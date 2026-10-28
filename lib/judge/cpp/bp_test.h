@@ -6,11 +6,17 @@
 //   {"t":"summary","passed":2,"failed":1}
 // A "begin" with no matching "result" means the test crashed or timed out; the judge attributes it.
 //
+// Two build modes (ADR 0001): with exceptions (native g++) and without (-fno-exceptions, the browser
+// toolchain has no C++ unwinder). Without exceptions ASSERT_*/FAIL report the failure, print the
+// test's result line and exit(3); the judge re-runs the remaining tests with `--only Suite.name`.
+// `--list` prints one "Suite.name" per line. EXPECT_THROWS needs exceptions.
+//
 // Exactly one translation unit (the driver) defines BP_TEST_MAIN before including this header.
 #pragma once
 
 #include <chrono>
 #include <cstdio>
+#include <cstdlib>
 #include <exception>
 #include <functional>
 #include <sstream>
@@ -43,8 +49,37 @@ inline std::vector<Failure>& currentFailures() {
   return failures;
 }
 
-// Thrown by ASSERT_* to abandon the current test only.
+#if defined(__cpp_exceptions) || defined(__EXCEPTIONS)
+#define BP_HAS_EXCEPTIONS 1
+#else
+#define BP_HAS_EXCEPTIONS 0
+#endif
+
+// Thrown by ASSERT_* to abandon the current test only (exception builds).
 struct AbortTest {};
+
+inline void emitResult(const TestCase& t, double ms);
+inline const TestCase*& currentTest() {
+  static const TestCase* current = nullptr;
+  return current;
+}
+inline double& currentStartMs() {
+  static double start = 0;
+  return start;
+}
+inline double nowMs() {
+  return std::chrono::duration<double, std::milli>(std::chrono::steady_clock::now().time_since_epoch()).count();
+}
+
+// Abandons the current test: throws when exceptions exist, otherwise emits the result and exits.
+[[noreturn]] inline void abortTest() {
+#if BP_HAS_EXCEPTIONS
+  throw AbortTest{};
+#else
+  emitResult(*currentTest(), nowMs() - currentStartMs());
+  std::exit(3);
+#endif
+}
 
 struct Registrar {
   Registrar(const char* suite, const char* name, std::function<void()> body) {
@@ -120,17 +155,48 @@ inline std::string basename(const char* path) {
   return slash == std::string::npos ? p : p.substr(slash + 1);
 }
 
+inline void emitResult(const TestCase& t, double ms) {
+  bool ok = currentFailures().empty();
+  std::string out = "{\"t\":\"result\",\"suite\":\"" + jsonEscape(t.suite) + "\",\"name\":\"" + jsonEscape(t.name) +
+                    "\",\"status\":\"" + (ok ? "pass" : "fail") + "\",\"ms\":" + std::to_string(ms) +
+                    ",\"failures\":[";
+  bool first = true;
+  for (const auto& f : currentFailures()) {
+    if (!first) out += ",";
+    first = false;
+    out += "{\"file\":\"" + jsonEscape(basename(f.file.c_str())) + "\",\"line\":" + std::to_string(f.line) +
+           ",\"msg\":\"" + jsonEscape(f.msg) + "\"}";
+  }
+  out += "]}";
+  std::printf("%s\n", out.c_str());
+  std::fflush(stdout);
+}
+
+// Usage: prog [substring-filter] | prog --list | prog --only Suite.name
 inline int runAll(int argc, char** argv) {
-  std::string filter = argc > 1 ? argv[1] : "";
+  std::string filter;
+  bool exact = false;
+  if (argc > 1 && std::string(argv[1]) == "--list") {
+    for (const auto& t : registry()) std::printf("%s.%s\n", t.suite.c_str(), t.name.c_str());
+    return 0;
+  }
+  if (argc > 2 && std::string(argv[1]) == "--only") {
+    filter = argv[2];
+    exact = true;
+  } else if (argc > 1) {
+    filter = argv[1];
+  }
   int passed = 0, failed = 0;
   for (const auto& t : registry()) {
     std::string full = t.suite + "." + t.name;
-    if (!filter.empty() && full.find(filter) == std::string::npos) continue;
+    if (exact ? full != filter : (!filter.empty() && full.find(filter) == std::string::npos)) continue;
     std::printf("{\"t\":\"begin\",\"suite\":\"%s\",\"name\":\"%s\"}\n", jsonEscape(t.suite).c_str(),
                 jsonEscape(t.name).c_str());
     std::fflush(stdout);
     currentFailures().clear();
-    auto start = std::chrono::steady_clock::now();
+    currentTest() = &t;
+    currentStartMs() = nowMs();
+#if BP_HAS_EXCEPTIONS
     try {
       t.body();
     } catch (const AbortTest&) {
@@ -139,22 +205,12 @@ inline int runAll(int argc, char** argv) {
     } catch (...) {
       report("", 0, "unexpected non-standard exception");
     }
-    double ms = std::chrono::duration<double, std::milli>(std::chrono::steady_clock::now() - start).count();
+#else
+    t.body();
+#endif
     bool ok = currentFailures().empty();
     ok ? ++passed : ++failed;
-    std::string out = "{\"t\":\"result\",\"suite\":\"" + jsonEscape(t.suite) + "\",\"name\":\"" + jsonEscape(t.name) +
-                      "\",\"status\":\"" + (ok ? "pass" : "fail") + "\",\"ms\":" + std::to_string(ms) +
-                      ",\"failures\":[";
-    bool first = true;
-    for (const auto& f : currentFailures()) {
-      if (!first) out += ",";
-      first = false;
-      out += "{\"file\":\"" + jsonEscape(basename(f.file.c_str())) + "\",\"line\":" + std::to_string(f.line) +
-             ",\"msg\":\"" + jsonEscape(f.msg) + "\"}";
-    }
-    out += "]}";
-    std::printf("%s\n", out.c_str());
-    std::fflush(stdout);
+    emitResult(t, nowMs() - currentStartMs());
   }
   std::printf("{\"t\":\"summary\",\"passed\":%d,\"failed\":%d}\n", passed, failed);
   std::fflush(stdout);
@@ -184,20 +240,24 @@ inline int runAll(int argc, char** argv) {
 #define EXPECT_TRUE(x) (void)::bp::checkTrue(static_cast<bool>(x), #x, __FILE__, __LINE__, true)
 #define EXPECT_FALSE(x) (void)::bp::checkTrue(static_cast<bool>(x), #x, __FILE__, __LINE__, false)
 
-#define ASSERT_EQ(a, b) do { if (!BP_EXPECT_CMP(a, b, ==, "==")) throw ::bp::AbortTest{}; } while (0)
-#define ASSERT_NE(a, b) do { if (!BP_EXPECT_CMP(a, b, !=, "!=")) throw ::bp::AbortTest{}; } while (0)
-#define ASSERT_TRUE(x) do { if (!::bp::checkTrue(static_cast<bool>(x), #x, __FILE__, __LINE__, true)) throw ::bp::AbortTest{}; } while (0)
-#define ASSERT_FALSE(x) do { if (!::bp::checkTrue(static_cast<bool>(x), #x, __FILE__, __LINE__, false)) throw ::bp::AbortTest{}; } while (0)
+#define ASSERT_EQ(a, b) do { if (!BP_EXPECT_CMP(a, b, ==, "==")) ::bp::abortTest(); } while (0)
+#define ASSERT_NE(a, b) do { if (!BP_EXPECT_CMP(a, b, !=, "!=")) ::bp::abortTest(); } while (0)
+#define ASSERT_TRUE(x) do { if (!::bp::checkTrue(static_cast<bool>(x), #x, __FILE__, __LINE__, true)) ::bp::abortTest(); } while (0)
+#define ASSERT_FALSE(x) do { if (!::bp::checkTrue(static_cast<bool>(x), #x, __FILE__, __LINE__, false)) ::bp::abortTest(); } while (0)
 
-// EXPECT_THROWS(expr, ExceptionType): passes when expr throws that type.
+// EXPECT_THROWS(expr, ExceptionType): passes when expr throws that type. Exception builds only.
+#if BP_HAS_EXCEPTIONS
 #define EXPECT_THROWS(expr, ExType)                                                              \
   do {                                                                                           \
     bool bp_threw = false;                                                                       \
     try { (void)(expr); } catch (const ExType&) { bp_threw = true; } catch (...) {}              \
     if (!bp_threw) ::bp::report(__FILE__, __LINE__, std::string("expected ") + #expr + " to throw " + #ExType); \
   } while (0)
+#else
+#define EXPECT_THROWS(expr, ExType) static_assert(sizeof(#expr) == 0, "EXPECT_THROWS needs exceptions (-fno-exceptions build)")
+#endif
 
-#define FAIL(msg) do { ::bp::report(__FILE__, __LINE__, (msg)); throw ::bp::AbortTest{}; } while (0)
+#define FAIL(msg) do { ::bp::report(__FILE__, __LINE__, (msg)); ::bp::abortTest(); } while (0)
 
 #ifdef BP_TEST_MAIN
 int main(int argc, char** argv) { return ::bp::runAll(argc, argv); }

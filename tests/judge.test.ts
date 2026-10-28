@@ -122,3 +122,41 @@ describe("native judge", () => {
     expect(r.verdict).toBe("accepted");
   });
 });
+
+describe("exception-free mode (browser toolchain, ADR 0001)", () => {
+  const NOEX_TESTS = `#include "bp_test.h"
+#include "api.h"
+TEST(Counter, a_passes) { Counter c; c.inc(); EXPECT_EQ(c.value(), 1); }
+TEST(Counter, b_asserts) { Counter c; ASSERT_EQ(c.value(), 5); EXPECT_EQ(1, 2); }
+TEST(Counter, c_passes) { Counter c; EXPECT_EQ(c.value(), 0); }
+`;
+  const IMPL = `#include "api.h"
+int Counter::value() const { return n_; }
+void Counter::inc() { ++n_; }
+void Counter::dec() { --n_; }
+`;
+  const files = (): ProjectFile[] => [
+    DRIVER,
+    { path: "api.h", content: API, readOnly: true },
+    { path: "tests.cpp", content: NOEX_TESTS, readOnly: true },
+    { path: "impl.cpp", content: IMPL },
+  ];
+  it("ASSERT_ fails the test, emits its result and stops the process", async () => {
+    const r = await judgeNative(files(), { flags: ["-fno-exceptions"] });
+    expect(r.summary.tests.map((t) => `${t.name}:${t.status}`)).toEqual(["a_passes:pass", "b_asserts:fail"]);
+    expect(r.summary.crashed).toBeUndefined();
+    expect(r.verdict).toBe("wrong_behaviour");
+  });
+  it("--only runs a single test and --list names them", async () => {
+    const only = await judgeNative(files(), { flags: ["-fno-exceptions"], runArgs: ["--only", "Counter.c_passes"] });
+    expect(only.summary.tests.map((t) => t.name)).toEqual(["c_passes"]);
+    expect(only.verdict).toBe("accepted");
+    const list = await judgeNative(files(), { runArgs: ["--list"] });
+    expect(list.stdout.trim().split("\n")).toEqual(["Counter.a_passes", "Counter.b_asserts", "Counter.c_passes"]);
+  });
+  it("rejects EXPECT_THROWS when exceptions are off", async () => {
+    const withThrows = files().map((f) => (f.path === "tests.cpp" ? { ...f, content: f.content + "TEST(Counter, t) { Counter c; EXPECT_THROWS(c.dec(), int); }\n" } : f));
+    const r = await judgeNative(withThrows, { flags: ["-fno-exceptions"] });
+    expect(r.verdict).toBe("compile_error");
+  });
+});

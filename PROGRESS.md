@@ -21,3 +21,11 @@ Append a dated entry after every run: what changed, how it was verified (command
 - Committed on `main` per CLAUDE.md. CI and Pages deploy confirmation skipped (Actions quota exhausted until 2026-11-01).
 - Known gaps: the header is not yet exposed to the browser VFS (A2b); no AST dump yet (B7).
 - Next: A2b, the `@yowasp/clang` worker spike with ADR 0001.
+
+## 2026-10-28: A2b toolchain spike (ADR 0001)
+- `@yowasp/clang` added; spike scripts `scripts/spike/clang-wasm.mjs` (multi-file compile + link + WASI run) and `ast-dump.mjs`. Compile+link ~6 s cold / ~3.7 s warm, per-test run ~0.1 ms; filtered AST dump 2.4 s / 30 KB, unfiltered never finished (>2 GB), so Senior Review uses `-ast-dump-filter`.
+- Key finding: the shipped libc++abi has no exception support, so the browser judge is **exception-free**. `bp_test.h` now supports `-fno-exceptions` (ASSERT exits after emitting its result), `--list` and `--only Suite.name`; `EXPECT_THROWS` is a compile error in that mode. `judgeNative` takes `flags`/`runArgs`; 3 new tests (15 in judge.test.ts).
+- ADR 0001 and ARCHITECTURE §2 updated. CLAUDE.md-style content rule to carry forward: briefs say "no exceptions", `content:verify` compiles with `-fno-exceptions`.
+- Verification: lint, typecheck, test, build, build:pages (see run summary). No UI change, no screenshots. Committed on branch `claude/funny-ramanujan-14225d` (session instruction) rather than `main`. CI/deploy confirmation skipped (Actions quota exhausted until 2026-11-01).
+- Known gaps: worker/WASI-in-browser not yet exercised (Node WASI used); the 105 MB toolchain download needs a caching/offline plan (A2c).
+- Next: A2c `/dev/judge` page wiring the worker.
