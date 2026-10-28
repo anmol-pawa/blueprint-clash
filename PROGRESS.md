@@ -1,9 +1,7 @@
 # Blueprint Clash progress
 
-## NEEDS OWNER APPROVAL
-- **Concurrency in the browser (ADR 0001):** the wasm sysroot has no exceptions and no real threads. Recommended: Workshop APIs use error returns instead of exceptions, and concurrency problems use a deterministic cooperative thread shim (plus native-only predict-behaviour cards). Say if you prefer a custom wasi-threads sysroot instead (big build effort).
-
-Append a dated entry after every run: what changed, how it was verified (commands, screenshot notes), known gaps, what's next. Newest at the bottom.
+## Owner decisions
+See `DECISIONS.md` (the routine proceeds with its recommendation and logs it there; it never blocks on approval).
 
 ## 2026-10-28: Project seeded
 - Added `CLAUDE.md`, `ROADMAP.md` (phases A–G), `docs/GAME_DESIGN.md`, `docs/CURRICULUM.md` and `docs/ARCHITECTURE.md`.
