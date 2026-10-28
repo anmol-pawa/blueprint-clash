@@ -13,7 +13,8 @@
     "typecheck": "next typegen && tsc --noEmit",
     "test": "vitest run",
     "prebuild:pages": "node scripts/copy-clang.mjs",
-    "build:pages": "STATIC_EXPORT=1 BASE_PATH=${BASE_PATH-/blueprint-clash} next build && BASE_PATH=${BASE_PATH-/blueprint-clash} node scripts/gen-sw.mjs"
+    "build:pages": "STATIC_EXPORT=1 BASE_PATH=${BASE_PATH-/blueprint-clash} next build && BASE_PATH=${BASE_PATH-/blueprint-clash} node scripts/gen-sw.mjs",
+    "content:verify": "vitest run --config vitest.content.config.ts"
   },
   "dependencies": {
     "@codemirror/commands": "^6.11.1",

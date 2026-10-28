@@ -37,3 +37,11 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - CI and Pages deploy confirmation skipped (Actions quota exhausted until 2026-11-01).
 - Known gaps: compile is ~9–10 s cold (every page load); no warm-compile or Chromium memory measurement; Pages deploy of 105 MB toolchain unverified; the `/dev/judge` page is unstyled scaffolding.
 - Next: A3 (workshop content pipeline + `content:verify`).
+
+## 2026-10-28: A3 workshop content pipeline
+- Added `lib/workshop/` (types, structural `validatePackage`, node loader, cumulative native phase runner), the package format documented in ARCH §3, `npm run content:verify` (Vitest via `vitest.content.config.ts`, `content/verify/*.verify.ts`), and the first problem `content/workshop/library-management` (base phase): api.h, brief, hidden requirements and a 10-question clarify menu (3 essential, 4 useful, 3 noise), 4-responsibility rubric, 5-part-reference design (Catalog, Member, LoanPolicy seam, LibraryService), 12 behaviour tests, 3 bad designs each failing documented tests, editorial with alternatives / trade-offs / 10x / level signals, 5 leveled follow-ups.
+- `content:verify` checks: package is valid (every hidden requirement revealable, rubric owners exist in the reference, editorial sections, bad designs documented), the reference passes every phase, each bad design passes earlier phases and fails the documented tests (compiled with `-fno-exceptions`, like the browser).
+- Fixed a lint error left on main by A2c (`module` variable in `run.worker.ts`).
+- Verification: `lint`, `typecheck`, `test` (25 pass, incl. 8 new validator/runner tests), `content:verify` (3 pass), `build`, `build:pages` all pass. No UI change, so no screenshots. CI/deploy confirmation skipped (Actions quota exhausted until 2026-11-01).
+- Known gaps: no storms yet (the validator already demands tests, a requirement and a bad design per storm phase); Senior Review checks on reference/bad designs await B7; the rubric ownership check is a class-name match, not a UML check (C1).
+- Next: A4 (multi-file editor).

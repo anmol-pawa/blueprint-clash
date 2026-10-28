@@ -8,11 +8,11 @@ self.onmessage = async (e: MessageEvent<Uint8Array<ArrayBuffer>>) => {
   const t0 = performance.now();
   const res: RunResponse = { exitCode: 0, stdout: "", stderr: "", runMs: 0 };
   try {
-    const module = await WebAssembly.compile(e.data);
+    const compiled = await WebAssembly.compile(e.data);
     // Any WASI call we do not implement answers ENOSYS instead of failing to link.
     const imports: Record<string, unknown> = { ...wasi.imports };
-    for (const i of WebAssembly.Module.imports(module)) if (i.module === "wasi_snapshot_preview1" && !(i.name in imports)) imports[i.name] = () => 52;
-    const instance = await WebAssembly.instantiate(module, { wasi_snapshot_preview1: imports as WebAssembly.ModuleImports });
+    for (const i of WebAssembly.Module.imports(compiled)) if (i.module === "wasi_snapshot_preview1" && !(i.name in imports)) imports[i.name] = () => 52;
+    const instance = await WebAssembly.instantiate(compiled, { wasi_snapshot_preview1: imports as WebAssembly.ModuleImports });
     wasi.bind(instance.exports.memory as WebAssembly.Memory);
     (instance.exports._start as () => void)();
   } catch (err) {

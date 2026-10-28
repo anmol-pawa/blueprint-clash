@@ -1,0 +1,9 @@
+import type { FollowUp } from "@/lib/workshop/types";
+
+export const followups: FollowUp[] = [
+  { level: "SDE2", question: "Why is the loan limit its own class and not a constant in the borrow method?", answer: "Because the limit is the most likely thing to change (premium members, children's cards). A LoanPolicy interface lets a new rule arrive as a new class instead of an edit to borrow(): that is the Open/Closed seam. A constant would be fine only if the interviewer says it will never vary." },
+  { level: "SDE2", question: "How do you keep the shelf count and the member's loan list consistent?", answer: "One method owns the whole transition (check, take the copy, record the loan) and it validates everything before mutating anything, so a failed call changes nothing. Keeping a second count in another structure invites drift." },
+  { level: "Senior", question: "How would you make this thread-safe?", answer: "Start with the invariant: a copy can be lent once. One mutex in the lending service guarding both catalog and member updates is correct and simple; per-book locks add speed but need a lock ordering when a borrow touches a member and a book. Measure before going finer-grained." },
+  { level: "Senior", question: "How would you add due dates and fines without touching borrow()?", answer: "Model a Loan value (book, member, borrowedAt) owned by the member or a LoanBook, inject a Clock for testability, and compute fines in a FinePolicy that the return path consults. The existing statuses and tests stay valid." },
+  { level: "Staff", question: "The library becomes a network of 200 branches sharing one catalog. What changes?", answer: "Copies become per-branch inventory; the member's limit becomes a cross-branch invariant, which needs a single owner of member state (or a reservation protocol). Search moves to an index. The class boundaries (catalog, member, policy) survive; the in-memory maps do not." },
+];
