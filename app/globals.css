@@ -1,0 +1,70 @@
+@import "tailwindcss";
+
+@theme inline {
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --font-display: var(--font-pixel), var(--font-inter), system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, monospace;
+}
+
+/* Blueprint Clash is dark-only: a drafting table at night. */
+html {
+  color-scheme: dark;
+}
+
+:root {
+  --accent: #7dd3fc;
+  --accent-2: #fbbf24;
+  --bg: #0a1530;
+  --panel: rgba(14, 28, 62, 0.82);
+}
+
+body {
+  background: var(--bg);
+  color: #e6edff;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Drafting-paper grid: minor lines every 24px, major every 120px. */
+.blueprint-grid {
+  background-image:
+    linear-gradient(rgba(125, 211, 252, 0.16) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(125, 211, 252, 0.16) 1px, transparent 1px),
+    linear-gradient(rgba(125, 211, 252, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(125, 211, 252, 0.06) 1px, transparent 1px);
+  background-size: 120px 120px, 120px 120px, 24px 24px, 24px 24px;
+}
+
+.panel {
+  background: var(--panel);
+  border: 3px solid #060d20;
+  border-radius: 6px;
+  box-shadow: inset 0 0 0 2px #2c4a86, inset 0 -3px 0 2px #0f1d42, 0 3px 0 rgba(0, 0, 0, 0.45);
+}
+
+/* Handheld-console button: flat fill, hard outline, a ledge it presses into. */
+.px-btn {
+  --btn: #1f3a6e;
+  --btn-hi: #3a5fa3;
+  --btn-lo: #112245;
+  background: var(--btn);
+  border: 2px solid #060d20;
+  border-radius: 4px;
+  box-shadow: inset 0 2px 0 var(--btn-hi), inset 0 -3px 0 var(--btn-lo), 0 2px 0 rgba(0, 0, 0, 0.5);
+  font-family: var(--font-display);
+  image-rendering: pixelated;
+  min-height: 44px;
+}
+.px-btn:not(:disabled):active {
+  box-shadow: inset 0 2px 0 var(--btn-lo), 0 0 0 rgba(0, 0, 0, 0.5);
+  transform: translateY(2px);
+}
+.px-btn-primary {
+  --btn: var(--accent-2);
+  --btn-hi: #fde68a;
+  --btn-lo: #b45309;
+  color: #1a1203;
+}
+.px-btn:disabled {
+  opacity: 0.55;
+}
