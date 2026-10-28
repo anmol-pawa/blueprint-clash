@@ -7,6 +7,7 @@ The same as Algo Clash: Next.js 16 (static export, `basePath` `/blueprint-clash`
 
 ## 2. C++ toolchain and judge (shared with Algo Clash)
 - **Reuse first.** If the reference clone `/home/user/algo-clash` already has a working in-browser C++ judge (`lib/judge/`, its ADR in `docs/adr/`), **copy it** (with attribution in a comment) rather than re-researching. Otherwise do the spike described in Algo Clash's ARCH §2.1: the primary candidate is `@yowasp/clang`, which ships libc++ for wasm32-wasip1. Record the numbers in an ADR here too.
+- **Limits of the wasm sysroot (ADR 0001):** no C++ exceptions (build with `-fno-exceptions`; Workshop APIs use error returns) and no real threads (concurrency needs a cooperative scheduler shim or native-only cards; owner decision pending).
 - **Multi-file projects:** the virtual filesystem holds `api.h` (read-only, provided), user files (`*.h`, `*.cpp`) and the hidden test driver. Compile all translation units and link. Diagnostics are mapped to file and line in the editor.
 - **Test framework:** a tiny in-repo header `bp_test.h` (TEST macros, expectations, structured JSON output to stdout) used by behaviour tests natively and in the browser.
 - **AST analysis for Senior Review:** run `clang++ -fsyntax-only -Xclang -ast-dump=json` (filtered to user files) in the compile worker. Parse it in TS (`lib/review/`) into a model (classes, bases, methods, virtual/override/const flags, fields and their access, function sizes, `new`/`delete` expressions, `dynamic_cast`, switch statements over enums).

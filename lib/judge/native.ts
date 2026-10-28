@@ -22,6 +22,8 @@ export interface NativeResult {
 
 export interface NativeOptions {
   std?: string;
+  /** Mirror the browser toolchain (no C++ exception runtime, ADR 0001). */
+  noExceptions?: boolean;
   timeoutMs?: number;
 }
 
@@ -35,7 +37,7 @@ export async function judgeNative(files: ProjectFile[], opts: NativeOptions = {}
       await writeFile(full, f.content);
     }
     const bin = join(dir, "a.out");
-    const args = [`-std=${opts.std ?? "c++20"}`, "-O1", "-Wall", "-Wextra", `-I${dir}`, `-I${HEADER_DIR}`, ...translationUnits(files), "-o", bin];
+    const args = [`-std=${opts.std ?? "c++20"}`, "-O1", ...(opts.noExceptions ? ["-fno-exceptions"] : []), "-Wall", "-Wextra", `-I${dir}`, `-I${HEADER_DIR}`, ...translationUnits(files), "-o", bin];
     let compileErr = "";
     try {
       await run("g++", args, { cwd: dir, maxBuffer: 16 << 20 });

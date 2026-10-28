@@ -121,4 +121,23 @@ describe("native judge", () => {
     const r = await judgeNative(project(GOOD.replace("++n_;", 'std::puts("noise"); ++n_;').replace("#include <stdexcept>", "#include <stdexcept>\n#include <cstdio>")));
     expect(r.verdict).toBe("accepted");
   });
+  it("works without exceptions like the browser toolchain: ASSERT returns, EXPECT_THROWS fails clearly", async () => {
+    const tests = `#include "bp_test.h"
+#include "api.h"
+TEST(Counter, assert_stops_test) { Counter c; ASSERT_EQ(c.value(), 1); EXPECT_EQ(c.value(), 7); }
+TEST(Counter, expect_throws) { Counter c; EXPECT_THROWS(c.dec(), int); }
+TEST(Counter, fine) { Counter c; c.inc(); EXPECT_EQ(c.value(), 1); }
+`;
+    const impl = `#include "api.h"
+int Counter::value() const { return n_; }
+void Counter::inc() { ++n_; }
+void Counter::dec() { --n_; }
+`;
+    const files = project(impl).map((f) => (f.path === "tests.cpp" ? { ...f, content: tests } : f));
+    const r = await judgeNative(files, { noExceptions: true });
+    const by = Object.fromEntries(r.summary.tests.map((t) => [t.name, t]));
+    expect(by.assert_stops_test.failures).toHaveLength(1);
+    expect(by.expect_throws.failures[0].msg).toMatch(/needs C\+\+ exceptions/);
+    expect(by.fine.status).toBe("pass");
+  });
 });

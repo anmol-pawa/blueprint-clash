@@ -43,8 +43,18 @@ inline std::vector<Failure>& currentFailures() {
   return failures;
 }
 
+// BP_EXCEPTIONS is 0 in the browser toolchain (wasm32-wasip1 ships no C++ exception runtime, see ADR 0001).
+// Then ASSERT_* `return`s from the test body instead of throwing, so it only works directly in TEST bodies.
+#if defined(__cpp_exceptions) || defined(__EXCEPTIONS)
+#define BP_EXCEPTIONS 1
+#else
+#define BP_EXCEPTIONS 0
+#endif
+
+#if BP_EXCEPTIONS
 // Thrown by ASSERT_* to abandon the current test only.
 struct AbortTest {};
+#endif
 
 struct Registrar {
   Registrar(const char* suite, const char* name, std::function<void()> body) {
@@ -131,6 +141,7 @@ inline int runAll(int argc, char** argv) {
     std::fflush(stdout);
     currentFailures().clear();
     auto start = std::chrono::steady_clock::now();
+#if BP_EXCEPTIONS
     try {
       t.body();
     } catch (const AbortTest&) {
@@ -139,6 +150,9 @@ inline int runAll(int argc, char** argv) {
     } catch (...) {
       report("", 0, "unexpected non-standard exception");
     }
+#else
+    t.body();
+#endif
     double ms = std::chrono::duration<double, std::milli>(std::chrono::steady_clock::now() - start).count();
     bool ok = currentFailures().empty();
     ok ? ++passed : ++failed;
@@ -184,20 +198,32 @@ inline int runAll(int argc, char** argv) {
 #define EXPECT_TRUE(x) (void)::bp::checkTrue(static_cast<bool>(x), #x, __FILE__, __LINE__, true)
 #define EXPECT_FALSE(x) (void)::bp::checkTrue(static_cast<bool>(x), #x, __FILE__, __LINE__, false)
 
-#define ASSERT_EQ(a, b) do { if (!BP_EXPECT_CMP(a, b, ==, "==")) throw ::bp::AbortTest{}; } while (0)
-#define ASSERT_NE(a, b) do { if (!BP_EXPECT_CMP(a, b, !=, "!=")) throw ::bp::AbortTest{}; } while (0)
-#define ASSERT_TRUE(x) do { if (!::bp::checkTrue(static_cast<bool>(x), #x, __FILE__, __LINE__, true)) throw ::bp::AbortTest{}; } while (0)
-#define ASSERT_FALSE(x) do { if (!::bp::checkTrue(static_cast<bool>(x), #x, __FILE__, __LINE__, false)) throw ::bp::AbortTest{}; } while (0)
+#if BP_EXCEPTIONS
+#define BP_ABORT_TEST throw ::bp::AbortTest{}
+#else
+#define BP_ABORT_TEST return
+#endif
+
+#define ASSERT_EQ(a, b) do { if (!BP_EXPECT_CMP(a, b, ==, "==")) BP_ABORT_TEST; } while (0)
+#define ASSERT_NE(a, b) do { if (!BP_EXPECT_CMP(a, b, !=, "!=")) BP_ABORT_TEST; } while (0)
+#define ASSERT_TRUE(x) do { if (!::bp::checkTrue(static_cast<bool>(x), #x, __FILE__, __LINE__, true)) BP_ABORT_TEST; } while (0)
+#define ASSERT_FALSE(x) do { if (!::bp::checkTrue(static_cast<bool>(x), #x, __FILE__, __LINE__, false)) BP_ABORT_TEST; } while (0)
 
 // EXPECT_THROWS(expr, ExceptionType): passes when expr throws that type.
+// Without exceptions (browser toolchain) it cannot run, so it reports a clear failure instead of a link error.
+#if BP_EXCEPTIONS
 #define EXPECT_THROWS(expr, ExType)                                                              \
   do {                                                                                           \
     bool bp_threw = false;                                                                       \
     try { (void)(expr); } catch (const ExType&) { bp_threw = true; } catch (...) {}              \
     if (!bp_threw) ::bp::report(__FILE__, __LINE__, std::string("expected ") + #expr + " to throw " + #ExType); \
   } while (0)
+#else
+#define EXPECT_THROWS(expr, ExType) \
+  ::bp::report(__FILE__, __LINE__, "EXPECT_THROWS needs C++ exceptions, which this toolchain does not provide")
+#endif
 
-#define FAIL(msg) do { ::bp::report(__FILE__, __LINE__, (msg)); throw ::bp::AbortTest{}; } while (0)
+#define FAIL(msg) do { ::bp::report(__FILE__, __LINE__, (msg)); BP_ABORT_TEST; } while (0)
 
 #ifdef BP_TEST_MAIN
 int main(int argc, char** argv) { return ::bp::runAll(argc, argv); }

@@ -1,5 +1,8 @@
 # Blueprint Clash progress
 
+## NEEDS OWNER APPROVAL
+- **Concurrency in the browser (ADR 0001):** the wasm sysroot has no exceptions and no real threads. Recommended: Workshop APIs use error returns instead of exceptions, and concurrency problems use a deterministic cooperative thread shim (plus native-only predict-behaviour cards). Say if you prefer a custom wasi-threads sysroot instead (big build effort).
+
 Append a dated entry after every run: what changed, how it was verified (commands, screenshot notes), known gaps, what's next. Newest at the bottom.
 
 ## 2026-10-28: Project seeded
@@ -21,3 +24,11 @@ Append a dated entry after every run: what changed, how it was verified (command
 - Committed on `main` per CLAUDE.md. CI and Pages deploy confirmation skipped (Actions quota exhausted until 2026-11-01).
 - Known gaps: the header is not yet exposed to the browser VFS (A2b); no AST dump yet (B7).
 - Next: A2b, the `@yowasp/clang` worker spike with ADR 0001.
+
+## 2026-10-28: A2b toolchain spike (ADR 0001)
+- Installed `@yowasp/clang`; `scripts/spikes/clang-wasm.mjs` compiles and links a 2-TU project with `bp_test.h` and runs it under WASI in Node: ~5.4 s cold, ~3.5 s warm, 586 KB wasm, 3 ms run.
+- Findings: no C++ exception runtime (throw fails to link), `std::thread` compiles but aborts at run time, argv must be non-empty. Documented in `docs/adr/0001-browser-cpp-toolchain.md` and ARCH §2.
+- `bp_test.h` now works with and without exceptions (`BP_EXCEPTIONS`); `judgeNative({noExceptions:true})` mirrors the browser; new test covers it.
+- Verification: `npm run lint`, `typecheck`, `test` (15 pass), `build`, `build:pages`. No UI change, so no screenshots. CI/deploy confirmation skipped (Actions quota exhausted until 2026-11-01).
+- Known gaps: browser-side measurements (download, memory, Chromium timing) not done yet; the package is 105 MB.
+- Next: A2c (browser worker + `/dev/judge`).
