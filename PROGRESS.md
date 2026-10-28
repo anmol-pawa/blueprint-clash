@@ -21,3 +21,11 @@ Append a dated entry after every run: what changed, how it was verified (command
 - Committed on `main` per CLAUDE.md. CI and Pages deploy confirmation skipped (Actions quota exhausted until 2026-11-01).
 - Known gaps: the header is not yet exposed to the browser VFS (A2b); no AST dump yet (B7).
 - Next: A2b, the `@yowasp/clang` worker spike with ADR 0001.
+
+## 2026-10-28: A2b toolchain spike (`@yowasp/clang`), ADR 0001
+- Spiked `@yowasp/clang` 22.1 in Node (`scripts/spike-clang.mjs`) and added `lib/judge/toolchain.ts`: `buildProject(clang, files)` compiles each TU to wasm32-wasip1, links, maps diagnostics to project files, returns timings; the clang command is injected so the same code will run in a worker.
+- **Key finding:** the wasm sysroot has no C++ exception runtime (`__cxa_throw` undefined), so the browser build uses `-fno-exceptions` (`throw` becomes a compile error). `bp_test.h` gained a no-exceptions mode (ASSERT/FAIL `return`, EXPECT_THROWS is a static_assert). Other findings: argv must be non-empty (exit 71 otherwise); full AST JSON is 14.6 MB / 35 s even when filtered, so B7 needs another approach. All recorded with numbers in `docs/adr/0001-cpp-toolchain.md` (warm compile about 3.9 s per TU, link about 0.3 s, 105 MB package).
+- Verification: `npm run lint`, `typecheck`, `test` (17 pass, including 3 real-clang tests: multi-file accept, wrong behaviour with file+line, compile error mapping, link error, `throw` rejected), `build`, `build:pages` pass. No UI change, so no screenshots.
+- Branch/CI: committed on the session branch `claude/funny-ramanujan-qdpdve` (the session requires it) rather than `main`. CI and Pages deploy confirmation skipped (Actions quota exhausted until 2026-11-01).
+- Known gaps: no browser run yet (needs a WASI shim and lazy asset loading, A2c); `@yowasp/clang` is still a devDependency; 3.9 s per TU needs the object cache and worker pool in A2c.
+- Next: A2c.

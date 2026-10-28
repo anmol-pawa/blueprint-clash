@@ -6,8 +6,18 @@
 //   {"t":"summary","passed":2,"failed":1}
 // A "begin" with no matching "result" means the test crashed or timed out; the judge attributes it.
 //
+// Exceptions: the browser toolchain (wasm32-wasip1) ships no C++ exception runtime, so the browser build is
+// compiled with -fno-exceptions. In that mode ASSERT_*/FAIL `return` from the test body (use them directly in the
+// TEST body, not in helpers) and EXPECT_THROWS is a compile error. Native builds keep exceptions. See ADR 0001.
+//
 // Exactly one translation unit (the driver) defines BP_TEST_MAIN before including this header.
 #pragma once
+
+#if defined(__cpp_exceptions) || defined(__EXCEPTIONS)
+#define BP_HAS_EXCEPTIONS 1
+#else
+#define BP_HAS_EXCEPTIONS 0
+#endif
 
 #include <chrono>
 #include <cstdio>
@@ -131,6 +141,7 @@ inline int runAll(int argc, char** argv) {
     std::fflush(stdout);
     currentFailures().clear();
     auto start = std::chrono::steady_clock::now();
+#if BP_HAS_EXCEPTIONS
     try {
       t.body();
     } catch (const AbortTest&) {
@@ -139,6 +150,9 @@ inline int runAll(int argc, char** argv) {
     } catch (...) {
       report("", 0, "unexpected non-standard exception");
     }
+#else
+    t.body();
+#endif
     double ms = std::chrono::duration<double, std::milli>(std::chrono::steady_clock::now() - start).count();
     bool ok = currentFailures().empty();
     ok ? ++passed : ++failed;
@@ -184,20 +198,30 @@ inline int runAll(int argc, char** argv) {
 #define EXPECT_TRUE(x) (void)::bp::checkTrue(static_cast<bool>(x), #x, __FILE__, __LINE__, true)
 #define EXPECT_FALSE(x) (void)::bp::checkTrue(static_cast<bool>(x), #x, __FILE__, __LINE__, false)
 
-#define ASSERT_EQ(a, b) do { if (!BP_EXPECT_CMP(a, b, ==, "==")) throw ::bp::AbortTest{}; } while (0)
-#define ASSERT_NE(a, b) do { if (!BP_EXPECT_CMP(a, b, !=, "!=")) throw ::bp::AbortTest{}; } while (0)
-#define ASSERT_TRUE(x) do { if (!::bp::checkTrue(static_cast<bool>(x), #x, __FILE__, __LINE__, true)) throw ::bp::AbortTest{}; } while (0)
-#define ASSERT_FALSE(x) do { if (!::bp::checkTrue(static_cast<bool>(x), #x, __FILE__, __LINE__, false)) throw ::bp::AbortTest{}; } while (0)
+#if BP_HAS_EXCEPTIONS
+#define BP_ABORT_TEST() throw ::bp::AbortTest{}
+#else
+#define BP_ABORT_TEST() return
+#endif
 
-// EXPECT_THROWS(expr, ExceptionType): passes when expr throws that type.
+#define ASSERT_EQ(a, b) do { if (!BP_EXPECT_CMP(a, b, ==, "==")) BP_ABORT_TEST(); } while (0)
+#define ASSERT_NE(a, b) do { if (!BP_EXPECT_CMP(a, b, !=, "!=")) BP_ABORT_TEST(); } while (0)
+#define ASSERT_TRUE(x) do { if (!::bp::checkTrue(static_cast<bool>(x), #x, __FILE__, __LINE__, true)) BP_ABORT_TEST(); } while (0)
+#define ASSERT_FALSE(x) do { if (!::bp::checkTrue(static_cast<bool>(x), #x, __FILE__, __LINE__, false)) BP_ABORT_TEST(); } while (0)
+
+// EXPECT_THROWS(expr, ExceptionType): passes when expr throws that type. Native builds only.
+#if BP_HAS_EXCEPTIONS
 #define EXPECT_THROWS(expr, ExType)                                                              \
   do {                                                                                           \
     bool bp_threw = false;                                                                       \
     try { (void)(expr); } catch (const ExType&) { bp_threw = true; } catch (...) {}              \
     if (!bp_threw) ::bp::report(__FILE__, __LINE__, std::string("expected ") + #expr + " to throw " + #ExType); \
   } while (0)
+#else
+#define EXPECT_THROWS(expr, ExType) static_assert(!sizeof(ExType), "EXPECT_THROWS needs exceptions; the browser build uses -fno-exceptions")
+#endif
 
-#define FAIL(msg) do { ::bp::report(__FILE__, __LINE__, (msg)); throw ::bp::AbortTest{}; } while (0)
+#define FAIL(msg) do { ::bp::report(__FILE__, __LINE__, (msg)); BP_ABORT_TEST(); } while (0)
 
 #ifdef BP_TEST_MAIN
 int main(int argc, char** argv) { return ::bp::runAll(argc, argv); }

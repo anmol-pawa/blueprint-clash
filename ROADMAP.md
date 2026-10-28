@@ -11,8 +11,8 @@ Work top to bottom: take the **first unchecked box**, and split big boxes into r
 - [x] A1. **Scaffold from Query Clash:** Next.js 16 / React 19 / Pixi 8 / Tailwind 4, PWA + service worker (keep the worker-fragment fix), `ci.yml` + `pages.yml` (basePath `/blueprint-clash`), scripts, `.routine/` lock and README. Remove all Query/SQL/PGlite references. The title screen renders.
 - [ ] A2. **C++ judge** (split below; algo-clash has no judge yet, so this is the toolchain spike with ADRs).
   - [x] A2a. `bp_test.h` framework (JSON lines, crash attribution), pure `lib/judge/` (project model, clang diagnostics mapped to files, result parser, verdicts), native g++ runner, tests.
-  - [ ] A2b. Toolchain spike: `@yowasp/clang` in a Web Worker (compile + link multi-file project to wasm, run via WASI), measured numbers, ADR 0001.
-  - [ ] A2c. `/dev/judge` page wiring the worker: multi-file compile, run, results, diagnostics.
+  - [x] A2b. Toolchain spike: `@yowasp/clang` (compile + link multi-file project to wasm, run via WASI), measured numbers, ADR 0001. Done in Node with an injected clang command (`lib/judge/toolchain.ts`); the Web Worker and browser WASI shim move to A2c.
+  - [ ] A2c. Browser worker + `/dev/judge` page: worker running `buildProject`, a small WASI preview1 shim (see ADR 0001), lazy compiler download with progress (SW must not precache it), multi-file compile, run with timeout, results, diagnostics, TU object cache.
 - [ ] A3. **Workshop content pipeline** (ARCH §3): the package format (`brief.md`, `clarify.ts`, `rubric.ts`, `api.h`, `reference/`, `tests/base`, `tests/storm1..3`, `bad/`, `editorial.md`, `followups.ts`), `npm run content:verify` and one sample problem (Library management, base phase only).
 - [ ] A4. **Multi-file editor:** file tree (create/rename/delete user files; `api.h` read-only), tabs, CodeMirror C++, Run/Submit with test results per test, drafts in IndexedDB.
 - [ ] A5. **Save system v1**, with migrations and export/import (port from Algo Clash if present).
