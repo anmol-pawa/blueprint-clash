@@ -122,3 +122,30 @@ describe("native judge", () => {
     expect(r.verdict).toBe("accepted");
   });
 });
+
+describe("no-exceptions build (browser toolchain)", () => {
+  const T = `#include "bp_test.h"
+#include "api.h"
+TEST(Math, ok) { EXPECT_EQ(twice(2), 4); }
+TEST(Math, bad) { EXPECT_EQ(twice(2), 5); ASSERT_EQ(1, 2); EXPECT_EQ(9, 8); }
+`;
+  const files = (impl: string): ProjectFile[] => [
+    DRIVER,
+    { path: "api.h", content: "#pragma once\nint twice(int);\n", readOnly: true },
+    { path: "tests.cpp", content: T, readOnly: true },
+    { path: "impl.cpp", content: impl },
+  ];
+  it("lists tests and runs one exactly", async () => {
+    const list = await judgeNative(files('#include "api.h"\nint twice(int x){return 2*x;}\n'), { noExceptions: true, runArgs: ["--list"] });
+    expect(list.stdout.trim().split("\n")).toEqual(["Math.ok", "Math.bad"]);
+    const one = await judgeNative(files('#include "api.h"\nint twice(int x){return 2*x;}\n'), { noExceptions: true, runArgs: ["=Math.ok"] });
+    expect(one.verdict).toBe("accepted");
+    expect(one.summary.tests).toHaveLength(1);
+  });
+  it("ASSERT ends the process after reporting the failed test", async () => {
+    const r = await judgeNative(files('#include "api.h"\nint twice(int x){return 2*x;}\n'), { noExceptions: true, runArgs: ["=Math.bad"] });
+    expect(r.summary.tests[0].status).toBe("fail");
+    expect(r.summary.tests[0].failures.map((f) => f.line)).toHaveLength(2);
+    expect(r.verdict).toBe("wrong_behaviour");
+  });
+});

@@ -21,3 +21,11 @@ Append a dated entry after every run: what changed, how it was verified (command
 - Committed on `main` per CLAUDE.md. CI and Pages deploy confirmation skipped (Actions quota exhausted until 2026-11-01).
 - Known gaps: the header is not yet exposed to the browser VFS (A2b); no AST dump yet (B7).
 - Next: A2b, the `@yowasp/clang` worker spike with ADR 0001.
+
+## 2026-10-28: A2b toolchain spike (ADR 0001)
+- Spiked `@yowasp/clang` in Node: multi-file C++20 project compiles and links to wasm in ~3.6 s warm / 5.5-7 s cold, runs in 2-4 ms under WASI. Added it as a devDependency and `scripts/judge-spike.mjs`.
+- **Key finding:** the wasi libc++ has no exceptions (`-fexceptions`/`-fwasm-exceptions` fail to link). `bp_test.h` now supports no-exceptions builds: ASSERT/FAIL report and `_Exit(3)`, the host runs one test per instance (`=Suite.Name`, `--list`); `EXPECT_THROWS` is compiled out there. `judgeNative` gained `noExceptions` and `runArgs`. Written up in `docs/adr/0001-cpp-judge-toolchain.md` (also notes threads are unavailable, so concurrency lessons need a decision).
+- Verification: `npm run lint`, `typecheck`, `test` (16 pass, incl. 2 new no-exceptions tests), `build`, `build:pages` pass. No UI change, no screenshots.
+- Committed on the designated branch `claude/funny-ramanujan-wyi2h9` (session instructions), not `main`. CI and deploy confirmation skipped (Actions quota exhausted until 2026-11-01).
+- Known gaps: worker wiring, toolchain download/caching UX, Pages file-size check (llvm.core.wasm is 75 MB, under the 100 MB limit).
+- Next: A2c, `/dev/judge` page wiring the worker.

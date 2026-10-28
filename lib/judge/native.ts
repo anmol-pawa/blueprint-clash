@@ -23,6 +23,10 @@ export interface NativeResult {
 export interface NativeOptions {
   std?: string;
   timeoutMs?: number;
+  /** Build like the browser toolchain (no exceptions), so ASSERT ends the process. */
+  noExceptions?: boolean;
+  /** Arguments for the test binary, e.g. ["=Suite.Name"] to run one test. */
+  runArgs?: string[];
 }
 
 /** Compiles every .cpp in `files` together with bp_test.h on the include path, then runs the binary. */
@@ -35,7 +39,7 @@ export async function judgeNative(files: ProjectFile[], opts: NativeOptions = {}
       await writeFile(full, f.content);
     }
     const bin = join(dir, "a.out");
-    const args = [`-std=${opts.std ?? "c++20"}`, "-O1", "-Wall", "-Wextra", `-I${dir}`, `-I${HEADER_DIR}`, ...translationUnits(files), "-o", bin];
+    const args = [`-std=${opts.std ?? "c++20"}`, "-O1", opts.noExceptions ? "-fno-exceptions" : "-fexceptions", "-Wall", "-Wextra", `-I${dir}`, `-I${HEADER_DIR}`, ...translationUnits(files), "-o", bin];
     let compileErr = "";
     try {
       await run("g++", args, { cwd: dir, maxBuffer: 16 << 20 });
@@ -51,7 +55,7 @@ export async function judgeNative(files: ProjectFile[], opts: NativeOptions = {}
     let exitCode: number | null = 0;
     let timedOut = false;
     try {
-      ({ stdout } = await run(bin, [], { timeout: opts.timeoutMs ?? 10000, maxBuffer: 16 << 20 }));
+      ({ stdout } = await run(bin, opts.runArgs ?? [], { timeout: opts.timeoutMs ?? 10000, maxBuffer: 16 << 20 }));
     } catch (e) {
       const err = e as { stdout?: string; code?: number | string; killed?: boolean; signal?: string };
       stdout = err.stdout ?? "";
