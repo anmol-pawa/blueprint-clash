@@ -21,3 +21,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - Committed on `main` per CLAUDE.md. CI and Pages deploy confirmation skipped (Actions quota exhausted until 2026-11-01).
 - Known gaps: the header is not yet exposed to the browser VFS (A2b); no AST dump yet (B7).
 - Next: A2b, the `@yowasp/clang` worker spike with ADR 0001.
+
+## 2026-10-28: A2b toolchain spike (ADR 0001)
+- Spiked `@yowasp/clang` 22.0.0-git20542-10 in Node: 3-file C++20 project compiles and links in about 5 to 8 s, outputs about 580 KB wasm and runs under `node:wasi` (200M-iteration loop in about 0.7 s). Numbers and the reproducible script (`scripts/toolchain-spike.mjs`) are in `docs/adr/0001-browser-cpp-toolchain.md`.
+- **Finding:** the sysroot has no C++ exception support (`__cxa_throw`, personality and libunwind absent; `-fwasm-exceptions` does not link either). `bp_test.h` uses try/catch, so this blocks the browser judge. Added A2b2 (exception runtime shim, with a documented fallback) and A2b3 (the Web Worker). The Worker itself was not built this run; the spike showed it needs a browser WASI shim and that the toolchain download is about 100 MB (cache in the service worker, do not precache).
+- Verification: ran the spike script; no app code changed, so lint/typecheck/test/build all pass (14 tests).
+- Committed on branch `claude/funny-ramanujan-e0j38r` (the session's designated branch), identical to `main` at start. CI and Pages confirmation skipped (Actions quota exhausted until 2026-11-01).
+- Next: A2b2.
