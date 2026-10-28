@@ -1,0 +1,364 @@
+@import "tailwindcss";
+
+@theme inline {
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --font-display: var(--font-pixel), var(--font-inter), system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, monospace;
+}
+
+/* Blueprint Clash is dark-only by design: a blueprint-blue drafting table. */
+html {
+  color-scheme: dark;
+}
+
+:root {
+  --accent: #7dd3fc;
+  --bg: #060b18;
+  --panel: rgba(18, 14, 36, 0.78);
+  --line: rgba(255, 255, 255, 0.08);
+}
+
+body {
+  background:
+    radial-gradient(1200px 600px at 15% -10%, color-mix(in oklab, var(--accent) 16%, transparent), transparent 60%),
+    radial-gradient(900px 500px at 110% 10%, rgba(232, 121, 249, 0.12), transparent 60%),
+    var(--bg);
+  background-attachment: fixed;
+  color: #e7e5f4;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+.panel {
+  background: var(--panel);
+  border: 3px solid #0e0f1a;
+  border-radius: 6px;
+  box-shadow: inset 0 0 0 2px #3a3f63, inset 0 -3px 0 2px #15172a, 0 3px 0 rgba(0, 0, 0, 0.45);
+}
+
+/* ------------------------------------------------------------ pixel UI */
+
+/* Handheld-console buttons: flat fill, hard outline, a bottom ledge that
+   the button presses down into. --btn is the fill, --btn-lo its shadow. */
+.px-btn {
+  --btn: #2b2f4a;
+  --btn-hi: #454a70;
+  --btn-lo: #181a2c;
+  background: var(--btn);
+  border: 2px solid #0e0f1a;
+  border-radius: 4px;
+  box-shadow: inset 0 2px 0 var(--btn-hi), inset 0 -3px 0 var(--btn-lo), 0 2px 0 rgba(0, 0, 0, 0.5);
+  font-family: var(--font-display);
+  image-rendering: pixelated;
+}
+.px-btn:not(:disabled):active {
+  box-shadow: inset 0 2px 0 var(--btn-lo), 0 0 0 rgba(0, 0, 0, 0.5);
+  transform: translateY(2px);
+}
+.px-btn-primary {
+  --btn: var(--accent);
+  --btn-hi: color-mix(in oklab, var(--accent) 55%, white);
+  --btn-lo: color-mix(in oklab, var(--accent) 60%, black);
+}
+.px-btn-gold {
+  --btn: #f2b632;
+  --btn-hi: #ffe08a;
+  --btn-lo: #a8701a;
+}
+.px-btn-danger {
+  --btn: #e0475e;
+  --btn-hi: #ff8a9b;
+  --btn-lo: #8f2238;
+}
+
+/* A menu window: dark fill inside a double outline (dark, then light). */
+.px-window {
+  background: #161a30;
+  border: 3px solid #0e0f1a;
+  border-radius: 6px;
+  box-shadow: inset 0 0 0 2px #c9cdea, inset 0 0 0 4px #0e0f1a, 0 4px 0 rgba(0, 0, 0, 0.5);
+}
+
+/* Main-menu entries: a window with a blinking ▸ cursor on hover/focus. */
+.px-menu-item {
+  position: relative;
+  background: linear-gradient(180deg, #232842, #1a1e34);
+  border: 3px solid #0e0f1a;
+  border-radius: 6px;
+  box-shadow: inset 0 0 0 2px #3a3f63, inset 0 -4px 0 2px #121427, 0 3px 0 rgba(0, 0, 0, 0.5);
+}
+.px-menu-item::before {
+  content: "▸";
+  position: absolute;
+  left: 6px;
+  bottom: 20px;
+  font-family: var(--font-display);
+  font-size: 18px;
+  color: #fff;
+  opacity: 0;
+}
+.px-menu-item:hover,
+.px-menu-item:focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 0 2px var(--item, #c9cdea), inset 0 -4px 0 2px #121427, 0 3px 0 rgba(0, 0, 0, 0.5);
+}
+.px-menu-item:hover::before,
+.px-menu-item:focus-visible::before {
+  opacity: 1;
+  animation: px-blink 0.8s steps(1) infinite;
+}
+.px-menu-item:active {
+  transform: translateY(2px);
+}
+@keyframes px-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* Battle command window: a sunken tray holding the action buttons. */
+.px-tray {
+  background: #10132a;
+  border: 2px solid #0e0f1a;
+  border-radius: 4px;
+  box-shadow: inset 0 2px 0 #070812, inset 0 0 0 2px #2a2f4f;
+}
+
+/* Handheld menu tabs. The selected tab is raised, lit with --tab and
+   carries a blinking ▸ cursor; the rest sit dark and flat. */
+.px-tab {
+  --tab: var(--accent);
+  position: relative;
+  font-family: var(--font-display);
+  background: #1a1e34;
+  border: 2px solid #0e0f1a;
+  border-radius: 3px;
+  color: rgba(255, 255, 255, 0.5);
+  box-shadow: inset 0 -2px 0 #121427;
+}
+.px-tab:hover {
+  color: rgba(255, 255, 255, 0.85);
+}
+.px-tab[aria-selected="true"],
+.px-tab[aria-pressed="true"] {
+  background: #2b3054;
+  color: #fff;
+  box-shadow: inset 0 0 0 2px var(--tab), inset 0 -4px 0 2px #121427, 0 2px 0 rgba(0, 0, 0, 0.5);
+}
+.px-tab[aria-selected="true"]::before {
+  content: "▸";
+  margin-right: 2px;
+  color: var(--tab);
+  animation: px-blink 0.8s steps(1) infinite;
+}
+
+/* One-tap keycaps (symbol row). */
+.px-key {
+  background: #232842;
+  border: 2px solid #0e0f1a;
+  border-radius: 3px;
+  box-shadow: inset 0 2px 0 #3a3f63, inset 0 -3px 0 #121427;
+}
+.px-key:active {
+  background: var(--accent);
+  color: #0e0f1a;
+  box-shadow: inset 0 2px 0 rgba(0, 0, 0, 0.3);
+  transform: translateY(2px);
+}
+
+/* Message boxes inside windows, tinted with --tone. */
+.px-box {
+  --tone: #c9cdea;
+  background: color-mix(in oklab, var(--tone) 9%, #11142a);
+  border: 2px solid #0e0f1a;
+  border-radius: 3px;
+  box-shadow: inset 0 0 0 2px color-mix(in oklab, var(--tone) 40%, #0e0f1a);
+}
+.px-box-title {
+  font-family: var(--font-display);
+  color: var(--tone);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* Small solid status tags (MATCH / NO MATCH / PREVIEW). */
+.px-tag {
+  --tone: #c9cdea;
+  display: inline-block;
+  font-family: var(--font-display);
+  background: var(--tone);
+  color: #0e0f1a;
+  border: 2px solid #0e0f1a;
+  border-radius: 2px;
+  box-shadow: inset 0 -2px 0 color-mix(in oklab, var(--tone) 60%, black);
+  padding: 0 6px 2px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* Spell cards: a framed card with a coloured header stripe (--card). */
+.px-card {
+  --card: #c9cdea;
+  background: linear-gradient(180deg, color-mix(in oklab, var(--card) 16%, #161a30), #12152a 70%);
+  border: 2px solid #0e0f1a;
+  border-radius: 3px;
+  box-shadow: inset 0 4px 0 var(--card), inset 0 0 0 2px color-mix(in oklab, var(--card) 35%, #0e0f1a), 0 3px 0 rgba(0, 0, 0, 0.5);
+}
+.px-card:hover,
+.px-card:focus-visible {
+  outline: none;
+  box-shadow: inset 0 4px 0 var(--card), inset 0 0 0 2px var(--card), 0 5px 0 rgba(0, 0, 0, 0.5);
+}
+
+/* Blinking ▸ in front of the ready CAST command. */
+.px-cursor::before {
+  content: "▸ ";
+  animation: px-blink 0.8s steps(1) infinite;
+}
+
+/* Code windows: a black terminal with a title bar tinted by --tone. */
+.px-term {
+  --tone: #8b90b8;
+  background: #090a14;
+  border: 2px solid #0e0f1a;
+  border-radius: 3px;
+  box-shadow: inset 0 0 0 2px color-mix(in oklab, var(--tone) 35%, #0e0f1a), 0 3px 0 rgba(0, 0, 0, 0.5);
+}
+.px-term-title {
+  color: var(--tone);
+  background: color-mix(in oklab, var(--tone) 14%, #12152a);
+  border-bottom: 2px solid #0e0f1a;
+}
+
+/* Codex rows: a framed card with a coloured edge on the left (--card) and
+   a blinking ▸ cursor while hovered or focused. */
+.px-row {
+  --card: #c9cdea;
+  position: relative;
+  background: linear-gradient(90deg, color-mix(in oklab, var(--card) 12%, #161a30), #13162b 60%);
+  border: 2px solid #0e0f1a;
+  border-radius: 3px;
+  box-shadow: inset 6px 0 0 var(--card), inset 0 0 0 2px color-mix(in oklab, var(--card) 30%, #0e0f1a), 0 3px 0 rgba(0, 0, 0, 0.5);
+}
+.px-row-open,
+.px-row:has(> button:hover),
+.px-row:has(> button:focus-visible) {
+  box-shadow: inset 6px 0 0 var(--card), inset 0 0 0 2px var(--card), 0 3px 0 rgba(0, 0, 0, 0.5);
+}
+.px-row > button:focus-visible {
+  outline: none;
+}
+.px-row-cursor {
+  color: var(--card);
+  opacity: 0;
+}
+.px-row:has(> button:hover) .px-row-cursor,
+.px-row:has(> button:focus-visible) .px-row-cursor,
+.px-row-open .px-row-cursor {
+  opacity: 1;
+  animation: px-blink 0.8s steps(1) infinite;
+}
+/* locked rows keep their category edge on a dark hatched fill */
+.px-row-locked {
+  background: repeating-linear-gradient(135deg, #14172b 0 6px, #11142a 6px 12px);
+}
+
+/* Quiz choices: a lettered keycap plus the answer, turning green or red. */
+.px-choice {
+  --tone: #3a3f63;
+  background: #1a1e34;
+  border: 2px solid #0e0f1a;
+  border-radius: 3px;
+  box-shadow: inset 0 0 0 2px var(--tone), inset 0 -3px 0 2px #121427;
+}
+.px-choice:not(:disabled):hover,
+.px-choice:not(:disabled):focus-visible {
+  outline: none;
+  --tone: #c9cdea;
+}
+.px-choice:not(:disabled):active {
+  transform: translateY(2px);
+}
+
+/* Hard pixel drop shadow for big titles. */
+.px-shadow {
+  text-shadow: 3px 3px 0 #0e0f1a, 0 3px 0 #0e0f1a;
+}
+
+.neon-text {
+  text-shadow: 0 0 18px color-mix(in oklab, var(--accent) 70%, transparent), 0 0 2px var(--accent);
+}
+
+.grid-bg {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+.scroll-thin {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+}
+
+/* CodeMirror host */
+.cm-host .cm-editor {
+  height: 100%;
+  border-radius: 12px;
+}
+.cm-host .cm-editor.cm-focused {
+  outline: none;
+  box-shadow: 0 0 0 1px color-mix(in oklab, var(--accent) 60%, transparent), 0 0 30px -10px var(--accent);
+}
+
+/* ---------------------------------------------------------------- touch */
+
+/* Below lg the battle screen has a fixed CAST bar at the bottom; keep
+   scrolled-to elements (focused fields, scrollIntoView) clear of it. */
+@media (max-width: 1023px) {
+  html {
+    scroll-padding-bottom: 6rem;
+  }
+}
+
+/* No 300ms tap delay or double-tap zoom on controls. */
+button,
+a,
+[role="tab"],
+[role="radio"] {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (pointer: coarse) {
+  /* iOS Safari zooms into any focused field under 16px; keep text at 16px. */
+  .cm-host .cm-content,
+  input,
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+  /* hover-only affordances don't exist on touch */
+  .hide-on-touch {
+    display: none !important;
+  }
+}
+
+@keyframes scan {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+

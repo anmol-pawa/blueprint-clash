@@ -1,13 +1,13 @@
 # Blueprint Clash
 
-Build systems that survive. A creature-tactics RPG for **low-level design in C++** and **system design**:
+A creature-tactics RPG that teaches **low-level design in C++** (OOP, SOLID, patterns, concurrency, machine coding) and **high-level system design** (estimation, caching, sharding, replication, messaging, consensus, reliability, case studies) up to FAANG-level interview rounds.
 
-- **Workshop:** machine-coding problems in real C++, judged by hidden behaviour tests, then hit by *Change Storms* (new requirements) that score how well your design follows the Open/Closed Principle, followed by an automated Senior Review of your class design.
-- **Pattern Quarter:** design patterns as creatures; pick the right one for each design problem.
-- **Race Hunter:** find races and deadlocks by scheduling threads by hand, then prove your fix.
-- **The Siege:** wire up load balancers, caches, shards, replicas and queues, then survive simulated traffic, hot keys, retry storms and region outages.
-- **Interview Room:** 45-minute system design mocks and 90-minute machine-coding mocks, scored with level signals (SDE II / Senior / Staff).
+**Play:** https://anmol-pawa.github.io/blueprint-clash/ (installable PWA)
 
-Live (after the first deploy): https://anmol-pawa.github.io/blueprint-clash/
+Stack: Next.js 16 · React 19 · TypeScript · Tailwind 4 · PixiJS 8 · Vitest. See `docs/` for the game design, curriculum and architecture, and `ROADMAP.md` for progress.
 
-Design docs: [Game design](docs/GAME_DESIGN.md) · [Curriculum](docs/CURRICULUM.md) · [Architecture](docs/ARCHITECTURE.md) · [Roadmap](ROADMAP.md)
+```
+npm ci
+npm run dev          # http://localhost:3000
+npm run lint && npm run typecheck && npm test && npm run build && npm run build:pages
+```
