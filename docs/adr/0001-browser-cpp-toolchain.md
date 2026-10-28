@@ -27,3 +27,9 @@ Use `@yowasp/clang` in a Web Worker with `-std=c++17/20 -fno-exceptions`. Keep n
 ## Consequences and open decisions (NEEDS OWNER APPROVAL)
 - LLD problems that expect exceptions (typical interview style: `throw std::invalid_argument`) must use error returns (`bool`, `std::optional`, error enums) in the Workshop; the editorial should say that is a deliberate trade-off, and note that `Result`/`optional` APIs are also common in big-tech C++ (Google style bans exceptions).
 - Concurrency: options are (a) a deterministic cooperative "thread" shim in `bp_test.h`/`api.h` with scheduled interleavings (teaches races reproducibly, but is not real `std::thread`), (b) custom-built wasm sysroot with wasi-threads (large build effort), (c) run concurrency tests natively only and offer them as read-and-reason cards in the browser. Recommended: (a) for the Workshop plus (c) for predict-behaviour cards.
+
+## Browser measurements (A2c, Chromium headless, desktop and iPhone 14 emulation)
+- Architecture: `scripts/copy-clang.mjs` copies the toolchain to `public/clang/` (git-ignored; run by `predev`/`prebuild`/`prebuild:pages`). A persistent compile worker loads `clang/bundle.js` at runtime (outside the bundler); each run gets a disposable worker with a hand-written WASI host (`lib/judge/browser/wasi.ts`) so a timeout is just `terminate()`.
+- Cold compile+link of a 3-file project: ~9–10 s (includes toolchain load from localhost). Compile error path: <1 s. Test run: 3–8 ms. Infinite loop is killed at the timeout (verdict `time_limit`).
+- The service worker does not precache `clang/` (~105 MB); it is cached on first judge use. `llvm.core.wasm` is 73 MB, under GitHub Pages' 100 MB file limit.
+- The WASI host needs `clock_time_get` (std::chrono in `bp_test.h`); unknown WASI imports answer ENOSYS.

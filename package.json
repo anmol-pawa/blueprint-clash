@@ -4,12 +4,15 @@
   "private": true,
   "description": "Blueprint Clash: a creature-tactics RPG that teaches low-level design in C++ and system design",
   "scripts": {
+    "predev": "node scripts/copy-clang.mjs",
     "dev": "next dev",
+    "prebuild": "node scripts/copy-clang.mjs",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
     "typecheck": "next typegen && tsc --noEmit",
     "test": "vitest run",
+    "prebuild:pages": "node scripts/copy-clang.mjs",
     "build:pages": "STATIC_EXPORT=1 BASE_PATH=${BASE_PATH-/blueprint-clash} next build && BASE_PATH=${BASE_PATH-/blueprint-clash} node scripts/gen-sw.mjs"
   },
   "dependencies": {

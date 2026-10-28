@@ -21,6 +21,8 @@ const urls = [];
 for (const file of walk(out).sort()) {
   const rel = relative(out, file).split(sep).join("/");
   if (rel === "sw.js" || rel === ".nojekyll" || rel.endsWith(".map")) continue;
+  // the ~105 MB clang toolchain is cached lazily on first judge use, never precached
+  if (rel.startsWith("clang/") && rel !== "clang/bp_test.h") continue;
   hash.update(rel).update(readFileSync(file));
   // serve directory indexes by their pretty URL too (…/campaign/)
   urls.push(`${base}/${rel}`);

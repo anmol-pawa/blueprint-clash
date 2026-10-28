@@ -30,3 +30,10 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Verification: `npm run lint`, `typecheck`, `test` (15 pass), `build`, `build:pages`. No UI change, so no screenshots. CI/deploy confirmation skipped (Actions quota exhausted until 2026-11-01).
 - Known gaps: browser-side measurements (download, memory, Chromium timing) not done yet; the package is 105 MB.
 - Next: A2c (browser worker + `/dev/judge`).
+
+## 2026-10-28: A2c browser judge worker
+- Added `lib/judge/browser/` (compile worker around `@yowasp/clang`, disposable run worker with a minimal WASI host, `judgeInBrowser` client), `scripts/copy-clang.mjs` (toolchain to git-ignored `public/clang/`, wired into predev/prebuild/prebuild:pages), SW precache excludes `clang/`, and the `/dev/judge` page. ADR 0001 updated with measurements.
+- Verification: `lint`, `typecheck`, `test` (17 pass, incl. new WASI test), `build:pages` pass. Playwright (Chromium) at 1280x800 and iPhone 14 on `/dev/judge`: accepted, wrong_behaviour (file:line messages), compile_error, runtime_error (trap), time_limit (infinite loop) all correct; no console errors, no horizontal overflow; screenshot viewed. `npm run build` (non-static) not separately re-run beyond build:pages' compile; see below.
+- CI and Pages deploy confirmation skipped (Actions quota exhausted until 2026-11-01).
+- Known gaps: compile is ~9–10 s cold (every page load); no warm-compile or Chromium memory measurement; Pages deploy of 105 MB toolchain unverified; the `/dev/judge` page is unstyled scaffolding.
+- Next: A3 (workshop content pipeline + `content:verify`).
