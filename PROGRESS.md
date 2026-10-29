@@ -59,3 +59,11 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Verification: `lint`, `typecheck`, `test` (46 pass, 12 new in `tests/save.test.ts`), `content:verify`, `build`, `build:pages` pass. No UI change, so no screenshots. CI/deploy confirmation skipped (Actions quota exhausted until 2026-11-01).
 - Known gaps: no settings/export UI yet (arrives with the title/menu in B1/B2); the IndexedDB backend is not exercised in Node (covered by the interface via the memory store); no cross-tab write coordination.
 - Next: B1 (Draftling art, player and Ada Lintwell, Old Town tileset).
+
+## 2026-10-29: B1a Draftling art + sprite pipeline
+- Split B1 into B1a–d (ROADMAP). Ported the sprite pipeline from Query Clash: `scripts/art/paint.mjs` (shaded-shape painter), `game/sprites/pixel.ts` + `texture.ts`, a `/dev/sprites` review page, and `tests/sprites.test.ts` (rectangular, palette-only, ≥64×64, idle 2–4 frames, faint sinks, animates).
+- New original creature **DRAFTLING** (`scripts/art/draftling.mjs`): blueprint-blue body, pencil horn, amber set-square ears, ruler tail, graph-paper belly. Front and back, 64×64, 4-frame idle, attack, hurt, faint, 8-frame evolve silhouette.
+- Verification: `lint`, `typecheck`, `test` (60 pass), `content:verify`, `build`, `build:pages` pass. Playwright on `/dev/sprites` at 1280x800 and iPhone 14: no console errors, no horizontal overflow, sprites readable (screenshots viewed).
+- Committed on the session's designated branch `claude/funny-ramanujan-xdhn3x` rather than `main` (see DECISIONS.md #3). CI/deploy confirmation skipped (Actions quota exhausted until 2026-11-01).
+- Known gaps: idle motion is subtle; no Pixi battle rendering yet (B3); the evolve target form arrives in B1b.
+- Next: B1b (Architect form).

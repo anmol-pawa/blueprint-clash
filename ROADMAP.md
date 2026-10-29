@@ -19,7 +19,11 @@ Work top to bottom: take the **first unchecked box**, and split big boxes into r
 
 ## Phase B: Vertical slice (Old Town, about 30–40 minutes of play)
 
-- [ ] B1. **Art:** the starter Patternling (*Draftling*, which evolves into an Architect form; original, 64×64, full animation set), the player and Ada Lintwell (overworld + portrait), the Old Town tileset and the Drafting Hall interior.
+- [ ] B1. **Art** (split below).
+  - [x] B1a. Starter Patternling *Draftling*: front + back, 64×64, idle/attack/hurt/faint/evolve, sprite pipeline (`scripts/art/`, `game/sprites/`) and `/dev/sprites`.
+  - [ ] B1b. The Architect evolution form of Draftling (front + back, full animation set).
+  - [ ] B1c. The player and Ada Lintwell: overworld walk cycles + dialogue portraits.
+  - [ ] B1d. Old Town tileset and the Drafting Hall interior.
 - [ ] B2. **Overworld + dialogue engine** (port from Algo Clash if present, else build per its GDD §B2 equivalent).
 - [ ] B3. **Battle stage and card battles** (MCQ, which-pattern, smell spotter, predict-behaviour; native generation of predict-behaviour outputs).
 - [ ] B4. **Old Town lesson** (CUR L1, first half: classes, RAII, ownership, smart pointers), 30 cards and 6 judged class exercises.
