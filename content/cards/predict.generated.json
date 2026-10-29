@@ -1,0 +1,7 @@
+{
+  "predict-slicing": "Shape",
+  "predict-ctor-virtual": "Base\nDerived",
+  "predict-shared-deleter": "~Derived\n~Base",
+  "predict-moved-unique": "a empty\n7",
+  "predict-copy-move-count": "ctor\ncopy\nmove"
+}

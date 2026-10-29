@@ -27,7 +27,9 @@ Work top to bottom: take the **first unchecked box**, and split big boxes into r
 - [x] B2. **Overworld + dialogue engine** (split below; Algo Clash has no overworld yet, so built fresh).
   - [x] B2a. Pure logic: `lib/world/` (grid maps, collision, warps, NPC/sign interaction, validation) and `lib/dialogue/` (scripts with choices and flags, typewriter), Old Town and Drafting Hall maps, Ada's intro, tests.
   - [x] B2b. Pixi overworld scene and `/play`: render maps via `composeScene` tiles, smooth tile-to-tile walking with the player walk cycles, NPC sprites, camera, dialogue box with portraits and choices, keyboard + touch D-pad/A button, door transitions; Playwright at desktop and iPhone 14.
-- [ ] B3. **Battle stage and card battles** (MCQ, which-pattern, smell spotter, predict-behaviour; native generation of predict-behaviour outputs).
+- [ ] B3. **Battle stage and card battles** (MCQ, which-pattern, smell spotter, predict-behaviour; native generation of predict-behaviour outputs). Split:
+  - [x] B3a. Pure `lib/battle/` (grading, damage, streaks, seeded decks), card types, starter Old Town cards, natively generated + verified predict cards.
+  - [ ] B3b. Pixi battle stage (backdrop, platforms, Draftling back + foe sprites, attack/hurt/faint animations, shake, hit-stop, damage numbers) and the card UI at `/dev/battle`, desktop + iPhone 14.
 - [ ] B4. **Old Town lesson** (CUR L1, first half: classes, RAII, ownership, smart pointers), 30 cards and 6 judged class exercises.
 - [ ] B5. **Old Town lesson, second half** (polymorphism, virtual destructors, slicing, `variant`), 25 cards and 6 exercises.
 - [ ] B6. **The Workshop flow, v1** (GDD §5.3): brief + clarify menu → code → tests → Change Storm 1 → a basic debrief. Use Library management with one storm.

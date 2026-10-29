@@ -105,3 +105,10 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Known gaps: the game is not linked from the home page yet; flags and position are not saved; no NPC idle animation; the typewriter cannot be skipped by tap (tap advances); no fade on door transitions; the Pixi scene has no unit tests (logic is covered in `tests/world.test.ts`).
 - Note: designated branch was `claude/funny-ramanujan-8xjebm`; pushed to it and to `main`.
 - Next: B3 (battle stage and card battles).
+
+## 2026-10-29: B3a card battle logic and predict cards
+- Split B3 into B3a (done) and B3b (Pixi stage + card UI). Added pure `lib/battle/` (`grade` incl. exact multi-select, `answerCard` with streak bonus and counter damage, seeded `drawDeck`/option shuffling with answer remap, `validateDeck`, `buildPredictCards`), 5 hand-written Old Town cards of 4 kinds (mcq, multi, pattern, smell) and 5 predict-behaviour programs (slicing, virtual call in ctor, shared_ptr deleter, moved-from unique_ptr, copy/move elision) whose answers come from native g++ runs (ASan/UBSan) recorded in `predict.generated.json`. Documented in ARCH.
+- Verification: `lint` (3 pre-existing warnings), `typecheck`, `test` (battle tests added), `content:verify` (new `cards.verify.ts`; it caught a distractor equal to the real output) pass. `build`/`build:pages` run below. No UI change, so no screenshots. CI/deploy confirmation skipped (Actions quota exhausted until 2026-11-01).
+- Known gaps: no UI yet; only 10 cards (B4/B5 add the lesson decks); UML-reader, estimation and trade-off card kinds come later; no SRS wiring.
+- Note: designated branch was `claude/funny-ramanujan-a4bqlf`; pushed there rather than `main`.
+- Next: B3b (Pixi battle stage and card UI).
