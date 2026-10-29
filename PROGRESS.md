@@ -91,3 +91,10 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Known gaps: no district-specific tiles beyond Old Town; the hall's rug edge tiles do not wrap its corners cleanly; no tile collision metadata yet (B2); tile-to-tile edge blending (grass/path) is not drawn.
 - Note: this session's designated branch was `claude/funny-ramanujan-6k1ea4`; pushed to it and to `main` as CLAUDE.md requires.
 - Next: B2 (overworld + dialogue engine).
+
+## 2026-10-29: B2a overworld and dialogue logic
+- Added pure `lib/world/` (`MapDef`, grid `step` with turn-then-move, solid tiles, NPC blocking, warps checked before solidity, `facingTarget`, `validateMaps`) and `lib/dialogue/` (node-graph scripts with `next`/`choices`, flag `set`/`requires`, pure `advance`, `validateScript`, typewriter `visibleText`). Old Town and Drafting Hall maps (door and mat warps, Ada Lintwell, three notice boards and a chalkboard) and Ada's intro script with a choice. Documented in ARCH ("World and dialogue"). B2 split into B2a (done) and B2b (Pixi scene and `/play`).
+- Verification: `lint` (3 pre-existing warnings in `scripts/art/tiles.mjs`), `typecheck`, `test` (103 pass, 16 new in `tests/world.test.ts`, including walking from the start to the hall door), `content:verify`, `build`, `build:pages` pass. No UI change, so no screenshots. CI/deploy confirmation skipped (Actions quota exhausted until 2026-11-01).
+- Known gaps: no rendering or input yet; no NPC wandering; no run/ledge/trigger tiles; flags are not yet persisted in the save.
+- Note: this session's designated branch was `claude/funny-ramanujan-7bz3kq`; pushed to it and to `main`.
+- Next: B2b (Pixi overworld scene + `/play`).
