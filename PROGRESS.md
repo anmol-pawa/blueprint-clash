@@ -119,3 +119,10 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Known gaps: foe is a recolour, not dedicated art; no battle music/sfx; no link to `/battle` from `/play` or home; on iPhone the explanation sits below the options (scrolls into view); no Pixi unit tests; battle result is not saved or fed to SRS.
 - Note: designated branch was `claude/funny-ramanujan-gp1ugc`; committed to `main` as CLAUDE.md requires.
 - Next: B4 (Old Town lesson, first half: 30 cards and 6 judged class exercises).
+
+## 2026-10-29: B4a Old Town deck grown to 30 cards
+- B4 split into B4a (done) and B4b (six judged class exercises). Added 18 cards to `content/cards/old-town.ts` covering struct vs class, invariants/encapsulation, initialiser lists (and declaration-order init), `explicit`, delegating constructors, const member functions, static members, copy vs move, `shared_ptr`/`weak_ptr`, `optional`, `enum class`, and non-owning parameters. 7 new predict cards are proven by native g++ in `tests/battle.test.ts` and `content:verify`.
+- Verification: `lint` (3 pre-existing warnings), `typecheck`, `test` (121 pass), `content:verify`, `build`, `build:pages` pass. Data-only change to the deck, so no new screenshots. CI/deploy confirmation skipped (Actions quota exhausted until 2026-11-01).
+- Known gaps: the deck is still all in one file (no per-lesson split yet); no UML-reader/estimation/trade-off card kinds; correct answers are mostly option 0 in the source (the battle shuffles options at run time).
+- Note: designated branch was `claude/funny-ramanujan-wdfdj8`; pushed to it and to `main`.
+- Next: B4b (six judged class exercises).

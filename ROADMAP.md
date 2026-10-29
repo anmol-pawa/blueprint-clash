@@ -30,7 +30,9 @@ Work top to bottom: take the **first unchecked box**, and split big boxes into r
 - [x] B3. **Battle stage and card battles** (MCQ, which-pattern, smell spotter, predict-behaviour; native generation of predict-behaviour outputs). Split below.
   - [x] B3a. Pure `lib/battle/` (card model + validation, deterministic battle state machine with streaks, counters, re-queue of misses, stars), the 12-card Old Town starter deck, predict cards proven by native g++ (`content:verify` + tests).
   - [x] B3b. Pixi battle stage: backdrop, platforms, Draftling back sprite vs a foe, intro transition, attack/hurt animations, shake, hit-stop, damage numbers; card UI (code view, options, explanation) at `/battle`; Playwright desktop + iPhone 14.
-- [ ] B4. **Old Town lesson** (CUR L1, first half: classes, RAII, ownership, smart pointers), 30 cards and 6 judged class exercises.
+- [ ] B4. **Old Town lesson** (CUR L1, first half: classes, RAII, ownership, smart pointers), 30 cards and 6 judged class exercises. Split below.
+  - [x] B4a. Grow the Old Town deck to 30 cards (classes/structs, invariants, constructors, const, static, copy vs move, smart pointers, `optional`), with predict cards proven natively.
+  - [ ] B4b. Six judged class exercises (BankAccount, RAII FileHandle, Inventory ownership, Stack<T>, Counter with static, Temperature `enum class`) as small packages run through the judge, with tests.
 - [ ] B5. **Old Town lesson, second half** (polymorphism, virtual destructors, slicing, `variant`), 25 cards and 6 exercises.
 - [ ] B6. **The Workshop flow, v1** (GDD §5.3): brief + clarify menu → code → tests → Change Storm 1 → a basic debrief. Use Library management with one storm.
 - [ ] B7. **OCP scorer and Senior Review v1:** the AST dump in the worker, the AST model, and 5 rules (virtual destructor, raw `new` ownership, public mutable fields, missing `override`, god class) with fixtures.
