@@ -67,3 +67,10 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Known gaps: no back sprite or Architect evolution yet; the ears sit slightly off the head silhouette; `/dev/sprites` is unstyled scaffolding.
 - Note: this session's designated branch was `claude/funny-ramanujan-20eb50`; pushed to it and to `main` as CLAUDE.md requires.
 - Next: B1b (Draftling back sprite + Architect evolution).
+
+## 2026-10-29: B1b Draftling back + Architect
+- Added `scripts/art/draftling-forms.mjs` generating `draftling-back` (64×64) and `architect` / `architect-back` (80×80): hard hat over set-square ears, spectacles, strapped blueprint scroll, gridded back, long pencil tail. Each has idle 4, attack 3, hurt 2, faint 4, evolve 4. All listed on `/dev/sprites`.
+- Verification: `lint`, `typecheck`, `test` (70 pass), `content:verify`, `build`, `build:pages` pass. Playwright at 1280x800 and iPhone 14 on `/dev/sprites`: no console errors, no horizontal overflow; screenshots viewed, forms read as one evolution line.
+- CI and Pages deploy confirmation skipped (Actions quota exhausted until 2026-11-01).
+- Known gaps: Architect evolve frames reuse the silhouette pulse (no colour reveal); the spectacles are rings only; the back-view pencil overlaps the body.
+- Next: B1c (player and Ada Lintwell walk cycles + portraits).
