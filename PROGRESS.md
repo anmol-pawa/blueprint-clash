@@ -105,3 +105,10 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Known gaps: the game is not linked from the home page yet; flags and position are not saved; no NPC idle animation; the typewriter cannot be skipped by tap (tap advances); no fade on door transitions; the Pixi scene has no unit tests (logic is covered in `tests/world.test.ts`).
 - Note: designated branch was `claude/funny-ramanujan-8xjebm`; pushed to it and to `main`.
 - Next: B3 (battle stage and card battles).
+
+## 2026-10-29: B3a battle logic and starter deck
+- Added pure `lib/battle/` (`cards.ts`: four card kinds, `validateCards`, exact-set `isCorrect`; `battle.ts`: seeded shuffle of cards and options, streak damage, counter damage, missed cards re-queued at the back, win/lose, stars) and `lib/battle/verify.ts` + `compileAndRun` in `lib/judge/native.ts`. 12-card Old Town deck in `content/cards/old-town.ts` (RAII, ownership, Rule of Zero, Observer, Decorator, two smell cards, four predict cards: slicing, virtual call in constructor, destructor order, unique_ptr move). B3 split into B3a (done) and B3b (Pixi stage and UI). Documented in ARCH.
+- Verification: `lint` (3 pre-existing warnings), `typecheck`, `test` (115 pass, 12 new in `tests/battle.test.ts`, including g++ proof of every predict output), `content:verify`, `build`, `build:pages` pass. No UI change, so no screenshots. CI/deploy confirmation skipped (Actions quota exhausted until 2026-11-01).
+- Known gaps: no UI yet; deck has 12 of the planned 30 Old Town cards (B4/B5 add more); no UML-reader/estimation/trade-off card kinds yet; misses are not yet fed to the SRS/save.
+- Note: designated branch was `claude/funny-ramanujan-3ec4fk`; pushed to it and to `main`.
+- Next: B3b (Pixi battle stage + `/battle` UI).

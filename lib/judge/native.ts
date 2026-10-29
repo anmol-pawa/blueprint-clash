@@ -78,3 +78,20 @@ export const DRIVER: ProjectFile = {
   content: '#define BP_TEST_MAIN\n#include "bp_test.h"\n',
   readOnly: true,
 };
+
+/** Compiles one self-contained program with g++ and returns its stdout (for generated/verified cards). */
+export async function compileAndRun(source: string, opts: { std?: string; timeoutMs?: number } = {}): Promise<{ ok: boolean; stdout: string; stderr: string }> {
+  const dir = await mkdtemp(join(tmpdir(), "bp-run-"));
+  try {
+    await writeFile(join(dir, "main.cpp"), source);
+    try {
+      await run("g++", [`-std=${opts.std ?? "c++20"}`, "-O0", "-Wall", "-o", join(dir, "a.out"), join(dir, "main.cpp")], { cwd: dir, maxBuffer: 16 << 20 });
+    } catch (e) {
+      return { ok: false, stdout: "", stderr: (e as { stderr?: string }).stderr ?? String(e) };
+    }
+    const { stdout, stderr } = await run(join(dir, "a.out"), [], { timeout: opts.timeoutMs ?? 10000, maxBuffer: 16 << 20 });
+    return { ok: true, stdout, stderr };
+  } finally {
+    await rm(dir, { recursive: true, force: true });
+  }
+}
