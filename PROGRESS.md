@@ -82,3 +82,12 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Known gaps: Ada's overworld glasses are a bar that hides her eyes at this size; side-view heads are blocky; no run/interact poses; the walkers have only a few hand-tuned limb offsets rather than a full 6-frame cycle.
 - Note: this session's designated branch was `claude/funny-ramanujan-4ej3h0`; committed to `main` as CLAUDE.md requires.
 - Next: B1d (Old Town tileset and the Drafting Hall interior).
+
+## 2026-10-29: B1d Old Town tileset and Drafting Hall interior
+- Added `scripts/art/tiles.mjs` generating `game/sprites/tiles/old-town.ts` (25 tiles: grass/flower variants, cobble path and plaza, 4-frame water, brick wall, lit/dark windows, door, slate roof and eave, plaster, trees, flickering lamp, fence, sign, bench, crate, flowerbed, hedge, blueprint notice board) and `drafting-hall.ts` (18 tiles: wood floors, rug set, panelled wall, window, bookshelf, drafting tables with blueprints, chalkboard with a UML sketch, plant, wall lamp, door mat, stairs). 16×16 tiles, palette + row strings, animated tiles have 2–4 frames.
+- `game/sprites/tiles/tileset.ts` defines `TileSetDef`, `validateTileSet` and `composeScene` (layered tile maps to a sprite); `scenes.ts` has a sample Old Town square and Drafting Hall. `/dev/sprites` now shows both scenes and every tile.
+- Verification: `lint`, `typecheck`, `test`, `content:verify`, `build`, `build:pages` pass (9 new tests in `tests/tiles.test.ts`). Playwright at 1280x800 and iPhone 14 on `/dev/sprites`: no console errors, no horizontal overflow; scene screenshots viewed, both read as a brick-and-slate town square and a wood-panelled drafting studio.
+- CI and Pages deploy confirmation skipped (Actions quota exhausted until 2026-11-01).
+- Known gaps: no district-specific tiles beyond Old Town; the hall's rug edge tiles do not wrap its corners cleanly; no tile collision metadata yet (B2); tile-to-tile edge blending (grass/path) is not drawn.
+- Note: this session's designated branch was `claude/funny-ramanujan-6k1ea4`; pushed to it and to `main` as CLAUDE.md requires.
+- Next: B2 (overworld + dialogue engine).
