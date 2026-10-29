@@ -59,3 +59,10 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Verification: `lint`, `typecheck`, `test` (46 pass, 12 new in `tests/save.test.ts`), `content:verify`, `build`, `build:pages` pass. No UI change, so no screenshots. CI/deploy confirmation skipped (Actions quota exhausted until 2026-11-01).
 - Known gaps: no settings/export UI yet (arrives with the title/menu in B1/B2); the IndexedDB backend is not exercised in Node (covered by the interface via the memory store); no cross-tab write coordination.
 - Next: B1 (Draftling art, player and Ada Lintwell, Old Town tileset).
+
+## 2026-10-29: B1a Draftling art + sprite toolkit
+- Split B1 into B1a/B1b/B1c. Added `lib/sprites/raster.ts` (indexed canvas: dithered lit-ellipse shading with 3–4 colour ramps, rotated bars, auto outline, silhouette/dissolve/sink effects, RGBA conversion), `lib/sprites/draftling.ts` (blue blueprint-sheet body, gridded belly, pencil ears, ruler tail, compass legs; 64×64 front and back; idle 4, attack 4, hurt 3, faint 4, evolve-silhouette 5 frames), `components/SpriteView.tsx` (nearest-neighbour canvas player) and the `/dev/sprites` review page.
+- Verification: `lint`, `typecheck`, `test` (51 pass, 5 new in `tests/sprites.test.ts`: size, palette bounds, inside-frame, determinism, front/back, dissolve, RGBA), `content:verify`, `build`, `build:pages` pass. Playwright on `/dev/sprites` at 1280x900 and iPhone 14: no console errors, no horizontal overflow; screenshots viewed (reads as a drafting creature, animations distinct).
+- Developed on branch `claude/funny-ramanujan-vpxixl` per the session's branch rule (not `main`). CI/deploy confirmation skipped (Actions quota exhausted until 2026-11-01).
+- Known gaps: the ruler tail reads weakly; the evolve animation is a silhouette pulse only (the Architect form lands in B8); no hit-spark effect sprites yet (B3).
+- Next: B1b (player and Ada Lintwell).
