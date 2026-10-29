@@ -59,3 +59,11 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Verification: `lint`, `typecheck`, `test` (46 pass, 12 new in `tests/save.test.ts`), `content:verify`, `build`, `build:pages` pass. No UI change, so no screenshots. CI/deploy confirmation skipped (Actions quota exhausted until 2026-11-01).
 - Known gaps: no settings/export UI yet (arrives with the title/menu in B1/B2); the IndexedDB backend is not exercised in Node (covered by the interface via the memory store); no cross-tab write coordination.
 - Next: B1 (Draftling art, player and Ada Lintwell, Old Town tileset).
+
+## 2026-10-29: B1a sprite engine and Draftling
+- Ported the renderer-agnostic sprite format (`game/sprites/pixel.ts`, `texture.ts`, `SpriteCanvas`) and the `scripts/art/paint.mjs` painter from Query Clash. Authored DRAFTLING (64×64, 19-colour palette) with `scripts/art/draftling.mjs`: blueprint-blue body, set-square ears, compass antenna, ruler-tick belly, pencil tail. Animations: idle 4, attack 3, hurt 2, faint 4 (dithered dissolve), evolve 4 (white silhouette pulse). `/dev/sprites` reviews every animation; `tests/sprites.test.ts` validates every sprite.
+- Verification: `lint`, `typecheck`, `test` (55 pass), `content:verify`, `build`, `build:pages` pass. Playwright at 1280x800 and iPhone 14 on `/dev/sprites`: no console errors, no horizontal overflow; screenshots viewed, the creature reads as a drafting critter.
+- CI and Pages deploy confirmation skipped (Actions quota exhausted until 2026-11-01).
+- Known gaps: no back sprite or Architect evolution yet; the ears sit slightly off the head silhouette; `/dev/sprites` is unstyled scaffolding.
+- Note: this session's designated branch was `claude/funny-ramanujan-20eb50`; pushed to it and to `main` as CLAUDE.md requires.
+- Next: B1b (Draftling back sprite + Architect evolution).
