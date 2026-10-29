@@ -112,3 +112,10 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Known gaps: no UI yet; deck has 12 of the planned 30 Old Town cards (B4/B5 add more); no UML-reader/estimation/trade-off card kinds yet; misses are not yet fed to the SRS/save.
 - Note: designated branch was `claude/funny-ramanujan-3ec4fk`; pushed to it and to `main`.
 - Next: B3b (Pixi battle stage + `/battle` UI).
+
+## 2026-10-29: B3b Pixi battle stage and /battle
+- Added `game/battle/BattleStage.ts` (dusk backdrop, platforms, Draftling back vs foe, intro slide-in + fade, lunge attack, hurt flash, shake, hit-stop, floating damage numbers, faint) and `/battle` (`app/battle/`): HP bars, code view, single/multi-select options with keys 1-9, Attack, explanation panel, Next, victory/defeat screen with stars and Rematch. Added `rotateHue`/`hueShifted` (tested) and the placeholder foe `ROUGH_DRAFT` (hue-shifted Draftling, shown on `/dev/sprites`).
+- Verification: `lint` (3 pre-existing warnings), `typecheck`, `test` (121 pass), `content:verify`, `build`, `build:pages` pass. Playwright at 1280x800 and iPhone 14 on `/battle`: answered a card, saw the strike, damage number and explanation; no console errors, no horizontal overflow; screenshots viewed. CI/deploy confirmation skipped (Actions quota exhausted until 2026-11-01).
+- Known gaps: foe is a recolour, not dedicated art; no battle music/sfx; no link to `/battle` from `/play` or home; on iPhone the explanation sits below the options (scrolls into view); no Pixi unit tests; battle result is not saved or fed to SRS.
+- Note: designated branch was `claude/funny-ramanujan-gp1ugc`; committed to `main` as CLAUDE.md requires.
+- Next: B4 (Old Town lesson, first half: 30 cards and 6 judged class exercises).

@@ -85,3 +85,12 @@ describe("character sprites", () => {
     });
   }
 });
+
+describe("hue shifting", () => {
+  it("keeps grey and lightness, changes hue", async () => {
+    const { rotateHue } = await import("@/game/sprites/pixel");
+    expect(rotateHue([120, 120, 120], 90)).toEqual([120, 120, 120]);
+    expect(rotateHue([255, 0, 0], 120)).toEqual([0, 255, 0]);
+    expect(rotateHue([255, 0, 0], 360)).toEqual([255, 0, 0]);
+  });
+});

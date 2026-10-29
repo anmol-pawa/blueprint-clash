@@ -133,3 +133,31 @@ export function bounds(frame: Frame): { x: number; y: number; w: number; h: numb
   });
   return x1 < 0 ? null : { x: x0, y: y0, w: x1 - x0 + 1, h: y1 - y0 + 1 };
 }
+
+/** Rotates a colour's hue by `deg` degrees, keeping lightness and saturation (so shade ramps survive). */
+export function rotateHue([r, g, b]: [number, number, number], deg: number): [number, number, number] {
+  const [rn, gn, bn] = [r / 255, g / 255, b / 255];
+  const max = Math.max(rn, gn, bn);
+  const min = Math.min(rn, gn, bn);
+  const l = (max + min) / 2;
+  const d = max - min;
+  if (d === 0) return [r, g, b];
+  const s = d / (1 - Math.abs(2 * l - 1));
+  let h = max === rn ? ((gn - bn) / d) % 6 : max === gn ? (bn - rn) / d + 2 : (rn - gn) / d + 4;
+  h = (((h * 60 + deg) % 360) + 360) % 360;
+  const c = (1 - Math.abs(2 * l - 1)) * s;
+  const x = c * (1 - Math.abs(((h / 60) % 2) - 1));
+  const m = l - c / 2;
+  const [r1, g1, b1] = h < 60 ? [c, x, 0] : h < 120 ? [x, c, 0] : h < 180 ? [0, c, x] : h < 240 ? [0, x, c] : h < 300 ? [x, 0, c] : [c, 0, x];
+  return [Math.round((r1 + m) * 255), Math.round((g1 + m) * 255), Math.round((b1 + m) * 255)];
+}
+
+/** A palette-swapped copy of a sprite (same frames), used for rival and corrupted forms. */
+export function hueShifted(def: SpriteDef, id: string, name: string, deg: number): SpriteDef {
+  const palette: Record<string, string> = {};
+  for (const [k, v] of Object.entries(def.palette)) {
+    const [r, g, b] = rotateHue(hexToRgb(v), deg);
+    palette[k] = `#${((1 << 24) | (r << 16) | (g << 8) | b).toString(16).slice(1)}`;
+  }
+  return { ...def, id, name, palette };
+}
