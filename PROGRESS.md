@@ -98,3 +98,10 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Known gaps: no rendering or input yet; no NPC wandering; no run/ledge/trigger tiles; flags are not yet persisted in the save.
 - Note: this session's designated branch was `claude/funny-ramanujan-7bz3kq`; pushed to it and to `main`.
 - Next: B2b (Pixi overworld scene + `/play`).
+
+## 2026-10-29: B2b Pixi overworld and /play
+- Added `game/overworld/OverworldGame.ts` (Pixi scene: tile rendering with animated tiles, tween walking with the walker cycles, NPC sprite, camera clamp, door warps, interact/dialogue routing) and `/play` (`app/play/`): dialogue box with Ada's portrait, typewriter text, choices, keyboard controls, touch D-pad and A button. Documented in ARCH.
+- Verification: `lint` (3 pre-existing warnings), `typecheck`, `test` (103 pass), `build`, `build:pages`, `content:verify` pass. Playwright at 1280x800 and iPhone 14 on `/play`: walked Old Town, through the door into the Drafting Hall, talked to Ada (portrait, typewriter, three choices); no console errors, no horizontal overflow; screenshots viewed. CI/deploy confirmation skipped (Actions quota exhausted until 2026-11-01).
+- Known gaps: the game is not linked from the home page yet; flags and position are not saved; no NPC idle animation; the typewriter cannot be skipped by tap (tap advances); no fade on door transitions; the Pixi scene has no unit tests (logic is covered in `tests/world.test.ts`).
+- Note: designated branch was `claude/funny-ramanujan-8xjebm`; pushed to it and to `main`.
+- Next: B3 (battle stage and card battles).

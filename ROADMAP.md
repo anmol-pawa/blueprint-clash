@@ -24,9 +24,9 @@ Work top to bottom: take the **first unchecked box**, and split big boxes into r
   - [x] B1b. Draftling back sprite and its Architect evolution (front + back, full animation set).
   - [x] B1c. The player and Ada Lintwell (overworld walk cycles + portraits).
   - [x] B1d. The Old Town tileset and the Drafting Hall interior.
-- [ ] B2. **Overworld + dialogue engine** (split below; Algo Clash has no overworld yet, so built fresh).
+- [x] B2. **Overworld + dialogue engine** (split below; Algo Clash has no overworld yet, so built fresh).
   - [x] B2a. Pure logic: `lib/world/` (grid maps, collision, warps, NPC/sign interaction, validation) and `lib/dialogue/` (scripts with choices and flags, typewriter), Old Town and Drafting Hall maps, Ada's intro, tests.
-  - [ ] B2b. Pixi overworld scene and `/play`: render maps via `composeScene` tiles, smooth tile-to-tile walking with the player walk cycles, NPC sprites, camera, dialogue box with portraits and choices, keyboard + touch D-pad/A button, door transitions; Playwright at desktop and iPhone 14.
+  - [x] B2b. Pixi overworld scene and `/play`: render maps via `composeScene` tiles, smooth tile-to-tile walking with the player walk cycles, NPC sprites, camera, dialogue box with portraits and choices, keyboard + touch D-pad/A button, door transitions; Playwright at desktop and iPhone 14.
 - [ ] B3. **Battle stage and card battles** (MCQ, which-pattern, smell spotter, predict-behaviour; native generation of predict-behaviour outputs).
 - [ ] B4. **Old Town lesson** (CUR L1, first half: classes, RAII, ownership, smart pointers), 30 cards and 6 judged class exercises.
 - [ ] B5. **Old Town lesson, second half** (polymorphism, virtual destructors, slicing, `variant`), 25 cards and 6 exercises.
