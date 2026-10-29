@@ -14,7 +14,7 @@ Work top to bottom: take the **first unchecked box**, and split big boxes into r
   - [x] A2b. Toolchain spike: `@yowasp/clang` compile + link a multi-file project, run via WASI (measured in Node), ADR 0001. Findings: no exceptions, no threads.
   - [x] A2c. Browser Web Worker wrapper around `@yowasp/clang` (lazy load, cache the ~105 MB, `-fno-exceptions`, argv `a.wasm`), measure in Chromium, and the `/dev/judge` page wiring the worker: multi-file compile, run, results, diagnostics.
 - [x] A3. **Workshop content pipeline** (ARCH §3): the package format (`brief.md`, `clarify.ts`, `rubric.ts`, `api.h`, `reference/`, `tests/base`, `tests/storm1..3`, `bad/`, `editorial.md`, `followups.ts`), `npm run content:verify` and one sample problem (Library management, base phase only).
-- [ ] A4. **Multi-file editor:** file tree (create/rename/delete user files; `api.h` read-only), tabs, CodeMirror C++, Run/Submit with test results per test, drafts in IndexedDB.
+- [x] A4. **Multi-file editor:** file tree (create/rename/delete user files; `api.h` read-only), tabs, CodeMirror C++, Run/Submit with test results per test, drafts in IndexedDB.
 - [ ] A5. **Save system v1**, with migrations and export/import (port from Algo Clash if present).
 
 ## Phase B: Vertical slice (Old Town, about 30–40 minutes of play)

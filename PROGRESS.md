@@ -45,3 +45,10 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Verification: `lint`, `typecheck`, `test` (25 pass, incl. 8 new validator/runner tests), `content:verify` (3 pass), `build`, `build:pages` all pass. No UI change, so no screenshots. CI/deploy confirmation skipped (Actions quota exhausted until 2026-11-01).
 - Known gaps: no storms yet (the validator already demands tests, a requirement and a bad design per storm phase); Senior Review checks on reference/bad designs await B7; the rubric ownership check is a class-name match, not a UML check (C1).
 - Next: A4 (multi-file editor).
+
+## 2026-10-29: A4 multi-file editor
+- Added pure `lib/editor/workspace.ts` (create/rename/delete/open/close/edit with path validation, read-only `api.h` protected, starter content, draft restore that drops invalid or clashing files), `lib/editor/drafts.ts` (IndexedDB store that degrades to "no draft", memory store, debounced saver), `components/CodeEditor.tsx` (CodeMirror 6 C++, dark theme, clang diagnostics as inline lint marks) and `components/WorkspaceEditor.tsx` (file tree, tabs, Run/Submit with per-test results and clickable diagnostics, drafts per problem id). Demo at `/dev/editor`.
+- Verification: `lint`, `typecheck`, `test` (34 + 9 new), `content:verify`, `build`, `build:pages` pass. Playwright at 1280x800 and iPhone 14 on the static build: invalid path rejected, wrong behaviour then Accepted, draft restored after reload, compile error mapped to impl.cpp:2:41 with a lint mark; no console errors, no horizontal overflow. Caught and fixed a mobile overflow (grid min-content) via screenshots.
+- CI and Pages deploy confirmation skipped (Actions quota exhausted until 2026-11-01).
+- Known gaps: no folders in the tree (paths are one level deep by the judge's rules), no autocomplete, Run and Submit differ only by the supplied extras until B6 wires visible vs hidden tests; the editor is dev-page only until the Workshop flow (B6).
+- Next: A5 (save system v1).
