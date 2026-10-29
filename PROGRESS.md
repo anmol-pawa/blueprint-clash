@@ -52,3 +52,11 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - CI and Pages deploy confirmation skipped (Actions quota exhausted until 2026-11-01).
 - Known gaps: no folders in the tree (paths are one level deep by the judge's rules), no autocomplete, Run and Submit differ only by the supplied extras until B6 wires visible vs hidden tests; the editor is dev-page only until the Workshop flow (B6).
 - Next: A5 (save system v1).
+
+## 2026-10-29: A5 save system v1
+- Added pure `lib/save/`: `schema.ts` (versioned `SaveData`: xp, bits, badges, cleared, mastery ladder per GDD §6, workshop results, settings; `sanitizeSave` repairs untrusted data), `migrate.ts` (ordered migration chain; unversioned = v1; newer-than-known versions are refused, never downgraded), `transfer.ts` (export envelope with FNV-1a checksum over canonical JSON; import rejects wrong app, newer format, truncation and edits), `store.ts` (localStorage store with subscribe; unreadable or too-new data is copied to `<key>.unreadable` before anything overwrites it; storage failures fall back to memory) and `index.ts` (`useSave` hook, `getStore`). Dev page `/dev/save` (XP, zen toggle, export, import, reset).
+- Algo Clash has no save code yet, so this was written fresh (Query Clash's `save.ts` was the reference; it lacks migrations, validation and export).
+- Verification: `lint`, `typecheck`, `test` (48 pass, 14 new in `tests/save.test.ts`), `content:verify`, `build`, `build:pages` pass. Playwright on the static build at 1280x800 and iPhone 14: state persists across reload, export downloads, tampered file rejected with checksum message (iPhone run; desktop read the message too early, a test-script race), re-import after reset restores progress; no console errors, no horizontal overflow; iPhone screenshot viewed.
+- Pushed to the session branch `claude/funny-ramanujan-41jtus` (session rules) rather than `main`. CI and Pages deploy confirmation skipped (Actions quota exhausted until 2026-11-01).
+- Known gaps: editor drafts (IndexedDB) are not part of export; no settings screen yet (controls live on `/dev/save`); mastery scheduling logic arrives in C3.
+- Next: B1 (Draftling art, player and Ada Lintwell, Old Town tileset).
