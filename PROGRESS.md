@@ -74,3 +74,11 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - CI and Pages deploy confirmation skipped (Actions quota exhausted until 2026-11-01).
 - Known gaps: Architect evolve frames reuse the silhouette pulse (no colour reveal); the spectacles are rings only; the back-view pencil overlaps the body.
 - Next: B1c (player and Ada Lintwell walk cycles + portraits).
+
+## 2026-10-29: B1c player and Ada Lintwell
+- Added `scripts/art/characters.mjs` generating `game/sprites/characters/`: 24×32 overworld walkers for the player (teal jacket, blueprint tube, tool belt) and Ada Lintwell (plum cardigan, long skirt, round glasses, silver bun, pencil behind the ear) with 4-frame `walk-down` / `walk-up` / `walk-right` cycles (left = mirrored right) plus a 4-frame idle; and 48×48 dialogue portraits with an idle blink and a talk animation. `/dev/sprites` now lists creatures, walkers (6×) and portraits. `paint.mjs` `emit` quotes hyphenated animation names.
+- Verification: `lint`, `typecheck`, `test` (78 pass, new character tests: dimensions, 4-frame cycles that differ, feet on the ground line, portrait blink/talk), `content:verify`, `build`, `build:pages` pass. Playwright at 1280x800 and iPhone 14 on `/dev/sprites`: no console errors, no horizontal overflow; screenshots viewed.
+- CI and Pages deploy confirmation skipped (Actions quota exhausted until 2026-11-01).
+- Known gaps: Ada's overworld glasses are a bar that hides her eyes at this size; side-view heads are blocky; no run/interact poses; the walkers have only a few hand-tuned limb offsets rather than a full 6-frame cycle.
+- Note: this session's designated branch was `claude/funny-ramanujan-4ej3h0`; committed to `main` as CLAUDE.md requires.
+- Next: B1d (Old Town tileset and the Drafting Hall interior).

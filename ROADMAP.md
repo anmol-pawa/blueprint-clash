@@ -22,7 +22,7 @@ Work top to bottom: take the **first unchecked box**, and split big boxes into r
 - [ ] B1. **Art** (split below).
   - [x] B1a. Sprite engine (pixel format, painter, `/dev/sprites`) and the starter *Draftling* front sprite (64×64; idle/attack/hurt/faint/evolve).
   - [x] B1b. Draftling back sprite and its Architect evolution (front + back, full animation set).
-  - [ ] B1c. The player and Ada Lintwell (overworld walk cycles + portraits).
+  - [x] B1c. The player and Ada Lintwell (overworld walk cycles + portraits).
   - [ ] B1d. The Old Town tileset and the Drafting Hall interior.
 - [ ] B2. **Overworld + dialogue engine** (port from Algo Clash if present, else build per its GDD §B2 equivalent).
 - [ ] B3. **Battle stage and card battles** (MCQ, which-pattern, smell spotter, predict-behaviour; native generation of predict-behaviour outputs).

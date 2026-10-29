@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { SPRITES } from "@/game/sprites";
+import { PORTRAITS, WALKERS } from "@/game/sprites/characters";
 import { bounds, frameToRGBA, mirror, shift, validateSprite } from "@/game/sprites/pixel";
 
 describe("sprite library", () => {
@@ -47,4 +48,40 @@ describe("pixel helpers", () => {
     expect(validateSprite({ ...def, anims: { idle: [["a."], ["a."]] } }).length).toBeGreaterThan(0);
     expect(validateSprite({ ...def, anims: { idle: [["a.", ".."], ["b.", ".."]] } }).length).toBeGreaterThan(0);
   });
+});
+
+describe("character sprites", () => {
+  for (const s of WALKERS) {
+    describe(`${s.id} walker`, () => {
+      it("is valid, 24×32 and non-empty", () => {
+        expect(validateSprite(s)).toEqual([]);
+        expect([s.w, s.h]).toEqual([24, 32]);
+        for (const frames of Object.values(s.anims)) for (const f of frames) expect(bounds(f)).not.toBeNull();
+      });
+      it("has 4-frame walk cycles in three directions whose frames all differ", () => {
+        for (const a of ["walk-down", "walk-up", "walk-right"]) {
+          expect(s.anims[a]).toHaveLength(4);
+          expect(new Set(s.anims[a].map((f) => f.join("\n"))).size).toBeGreaterThanOrEqual(3);
+        }
+      });
+      it("keeps feet on the ground line in every walk frame", () => {
+        for (const a of ["walk-down", "walk-up", "walk-right"])
+          for (const f of s.anims[a]) {
+            const b = bounds(f)!;
+            expect(b.y + b.h).toBeGreaterThanOrEqual(30);
+            expect(b.y + b.h).toBeLessThanOrEqual(32);
+          }
+      });
+    });
+  }
+  for (const s of PORTRAITS) {
+    describe(`${s.id}`, () => {
+      it("is valid, 48×48 with idle blink and talk frames", () => {
+        expect(validateSprite(s)).toEqual([]);
+        expect([s.w, s.h]).toEqual([48, 48]);
+        expect(new Set(s.anims.idle.map((f) => f.join("\n"))).size).toBeGreaterThan(1);
+        expect(new Set(s.anims.talk.map((f) => f.join("\n"))).size).toBe(2);
+      });
+    });
+  }
 });
