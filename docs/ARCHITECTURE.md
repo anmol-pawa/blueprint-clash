@@ -67,3 +67,7 @@ Routes: `/` · `/play` · `/workshop/[id]` · `/siege/[id]` · `/interview` (sys
 
 ## 8. Budgets
 First-load JS ≤ 300 KB gzip (the toolchain and simulator worker are lazy), a 60 fps city overworld on an iPhone 14, a smooth Siege canvas at 30+ fps with 20 components on desktop, no console errors, and no horizontal overflow at 390 px.
+
+## Save system (`lib/save/`)
+
+One IndexedDB slot (`blueprint-clash-save`/`slot1`) holding a versioned `SaveData` (player, badges, lessons done, Workshop records, SRS cards, settings). `loadSave` migrates old versions through the ordered `MIGRATIONS` chain (each step `n -> n+1`, pure), validates the result, and on a missing, corrupt or newer-than-game save returns a fresh in-memory save plus a warning without overwriting the stored value, so the player can still export it. Export is a JSON envelope (`app`, `version`, `checksum` = FNV-1a over canonical JSON); import checks the envelope and checksum, migrates, then validates. Editor drafts live in their own store (`lib/editor/drafts.ts`) so large code never bloats the save.

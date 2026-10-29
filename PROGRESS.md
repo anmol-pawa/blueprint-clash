@@ -52,3 +52,10 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - CI and Pages deploy confirmation skipped (Actions quota exhausted until 2026-11-01).
 - Known gaps: no folders in the tree (paths are one level deep by the judge's rules), no autocomplete, Run and Submit differ only by the supplied extras until B6 wires visible vs hidden tests; the editor is dev-page only until the Workshop flow (B6).
 - Next: A5 (save system v1).
+
+## 2026-10-29: A5 save system v1
+- Added `lib/save/`: `schema.ts` (SaveData v1, `newSave`, `validateSave`), `migrations.ts` (ordered pure `n -> n+1` chain; rejects gaps and newer saves), `store.ts` (`SaveStore` with memory and IndexedDB backends, `loadSave`, `updateSave`) and `transfer.ts` (checksummed JSON export/import). Algo Clash has no save code yet, so this is built fresh; documented in ARCH (Save system).
+- Behaviour: corrupt/newer/unavailable storage yields a fresh in-memory save plus a warning and never overwrites the stored value.
+- Verification: `lint`, `typecheck`, `test` (46 pass, 12 new in `tests/save.test.ts`), `content:verify`, `build`, `build:pages` pass. No UI change, so no screenshots. CI/deploy confirmation skipped (Actions quota exhausted until 2026-11-01).
+- Known gaps: no settings/export UI yet (arrives with the title/menu in B1/B2); the IndexedDB backend is not exercised in Node (covered by the interface via the memory store); no cross-tab write coordination.
+- Next: B1 (Draftling art, player and Ada Lintwell, Old Town tileset).
