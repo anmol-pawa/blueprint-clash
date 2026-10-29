@@ -59,3 +59,9 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Verification: `lint`, `typecheck`, `test` (46 pass, 12 new in `tests/save.test.ts`), `content:verify`, `build`, `build:pages` pass. No UI change, so no screenshots. CI/deploy confirmation skipped (Actions quota exhausted until 2026-11-01).
 - Known gaps: no settings/export UI yet (arrives with the title/menu in B1/B2); the IndexedDB backend is not exercised in Node (covered by the interface via the memory store); no cross-tab write coordination.
 - Next: B1 (Draftling art, player and Ada Lintwell, Old Town tileset).
+
+## 2026-10-29: B1a sprite engine and Draftling
+- Split B1 into B1a–d (ROADMAP). Added pure `lib/sprites/` (indexed `PixelBuffer`, normal-lit ellipsoid shading with 4-shade ramps, pencil/stroke primitives, 1px outline, white-flash silhouette, ground clip, RGBA conversion), `draftling.ts` (original 64×64 starter: blue body, sharpened-pencil ears, graph-paper belly, drafting-compass tail; front view, plus back view with a rolled blueprint) driven by a `Pose`, and `animations.ts` (idle 4 frames, attack 4, hurt 3 with flash, faint 4 sinking). `components/SpriteCanvas.tsx` renders with nearest-neighbour scaling; review page at `/dev/sprites`.
+- Verification: `lint`, `typecheck`, `test`, `content:verify`, `build`, `build:pages` all pass. Playwright dev-server screenshots of `/dev/sprites` at 1280x900 and iPhone 14: no console errors, no horizontal overflow; viewed, pencil ears with graphite tips read correctly, flash and faint frames work. CI/deploy confirmation skipped (Actions quota exhausted until 2026-11-01).
+- Known gaps: sprite not yet in Pixi (B2/B3 use `toRgba`); evolve frames and the Architect form (B1b); no move-effect sprites yet.
+- Next: B1b.
