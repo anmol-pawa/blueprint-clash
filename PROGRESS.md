@@ -52,3 +52,11 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - CI and Pages deploy confirmation skipped (Actions quota exhausted until 2026-11-01).
 - Known gaps: no folders in the tree (paths are one level deep by the judge's rules), no autocomplete, Run and Submit differ only by the supplied extras until B6 wires visible vs hidden tests; the editor is dev-page only until the Workshop flow (B6).
 - Next: A5 (save system v1).
+
+## 2026-10-29: A5 save system v1
+- Added pure `lib/save/`: `types` (SaveData v1: player name, bits, badges, mastery ladder, completions with `assisted`, settings), `migrate` (append-only step list, refuses newer saves), `validate.sanitize` (clamps, drops junk and prototype-poisoning keys; imports are untrusted), `transfer` (export envelope with FNV-1a checksum, size cap, never-throwing `importSave`), `store` (memory + IndexedDB; current and previous save rotated in one transaction as a backup), `actions` (pure updaters: completion best score, badges, bits never negative, settings).
+- UI: `/settings` with `SaveManager` (toggles, Export, Import, Restore backup); writes degrade to a message when storage is unavailable.
+- Verification: `lint`, `typecheck`, `test` (45 pass, 11 new), `content:verify` (3 pass), `build`, `build:pages` pass. Playwright (desktop + iPhone 14) on the static build: setting persisted across reload, export downloaded, re-import accepted, a bogus file rejected with a message; no console errors, no horizontal overflow; screenshots viewed.
+- CI and Pages deploy confirmation skipped (GitHub Actions quota exhausted until 2026-11-01).
+- Known gaps: no home-page link to `/settings` yet; mastery intervals are stored but scheduled by the SRS in C3; save schema will grow with B/C boxes via migrations.
+- Next: B1 (Draftling art, player, Ada Lintwell, Old Town tileset).

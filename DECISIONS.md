@@ -6,3 +6,8 @@ Routine runs never stop for approval. When in doubt they proceed with their reco
 | --- | --- | --- | --- | --- | --- |
 | 1 | 2026-10-28 | Browser judge compiles with `-fno-exceptions`; Workshop APIs use error returns (`bool`, `optional`, error enums) instead of exceptions. | Custom wasm sysroot with exception support. | Stock `@yowasp/clang` sysroot has no `__cxa_throw` (ADR 0001). Editorials note the trade-off. | Proceeding |
 | 2 | 2026-10-28 | Concurrency problems use a deterministic cooperative thread shim, plus native-only predict-behaviour cards. | Custom wasi-threads sysroot (big build effort). | `std::thread` aborts at run time in the sysroot (ADR 0001). | Proceeding |
+
+## 2026-10-29: routine pushed to the session branch, not `main`
+- What: this run's cloud session was pinned to branch `claude/funny-ramanujan-57z4vv` (identical to `main` at start), so A5 was pushed there instead of `main`.
+- Alternatives: push to `main` as CLAUDE.md says; rejected because the session forbids pushing to other branches without permission.
+- Why / owner action: Pages deploys from `main`, so merge or fast-forward `main` to this branch to ship A5.
