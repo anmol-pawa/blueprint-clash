@@ -1,0 +1,28 @@
+(globalThis.TURBOPACK||(globalThis.TURBOPACK=[])).push(["object"==typeof document?document.currentScript:void 0,[77671,e=>{var t=e.i(43476),r=e.i(71645),s=e.i(811);let n=`#pragma once
+class Counter {
+ public:
+  virtual ~Counter() = default;
+  virtual int next() = 0;
+};
+Counter* make_counter();
+`,a=`#include "api.h"
+struct Impl : Counter {
+  int n = 0;
+  int next() override { return ++n; }
+};
+Counter* make_counter() { return new Impl; }
+`,i=`#define BP_TEST_MAIN
+#include "bp_test.h"
+#include "api.h"
+#include <memory>
+TEST(Counter, counts) {
+  std::unique_ptr<Counter> c(make_counter());
+  EXPECT_EQ(c->next(), 1);
+  EXPECT_EQ(c->next(), 2);
+}
+TEST(Counter, independent) {
+  std::unique_ptr<Counter> a(make_counter()), b(make_counter());
+  a->next();
+  EXPECT_EQ(b->next(), 1);
+}
+`,l={accepted:a,"wrong behaviour":a.replace("++n","n++"),"compile error":a.replace("return ++n;","return ++n"),crash:a.replace("return ++n;","__builtin_trap(); return 0;"),"infinite loop":a.replace("return ++n;","for (;;) {} return 0;")};e.s(["default",0,function(){let[e,u]=(0,r.useState)(a),[o,c]=(0,r.useState)(!1),[m,p]=(0,r.useState)(null),[d,h]=(0,r.useState)("");async function f(){c(!0),h("");try{p(await (0,s.f)([{path:"api.h",content:n,readOnly:!0},{path:"impl.cpp",content:e},{path:"tests.cpp",content:i,readOnly:!0}],3e3))}catch(e){h(String(e))}finally{c(!1)}}return(0,t.jsxs)("main",{className:"mx-auto max-w-3xl space-y-3 p-4 text-sm",children:[(0,t.jsx)("h1",{className:"text-xl font-bold",children:"/dev/judge"}),(0,t.jsx)("div",{className:"flex flex-wrap gap-2",children:Object.entries(l).map(([e,r])=>(0,t.jsx)("button",{className:"min-h-11 rounded border px-3",onClick:()=>u(r),children:e},e))}),(0,t.jsx)("textarea",{"aria-label":"impl.cpp",className:"h-48 w-full rounded border p-2 font-mono",value:e,onChange:e=>u(e.target.value)}),(0,t.jsx)("button",{id:"run",disabled:o,className:"min-h-11 rounded bg-blue-700 px-4 text-white disabled:opacity-50",onClick:f,children:o?"Judging…":"Run tests"}),d&&(0,t.jsx)("p",{id:"error",className:"text-red-600",children:d}),m&&(0,t.jsxs)("section",{id:"result",className:"space-y-1",children:[(0,t.jsxs)("p",{children:["verdict: ",(0,t.jsx)("b",{id:"verdict",children:m.verdict})," · compile ",m.timings.compileMs," ms · run ",m.timings.runMs," ms · ",m.summary.passed,"/",m.summary.tests.length," passed"]}),(0,t.jsxs)("ul",{className:"break-words font-mono",children:[m.diagnostics.map((e,r)=>(0,t.jsx)("li",{children:`${e.file}:${e.line}:${e.col} ${e.severity}: ${e.message}`},r)),m.summary.tests.map(e=>(0,t.jsx)("li",{children:`${e.status} ${e.suite}.${e.name} ${e.failures.map(e=>`${e.file}:${e.line} ${e.msg}`).join("; ")}`},e.suite+e.name))]})]})]})}])},811,e=>{function t(e){let t,r=[],s=null;for(let t of e.split(/\r?\n/)){let e;if(t.startsWith('{"t":"')){try{e=JSON.parse(t)}catch{continue}"begin"===e.t?s=e:"result"===e.t&&(r.push({suite:e.suite,name:e.name,status:e.status,ms:e.ms,failures:e.failures}),s=null)}}s&&(t=`${s.suite}.${s.name}`,r.push({suite:s.suite,name:s.name,status:"crash",ms:0,failures:[]}));let n=r.filter(e=>"pass"===e.status).length;return{tests:r,passed:n,failed:r.length-n,crashed:t}}let r="/blueprint-clash",s=null,n=null;async function a(i,l=1e4){var u,o,c;let m,p,d=await (u=await (n??=fetch(`${r}/clang/bp_test.h`).then(e=>{if(!e.ok)throw Error(`bp_test.h: HTTP ${e.status}`);return e.text()})),m=s??=e.r(29071)(Worker),new Promise((e,t)=>{m.onmessage=t=>e(t.data),m.onerror=e=>{s=null,t(Error(e.message||"compiler worker crashed"))},m.postMessage({base:location.origin+r,req:{files:i,header:u}})})),h=t("");if(!d.ok){if("fatal"in d)throw Error(`Toolchain failure: ${d.fatal}`);return{verdict:"compile_error",diagnostics:d.diagnostics,summary:h,stdout:"",timings:{compileMs:d.compileMs,runMs:0}}}let f=await (o=d.wasm,p=e.r(91026)(Worker),new Promise(e=>{let t=setTimeout(()=>(p.terminate(),e("timeout")),l);p.onmessage=r=>(clearTimeout(t),p.terminate(),e(r.data)),p.onerror=()=>(clearTimeout(t),p.terminate(),e({exitCode:null,stdout:"",stderr:"",runMs:0,trap:"worker error"})),p.postMessage(o,[o.buffer])})),g="timeout"===f,x=g?"":f.stdout,b=t(x),k=g?null:f.exitCode;return{verdict:(c={compileOk:!0,timedOut:g,exitCode:k,summary:b}).compileOk?c.timedOut?"time_limit":c.summary.crashed||0===c.summary.tests.length&&0!==c.exitCode?"runtime_error":0===c.summary.failed&&c.summary.tests.length>0?"accepted":"wrong_behaviour":"compile_error",diagnostics:d.diagnostics,summary:b,stdout:x,timings:{compileMs:d.compileMs,runMs:g?l:f.runMs}}}e.s(["f",0,a],811)},10914,e=>{e.s(["f",0,function(t,r){return(s,n)=>(function(t,r,s,n){let a="SharedWorker"===t.name,i=e.b,l=[s.map(t=>e.h("string"==typeof t?t:t.path,i)).reverse(),e.X,i],u=["NEXT_DEPLOYMENT_ID","NEXT_CLIENT_ASSET_SUFFIX"];for(let e=0;e<u.length;e++)l.push(globalThis[u[e]]);let o=new URL(e.h(r,i),location.origin),c=JSON.stringify(l);return a?o.searchParams.set("params",c):o.hash="#params="+encodeURIComponent(c),new t(o,n?{...n,type:void 0}:void 0)})(s,t,r,n)}])}],96582,e=>{e.q("/blueprint-clash/_next/static/media/compile.worker.36hqb2--3a7c6.ts")},29071,e=>{e.v(e.r(10914).f("static/chunks/turbopack-worker-1hrsqshz0gfey.js",["static/chunks/1ylmzz9abnl_v.js","static/chunks/turbopack-3px0zjga4ddtk.js","static/chunks/turbopack-1l1ijncxz8cv6.js"]))},10671,e=>{e.q("/blueprint-clash/_next/static/media/run.worker.3qivqaajtajcv.ts")},91026,e=>{e.v(e.r(10914).f("static/chunks/turbopack-worker-1hrsqshz0gfey.js",["static/chunks/1-kacuvrl7_28.js","static/chunks/turbopack-2qnfoi4tyurx1.js","static/chunks/turbopack-1l1ijncxz8cv6.js"]))}]);
