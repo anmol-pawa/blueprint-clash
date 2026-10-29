@@ -1,0 +1,23 @@
+#pragma once
+#include <string>
+#include <utility>
+#include "api.h"
+
+class FileHandle {
+ public:
+  explicit FileHandle(const std::string& path) : id_(os::open(path)) {}
+  ~FileHandle() {
+    if (id_ != 0) os::close(id_);
+  }
+  FileHandle(const FileHandle&) = delete;
+  FileHandle& operator=(const FileHandle&) = delete;
+  FileHandle(FileHandle&& o) noexcept : id_(std::exchange(o.id_, 0)) {}
+  FileHandle& operator=(FileHandle&& o) noexcept {
+    id_ = std::exchange(o.id_, 0);  // the file this handle already owned is never closed
+    return *this;
+  }
+  int id() const { return id_; }
+
+ private:
+  int id_;
+};

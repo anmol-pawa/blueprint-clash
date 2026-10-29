@@ -126,3 +126,11 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Known gaps: the deck is still all in one file (no per-lesson split yet); no UML-reader/estimation/trade-off card kinds; correct answers are mostly option 0 in the source (the battle shuffles options at run time).
 - Note: designated branch was `claude/funny-ramanujan-wdfdj8`; pushed to it and to `main`.
 - Next: B4b (six judged class exercises).
+
+## 2026-10-29: B4b six judged class exercises
+- Added `lib/exercises/` (types, compiler-free `validateExercise`, node loader, `judgeExercise`) and six packages in `content/exercises/`: bank-account (invariants), file-handle (RAII, move-only, self-move), inventory (`unique_ptr` ownership transfer), stack (`Stack<T>`, move-only elements, no needless copies), counter (static members, copy ctor vs assignment), temperature (`enum class`, validating factory, cross-unit comparison). Each has a prompt, compiling starter with a TODO, reference, 7-9 hidden tests, a 3-rung hint ladder and 3-4 known-wrong solutions (one `rejects: "compile"`). Documented in ARCH ("Class exercises"). B4 is complete.
+- Verification: `lint` (3 pre-existing warnings), `typecheck`, `test` (132 pass, 11 new in `tests/exercises.test.ts`), `content:verify` (28 pass: every reference accepted, every starter rejected, every wrong solution fails exactly the documented tests under g++ `-fno-exceptions`), `build`, `build:pages` pass. No UI change, so no screenshots. CI/deploy confirmation skipped (Actions quota exhausted until 2026-11-01).
+- Gotcha found while verifying: C++17 evaluates the right side of `m[item->name] = item.release()` first, so the "obvious" leaky wrong solution crashed instead of leaking. Fixed in the fixture; worth a card later.
+- Known gaps: no in-game UI to play the exercises yet (they run through `content:verify` and the shared judge only); the exercises are not wired to lesson progress/save; the browser judge has not yet run these packages (native g++ only).
+- Note: designated branch was `claude/funny-ramanujan-0pc0qw`; pushed to it and to `main`.
+- Next: B5 (Old Town second half: polymorphism, virtual destructors, slicing, `variant`; 25 cards and 6 exercises).
