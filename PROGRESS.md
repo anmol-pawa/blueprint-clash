@@ -154,3 +154,9 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Verification: `lint` (3 pre-existing warnings), `typecheck`, `test` (139 pass), `content:verify`, `build`, `build:pages` pass. No UI change, so no screenshots. CI/deploy confirmation: `gh` is unavailable in this environment, so not checked.
 - Known gaps: no UI yet; no before/after reference snapshot for OCP scoring (B6b needs a pre-storm reference or the player's own pre-storm submission); Storm 1 tests are not yet run in the browser judge.
 - Next: B6b.
+
+## 2026-11-02: B6b pure Workshop flow, clarify scoring and OCP score
+- Added `lib/workshop/flow.ts` (pure reducer: brief -> clarify -> code -> submit/lock -> storm -> ... -> debrief; illegal events are no-ops; `surprises` finds hidden storm requirements the player never uncovered), `ocp.ts` (LCS line diff; OCP = added / (added + touched), a modified line counts once as touched) and `score.ts` (`clarifyScore`, `timeScore`, `workshopScore` with GDD §5.3 weights, renormalised while board/review are absent; stars 0-3 with `starThreePending` until Senior Review exists). Documented in ARCH.
+- Verification: `lint` (3 pre-existing warnings), `typecheck`, `test` (159 pass, 20 new in `tests/workshopFlow.test.ts`), `content:verify` (52 pass), `build`, `build:pages` pass. No UI change, so no screenshots. CI/deploy confirmation: `gh` is unavailable here, so not checked.
+- Known gaps: OCP unit is the file, not the class; no pre-storm reference diff beyond the player's own locked snapshot; no UI yet.
+- Next: B6c (`/workshop` UI).

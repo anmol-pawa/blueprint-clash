@@ -38,7 +38,7 @@ Work top to bottom: take the **first unchecked box**, and split big boxes into r
   - [x] B5b. Six judged exercises (Shape hierarchy with virtual destructor, polymorphic `clone`, Strategy pricing, interface segregation, `variant` + `visit` evaluator, NVI wrapper), full packages with wrong solutions.
 - [ ] B6. **The Workshop flow, v1** (GDD §5.3): brief + clarify menu → code → tests → Change Storm 1 → a basic debrief. Use Library management with one storm. Split below.
   - [x] B6a. Content: Library management Storm 1 (premium tier, per-phase `api_storm1.h`, cumulative tests, reference update, two bad designs that fail it, rubric/clarify/editorial/follow-ups updated), proven by `content:verify`.
-  - [ ] B6b. Pure `lib/workshop/` flow: phase state machine (brief → clarify → code → submit → storm → debrief), clarify scoring, per-phase scoring, OCP score from a before/after diff, with tests.
+  - [x] B6b. Pure `lib/workshop/` flow: phase state machine (brief → clarify → code → submit → storm → debrief), clarify scoring, per-phase scoring, OCP score from a before/after diff, with tests.
   - [ ] B6c. `/workshop` UI: brief + clarify menu, multi-file editor, Run/Submit through the browser judge, storm arrival, debrief; Playwright desktop + iPhone 14.
 - [ ] B7. **OCP scorer and Senior Review v1:** the AST dump in the worker, the AST model, and 5 rules (virtual destructor, raw `new` ownership, public mutable fields, missing `override`, god class) with fixtures.
 - [ ] B8. **Old Town master battle:** the gym leader (96×96), a three-phase fight (cards → a mini Workshop → a smell boss), a badge and an evolution scene.
