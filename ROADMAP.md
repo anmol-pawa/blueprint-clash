@@ -33,9 +33,9 @@ Work top to bottom: take the **first unchecked box**, and split big boxes into r
 - [x] B4. **Old Town lesson** (CUR L1, first half: classes, RAII, ownership, smart pointers), 30 cards and 6 judged class exercises. Split below.
   - [x] B4a. Grow the Old Town deck to 30 cards (classes/structs, invariants, constructors, const, static, copy vs move, smart pointers, `optional`), with predict cards proven natively.
   - [x] B4b. Six judged class exercises (BankAccount, RAII FileHandle, Inventory ownership, Stack<T>, Counter with static, Temperature `enum class`) as small packages run through the judge, with tests.
-- [ ] B5. **Old Town lesson, second half** (polymorphism, virtual destructors, slicing, `variant`), 25 cards and 6 exercises. Split below.
+- [x] B5. **Old Town lesson, second half** (polymorphism, virtual destructors, slicing, `variant`), 25 cards and 6 exercises. Split below.
   - [x] B5a. 26 cards in `content/cards/old-town-poly.ts` (dispatch, virtual destructors, slicing, override, abstract/interface, clone, final, LSP, ISP, composition, Strategy, Template Method, NVI, `variant`, cost of virtual), predict cards proven natively.
-  - [ ] B5b. Six judged exercises (Shape hierarchy with virtual destructor, polymorphic `clone`, Strategy pricing, interface segregation, `variant` + `visit` evaluator, NVI wrapper), full packages with wrong solutions.
+  - [x] B5b. Six judged exercises (Shape hierarchy with virtual destructor, polymorphic `clone`, Strategy pricing, interface segregation, `variant` + `visit` evaluator, NVI wrapper), full packages with wrong solutions.
 - [ ] B6. **The Workshop flow, v1** (GDD §5.3): brief + clarify menu → code → tests → Change Storm 1 → a basic debrief. Use Library management with one storm.
 - [ ] B7. **OCP scorer and Senior Review v1:** the AST dump in the worker, the AST model, and 5 rules (virtual destructor, raw `new` ownership, public mutable fields, missing `override`, god class) with fixtures.
 - [ ] B8. **Old Town master battle:** the gym leader (96×96), a three-phase fight (cards → a mini Workshop → a smell boss), a badge and an evolution scene.
