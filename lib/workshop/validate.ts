@@ -24,6 +24,7 @@ export function validatePackage(pkg: WorkshopPackage): string[] {
   if (!meta.requirements.some((r) => r.phase === "base")) errs.push("no base-phase requirements");
 
   for (const p of phases) {
+    if (p !== "base" && !pkg.phaseApis[p]) errs.push(`api_${p}.h is missing: a storm must show the player the new interface`);
     const files = pkg.tests[p] ?? [];
     if (files.length === 0) errs.push(`tests/${p} has no test files`);
   }

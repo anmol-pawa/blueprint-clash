@@ -48,11 +48,11 @@ describe("validatePackage", () => {
 
   it("flags a storm requirement with no tests or bad design", () => {
     const p = clone();
-    p.meta.requirements.push({ id: "R-s1", text: "x", phase: "storm1", hidden: true });
+    p.meta.requirements.push({ id: "R-s2", text: "x", phase: "storm2", hidden: true });
     const msg = validatePackage(p).join("\n");
-    expect(msg).toMatch(/tests\/storm1 has no test files/);
-    expect(msg).toMatch(/no bad design documented for storm1/);
-    expect(msg).toMatch(/R-s1 is not revealable/);
+    expect(msg).toMatch(/tests\/storm2 has no test files/);
+    expect(msg).toMatch(/no bad design documented for storm2/);
+    expect(msg).toMatch(/R-s2 is not revealable/);
   });
 });
 
@@ -67,5 +67,15 @@ describe("runPhase (native)", () => {
     const r = await runPhase(pkg, pkg.bad["no_limit"], "base");
     expect(r.verdict).toBe("wrong_behaviour");
     expect(failedTests(r)).toEqual(["Limits.FourthBookIsRefused"]);
+  });
+});
+
+describe("storm API headers", () => {
+  it("every run receives api_storm1.h and a missing one is flagged", () => {
+    expect(testFilesUpTo(pkg, "storm1").map((f) => f.path)).toContain("api_storm1.h");
+    expect(testFilesUpTo(pkg, "base").map((f) => f.path)).toContain("api_storm1.h");
+    const p = structuredClone(pkg);
+    delete p.phaseApis.storm1;
+    expect(validatePackage(p).join("\n")).toMatch(/api_storm1\.h is missing/);
   });
 });

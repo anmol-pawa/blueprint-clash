@@ -2,13 +2,19 @@
 import { DRIVER, judgeNative, type NativeResult } from "@/lib/judge/native";
 import type { ProjectFile } from "@/lib/judge/types";
 import { activePhases } from "./validate";
-import type { PhaseId, WorkshopFile, WorkshopPackage } from "./types";
+import { PHASE_ORDER, type PhaseId, type WorkshopFile, type WorkshopPackage } from "./types";
 
 /** Test files for `phase` and every earlier phase (a storm re-runs all old tests: regressions count). */
 export function testFilesUpTo(pkg: WorkshopPackage, phase: PhaseId): ProjectFile[] {
   const phases = activePhases(pkg);
   const upTo = phases.slice(0, phases.indexOf(phase) + 1);
   const out: ProjectFile[] = [{ path: "api.h", content: pkg.apiHeader }, DRIVER];
+  // Every storm header is on the include path in every run: the reference is the post-storm design,
+  // and a header is only declarations, so a base-phase design that ignores it is unaffected.
+  for (const p of PHASE_ORDER) {
+    const api = pkg.phaseApis[p];
+    if (api !== undefined) out.push({ path: `api_${p}.h`, content: api });
+  }
   for (const p of upTo) for (const f of pkg.tests[p] ?? []) out.push({ path: `tests_${p}_${f.path}`, content: f.content });
   return out;
 }

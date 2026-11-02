@@ -36,6 +36,11 @@ export async function loadPackage(id: string, root = WORKSHOP_ROOT): Promise<Wor
     const files = await readDir(join(dir, "tests", p));
     if (files.length) tests[p] = files;
   }
+  const phaseApis: Partial<Record<PhaseId, string>> = {};
+  for (const p of PHASE_ORDER) {
+    const text = await readFile(join(dir, `api_${p}.h`), "utf8").catch(() => undefined);
+    if (text !== undefined) phaseApis[p] = text;
+  }
   const bad: Record<string, WorkshopFile[]> = {};
   for (const b of meta.bad) bad[b.dir] = await readDir(join(dir, "bad", b.dir));
   return {
@@ -46,6 +51,7 @@ export async function loadPackage(id: string, root = WORKSHOP_ROOT): Promise<Wor
     rubric,
     followups,
     apiHeader: await readFile(join(dir, "api.h"), "utf8"),
+    phaseApis,
     reference: await readDir(join(dir, "reference")),
     tests,
     bad,

@@ -13,6 +13,7 @@ export const meta: WorkshopMeta = {
     { id: "R-limit", text: "A member may hold at most 3 books at once.", phase: "base", hidden: true },
     { id: "R-once", text: "A member cannot hold two copies of the same book at the same time.", phase: "base", hidden: true },
     { id: "R-errors", text: "Failures are reported with specific statuses, never by crashing; a failed call changes nothing.", phase: "base", hidden: true },
+    { id: "R-tier", text: "Storm 1: members have a tier. Premium members may hold 5 books, Basic members 3; staff can change a member's tier; demoting someone who holds more than the new limit is refused.", phase: "storm1", hidden: true },
   ],
   bad: [
     {
@@ -32,6 +33,18 @@ export const meta: WorkshopMeta = {
       failsPhase: "base",
       failingTests: ["Borrowing.ReturnRestoresCopy", "Limits.ReturnFreesALoanSlot"],
       reason: "Return removes the loan but forgets to put the copy back: the shelf count drifts down forever. Two data structures kept in sync by hand is the smell; the reference keeps the count in one place.",
+    },
+    {
+      dir: "premium_ignored",
+      failsPhase: "storm1",
+      failingTests: ["Tiers.PremiumMayHoldFive"],
+      reason: "The limit is a literal 3 inside borrow(). It passed the base phase, and the storm has to edit that method; this version stores the tier and forgets to consult it.",
+    },
+    {
+      dir: "demote_unchecked",
+      failsPhase: "storm1",
+      failingTests: ["Tiers.DemotionBelowCurrentLoansIsRefused"],
+      reason: "The tier test was bolted on inside borrow(), and setTier never checks current loans, so a demoted member silently holds more books than their tier allows.",
     },
   ],
 };

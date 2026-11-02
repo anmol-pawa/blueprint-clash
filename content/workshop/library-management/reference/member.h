@@ -3,6 +3,8 @@
 #include <string>
 #include <vector>
 
+#include "api_storm1.h"
+
 // A library member and the books they currently hold.
 class Member {
  public:
@@ -10,6 +12,8 @@ class Member {
 
   const std::string& id() const { return id_; }
   const std::string& name() const { return name_; }
+  lib::Tier tier() const { return tier_; }
+  void setTier(lib::Tier tier) { tier_ = tier; }
   int loanCount() const { return static_cast<int>(loans_.size()); }
   bool holds(const std::string& bookId) const { return loans_.count(bookId) != 0; }
 
@@ -20,5 +24,6 @@ class Member {
  private:
   std::string id_;
   std::string name_;
+  lib::Tier tier_ = lib::Tier::Basic;
   std::set<std::string> loans_;
 };

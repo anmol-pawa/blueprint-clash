@@ -16,3 +16,15 @@ class FixedLimitPolicy : public LoanPolicy {
  private:
   int limit_;
 };
+
+// Storm 1: the limit depends on the member's tier. A new class, no change to LoanPolicy or its callers.
+class TierLimitPolicy : public LoanPolicy {
+ public:
+  TierLimitPolicy(int basicLimit, int premiumLimit) : basic_(basicLimit), premium_(premiumLimit) {}
+  bool mayBorrow(const Member& member) const override { return member.loanCount() < limitFor(member.tier()); }
+  int limitFor(lib::Tier tier) const { return tier == lib::Tier::Premium ? premium_ : basic_; }
+
+ private:
+  int basic_;
+  int premium_;
+};

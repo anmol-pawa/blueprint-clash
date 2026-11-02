@@ -68,6 +68,8 @@ export interface WorkshopPackage {
   rubric: Responsibility[];
   followups: FollowUp[];
   apiHeader: string;
+  /** Extra API headers a Change Storm introduces (`api_storm1.h`), keyed by phase. */
+  phaseApis: Partial<Record<PhaseId, string>>;
   reference: WorkshopFile[];
   /** Test files per phase, keyed by phase id. */
   tests: Partial<Record<PhaseId, WorkshopFile[]>>;

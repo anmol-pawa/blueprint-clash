@@ -38,6 +38,22 @@ std::vector<std::string> LibraryService::loansOf(const std::string& memberId) co
   return m == members_.end() ? std::vector<std::string>{} : m->second.loans();
 }
 
-std::unique_ptr<lib::Library> lib::makeLibrary() {
-  return std::make_unique<LibraryService>(std::make_unique<FixedLimitPolicy>(3));
+Status LibraryService::setTier(const std::string& memberId, lib::Tier tier) {
+  auto m = members_.find(memberId);
+  if (m == members_.end()) return Status::NoSuchMember;
+  // Demotion must not leave a member holding more than the new tier allows.
+  if (m->second.loanCount() > policy_->limitFor(tier)) return Status::LimitReached;
+  m->second.setTier(tier);
+  return Status::Ok;
 }
+
+lib::Tier LibraryService::tierOf(const std::string& memberId) const {
+  auto m = members_.find(memberId);
+  return m == members_.end() ? lib::Tier::Basic : m->second.tier();
+}
+
+std::unique_ptr<lib::TieredLibrary> lib::makeTieredLibrary() {
+  return std::make_unique<LibraryService>(std::make_unique<TierLimitPolicy>(3, 5));
+}
+
+std::unique_ptr<lib::Library> lib::makeLibrary() { return lib::makeTieredLibrary(); }

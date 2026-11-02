@@ -147,3 +147,10 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Verification: `lint` (3 pre-existing warnings), `typecheck`, `test` (138 pass), `content:verify` (all 12 exercises: references accepted, starters rejected, wrong solutions rejected as documented; first run caught two fixture bugs, fixed), `build`, `build:pages` pass. Data-only, no screenshots. CI/deploy not checked: the Actions quota note was past its 2026-11-01 end date but `gh` is unavailable in this environment.
 - Known gaps: no in-game UI to play exercises yet; not wired to progress/save; browser judge has not run these packages (native g++ only).
 - Next: B6 (the Workshop flow v1).
+
+## 2026-11-02: B6a Library management Change Storm 1
+- B6 split into B6a (done), B6b (pure Workshop flow + OCP score) and B6c (`/workshop` UI). Added Storm 1 (membership tiers) to `content/workshop/library-management`: `api_storm1.h` (`TieredLibrary`, `Tier`, `makeTieredLibrary`), `tests/storm1/` (7 tests including base-rule regressions), a hidden storm requirement `R-tier` revealed by a new essential clarify question, a `res-tier` rubric item, editorial and a follow-up on demotion. The reference now adds `TierLimitPolicy` without touching `borrow()`. Two bad designs (`premium_ignored`, `demote_unchecked`) pass the base phase and fail Storm 1 as documented.
+- Loader/validator: `WorkshopPackage.phaseApis` loads `api_<phase>.h`; `validatePackage` requires one for every storm; `testFilesUpTo` puts every phase header on the include path (the reference is the post-storm design). ARCH §3 updated.
+- Verification: `lint` (3 pre-existing warnings), `typecheck`, `test` (139 pass), `content:verify`, `build`, `build:pages` pass. No UI change, so no screenshots. CI/deploy confirmation: `gh` is unavailable in this environment, so not checked.
+- Known gaps: no UI yet; no before/after reference snapshot for OCP scoring (B6b needs a pre-storm reference or the player's own pre-storm submission); Storm 1 tests are not yet run in the browser judge.
+- Next: B6b.

@@ -3,11 +3,15 @@
 ## Requirements
 Functional: register books (with copy counts) and members, borrow, return, search by author. Hidden until asked: a three-book limit, one copy of a title per member, and specific statuses for every failure (a failed call changes nothing). Non-goals: persistence, UI, due dates (but keep them cheap to add).
 
+**Change Storm 1, membership tiers:** Premium members may hold 5 books, Basic members 3; staff can change a tier; demoting a member who holds more than the new limit is refused (`LimitReached`, nothing changes). It is revealable by asking whether different kinds of members will ever get different rules.
+
 ## Reference design
 - `Catalog` owns books and their shelf counts; it is the only place a count changes.
 - `Member` owns its id, name and the set of book ids it holds.
 - `LoanPolicy` (abstract) answers "may this member borrow one more?"; `FixedLimitPolicy(3)` is the rule here.
 - `LibraryService` implements `lib::Library`. It validates, asks the policy, then mutates: check everything first, change state last.
+
+**Storm 1 in the reference:** a new `TierLimitPolicy` (one class) replaces `FixedLimitPolicy` in the factory; `Member` gains a tier; the service gains `setTier` and `tierOf` via the new `TieredLibrary` interface. `borrow()` is untouched, which is the point: the seam existed before the requirement did. The honest cost: `Member`, `LibraryService` and the factory still change, so the OCP score is high but not 100%.
 
 Ownership: the service owns catalog, members and a `unique_ptr<LoanPolicy>`. No raw `new`, no shared state outside the service.
 
@@ -17,6 +21,8 @@ Ownership: the service owns catalog, members and a `unique_ptr<LoanPolicy>`. No 
 - **A per-title `Book` object holding its own copy count** is reasonable too; the Catalog-owns-counts version keeps the invariant in one place.
 
 ## Trade-offs
+Tiers as an enum on `Member` plus a limit table is the smallest thing that works. If tiers later carry behaviour beyond a number (loan length, fines, reservations), promote the tier to a polymorphic `MembershipPlan` object; do it when the second behaviour appears, not before.
+
 Policy as a class costs one interface and one file; it buys the Open/Closed seam where the interviewer is most likely to push. A constant is cheaper and correct if limits never vary. Status codes instead of exceptions keep call sites explicit and work in the browser toolchain (no exception runtime); the cost is that a caller can ignore a result, which `[[nodiscard]]` on the status type would catch in a real codebase.
 
 ## What breaks at 10x

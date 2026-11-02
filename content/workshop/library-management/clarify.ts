@@ -6,6 +6,7 @@ export const clarify: ClarifyQuestion[] = [
   { id: "q-errors", text: "What should happen on invalid operations (unknown member, no copies left)?", answer: "Return a specific status. Nothing is thrown and nothing changes.", reveals: ["R-errors"], quality: "essential" },
   { id: "q-copies", text: "Can the library own several copies of one title?", answer: "Yes. Each addBook call carries the copy count.", reveals: ["R-add"], quality: "useful" },
   { id: "q-search", text: "Is author search exact or fuzzy?", answer: "Exact match on the author string, results sorted by book id.", reveals: ["R-author"], quality: "useful" },
+  { id: "q-tiers", text: "Will different kinds of members ever get different rules (for example staff, students, premium)?", answer: "Good question. Yes: membership tiers are coming. Premium members will be allowed more books, and staff will be able to change a member's tier. Details arrive with the change.", reveals: ["R-tier"], quality: "essential" },
   { id: "q-due", text: "Do loans have due dates and fines?", answer: "Not now. Keep the design open to it, but do not build it.", reveals: [], quality: "useful" },
   { id: "q-scale", text: "How many books and members do we expect?", answer: "A branch library: thousands of books, hundreds of members. In-memory is fine.", reveals: [], quality: "useful" },
   { id: "q-ui", text: "Should I build a command-line or a web UI?", answer: "No UI. Only the interface in api.h is tested.", reveals: [], quality: "noise" },
