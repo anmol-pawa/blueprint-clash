@@ -1,7 +1,8 @@
 import type { Card } from "@/lib/battle/cards";
+import { OLD_TOWN_POLY_DECK } from "./old-town-poly";
 
 /** Old Town concept deck (CURRICULUM L1: classes, RAII, ownership, polymorphism). Original wording. */
-export const OLD_TOWN_DECK: Card[] = [
+const OLD_TOWN_BASICS: Card[] = [
   {
     id: "ot-mcq-raii",
     kind: "mcq",
@@ -500,3 +501,6 @@ int main() {
     explain: "The first push_back copies s. The second moves it into the vector, which steals its buffer. This is a long string, so there is no small-string optimisation, and the moved-from s is left empty. (Moved-from strings are valid but unspecified in general; empty is what every mainstream implementation does, so never rely on the content, only reuse after assigning.)",
   },
 ];
+
+/** The full Old Town deck: fundamentals (B4) then polymorphism and substitutability (B5). */
+export const OLD_TOWN_DECK: Card[] = [...OLD_TOWN_BASICS, ...OLD_TOWN_POLY_DECK];

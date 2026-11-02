@@ -134,3 +134,10 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Known gaps: no in-game UI to play the exercises yet (they run through `content:verify` and the shared judge only); the exercises are not wired to lesson progress/save; the browser judge has not yet run these packages (native g++ only).
 - Note: designated branch was `claude/funny-ramanujan-0pc0qw`; pushed to it and to `main`.
 - Next: B5 (Old Town second half: polymorphism, virtual destructors, slicing, `variant`; 25 cards and 6 exercises).
+
+## 2026-11-02: B5a Old Town polymorphism deck
+- B5 split into B5a (done) and B5b (six judged exercises). Added `content/cards/old-town-poly.ts` with 26 cards: virtual dispatch and when it applies, virtual destructors, `override`, abstract classes and interface shape, virtual `clone()`, `final`, virtual calls in constructors, `dynamic_cast` smell vs legitimate use, LSP (Square/Rectangle), inheritance-for-reuse smell, ISP, Strategy and Template Method pattern cards, NVI, `variant` vs hierarchy (closed vs open set), `visit`, default-constructed `variant`, and the cost of virtual. 10 predict cards, including slicing in a vector and by value, hiding a non-virtual, and default arguments bound statically. `OLD_TOWN_DECK` is now the 56-card concatenation of the basics and this deck.
+- Verification: `lint`, `typecheck`, `test`, `content:verify` (every predict output proven by native g++), `build`, `build:pages` pass (see run summary). Data-only change, so no screenshots. CI/deploy checked per CLAUDE.md.
+- Known gaps: the whole 56-card deck is one battle (no per-lesson split yet); no UML-reader, estimation or trade-off card kinds; misses are not fed to the SRS yet.
+- Note: designated branch was `claude/funny-ramanujan-uw1twk`; pushed to it and to `main`.
+- Next: B5b (six judged exercises).
