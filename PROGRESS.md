@@ -141,3 +141,9 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Known gaps: the whole 56-card deck is one battle (no per-lesson split yet); no UML-reader, estimation or trade-off card kinds; misses are not fed to the SRS yet.
 - Note: designated branch was `claude/funny-ramanujan-uw1twk`; pushed to it and to `main`.
 - Next: B5b (six judged exercises).
+
+## 2026-11-02: B5b six polymorphism exercises (B5 complete)
+- Added six judged packages in `content/exercises/`: shapes (abstract interface, virtual destructor), widgets (virtual `clone()`, deep-copying Panel, copy assignment), pricing (Strategy; tests plug in a rule the solution never saw), roles (ISP, `is_base_of` checks), variant-eval (`variant` + `visit`), sink (NVI; a rogue subclass proves `write` cannot be overridden). Each has hidden tests, a 3-rung hint ladder, starter, reference and 3 wrong solutions (two reject at compile time or via type traits). ARCH "Class exercises" updated.
+- Verification: `lint` (3 pre-existing warnings), `typecheck`, `test` (138 pass), `content:verify` (all 12 exercises: references accepted, starters rejected, wrong solutions rejected as documented; first run caught two fixture bugs, fixed), `build`, `build:pages` pass. Data-only, no screenshots. CI/deploy not checked: the Actions quota note was past its 2026-11-01 end date but `gh` is unavailable in this environment.
+- Known gaps: no in-game UI to play exercises yet; not wired to progress/save; browser judge has not run these packages (native g++ only).
+- Next: B6 (the Workshop flow v1).
