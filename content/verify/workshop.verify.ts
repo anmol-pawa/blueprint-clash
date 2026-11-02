@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { reviewFiles } from "@/lib/review";
 import { listProblems, loadPackage } from "@/lib/workshop/load";
 import { activePhases, validatePackage } from "@/lib/workshop/validate";
 import { failedTests, runPhase } from "@/lib/workshop/verify";
@@ -19,6 +20,11 @@ describe.each(ids)("workshop/%s", (id) => {
       expect(r.verdict, `${phase}: ${JSON.stringify(r.diagnostics.slice(0, 3))} ${failedTests(r).join(",")}`).toBe("accepted");
       expect(r.summary.tests.length).toBeGreaterThan(0);
     }
+  });
+
+  it("the reference passes Senior Review with no blockers or majors", () => {
+    const r = reviewFiles(pkg.reference);
+    expect(r.findings.filter((f) => f.severity !== "minor").map((f) => `${f.rule} ${f.file}:${f.line} ${f.message}`)).toEqual([]);
   });
 
   it("every bad design fails exactly where documented", async () => {

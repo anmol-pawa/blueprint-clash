@@ -167,3 +167,11 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Verification: `lint` (3 pre-existing warnings), `typecheck`, `test`, `content:verify`, `build`, `build:pages` pass. Playwright at 1280x800 and iPhone 14: brief, clarify, base submit (compile error), storm card, reference through the browser judge (Accepted, all tests), debrief; no console errors, no horizontal overflow; screenshots viewed.
 - Known gaps: flow state is not saved (reload resets it, the draft stays); not linked from home or `/play`; first judge run downloads ~105 MB (no progress UI); debrief shows no player-vs-reference diff; Run and Submit are identical (DECISIONS #3).
 - Next: B7 (OCP scorer and Senior Review v1).
+
+## 2026-11-02: B7a Senior Review v1 (pure rules)
+- B7 split into B7a (done) and B7b (UI + scoring wiring). Added `lib/review/` (`tokenize.ts`, `parse.ts`, `model.ts`, `rules.ts`, `index.ts`: `reviewFiles`) with 5 rules: `virtual-destructor` (blocker; protected non-virtual accepted per C.35), `raw-new` (blocker), `public-mutable-field` (blocker; plain data carriers exempt), `missing-override` (minor), `god-class` (major; >12 methods or >300 lines). Each finding has a fix and a lesson pointer. ADR 0002 and DECISIONS #4: the planned clang JSON AST dump measured ~226 MB for a file including `<memory>`, so a declaration parser replaced it; ARCH §2 and the Workshop section updated.
+- Verification: `lint` (3 pre-existing warnings), `typecheck`, `test` (191 pass, 25 new in `tests/review.test.ts` including a cross-check of the parser against clang's JSON AST), `content:verify` (53 pass; new check that every Workshop reference has no blocker/major findings; it caught a false positive on classes that only override a base from the unreviewed `api.h`, now fixed and tested), `build`, `build:pages` pass. No UI change, so no screenshots. CI/deploy confirmation: `gh` is unavailable in this environment, so not checked.
+- Known gaps: not shown in the UI or scored yet; no slicing, type-tag `switch`, `dynamic_cast`, long-function or deep-inheritance rules (need types or more token patterns); name-based matching, no overload resolution or macro expansion; bad designs are not yet checked for expected findings.
+- Note: designated branch was `claude/funny-ramanujan-eq6kj3`; pushed to it and to `main`.
+- Next: B7b.
+

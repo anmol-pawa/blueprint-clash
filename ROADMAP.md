@@ -40,7 +40,9 @@ Work top to bottom: take the **first unchecked box**, and split big boxes into r
   - [x] B6a. Content: Library management Storm 1 (premium tier, per-phase `api_storm1.h`, cumulative tests, reference update, two bad designs that fail it, rubric/clarify/editorial/follow-ups updated), proven by `content:verify`.
   - [x] B6b. Pure `lib/workshop/` flow: phase state machine (brief → clarify → code → submit → storm → debrief), clarify scoring, per-phase scoring, OCP score from a before/after diff, with tests.
   - [x] B6c. `/workshop` UI: brief + clarify menu, multi-file editor, Run/Submit through the browser judge, storm arrival, debrief; Playwright desktop + iPhone 14.
-- [ ] B7. **OCP scorer and Senior Review v1:** the AST dump in the worker, the AST model, and 5 rules (virtual destructor, raw `new` ownership, public mutable fields, missing `override`, god class) with fixtures.
+- [ ] B7. **OCP scorer and Senior Review v1:** the AST dump in the worker, the AST model, and 5 rules (virtual destructor, raw `new` ownership, public mutable fields, missing `override`, god class) with fixtures. Split below.
+  - [x] B7a. Pure `lib/review/` (tokenizer, declaration parser, model, the 5 rules with positive/negative fixtures, clang-AST cross-check, reference passes via `content:verify`). The clang JSON dump is ~226 MB, so a declaration parser replaced it (ADR 0002).
+  - [ ] B7b. Wire Senior Review into `/workshop` (review the player's files at debrief, findings list with fix + lesson, feed `workshopScore` review weight and the third star), Playwright desktop + iPhone 14.
 - [ ] B8. **Old Town master battle:** the gym leader (96×96), a three-phase fight (cards → a mini Workshop → a smell boss), a badge and an evolution scene.
 - [ ] B9. **Audio v1** (port the synth if present) and a theme for Old Town.
 - [ ] B10. **Slice polish:** a full Playwright playthrough on desktop and iPhone 14, screenshots, fixes, and a slice review in PROGRESS.md.
