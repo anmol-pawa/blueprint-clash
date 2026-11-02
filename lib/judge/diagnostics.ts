@@ -3,6 +3,9 @@ import type { Diagnostic, Severity } from "./types";
 // clang/gcc: /work/src/store.cpp:12:5: error: message
 const LINE_RE = /^(.+?):(\d+):(?:(\d+):)?\s*(fatal error|error|warning|note):\s*(.*)$/;
 
+// wasm-ld: error: undefined symbol: lib::makeLibrary()
+const LINK_RE = /^(?:wasm-ld|ld|lld)(?::| \S*:)\s*error:\s*(.*)$/;
+
 /**
  * Parses compiler stderr into diagnostics. Paths under `root` are made project-relative;
  * diagnostics in files outside the project (system headers) are kept with their raw path.
@@ -11,6 +14,11 @@ const LINE_RE = /^(.+?):(\d+):(?:(\d+):)?\s*(fatal error|error|warning|note):\s*
 export function parseDiagnostics(stderr: string, root = "/work/"): Diagnostic[] {
   const out: Diagnostic[] = [];
   for (const raw of stderr.split(/\r?\n/)) {
+    const link = LINK_RE.exec(raw);
+    if (link) {
+      out.push({ file: "(linker)", line: 1, col: 1, severity: "error", message: link[1] });
+      continue;
+    }
     const m = LINE_RE.exec(raw);
     if (!m) continue;
     const file = m[1].startsWith(root) ? m[1].slice(root.length) : m[1];

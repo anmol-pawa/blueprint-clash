@@ -37,6 +37,10 @@ describe("diagnostics", () => {
     expect(d[0]).toEqual({ file: "src/store.cpp", line: 12, col: 5, severity: "error", message: "use of undeclared identifier 'foo'" });
     expect(d[3].severity).toBe("error");
   });
+  it("reports linker errors as errors so a missing definition is a compile error, not a toolchain failure", () => {
+    const d = parseDiagnostics("wasm-ld: error: undefined symbol: lib::makeLibrary()\n>>> referenced by x.cpp");
+    expect(d).toEqual([{ file: "(linker)", line: 1, col: 1, severity: "error", message: "undefined symbol: lib::makeLibrary()" }]);
+  });
   it("keeps only editable, non-note diagnostics for players", () => {
     const d = playerFacing(parseDiagnostics(stderr), new Set(["src/store.cpp"]));
     expect(d.map((x) => x.file)).toEqual(["src/store.cpp"]);

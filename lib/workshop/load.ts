@@ -25,12 +25,12 @@ export async function listProblems(root = WORKSHOP_ROOT): Promise<string[]> {
   return ents.filter((e) => e.isDirectory()).map((e) => e.name).sort();
 }
 
-export async function loadPackage(id: string, root = WORKSHOP_ROOT): Promise<WorkshopPackage> {
+/** Everything that is plain text on disk (no TypeScript modules), so a bundler-friendly caller can supply the modules itself. */
+export type PackageModules = Pick<WorkshopPackage, "meta" | "clarify" | "rubric" | "followups">;
+
+export async function loadPackageWith(id: string, mods: PackageModules, root = WORKSHOP_ROOT): Promise<WorkshopPackage> {
   const dir = join(root, id);
-  const meta = (await importTs<{ meta: WorkshopMeta }>(join(dir, "meta.ts"))).meta;
-  const clarify = (await importTs<{ clarify: ClarifyQuestion[] }>(join(dir, "clarify.ts"))).clarify;
-  const rubric = (await importTs<{ rubric: Responsibility[] }>(join(dir, "rubric.ts"))).rubric;
-  const followups = (await importTs<{ followups: FollowUp[] }>(join(dir, "followups.ts"))).followups;
+  const { meta, clarify, rubric, followups } = mods;
   const tests: Partial<Record<PhaseId, WorkshopFile[]>> = {};
   for (const p of PHASE_ORDER) {
     const files = await readDir(join(dir, "tests", p));
@@ -56,4 +56,13 @@ export async function loadPackage(id: string, root = WORKSHOP_ROOT): Promise<Wor
     tests,
     bad,
   };
+}
+
+export async function loadPackage(id: string, root = WORKSHOP_ROOT): Promise<WorkshopPackage> {
+  const dir = join(root, id);
+  const meta = (await importTs<{ meta: WorkshopMeta }>(join(dir, "meta.ts"))).meta;
+  const clarify = (await importTs<{ clarify: ClarifyQuestion[] }>(join(dir, "clarify.ts"))).clarify;
+  const rubric = (await importTs<{ rubric: Responsibility[] }>(join(dir, "rubric.ts"))).rubric;
+  const followups = (await importTs<{ followups: FollowUp[] }>(join(dir, "followups.ts"))).followups;
+  return loadPackageWith(id, { meta, clarify, rubric, followups }, root);
 }

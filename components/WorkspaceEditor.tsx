@@ -23,6 +23,8 @@ interface Props {
   submitExtras: ProjectFile[];
   judge: JudgeFn;
   store?: DraftStore;
+  /** Called after every Run/Submit with the player's own files (not the hidden ones) and the result. */
+  onJudged?: (mode: "run" | "submit", res: BrowserJudgeResult, files: ProjectFile[]) => void;
 }
 
 type Mode = "run" | "submit";
@@ -36,7 +38,7 @@ const VERDICT_TEXT: Record<BrowserJudgeResult["verdict"], string> = {
   time_limit: "Time limit",
 };
 
-export function WorkspaceEditor({ id, provided, starter, runExtras, submitExtras, judge, store }: Props) {
+export function WorkspaceEditor({ id, provided, starter, runExtras, submitExtras, judge, store, onJudged }: Props) {
   const draftStore = useMemo(() => store ?? indexedDbDraftStore(), [store]);
   const [ws, setWs] = useState<Workspace>(() => createWorkspace(provided, starter));
   const [loaded, setLoaded] = useState(false);
@@ -94,7 +96,9 @@ export function WorkspaceEditor({ id, provided, starter, runExtras, submitExtras
     try {
       await saver.current?.flush();
       const files = [...ws.files.map((f) => ({ ...f })), ...(mode === "run" ? runExtras : submitExtras)];
-      setResult({ mode, res: await judge(files) });
+      const res = await judge(files);
+      setResult({ mode, res });
+      onJudged?.(mode, res, userFiles(ws).map((f) => ({ path: f.path, content: f.content })));
     } catch (e) {
       setFatal(String(e));
     } finally {

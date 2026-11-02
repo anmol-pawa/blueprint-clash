@@ -160,3 +160,10 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Verification: `lint` (3 pre-existing warnings), `typecheck`, `test` (159 pass, 20 new in `tests/workshopFlow.test.ts`), `content:verify` (52 pass), `build`, `build:pages` pass. No UI change, so no screenshots. CI/deploy confirmation: `gh` is unavailable here, so not checked.
 - Known gaps: OCP unit is the file, not the class; no pre-storm reference diff beyond the player's own locked snapshot; no UI yet.
 - Next: B6c (`/workshop` UI).
+
+## 2026-11-02: B6c `/workshop/[id]` UI (B6 complete)
+- Added `/workshop/library-management` (static, from `WORKSHOP_REGISTRY`): brief, clarify menu with interviewer answers, multi-file editor with Run/Submit in the browser judge, storm card ("you saw this coming" vs "you never asked"), second round with the storm header revealed, and a debrief (stars, weighted score, clarify score, OCP per file, rubric, editorial, follow-ups, reference code). New `lib/workshop/bundle.ts` (provided/hidden file split, expected test counts), `components/Prose.tsx` (tiny markdown renderer), `WorkspaceEditor` `onJudged` hook, `loadPackageWith` loader split. ARCH and DECISIONS #3 updated.
+- Bug found by the playthrough and fixed: a missing definition is a *link* error (`wasm-ld: error:`), which was reported as a toolchain failure; `parseDiagnostics` now turns linker errors into a compile error (tested).
+- Verification: `lint` (3 pre-existing warnings), `typecheck`, `test`, `content:verify`, `build`, `build:pages` pass. Playwright at 1280x800 and iPhone 14: brief, clarify, base submit (compile error), storm card, reference through the browser judge (Accepted, all tests), debrief; no console errors, no horizontal overflow; screenshots viewed.
+- Known gaps: flow state is not saved (reload resets it, the draft stays); not linked from home or `/play`; first judge run downloads ~105 MB (no progress UI); debrief shows no player-vs-reference diff; Run and Submit are identical (DECISIONS #3).
+- Next: B7 (OCP scorer and Senior Review v1).
