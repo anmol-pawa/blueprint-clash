@@ -269,3 +269,11 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - CI/deploy: Actions quota note expired, but `gh` is unavailable here, so not confirmed.
 - Note: pushed to the designated branch `claude/funny-ramanujan-jrit2z` and to `main`.
 - Next: C3c is blocked on later modes; take C4 (SOLID Square).
+
+## 2026-11-03: C4a SOLID Square deck
+- C4 split into C4a (done), C4b (wire deck: district battle, `/review` deck choice), C4c (lessons), C4d (8 refactor exercises), C4e (district art and master/gym).
+- Added `content/cards/solid-square.ts`: 43 original cards across SRP, OCP, LSP, ISP, DIP, DRY/KISS/YAGNI, Law of Demeter, tell-don't-ask, composition and immutability. Mix: 23 mcq, 11 smell, 5 predict, 4 pattern. Each explanation says why the tempting option is wrong and notes over-application costs. Contract-based LSP (pre/postconditions, invariants) and the rectangle/square trap are included.
+- Verification: `content/verify/solid-cards.verify.ts` (card shape, all 5 predict cards compiled and run natively, at least 3 cards per principle) passes; `lint` (0 errors, 3 pre-existing warnings), `typecheck`, `test` (286 pass), `build`, `build:pages` pass. No UI change, so no screenshots.
+- Known gaps: the deck is not reachable from the game yet (C4b); no district art or lessons.
+- CI/deploy: `gh` unavailable here, not confirmed.
+- Next: C4b.
