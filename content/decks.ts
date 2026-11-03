@@ -1,4 +1,5 @@
 import type { Card } from "@/lib/battle/cards";
+import type { BattleScene } from "@/lib/battle/scene";
 import { OLD_TOWN_DECK } from "./cards/old-town";
 import { SOLID_SQUARE_DECK } from "./cards/solid-square";
 
@@ -8,11 +9,13 @@ export interface Deck {
   title: string;
   district: string;
   cards: Card[];
+  /** Backdrop for this district's battles. */
+  scene: BattleScene;
 }
 
 export const DECKS: readonly Deck[] = [
-  { id: "old-town", title: "Old Town", district: "Foundations: classes, polymorphism, composition", cards: OLD_TOWN_DECK },
-  { id: "solid-square", title: "SOLID Square", district: "SRP, OCP, LSP, ISP, DIP and the supporting heuristics", cards: SOLID_SQUARE_DECK },
+  { id: "old-town", title: "Old Town", district: "Foundations: classes, polymorphism, composition", cards: OLD_TOWN_DECK, scene: "old-town" },
+  { id: "solid-square", title: "SOLID Square", district: "SRP, OCP, LSP, ISP, DIP and the supporting heuristics", cards: SOLID_SQUARE_DECK, scene: "solid-square" },
 ];
 
 export const DEFAULT_DECK_ID = "old-town";

@@ -22,7 +22,7 @@ describe("sprite library", () => {
         expect(Object.keys(s.palette).length).toBeLessThanOrEqual(s.w >= 96 ? 32 : 24);
       });
       it("has attack, hurt, faint (and evolve for Patternlings); faint ends sparser", () => {
-        const needed = s.id === "warden-vane" ? ["attack", "hurt", "faint"] : ["attack", "hurt", "faint", "evolve"];
+        const needed = s.id === "warden-vane" || s.id === "provost-marlow" ? ["attack", "hurt", "faint"] : ["attack", "hurt", "faint", "evolve"];
         for (const a of needed) expect(s.anims[a]?.length ?? 0).toBeGreaterThan(0);
         const opaque = (f: readonly string[]) => f.join("").replace(/\./g, "").length;
         expect(opaque(s.anims.faint[s.anims.faint.length - 1])).toBeLessThan(opaque(s.anims.faint[0]));
@@ -35,6 +35,12 @@ describe("sprite library", () => {
 });
 
 describe("district masters", () => {
+  it("Provost Marlow is 96×96 with 4 idle frames and a 4-frame attack", () => {
+    const p = SPRITES.find((x) => x.id === "provost-marlow")!;
+    expect([p.w, p.h]).toEqual([96, 96]);
+    expect(p.anims.idle).toHaveLength(4);
+    expect(p.anims.attack).toHaveLength(4);
+  });
   it("Warden Vane is 96×96 with 4 idle frames", () => {
     const w = SPRITES.find((x) => x.id === "warden-vane")!;
     expect([w.w, w.h]).toEqual([96, 96]);

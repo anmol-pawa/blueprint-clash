@@ -20,3 +20,11 @@ describe("deck registry", () => {
     }
   });
 });
+
+describe("battle scenes", () => {
+  it("every deck names a backdrop and SOLID Square has its own", () => {
+    for (const d of DECKS) expect(["old-town", "solid-square"]).toContain(d.scene);
+    expect(getDeck("solid-square").scene).toBe("solid-square");
+    expect(getDeck("old-town").scene).toBe("old-town");
+  });
+});

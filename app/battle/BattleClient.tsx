@@ -30,7 +30,7 @@ export function BattleClient({ deckId }: { deckId: string }) {
   }, []);
 
   useEffect(() => {
-    const s = new BattleStage(host.current!, DRAFTLING_BACK, ROUGH_DRAFT);
+    const s = new BattleStage(host.current!, DRAFTLING_BACK, ROUGH_DRAFT, deck.scene);
     stage.current = s;
     void s.init().then(() => s.intro()).then(() => {
       setReady(true);

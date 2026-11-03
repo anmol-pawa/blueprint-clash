@@ -2,6 +2,7 @@ import { sfx } from "@/game/audio/synth";
 import { Application, Container, Graphics, Text } from "pixi.js";
 import { PixelSprite } from "@/game/sprites/texture";
 import type { SpriteDef } from "@/game/sprites/pixel";
+import type { BattleScene } from "@/lib/battle/scene";
 
 /** Logical stage size; the container is scaled to fit the host. */
 export const STAGE_W = 256;
@@ -36,6 +37,7 @@ export class BattleStage {
     private host: HTMLElement,
     private playerDef: SpriteDef,
     private foeDef: SpriteDef,
+    private scene: BattleScene = "old-town",
   ) {}
 
   async init(): Promise<void> {
@@ -47,7 +49,7 @@ export class BattleStage {
     this.host.appendChild(this.app.canvas);
     this.app.canvas.style.imageRendering = "pixelated";
     this.app.stage.addChild(this.root);
-    this.root.addChild(this.backdrop());
+    this.root.addChild(this.scene === "solid-square" ? this.solidSquareBackdrop() : this.backdrop());
     this.foe = new PixelSprite(this.foeDef, 1);
     this.player = new PixelSprite(this.playerDef, 1);
     this.foe.position.set(FOE_HOME.x + 140, FOE_HOME.y);
@@ -105,6 +107,57 @@ export class BattleStage {
     };
     platform(FOE_HOME.x, FOE_HOME.y - 2, 40, 9);
     platform(PLAYER_HOME.x, PLAYER_HOME.y - 2, 50, 11);
+    c.addChild(g);
+    return c;
+  }
+
+  /** SOLID Square: a marble hall at dusk, five lit arched windows between fluted columns, purple banners, a checker floor. */
+  private solidSquareBackdrop(): Container {
+    const c = new Container();
+    const g = new Graphics();
+    // back wall: deep indigo with a lighter cornice
+    g.rect(0, 0, STAGE_W, 96).fill(0x2a2447);
+    for (let y = 0; y < 96; y += 12) g.rect(0, y, STAGE_W, 1).fill(0x332c56); // ashlar courses
+    g.rect(0, 0, STAGE_W, 8).fill(0x4a3f73).rect(0, 8, STAGE_W, 2).fill(0x6a5d9a);
+    // five arched windows with a warm evening glow (one per principle)
+    for (let i = 0; i < 5; i++) {
+      const x = 14 + i * 50, top = 20;
+      g.rect(x, top + 8, 22, 50).fill(0xffd98a).circle(x + 11, top + 8, 11).fill(0xffd98a);
+      g.rect(x + 3, top + 12, 16, 46).fill(0xffeab0).circle(x + 11, top + 10, 8).fill(0xffeab0);
+      g.rect(x + 10, top + 2, 2, 56).fill(0x6a5d9a).rect(x, top + 30, 22, 2).fill(0x6a5d9a); // mullion and transom
+      g.rect(x - 2, top + 58, 26, 3).fill(0x8a7fb8); // sill
+    }
+    // fluted marble columns between the windows
+    for (let i = 0; i < 6; i++) {
+      const x = 2 + i * 50;
+      g.rect(x - 2, 10, 12, 5).fill(0xd8d2e8).rect(x - 1, 15, 10, 76).fill(0xe8e4f4);
+      for (let fx = x; fx < x + 9; fx += 3) g.rect(fx, 15, 1, 76).fill(0xc4bedb);
+      g.rect(x - 1, 15, 2, 76).fill(0xf8f6ff);
+      g.rect(x - 3, 91, 14, 5).fill(0xd8d2e8);
+    }
+    // purple banners hanging in front of every other column, with a gold diamond
+    for (const bx of [52, 152, 252 - 2]) {
+      if (bx > STAGE_W - 8) continue;
+      g.rect(bx - 6, 16, 12, 40).fill(0x6a2f86).rect(bx - 6, 16, 2, 40).fill(0x8a4aa8);
+      g.poly([bx - 6, 56, bx + 6, 56, bx, 64]).fill(0x6a2f86);
+      g.poly([bx, 24, bx + 4, 30, bx, 36, bx - 4, 30]).fill(0xe8b933).poly([bx, 27, bx + 2, 30, bx, 33, bx - 2, 30]).fill(0xfff0a0);
+    }
+    // checker floor: cream and slate marble, rows darken towards the viewer
+    g.rect(0, 96, STAGE_W, STAGE_H - 96).fill(0xcfc8e0);
+    for (let row = 0, y = 96; y < STAGE_H; row++, y += 8) {
+      for (let x = (row % 2) * 16; x < STAGE_W; x += 32) g.rect(x, y, 16, 8).fill(row > 3 ? 0x6c6490 : 0x8a82ad);
+      g.rect(0, y, STAGE_W, 1).fill(0xa9a2c8);
+    }
+    g.rect(0, 96, STAGE_W, 2).fill(0xf0ecfa).rect(0, 98, STAGE_W, 1).fill(0x5c5483);
+    // platforms: round marble dais with a gold rim
+    const dais = (x: number, y: number, rx: number, ry: number) => {
+      g.ellipse(x, y + 3, rx, ry).fill(0x3a3158);
+      g.ellipse(x, y, rx, ry).fill(0xe8b933);
+      g.ellipse(x, y, rx - 2, ry - 1).fill(0xf4efe0);
+      g.ellipse(x, y - 1, rx - 6, ry - 3).fill(0xffffff);
+    };
+    dais(FOE_HOME.x, FOE_HOME.y - 2, 40, 9);
+    dais(PLAYER_HOME.x, PLAYER_HOME.y - 2, 50, 11);
     c.addChild(g);
     return c;
   }

@@ -27,6 +27,12 @@ const ROOK = {
   palette: { ...base, 1: "#c9936e", 2: "#efbe96", 3: "#fbdcbd", h: "#8a3a14", H: "#c4621c", j: "#ee9a48", c: "#a8641c", C: "#e0a030", D: "#f6d070", p: "#3a4a6a", P: "#566a90" },
 };
 
+// SOLID Square master: Provost Marlow, burgundy robe, silver bun, round gold glasses.
+const MARLOW = {
+  id: "marlow", name: "Provost Marlow", kind: "trainer", skirt: true, pack: false, bun: true, glasses: true, pencil: false, lapel: true,
+  palette: { ...base, 1: "#8a5a3c", 2: "#c08a64", 3: "#ecb98c", h: "#555a6b", H: "#aab0c0", j: "#e6e9f2", c: "#5a1a2c", C: "#8c2c44", D: "#c8607a", p: "#2e0f1a", P: "#44202c" },
+};
+
 /** A limb as a slanted quad from (tx, ty) to (bx, by), `w` wide. */
 function limb(L, tx, ty, bx, by, w, ramp, lit = 0.6) {
   const h = w / 2;
@@ -185,12 +191,12 @@ function portraitSprite(o) {
   };
 }
 
-for (const o of [PLAYER, ADA, SABLE, ROOK]) {
+for (const o of [PLAYER, ADA, SABLE, ROOK, MARLOW]) {
   emit(`game/sprites/characters/${o.id}.ts`, {
     id: o.id, name: o.name, w: 24, h: 32, palette: o.palette, script: "characters",
     fps: { idle: 3, "walk-down": 8, "walk-up": 8, "walk-right": 8 },
     anims: walkerSprite(o),
-    comment: o.id === "sable" ? "Sable Quill, SOLID Square trainer: moss-green long coat and a short dark bob." : o.id === "rook" ? "Rook Ferris, SOLID Square trainer: ochre vest, round glasses and a tool belt." : o.kind === "ada" ? "Ada Lintwell, overworld walker: plum cardigan, long skirt, round glasses and a silver bun." : "The player, overworld walker: teal jacket, a blueprint tube on the back and a tool belt.",
+    comment: o.id === "sable" ? "Sable Quill, SOLID Square trainer: moss-green long coat and a short dark bob." : o.id === "marlow" ? "Provost Marlow, SOLID Square master: burgundy robe, silver bun and round gold glasses." : o.id === "rook" ? "Rook Ferris, SOLID Square trainer: ochre vest, round glasses and a tool belt." : o.kind === "ada" ? "Ada Lintwell, overworld walker: plum cardigan, long skirt, round glasses and a silver bun." : "The player, overworld walker: teal jacket, a blueprint tube on the back and a tool belt.",
   });
   emit(`game/sprites/characters/${o.id}-portrait.ts`, {
     id: `${o.id}-portrait`, name: `${o.name} (portrait)`, w: 48, h: 48, palette: o.palette, script: "characters",

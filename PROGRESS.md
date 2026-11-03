@@ -324,3 +324,12 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - CI/deploy: `gh` unavailable here, so status not confirmed.
 - Note: pushed to `main` per the run protocol.
 - Next: C4e2b.
+
+## 2026-11-03: C4e2b SOLID Square master and battle backdrop
+- New master **Provost Isolde Marlow** (`scripts/art/provost.mjs` → `game/sprites/creatures/provost-marlow.ts`): 96×96, burgundy robe, white fluted ruff, silver twist under a flat cap, round gold spectacles, a staff whose balance carries five gems (one per principle; the beam tilts in attack) and a gavel. Idle 4, attack 4, hurt 2, faint 4 frames. Overworld walker and 48×48 portrait (`marlow`, `marlow-portrait`) via `characters.mjs` (existing characters regenerate byte-identical); wired into `WALKERS`, `PORTRAITS`, the overworld walker map and `/play` portraits. She is not placed on a map yet (Principle Hall interior is C4e3).
+- Backdrop: `BattleStage` takes a `BattleScene` (`lib/battle/scene.ts`); `Deck.scene` selects it, so the SOLID Square concept battle now shows a marble hall (five lit arched windows, fluted columns, purple banners, checker floor, gold-rimmed daises).
+- Verification: `lint` (0 errors, 4 pre-existing warnings), `typecheck`, `test` (326 pass; sprite validation caught a two-character palette key, fixed), `build`, `build:pages` pass. Playwright on the static export at 1280x800 and iPhone 14: `/battle?deck=solid-square` and `/dev/sprites` viewed, no console errors, no horizontal overflow. `content:verify` not rerun (no content touched).
+- Known gaps: the foe is still Rough Draft; Marlow has no battle yet and no master music; no back view needed.
+- CI/deploy: `gh` unavailable here; Actions quota note expired, so not confirmed.
+- Note: designated branch `claude/funny-ramanujan-xxi0o7`; pushed to it and to `main` per the run protocol.
+- Next: C4e3 (Principle Hall interior, trainer duels, master fight wired to the SOLID deck and exercises).
