@@ -217,3 +217,11 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Known gaps: real playback quality can only be judged by ear (headless run proves the graph runs, not how it sounds); no volume slider (only mute); no dialogue blips or footsteps in the overworld yet; workshop pages have no sound; `/battle/master` plays no win stinger beyond the badge fanfare. CI/deploy checked below.
 - Note: designated branch was `claude/funny-ramanujan-oumncb`; pushed to it and to `main`.
 - Next: B10 (slice polish: full Playwright playthrough and slice review).
+
+## 2026-11-03: B10 Slice polish and review (Phase B complete)
+- The title screen was a dead end ("Start (coming soon)"). It now links every built mode: Start (`/play`), Concept battle, Workshop: Library, Old Town master; Siege and Interview mocks stay locked. `PLAYABLE_MODES` in `lib/siteInfo.ts` with a test that every href maps to an existing route. The Workshop header gained a 44 px Menu link.
+- Slice review: end-to-end flows were each played in a real browser by B6c, B7b, B8c, B8d and B9 (judge, review, master fight, evolve, audio). This run re-checked navigation from the menu into each route and back on the static export at 1280x800 and iPhone 14: no console errors, no horizontal overflow; screenshots viewed.
+- Verification: `lint` (3 pre-existing warnings), `typecheck`, `test` (230 pass), `content:verify`, `build`, `build:pages` pass. CI/deploy: `gh` unavailable here, not confirmed.
+- Slice gaps (carry into Phase C): the overworld has no door to the Workshop or master; `/evolve` is not badge-gated; misses are not fed to the SRS (C3); the first judge run downloads ~105 MB with no progress UI; Workshop flow state is not saved; Design Board (C1) absent; no Siege yet.
+- Note: designated branch was `claude/funny-ramanujan-y0lvff`; pushed to it and to `main`.
+- Next: C1 (Design Board).

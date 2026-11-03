@@ -19,8 +19,21 @@ export const PILLARS: readonly Pillar[] = [
   },
 ];
 
+export interface PlayableMode {
+  href: string;
+  title: string;
+  blurb: string;
+}
+
+/** Routes that exist today, shown as live tiles on the title screen (paths are base-path relative). */
+export const PLAYABLE_MODES: readonly PlayableMode[] = [
+  { href: "/battle", title: "Concept battle", blurb: "Patternling cards: name the smell, pick the principle." },
+  { href: "/workshop/library-management", title: "Workshop: Library", blurb: "Write C++ against hidden tests, then survive a Change Storm." },
+  { href: "/battle/master", title: "Old Town master", blurb: "Warden Hollis Vane: cards, a build and a smell boss." },
+];
+
 /** Routes planned in ARCH §7 that are not built yet, shown as locked tiles. */
-export const UPCOMING_MODES: readonly string[] = ["Old Town lessons", "Workshop problems", "Siege case studies", "Interview mocks"];
+export const UPCOMING_MODES: readonly string[] = ["Siege case studies", "Interview mocks"];
 
 export function basePathed(path: string, base = process.env.NEXT_PUBLIC_BASE_PATH ?? ""): string {
   return `${base}${path.startsWith("/") ? path : `/${path}`}`;

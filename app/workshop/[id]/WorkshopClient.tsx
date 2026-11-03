@@ -37,9 +37,14 @@ export function WorkshopClient({ bundle }: { bundle: WorkshopBundle }) {
           <p className="font-display text-xs tracking-[0.3em] text-[var(--accent-2)]">THE WORKSHOP · {bundle.level}</p>
           <h1 className="font-display text-3xl text-[var(--accent)]">{bundle.title}</h1>
         </div>
-        <p className="text-sm text-white/70" aria-label="Time used">
-          ⏱ <span data-testid="clock">{mmss(elapsed)}</span> / par {bundle.parMinutes}:00
-        </p>
+        <div className="flex items-center gap-3 text-sm text-white/70">
+          <p aria-label="Time used">
+            ⏱ <span data-testid="clock">{mmss(elapsed)}</span> / par {bundle.parMinutes}:00
+          </p>
+          <a href="../../" className="px-btn flex min-h-11 items-center px-3">
+            Menu
+          </a>
+        </div>
       </header>
       <Stepper stage={flow.stage} phase={flow.phase} phases={bundle.phases} />
 

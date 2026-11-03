@@ -1,4 +1,5 @@
-import { PILLARS, UPCOMING_MODES } from "@/lib/siteInfo";
+import Link from "next/link";
+import { PILLARS, PLAYABLE_MODES, UPCOMING_MODES } from "@/lib/siteInfo";
 
 export default function Home() {
   return (
@@ -27,13 +28,21 @@ export default function Home() {
         </section>
 
         <section className="flex w-full flex-col gap-2" aria-label="Modes">
-          <button className="px-btn px-btn-primary w-full text-lg" disabled>
-            Start (coming soon)
-          </button>
+          <Link href="/play" className="px-btn px-btn-primary flex min-h-12 w-full items-center justify-center text-lg">
+            Start: walk Old Town
+          </Link>
+          <div className="grid gap-2 sm:grid-cols-3">
+            {PLAYABLE_MODES.map((m) => (
+              <Link key={m.href} href={m.href} className="px-btn flex min-h-12 flex-col items-start gap-1 p-3 text-left">
+                <span className="text-sm text-[var(--accent-2)]">{m.title}</span>
+                <span className="text-xs text-white/70">{m.blurb}</span>
+              </Link>
+            ))}
+          </div>
           <div className="grid grid-cols-2 gap-2">
             {UPCOMING_MODES.map((m) => (
-              <button key={m} className="px-btn text-sm text-white/80" disabled>
-                {m}
+              <button key={m} className="px-btn text-sm text-white/60" disabled>
+                {m} (soon)
               </button>
             ))}
           </div>
