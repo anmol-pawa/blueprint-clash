@@ -254,3 +254,10 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Known gaps: not wired into the save or any screen; no Patternling art yet (arrives per district C4 to C7); only 5 design problems.
 - CI/deploy: `gh` unavailable here, not confirmed.
 - Next: C2b.
+
+## 2026-11-03: C2b Party save, /party page, design battle (C2 complete)
+- Save schema v2 adds `party` (owned, mastery, singletonOveruse) with a 1→2 migration and validation. New pure `lib/patterns/designBattle.ts` (30 HP monsters, 3 hearts; super kills and recruits, heavy chips by the YAGNI-shaved multiplier, weak costs a heart; Global State debuff applied to damage) and a `/party` page (roster with level/stage, battle with failure explanations, party persisted to the IndexedDB save). Title screen links it. Fixed a float-ceil bug (15×0.6) found by a test.
+- Verification: `lint` (0 errors), `typecheck`, `test` (278 pass), `content:verify` (53 pass), `build`, `build:pages` pass. Playwright on the static export at 1280x800 and iPhone 14: battle played, party restored after reload, no horizontal overflow, screenshots viewed (only console noise was my test server lacking a JS MIME type for sw.js).
+- Known gaps: no Patternling art yet (C4 to C7); only 5 problems; the Menu link on `/party` uses a relative path; picks are not yet fed to SRS (C3); party UI is text-only.
+- CI/deploy: `gh` unavailable here, not confirmed (Actions quota note expired 2026-11-01).
+- Next: C3 (SRS and mastery with rust; Daily Review).
