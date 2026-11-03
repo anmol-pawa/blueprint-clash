@@ -125,3 +125,17 @@ describe("dialogue", () => {
     expect(visibleText("a😀b", 100, 20)).toBe("a😀");
   });
 });
+
+describe("SOLID Square trainers", () => {
+  it("places Sable and Rook on walkable plaza tiles with art and dialogue", async () => {
+    const { WALKERS, PORTRAITS } = await import("@/game/sprites/characters");
+    const sq = MAPS["solid-square"];
+    for (const id of ["sable", "rook"]) {
+      const npc = sq.npcs.find((n) => n.id === id);
+      expect(npc, id).toBeDefined();
+      expect(sq.solid.includes(sq.rows[npc!.y][npc!.x])).toBe(false);
+      expect(WALKERS.some((w) => w.id === id)).toBe(true);
+      expect(PORTRAITS.some((p) => p.id === `${id}-portrait`)).toBe(true);
+    }
+  });
+});

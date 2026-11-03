@@ -316,3 +316,11 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - CI/deploy: `gh` unavailable here, so Actions/Pages status was not confirmed.
 - Note: designated branch is `claude/funny-ramanujan-38uwxg`; pushed to it and to `main`.
 - Next: C4e2.
+
+## 2026-11-03: C4e2a SOLID Square trainers
+- C4e2 split into C4e2a (done) and C4e2b (master + backdrop). `scripts/art/characters.mjs` now takes style flags (skirt, pack, bun, glasses, pencil, strap, lapel; Ada and the player regenerate byte-identical). Two new trainers with 24x32 four-frame walk cycles and 48x48 idle/talk portraits: **Sable Quill** (moss-green long coat, short dark bob) and **Rook Ferris** (ochre vest, round glasses, tool belt). Placed on the SOLID Square plaza with SRP and DIP teaching dialogue (each states the over-application caveat); wired into the overworld walkers and `/play` portraits.
+- Verification: `lint` (0 errors, 3 pre-existing warnings), `typecheck`, `test` (315 pass, new trainer placement test), `build:pages` pass; `content:verify` not rerun (no content touched). Playwright on the static export at 1280 wide and iPhone 14: `/dev/sprites` (viewed: trainers distinct from Ada and the player) and `/play` load, no console errors, no horizontal overflow. I did not walk to the trainers in-browser; placement is covered by tests.
+- Known gaps: trainers do not duel yet (C4e3); Rook's glasses use Ada's wrinkle marks on his portrait.
+- CI/deploy: `gh` unavailable here, so status not confirmed.
+- Note: pushed to `main` per the run protocol.
+- Next: C4e2b.

@@ -73,7 +73,9 @@ Work top to bottom: take the **first unchecked box**, and split big boxes into r
     - [x] C4d2. Five more: OCP (shipping rules via a registry), ISP (split a fat `Machine`), DIP with owning injection (`unique_ptr` + a clock), Demeter/tell-don't-ask, composition over inheritance.
   - [ ] C4e. District art (tiles, 2 trainers, master, backdrop), then the district master/gym. Split below.
     - [x] C4e1. SOLID Square tileset (marble plaza, animated fountain, columns, banners, copper roofs), map + warps from Old Town, signs, `/dev/sprites` scene.
-    - [ ] C4e2. Two trainers + the district master (overworld walkers, portraits, battle sprite), SOLID Square battle backdrop.
+    - [ ] C4e2. Two trainers + the district master, SOLID Square battle backdrop. Split below.
+      - [x] C4e2a. Two trainers (Sable Quill, Rook Ferris): overworld walkers, portraits, map placement, dialogue.
+      - [ ] C4e2b. District master (96×96 battle sprite, overworld walker, portrait) and the SOLID Square battle backdrop.
     - [ ] C4e3. Principle Hall interior, trainer duels and the master/gym fight wired to the SOLID deck and the 8 refactor exercises.
 - [ ] C5. **Creational Foundry** (L3): Patternling art for 5 patterns, lessons, cards, pattern duels, 6 exercises, a gym.
 - [ ] C6. **Structural Bridges** (L4): Patternling art for 7, lessons, cards, 7 exercises, a gym.

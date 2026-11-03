@@ -67,7 +67,10 @@ export const SOLID_SQUARE: MapDef = {
   name: "SOLID Square",
   rows: SOLID_SQUARE_ROWS,
   solid: "tbTCEWVKBA1234LMHNUFQI",
-  npcs: [],
+  npcs: [
+    { id: "sable", name: "Sable Quill", x: 5, y: 6, facing: "right", dialogue: "sable-intro" },
+    { id: "rook", name: "Rook Ferris", x: 14, y: 8, facing: "left", dialogue: "rook-intro" },
+  ],
   warps: [9, 10, 11].map((x) => ({ x, y: 13, to: "old-town", toX: 10, toY: 10, facing: "up" as const })),
   signs: { "1,4": "sign-solid-square", "17,9": "board-solid", "9,2": "door-principle-hall", "10,2": "door-principle-hall" },
 };
