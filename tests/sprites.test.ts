@@ -19,10 +19,11 @@ describe("sprite library", () => {
         for (const frames of Object.values(s.anims)) for (const f of frames) expect(bounds(f)).not.toBeNull();
       });
       it("uses a limited palette", () => {
-        expect(Object.keys(s.palette).length).toBeLessThanOrEqual(24);
+        expect(Object.keys(s.palette).length).toBeLessThanOrEqual(s.w >= 96 ? 32 : 24);
       });
-      it("has attack, hurt, faint and evolve animations; faint ends sparser", () => {
-        for (const a of ["attack", "hurt", "faint", "evolve"]) expect(s.anims[a]?.length ?? 0).toBeGreaterThan(0);
+      it("has attack, hurt, faint (and evolve for Patternlings); faint ends sparser", () => {
+        const needed = s.id === "warden-vane" ? ["attack", "hurt", "faint"] : ["attack", "hurt", "faint", "evolve"];
+        for (const a of needed) expect(s.anims[a]?.length ?? 0).toBeGreaterThan(0);
         const opaque = (f: readonly string[]) => f.join("").replace(/\./g, "").length;
         expect(opaque(s.anims.faint[s.anims.faint.length - 1])).toBeLessThan(opaque(s.anims.faint[0]));
       });
@@ -31,6 +32,14 @@ describe("sprite library", () => {
       });
     });
   }
+});
+
+describe("district masters", () => {
+  it("Warden Vane is 96×96 with 4 idle frames", () => {
+    const w = SPRITES.find((x) => x.id === "warden-vane")!;
+    expect([w.w, w.h]).toEqual([96, 96]);
+    expect(w.anims.idle).toHaveLength(4);
+  });
 });
 
 describe("pixel helpers", () => {

@@ -188,3 +188,10 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Verification: `lint` (3 pre-existing warnings), `typecheck`, `test` (206 pass, 14 new in `tests/master.test.ts`), `content:verify` (53 pass), `build`, `build:pages` pass. CI/deploy: `gh` unavailable here, so not checked; the Actions quota note has expired. Data and pure logic only, so no screenshots.
 - Known gaps: no UI or sprite yet; the smell cards are not yet in the SRS/review queue; the smell pool is small (6) so a retry repeats cards.
 - Next: B8b (master sprite).
+
+## 2026-11-03: B8b Warden Hollis Vane 96×96 sprite
+- Added `scripts/art/warden.mjs` and generated `game/sprites/creatures/warden-vane.ts` (96×96, 27-colour palette, 3–4 shade ramps, outlined): a grey-bearded gatekeeper in a slate coat and flat cap, with a key-ring staff (ownership), a belt of keys and a lantern. Animations: idle (4, breathing, lantern sway, blink), attack (4, staff raise and slam, lantern glows), hurt (2), faint (4, kneel and dissolve). Registered in `SPRITES` so it shows on `/dev/sprites`. Sprite tests: evolve is optional for masters, palette limit is 32 at 96 px, plus a 96×96 check.
+- Verification: `lint` (3 pre-existing warnings), `typecheck`, `test` (212 pass), `content:verify`, `build`, `build:pages` pass. Playwright on `/dev/sprites` at 1280×800 and iPhone 14: no console errors, no horizontal overflow; screenshots viewed (face readable under the cap, frames consistent).
+- Known gaps: the staff ring clips the top edge in attack frame 2; no back sprite (master is a foe only); not yet used in a battle scene. CI/deploy not checked: `gh` is unavailable here.
+- Note: designated branch was `claude/funny-ramanujan-oi3zpw`; pushed to it and to `main`. Untracked `AGENTS.md` (written by Next dev) was not committed.
+- Next: B8c (`/battle/master` UI).
