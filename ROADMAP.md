@@ -66,7 +66,7 @@ Work top to bottom: take the **first unchecked box**, and split big boxes into r
   - [ ] C3c. Daily Review extras once their modes exist: one estimation (Fermi Forge), one micro-Siege, one past-LLD review question; rust on Patternling sprites.
 - [ ] C4. **SOLID Square** (CUR L2): art (district tiles, 2 trainers, a master, a backdrop), lessons, 40 cards, 8 refactor exercises, a gym.
   - [x] C4a. 43-card SOLID Square deck (`content/cards/solid-square.ts`) verified by `content:verify` (predict cards run natively).
-  - [ ] C4b. Wire the deck: district battle route, SRS deck selection on `/review`, tests.
+  - [x] C4b. Wire the deck: district battle route, SRS deck selection on `/review`, tests.
   - [ ] C4c. Lessons (SRP, OCP, LSP, ISP, DIP, heuristics) with smell, before/after C++ and over-application cost.
   - [ ] C4d. 8 refactor exercises judged by tests plus Senior Review rules (`content:verify` packages).
   - [ ] C4e. District art (tiles, 2 trainers, master, backdrop), then the district master/gym.

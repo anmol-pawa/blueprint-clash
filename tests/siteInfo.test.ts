@@ -8,7 +8,7 @@ describe("siteInfo", () => {
   });
   it("every playable mode points at a built route", () => {
     for (const m of PLAYABLE_MODES) {
-      const dir = m.href.replace(/^\//, "").replace(/^workshop\/.*/, "workshop/[id]");
+      const dir = m.href.split("?")[0].replace(/^\//, "").replace(/^workshop\/.*/, "workshop/[id]");
       expect(existsSync(`app/${dir}/page.tsx`), m.href).toBe(true);
     }
   });

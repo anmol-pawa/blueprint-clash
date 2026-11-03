@@ -277,3 +277,11 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Known gaps: the deck is not reachable from the game yet (C4b); no district art or lessons.
 - CI/deploy: `gh` unavailable here, not confirmed.
 - Next: C4b.
+
+## 2026-11-03: C4b Wire the SOLID Square deck
+- New `content/decks.ts` registry (Old Town, SOLID Square; `getDeck`, `deckIdFromSearch` falling back to Old Town) with `tests/decks.test.ts` (unique deck and card ids, valid answers, `?deck=` resolution). `/battle?deck=solid-square` starts the concept battle with that deck (`BattleEntry` reads the query on the client via `useSyncExternalStore`, since the site is a static export); `/review` gained a deck switcher (44 px buttons) and honours `?deck=`; a title-screen tile links the SOLID Square battle. Card ids are globally unique, so the one SRS map serves both decks. The `siteInfo` test now strips query strings.
+- Verification: `lint` (0 errors, 3 pre-existing warnings), `typecheck`, `test` (289 pass), `content:verify`, `build`, `build:pages` pass. Playwright on the static export at 1280x800 and iPhone 14: battle and review with `?deck=solid-square` showed the 43-card deck, the deck switch worked, no console errors, no horizontal overflow; screenshots viewed.
+- Known gaps: the battle still uses the Rough Draft foe and Old Town backdrop (district art is C4e); the card header for mcq cards reads "Which pattern?" in battle; the master fight still uses the Old Town deck only.
+- CI/deploy: `gh` unavailable here, so Actions/Pages status not confirmed (the quota note has expired).
+- Note: designated branch was `claude/funny-ramanujan-es7zmh`; pushed to it and to `main`.
+- Next: C4c (SOLID lessons).

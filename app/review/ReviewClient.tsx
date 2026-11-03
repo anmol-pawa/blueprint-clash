@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { CardView } from "@/components/BattleCard";
-import { OLD_TOWN_DECK } from "@/content/cards/old-town";
+import { DECKS, deckIdFromSearch, getDeck } from "@/content/decks";
 import { rng, shuffleOptions, type AnswerResult } from "@/lib/battle/battle";
 import { isCorrect, type Card } from "@/lib/battle/cards";
 import { indexedDbSaveStore, loadSave, memorySaveStore, updateSave, type SaveStore } from "@/lib/save/store";
@@ -21,6 +21,20 @@ export function ReviewClient() {
   const [result, setResult] = useState<AnswerResult | null>(null);
   const [right, setRight] = useState(0);
   const [now, setNow] = useState(0);
+  const [deckId, setDeckId] = useState(DECKS[0].id);
+  const deck = getDeck(deckId);
+
+  const startDeck = useCallback((id: string, data: SaveData, at: number) => {
+    const cards = getDeck(id).cards;
+    const ids = buildQueue(data.srs, cards.map((c) => c.id), at);
+    const rand = rng(at & 0xffff);
+    setDeckId(id);
+    setIdx(0);
+    setRight(0);
+    setSelected([]);
+    setResult(null);
+    setQueue(ids.map((qid) => shuffleOptions(cards.find((c) => c.id === qid)!, rand)));
+  }, []);
 
   useEffect(() => {
     let live = true;
@@ -39,15 +53,13 @@ export function ReviewClient() {
       if (!live) return;
       const now = Date.now();
       setNow(now);
-      const ids = buildQueue(data.srs, OLD_TOWN_DECK.map((c) => c.id), now);
-      const rand = rng(now & 0xffff);
       setSave(data);
-      setQueue(ids.map((id) => shuffleOptions(OLD_TOWN_DECK.find((c) => c.id === id)!, rand)));
+      startDeck(deckIdFromSearch(window.location.search), data, now);
     })();
     return () => {
       live = false;
     };
-  }, []);
+  }, [startDeck]);
 
   const card = queue?.[idx];
 
@@ -84,12 +96,12 @@ export function ReviewClient() {
     const counts: Record<MasteryState, number> = { unseen: 0, seen: 0, learning: 0, practiced: 0, mastered: 0, ingrained: 0 };
     if (!save) return { counts, rusty: 0 };
     let rusty = 0;
-    for (const c of OLD_TOWN_DECK) {
+    for (const c of deck.cards) {
       counts[masteryState(save.srs[c.id])] += 1;
       if (rustLevel(save.srs[c.id], now) > 0) rusty += 1;
     }
     return { counts, rusty };
-  }, [save, now]);
+  }, [save, now, deck]);
 
   const done = queue !== null && idx >= queue.length;
 
@@ -100,8 +112,21 @@ export function ReviewClient() {
         <Link href="/" className="px-btn px-4 py-3">Menu</Link>
       </header>
       {persist === "off" && <p className="panel p-2 text-xs text-white/70">Progress cannot be saved in this browser; reviews will not persist.</p>}
+      <nav className="flex gap-2" aria-label="Deck">
+        {DECKS.map((d) => (
+          <button
+            key={d.id}
+            className={`px-btn flex-1 px-3 py-3 text-sm ${d.id === deckId ? "px-btn-primary" : ""}`}
+            aria-pressed={d.id === deckId}
+            disabled={!save}
+            onClick={() => save && startDeck(d.id, save, Date.now())}
+          >
+            {d.title}
+          </button>
+        ))}
+      </nav>
       <section className="panel p-3" aria-label="Mastery">
-        <div className="font-display mb-1 text-xs text-white/60">MASTERY (Old Town deck, {OLD_TOWN_DECK.length} cards)</div>
+        <div className="font-display mb-1 text-xs text-white/60">MASTERY ({deck.title} deck, {deck.cards.length} cards)</div>
         <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs">
           {MASTERY_ORDER.map((m) => (
             <span key={m}>
@@ -118,7 +143,7 @@ export function ReviewClient() {
           <div className="m-auto text-center">
             <h2 className="font-display text-lg">All caught up</h2>
             <p className="text-sm text-white/70">Nothing is due. Come back tomorrow, or battle for new cards.</p>
-            <Link href="/battle" className="px-btn px-btn-primary mt-3 inline-block px-4 py-3">Concept battle</Link>
+            <Link href={`/battle?deck=${deck.id}`} className="px-btn px-btn-primary mt-3 inline-block px-4 py-3">Concept battle</Link>
           </div>
         ) : done ? (
           <div className="m-auto text-center">

@@ -3,7 +3,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { BattleStage } from "@/game/battle/BattleStage";
 import { DRAFTLING_BACK } from "@/game/sprites/creatures/draftling-back";
 import { ROUGH_DRAFT } from "@/game/sprites/creatures/rough-draft";
-import { OLD_TOWN_DECK } from "@/content/cards/old-town";
+import { getDeck } from "@/content/decks";
 import { AudioToggle } from "@/components/AudioToggle";
 import { Bar, CardView } from "@/components/BattleCard";
 import { sfx, startMusic, stopMusic } from "@/game/audio/synth";
@@ -14,10 +14,11 @@ import { type AnswerResult, type BattleState, answer, currentCard, stars, startB
 
 type Phase = "intro" | "answering" | "resolving" | "feedback" | "over";
 
-export function BattleClient() {
+export function BattleClient({ deckId }: { deckId: string }) {
+  const deck = getDeck(deckId);
   const host = useRef<HTMLDivElement>(null);
   const stage = useRef<BattleStage | null>(null);
-  const [state, setState] = useState<BattleState>(() => startBattle(OLD_TOWN_DECK, 1));
+  const [state, setState] = useState<BattleState>(() => startBattle(deck.cards, 1));
   const [phase, setPhase] = useState<Phase>("intro");
   const [selected, setSelected] = useState<number[]>([]);
   const [result, setResult] = useState<AnswerResult | null>(null);
@@ -116,7 +117,7 @@ export function BattleClient() {
     })();
   }, [phase, state.missed]);
 
-  const total = OLD_TOWN_DECK.length;
+  const total = deck.cards.length;
   const earned = stars(state);
 
   return (
@@ -152,7 +153,10 @@ export function BattleClient() {
             </div>
           </div>
         ) : !ready || !card ? (
-          <p className="font-display m-auto text-[var(--accent-2)]">A wild ROUGH DRAFT appears!</p>
+          <p className="font-display m-auto text-center text-[var(--accent-2)]">
+            A wild ROUGH DRAFT appears!
+            <span className="mt-1 block text-xs text-white/60">{deck.title} deck</span>
+          </p>
         ) : (
           <>
             <CardView
