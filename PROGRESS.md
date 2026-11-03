@@ -300,3 +300,11 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - CI/deploy: the Actions quota note has expired, but `gh` is unavailable here, so Actions/Pages status was not confirmed.
 - Note: designated branch was `claude/funny-ramanujan-kc3if8`; the routine protocol pushes to `main`.
 - Next: C4d2.
+
+## 2026-11-03: C4d2 Five more SOLID refactor exercises (C4d complete)
+- Five full packages (prompt, `api.h`, starter, reference, hidden tests, three known-wrong solutions each, 3-rung hints): **ocp-shipping** (registry of `unique_ptr<ShippingRule>`, cheapest matching rule, -1 when none; tests register rules the solution never saw and count live objects), **isp-machine** (`BasicPrinter` is only a `Printer`; `AllInOne` has both roles; `copyDocument(Scanner&, Printer&)`; the wrong `copy_needs_allinone` is a compile error), **dip-clock** (owning `unique_ptr<Clock>` injection, expiry exactly at the ttl, destroying the store destroys the clock), **demeter-wallet** (a detection trait proves `Customer` has no `wallet()`; `Shop` counts revenue only on a successful `pay`), **composition-history** (`BoundedHistory` has-a deque; must not derive from `std::vector` or offer `push_back`).
+- Verification: `lint` (0 errors, 3 pre-existing warnings), `typecheck`, `test` (301 pass), `content:verify` (114 pass: every reference accepted and Senior-Review clean, every starter rejected, every wrong solution rejected the documented way), `build`, `build:pages` pass. No UI change, so no screenshots.
+- Known gaps: not reachable in-game yet (the district gym in C4e will use all eight); no lesson links to them.
+- CI/deploy: `gh` unavailable here, so Actions/Pages status was not confirmed.
+- Note: designated branch was `claude/funny-ramanujan-mobvei`; pushed to it and to `main`.
+- Next: C4e (SOLID Square district art, then the master/gym).

@@ -1,0 +1,5 @@
+A shop sells to customers who have money. The tempting code is `customer.getWallet().getBalance() >= price` followed by `customer.getWallet().setBalance(...)`: the shop reaches through the customer into its wallet, so every caller depends on the customer's internals. Follow the Law of Demeter and *tell, don't ask*. Write in `solution.h`:
+
+- `class Wallet`: `explicit Wallet(long long cents = 0)`; `bool charge(long long cents)` (false and no change unless `0 < cents <= balance`); `void deposit(long long cents)` (ignores `cents <= 0`); `long long balance() const`.
+- `class Customer`: `Customer(std::string name, long long openingCents)`; `const std::string& name() const`; `bool pay(long long cents)`; `void topUp(long long cents)`; `long long funds() const`. A `Customer` must **not** hand out its wallet: no `wallet()` accessor.
+- `class Shop`: `bool sell(Customer& buyer, long long priceCents)` asks the customer to pay and counts the price as revenue only when the payment succeeded; `long long revenue() const`.
