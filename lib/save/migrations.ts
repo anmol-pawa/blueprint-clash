@@ -6,8 +6,10 @@ export interface Migration {
   up(old: Record<string, unknown>): Record<string, unknown>;
 }
 
-/** Registered migrations. Empty while v1 is the first shipped schema. */
-export const MIGRATIONS: Migration[] = [];
+/** Registered migrations. v1 -> v2 adds the Patternling party. */
+export const MIGRATIONS: Migration[] = [
+  { from: 1, up: (old) => ({ ...old, party: { owned: [], mastery: {}, singletonOveruse: 0 } }) },
+];
 
 export type MigrateResult = { ok: true; data: Record<string, unknown> } | { ok: false; error: string };
 

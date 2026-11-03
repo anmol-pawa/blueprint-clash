@@ -96,3 +96,20 @@ describe("store", () => {
     expect((await loadSave(broken, 1)).warning).toMatch(/storage unavailable/);
   });
 });
+
+describe("party (v2)", () => {
+  it("migrates a v1 save by adding an empty party", () => {
+    const { party: _p, ...v1 } = { ...newSave(3), version: 1 };
+    void _p;
+    const m = migrate(v1);
+    expect(m.ok).toBe(true);
+    if (m.ok) {
+      expect(m.data.version).toBe(2);
+      expect(validateSave(m.data)).toEqual([]);
+      expect(m.data.party).toEqual({ owned: [], mastery: {}, singletonOveruse: 0 });
+    }
+  });
+  it("rejects a malformed party", () => {
+    expect(validateSave({ ...newSave(1), party: { owned: "x" } })).toContain("party is malformed");
+  });
+});

@@ -28,6 +28,7 @@ export interface PlayableMode {
 /** Routes that exist today, shown as live tiles on the title screen (paths are base-path relative). */
 export const PLAYABLE_MODES: readonly PlayableMode[] = [
   { href: "/battle", title: "Concept battle", blurb: "Patternling cards: name the smell, pick the principle." },
+  { href: "/party", title: "Patternling party", blurb: "Design battles: match the pattern to the problem and recruit." },
   { href: "/workshop/library-management", title: "Workshop: Library", blurb: "Write C++ against hidden tests, then survive a Change Storm." },
   { href: "/battle/master", title: "Old Town master", blurb: "Warden Hollis Vane: cards, a build and a smell boss." },
 ];
