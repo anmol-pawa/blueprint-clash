@@ -60,7 +60,10 @@ Work top to bottom: take the **first unchecked box**, and split big boxes into r
 - [x] C2. **Patternling party and type chart** (GDD §5.2), plus the Singleton "Global State" debuff.
   - [x] C2a. Pure `lib/patterns/`: 21-creature roster, type chart (super/neutral-with-YAGNI/weak) with starter design problems, party state, mastery levels and stages, Global State debuff, with tests.
   - [x] C2b. Save wiring (`party` in the save schema with migration), `/party` page, and a design-battle mode using `matchup` (art arrives per district in C4 to C7).
-- [ ] C3. **SRS and mastery with rust; the Daily Review** (GDD §6).
+- [x] C3. **SRS and mastery with rust; the Daily Review** (GDD §6).
+  - [x] C3a. Pure `lib/srs/` scheduler, mastery states, rust, queue builder, with tests.
+  - [x] C3b. `/review` page (spaced cards, mastery summary, rust), battle misses feed the SRS.
+  - [ ] C3c. Daily Review extras once their modes exist: one estimation (Fermi Forge), one micro-Siege, one past-LLD review question; rust on Patternling sprites.
 - [ ] C4. **SOLID Square** (CUR L2): art (district tiles, 2 trainers, a master, a backdrop), lessons, 40 cards, 8 refactor exercises, a gym.
 - [ ] C5. **Creational Foundry** (L3): Patternling art for 5 patterns, lessons, cards, pattern duels, 6 exercises, a gym.
 - [ ] C6. **Structural Bridges** (L4): Patternling art for 7, lessons, cards, 7 exercises, a gym.

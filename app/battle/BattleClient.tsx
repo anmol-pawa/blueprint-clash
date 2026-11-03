@@ -8,6 +8,8 @@ import { AudioToggle } from "@/components/AudioToggle";
 import { Bar, CardView } from "@/components/BattleCard";
 import { sfx, startMusic, stopMusic } from "@/game/audio/synth";
 import type { Card } from "@/lib/battle/cards";
+import { indexedDbSaveStore, loadSave, updateSave } from "@/lib/save/store";
+import { recordAnswer } from "@/lib/srs";
 import { type AnswerResult, type BattleState, answer, currentCard, stars, startBattle } from "@/lib/battle/battle";
 
 type Phase = "intro" | "answering" | "resolving" | "feedback" | "over";
@@ -96,6 +98,23 @@ export function BattleClient() {
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [toggle, submit, next, phase]);
+
+  // Feed misses to the spaced-repetition queue once, when the battle ends (best effort: storage may be unavailable).
+  const fed = useRef(false);
+  useEffect(() => {
+    if (phase !== "over" || fed.current || state.missed.length === 0) return;
+    fed.current = true;
+    void (async () => {
+      try {
+        const store = indexedDbSaveStore();
+        const { data, warning } = await loadSave(store, Date.now());
+        if (warning) return;
+        await updateSave(store, data, (d) => state.missed.forEach((id) => recordAnswer(d.srs, id, false, Date.now())), Date.now());
+      } catch {
+        /* storage unavailable: the review queue just will not include these */
+      }
+    })();
+  }, [phase, state.missed]);
 
   const total = OLD_TOWN_DECK.length;
   const earned = stars(state);

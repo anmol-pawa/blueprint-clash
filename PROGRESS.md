@@ -261,3 +261,11 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Known gaps: no Patternling art or battle animation yet (arrives per district C4-C7); only 5 design problems; no mastery/level-up toast; disabled buttons after a battle look dim.
 - CI/deploy: `gh` unavailable; Actions status not confirmed.
 - Next: C3 (SRS and mastery with rust; Daily Review).
+
+## 2026-11-03: C3 SRS, mastery with rust, Daily Review
+- Added pure `lib/srs/` (SM-2 flavoured scheduler: 1 day, 3 days, then x ease; a miss resets reps, counts a lapse and returns in 10 minutes; assisted answers never advance; mastery states unseen/seen/learning/practiced/mastered/ingrained; rust level 0-2 from overdue time relative to the interval; queue builder: due cards most-overdue first, then at most 4 new). `SaveData.srs` already existed, so no schema bump. New `/review` page (Old Town deck, mastery summary, rust note, per-answer persistence to the IndexedDB save, Pattern duel link at the end) and the concept battle now feeds its missed cards to the SRS. Title screen links the Daily Review.
+- Verification: `lint` (0 errors, 4 pre-existing warnings), `typecheck`, `test` (286 pass; new `tests/srs.test.ts`), `build`, `build:pages` pass; `content:verify` not rerun after the change (no content touched). Playwright on the static export at 1280x800 and iPhone 14: answered two cards, reload showed the saved mastery counts, no console errors, no horizontal overflow; screenshots viewed.
+- Known gaps: rust is text only (no sprite rust yet); queue covers only the Old Town deck; the Daily Review lacks the estimation, micro-Siege and past-LLD question (those modes do not exist yet, tracked as C3c); battle only feeds misses, not successes; the master fight does not feed misses.
+- CI/deploy: Actions quota note expired, but `gh` is unavailable here, so not confirmed.
+- Note: pushed to the designated branch `claude/funny-ramanujan-jrit2z` and to `main`.
+- Next: C3c is blocked on later modes; take C4 (SOLID Square).

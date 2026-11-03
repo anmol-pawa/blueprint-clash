@@ -90,7 +90,7 @@ export function CardView({ card, phase, selected, result, counter, nextLabel, on
       )}
       {phase === "feedback" && result && (
         <div ref={feedbackRef} className="mt-1 flex shrink-0 flex-col gap-2" role="status">
-          <div className={`font-display text-lg ${result.correct ? "text-emerald-300" : "text-red-300"}`}>{result.correct ? `Hit! −${result.damageToFoe}` : `Countered! −${result.damageToPlayer}`}</div>
+          <div className={`font-display text-lg ${result.correct ? "text-emerald-300" : "text-red-300"}`}>{result.correct ? (result.damageToFoe > 0 ? `Hit! −${result.damageToFoe}` : "Correct!") : result.damageToPlayer > 0 ? `Countered! −${result.damageToPlayer}` : "Not quite"}</div>
           <p className="text-sm leading-snug text-white/85">{result.explain}</p>
           <button className="px-btn px-btn-primary min-h-11 px-4 py-2" onClick={onNext}>
             {nextLabel}
