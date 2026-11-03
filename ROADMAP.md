@@ -43,7 +43,11 @@ Work top to bottom: take the **first unchecked box**, and split big boxes into r
 - [x] B7. **OCP scorer and Senior Review v1:** the AST dump in the worker, the AST model, and 5 rules (virtual destructor, raw `new` ownership, public mutable fields, missing `override`, god class) with fixtures. Split below.
   - [x] B7a. Pure `lib/review/` (tokenizer, declaration parser, model, the 5 rules with positive/negative fixtures, clang-AST cross-check, reference passes via `content:verify`). The clang JSON dump is ~226 MB, so a declaration parser replaced it (ADR 0002).
   - [x] B7b. Wire Senior Review into `/workshop` (review the player's files at debrief, findings list with fix + lesson, feed `workshopScore` review weight and the third star), Playwright desktop + iPhone 14.
-- [ ] B8. **Old Town master battle:** the gym leader (96×96), a three-phase fight (cards → a mini Workshop → a smell boss), a badge and an evolution scene.
+- [ ] B8. **Old Town master battle:** the gym leader (96×96), a three-phase fight (cards → a mini Workshop → a smell boss), a badge and an evolution scene.  Split below.
+  - [x] B8a. Pure `lib/battle/master.ts` (three-phase fight with one HP pool: cards, judged mini Workshop, smell boss; stars, badge), the Old Town master profile and six dedicated smell cards, with tests.
+  - [ ] B8b. Warden Hollis Vane 96×96 front sprite with idle/attack/hurt/faint frames, reviewed on `/dev/sprites`.
+  - [ ] B8c. `/battle/master` UI: phase banners, master HP bar, phase 2 through the browser judge (`file-handle` exercise), win/lose dialogue, badge saved.
+  - [ ] B8d. Draftling evolution scene (white-silhouette morph) after the badge.
 - [ ] B9. **Audio v1** (port the synth if present) and a theme for Old Town.
 - [ ] B10. **Slice polish:** a full Playwright playthrough on desktop and iPhone 14, screenshots, fixes, and a slice review in PROGRESS.md.
 

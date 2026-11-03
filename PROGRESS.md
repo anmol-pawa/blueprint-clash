@@ -182,3 +182,9 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Known gaps: review shown only at debrief (not while coding); no per-finding jump to the editor; bad designs not yet checked for expected findings; flow state still not saved; design board (15 %) still absent.
 - Note: designated branch was `claude/funny-ramanujan-iqqotl`; pushed to it and to `main`.
 - Next: B8 (Old Town master battle).
+
+## 2026-11-03: B8a district master fight (pure logic + Old Town content)
+- B8 split into B8a (done), B8b (96×96 master sprite), B8c (`/battle/master` UI with phase 2 through the browser judge, badge saved) and B8d (evolution scene). Added `lib/battle/master.ts`: a three-phase fight (concept cards -> judged mini exercise -> smell boss) with one HP pool, small heals between phases, a continuous master HP bar (`masterHpFraction`, 40/20/40), stars from card misses plus failed submissions, and a badge only on victory. An assisted workshop pass (reference viewed) never beats the master. Content: `content/masters/old-town.ts` (Warden Hollis Vane, dialogue, badge id, `file-handle` as the phase-2 exercise, level 2+ cards from the deck) and `old-town-smells.ts` (six new smell cards: hidden singleton dependencies, raw owning pointer, inheriting from `std::vector`, feature envy, fat interface, copy-paste duplication). ARCH gained a "District master fight" paragraph.
+- Verification: `lint` (3 pre-existing warnings), `typecheck`, `test` (206 pass, 14 new in `tests/master.test.ts`), `content:verify` (53 pass), `build`, `build:pages` pass. CI/deploy: `gh` unavailable here, so not checked; the Actions quota note has expired. Data and pure logic only, so no screenshots.
+- Known gaps: no UI or sprite yet; the smell cards are not yet in the SRS/review queue; the smell pool is small (6) so a retry repeats cards.
+- Next: B8b (master sprite).
