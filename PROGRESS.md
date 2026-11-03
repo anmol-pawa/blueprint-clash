@@ -285,3 +285,9 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - CI/deploy: `gh` unavailable here, so Actions/Pages status not confirmed (the quota note has expired).
 - Note: designated branch was `claude/funny-ramanujan-es7zmh`; pushed to it and to `main`.
 - Next: C4c (SOLID lessons).
+
+## 2026-11-03: C4c SOLID Square lessons
+- Added the first lesson system: `lib/lessons/model.ts` (type + validator), `content/lessons/solid-square.ts` (6 lessons: SRP, OCP, LSP, ISP, DIP, and DRY/KISS/YAGNI/Demeter/tell-don't-ask), `content/lessons/registry.ts`, `/learn` index and `/learn/[id]` pages (before/after code side by side, trade-off, interview phrasing, over-application cost, "Mark as learned" saved to `lessonsDone`, link to the SOLID Square cards), a Lessons tile on the title screen, and an ARCH "Lessons" section. Each lesson states the expression-problem or other trade-off honestly (OCP vs switch/variant, LSP via contracts and the rectangle/square trap, ISP/DIP over-application).
+- Verification: `lint` (0 errors, 3 pre-existing warnings), `typecheck`, `test` (293 pass, new `tests/lessons.test.ts`), `content:verify` (new `solid-lessons.verify.ts`: all 12 programs compile with g++ and print the recorded output; each `after` is Senior-Review clean; the review caught a public mutable field in the DIP test double, now fixed), `build`, `build:pages` pass. Playwright on the static export at 1280x900 and iPhone 14: `/learn` and `/learn/lsp` rendered, no console errors, no horizontal overflow, mark-as-learned worked; screenshots viewed.
+- Known gaps: no lesson art or NPC trigger yet (C4e); lessons are not yet tied to district progress; L1 lessons do not exist (only exercises and cards); no "Learned" mark on the title screen.
+- Next: C4d (8 refactor exercises).
