@@ -2,7 +2,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { CodeEditor } from "./CodeEditor";
 import {
-  applyDraft, closeTab, createFile, createWorkspace, deleteFile, editFile, getFile, openFile, renameFile, userFiles,
+  applyDraft, closeTab, createFile, createWorkspace, deleteFile, editFile, getFile, insertFiles, openFile, renameFile, userFiles,
   type Workspace, type WorkspaceResult,
 } from "@/lib/editor/workspace";
 import { debouncedSaver, indexedDbDraftStore, type DraftStore } from "@/lib/editor/drafts";
@@ -23,6 +23,8 @@ interface Props {
   submitExtras: ProjectFile[];
   judge: JudgeFn;
   store?: DraftStore;
+  /** Optional files (the Design Board skeleton) the player can insert with one click; existing files are never overwritten. */
+  skeleton?: ProjectFile[];
   /** Called after every Run/Submit with the player's own files (not the hidden ones) and the result. */
   onJudged?: (mode: "run" | "submit", res: BrowserJudgeResult, files: ProjectFile[]) => void;
 }
@@ -38,7 +40,7 @@ const VERDICT_TEXT: Record<BrowserJudgeResult["verdict"], string> = {
   time_limit: "Time limit",
 };
 
-export function WorkspaceEditor({ id, provided, starter, runExtras, submitExtras, judge, store, onJudged }: Props) {
+export function WorkspaceEditor({ id, provided, starter, runExtras, submitExtras, judge, store, skeleton, onJudged }: Props) {
   const draftStore = useMemo(() => store ?? indexedDbDraftStore(), [store]);
   const [ws, setWs] = useState<Workspace>(() => createWorkspace(provided, starter));
   const [loaded, setLoaded] = useState(false);
@@ -120,6 +122,19 @@ export function WorkspaceEditor({ id, provided, starter, runExtras, submitExtras
         <button id="submit" className={`${btn} bg-emerald-700 text-white disabled:opacity-50`} disabled={!!busy} onClick={() => go("submit")}>
           {busy === "submit" ? "Judging…" : "Submit"}
         </button>
+        {skeleton && skeleton.length > 0 && (
+          <button
+            className={btn}
+            data-testid="insert-skeleton"
+            onClick={() => {
+              const r = insertFiles(ws, skeleton);
+              update(r.ws);
+              setError(r.skipped.length ? `Skipped existing: ${r.skipped.join(", ")}` : "");
+            }}
+          >
+            Insert board skeleton
+          </button>
+        )}
         <span className="text-xs opacity-70">{loaded ? "Draft saved on this device" : "Loading draft…"}</span>
       </div>
 

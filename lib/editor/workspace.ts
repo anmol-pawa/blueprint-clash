@@ -93,3 +93,18 @@ export function applyDraft(ws: Workspace, draft: ProjectFile[]): Workspace {
   const provided = ws.files.filter((f) => f.readOnly);
   return createWorkspace(provided, user);
 }
+
+/** Adds files that do not exist yet (never overwrites the player's work); reports what was added and what was skipped. */
+export function insertFiles(ws: Workspace, files: ProjectFile[]): { ws: Workspace; added: string[]; skipped: string[] } {
+  let cur = ws;
+  const added: string[] = [];
+  const skipped: string[] = [];
+  for (const f of files) {
+    const r = createFile(cur, f.path, f.content);
+    if (r.ok) {
+      cur = r.ws;
+      added.push(f.path);
+    } else skipped.push(f.path);
+  }
+  return { ws: cur, added, skipped };
+}

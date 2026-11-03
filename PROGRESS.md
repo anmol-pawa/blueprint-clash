@@ -240,3 +240,10 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - CI/deploy: Actions quota note expired; `gh` unavailable here, so not confirmed.
 - Note: designated branch was `claude/funny-ramanujan-8n9rdx`; pushed to it and to `main`.
 - Next: C1c (PNG export, skeleton download/insert, saved board).
+
+## 2026-11-03: C1c Board export, skeleton insert, saved board (C1 complete)
+- New pure `lib/board/persist.ts` (tolerant `parseBoard`/`serializeBoard`, per-problem storage key, `joinSkeleton`) and `insertFiles` in `lib/editor/workspace.ts` (adds files, never overwrites). `DesignBoard` gained Export PNG (2x raster of the live SVG, with explicit background and font so the file matches the canvas), Download C++ skeleton (single `skeleton.h.txt` with per-file banners; a zip would need a dependency) and autosave/restore of the board to localStorage per problem. The code stage shows an "Insert board skeleton" button that adds the headers to the editor workspace.
+- Verification: `lint` (0 errors), `typecheck`, `test` (260 pass, 6 new in `tests/boardPersist.test.ts`), `content:verify` (53 pass), `build`, `build:pages` pass. Playwright on the static export at 1280x800 and iPhone 14: downloaded a valid PNG (viewed; first version had a white background, fixed), downloaded skeleton, reload restored the board, skeleton inserted as `Library.h` and `IFeePolicy.h` tabs, no console errors, no horizontal overflow.
+- Known gaps: box positions are not saved (auto-layout on restore); the selected-box highlight appears in the PNG; the saved board is localStorage, not the IndexedDB save; skeleton is one text file, not separate downloads.
+- CI/deploy: `gh` is unavailable here, so Actions/Pages status was not confirmed.
+- Next: C2 (Patternling party and type chart).

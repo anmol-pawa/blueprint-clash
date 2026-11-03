@@ -1,8 +1,8 @@
 "use client";
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
-  addClass, addEdge, addField, addMethod, classHeight, clampPos, CLASS_W, edgeAnchor, ensureLayout, fieldText, HEAD_H, methodText, nextId, removeClass, removeEdge, removeField,
-  removeMethod, ROW_H, scoreBoard, setKind, toggleResponsibility, updateClass, updateEdge, validateBoard,
+  addClass, addEdge, addField, addMethod, boardStorageKey, boardToSkeleton, classHeight, clampPos, CLASS_W, edgeAnchor, ensureLayout, fieldText, HEAD_H, methodText, nextId, removeClass, removeEdge, removeField,
+  joinSkeleton, parseBoard, removeMethod, ROW_H, serializeBoard, scoreBoard, setKind, toggleResponsibility, updateClass, updateEdge, validateBoard,
   type Board, type ClassKind, type EdgeKind, type Layout,
 } from "@/lib/board";
 import type { Responsibility } from "@/lib/workshop/types";
@@ -21,14 +21,61 @@ const KINDS: { id: ClassKind; label: string }[] = [{ id: "class", label: "+ Clas
 const STEREO: Partial<Record<ClassKind, string>> = { abstract: "«abstract»", interface: "«interface»", enum: "«enum»" };
 const COLOR: Record<ClassKind, string> = { class: "#2f6f8f", abstract: "#7a5ab5", interface: "#3f9a6b", enum: "#a8794a" };
 
-export function DesignBoard({ rubric, initial, onFinish }: { rubric: Responsibility[]; initial?: Board; onFinish: (board: Board) => void }) {
-  const [board, setBoard] = useState<Board>(initial ?? { classes: [], edges: [] });
+/** Rasterises the live SVG (inline-styled, so it serialises faithfully) to a PNG download at 2x. */
+async function downloadPng(svg: SVGSVGElement, name: string): Promise<void> {
+  const xml = new XMLSerializer().serializeToString(svg);
+  const withNs = xml.includes("xmlns=") ? xml : xml.replace("<svg", '<svg xmlns="http://www.w3.org/2000/svg"');
+  const url = URL.createObjectURL(new Blob([withNs], { type: "image/svg+xml;charset=utf-8" }));
+  try {
+    const img = new Image();
+    await new Promise<void>((res, rej) => { img.onload = () => res(); img.onerror = () => rej(new Error("render failed")); img.src = url; });
+    const canvas = document.createElement("canvas");
+    canvas.width = W * 2;
+    canvas.height = H * 2;
+    canvas.getContext("2d")!.drawImage(img, 0, 0, canvas.width, canvas.height);
+    const blob = await new Promise<Blob | null>((res) => canvas.toBlob(res, "image/png"));
+    if (blob) saveBlob(blob, name);
+  } finally {
+    URL.revokeObjectURL(url);
+  }
+}
+
+function saveBlob(blob: Blob, name: string) {
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = name;
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+
+export function DesignBoard({ rubric, initial, draftId, onFinish }: { rubric: Responsibility[]; initial?: Board; /** Saves the board to this device under this id and restores it on return. */ draftId?: string; onFinish: (board: Board) => void }) {
+  // Mounted only after a click on the client, so reading localStorage in the initialiser cannot mismatch server HTML.
+  const [saved] = useState<Board | null>(() => {
+    if (!draftId || initial) return null;
+    try {
+      const b = parseBoard(localStorage.getItem(boardStorageKey(draftId)));
+      return b && b.classes.length > 0 ? b : null;
+    } catch {
+      return null; // storage unavailable: start empty
+    }
+  });
+  const [board, setBoard] = useState<Board>(initial ?? saved ?? { classes: [], edges: [] });
+  const [note, setNote] = useState(saved ? "Restored your saved board." : "");
   const [layout, setLayout] = useState<Layout>({});
   const [sel, setSel] = useState<string | null>(null);
   const [linkKind, setLinkKind] = useState<EdgeKind | null>(null);
   const [linkFrom, setLinkFrom] = useState<string | null>(null);
   const drag = useRef<{ id: string; dx: number; dy: number } | null>(null);
   const svg = useRef<SVGSVGElement>(null);
+
+  useEffect(() => {
+    if (!draftId) return;
+    try {
+      localStorage.setItem(boardStorageKey(draftId), serializeBoard(board));
+    } catch {
+      /* ignore */
+    }
+  }, [board, draftId]);
 
   const lay = useMemo(() => ensureLayout(board, layout, W), [board, layout]);
   const base = useMemo(() => rubric.filter((r) => r.phase === "base"), [rubric]);
@@ -94,7 +141,7 @@ export function DesignBoard({ rubric, initial, onFinish }: { rubric: Responsibil
 
       <div className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_320px]">
         <div className="panel min-w-0 self-start overflow-x-auto p-1">
-          <svg ref={svg} viewBox={`0 0 ${W} ${H}`} className="block w-full min-w-[720px] touch-none select-none rounded bg-[#101a2a]" role="img" aria-label="UML class diagram" onPointerMove={onMove} onPointerUp={() => (drag.current = null)} onPointerCancel={() => (drag.current = null)} onPointerDown={() => { setSel(null); setLinkFrom(null); }} data-testid="board-canvas">
+          <svg ref={svg} fontFamily="system-ui, Helvetica, Arial, sans-serif" viewBox={`0 0 ${W} ${H}`} className="block w-full min-w-[720px] touch-none select-none rounded bg-[#101a2a]" role="img" aria-label="UML class diagram" onPointerMove={onMove} onPointerUp={() => (drag.current = null)} onPointerCancel={() => (drag.current = null)} onPointerDown={() => { setSel(null); setLinkFrom(null); }} data-testid="board-canvas">
             <defs>
               <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M20 0H0V20" fill="none" stroke="#1d2b44" strokeWidth="1" /></pattern>
               <marker id="tri" markerWidth="14" markerHeight="14" refX="13" refY="7" orient="auto-start-reverse"><path d="M1 1L13 7L1 13Z" fill="#101a2a" stroke="#cfe3ff" strokeWidth="1.5" /></marker>
@@ -102,6 +149,7 @@ export function DesignBoard({ rubric, initial, onFinish }: { rubric: Responsibil
               <marker id="dia-h" markerWidth="18" markerHeight="12" refX="17" refY="6" orient="auto-start-reverse"><path d="M1 6L9 1L17 6L9 11Z" fill="#101a2a" stroke="#cfe3ff" strokeWidth="1.5" /></marker>
               <marker id="arr" markerWidth="12" markerHeight="12" refX="11" refY="6" orient="auto-start-reverse"><path d="M1 1L11 6L1 11" fill="none" stroke="#cfe3ff" strokeWidth="1.5" /></marker>
             </defs>
+            <rect width={W} height={H} fill="#101a2a" />
             <rect width={W} height={H} fill="url(#grid)" />
             {board.classes.length === 0 && <text x={W / 2} y={H / 2} textAnchor="middle" fill="#6b82a8" fontSize="18">Add a class to start your design</text>}
             {board.edges.map((e) => {
@@ -189,6 +237,11 @@ export function DesignBoard({ rubric, initial, onFinish }: { rubric: Responsibil
         <p className="text-xs text-white/60">Later Change Storms add responsibilities (a tier limit, say). A design that isolates each reason to change will absorb them without edits.</p>
       </div>
 
+      <div className="flex flex-wrap items-center gap-2">
+        <button className={btn} disabled={board.classes.length === 0} onClick={() => svg.current && void downloadPng(svg.current, "design-board.png").catch(() => setNote("PNG export failed in this browser."))} data-testid="export-png">Export PNG</button>
+        <button className={btn} disabled={board.classes.length === 0 || errors.length > 0} title={errors.length ? "Fix the board problems first" : undefined} onClick={() => saveBlob(new Blob([joinSkeleton(boardToSkeleton(board))], { type: "text/plain" }), "skeleton.h.txt")} data-testid="export-skeleton">Download C++ skeleton</button>
+        {note && <span className="text-xs text-white/60" role="status">{note}</span>}
+      </div>
       <div className="flex flex-wrap items-center gap-2">
         <button className="px-btn px-btn-primary min-h-11 px-4 text-sm" onClick={() => onFinish(board)} data-testid="finish-board">
           {board.classes.length === 0 ? "Skip the board and start coding" : "Lock the board and start coding"}

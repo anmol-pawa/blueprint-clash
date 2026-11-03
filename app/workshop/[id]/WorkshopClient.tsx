@@ -2,7 +2,7 @@
 import { useEffect, useMemo, useReducer, useRef, useState } from "react";
 import { Prose } from "@/components/Prose";
 import { DesignBoard } from "@/components/DesignBoard";
-import { scoreBoard } from "@/lib/board";
+import { boardToSkeleton, scoreBoard } from "@/lib/board";
 import { WorkspaceEditor } from "@/components/WorkspaceEditor";
 import { judgeInBrowser } from "@/lib/judge/browser/client";
 import type { BrowserJudgeResult } from "@/lib/judge/browser/protocol";
@@ -31,6 +31,14 @@ export function WorkshopClient({ bundle }: { bundle: WorkshopBundle }) {
   const known = useMemo(() => knownRequirements(bundle.requirements, bundle.clarify, flow.asked), [bundle, flow.asked]);
   const elapsed = flow.startedAtMs === null ? 0 : (flow.endedAtMs ?? Math.max(now, flow.startedAtMs)) - flow.startedAtMs;
   const btn = "px-btn min-h-11 px-4 text-sm";
+  const skeleton = useMemo(() => {
+    if (!flow.board) return undefined;
+    try {
+      return boardToSkeleton(flow.board);
+    } catch {
+      return undefined; // structural errors: no skeleton
+    }
+  }, [flow.board]);
 
   return (
     <main className="mx-auto w-full min-w-0 max-w-5xl space-y-3 p-4">
@@ -87,7 +95,7 @@ export function WorkshopClient({ bundle }: { bundle: WorkshopBundle }) {
         </section>
       )}
 
-      {flow.stage === "design" && <DesignBoard rubric={bundle.rubric} onFinish={(board) => dispatch({ type: "FINISH_BOARD", board: board.classes.length > 0 ? board : null })} />}
+      {flow.stage === "design" && <DesignBoard rubric={bundle.rubric} draftId={bundle.id} onFinish={(board) => dispatch({ type: "FINISH_BOARD", board: board.classes.length > 0 ? board : null })} />}
 
       {flow.stage === "storm" && (
         <StormCard bundle={bundle} flow={flow} onAccept={() => dispatch({ type: "ACCEPT_STORM" })} />
@@ -110,6 +118,7 @@ export function WorkshopClient({ bundle }: { bundle: WorkshopBundle }) {
           <WorkspaceEditor
             key={flow.phase}
             id={`workshop-${bundle.id}`}
+            skeleton={skeleton}
             provided={providedFiles(bundle, flow.phase)}
             starter={STARTER}
             runExtras={hiddenFiles(bundle, flow.phase)}
