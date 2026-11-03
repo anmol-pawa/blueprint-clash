@@ -22,9 +22,10 @@ export async function listExercises(root = EXERCISE_ROOT): Promise<string[]> {
   return ents.filter((e) => e.isDirectory()).map((e) => e.name).sort();
 }
 
-export async function loadExercise(id: string, root = EXERCISE_ROOT): Promise<ExercisePackage> {
+/** `metaOverride` lets a bundler-built caller (the app build) supply `meta.ts` itself, as a bundler cannot follow a path import. */
+export async function loadExercise(id: string, root = EXERCISE_ROOT, metaOverride?: ExerciseMeta): Promise<ExercisePackage> {
   const dir = join(root, id);
-  const { meta } = (await import(/* @vite-ignore */ pathToFileURL(join(dir, "meta.ts")).href)) as { meta: ExerciseMeta };
+  const meta = metaOverride ?? ((await import(/* @vite-ignore */ pathToFileURL(join(dir, "meta.ts")).href)) as { meta: ExerciseMeta }).meta;
   const api = await readFile(join(dir, "api.h"), "utf8").catch(() => undefined);
   const wrong: Record<string, WorkshopFile[]> = {};
   for (const w of meta.wrong) wrong[w.dir] = await readDir(join(dir, "wrong", w.dir));

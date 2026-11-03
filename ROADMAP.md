@@ -46,7 +46,7 @@ Work top to bottom: take the **first unchecked box**, and split big boxes into r
 - [ ] B8. **Old Town master battle:** the gym leader (96×96), a three-phase fight (cards → a mini Workshop → a smell boss), a badge and an evolution scene.  Split below.
   - [x] B8a. Pure `lib/battle/master.ts` (three-phase fight with one HP pool: cards, judged mini Workshop, smell boss; stars, badge), the Old Town master profile and six dedicated smell cards, with tests.
   - [x] B8b. Warden Hollis Vane 96×96 front sprite with idle/attack/hurt/faint frames, reviewed on `/dev/sprites`.
-  - [ ] B8c. `/battle/master` UI: phase banners, master HP bar, phase 2 through the browser judge (`file-handle` exercise), win/lose dialogue, badge saved.
+  - [x] B8c. `/battle/master` UI: phase banners, master HP bar, phase 2 through the browser judge (`file-handle` exercise), win/lose dialogue, badge saved.
   - [ ] B8d. Draftling evolution scene (white-silhouette morph) after the badge.
 - [ ] B9. **Audio v1** (port the synth if present) and a theme for Old Town.
 - [ ] B10. **Slice polish:** a full Playwright playthrough on desktop and iPhone 14, screenshots, fixes, and a slice review in PROGRESS.md.
