@@ -225,3 +225,10 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Slice gaps (carry into Phase C): the overworld has no door to the Workshop or master; `/evolve` is not badge-gated; misses are not fed to the SRS (C3); the first judge run downloads ~105 MB with no progress UI; Workshop flow state is not saved; Design Board (C1) absent; no Siege yet.
 - Note: designated branch was `claude/funny-ramanujan-y0lvff`; pushed to it and to `main`.
 - Next: C1 (Design Board).
+
+## 2026-11-03: C1a Design Board core (lib/design)
+- Split C1 into C1a/C1b/C1c. Added `lib/design/`: immutable `Board` model with validated operations (C++ identifiers/types, multiplicities, inheritance-cycle and enum/interface rules, duplicate members), responsibility tagging, `scoreBoard` against the existing rubric (ok / duplicate with half credit / misplaced / missing, overloaded-class and missing-extension-point notes; storm responsibilities only count once their phase is due), and `exportSkeleton` (one header per type: `unique_ptr`/vector for composition, raw non-owning pointers for aggregation/association, pure virtual interfaces, `override`, virtual destructors, forward declarations).
+- Verification: `lint` (3 pre-existing warnings in scripts/art), `typecheck`, `test` (243 pass, 13 new in `tests/design.test.ts` incl. g++ -Wall -Wextra -Werror compile of the exported headers, together and standalone), `content:verify` (53 pass), `build`, `build:pages`. No UI change, so no screenshots.
+- Branch note: this session was pinned to branch `claude/funny-ramanujan-oadfdw`, so the commit went there, not `main`. CI/deploy not checked (branch push only).
+- Known gaps: scoring matches owner class names only (no UML structure check yet); no UI.
+- Next: C1b, the UML canvas UI.

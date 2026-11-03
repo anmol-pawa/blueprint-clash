@@ -53,7 +53,10 @@ Work top to bottom: take the **first unchecked box**, and split big boxes into r
 
 ## Phase C: LLD systems and districts
 
-- [ ] C1. **Design Board** (GDD §5.3 step 2): the UML canvas (classes, interfaces, members, relationships, multiplicities), responsibility tagging, the rubric scorer with tests, PNG export, and the optional skeleton export to C++ headers.
+- [ ] C1. **Design Board** (GDD §5.3 step 2): the UML canvas (classes, interfaces, members, relationships, multiplicities), responsibility tagging, the rubric scorer with tests, PNG export, and the optional skeleton export to C++ headers. Split below.
+  - [x] C1a. Pure `lib/design/`: immutable board model with validated operations, responsibility tagging, rubric scorer (missing/misplaced/duplicate, overloaded classes, extension-point note), C++ skeleton export proven by g++, tests.
+  - [ ] C1b. Pixi/React UML canvas on `/workshop` (drag classes, member editor, relationship tool with multiplicities, tag panel with live score), Playwright desktop + iPhone 14.
+  - [ ] C1c. PNG export, skeleton export button, board saved in the workshop draft, Design Board phase wired between clarify and code.
 - [ ] C2. **Patternling party and type chart** (GDD §5.2), plus the Singleton "Global State" debuff.
 - [ ] C3. **SRS and mastery with rust; the Daily Review** (GDD §6).
 - [ ] C4. **SOLID Square** (CUR L2): art (district tiles, 2 trainers, a master, a backdrop), lessons, 40 cards, 8 refactor exercises, a gym.
