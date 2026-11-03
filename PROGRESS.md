@@ -247,3 +247,10 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Known gaps: box positions are not saved (auto-layout on restore); the selected-box highlight appears in the PNG; the saved board is localStorage, not the IndexedDB save; skeleton is one text file, not separate downloads.
 - CI/deploy: `gh` is unavailable here, so Actions/Pages status was not confirmed.
 - Next: C2 (Patternling party and type chart).
+
+## 2026-11-03: C2a Patternling roster, type chart, party and debuff (pure logic)
+- C2 split into C2a (done) and C2b (save, UI, design battle). Added `lib/patterns/`: the 21 Patternlings with an honest "solves" and "cost" line each; `matchup` (super x2, neutral x1 with a 0.75 YAGNI factor for heavier picks, weak x0.5 with a specific failure explanation); 5 starter design problems; `PartyState` with mastery, triangular levels (1..30), evolution stages at levels 10 and 20, and the Singleton "Global State" debuff (3 unjustified Solo picks; a super pick heals one; debuff trims non-super multipliers by 20%). 10 tests in `tests/patterns.test.ts`.
+- Verification: `lint` (0 errors, 3 pre-existing warnings), `typecheck`, `test`, `build`, `build:pages`, `content:verify` pass (see commit). No UI change, so no screenshots.
+- Known gaps: not wired into the save or any screen; no Patternling art yet (arrives per district C4 to C7); only 5 design problems.
+- CI/deploy: `gh` unavailable here, not confirmed.
+- Next: C2b.
