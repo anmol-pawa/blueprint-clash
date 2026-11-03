@@ -225,3 +225,10 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Slice gaps (carry into Phase C): the overworld has no door to the Workshop or master; `/evolve` is not badge-gated; misses are not fed to the SRS (C3); the first judge run downloads ~105 MB with no progress UI; Workshop flow state is not saved; Design Board (C1) absent; no Siege yet.
 - Note: designated branch was `claude/funny-ramanujan-y0lvff`; pushed to it and to `main`.
 - Next: C1 (Design Board).
+
+## 2026-11-03: C1a Design Board pure logic
+- C1 split into C1a (done), C1b (UI) and C1c (PNG export, skeleton insert, saved board). Added `lib/board/`: model + `validateBoard` (unique C++ names, no inheritance cycles, `implements` only to interface/abstract, multiplicity syntax), `scoreBoard` (responsibility rubric: exactly one owner, loose name match, missing 0, duplicated/misplaced half credit, god-class/empty/unconnected flags, phase-limited) producing the 0..1 `boardScore` for `workshopScore`, and `boardToSkeleton` (one header per class, UML-driven ownership, pure-virtual interfaces with virtual destructors, `override`, inferred std includes). ARCH gained a "Design Board model" section.
+- Verification: `lint` (3 pre-existing warnings), `typecheck`, `test` (245 pass, 15 new in `tests/board.test.ts` including a real g++ `-fsyntax-only` of the exported headers, which caught a missing `<map>` include, now fixed), `build`, `build:pages` pass. No UI change, so no screenshots. `content:verify` untouched. The Actions quota note has expired; CI/deploy confirmation is not possible here (`gh` unavailable).
+- Known gaps: no UI yet; no reference board per Workshop problem to prove the rubric scores the reference at 1.0 (add with C1b); aggregation vs association emit the same member shape.
+- Note: designated branch was `claude/funny-ramanujan-qhqdd2`; pushed to it and to `main`.
+- Next: C1b (Design Board UI).
