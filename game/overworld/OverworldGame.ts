@@ -5,14 +5,14 @@ import { type DialogueState, advance, startDialogue } from "@/lib/dialogue/dialo
 import { SCRIPTS } from "@/lib/dialogue/scripts";
 import { ADA, PLAYER } from "@/game/sprites/characters";
 import { animTextures, frameCanvas } from "@/game/sprites/texture";
-import { DRAFTING_HALL_TILES, OLD_TOWN_TILES } from "@/game/sprites/tiles";
+import { DRAFTING_HALL_TILES, OLD_TOWN_TILES, SOLID_SQUARE_TILES } from "@/game/sprites/tiles";
 import type { SpriteDef } from "@/game/sprites/pixel";
 import type { TileSetDef } from "@/game/sprites/tiles/tileset";
 
 const TILE = 16;
 /** Seconds to walk one tile. */
 const STEP_SECONDS = 0.2;
-const TILESET_FOR: Record<string, TileSetDef> = { "old-town": OLD_TOWN_TILES, "drafting-hall": DRAFTING_HALL_TILES };
+const TILESET_FOR: Record<string, TileSetDef> = { "old-town": OLD_TOWN_TILES, "drafting-hall": DRAFTING_HALL_TILES, "solid-square": SOLID_SQUARE_TILES };
 const WALKER_FOR: Record<string, SpriteDef> = { ada: ADA };
 
 export interface OverworldView {

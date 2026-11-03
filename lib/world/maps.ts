@@ -1,4 +1,4 @@
-import { HALL_LEGEND, OLD_TOWN_LEGEND } from "@/game/sprites/tiles/scenes";
+import { HALL_LEGEND, OLD_TOWN_LEGEND, SOLID_SQUARE_LEGEND, SOLID_SQUARE_ROWS } from "@/game/sprites/tiles/scenes";
 import type { MapDef, MapTable } from "./world";
 
 /**
@@ -25,7 +25,11 @@ export const OLD_TOWN: MapDef = {
   ],
   solid: "tbTRBEWdLMSHNXFQZw",
   npcs: [],
-  warps: [{ x: 9, y: 2, to: "drafting-hall", toX: 7, toY: 7, facing: "up" }],
+  warps: [
+    { x: 9, y: 2, to: "drafting-hall", toX: 7, toY: 7, facing: "up" },
+    // the cobbled road south leads to SOLID Square
+    ...[9, 10, 11].map((x) => ({ x, y: 11, to: "solid-square", toX: 10, toY: 12, facing: "up" as const })),
+  ],
   signs: { "1,4": "sign-welcome", "3,11": "board-quest", "17,11": "board-patterns" },
 };
 
@@ -53,8 +57,23 @@ export const DRAFTING_HALL: MapDef = {
   signs: { "6,1": "chalkboard-uml", "7,1": "chalkboard-uml" },
 };
 
-export const MAPS: MapTable = { [OLD_TOWN.id]: OLD_TOWN, [DRAFTING_HALL.id]: DRAFTING_HALL };
+/**
+ * SOLID Square: a civic plaza with the Principle Hall to the north. Its arch
+ * door is shut until the district master's gym arrives (C4e3); the board and
+ * sign point at the lessons. The road south returns to Old Town.
+ */
+export const SOLID_SQUARE: MapDef = {
+  id: "solid-square",
+  name: "SOLID Square",
+  rows: SOLID_SQUARE_ROWS,
+  solid: "tbTCEWVKBA1234LMHNUFQI",
+  npcs: [],
+  warps: [9, 10, 11].map((x) => ({ x, y: 13, to: "old-town", toX: 10, toY: 10, facing: "up" as const })),
+  signs: { "1,4": "sign-solid-square", "17,9": "board-solid", "9,2": "door-principle-hall", "10,2": "door-principle-hall" },
+};
 
-export const MAP_LEGENDS = { [OLD_TOWN.id]: OLD_TOWN_LEGEND, [DRAFTING_HALL.id]: HALL_LEGEND };
+export const MAPS: MapTable = { [OLD_TOWN.id]: OLD_TOWN, [DRAFTING_HALL.id]: DRAFTING_HALL, [SOLID_SQUARE.id]: SOLID_SQUARE };
+
+export const MAP_LEGENDS = { [OLD_TOWN.id]: OLD_TOWN_LEGEND, [DRAFTING_HALL.id]: HALL_LEGEND, [SOLID_SQUARE.id]: SOLID_SQUARE_LEGEND };
 
 export const START = { map: "old-town", x: 9, y: 4, facing: "up" } as const;

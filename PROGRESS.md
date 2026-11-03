@@ -308,3 +308,11 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - CI/deploy: `gh` unavailable here, so Actions/Pages status was not confirmed.
 - Note: designated branch was `claude/funny-ramanujan-mobvei`; pushed to it and to `main`.
 - Next: C4e (SOLID Square district art, then the master/gym).
+
+## 2026-11-03: C4e1 SOLID Square tileset, map and warps
+- C4e split into C4e1 (done), C4e2 (trainers, master, battle backdrop) and C4e3 (Principle Hall interior, duels, gym). New generator `scripts/art/solid-square.mjs` writes `game/sprites/tiles/solid-square.ts`: 28 tiles of 16x16 (limestone walls, copper-green roofs, arched windows and door, columns, purple banners that sway, a marble checker plaza, a four-tile fountain basin with animated water and spray, flagstone path, topiary cubes, a scales statue, lamps, benches, flowerbeds, notice board), its own 46-colour palette. New map `solid-square` (20x14) reached by the Old Town south road (warps on the bottom row) and back; three signs (district sign, lessons board, shut Principle Hall door with a notice). The overworld and `/dev/sprites` render it.
+- Verification: `lint` (0 errors; no new warnings), `typecheck`, `test` (306 pass; new SOLID Square walk/warp/blocked tests, scene test extended), `build`, `build:pages` pass. Playwright on the static export at 1280x800 and iPhone 14: `/dev/sprites` scene and a real `/play` walk from Old Town through the south road into SOLID Square, no console errors, no horizontal overflow; screenshots viewed (header reads "SOLID Square").
+- Known gaps: no trainers, master or battle backdrop yet (C4e2); the hall door is a notice only (C4e3); the district has no music theme of its own.
+- CI/deploy: `gh` unavailable here, so Actions/Pages status was not confirmed.
+- Note: designated branch is `claude/funny-ramanujan-38uwxg`; pushed to it and to `main`.
+- Next: C4e2.

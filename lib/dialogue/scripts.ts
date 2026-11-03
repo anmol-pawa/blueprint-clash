@@ -35,6 +35,21 @@ export const SCRIPTS: Readonly<Record<string, DialogueScript>> = {
     start: "a",
     nodes: { a: { text: "NOTICE: Who owns this resource? Please settle ownership before the next release. -- Town Council of Smart Pointers" } },
   },
+  "sign-solid-square": {
+    id: "sign-solid-square",
+    start: "a",
+    nodes: { a: { text: "SOLID SQUARE. Five pillars, five habits: one reason to change, open for extension, honest substitutes, small interfaces, depend on abstractions. Old Town is back south." } },
+  },
+  "board-solid": {
+    id: "board-solid",
+    start: "a",
+    nodes: { a: { text: "NOTICE: A rule used without its trade-off is a superstition. Read the lessons, then argue with them. -- The Pillar Society" } },
+  },
+  "door-principle-hall": {
+    id: "door-principle-hall",
+    start: "a",
+    nodes: { a: { text: "The Principle Hall's door is shut. A card reads: \"Master on rounds. Come back when your refactors are tidy.\"" } },
+  },
   "board-patterns": {
     id: "board-patterns",
     start: "a",

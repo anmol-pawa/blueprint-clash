@@ -2,7 +2,7 @@
 import { SpriteCanvas } from "@/components/sprites/SpriteCanvas";
 import { SPRITES } from "@/game/sprites";
 import { PORTRAITS, WALKERS } from "@/game/sprites/characters";
-import { DRAFTING_HALL_SCENE, OLD_TOWN_SCENE, TILESETS } from "@/game/sprites/tiles";
+import { DRAFTING_HALL_SCENE, OLD_TOWN_SCENE, SOLID_SQUARE_SCENE, TILESETS } from "@/game/sprites/tiles";
 import type { SpriteDef } from "@/game/sprites/pixel";
 
 /** Review page for art: every animation of every sprite, creatures at 3×, characters at 6×. */
@@ -42,7 +42,7 @@ export default function SpritesPage() {
       ))}
       <h2 className="mb-3 text-lg font-bold">Scenes (16×16 tiles at 3×)</h2>
       <div className="mb-8 flex flex-wrap gap-4">
-        {[OLD_TOWN_SCENE, DRAFTING_HALL_SCENE].map((s) => (
+        {[OLD_TOWN_SCENE, DRAFTING_HALL_SCENE, SOLID_SQUARE_SCENE].map((s) => (
           <figure key={s.id} className="rounded-lg bg-[#222] p-2 text-center text-xs text-white" data-testid={`scene-${s.id}`}>
             <SpriteCanvas def={s} scale={3} />
             <figcaption>{s.id} ({s.w / 16}×{s.h / 16} tiles)</figcaption>

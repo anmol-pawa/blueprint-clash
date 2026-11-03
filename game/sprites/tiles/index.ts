@@ -1,7 +1,8 @@
 import { DRAFTING_HALL_TILES } from "./drafting-hall";
 import { OLD_TOWN_TILES } from "./old-town";
+import { SOLID_SQUARE_TILES } from "./solid-square";
 import type { TileSetDef } from "./tileset";
 
-export const TILESETS: readonly TileSetDef[] = [OLD_TOWN_TILES, DRAFTING_HALL_TILES];
-export { OLD_TOWN_TILES, DRAFTING_HALL_TILES };
-export { OLD_TOWN_SCENE, DRAFTING_HALL_SCENE } from "./scenes";
+export const TILESETS: readonly TileSetDef[] = [OLD_TOWN_TILES, DRAFTING_HALL_TILES, SOLID_SQUARE_TILES];
+export { OLD_TOWN_TILES, DRAFTING_HALL_TILES, SOLID_SQUARE_TILES };
+export { OLD_TOWN_SCENE, DRAFTING_HALL_SCENE, SOLID_SQUARE_SCENE } from "./scenes";

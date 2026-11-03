@@ -54,6 +54,21 @@ describe("step", () => {
   });
 });
 
+describe("SOLID Square", () => {
+  it("is reached by walking south from Old Town and back", () => {
+    let p: PlayerState = { map: "old-town", x: 10, y: 9, facing: "down" };
+    for (let i = 0; i < 2; i++) p = step(MAPS, p, "down").state;
+    expect(p).toEqual({ map: "solid-square", x: 10, y: 12, facing: "up" });
+    p = step(MAPS, p, "down").state; // turn to face the gate
+    expect(step(MAPS, p, "down")).toMatchObject({ kind: "warped", state: { map: "old-town", x: 10, y: 10 } });
+  });
+  it("blocks the Principle Hall door with a readable notice, and the fountain with water", () => {
+    expect(facingTarget(MAPS, { map: "solid-square", x: 9, y: 3, facing: "up" })).toEqual({ kind: "sign", dialogue: "door-principle-hall" });
+    expect(step(MAPS, { map: "solid-square", x: 9, y: 3, facing: "up" }, "up").kind).toBe("blocked");
+    expect(step(MAPS, { map: "solid-square", x: 8, y: 5, facing: "right" }, "right").kind).toBe("blocked");
+  });
+});
+
 describe("interaction", () => {
   it("finds the NPC or sign being faced", () => {
     const t = facingTarget(MAPS, { map: "drafting-hall", x: 2, y: 5, facing: "right" });
