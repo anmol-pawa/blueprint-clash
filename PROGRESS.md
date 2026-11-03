@@ -285,3 +285,11 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - CI/deploy: `gh` unavailable here, so Actions/Pages status not confirmed (the quota note has expired).
 - Note: designated branch was `claude/funny-ramanujan-es7zmh`; pushed to it and to `main`.
 - Next: C4c (SOLID lessons).
+
+## 2026-11-03: C4c SOLID Square lessons
+- Added `content/lessons/solid-square.ts` (6 lessons: SRP, OCP, LSP, ISP, DIP, heuristics; each has smell, idea, before/after C++, interview phrasing and the cost of over-applying) and a `/learn` page (lesson tabs, code panels, links to the deck battle and Daily Review), linked from the title screen. `content/verify/lessons.verify.ts` compiles every before/after snippet natively (C++20) and checks the lesson shape.
+- Verification: `lint` (0 errors, 3 pre-existing warnings), `typecheck`, `test` (289 pass), `content:verify` pass, `build`, `build:pages` pass. Playwright on the static export at 1280x800 and iPhone 14: no console errors, no horizontal page overflow; screenshot viewed (long code lines scroll inside their panel).
+- Known gaps: lessons are text and code only (no illustrations or Patternling teachers yet, C4e); no lesson-completion tracking in the save; the lock commit was skipped because this run pushes only to its designated branch.
+- CI/deploy: `gh` is unavailable here, so Actions/Pages status was not confirmed.
+- Note: pushed to the designated branch `claude/funny-ramanujan-tvqjx4`, not `main`; merge it to publish.
+- Next: C4d (8 refactor exercises).
