@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { listExercises, loadExercise } from "@/lib/exercises/load";
+import { reviewFiles } from "@/lib/review";
 import { validateExercise } from "@/lib/exercises/validate";
 import { failedTests, judgeExercise } from "@/lib/exercises/verify";
 import type { ExercisePackage } from "@/lib/exercises/types";
@@ -17,6 +18,12 @@ describe.each(ids)("exercise/%s", (id) => {
     const r = await judgeExercise(pkg, pkg.reference);
     expect(r.verdict, `${JSON.stringify(r.diagnostics.slice(0, 3))} ${failedTests(r).join(",")}`).toBe("accepted");
     expect(r.summary.tests.length).toBeGreaterThanOrEqual(5);
+  });
+
+  it("the reference has no blocker or major Senior Review findings", () => {
+    const files = pkg.reference;
+    const review = reviewFiles(files);
+    expect(review.findings.filter((f) => f.severity !== "minor").map((f) => `${f.rule}@${f.file}:${f.line}`)).toEqual([]);
   });
 
   it("the starter compiles-or-fails but is never accepted", async () => {

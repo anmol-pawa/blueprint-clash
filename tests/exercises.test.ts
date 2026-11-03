@@ -3,10 +3,10 @@ import { listExercises, loadExercise } from "@/lib/exercises/load";
 import { validateExercise } from "@/lib/exercises/validate";
 import type { ExercisePackage } from "@/lib/exercises/types";
 
-const IDS = ["bank-account", "file-handle", "inventory", "stack", "counter", "temperature", "shapes", "widgets", "pricing", "roles", "variant-eval", "sink"];
+const IDS = ["bank-account", "file-handle", "inventory", "stack", "counter", "temperature", "shapes", "widgets", "pricing", "roles", "variant-eval", "sink", "srp-invoice", "dip-notifier", "lsp-account"];
 
 describe("exercise packages", () => {
-  it("ships the twelve Old Town class exercises", async () => {
+  it("ships the Old Town and SOLID Square class exercises", async () => {
     expect(await listExercises()).toEqual([...IDS].sort());
   });
 

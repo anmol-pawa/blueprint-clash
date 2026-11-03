@@ -291,3 +291,12 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Verification: `lint` (0 errors, 3 pre-existing warnings), `typecheck`, `test` (293 pass, new `tests/lessons.test.ts`), `content:verify` (new `solid-lessons.verify.ts`: all 12 programs compile with g++ and print the recorded output; each `after` is Senior-Review clean; the review caught a public mutable field in the DIP test double, now fixed), `build`, `build:pages` pass. Playwright on the static export at 1280x900 and iPhone 14: `/learn` and `/learn/lsp` rendered, no console errors, no horizontal overflow, mark-as-learned worked; screenshots viewed.
 - Known gaps: no lesson art or NPC trigger yet (C4e); lessons are not yet tied to district progress; L1 lessons do not exist (only exercises and cards); no "Learned" mark on the title screen.
 - Next: C4d (8 refactor exercises).
+
+## 2026-11-03: C4d1 SOLID refactor exercises (srp-invoice, dip-notifier, lsp-account)
+- C4d split into C4d1 (done) and C4d2 (five more: OCP registry, ISP fat Machine, owning DIP with a clock, Demeter/tell-don't-ask, composition over inheritance). Three full exercise packages (prompt, `api.h`, starter, reference, hidden tests, three known-wrong solutions each, 3-rung hints): **srp-invoice** (split data, formatting, archiving; a detection trait proves `Invoice` has no `render`/`store`), **dip-notifier** (inject `MessageSender&`; recorder and always-failing test doubles, hard-wired sender rejected), **lsp-account** (contract-based substitution: a per-call cap or a fee on a refused withdrawal breaks the contract; `FixedDeposit` must not derive from `Account`).
+- `content:verify` now also runs Senior Review on every exercise reference (no blocker or major findings). Tests use `ASSERT_EQ` on sizes before indexing, because an out-of-range read in a wrong solution crashed the run and hid later failures.
+- Verification: `lint` (0 errors, 3 pre-existing warnings), `typecheck`, `test` (296 pass), `content:verify` (89 pass), `build`, `build:pages` pass. No UI change, so no screenshots.
+- Known gaps: these exercises are not yet reachable in-game (the district gym in C4e will use them); no lesson links to them yet.
+- CI/deploy: the Actions quota note has expired, but `gh` is unavailable here, so Actions/Pages status was not confirmed.
+- Note: designated branch was `claude/funny-ramanujan-kc3if8`; the routine protocol pushes to `main`.
+- Next: C4d2.

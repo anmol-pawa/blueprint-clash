@@ -68,7 +68,9 @@ Work top to bottom: take the **first unchecked box**, and split big boxes into r
   - [x] C4a. 43-card SOLID Square deck (`content/cards/solid-square.ts`) verified by `content:verify` (predict cards run natively).
   - [x] C4b. Wire the deck: district battle route, SRS deck selection on `/review`, tests.
   - [x] C4c. Lessons (SRP, OCP, LSP, ISP, DIP, heuristics) with smell, before/after C++ and over-application cost.
-  - [ ] C4d. 8 refactor exercises judged by tests plus Senior Review rules (`content:verify` packages).
+  - [ ] C4d. 8 refactor exercises judged by tests plus Senior Review rules (`content:verify` packages). Split below.
+    - [x] C4d1. srp-invoice, dip-notifier, lsp-account (and a Senior Review check on every exercise reference).
+    - [ ] C4d2. Five more: OCP (shipping rules via a registry), ISP (split a fat `Machine`), DIP with owning injection (`unique_ptr` + a clock), Demeter/tell-don't-ask, composition over inheritance.
   - [ ] C4e. District art (tiles, 2 trainers, master, backdrop), then the district master/gym.
 - [ ] C5. **Creational Foundry** (L3): Patternling art for 5 patterns, lessons, cards, pattern duels, 6 exercises, a gym.
 - [ ] C6. **Structural Bridges** (L4): Patternling art for 7, lessons, cards, 7 exercises, a gym.
