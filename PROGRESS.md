@@ -203,3 +203,10 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Known gaps: no link to `/battle/master` from the overworld or home yet; misses are not fed to the SRS; the Pixi stage letterboxes inside a tall mobile area (the editor sits below the fold on iPhone, reached by scrolling); the Warden has no attack-phase reaction to a phase change; the evolution scene is B8d. CI/deploy: `gh` is unavailable here, so not confirmed.
 - Note: designated branch was `claude/funny-ramanujan-mm57ez`; pushed to it and to `main`.
 - Next: B8d (Draftling evolution scene).
+
+## 2026-11-03: B8d Draftling evolution scene (B8 complete)
+- Added `lib/battle/evolution.ts` (pure timeline: announce 1.2 s, morph 3.2 s with a chirping flicker between forms and a growing glow, burst 0.7 s, reveal 1.6 s), `game/battle/EvolutionStage.ts` (Pixi night scene, platform, glow rings, burst rays, white-silhouette flash on the existing Draftling and Architect sprites) and `/evolve` (narration, Skip, reduced-motion skip, Back to town). The master victory screen now has an "Evolve!" link. ARCH gained an "Evolution scene" note.
+- Verification: `lint` (3 pre-existing warnings), `typecheck`, `test` (220 pass, 6 new in `tests/evolution.test.ts`), `content:verify` (53 pass), `build`, `build:pages` pass. Playwright at 1280x800 and iPhone 14 through the whole sequence: no console errors, no horizontal overflow; screenshots viewed (white silhouette with rays at the burst, Architect reveal; found and fixed a mobile layout where the text panel was clipped).
+- Known gaps: no save flag for the evolved form (implied by the badge), the overworld/battle still use Draftling; no sound (B9); `/evolve` is not yet gated on the badge. CI/deploy: `gh` is unavailable here, so not confirmed.
+- Note: designated branch was `claude/funny-ramanujan-5khp00`; pushed to it and to `main`.
+- Next: B9 (Audio v1).

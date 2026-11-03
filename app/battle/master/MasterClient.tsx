@@ -187,9 +187,14 @@ export function MasterClient({ exercise }: { exercise: ExerciseBundle }) {
               </>
             )}
             <div className="flex gap-2">
-              <button className="px-btn px-btn-primary px-4 py-3" onClick={() => window.location.reload()}>
+              <button className="px-btn px-4 py-3" onClick={() => window.location.reload()}>
                 {m.phase === "won" ? "Fight again" : "Rematch"}
               </button>
+              {m.phase === "won" && (
+                <a href="../../evolve/" className="px-btn px-btn-primary px-4 py-3" data-testid="evolve-link">
+                  Evolve!
+                </a>
+              )}
               <a href="../../play/" className="px-btn px-4 py-3">
                 Back to town
               </a>
