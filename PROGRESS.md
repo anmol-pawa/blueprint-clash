@@ -254,3 +254,10 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Known gaps: not wired into the save or any screen; no Patternling art yet (arrives per district C4 to C7); only 5 design problems.
 - CI/deploy: `gh` unavailable here, not confirmed.
 - Next: C2b.
+
+## 2026-11-03: C2b Party save, /party page, design battle (C2 complete)
+- Save schema v2: `party` (owned, mastery, singletonOveruse) with a 1->2 migration (starter party: Chamelstrat, Solo, Forgebot), validation via `isPartyState`, `lib/save/party.ts`. New pure `lib/patterns/battle.ts` (foe HP 100, 3 hearts; super 80 dmg and befriends, neutral 30 with YAGNI, weak costs a heart; Global State debuff applied). New `/party` page: pick a design problem, tap Patternlings (unowned ones are a "practice loan"), result card with the specific explanation, party levels/stages, debuff banner; persists to the IndexedDB save. Linked from the home modes.
+- Verification: `lint` (0 errors, 3 pre-existing warnings), `typecheck`, `test` (278 pass; new designBattle and migration tests), `content:verify` (53 pass), `build`, `build:pages` pass. Playwright on the static export at 1280x800 and iPhone 14: played a battle, reload, no console errors, no horizontal overflow; screenshots viewed.
+- Known gaps: no Patternling art or battle animation yet (arrives per district C4-C7); only 5 design problems; no mastery/level-up toast; disabled buttons after a battle look dim.
+- CI/deploy: `gh` unavailable; Actions status not confirmed.
+- Next: C3 (SRS and mastery with rust; Daily Review).

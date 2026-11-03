@@ -1,3 +1,4 @@
+import { starterParty } from "../patterns/party";
 import { SAVE_VERSION } from "./schema";
 
 /** A migration upgrades a save from `from` to `from + 1`. It must not mutate its input. */
@@ -6,8 +7,8 @@ export interface Migration {
   up(old: Record<string, unknown>): Record<string, unknown>;
 }
 
-/** Registered migrations. Empty while v1 is the first shipped schema. */
-export const MIGRATIONS: Migration[] = [];
+/** Registered migrations. v1 -> v2 adds the Patternling party. */
+export const MIGRATIONS: Migration[] = [{ from: 1, up: (old) => ({ ...old, party: starterParty() }) }];
 
 export type MigrateResult = { ok: true; data: Record<string, unknown> } | { ok: false; error: string };
 

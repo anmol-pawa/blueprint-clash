@@ -29,6 +29,7 @@ export interface PlayableMode {
 export const PLAYABLE_MODES: readonly PlayableMode[] = [
   { href: "/battle", title: "Concept battle", blurb: "Patternling cards: name the smell, pick the principle." },
   { href: "/workshop/library-management", title: "Workshop: Library", blurb: "Write C++ against hidden tests, then survive a Change Storm." },
+  { href: "/party", title: "Party: design battles", blurb: "Match a Patternling to a design smell; super picks befriend it." },
   { href: "/battle/master", title: "Old Town master", blurb: "Warden Hollis Vane: cards, a build and a smell boss." },
 ];
 

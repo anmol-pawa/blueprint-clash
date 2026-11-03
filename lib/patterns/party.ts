@@ -64,3 +64,17 @@ export function effectiveMultiplier(p: PartyState, m: Matchup): number {
 }
 
 
+
+/** Patternlings every new save starts with (one per family-ish; the rest are earned by super picks and gyms). */
+export const STARTERS: readonly string[] = ["chamelstrat", "solo", "forgebot"];
+export const starterParty = (): PartyState => ({ ...newParty(), owned: [...STARTERS] });
+
+/** Tolerant check used by save validation. */
+export function isPartyState(v: unknown): v is PartyState {
+  if (typeof v !== "object" || v === null) return false;
+  const p = v as Record<string, unknown>;
+  if (!Array.isArray(p.owned) || !p.owned.every((s) => typeof s === "string")) return false;
+  if (typeof p.singletonOveruse !== "number" || !Number.isFinite(p.singletonOveruse)) return false;
+  if (typeof p.mastery !== "object" || p.mastery === null || Array.isArray(p.mastery)) return false;
+  return Object.values(p.mastery as Record<string, unknown>).every((n) => typeof n === "number" && Number.isFinite(n));
+}

@@ -1,5 +1,7 @@
 /** Current save schema. Bump SAVE_VERSION and add a migration in migrations.ts when this shape changes. */
-export const SAVE_VERSION = 1;
+import { isPartyState, starterParty, type PartyState } from "../patterns/party";
+
+export const SAVE_VERSION = 2;
 
 export interface SrsCard {
   /** Epoch ms when the card is next due. */
@@ -34,6 +36,8 @@ export interface SaveData {
   lessonsDone: string[];
   workshop: Record<string, WorkshopRecord>;
   srs: Record<string, SrsCard>;
+  /** Patternling party, mastery and the Global State debuff counter (v2). */
+  party: PartyState;
   settings: SaveSettings;
 }
 
@@ -47,6 +51,7 @@ export function newSave(now: number): SaveData {
     lessonsDone: [],
     workshop: {},
     srs: {},
+    party: starterParty(),
     settings: { audio: true, reducedMotion: false },
   };
 }
@@ -77,6 +82,7 @@ export function validateSave(v: unknown): string[] {
       if (!isObj(c) || !isNum(c.due) || !isNum(c.intervalDays) || !isNum(c.ease) || !isNum(c.reps) || !isNum(c.lapses)) errs.push(`srs.${id} is malformed`);
     }
   }
+  if (!isPartyState(v.party)) errs.push("party is malformed");
   if (!isObj(v.settings) || typeof v.settings.audio !== "boolean" || typeof v.settings.reducedMotion !== "boolean") errs.push("settings is malformed");
   return errs;
 }

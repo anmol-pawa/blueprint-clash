@@ -38,6 +38,24 @@ describe("migrate", () => {
   });
 });
 
+describe("v1 -> v2 migration", () => {
+  it("adds the starter party and keeps progress", () => {
+    const { party: _party, ...v1 } = { ...newSave(3), version: 1 };
+    void _party;
+    v1.badges.push("old-town");
+    const m = migrate(v1);
+    expect(m.ok).toBe(true);
+    const data = (m as { ok: true; data: Record<string, unknown> }).data;
+    expect(data.version).toBe(2);
+    expect(validateSave(data)).toEqual([]);
+    expect(data.badges).toEqual(["old-town"]);
+    expect((data.party as { owned: string[] }).owned).toContain("chamelstrat");
+  });
+  it("rejects a malformed party", () => {
+    expect(validateSave({ ...newSave(1), party: { owned: [1] } })).toContain("party is malformed");
+  });
+});
+
 describe("export / import", () => {
   const sample = () => {
     const s = newSave(100);
