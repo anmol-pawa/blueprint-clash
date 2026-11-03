@@ -175,3 +175,10 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Note: designated branch was `claude/funny-ramanujan-eq6kj3`; pushed to it and to `main`.
 - Next: B7b.
 
+
+## 2026-11-03: B7b Senior Review in the Workshop debrief (B7 complete)
+- The `/workshop` debrief now reviews the player's locked final files (provided `api*.h` excluded): findings list with severity, file:line, fix and lesson; the Senior Review row shows its score. New `lib/review/score.ts` (`reviewScore`: blocker 0.34, major 0.2, minor 0.05 off 1.0; `isProvidedHeader`) feeds `workshopScore`'s 15 % review weight and the third-star rule (needs no blocker/major).
+- Verification: `lint` (3 pre-existing warnings), `typecheck`, `test` (192 pass), `content:verify` (53 pass), `build`, `build:pages` pass. Playwright (seeded draft, real browser judge) at 1280x800 with the reference: 3 stars, "no findings"; at iPhone 14 with a seeded bad design: 2 stars, 3 blockers + 1 minor listed with fix/lesson; no console errors, no horizontal overflow; screenshots viewed. CI/deploy: not checked (`gh` unavailable here).
+- Known gaps: review shown only at debrief (not while coding); no per-finding jump to the editor; bad designs not yet checked for expected findings; flow state still not saved; design board (15 %) still absent.
+- Note: designated branch was `claude/funny-ramanujan-iqqotl`; pushed to it and to `main`.
+- Next: B8 (Old Town master battle).

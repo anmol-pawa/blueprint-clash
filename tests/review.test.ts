@@ -210,3 +210,16 @@ describe("virtual-destructor with unreviewed bases", () => {
     expect(has("class Impl : public lib::Api { public: int f() const override; };", "virtual-destructor")).toBe(false);
   });
 });
+
+describe("review score wiring", () => {
+  it("costs blockers most and never goes below zero", async () => {
+    const { reviewScore, isProvidedHeader } = await import("../lib/review/score");
+    expect(reviewScore({ blocker: 0, major: 0, minor: 0 })).toBe(1);
+    expect(reviewScore({ blocker: 1, major: 0, minor: 0 })).toBeCloseTo(0.66);
+    expect(reviewScore({ blocker: 0, major: 0, minor: 2 })).toBeCloseTo(0.9);
+    expect(reviewScore({ blocker: 9, major: 9, minor: 9 })).toBe(0);
+    expect(isProvidedHeader("api.h")).toBe(true);
+    expect(isProvidedHeader("api_storm1.h")).toBe(true);
+    expect(isProvidedHeader("library.h")).toBe(false);
+  });
+});

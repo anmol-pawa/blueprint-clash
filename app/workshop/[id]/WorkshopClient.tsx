@@ -8,6 +8,8 @@ import type { ProjectFile } from "@/lib/judge/types";
 import { expectedTestCount, hiddenFiles, providedFiles, STARTER, visibleRequirements, type WorkshopBundle } from "@/lib/workshop/bundle";
 import { initialFlow, knownRequirements, reduceFlow, surprises, type FlowEvent } from "@/lib/workshop/flow";
 import { clarifyScore, workshopScore } from "@/lib/workshop/score";
+import { reviewFiles } from "@/lib/review";
+import { isProvidedHeader, reviewScore } from "@/lib/review/score";
 import type { PhaseId } from "@/lib/workshop/types";
 
 const PHASE_NAME: Record<PhaseId, string> = { base: "Build it", storm1: "Change Storm 1", storm2: "Change Storm 2", storm3: "Change Storm 3" };
@@ -176,7 +178,20 @@ function StormCard({ bundle, flow, onAccept }: { bundle: WorkshopBundle; flow: R
 }
 
 function Debrief({ bundle, flow }: { bundle: WorkshopBundle; flow: ReturnType<typeof initialFlow> }) {
-  const score = useMemo(() => workshopScore({ flow, parMinutes: bundle.parMinutes }), [flow, bundle.parMinutes]);
+  const review = useMemo(() => {
+    const last = flow.records[flow.phases[flow.phases.length - 1]].snapshot;
+    return last ? reviewFiles(last.filter((f) => !isProvidedHeader(f.path))) : null;
+  }, [flow]);
+  const score = useMemo(
+    () =>
+      workshopScore({
+        flow,
+        parMinutes: bundle.parMinutes,
+        reviewBlockingFindings: review ? review.counts.blocker + review.counts.major : null,
+        reviewScore: review ? reviewScore(review.counts) : null,
+      }),
+    [flow, bundle.parMinutes, review],
+  );
   const clar = useMemo(() => clarifyScore(bundle.clarify, flow.asked), [bundle.clarify, flow.asked]);
   const [showRef, setShowRef] = useState(false);
   const [open, setOpen] = useState<number | null>(null);
@@ -185,14 +200,14 @@ function Debrief({ bundle, flow }: { bundle: WorkshopBundle; flow: ReturnType<ty
     ["Change Storms (20%)", pct(score.parts.storms)],
     ["Time vs par (10%)", pct(score.parts.time)],
     ["Design board (15%)", "not played yet"],
-    ["Senior Review (15%)", "not played yet"],
+    ["Senior Review (15%)", score.parts.review === null ? "no files" : pct(score.parts.review)],
   ];
   return (
     <section className="space-y-3" aria-label="Debrief">
       <div className="panel space-y-2 p-4">
         <h2 className="font-display text-2xl text-[var(--accent)]">Debrief</h2>
         <p className="text-3xl" aria-label={`${score.stars} stars`} data-testid="stars">{"★".repeat(score.stars)}{"☆".repeat(3 - score.stars)}</p>
-        <p className="text-sm">Score so far: <b data-testid="total">{pct(score.total)}</b> {score.partial && <span className="text-white/60">(board and review not played yet, so the weights were rescaled)</span>}</p>
+        <p className="text-sm">Score so far: <b data-testid="total">{pct(score.total)}</b> {score.partial && <span className="text-white/60">(the design board is not played yet, so the weights were rescaled)</span>}</p>
         {score.starThreePending && <p className="text-sm text-yellow-300">Third star pending: your design is open enough, but Senior Review has not run yet.</p>}
         <dl className="grid grid-cols-[1fr_auto] gap-x-4 gap-y-1 text-sm">
           {rows.map(([k, v]) => (
@@ -232,6 +247,22 @@ function Debrief({ bundle, flow }: { bundle: WorkshopBundle; flow: ReturnType<ty
         ))}
         <p className="text-xs text-white/60">OCP = lines added / (lines added + existing lines modified or deleted). A coarse proxy measured per file: extend with new files and new classes, and the score rises.</p>
       </div>
+
+      {review && (
+        <div className="panel space-y-2 p-4 text-sm" data-testid="review">
+          <h3 className="font-display text-lg text-[var(--accent-2)]">Senior Review: {review.findings.length === 0 ? "no findings" : `${review.counts.blocker} blocker, ${review.counts.major} major, ${review.counts.minor} minor`}</h3>
+          <p className="text-white/70">{review.clean ? "No blocker or major findings: the third star is allowed." : "A blocker or major finding blocks the third star. Fix it and resubmit in your next attempt."}</p>
+          <ul className="space-y-2">
+            {review.findings.map((f, i) => (
+              <li key={i} className="rounded border border-slate-600 p-2">
+                <p><span className={`mr-2 rounded px-1 text-xs uppercase ${f.severity === "minor" ? "bg-slate-600" : "bg-red-700"}`}>{f.severity}</span><code className="text-xs">{f.file}:{f.line}</code> {f.message}</p>
+                <p className="text-white/80"><b>Fix:</b> {f.fix}</p>
+                <p className="text-white/60"><b>Lesson:</b> {f.lesson}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       <div className="panel space-y-2 p-4">
         <h3 className="font-display text-lg text-[var(--accent-2)]">Responsibilities a good design assigns</h3>
