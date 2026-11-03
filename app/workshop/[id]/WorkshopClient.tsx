@@ -1,6 +1,8 @@
 "use client";
 import { useEffect, useMemo, useReducer, useRef, useState } from "react";
 import { Prose } from "@/components/Prose";
+import { DesignBoard } from "@/components/DesignBoard";
+import { scoreBoard } from "@/lib/board";
 import { WorkspaceEditor } from "@/components/WorkspaceEditor";
 import { judgeInBrowser } from "@/lib/judge/browser/client";
 import type { BrowserJudgeResult } from "@/lib/judge/browser/protocol";
@@ -79,11 +81,13 @@ export function WorkshopClient({ bundle }: { bundle: WorkshopBundle }) {
               );
             })}
           </ul>
-          <button className={`${btn} px-btn-primary`} onClick={() => dispatch({ type: "BEGIN_CODING" })}>
-            Start coding ({flow.asked.length} asked)
+          <button className={`${btn} px-btn-primary`} onClick={() => dispatch({ type: "BEGIN_DESIGN" })}>
+            Open the design board ({flow.asked.length} asked)
           </button>
         </section>
       )}
+
+      {flow.stage === "design" && <DesignBoard rubric={bundle.rubric} onFinish={(board) => dispatch({ type: "FINISH_BOARD", board: board.classes.length > 0 ? board : null })} />}
 
       {flow.stage === "storm" && (
         <StormCard bundle={bundle} flow={flow} onAccept={() => dispatch({ type: "ACCEPT_STORM" })} />
@@ -128,8 +132,8 @@ export function WorkshopClient({ bundle }: { bundle: WorkshopBundle }) {
 }
 
 function Stepper({ stage, phase, phases }: { stage: string; phase: PhaseId; phases: PhaseId[] }) {
-  const steps = [{ id: "brief", label: "Brief" }, { id: "clarify", label: "Clarify" }, ...phases.map((p) => ({ id: p, label: p === "base" ? "Build" : PHASE_NAME[p].replace("Change ", "") })), { id: "debrief", label: "Debrief" }];
-  const current = stage === "brief" || stage === "clarify" || stage === "debrief" ? stage : phase;
+  const steps = [{ id: "brief", label: "Brief" }, { id: "clarify", label: "Clarify" }, { id: "design", label: "Design" }, ...phases.map((p) => ({ id: p, label: p === "base" ? "Build" : PHASE_NAME[p].replace("Change ", "") })), { id: "debrief", label: "Debrief" }];
+  const current = stage === "brief" || stage === "clarify" || stage === "design" || stage === "debrief" ? stage : phase;
   const at = steps.findIndex((s) => s.id === current);
   return (
     <ol className="flex flex-wrap gap-1 text-xs" aria-label="Progress">
@@ -187,6 +191,7 @@ function Debrief({ bundle, flow }: { bundle: WorkshopBundle; flow: ReturnType<ty
     const last = flow.records[flow.phases[flow.phases.length - 1]].snapshot;
     return last ? reviewFiles(last.filter((f) => !isProvidedHeader(f.path))) : null;
   }, [flow]);
+  const boardResult = useMemo(() => (flow.board ? scoreBoard(flow.board, bundle.rubric, flow.phases[flow.phases.length - 1]) : null), [flow.board, flow.phases, bundle.rubric]);
   const score = useMemo(
     () =>
       workshopScore({
@@ -194,8 +199,9 @@ function Debrief({ bundle, flow }: { bundle: WorkshopBundle; flow: ReturnType<ty
         parMinutes: bundle.parMinutes,
         reviewBlockingFindings: review ? review.counts.blocker + review.counts.major : null,
         reviewScore: review ? reviewScore(review.counts) : null,
+        boardScore: boardResult ? boardResult.score : null,
       }),
-    [flow, bundle.parMinutes, review],
+    [flow, bundle.parMinutes, review, boardResult],
   );
   const clar = useMemo(() => clarifyScore(bundle.clarify, flow.asked), [bundle.clarify, flow.asked]);
   const [showRef, setShowRef] = useState(false);
@@ -204,7 +210,7 @@ function Debrief({ bundle, flow }: { bundle: WorkshopBundle; flow: ReturnType<ty
     ["Behaviour tests (40%)", pct(score.parts.tests)],
     ["Change Storms (20%)", pct(score.parts.storms)],
     ["Time vs par (10%)", pct(score.parts.time)],
-    ["Design board (15%)", "not played yet"],
+    ["Design board (15%)", boardResult ? pct(boardResult.score) : "skipped"],
     ["Senior Review (15%)", score.parts.review === null ? "no files" : pct(score.parts.review)],
   ];
   return (
@@ -212,7 +218,7 @@ function Debrief({ bundle, flow }: { bundle: WorkshopBundle; flow: ReturnType<ty
       <div className="panel space-y-2 p-4">
         <h2 className="font-display text-2xl text-[var(--accent)]">Debrief</h2>
         <p className="text-3xl" aria-label={`${score.stars} stars`} data-testid="stars">{"★".repeat(score.stars)}{"☆".repeat(3 - score.stars)}</p>
-        <p className="text-sm">Score so far: <b data-testid="total">{pct(score.total)}</b> {score.partial && <span className="text-white/60">(the design board is not played yet, so the weights were rescaled)</span>}</p>
+        <p className="text-sm">Score so far: <b data-testid="total">{pct(score.total)}</b> {score.partial && <span className="text-white/60">(a part was not played, so the weights were rescaled)</span>}</p>
         {score.starThreePending && <p className="text-sm text-yellow-300">Third star pending: your design is open enough, but Senior Review has not run yet.</p>}
         <dl className="grid grid-cols-[1fr_auto] gap-x-4 gap-y-1 text-sm">
           {rows.map(([k, v]) => (
@@ -266,6 +272,16 @@ function Debrief({ bundle, flow }: { bundle: WorkshopBundle; flow: ReturnType<ty
               </li>
             ))}
           </ul>
+        </div>
+      )}
+
+      {boardResult && (
+        <div className="panel space-y-1 p-4 text-sm" data-testid="board-debrief">
+          <h3 className="font-display text-lg text-[var(--accent-2)]">Your Design Board: {pct(boardResult.score)}</h3>
+          <ul className="list-disc pl-5">
+            {boardResult.results.map((r) => <li key={r.id}>{r.verdict === "ok" ? "✅" : "⚠️"} {r.text} <span className="text-white/60">{r.tagged.length ? `→ ${r.tagged.join(", ")}` : "→ nobody"}</span></li>)}
+          </ul>
+          {boardResult.flags.map((f, i) => <p key={i} className="text-yellow-300">⚠ {f.message}</p>)}
         </div>
       )}
 

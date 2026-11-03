@@ -55,7 +55,7 @@ Work top to bottom: take the **first unchecked box**, and split big boxes into r
 
 - [ ] C1. **Design Board** (GDD §5.3 step 2): the UML canvas (classes, interfaces, members, relationships, multiplicities), responsibility tagging, the rubric scorer with tests, PNG export, and the optional skeleton export to C++ headers.
   - [x] C1a. Pure `lib/board/`: board model and validation, responsibility-rubric scorer (missing / misplaced / duplicated, god-class and orphan flags), C++ skeleton export (compiles under g++), with tests.
-  - [ ] C1b. `/workshop` Design Board UI: SVG canvas (add class/interface, members, drag, relationships with multiplicities, responsibility tags), feed `boardScore` into the debrief, Playwright desktop + iPhone 14.
+  - [x] C1b. `/workshop` Design Board UI: SVG canvas (add class/interface, members, drag, relationships with multiplicities, responsibility tags), feed `boardScore` into the debrief, Playwright desktop + iPhone 14.
   - [ ] C1c. PNG export, skeleton download/insert into the code editor, board saved with the draft.
 - [ ] C2. **Patternling party and type chart** (GDD §5.2), plus the Singleton "Global State" debuff.
 - [ ] C3. **SRS and mastery with rust; the Daily Review** (GDD §6).

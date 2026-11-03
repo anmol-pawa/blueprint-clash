@@ -1,12 +1,13 @@
 import type { ClarifyQuestion, PhaseId, Requirement, WorkshopFile } from "./types";
 import { PHASE_ORDER } from "./types";
+import type { Board } from "@/lib/board/model";
 
 /** Phases a package plays, in order: those that have tests. */
 export function phasesOf(tests: Partial<Record<PhaseId, unknown>>): PhaseId[] {
   return PHASE_ORDER.filter((p) => tests[p] !== undefined);
 }
 
-export type Stage = "brief" | "clarify" | "code" | "storm" | "debrief";
+export type Stage = "brief" | "clarify" | "design" | "code" | "storm" | "debrief";
 
 export interface PhaseResult {
   passed: number;
@@ -28,6 +29,8 @@ export interface FlowState {
   phase: PhaseId;
   phases: PhaseId[];
   asked: string[];
+  /** The Design Board as the player left it; null when they skipped it. */
+  board: Board | null;
   records: Record<string, PhaseRecord>;
   startedAtMs: number | null;
   endedAtMs: number | null;
@@ -36,6 +39,8 @@ export interface FlowState {
 export type FlowEvent =
   | { type: "START"; nowMs: number }
   | { type: "ASK"; questionId: string }
+  | { type: "BEGIN_DESIGN" }
+  | { type: "FINISH_BOARD"; board: Board | null }
   | { type: "BEGIN_CODING" }
   | { type: "SUBMIT"; result: PhaseResult }
   | { type: "LOCK"; files: WorkshopFile[]; nowMs: number }
@@ -48,6 +53,7 @@ export function initialFlow(phases: PhaseId[]): FlowState {
     phase: "base",
     phases,
     asked: [],
+    board: null,
     records: Object.fromEntries(phases.map((p) => [p, { phase: p, attempts: 0, best: null, snapshot: null, lockedAtMs: null }])),
     startedAtMs: null,
     endedAtMs: null,
@@ -59,7 +65,8 @@ const ratio = (r: PhaseResult): number => (r.total === 0 ? 0 : r.passed / r.tota
 /**
  * Pure reducer. Illegal events (wrong stage, unknown question, locking before any submit) return the same state
  * object, so the UI can dispatch freely and the tests can assert "nothing happened".
- *   brief -START-> clarify -BEGIN_CODING-> code(base) -SUBMIT*-> -LOCK-> storm(n) -ACCEPT_STORM-> code(n) ... -LOCK-> debrief
+ *   brief -START-> clarify -BEGIN_DESIGN-> design -FINISH_BOARD-> code(base) (BEGIN_CODING skips the board)
+ *   code(base) -SUBMIT*-> -LOCK-> storm(n) -ACCEPT_STORM-> code(n) ... -LOCK-> debrief
  * Clarifying is only possible before coding starts: a real interviewer will not re-brief you at minute 40.
  */
 export function reduceFlow(s: FlowState, e: FlowEvent, questions: ClarifyQuestion[] = []): FlowState {
@@ -70,6 +77,10 @@ export function reduceFlow(s: FlowState, e: FlowEvent, questions: ClarifyQuestio
       if (s.stage !== "clarify" || s.asked.includes(e.questionId)) return s;
       if (questions.length > 0 && !questions.some((q) => q.id === e.questionId)) return s;
       return { ...s, asked: [...s.asked, e.questionId] };
+    case "BEGIN_DESIGN":
+      return s.stage === "clarify" ? { ...s, stage: "design" } : s;
+    case "FINISH_BOARD":
+      return s.stage === "design" ? { ...s, stage: "code", phase: "base", board: e.board } : s;
     case "BEGIN_CODING":
       return s.stage === "clarify" ? { ...s, stage: "code", phase: "base" } : s;
     case "SUBMIT": {

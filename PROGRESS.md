@@ -232,3 +232,11 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Known gaps: no UI yet; no reference board per Workshop problem to prove the rubric scores the reference at 1.0 (add with C1b); aggregation vs association emit the same member shape.
 - Note: designated branch was `claude/funny-ramanujan-qhqdd2`; pushed to it and to `main`.
 - Next: C1b (Design Board UI).
+
+## 2026-11-03: C1b Design Board UI
+- Workshop flow gained a `design` stage (`BEGIN_DESIGN`, `FINISH_BOARD`; `FlowState.board`; `BEGIN_CODING` still skips it). New pure `lib/board/edit.ts` (immutable edit ops, auto-layout, edge anchors; `tests/boardEdit.test.ts`, 2 flow tests) and `components/DesignBoard.tsx`: SVG UML canvas (drag boxes, class/abstract/interface/enum, fields and methods, six relationship kinds with UML markers, multiplicities, responsibility checkboxes, live rubric check with flags). The debrief now feeds `scoreBoard` into `workshopScore` (the 15 % part) and shows the board verdicts.
+- Verification: `lint` (0 errors), `typecheck`, `test` (254 pass), `build`, `build:pages` pass. Playwright on the static export at 1280x800 and iPhone 14: built a 3-class board with composition and aggregation edges, live score 75 %, no console errors, no horizontal page overflow; screenshots viewed (mobile canvas scrolls horizontally inside its panel). `content:verify` untouched.
+- Known gaps: board scored only against base-phase responsibilities (storm responsibilities are not visible yet); relationship drawing uses tap-source-tap-target (tested via synthetic pointer events); no reference board shown in the debrief; board is not saved with the draft (C1c); no keyboard drag alternative.
+- CI/deploy: Actions quota note expired; `gh` unavailable here, so not confirmed.
+- Note: designated branch was `claude/funny-ramanujan-8n9rdx`; pushed to it and to `main`.
+- Next: C1c (PNG export, skeleton download/insert, saved board).

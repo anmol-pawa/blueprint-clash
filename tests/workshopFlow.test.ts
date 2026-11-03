@@ -165,3 +165,21 @@ describe("flow state machine", () => {
     expect(sc.total).toBeLessThan(0.6);
   });
 });
+
+describe("design stage", () => {
+  const start = () => reduceFlow(initialFlow(["base", "storm1"]), { type: "START", nowMs: 0 });
+  it("goes clarify -> design -> code and keeps the board", () => {
+    const d = reduceFlow(start(), { type: "BEGIN_DESIGN" });
+    expect(d.stage).toBe("design");
+    const board = { classes: [], edges: [] };
+    const c = reduceFlow(d, { type: "FINISH_BOARD", board });
+    expect(c.stage).toBe("code");
+    expect(c.board).toBe(board);
+  });
+  it("ignores design events in the wrong stage", () => {
+    const s = start();
+    expect(reduceFlow(s, { type: "FINISH_BOARD", board: null })).toBe(s);
+    const brief = initialFlow(["base"]);
+    expect(reduceFlow(brief, { type: "BEGIN_DESIGN" })).toBe(brief);
+  });
+});
