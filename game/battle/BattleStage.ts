@@ -1,3 +1,4 @@
+import { sfx } from "@/game/audio/synth";
 import { Application, Container, Graphics, Text } from "pixi.js";
 import { PixelSprite } from "@/game/sprites/texture";
 import type { SpriteDef } from "@/game/sprites/pixel";
@@ -160,6 +161,8 @@ export class BattleStage {
   }
 
   private async hit(target: PixelSprite, home: { x: number; y: number }, dmg: number, pushX: number): Promise<void> {
+    if (target === this.foe) sfx.hit();
+    else sfx.hurt();
     this.frozen = 0.07; // hit-stop
     this.shake = Math.min(6, 2 + dmg / 6);
     this.popNumber(`-${dmg}`, home.x, home.y - 62, 0xffe066);
@@ -195,6 +198,7 @@ export class BattleStage {
 
   async faint(who: "foe" | "player"): Promise<void> {
     const s = who === "foe" ? this.foe : this.player;
+    sfx.faint();
     await s.play("faint", false, true);
     await this.tween(0.5, (k) => (s.alpha = 1 - k));
   }

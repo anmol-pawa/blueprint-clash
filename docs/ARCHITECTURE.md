@@ -98,3 +98,8 @@ Small judged class exercises for the lessons (CUR L1/L2), distinct from Workshop
 
 ### Evolution scene
 `lib/battle/evolution.ts` is the pure timeline (`evolutionFrame(t)`: announce, morph with an accelerating white-silhouette flicker between the old and new sprite, burst with rays, reveal). `game/battle/EvolutionStage.ts` only draws that frame in Pixi; `/evolve` hosts it, with Skip and reduced-motion support. The master victory screen links to it. No save field yet: the evolved form is implied by the district badge.
+
+
+### Audio (v1)
+
+All sound is synthesized with WebAudio (no files). `lib/audio/themes.ts` is pure: `Theme` data (Old Town, Warden fight), `stepEvents` (deterministic bass/lead/drum per eighth-note step, looping), `midiToHz` and tolerant `parseAudioSettings`. `game/audio/synth.ts` owns the context (started on the first gesture), a lookahead step scheduler (60 ms timer, 250 ms horizon, no burst after a suspended context resumes), the `sfx` voices (gated by the SFX setting) and persisted settings (`localStorage` key `blueprint-clash:audio`, in-memory fallback). `components/AudioToggle.tsx` is the one mute button placed in the headers of `/play`, `/battle`, `/battle/master` and `/evolve`.

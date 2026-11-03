@@ -1,6 +1,8 @@
 "use client";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { AudioToggle } from "@/components/AudioToggle";
 import { Bar, CardView } from "@/components/BattleCard";
+import { sfx, startMusic, stopMusic } from "@/game/audio/synth";
 import { Prose } from "@/components/Prose";
 import { WorkspaceEditor } from "@/components/WorkspaceEditor";
 import { OLD_TOWN_MASTER, oldTownMasterDeck } from "@/content/masters/old-town";
@@ -38,6 +40,11 @@ export function MasterClient({ exercise }: { exercise: ExerciseBundle }) {
     mRef.current = next;
     setM(next);
   };
+
+  useEffect(() => {
+    startMusic("warden-fight");
+    return () => stopMusic();
+  }, []);
 
   useEffect(() => {
     const s = new BattleStage(host.current!, DRAFTLING_BACK, WARDEN_VANE);
@@ -88,12 +95,16 @@ export function MasterClient({ exercise }: { exercise: ExerciseBundle }) {
     setUi("resolving");
     setResult(r);
     commit(next);
+    if (r.correct) sfx.correct();
+    else sfx.wrong();
     const s = stage.current;
     if (s) {
       if (r.correct) await s.playerStrike(r.damageToFoe);
       else await s.foeStrike(r.damageToPlayer);
       if (next.phase === "won") await s.faint("foe");
       else if (next.phase === "lost") await s.faint("player");
+      if (next.phase === "won") sfx.badge();
+      else if (next.phase === "lost") sfx.defeat();
       await s.beat();
     }
     setUi("feedback");
@@ -138,6 +149,8 @@ export function MasterClient({ exercise }: { exercise: ExerciseBundle }) {
     const passed = res.verdict === "compile_error" ? 0 : res.summary.passed;
     const out = submitWorkshop(mRef.current, { passed, total });
     commit(out.state);
+    if (out.beaten) sfx.judgePass();
+    else sfx.judgeFail();
     setNote(out.beaten ? `All ${total} tests pass.` : `${passed}/${total} tests pass. The master strikes back for ${out.damageToPlayer}.`);
     const s = stage.current;
     if (s) {
@@ -156,6 +169,7 @@ export function MasterClient({ exercise }: { exercise: ExerciseBundle }) {
     <main className="fixed inset-0 flex flex-col bg-[var(--bg)] md:flex-row">
       <section className="flex min-h-0 flex-[0_0_32%] flex-col md:flex-[1_1_45%]">
         <div className="flex items-end gap-3 px-3 pt-2">
+          <AudioToggle />
           <Bar label={OLD_TOWN_MASTER.name.toUpperCase()} hp={foeHp} max={100} tone="#e0524b" />
           <Bar label={`DRAFTLING${m.battle && m.battle.streak >= 2 ? ` ×${m.battle.streak}` : ""}`} hp={m.playerHp} max={m.config.playerHp} tone="#4bd37b" />
         </div>

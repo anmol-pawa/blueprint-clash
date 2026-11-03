@@ -210,3 +210,10 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Known gaps: no save flag for the evolved form (implied by the badge), the overworld/battle still use Draftling; no sound (B9); `/evolve` is not yet gated on the badge. CI/deploy: `gh` is unavailable here, so not confirmed.
 - Note: designated branch was `claude/funny-ramanujan-5khp00`; pushed to it and to `main`.
 - Next: B9 (Audio v1).
+
+## 2026-11-03: B9 Audio v1
+- Ported and adapted the Query Clash synth. New pure `lib/audio/themes.ts` (Old Town major-pentatonic loop at 96 bpm, minor Warden-fight loop at 132 bpm, `stepEvents`, `midiToHz`, `parseAudioSettings`; 9 tests in `tests/audio.test.ts`), `game/audio/synth.ts` (context on first gesture, lookahead music scheduler, sfx: click, correct, wrong, hit, hurt, faint, victory, defeat, judgePass/Fail, badge, evolving, evolved) and `components/AudioToggle.tsx` (44 px mute button, persisted). Wired: music on `/play` and `/battle` (Old Town) and `/battle/master` (Warden theme); strike/faint sounds in the shared `BattleStage`; card result, judge result and badge stingers; evolution shimmer and reveal. ARCH gained an Audio section.
+- Verification: `lint` (3 pre-existing warnings), `typecheck`, `test` (229 pass), `build`, `build:pages` pass (`content:verify` untouched, no content change). Playwright on the static export at 1280x800 and iPhone 14 (`/play`, `/battle`, `/evolve`): oscillators created after a gesture, mute persists to localStorage, no console errors, no horizontal overflow; screenshots viewed (toggle sits in the header row without overlap).
+- Known gaps: real playback quality can only be judged by ear (headless run proves the graph runs, not how it sounds); no volume slider (only mute); no dialogue blips or footsteps in the overworld yet; workshop pages have no sound; `/battle/master` plays no win stinger beyond the badge fanfare. CI/deploy checked below.
+- Note: designated branch was `claude/funny-ramanujan-oumncb`; pushed to it and to `main`.
+- Next: B10 (slice polish: full Playwright playthrough and slice review).

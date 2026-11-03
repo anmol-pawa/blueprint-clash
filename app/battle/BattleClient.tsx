@@ -4,7 +4,9 @@ import { BattleStage } from "@/game/battle/BattleStage";
 import { DRAFTLING_BACK } from "@/game/sprites/creatures/draftling-back";
 import { ROUGH_DRAFT } from "@/game/sprites/creatures/rough-draft";
 import { OLD_TOWN_DECK } from "@/content/cards/old-town";
+import { AudioToggle } from "@/components/AudioToggle";
 import { Bar, CardView } from "@/components/BattleCard";
+import { sfx, startMusic, stopMusic } from "@/game/audio/synth";
 import type { Card } from "@/lib/battle/cards";
 import { type AnswerResult, type BattleState, answer, currentCard, stars, startBattle } from "@/lib/battle/battle";
 
@@ -19,6 +21,11 @@ export function BattleClient() {
   const [result, setResult] = useState<AnswerResult | null>(null);
   const [held, setHeld] = useState<Card | null>(null);
   const [ready, setReady] = useState(false);
+  useEffect(() => {
+    startMusic("old-town");
+    return () => stopMusic();
+  }, []);
+
   useEffect(() => {
     const s = new BattleStage(host.current!, DRAFTLING_BACK, ROUGH_DRAFT);
     stage.current = s;
@@ -51,12 +58,16 @@ export function BattleClient() {
     setPhase("resolving");
     setResult(r);
     setState(next);
+    if (r.correct) sfx.correct();
+    else sfx.wrong();
     const s = stage.current;
     if (s) {
       if (r.correct) await s.playerStrike(r.damageToFoe);
       else await s.foeStrike(r.damageToPlayer);
       if (next.status === "won") await s.faint("foe");
       else if (next.status === "lost") await s.faint("player");
+      if (next.status === "won") sfx.victory();
+      else if (next.status === "lost") sfx.defeat();
       await s.beat();
     }
     setPhase("feedback");
@@ -94,6 +105,7 @@ export function BattleClient() {
       <section className="flex min-h-0 flex-[0_0_36%] flex-col md:flex-[1_1_55%]">
         <div className="flex items-end gap-3 px-3 pt-2">
           <Bar label={ROUGH_DRAFT.name} hp={state.foeHp} max={state.config.foeHp} tone="#e0524b" />
+          <AudioToggle />
           <Bar label={`DRAFTLING${state.streak >= 2 ? ` ×${state.streak}` : ""}`} hp={state.playerHp} max={state.config.playerHp} tone="#4bd37b" />
         </div>
         <div ref={host} className="relative min-h-0 flex-1" aria-label="Battle stage" />

@@ -1,5 +1,7 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { AudioToggle } from "@/components/AudioToggle";
+import { sfx, startMusic, stopMusic } from "@/game/audio/synth";
 import { SpriteCanvas } from "@/components/sprites/SpriteCanvas";
 import { OverworldGame, type OverworldView } from "@/game/overworld/OverworldGame";
 import { ADA_PORTRAIT, PLAYER_PORTRAIT } from "@/game/sprites/characters";
@@ -35,7 +37,15 @@ export function PlayClient() {
     };
   }, []);
 
-  const press = useCallback(() => game.current?.interact(), []);
+  useEffect(() => {
+    startMusic("old-town");
+    return () => stopMusic();
+  }, []);
+
+  const press = useCallback(() => {
+    sfx.click();
+    game.current?.interact();
+  }, []);
 
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
@@ -68,9 +78,12 @@ export function PlayClient() {
     <main className="fixed inset-0 flex flex-col bg-[var(--bg)] select-none" style={{ touchAction: "none" }}>
       <div className="font-display flex items-center justify-between px-3 py-1 text-sm text-[var(--accent-2)]">
         <span>{view.mapName}</span>
-        <a href="./" className="text-white/60 underline">
-          Menu
-        </a>
+        <span className="flex items-center gap-3">
+          <AudioToggle />
+          <a href="./" className="text-white/60 underline">
+            Menu
+          </a>
+        </span>
       </div>
       <div ref={host} className="relative min-h-0 flex-1" aria-label="Overworld" />
 

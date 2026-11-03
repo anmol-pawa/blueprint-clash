@@ -1,6 +1,8 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { EvolutionStage } from "@/game/battle/EvolutionStage";
+import { AudioToggle } from "@/components/AudioToggle";
+import { sfx } from "@/game/audio/synth";
 import { ARCHITECT } from "@/game/sprites/creatures/architect";
 import { DRAFTLING } from "@/game/sprites/creatures/draftling";
 import { evolutionText, type Beat } from "@/lib/battle/evolution";
@@ -16,6 +18,8 @@ export function EvolveClient() {
     const s = new EvolutionStage(host.current!, DRAFTLING, ARCHITECT, (f) => {
       if (f.beat !== lastBeat) {
         lastBeat = f.beat;
+        if (f.beat === "morph") sfx.evolving();
+        else if (f.beat === "burst") sfx.evolved();
         setBeat(f.beat);
       }
       if (f.done) setDone(true);
@@ -37,6 +41,9 @@ export function EvolveClient() {
         <p className="font-display min-h-[2.5rem] text-lg text-[var(--accent-2)]" data-testid="evolve-text">
           {evolutionText(beat, DRAFTLING.name, ARCHITECT.name)}
         </p>
+        <div className="flex items-center gap-2">
+          <AudioToggle />
+        </div>
         {done ? (
           <>
             <p className="max-w-md text-sm text-white/80">An Architect plans before it builds: it keeps a blueprint scroll, wears a hard hat, and leaves a pencil mark wherever its tail drags.</p>
