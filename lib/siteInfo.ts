@@ -31,6 +31,8 @@ export const PLAYABLE_MODES: readonly PlayableMode[] = [
   { href: "/workshop/library-management", title: "Workshop: Library", blurb: "Write C++ against hidden tests, then survive a Change Storm." },
   { href: "/learn", title: "Lessons", blurb: "SOLID in C++: smell, before/after code, interview phrasing, and the cost of overdoing it." },
   { href: "/battle?deck=solid-square", title: "SOLID Square battle", blurb: "43 cards on SRP, OCP, LSP, ISP and DIP, with the over-application costs." },
+  { href: "/battle?trainer=sable-quill", title: "Sable Quill duel", blurb: "Six cards on SRP, cohesion, OCP, KISS and DRY." },
+  { href: "/battle?trainer=rook-ferris", title: "Rook Ferris duel", blurb: "Six cards on DIP, ISP, LSP and coupling." },
   { href: "/review", title: "Daily Review", blurb: "Spaced cards: misses return soon, mastered cards drift away, overdue ones rust." },
   { href: "/party", title: "Party: design battles", blurb: "Match a Patternling to a design smell; super picks befriend it." },
   { href: "/battle/master", title: "Old Town master", blurb: "Warden Hollis Vane: cards, a build and a smell boss." },

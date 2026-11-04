@@ -64,22 +64,22 @@ Work top to bottom: take the **first unchecked box**, and split big boxes into r
   - [x] C3a. Pure `lib/srs/` scheduler, mastery states, rust, queue builder, with tests.
   - [x] C3b. `/review` page (spaced cards, mastery summary, rust), battle misses feed the SRS.
   - [ ] C3c. Daily Review extras once their modes exist: one estimation (Fermi Forge), one micro-Siege, one past-LLD review question; rust on Patternling sprites.
-- [ ] C4. **SOLID Square** (CUR L2): art (district tiles, 2 trainers, a master, a backdrop), lessons, 40 cards, 8 refactor exercises, a gym.
+- [x] C4. **SOLID Square** (CUR L2): art (district tiles, 2 trainers, a master, a backdrop), lessons, 40 cards, 8 refactor exercises, a gym.
   - [x] C4a. 43-card SOLID Square deck (`content/cards/solid-square.ts`) verified by `content:verify` (predict cards run natively).
   - [x] C4b. Wire the deck: district battle route, SRS deck selection on `/review`, tests.
   - [x] C4c. Lessons (SRP, OCP, LSP, ISP, DIP, heuristics) with smell, before/after C++ and over-application cost.
   - [x] C4d. 8 refactor exercises judged by tests plus Senior Review rules (`content:verify` packages). Split below.
     - [x] C4d1. srp-invoice, dip-notifier, lsp-account (and a Senior Review check on every exercise reference).
     - [x] C4d2. Five more: OCP (shipping rules via a registry), ISP (split a fat `Machine`), DIP with owning injection (`unique_ptr` + a clock), Demeter/tell-don't-ask, composition over inheritance.
-  - [ ] C4e. District art (tiles, 2 trainers, master, backdrop), then the district master/gym. Split below.
+  - [x] C4e. District art (tiles, 2 trainers, master, backdrop), then the district master/gym. Split below.
     - [x] C4e1. SOLID Square tileset (marble plaza, animated fountain, columns, banners, copper roofs), map + warps from Old Town, signs, `/dev/sprites` scene.
-    - [ ] C4e2. Two trainers + the district master, SOLID Square battle backdrop. Split below.
+    - [x] C4e2. Two trainers + the district master, SOLID Square battle backdrop. Split below.
       - [x] C4e2a. Two trainers (Sable Quill, Rook Ferris): overworld walkers, portraits, map placement, dialogue.
       - [x] C4e2b. District master (96×96 battle sprite, overworld walker, portrait) and the SOLID Square battle backdrop.
-    - [ ] C4e3. Principle Hall interior, trainer duels and the master/gym fight wired to the SOLID deck and the 8 refactor exercises. Split below.
+    - [x] C4e3. Principle Hall interior, trainer duels and the master/gym fight wired to the SOLID deck and the 8 refactor exercises. Split below.
       - [x] C4e3a. Principle Hall interior map (SOLID Square tiles), the plaza arch door becomes a warp, Provost Marlow placed with an intro dialogue, scene on `/dev/sprites`, tests.
       - [x] C4e3b. Marlow master fight: SOLID master profile, master deck (cards + dedicated smell cards), phase-2 exercise choice from the 8, `/battle/master?master=solid-square`, badge saved.
-      - [ ] C4e3c. Trainer duels (Sable, Rook) as short concept battles with flags.
+      - [x] C4e3c. Trainer duels (Sable, Rook) as short concept battles with flags.
 - [ ] C5. **Creational Foundry** (L3): Patternling art for 5 patterns, lessons, cards, pattern duels, 6 exercises, a gym.
 - [ ] C6. **Structural Bridges** (L4): Patternling art for 7, lessons, cards, 7 exercises, a gym.
 - [ ] C7. **Behavioural Theatre** (L5): split across runs (Patternling art for 11 patterns, lessons, cards, 11 exercises, a gym).

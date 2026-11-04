@@ -4,6 +4,7 @@ import { BattleStage } from "@/game/battle/BattleStage";
 import { DRAFTLING_BACK } from "@/game/sprites/creatures/draftling-back";
 import { ROUGH_DRAFT } from "@/game/sprites/creatures/rough-draft";
 import { getDeck } from "@/content/decks";
+import { DUEL_CONFIG, duelFlag, getTrainer, trainerCards } from "@/content/trainers";
 import { AudioToggle } from "@/components/AudioToggle";
 import { Bar, CardView } from "@/components/BattleCard";
 import { sfx, startMusic, stopMusic } from "@/game/audio/synth";
@@ -14,11 +15,13 @@ import { type AnswerResult, type BattleState, answer, currentCard, stars, startB
 
 type Phase = "intro" | "answering" | "resolving" | "feedback" | "over";
 
-export function BattleClient({ deckId }: { deckId: string }) {
+export function BattleClient({ deckId, trainerId }: { deckId: string; trainerId?: string }) {
   const deck = getDeck(deckId);
+  const trainer = getTrainer(trainerId);
+  const [cards] = useState<Card[]>(() => (trainer ? trainerCards(trainer, Math.floor(Math.random() * 997)) : deck.cards));
   const host = useRef<HTMLDivElement>(null);
   const stage = useRef<BattleStage | null>(null);
-  const [state, setState] = useState<BattleState>(() => startBattle(deck.cards, 1));
+  const [state, setState] = useState<BattleState>(() => (trainer ? startBattle(cards, 1, { ...DUEL_CONFIG }) : startBattle(cards, 1)));
   const [phase, setPhase] = useState<Phase>("intro");
   const [selected, setSelected] = useState<number[]>([]);
   const [result, setResult] = useState<AnswerResult | null>(null);
@@ -117,14 +120,33 @@ export function BattleClient({ deckId }: { deckId: string }) {
     })();
   }, [phase, state.missed]);
 
-  const total = deck.cards.length;
+  // A won trainer duel is recorded once (as a `duel:<id>` entry in lessonsDone) when the battle ends.
+  const flagged = useRef(false);
+  useEffect(() => {
+    if (!trainer || phase !== "over" || state.status !== "won" || flagged.current) return;
+    flagged.current = true;
+    void (async () => {
+      try {
+        const store = indexedDbSaveStore();
+        const { data, warning } = await loadSave(store, Date.now());
+        if (warning) return;
+        await updateSave(store, data, (d) => {
+          if (!d.lessonsDone.includes(duelFlag(trainer))) d.lessonsDone.push(duelFlag(trainer));
+        }, Date.now());
+      } catch {
+        /* storage unavailable: the win is just not remembered */
+      }
+    })();
+  }, [phase, state.status, trainer]);
+
+  const total = cards.length;
   const earned = stars(state);
 
   return (
     <main className="fixed inset-0 flex flex-col bg-[var(--bg)] md:flex-row">
       <section className="flex min-h-0 flex-[0_0_36%] flex-col md:flex-[1_1_55%]">
         <div className="flex items-end gap-3 px-3 pt-2">
-          <Bar label={ROUGH_DRAFT.name} hp={state.foeHp} max={state.config.foeHp} tone="#e0524b" />
+          <Bar label={trainer ? trainer.foeName : ROUGH_DRAFT.name} hp={state.foeHp} max={state.config.foeHp} tone="#e0524b" />
           <AudioToggle />
           <Bar label={`DRAFTLING${state.streak >= 2 ? ` ×${state.streak}` : ""}`} hp={state.playerHp} max={state.config.playerHp} tone="#4bd37b" />
         </div>
@@ -139,6 +161,7 @@ export function BattleClient({ deckId }: { deckId: string }) {
               {"★".repeat(earned)}
               <span className="text-white/20">{"★".repeat(3 - earned)}</span>
             </div>
+            {trainer && <p className="text-sm text-[var(--accent-2)]">{state.status === "won" ? trainer.win : trainer.lose}</p>}
             <p className="text-sm text-white/70">
               {state.answered} cards answered, {state.missed.length} missed.
               {state.missed.length > 0 && " Missed cards return in the Daily Review."}
@@ -154,8 +177,8 @@ export function BattleClient({ deckId }: { deckId: string }) {
           </div>
         ) : !ready || !card ? (
           <p className="font-display m-auto text-center text-[var(--accent-2)]">
-            A wild ROUGH DRAFT appears!
-            <span className="mt-1 block text-xs text-white/60">{deck.title} deck</span>
+            {trainer ? `${trainer.name} challenges you!` : "A wild ROUGH DRAFT appears!"}
+            <span className="mt-1 block text-xs text-white/60">{trainer ? trainer.intro : `${deck.title} deck`}</span>
           </p>
         ) : (
           <>

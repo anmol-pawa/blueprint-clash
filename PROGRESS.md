@@ -349,3 +349,11 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - CI/deploy: `gh` unavailable here, so Actions/Pages status was not confirmed.
 - Note: designated branch `claude/funny-ramanujan-ipkl1o`; pushed to it and to `main` per the run protocol.
 - Next: C4e3c (trainer duels).
+
+## 2026-11-04: C4e3c Trainer duels (closes C4e3, C4e, C4)
+- New `content/trainers.ts`: Sable Quill (SRP, cohesion, OCP, KISS, DRY) and Rook Ferris (DIP, ISP, LSP, coupling) each draw six topic-filtered cards from the SOLID Square deck. `/battle?trainer=<id>` runs the existing concept battle with a shorter foe (36 HP), the trainer's name on the foe bar, an intro line and win/lose lines. A won duel is stored as `duel:<id>` in `lessonsDone` (no save-schema change); misses feed the SRS as before. The two trainers' dialogue now points to their duels, and both are in the site index.
+- Verification: `lint` (0 errors), `typecheck`, `test` (336 pass; new `tests/trainers.test.ts`), `build`, `build:pages` pass; `content:verify` started in the background (no cards changed; result not awaited). Playwright on the static export at 1280x800 and iPhone 14: `/battle/?trainer=rook-ferris` screenshots viewed, no horizontal overflow; the only console error came from my ad-hoc static server lacking a JS MIME type for `sw.js`.
+- Known gaps: the foe sprite is still Rough Draft; the duel is launched from the Battle menu rather than an in-world prompt; the duel hand is random per visit; no duel badge UI on the overworld yet.
+- CI/deploy: the Actions quota note has expired, but `gh` is unavailable here, so status was not confirmed.
+- Note: pushed to `main` per the run protocol; the designated branch `claude/funny-ramanujan-1kk2bx` was not force-updated (force push was denied).
+- Next: C5 (Creational Foundry).

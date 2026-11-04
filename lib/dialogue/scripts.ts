@@ -55,7 +55,7 @@ export const SCRIPTS: Readonly<Record<string, DialogueScript>> = {
       },
       no: { speaker: "Sable Quill", text: "That road ends in a thousand one-method classes and a reader who cannot find anything. Split along who asks for the change, not along verbs.", next: "bye" },
       yes: { speaker: "Sable Quill", text: "Good. Responsibility means a reason to change, usually one stakeholder. Cohesion is the test; method count is not.", next: "bye" },
-      bye: { speaker: "Sable Quill", text: "The Principle Hall's master will test this properly. Practise the refactors first." },
+      bye: { speaker: "Sable Quill", text: "Want a proper duel? Battle menu: Sable Quill duel. Six cards. After that, the Hall's master will test this properly." },
     },
   },
   "rook-intro": {
@@ -73,7 +73,7 @@ export const SCRIPTS: Readonly<Record<string, DialogueScript>> = {
       },
       yes: { speaker: "Rook Ferris", text: "Right. The policy defines the interface it needs and the detail plugs into it. A caution: do not invent an interface for every class. Add one where a second implementation or a test double is real.", next: "bye" },
       no: { speaker: "Rook Ferris", text: "That is how I got my week. Flip it: the high-level code states what it needs, and the low-level code adapts.", next: "bye" },
-      bye: { speaker: "Rook Ferris", text: "Fight me in the Hall when the master opens it. I will bring a fake clock." },
+      bye: { speaker: "Rook Ferris", text: "Fight me from the Battle menu: Rook Ferris duel. I will bring a fake clock." },
     },
   },
   "board-solid": {
