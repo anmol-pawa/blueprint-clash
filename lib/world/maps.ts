@@ -1,4 +1,6 @@
 import {
+  FOUNDRY_LEGEND,
+  FOUNDRY_ROWS,
   HALL_LEGEND,
   OLD_TOWN_LEGEND,
   PRINCIPLE_HALL_LEGEND,
@@ -81,6 +83,8 @@ export const SOLID_SQUARE: MapDef = {
   warps: [
     ...[9, 10, 11].map((x) => ({ x, y: 13, to: "old-town", toX: 10, toY: 10, facing: "up" as const })),
     ...[9, 10].map((x) => ({ x, y: 2, to: "principle-hall", toX: x - 3, toY: 8, facing: "up" as const })),
+    // the east gate leads to the Creational Foundry
+    ...[3, 4].map((y) => ({ x: 19, y, to: "foundry", toX: 1, toY: y + 2, facing: "right" as const })),
   ],
   signs: { "1,4": "sign-solid-square", "17,9": "board-solid" },
 };
@@ -100,8 +104,24 @@ export const PRINCIPLE_HALL: MapDef = {
   signs: {},
 };
 
-export const MAPS: MapTable = { [OLD_TOWN.id]: OLD_TOWN, [DRAFTING_HALL.id]: DRAFTING_HALL, [SOLID_SQUARE.id]: SOLID_SQUARE, [PRINCIPLE_HALL.id]: PRINCIPLE_HALL };
+/**
+ * Creational Foundry: a works front with furnaces and roller doors, a conveyor
+ * of finished products and a molten channel (impassable) across the yard. The
+ * west gate (two tiles) returns to SOLID Square. The roller doors are scenery
+ * until the Foundry hall opens (C5e3).
+ */
+export const FOUNDRY: MapDef = {
+  id: "foundry",
+  name: "Creational Foundry",
+  rows: FOUNDRY_ROWS,
+  solid: "RESsBWFDGeLMmvPaxoIH",
+  npcs: [],
+  warps: [5, 6].map((y) => ({ x: 0, y, to: "solid-square", toX: 18, toY: y - 2, facing: "left" as const })),
+  signs: { "1,4": "sign-foundry" },
+};
 
-export const MAP_LEGENDS = { [OLD_TOWN.id]: OLD_TOWN_LEGEND, [DRAFTING_HALL.id]: HALL_LEGEND, [SOLID_SQUARE.id]: SOLID_SQUARE_LEGEND, [PRINCIPLE_HALL.id]: PRINCIPLE_HALL_LEGEND };
+export const MAPS: MapTable = { [OLD_TOWN.id]: OLD_TOWN, [DRAFTING_HALL.id]: DRAFTING_HALL, [SOLID_SQUARE.id]: SOLID_SQUARE, [PRINCIPLE_HALL.id]: PRINCIPLE_HALL, [FOUNDRY.id]: FOUNDRY };
+
+export const MAP_LEGENDS = { [OLD_TOWN.id]: OLD_TOWN_LEGEND, [DRAFTING_HALL.id]: HALL_LEGEND, [SOLID_SQUARE.id]: SOLID_SQUARE_LEGEND, [PRINCIPLE_HALL.id]: PRINCIPLE_HALL_LEGEND, [FOUNDRY.id]: FOUNDRY_LEGEND };
 
 export const START = { map: "old-town", x: 9, y: 4, facing: "up" } as const;

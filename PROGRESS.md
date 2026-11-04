@@ -413,3 +413,11 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Known gaps: unused `IRON` constant warning in the tile generator; `content:verify` not rerun (no content change).
 - CI/deploy: `gh` unavailable here; Actions/Pages status not confirmed.
 - Next: C5e (Foundry map, trainers, pattern duels, master/gym).
+
+## 2026-11-04: C5e1 Creational Foundry overworld map
+- C5e split into C5e1 (done), C5e2 (trainers and duels) and C5e3 (hall, master, badge). New `FOUNDRY` map in `lib/world/maps.ts` built from the shared `FOUNDRY_ROWS`: impassable molten channel, conveyor, furnaces and crates are solid; a two-tile west gate returns to SOLID Square, whose new east gate (x=19, y=3-4) leads in. `sign-foundry` dialogue added and the SOLID Square sign now mentions the east gate. `OverworldGame` uses `FOUNDRY_TILES` for the map. The roller doors are scenery until C5e3.
+- Tests: foundry round-trip via the east gate, molten channel blocks, sign interaction, plus a check that every warp in every map lands on a walkable tile (357 tests pass overall).
+- Verification: `lint`, `typecheck`, `test`, `build`, `build:pages` pass. Playwright on the static export, desktop 1280x800 and iPhone 14: walked Old Town to SOLID Square to the Foundry, screenshots viewed (map reads clearly, D-pad usable), no console errors, no horizontal overflow.
+- Known gaps: no NPCs yet; `content:verify` not rerun (no content change).
+- CI/deploy: `gh` unavailable here; Actions/Pages status not confirmed.
+- Next: C5e2 (two Foundry trainers and pattern duels).

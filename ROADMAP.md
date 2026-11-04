@@ -90,7 +90,10 @@ Work top to bottom: take the **first unchecked box**, and split big boxes into r
   - [x] C5d. Foundry art. Split below.
     - [x] C5d1. Patternling sprites for Forgebot, Beaverbuild, Solo, Clonewisp (64x64, idle/attack/hurt/faint/evolve), on `/dev/sprites`.
     - [x] C5d2. Foundry tileset and battle backdrop.
-  - [ ] C5e. Foundry map, trainers, pattern duels and the district master/gym.
+  - [ ] C5e. Foundry map, trainers, pattern duels and the district master/gym. Split below.
+    - [x] C5e1. Foundry overworld map (from `FOUNDRY_ROWS`), east gate warp from SOLID Square, sign, tileset wiring, tests.
+    - [ ] C5e2. Two trainers (walkers, portraits, dialogue, placement) and their pattern duels.
+    - [ ] C5e3. Foundry hall interior, master (96x96 sprite, profile, deck, exercise choice), `/battle/master?master=creational-foundry`, badge.
 - [ ] C6. **Structural Bridges** (L4): Patternling art for 7, lessons, cards, 7 exercises, a gym.
 - [ ] C7. **Behavioural Theatre** (L5): split across runs (Patternling art for 11 patterns, lessons, cards, 11 exercises, a gym).
 - [ ] C8. **Modelling and UML lessons** (L6) and Design Board drills.

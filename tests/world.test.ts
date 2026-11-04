@@ -77,6 +77,27 @@ describe("SOLID Square", () => {
   });
 });
 
+describe("Creational Foundry", () => {
+  it("is reached through SOLID Square's east gate and back", () => {
+    let p: PlayerState = { map: "solid-square", x: 18, y: 3, facing: "right" };
+    const r = step(MAPS, p, "right");
+    expect(r).toMatchObject({ kind: "warped", state: { map: "foundry", x: 1, y: 5 } });
+    p = (r as { state: PlayerState }).state;
+    p = step(MAPS, p, "left").state; // turn to face the gate
+    expect(step(MAPS, p, "left")).toMatchObject({ kind: "warped", state: { map: "solid-square", x: 18, y: 3 } });
+  });
+  it("blocks the molten channel and reads the sign", () => {
+    expect(step(MAPS, { map: "foundry", x: 5, y: 6, facing: "down" }, "down").kind).toBe("blocked");
+    expect(facingTarget(MAPS, { map: "foundry", x: 1, y: 5, facing: "up" })).toMatchObject({ kind: "sign" });
+  });
+  it("has every warp landing on a walkable tile", () => {
+    for (const m of Object.values(MAPS)) for (const w of m.warps) {
+      const t = MAPS[w.to];
+      expect(t.solid.includes(t.rows[w.toY][w.toX]), `${m.id}->${w.to} ${w.toX},${w.toY}`).toBe(false);
+    }
+  });
+});
+
 describe("interaction", () => {
   it("finds the NPC or sign being faced", () => {
     const t = facingTarget(MAPS, { map: "drafting-hall", x: 2, y: 5, facing: "right" });
