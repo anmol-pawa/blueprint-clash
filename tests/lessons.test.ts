@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { ALL_LESSONS, lessonById } from "@/content/lessons/registry";
 import { validateLessons } from "@/lib/lessons/model";
 import { SOLID_SQUARE_DECK } from "@/content/cards/solid-square";
+import { STRUCTURAL_BRIDGES_DECK } from "@/content/cards/structural-bridges";
 import { CREATIONAL_FOUNDRY_DECK } from "@/content/cards/creational-foundry";
 
 describe("lessons", () => {
@@ -18,8 +19,13 @@ describe("lessons", () => {
       "factory-method", "abstract-factory", "builder", "prototype", "singleton", "object-pool", "di",
     ]);
   });
+  it("cover the seven Structural Bridges patterns", () => {
+    expect(ALL_LESSONS.filter((l) => l.level === "L4").map((l) => l.id)).toEqual([
+      "adapter", "bridge", "composite", "decorator", "facade", "flyweight", "proxy",
+    ]);
+  });
   it("each lesson's card topic has cards to drill", () => {
-    const cards = [...SOLID_SQUARE_DECK, ...CREATIONAL_FOUNDRY_DECK];
+    const cards = [...SOLID_SQUARE_DECK, ...CREATIONAL_FOUNDRY_DECK, ...STRUCTURAL_BRIDGES_DECK];
     for (const l of ALL_LESSONS) {
       expect(cards.some((c) => c.topic.startsWith(l.cardTopic)), l.id).toBe(true);
     }

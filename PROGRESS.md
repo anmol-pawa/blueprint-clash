@@ -456,3 +456,11 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - CI/deploy: `gh` unavailable here; Actions/Pages status not confirmed.
 - Note: pushed to the designated branch `claude/funny-ramanujan-f42xvc` and to `main` per the run protocol.
 - Next: C6b (Structural Bridges lessons).
+
+## 2026-11-04: C6b Structural Bridges lessons
+- Seven lessons in `content/lessons/structural-bridges.ts` (L4): Adapter, Bridge, Composite, Decorator, Facade, Flyweight, Proxy. Each has intro (with the confusable-pattern contrast and object-vs-class / transparency-vs-safety / ordering choices stated), smell, compilable before/after programs, refactor notes with the trade-off, interview signal and the over-application cost. Registered in the lesson registry (shows up on `/learn`) and in `content/verify/solid-lessons.verify.ts`.
+- Verification: `content:verify` for lessons (21 pass: every before/after compiled and run natively, output matches, every `after` is Senior-Review clean), `lint` (0 errors, 8 pre-existing warnings), `typecheck`, `test` (397 pass, new L4 coverage test; each lesson's card topic has cards), `build`, `build:pages` pass. Playwright on the static export, desktop 1280x800 and iPhone 14: `/learn/decorator/` viewed, no console errors, no horizontal overflow. Caught and fixed a doubled-backslash escape that showed literal `\` around inline code.
+- Known gaps: Flyweight and Proxy `after` programs are single-threaded (the notes say so and name `std::call_once`); lessons not yet linked from the Bridges map/master (C6e).
+- CI/deploy: `gh` unavailable here, so Actions/Pages status not confirmed.
+- Note: pushed to the designated branch `claude/funny-ramanujan-b349k3` (not `main`), as the session instructions require.
+- Next: C6c (Structural Bridges judged exercises).
