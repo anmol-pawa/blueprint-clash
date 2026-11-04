@@ -78,7 +78,7 @@ Work top to bottom: take the **first unchecked box**, and split big boxes into r
       - [x] C4e2b. District master (96×96 battle sprite, overworld walker, portrait) and the SOLID Square battle backdrop.
     - [ ] C4e3. Principle Hall interior, trainer duels and the master/gym fight wired to the SOLID deck and the 8 refactor exercises. Split below.
       - [x] C4e3a. Principle Hall interior map (SOLID Square tiles), the plaza arch door becomes a warp, Provost Marlow placed with an intro dialogue, scene on `/dev/sprites`, tests.
-      - [ ] C4e3b. Marlow master fight: SOLID master profile, master deck (cards + dedicated smell cards), phase-2 exercise choice from the 8, `/battle/master?master=solid-square`, badge saved.
+      - [x] C4e3b. Marlow master fight: SOLID master profile, master deck (cards + dedicated smell cards), phase-2 exercise choice from the 8, `/battle/master?master=solid-square`, badge saved.
       - [ ] C4e3c. Trainer duels (Sable, Rook) as short concept battles with flags.
 - [ ] C5. **Creational Foundry** (L3): Patternling art for 5 patterns, lessons, cards, pattern duels, 6 exercises, a gym.
 - [ ] C6. **Structural Bridges** (L4): Patternling art for 7, lessons, cards, 7 exercises, a gym.

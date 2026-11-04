@@ -4,6 +4,11 @@ import { OLD_TOWN_MASTER, oldTownMasterDeck } from "@/content/masters/old-town";
 import { OLD_TOWN_MASTER_SMELLS } from "@/content/masters/old-town-smells";
 import { validateCards, type Card } from "@/lib/battle/cards";
 import { DEFAULT_MASTER_CONFIG, earnsBadge, masterAnswer, masterCard, masterHpFraction, masterStars, startMaster, submitWorkshop, type MasterState } from "@/lib/battle/master";
+import { EXERCISE_META } from "@/content/exercises/registry";
+import { MASTERS, masterIdFromSearch } from "@/content/masters";
+import { SOLID_SQUARE_DECK } from "@/content/cards/solid-square";
+import { SOLID_SQUARE_MASTER, solidSquareMasterDeck } from "@/content/masters/solid-square";
+import { SOLID_SQUARE_MASTER_SMELLS } from "@/content/masters/solid-square-smells";
 import { loadExercise } from "@/lib/exercises/load";
 
 const mcq = (n: number, prefix = "c"): Card[] =>
@@ -37,7 +42,7 @@ describe("master content", () => {
     expect(d.cards.length).toBeGreaterThanOrEqual(15);
     expect(d.smells.length).toBeGreaterThanOrEqual(6);
     expect(validateCards(d.cards)).toEqual([]);
-    expect(await loadExercise(OLD_TOWN_MASTER.exercise)).toBeTruthy();
+    expect(await loadExercise(OLD_TOWN_MASTER.exercises[0])).toBeTruthy();
   });
 });
 
@@ -153,5 +158,46 @@ describe("master fight", () => {
     s = submitWorkshop(s, { passed: 8, total: 8 }).state;
     s = clear(s);
     expect(s.phase).toBe("won");
+  });
+});
+
+describe("Provost Marlow (SOLID Square master)", () => {
+  it("has well-formed, all-smell dedicated cards that do not repeat the deck", () => {
+    expect(validateCards(SOLID_SQUARE_MASTER_SMELLS)).toEqual([]);
+    expect(SOLID_SQUARE_MASTER_SMELLS.every((c) => c.kind === "smell")).toBe(true);
+    const ids = new Set(SOLID_SQUARE_DECK.map((c) => c.id));
+    expect(SOLID_SQUARE_MASTER_SMELLS.some((c) => ids.has(c.id))).toBe(false);
+    expect(new Set(SOLID_SQUARE_MASTER_SMELLS.map((c) => c.topic)).size).toBeGreaterThanOrEqual(5);
+  });
+
+  it("has enough cards for both card phases and all eight refactors exist and are registered", async () => {
+    const d = solidSquareMasterDeck();
+    expect(d.cards.length).toBeGreaterThanOrEqual(15);
+    expect(validateCards(d.cards)).toEqual([]);
+    expect(d.cards.some((c) => c.kind === "smell")).toBe(false);
+    expect(SOLID_SQUARE_MASTER.exercises).toHaveLength(8);
+    for (const e of SOLID_SQUARE_MASTER.exercises) {
+      expect(EXERCISE_META[e], e).toBeTruthy();
+      expect(await loadExercise(e), e).toBeTruthy();
+    }
+  });
+
+  it("is selected by ?master= and falls back to Old Town", () => {
+    expect(masterIdFromSearch("?master=solid-square")).toBe("solid-square");
+    expect(masterIdFromSearch("?master=nope")).toBe("old-town");
+    expect(masterIdFromSearch("")).toBe("old-town");
+    expect(MASTERS["solid-square"].profile.badge).toBe("solid-square");
+  });
+
+  it("a full clean run earns the badge", () => {
+    const d = solidSquareMasterDeck();
+    let s = startMaster(d, 3);
+    s = clear(s);
+    expect(s.phase).toBe("workshop");
+    s = submitWorkshop(s, { passed: 5, total: 5 }).state;
+    s = clear(s);
+    expect(s.phase).toBe("won");
+    expect(earnsBadge(s)).toBe(true);
+    expect(masterStars(s)).toBe(3);
   });
 });

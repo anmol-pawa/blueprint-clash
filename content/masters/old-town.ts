@@ -9,8 +9,12 @@ export interface MasterProfile {
   district: string;
   /** Badge id written to the save on victory. */
   badge: string;
-  /** Exercise (content/exercises) used as the phase-2 mini Workshop. */
-  exercise: string;
+  /** Display name of the badge, e.g. "Gate Badge". */
+  badgeName: string;
+  /** Shown while the intro waits for the stage to load. */
+  arrival: string;
+  /** Exercises (content/exercises) the player may use as the phase-2 mini Workshop (one is chosen). */
+  exercises: string[];
   intro: string[];
   phaseLines: { workshop: string; smell: string };
   win: string[];
@@ -23,7 +27,9 @@ export const OLD_TOWN_MASTER: MasterProfile = {
   title: "Keeper of the Old Town Gate",
   district: "old-town",
   badge: "old-town",
-  exercise: "file-handle",
+  badgeName: "Gate Badge",
+  arrival: "Warden Hollis Vane blocks the gate!",
+  exercises: ["file-handle"],
   intro: [
     "Everything in this district stands because somebody decided who owns what.",
     "Show me you can say it in a class, build it, and smell it when it is wrong.",

@@ -1,13 +1,14 @@
 "use client";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { AudioToggle } from "@/components/AudioToggle";
 import { Bar, CardView } from "@/components/BattleCard";
 import { sfx, startMusic, stopMusic } from "@/game/audio/synth";
 import { Prose } from "@/components/Prose";
 import { WorkspaceEditor } from "@/components/WorkspaceEditor";
-import { OLD_TOWN_MASTER, oldTownMasterDeck } from "@/content/masters/old-town";
+import { MASTERS, masterIdFromSearch } from "@/content/masters";
 import { BattleStage } from "@/game/battle/BattleStage";
 import { DRAFTLING_BACK } from "@/game/sprites/creatures/draftling-back";
+import { PROVOST_MARLOW } from "@/game/sprites/creatures/provost-marlow";
 import { WARDEN_VANE } from "@/game/sprites/creatures/warden-vane";
 import type { AnswerResult } from "@/lib/battle/battle";
 import type { Card } from "@/lib/battle/cards";
@@ -20,10 +21,25 @@ import { indexedDbSaveStore, loadSave, updateSave } from "@/lib/save/store";
 type Ui = "intro" | "answering" | "resolving" | "feedback" | "banner" | "workshop" | "over";
 const PHASE_LABEL = { cards: "PHASE 1 · CONCEPTS", workshop: "PHASE 2 · BUILD", smell: "PHASE 3 · SMELL BOSS", won: "VICTORY", lost: "DEFEATED" } as const;
 
-export function MasterClient({ exercise }: { exercise: ExerciseBundle }) {
+export function MasterClient({ exercises }: { exercises: Record<string, ExerciseBundle[]> }) {
+  // The master comes from `?master=` (static export: read on the client). Remount once it is known.
+  const id = useSyncExternalStore(
+    () => () => {},
+    () => masterIdFromSearch(window.location.search),
+    () => null,
+  );
+  if (!id) return <main className="fixed inset-0 bg-[var(--bg)]" aria-busy="true" />;
+  return <MasterFight key={id} id={id} choices={exercises[id]} />;
+}
+
+function MasterFight({ id, choices }: { id: string; choices: ExerciseBundle[] }) {
+  const entry = MASTERS[id];
+  const P = entry.profile;
+  const [exId, setExId] = useState<string | null>(choices.length === 1 ? choices[0].id : null);
+  const exercise = choices.find((e) => e.id === exId) ?? choices[0];
   const host = useRef<HTMLDivElement>(null);
   const stage = useRef<BattleStage | null>(null);
-  const deck = useMemo(() => oldTownMasterDeck(), []);
+  const deck = useMemo(() => entry.deck(), [entry]);
   const [m, setM] = useState<MasterState>(() => startMaster(deck, 7));
   const mRef = useRef(m);
   const [ui, setUi] = useState<Ui>("intro");
@@ -47,7 +63,7 @@ export function MasterClient({ exercise }: { exercise: ExerciseBundle }) {
   }, []);
 
   useEffect(() => {
-    const s = new BattleStage(host.current!, DRAFTLING_BACK, WARDEN_VANE);
+    const s = new BattleStage(host.current!, DRAFTLING_BACK, entry.visual === "provost-marlow" ? PROVOST_MARLOW : WARDEN_VANE, id === "solid-square" ? "solid-square" : "old-town");
     stage.current = s;
     void s.init().then(() => s.intro()).then(() => setReady(true));
     return () => {
@@ -64,7 +80,7 @@ export function MasterClient({ exercise }: { exercise: ExerciseBundle }) {
       try {
         const store = indexedDbSaveStore();
         const { data } = await loadSave(store, Date.now());
-        await updateSave(store, data, (d) => awardBadge(d, OLD_TOWN_MASTER.badge), Date.now());
+        await updateSave(store, data, (d) => awardBadge(d, P.badge), Date.now());
         if (live) setBadge("saved");
       } catch {
         if (live) setBadge("failed");
@@ -119,7 +135,7 @@ export function MasterClient({ exercise }: { exercise: ExerciseBundle }) {
 
   const advance = useCallback(() => {
     if (ui === "intro") {
-      if (line + 1 < OLD_TOWN_MASTER.intro.length) setLine(line + 1);
+      if (line + 1 < P.intro.length) setLine(line + 1);
       else setUi("answering");
     } else if (ui === "banner") {
       setUi(mRef.current.phase === "workshop" ? "workshop" : "answering");
@@ -170,7 +186,7 @@ export function MasterClient({ exercise }: { exercise: ExerciseBundle }) {
       <section className="flex min-h-0 flex-[0_0_32%] flex-col md:flex-[1_1_45%]">
         <div className="flex items-end gap-3 px-3 pt-2">
           <AudioToggle />
-          <Bar label={OLD_TOWN_MASTER.name.toUpperCase()} hp={foeHp} max={100} tone="#e0524b" />
+          <Bar label={P.name.toUpperCase()} hp={foeHp} max={100} tone="#e0524b" />
           <Bar label={`DRAFTLING${m.battle && m.battle.streak >= 2 ? ` ×${m.battle.streak}` : ""}`} hp={m.playerHp} max={m.config.playerHp} tone="#4bd37b" />
         </div>
         <div className="font-display px-3 text-[10px] tracking-widest text-[var(--accent-2)]" data-testid="phase">
@@ -182,21 +198,21 @@ export function MasterClient({ exercise }: { exercise: ExerciseBundle }) {
       <section className="panel m-2 flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto p-3 md:m-3 md:flex-[1_1_55%]" aria-label="Fight">
         {ui === "over" ? (
           <div className="flex flex-1 flex-col items-center justify-center gap-3 text-center" data-testid="over">
-            <h1 className="font-display text-3xl text-[var(--accent-2)]">{m.phase === "won" ? "GATE BADGE EARNED" : "DEFEATED"}</h1>
+            <h1 className="font-display text-3xl text-[var(--accent-2)]">{m.phase === "won" ? `${P.badgeName.toUpperCase()} EARNED` : "DEFEATED"}</h1>
             {m.phase === "won" ? (
               <>
                 <div className="text-4xl" aria-label={`${stars} of 3 stars`}>
                   {"★".repeat(stars)}
                   <span className="text-white/20">{"★".repeat(3 - stars)}</span>
                 </div>
-                {OLD_TOWN_MASTER.win.map((l) => (
+                {P.win.map((l) => (
                   <p key={l} className="max-w-md text-sm text-white/85">“{l}”</p>
                 ))}
                 <p className="text-xs text-white/60">{badge === "failed" ? "Could not save the badge (storage unavailable)." : badge === "saved" ? "Badge saved." : "Saving badge…"}</p>
               </>
             ) : (
               <>
-                <p className="max-w-md text-sm text-white/85">“{OLD_TOWN_MASTER.lose}”</p>
+                <p className="max-w-md text-sm text-white/85">“{P.lose}”</p>
                 <p className="text-xs text-white/60">Lost in the {m.endedIn === "workshop" ? "build" : m.endedIn === "smell" ? "smell boss" : "concept"} phase.{m.missed.length > 0 && ` ${m.missed.length} card${m.missed.length === 1 ? "" : "s"} missed.`}</p>
               </>
             )}
@@ -216,13 +232,23 @@ export function MasterClient({ exercise }: { exercise: ExerciseBundle }) {
           </div>
         ) : ui === "intro" || ui === "banner" ? (
           <div className="flex flex-1 flex-col justify-center gap-3" data-testid="dialogue">
-            <div className="font-display text-sm text-[var(--accent-2)]">{OLD_TOWN_MASTER.name} · {OLD_TOWN_MASTER.title}</div>
+            <div className="font-display text-sm text-[var(--accent-2)]">{P.name} · {P.title}</div>
             <p className="min-h-[3.5rem] text-lg leading-snug">
-              {ui === "intro" ? (ready ? OLD_TOWN_MASTER.intro[line] : `${OLD_TOWN_MASTER.name} blocks the gate!`) : m.phase === "workshop" ? OLD_TOWN_MASTER.phaseLines.workshop : OLD_TOWN_MASTER.phaseLines.smell}
+              {ui === "intro" ? (ready ? P.intro[line] : P.arrival) : m.phase === "workshop" ? P.phaseLines.workshop : P.phaseLines.smell}
             </p>
-            <button className="px-btn px-btn-primary min-h-11 self-end px-4 py-2" disabled={ui === "intro" && !ready} onClick={advance}>
-              {ui === "intro" && line + 1 >= OLD_TOWN_MASTER.intro.length ? "Begin the trial" : ui === "banner" ? (m.phase === "workshop" ? "To the workbench" : "Face the smell boss") : "Next"}
-            </button>
+            {ui === "banner" && m.phase === "workshop" && !exId ? (
+              <div className="flex flex-col gap-2" data-testid="exercise-choice" role="group" aria-label="Choose your refactor">
+                {choices.map((c) => (
+                  <button key={c.id} className="px-btn min-h-11 px-3 py-2 text-left text-sm" onClick={() => setExId(c.id)}>
+                    {c.title}
+                  </button>
+                ))}
+              </div>
+            ) : (
+              <button className="px-btn px-btn-primary min-h-11 self-end px-4 py-2" disabled={ui === "intro" && !ready} onClick={advance}>
+                {ui === "intro" && line + 1 >= P.intro.length ? "Begin the trial" : ui === "banner" ? (m.phase === "workshop" ? "To the workbench" : "Face the smell boss") : "Next"}
+              </button>
+            )}
           </div>
         ) : ui === "workshop" ? (
           <div className="flex min-h-0 flex-col gap-2" data-testid="workshop-phase">

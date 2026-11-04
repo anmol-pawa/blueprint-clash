@@ -341,3 +341,11 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - CI/deploy: the Actions quota note has expired; `gh` CLI is unavailable in this environment, so Actions/Pages status was not confirmed.
 - Note: designated branch `claude/funny-ramanujan-nh5j0f`; pushed to `main` per the run protocol.
 - Next: C4e3b.
+
+## 2026-11-04: C4e3b Provost Marlow master fight
+- `/battle/master` now serves every district master from `?master=<district>` (read on the client for the static export; unknown ids fall back to Old Town). New `content/masters/index.ts` registry, `MasterProfile` gained `exercises[]`, `badgeName` and `arrival`. **Provost Marlow** (`?master=solid-square`): phase 1 uses the level 2+ SOLID cards (no smell cards, 24 cards), phase 2 lets the player choose any of the eight refactor exercises (all registered in `EXERCISE_META`), phase 3 uses eight new dedicated smell cards (`solid-square-smells.ts`: two-actor SRP, type-switch OCP with the variant counter-argument, throwing-override LSP, fat-interface ISP, `new` in constructor DIP, tell-don't-ask, speculative factory YAGNI, inheritance-for-reuse). Her 96x96 sprite and the marble hall backdrop are used; the Hall Badge (`solid-square`) is saved on victory. Marlow's dialogue now points to the trial; a Principle Hall master entry was added to the site index.
+- Verification: `lint` (0 errors), `typecheck`, `test` (331 pass; new Marlow tests for cards, exercise registry, `?master=` selection and a full clean run), `content:verify` (114 pass), `build`, `build:pages` pass. Playwright on the static export at 1280x800 and iPhone 14: `/battle/master/?master=solid-square` intro and phase-1 card viewed, no console errors, no horizontal overflow. I did not play through the workshop chooser or the end screen in-browser (state machine covered by tests).
+- Known gaps: the fight is not launched from an in-world trigger (Marlow only points to it, as with Old Town); the "Evolve!" link on victory is still the Old Town one; no master music of her own; the player's Draftling is still the only party sprite.
+- CI/deploy: `gh` unavailable here, so Actions/Pages status was not confirmed.
+- Note: designated branch `claude/funny-ramanujan-ipkl1o`; pushed to it and to `main` per the run protocol.
+- Next: C4e3c (trainer duels).

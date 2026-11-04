@@ -96,7 +96,7 @@ export const SCRIPTS: Readonly<Record<string, DialogueScript>> = {
       },
       no: { speaker: "Provost Marlow", text: "An abstraction with no second user is cost without benefit: more files, more indirection, the same coupling. Principles justify seams; they do not demand them.", next: "bye" },
       yes: { speaker: "Provost Marlow", text: "Well said. In an interview, say the principle and its cost in the same breath. That is the senior signal.", next: "bye" },
-      bye: { speaker: "Provost Marlow", text: "My formal trial is not ready yet. Train on the cards and the refactor drills, then return." },
+      bye: { speaker: "Provost Marlow", text: "When you have trained on the cards and the refactor drills, take my trial from the Battle menu: Principle Hall master. Three phases, one badge." },
     },
   },
   "board-patterns": {
