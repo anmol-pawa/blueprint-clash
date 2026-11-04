@@ -406,3 +406,10 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Known gaps: no back sprites yet for the party views; Forgebot's hammer is small; Clonewisp's echo outline is noisy when dithered.
 - CI/deploy: `gh` unavailable here; not confirmed.
 - Next: C5d2 (Foundry tileset and backdrop).
+
+## 2026-11-04: C5d2 Foundry tileset and battle backdrop (closes C5d)
+- Code landed in the previous run (`9e657ed`) but the box and log were not recorded; this run verified and closed it. `game/sprites/tiles/foundry.ts` adds the Creational Foundry tileset (cinder floor, steel plate, conveyor, molten channel, furnace, smokestack, gears, crates, pallets, anvil, pipes), `foundry-scene` on `/dev/sprites`, and a Foundry battle backdrop in `BattleStage`.
+- Verification: `lint` (0 errors, 8 warnings), `typecheck`, `test` (368 pass), `build`, `build:pages` pass. Playwright on the static export under `/blueprint-clash/` at 1280x800 and iPhone 14: `/dev/sprites` has no console errors and no horizontal overflow; the Foundry scene and tile sheet were viewed and read clearly, distinct from the other districts.
+- Known gaps: unused `IRON` constant warning in the tile generator; `content:verify` not rerun (no content change).
+- CI/deploy: `gh` unavailable here; Actions/Pages status not confirmed.
+- Next: C5e (Foundry map, trainers, pattern duels, master/gym).
