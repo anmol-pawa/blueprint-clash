@@ -483,3 +483,11 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Known gaps: exercises are in the metadata registry but not yet offered by an in-game screen; `content:verify` for the other exercises not rerun.
 - CI/deploy: `gh` is unavailable here, so Actions/Pages status was not confirmed.
 - Next: C6c3 (flyweight-glyphs, proxy-cache).
+
+## 2026-11-04: C6c3 Bridges exercises: flyweight, proxy (closes C6c)
+- Two new full packages (api.h, prompt, starter, reference, tests, meta with hint ladder). **flyweight-glyphs**: an immutable `Glyph` (intrinsic state) shared through a `GlyphFactory` keyed by (char, font, size) and returned as `shared_ptr<const Glyph>`; `TextLine` keeps the position (extrinsic state) beside the shared glyph. Tests prove sharing with a construction counter, key sensitivity, const-ness (`static_assert`), running positions across mixed styles, and cross-line sharing. **proxy-cache**: `CachingStore` (same `Store` interface, write-through with no stale value, a missing key is not remembered) and `LazyStore` (virtual proxy: created on first use, exactly once, owned), plus stacking.
+- 9 known-wrong solutions (4 + 5): new object per request, key ignores size, key ignores font, width counts distinct glyphs; caches nothing, stale after put, caches "missing" as empty, lazy but eager, lazy but rebuilds each call. Each is rejected for the documented tests.
+- Design note: the judge compiles without exceptions (like the browser), so `Store::get` returns `std::optional<std::string>`; "do not cache the failure" became "do not cache the miss".
+- Verification: `content:verify` for both exercises (10 pass: reference accepted, Senior Review clean, starter not accepted, all wrongs rejected). `lint` (0 errors, 8 pre-existing warnings), `typecheck`, `test` (404 pass), `build`, `build:pages` pass. No visual change, so no screenshots. CI/deploy: `gh` is unavailable here, so Actions/Pages status was not confirmed.
+- Known gaps: the exercises are in the metadata registry but not yet offered by an in-game screen (C6e).
+- Next: C6d (Bridges art: 7 Patternling sprites, tileset, backdrop).

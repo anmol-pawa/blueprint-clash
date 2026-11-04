@@ -1,0 +1,8 @@
+A text editor shows documents with hundreds of thousands of characters, but only a few dozen distinct (character, font, size) combinations. Allocating one object per character wastes memory, so apply the **Flyweight** pattern: share the immutable part, and keep the part that differs per use outside it. `api.h` gives an immutable `Glyph` (the *intrinsic* state) and a counter, `Glyph::constructed()`, that counts how many glyph objects were ever built. Write in `solution.h`.
+
+- `GlyphFactory::get(char ch, const std::string& font, int size)` returns `std::shared_ptr<const Glyph>`. The same `(ch, font, size)` always returns the same object; any difference in any of the three gives a different one. Never build a glyph twice for the same key. `cachedCount()` is how many distinct glyphs the factory holds.
+- `TextLine(GlyphFactory& factory)` is a line of placed glyphs. `append(text, font, size)` adds one glyph per character of `text`, taking them from the factory, and places each one to the right of the previous one. A glyph's position is **extrinsic** state: it lives in the line, not in the shared glyph.
+- `length()` is the number of placed glyphs. `at(i)` returns a `Placed` with the shared `glyph` and its `x` (the first one is at `x = 0`; the next starts at the previous `x` plus the previous glyph's `advance()`). `width()` is the total width of the line: the sum of the advances of **every placed glyph**, not of the distinct ones.
+- Two lines built from the same factory share glyphs with each other too.
+
+The flyweight must stay immutable: the factory hands out `shared_ptr<const Glyph>`, so no caller can change a glyph everyone else is using.

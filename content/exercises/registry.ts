@@ -21,6 +21,8 @@ import { meta as bridgeRenderer } from "./bridge-renderer/meta";
 import { meta as compositeFs } from "./composite-fs/meta";
 import { meta as decoratorStream } from "./decorator-stream/meta";
 import { meta as facadeCheckout } from "./facade-checkout/meta";
+import { meta as flyweightGlyphs } from "./flyweight-glyphs/meta";
+import { meta as proxyCache } from "./proxy-cache/meta";
 
 export const EXERCISE_META: Record<string, ExerciseMeta> = {
   "file-handle": fileHandle,
@@ -43,4 +45,6 @@ export const EXERCISE_META: Record<string, ExerciseMeta> = {
   "composite-fs": compositeFs,
   "decorator-stream": decoratorStream,
   "facade-checkout": facadeCheckout,
+  "flyweight-glyphs": flyweightGlyphs,
+  "proxy-cache": proxyCache,
 };
