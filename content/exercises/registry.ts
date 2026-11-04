@@ -12,6 +12,8 @@ import { meta as demeterWallet } from "./demeter-wallet/meta";
 import { meta as compositionHistory } from "./composition-history/meta";
 import { meta as factoryRegistry } from "./factory-registry/meta";
 import { meta as builderRequest } from "./builder-request/meta";
+import { meta as abstractFactoryFamily } from "./abstract-factory-family/meta";
+import { meta as prototypeClone } from "./prototype-clone/meta";
 
 export const EXERCISE_META: Record<string, ExerciseMeta> = {
   "file-handle": fileHandle,
@@ -25,4 +27,6 @@ export const EXERCISE_META: Record<string, ExerciseMeta> = {
   "composition-history": compositionHistory,
   "factory-registry": factoryRegistry,
   "builder-request": builderRequest,
+  "abstract-factory-family": abstractFactoryFamily,
+  "prototype-clone": prototypeClone,
 };

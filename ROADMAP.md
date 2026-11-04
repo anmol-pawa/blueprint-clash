@@ -85,7 +85,7 @@ Work top to bottom: take the **first unchecked box**, and split big boxes into r
   - [x] C5b. Lessons (Factory Method, Abstract Factory, Builder, Prototype, Singleton, Object Pool, DI) with smell, C++ structure, when not to use it, over-application cost.
   - [ ] C5c. Six judged exercises as `content:verify` packages with wrong solutions. Split below.
     - [x] C5c1. `factory-registry` (registry of factories, lazy, first registration wins) and `builder-request` (validating builder, immutable value, case-insensitive headers).
-    - [ ] C5c2. `abstract-factory-family` (a family of products that must match) and `prototype-clone` (`unique_ptr` clone with deep copy).
+    - [x] C5c2. `abstract-factory-family` (a family of products that must match) and `prototype-clone` (`unique_ptr` clone with deep copy).
     - [ ] C5c3. `singleton-meyers` (thread-safe Meyers singleton plus the injected alternative) and `pool-lease` (RAII object pool).
   - [ ] C5d. Patternling art for Forgebot, Beaverbuild, Solo, Clonewisp (64x64, idle/attack/hurt/faint), a Foundry tileset and backdrop.
   - [ ] C5e. Foundry map, trainers, pattern duels and the district master/gym.

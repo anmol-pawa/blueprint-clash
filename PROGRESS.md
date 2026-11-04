@@ -382,3 +382,11 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - CI/deploy: `gh` unavailable here; not confirmed.
 - Note: designated branch `claude/funny-ramanujan-ds4wf4`; pushed to it and to `main` per the run protocol.
 - Next: C5c2 (abstract-factory-family, prototype-clone).
+
+## 2026-11-04: C5c2 Creational exercises: abstract factory and prototype
+- Two new judged class exercises (24 in total). **abstract-factory-family** (`LightFactory`/`DarkFactory` over `Button`/`Checkbox`, `makeFactory(name)`, and a `renderLogin(const WidgetFactory&)` that must work for a family the tests invent). Wrong solutions: dark factory builds a light checkbox, screen type-switches on the concrete factory, unknown family silently falls back to light. **prototype-clone** (`Label`, `Badge : Label`, `Panel` owning `unique_ptr` children, `Palette` of prototypes with private snapshots; the prompt explains why `clone()` returns `unique_ptr<Widget>`, not a covariant type). Wrong solutions: shallow panel copy (shared_ptr children), `Badge` forgets its `clone()` override (slices to Label), `Palette` stores a pointer to the caller's object.
+- Verification: `lint` (0 errors, 7 pre-existing warnings), `typecheck`, `test` (342 pass; ids added to the structural-validity list), `content:verify` filtered to both new exercises natively (reference accepted, clean Senior Review, starter rejected, every wrong solution fails its documented tests), `build`, `build:pages` pass. No visual change, so no screenshots.
+- Known gaps: not yet linked from a lesson or the Foundry master (C5e); full `content:verify` not rerun.
+- CI/deploy: `gh` unavailable here; Actions/Pages status not confirmed.
+- Note: designated branch `claude/funny-ramanujan-i4naek`; pushed to it and to `main` per the run protocol.
+- Next: C5c3 (singleton-meyers, pool-lease).
