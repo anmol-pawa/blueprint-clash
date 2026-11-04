@@ -1,4 +1,11 @@
-import { HALL_LEGEND, OLD_TOWN_LEGEND, SOLID_SQUARE_LEGEND, SOLID_SQUARE_ROWS } from "@/game/sprites/tiles/scenes";
+import {
+  HALL_LEGEND,
+  OLD_TOWN_LEGEND,
+  PRINCIPLE_HALL_LEGEND,
+  PRINCIPLE_HALL_ROWS,
+  SOLID_SQUARE_LEGEND,
+  SOLID_SQUARE_ROWS,
+} from "@/game/sprites/tiles/scenes";
 import type { MapDef, MapTable } from "./world";
 
 /**
@@ -58,9 +65,9 @@ export const DRAFTING_HALL: MapDef = {
 };
 
 /**
- * SOLID Square: a civic plaza with the Principle Hall to the north. Its arch
- * door is shut until the district master's gym arrives (C4e3); the board and
- * sign point at the lessons. The road south returns to Old Town.
+ * SOLID Square: a civic plaza with the Principle Hall to the north. The arch
+ * door (two tiles) is a warp into the hall; the board and sign point at the
+ * lessons. The road south returns to Old Town.
  */
 export const SOLID_SQUARE: MapDef = {
   id: "solid-square",
@@ -71,12 +78,30 @@ export const SOLID_SQUARE: MapDef = {
     { id: "sable", name: "Sable Quill", x: 5, y: 6, facing: "right", dialogue: "sable-intro" },
     { id: "rook", name: "Rook Ferris", x: 14, y: 8, facing: "left", dialogue: "rook-intro" },
   ],
-  warps: [9, 10, 11].map((x) => ({ x, y: 13, to: "old-town", toX: 10, toY: 10, facing: "up" as const })),
-  signs: { "1,4": "sign-solid-square", "17,9": "board-solid", "9,2": "door-principle-hall", "10,2": "door-principle-hall" },
+  warps: [
+    ...[9, 10, 11].map((x) => ({ x, y: 13, to: "old-town", toX: 10, toY: 10, facing: "up" as const })),
+    ...[9, 10].map((x) => ({ x, y: 2, to: "principle-hall", toX: x - 3, toY: 8, facing: "up" as const })),
+  ],
+  signs: { "1,4": "sign-solid-square", "17,9": "board-solid" },
 };
 
-export const MAPS: MapTable = { [OLD_TOWN.id]: OLD_TOWN, [DRAFTING_HALL.id]: DRAFTING_HALL, [SOLID_SQUARE.id]: SOLID_SQUARE };
+/**
+ * Provost Marlow's Principle Hall: a marble hall with a central carpet, two
+ * statues of the scales and a bench each side. Marlow stands at the head of the
+ * carpet; the carpet end (p, bottom row) warps back to the plaza.
+ */
+export const PRINCIPLE_HALL: MapDef = {
+  id: "principle-hall",
+  name: "Principle Hall",
+  rows: PRINCIPLE_HALL_ROWS,
+  solid: "WVKBUn",
+  npcs: [{ id: "marlow", name: "Provost Isolde Marlow", x: 6, y: 3, facing: "down", dialogue: "marlow-intro" }],
+  warps: [6, 7].map((x) => ({ x, y: 9, to: "solid-square", toX: x + 3, toY: 3, facing: "down" as const })),
+  signs: {},
+};
 
-export const MAP_LEGENDS = { [OLD_TOWN.id]: OLD_TOWN_LEGEND, [DRAFTING_HALL.id]: HALL_LEGEND, [SOLID_SQUARE.id]: SOLID_SQUARE_LEGEND };
+export const MAPS: MapTable = { [OLD_TOWN.id]: OLD_TOWN, [DRAFTING_HALL.id]: DRAFTING_HALL, [SOLID_SQUARE.id]: SOLID_SQUARE, [PRINCIPLE_HALL.id]: PRINCIPLE_HALL };
+
+export const MAP_LEGENDS = { [OLD_TOWN.id]: OLD_TOWN_LEGEND, [DRAFTING_HALL.id]: HALL_LEGEND, [SOLID_SQUARE.id]: SOLID_SQUARE_LEGEND, [PRINCIPLE_HALL.id]: PRINCIPLE_HALL_LEGEND };
 
 export const START = { map: "old-town", x: 9, y: 4, facing: "up" } as const;

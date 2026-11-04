@@ -85,3 +85,25 @@ export const SOLID_SQUARE_ROWS: readonly string[] = [
 
 /** A sample of SOLID Square for art review: the Principle Hall, the fountain plaza, statues and lamps. */
 export const SOLID_SQUARE_SCENE = composeScene(SOLID_SQUARE_TILES, "solid-square-scene", SOLID_SQUARE_ROWS, SOLID_SQUARE_LEGEND);
+
+export const PRINCIPLE_HALL_LEGEND: Legend = {
+  P: ["plaza"], p: ["path"], W: ["stone-wall"], V: ["window"], K: ["column"], B: ["banner"],
+  U: ["plaza", "statue"], n: ["plaza", "bench"],
+};
+
+/** Principle Hall rows, shared by the scene and the map: a carpet runs from the door mat to the Provost's dais. */
+export const PRINCIPLE_HALL_ROWS: readonly string[] = [
+  "WVWWBWWWWBWWVW",
+  "KWWKWWWWWWKWWK",
+  "PPPPPPppPPPPPP",
+  "PUPPPPppPPPPUP",
+  "PPPPPPppPPPPPP",
+  "PnPPPPppPPPPnP",
+  "PPPPPPppPPPPPP",
+  "PPPPPPppPPPPPP",
+  "PPPPPPppPPPPPP",
+  "PPPPPPppPPPPPP",
+];
+
+/** The Principle Hall interior for art review. */
+export const PRINCIPLE_HALL_SCENE = composeScene(SOLID_SQUARE_TILES, "principle-hall-scene", PRINCIPLE_HALL_ROWS, PRINCIPLE_HALL_LEGEND);

@@ -62,9 +62,17 @@ describe("SOLID Square", () => {
     p = step(MAPS, p, "down").state; // turn to face the gate
     expect(step(MAPS, p, "down")).toMatchObject({ kind: "warped", state: { map: "old-town", x: 10, y: 10 } });
   });
-  it("blocks the Principle Hall door with a readable notice, and the fountain with water", () => {
-    expect(facingTarget(MAPS, { map: "solid-square", x: 9, y: 3, facing: "up" })).toEqual({ kind: "sign", dialogue: "door-principle-hall" });
-    expect(step(MAPS, { map: "solid-square", x: 9, y: 3, facing: "up" }, "up").kind).toBe("blocked");
+  it("opens the Principle Hall arch as a warp and returns to the plaza", () => {
+    let p: PlayerState = { map: "solid-square", x: 9, y: 3, facing: "up" };
+    const r = step(MAPS, p, "up");
+    expect(r).toMatchObject({ kind: "warped", state: { map: "principle-hall", x: 6, y: 8 } });
+    p = (r as { state: PlayerState }).state;
+    for (let i = 0; i < 4; i++) p = step(MAPS, p, "up").state;
+    expect(p).toMatchObject({ map: "principle-hall", x: 6, y: 4 });
+    expect(facingTarget(MAPS, p)).toMatchObject({ kind: "npc", npc: { id: "marlow" } });
+    expect(step(MAPS, { map: "principle-hall", x: 7, y: 8, facing: "down" }, "down")).toMatchObject({ kind: "warped", state: { map: "solid-square", x: 10, y: 3 } });
+  });
+  it("blocks the fountain with water", () => {
     expect(step(MAPS, { map: "solid-square", x: 8, y: 5, facing: "right" }, "right").kind).toBe("blocked");
   });
 });

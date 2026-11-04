@@ -333,3 +333,11 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - CI/deploy: `gh` unavailable here; Actions quota note expired, so not confirmed.
 - Note: designated branch `claude/funny-ramanujan-xxi0o7`; pushed to it and to `main` per the run protocol.
 - Next: C4e3 (Principle Hall interior, trainer duels, master fight wired to the SOLID deck and exercises).
+
+## 2026-11-04: C4e3a Principle Hall interior
+- C4e3 split into C4e3a (done), C4e3b (Marlow master fight) and C4e3c (trainer duels). New map `principle-hall` (14x10, SOLID Square tileset: limestone wall with windows, columns, banners, marble checker floor, a flagstone aisle, two scale statues and benches). The plaza arch door (two tiles) is now a warp into the hall and the aisle end warps back; Provost Marlow stands at the head of the aisle with an original `marlow-intro` dialogue (speculative generality, stating a principle with its cost). The old "door shut" notice was removed. Scene added to `/dev/sprites`; the overworld uses the SOLID tileset for the hall.
+- Verification: `lint` (0 errors, 4 pre-existing warnings), `typecheck`, `test` (327 pass; new warp/return/NPC-facing test), `build`, `build:pages` pass. Playwright on the static export: `/dev/sprites` at 1280 and iPhone 14 (no console errors, no horizontal overflow) and a real `/play` walk Old Town -> SOLID Square -> Principle Hall (screenshots viewed: Marlow, statues, benches and banners render, header reads "Principle Hall"). I did not capture the dialogue box in-browser; the script is covered by the dialogue validation tests. `content:verify` not rerun (no content touched).
+- Known gaps: the hall is always open (no gate); Marlow only talks, the trial is C4e3b; the aisle uses the outdoor path tile rather than a carpet; no hall music.
+- CI/deploy: the Actions quota note has expired; `gh` CLI is unavailable in this environment, so Actions/Pages status was not confirmed.
+- Note: designated branch `claude/funny-ramanujan-nh5j0f`; pushed to `main` per the run protocol.
+- Next: C4e3b.

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { DRAFTING_HALL_SCENE, OLD_TOWN_SCENE, SOLID_SQUARE_SCENE, TILESETS } from "@/game/sprites/tiles";
+import { DRAFTING_HALL_SCENE, OLD_TOWN_SCENE, SOLID_SQUARE_SCENE, PRINCIPLE_HALL_SCENE, TILESETS } from "@/game/sprites/tiles";
 import { composeScene, validateTileSet } from "@/game/sprites/tiles/tileset";
 import { validateSprite } from "@/game/sprites/pixel";
 
@@ -27,7 +27,7 @@ describe("tilesets", () => {
   });
 
   it("composes scenes with animated tiles", () => {
-    for (const s of [OLD_TOWN_SCENE, DRAFTING_HALL_SCENE, SOLID_SQUARE_SCENE]) {
+    for (const s of [OLD_TOWN_SCENE, DRAFTING_HALL_SCENE, SOLID_SQUARE_SCENE, PRINCIPLE_HALL_SCENE]) {
       expect(validateSprite(s)).toEqual([]);
       expect(new Set(s.anims.idle.map((f) => f.join())).size).toBeGreaterThan(1);
       expect(s.w % 16).toBe(0);

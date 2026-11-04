@@ -81,10 +81,23 @@ export const SCRIPTS: Readonly<Record<string, DialogueScript>> = {
     start: "a",
     nodes: { a: { text: "NOTICE: A rule used without its trade-off is a superstition. Read the lessons, then argue with them. -- The Pillar Society" } },
   },
-  "door-principle-hall": {
-    id: "door-principle-hall",
+  "marlow-intro": {
+    id: "marlow-intro",
     start: "a",
-    nodes: { a: { text: "The Principle Hall's door is shut. A card reads: \"Master on rounds. Come back when your refactors are tidy.\"" } },
+    nodes: {
+      a: { speaker: "Provost Marlow", text: "Five gems on my staff, one per principle. Every one has a price when you over-apply it, and the price is where most candidates stumble.", next: "q" },
+      q: {
+        speaker: "Provost Marlow",
+        text: "A colleague wraps every class in an interface 'for flexibility' and has one implementation of each. Which principle did they honour?",
+        choices: [
+          { text: "Dependency Inversion, so it is fine.", next: "no" },
+          { text: "None. That is speculative generality; add the seam when a second implementation or a test double is real.", next: "yes", set: ["marlow-yagni"] },
+        ],
+      },
+      no: { speaker: "Provost Marlow", text: "An abstraction with no second user is cost without benefit: more files, more indirection, the same coupling. Principles justify seams; they do not demand them.", next: "bye" },
+      yes: { speaker: "Provost Marlow", text: "Well said. In an interview, say the principle and its cost in the same breath. That is the senior signal.", next: "bye" },
+      bye: { speaker: "Provost Marlow", text: "My formal trial is not ready yet. Train on the cards and the refactor drills, then return." },
+    },
   },
   "board-patterns": {
     id: "board-patterns",
