@@ -16,6 +16,9 @@ import { meta as abstractFactoryFamily } from "./abstract-factory-family/meta";
 import { meta as prototypeClone } from "./prototype-clone/meta";
 import { meta as singletonMeyers } from "./singleton-meyers/meta";
 import { meta as poolLease } from "./pool-lease/meta";
+import { meta as adapterPayments } from "./adapter-payments/meta";
+import { meta as bridgeRenderer } from "./bridge-renderer/meta";
+import { meta as compositeFs } from "./composite-fs/meta";
 
 export const EXERCISE_META: Record<string, ExerciseMeta> = {
   "file-handle": fileHandle,
@@ -33,4 +36,7 @@ export const EXERCISE_META: Record<string, ExerciseMeta> = {
   "prototype-clone": prototypeClone,
   "singleton-meyers": singletonMeyers,
   "pool-lease": poolLease,
+  "adapter-payments": adapterPayments,
+  "bridge-renderer": bridgeRenderer,
+  "composite-fs": compositeFs,
 };

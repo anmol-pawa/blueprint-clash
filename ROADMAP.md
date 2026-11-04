@@ -99,7 +99,10 @@ Work top to bottom: take the **first unchecked box**, and split big boxes into r
 - [ ] C6. **Structural Bridges** (L4): Patternling art for 7, lessons, cards, 7 exercises, a gym. Split below.
   - [x] C6a. 41-card Structural Bridges deck (`content/cards/structural-bridges.ts`, 9 predict cards proven natively), registered as `?deck=structural-bridges`.
   - [x] C6b. Lessons (Adapter, Bridge, Composite, Decorator, Facade, Flyweight, Proxy) with smell, C++ structure, when not to use it, over-application cost.
-  - [ ] C6c. Seven judged exercises as `content:verify` packages with wrong solutions (split in 3 runs).
+  - [ ] C6c. Seven judged exercises as `content:verify` packages with wrong solutions. Split below.
+    - [x] C6c1. `adapter-payments` (legacy bank behind a gateway), `bridge-renderer` (shapes x renderers, runtime switch) and `composite-fs` (files and folders).
+    - [ ] C6c2. `decorator-stream` (stackable wrappers, order matters) and `facade-checkout` (one entry point over subsystems).
+    - [ ] C6c3. `flyweight-glyphs` (shared immutable state) and `proxy-cache` (lazy/caching proxy with the same interface).
   - [ ] C6d. Bridges art: 7 Patternling sprites (Axolink, Bridgeback, Fractree, Shellcrab, Facadeon, Flytile, Proxifox), tileset, backdrop.
   - [ ] C6e. Bridges map, trainers, pattern duels, hall, master and badge.
 - [ ] C7. **Behavioural Theatre** (L5): split across runs (Patternling art for 11 patterns, lessons, cards, 11 exercises, a gym).

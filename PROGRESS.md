@@ -465,3 +465,12 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - CI/deploy: `gh` unavailable here; the Actions quota note has expired, so status was not confirmed.
 - Note: pushed to `main` per the run protocol; the designated branch `claude/funny-ramanujan-2ffozu` is fast-forwarded to match.
 - Next: C6c (seven judged exercises, 3 runs).
+
+## 2026-11-04: C6c1 Bridges exercises: adapter, bridge, composite
+- C6c split into C6c1 (done), C6c2 (decorator, facade) and C6c3 (flyweight, proxy). Three new full packages (api.h, prompt, starter, reference, tests, meta with hint ladder): **adapter-payments** (cents/`std::string`/enum over a vendor `LegacyBank` with dollars/C-string/codes; holds the vendor by reference; impossible requests never reach the bank), **bridge-renderer** (`Shape` x `Renderer` with SVG and text backends, runtime `setRenderer`, `Drawing::useRenderer`, tests use a test-local backend to prove shapes depend only on the interface), **composite-fs** (`File`/`Directory`, recursive size/count/render, path `find`, duplicate/null/self rejection).
+- 12 known-wrong solutions in total (4 each), each rejected for the documented tests: integer division, vendor copied by value, all failures declined, bank called on invalid input; set-renderer ignored, open rectangle outline, move ignored, retarget first shape only; shallow size, shallow find, duplicates allowed, leaf `find` matches anything.
+- Caught while writing: a test indexing past the end of a vector crashed the binary and hid later test results for a wrong solution; guarded with `ASSERT_EQ(size)`.
+- Verification: `content:verify` for the three exercises (15 pass: reference accepted, Senior Review clean, starter not accepted, all wrongs rejected), `lint` (0 errors, 8 pre-existing warnings), `typecheck`, `test` (400 pass), `build`, `build:pages` pass. No visual change, so no screenshots.
+- Known gaps: the exercises are registered in the metadata registry but not yet offered by an in-game screen; `content:verify` for the other exercises not rerun.
+- CI/deploy: `gh` is unavailable here, so Actions/Pages status was not confirmed.
+- Next: C6c2 (decorator-stream, facade-checkout).
