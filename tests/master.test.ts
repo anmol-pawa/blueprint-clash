@@ -9,6 +9,9 @@ import { MASTERS, masterIdFromSearch } from "@/content/masters";
 import { SOLID_SQUARE_DECK } from "@/content/cards/solid-square";
 import { SOLID_SQUARE_MASTER, solidSquareMasterDeck } from "@/content/masters/solid-square";
 import { SOLID_SQUARE_MASTER_SMELLS } from "@/content/masters/solid-square-smells";
+import { CREATIONAL_FOUNDRY_DECK } from "@/content/cards/creational-foundry";
+import { CREATIONAL_FOUNDRY_MASTER, creationalFoundryMasterDeck } from "@/content/masters/creational-foundry";
+import { CREATIONAL_FOUNDRY_MASTER_SMELLS } from "@/content/masters/creational-foundry-smells";
 import { loadExercise } from "@/lib/exercises/load";
 
 const mcq = (n: number, prefix = "c"): Card[] =>
@@ -199,5 +202,43 @@ describe("Provost Marlow (SOLID Square master)", () => {
     expect(s.phase).toBe("won");
     expect(earnsBadge(s)).toBe(true);
     expect(masterStars(s)).toBe(3);
+  });
+});
+
+describe("Foreman Corvo (Creational Foundry master)", () => {
+  it("has well-formed, all-smell dedicated cards that do not repeat the deck", () => {
+    expect(validateCards(CREATIONAL_FOUNDRY_MASTER_SMELLS)).toEqual([]);
+    expect(CREATIONAL_FOUNDRY_MASTER_SMELLS.every((c) => c.kind === "smell")).toBe(true);
+    const ids = new Set(CREATIONAL_FOUNDRY_DECK.map((c) => c.id));
+    expect(CREATIONAL_FOUNDRY_MASTER_SMELLS.some((c) => ids.has(c.id))).toBe(false);
+    expect(new Set(CREATIONAL_FOUNDRY_MASTER_SMELLS.map((c) => c.topic)).size).toBeGreaterThanOrEqual(5);
+  });
+
+  it("has enough cards for phase 1 and all six builds exist and are registered", async () => {
+    const d = creationalFoundryMasterDeck();
+    expect(d.cards.length).toBeGreaterThanOrEqual(15);
+    expect(validateCards(d.cards)).toEqual([]);
+    expect(d.cards.some((c) => c.kind === "smell")).toBe(false);
+    expect(CREATIONAL_FOUNDRY_MASTER.exercises).toHaveLength(6);
+    for (const e of CREATIONAL_FOUNDRY_MASTER.exercises) {
+      expect(EXERCISE_META[e], e).toBeTruthy();
+      expect(await loadExercise(e), e).toBeTruthy();
+    }
+  });
+
+  it("is selected by ?master= and uses Corvo's sprite and the Foundry badge", () => {
+    expect(masterIdFromSearch("?master=creational-foundry")).toBe("creational-foundry");
+    expect(MASTERS["creational-foundry"].visual).toBe("foreman-corvo");
+    expect(MASTERS["creational-foundry"].profile.badge).toBe("creational-foundry");
+  });
+
+  it("a full clean run earns the badge", () => {
+    let s = startMaster(creationalFoundryMasterDeck(), 3);
+    s = clear(s);
+    expect(s.phase).toBe("workshop");
+    s = submitWorkshop(s, { passed: 5, total: 5 }).state;
+    s = clear(s);
+    expect(s.phase).toBe("won");
+    expect(earnsBadge(s)).toBe(true);
   });
 });

@@ -439,3 +439,11 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Known gaps: Corvo has no master sprite or fight yet; the hall reuses the yard backdrop.
 - CI/deploy: confirmation skipped per the Actions quota note (the note says before 2026-11-01, so this is stale: `gh` is unavailable here, so Actions/Pages status was not confirmed).
 - Next: C5e3b (Corvo master fight and badge).
+
+## 2026-11-04: C5e3b Foreman Corvo master fight and Foundry Badge (closes C5)
+- New 96x96 master sprite **Foreman Corvo** (`scripts/art/corvo.mjs`; idle 4, attack 4 with a stamp that leaves identical crates, hurt 2, faint 4). `/battle/master?master=creational-foundry` now runs the three-phase fight on the Foundry backdrop: phase 1 draws the level 2+ non-smell cards of the 41-card Foundry deck, phase 2 lets the player pick one of the six judged builds, phase 3 uses six new dedicated smell cards (`content/masters/creational-foundry-smells.ts`: telescoping constructor, singleton test leakage, factory for one product (restraint), shallow clone, manual pool release, mixed abstract-factory families). Win awards the `creational-foundry` badge; Corvo's intro dialogue now points to the trial; Battle menu entry added.
+- Verification: `lint` (0 errors, 8 pre-existing warnings), `typecheck`, `test` (395 pass, including new master and sprite tests), `build`, `build:pages` pass. Playwright on the static export, desktop 1280x800 and iPhone 14: master intro and phase-1 card screen viewed (Corvo reads clearly on the Foundry backdrop), no console errors, no horizontal overflow. `content:verify` not rerun (no exercise or predict-card change; smell cards are judgment cards validated by `validateCards`).
+- Known gaps: phases 2 and 3 were not clicked through in the browser (covered by the state-machine test); smell-card correctness is reviewed by hand, not machine-checked.
+- CI/deploy: confirmation skipped; `gh` is unavailable in this environment (the Actions quota note has expired as of 2026-11-01, so this is an environment limit).
+- Note: pushed to the designated branch `claude/funny-ramanujan-lqm4xh` and to `main` per the run protocol.
+- Next: C6 (Structural Bridges).

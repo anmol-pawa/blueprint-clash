@@ -80,7 +80,7 @@ Work top to bottom: take the **first unchecked box**, and split big boxes into r
       - [x] C4e3a. Principle Hall interior map (SOLID Square tiles), the plaza arch door becomes a warp, Provost Marlow placed with an intro dialogue, scene on `/dev/sprites`, tests.
       - [x] C4e3b. Marlow master fight: SOLID master profile, master deck (cards + dedicated smell cards), phase-2 exercise choice from the 8, `/battle/master?master=solid-square`, badge saved.
       - [x] C4e3c. Trainer duels (Sable, Rook) as short concept battles with flags.
-- [ ] C5. **Creational Foundry** (L3): Patternling art for 5 patterns, lessons, cards, pattern duels, 6 exercises, a gym. Split below.
+- [x] C5. **Creational Foundry** (L3): Patternling art for 5 patterns, lessons, cards, pattern duels, 6 exercises, a gym. Split below.
   - [x] C5a. 41-card Creational Foundry deck (`content/cards/creational-foundry.ts`, 7 predict cards proven natively), registered as `?deck=creational-foundry`.
   - [x] C5b. Lessons (Factory Method, Abstract Factory, Builder, Prototype, Singleton, Object Pool, DI) with smell, C++ structure, when not to use it, over-application cost.
   - [x] C5c. Six judged exercises as `content:verify` packages with wrong solutions. Split below.
@@ -90,12 +90,12 @@ Work top to bottom: take the **first unchecked box**, and split big boxes into r
   - [x] C5d. Foundry art. Split below.
     - [x] C5d1. Patternling sprites for Forgebot, Beaverbuild, Solo, Clonewisp (64x64, idle/attack/hurt/faint/evolve), on `/dev/sprites`.
     - [x] C5d2. Foundry tileset and battle backdrop.
-  - [ ] C5e. Foundry map, trainers, pattern duels and the district master/gym. Split below.
+  - [x] C5e. Foundry map, trainers, pattern duels and the district master/gym. Split below.
     - [x] C5e1. Foundry overworld map (from `FOUNDRY_ROWS`), east gate warp from SOLID Square, sign, tileset wiring, tests.
     - [x] C5e2. Two trainers (walkers, portraits, dialogue, placement) and their pattern duels.
-    - [ ] C5e3. Foundry hall, master and badge. Split below.
+    - [x] C5e3. Foundry hall, master and badge. Split below.
       - [x] C5e3a. Foundry Hall interior map, roller-door warp, Foreman Corvo placed (walker, portrait, intro dialogue), scene on `/dev/sprites`, tests.
-      - [ ] C5e3b. Corvo master fight: 96x96 master sprite, profile, deck, phase-2 exercise choice from the 6, `/battle/master?master=creational-foundry`, badge saved, Foundry battle backdrop for deck battles.
+      - [x] C5e3b. Corvo master fight: 96x96 master sprite, profile, deck, phase-2 exercise choice from the 6, `/battle/master?master=creational-foundry`, badge saved, Foundry battle backdrop for deck battles.
 - [ ] C6. **Structural Bridges** (L4): Patternling art for 7, lessons, cards, 7 exercises, a gym.
 - [ ] C7. **Behavioural Theatre** (L5): split across runs (Patternling art for 11 patterns, lessons, cards, 11 exercises, a gym).
 - [ ] C8. **Modelling and UML lessons** (L6) and Design Board drills.

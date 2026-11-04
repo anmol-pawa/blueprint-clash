@@ -8,6 +8,7 @@ import { WorkspaceEditor } from "@/components/WorkspaceEditor";
 import { MASTERS, masterIdFromSearch } from "@/content/masters";
 import { BattleStage } from "@/game/battle/BattleStage";
 import { DRAFTLING_BACK } from "@/game/sprites/creatures/draftling-back";
+import { FOREMAN_CORVO } from "@/game/sprites/creatures/foreman-corvo";
 import { PROVOST_MARLOW } from "@/game/sprites/creatures/provost-marlow";
 import { WARDEN_VANE } from "@/game/sprites/creatures/warden-vane";
 import type { AnswerResult } from "@/lib/battle/battle";
@@ -63,7 +64,7 @@ function MasterFight({ id, choices }: { id: string; choices: ExerciseBundle[] })
   }, []);
 
   useEffect(() => {
-    const s = new BattleStage(host.current!, DRAFTLING_BACK, entry.visual === "provost-marlow" ? PROVOST_MARLOW : WARDEN_VANE, id === "solid-square" ? "solid-square" : "old-town");
+    const s = new BattleStage(host.current!, DRAFTLING_BACK, entry.visual === "foreman-corvo" ? FOREMAN_CORVO : entry.visual === "provost-marlow" ? PROVOST_MARLOW : WARDEN_VANE, id === "creational-foundry" ? "foundry" : id === "solid-square" ? "solid-square" : "old-town");
     stage.current = s;
     void s.init().then(() => s.intro()).then(() => setReady(true));
     return () => {

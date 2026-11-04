@@ -39,6 +39,7 @@ export const PLAYABLE_MODES: readonly PlayableMode[] = [
   { href: "/party", title: "Party: design battles", blurb: "Match a Patternling to a design smell; super picks befriend it." },
   { href: "/battle/master", title: "Old Town master", blurb: "Warden Hollis Vane: cards, a build and a smell boss." },
   { href: "/battle/master?master=solid-square", title: "Principle Hall master", blurb: "Provost Marlow: concepts, a refactor of your choice and a smell boss." },
+  { href: "/battle/master?master=creational-foundry", title: "Foundry master", blurb: "Foreman Corvo: concepts, one of six builds and a smell boss." },
 ];
 
 /** Routes planned in ARCH §7 that are not built yet, shown as locked tiles. */

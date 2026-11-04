@@ -96,7 +96,7 @@ export const SCRIPTS: Readonly<Record<string, DialogueScript>> = {
       },
       no: { speaker: "Foreman Corvo", text: "'Only one exists' is a lifetime fact, not a design reason. A Singleton also hides the dependency and makes every test share state. Inject it, and keep the single instance in main().", next: "bye" },
       yes: { speaker: "Foreman Corvo", text: "Good. Name the pattern, then name what it costs. Interviewers listen for the second half.", next: "bye" },
-      bye: { speaker: "Foreman Corvo", text: "My formal trial is not ready yet. Train on the Foundry cards and the exercises, then return." },
+      bye: { speaker: "Foreman Corvo", text: "When you have trained on the Foundry cards and the six build drills, take my trial from the Battle menu: Foundry master. Three phases, one badge." },
     },
   },
   "dova-intro": {
