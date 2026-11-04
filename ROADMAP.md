@@ -87,9 +87,9 @@ Work top to bottom: take the **first unchecked box**, and split big boxes into r
     - [x] C5c1. `factory-registry` (registry of factories, lazy, first registration wins) and `builder-request` (validating builder, immutable value, case-insensitive headers).
     - [x] C5c2. `abstract-factory-family` (a family of products that must match) and `prototype-clone` (`unique_ptr` clone with deep copy).
     - [x] C5c3. `singleton-meyers` (thread-safe Meyers singleton plus the injected alternative) and `pool-lease` (RAII object pool).
-  - [ ] C5d. Foundry art. Split below.
+  - [x] C5d. Foundry art. Split below.
     - [x] C5d1. Patternling sprites for Forgebot, Beaverbuild, Solo, Clonewisp (64x64, idle/attack/hurt/faint/evolve), on `/dev/sprites`.
-    - [ ] C5d2. Foundry tileset and battle backdrop.
+    - [x] C5d2. Foundry tileset and battle backdrop (`game/sprites/tiles/foundry.ts`, `FOUNDRY_SCENE`, battle backdrop in `BattleStage`).
   - [ ] C5e. Foundry map, trainers, pattern duels and the district master/gym.
 - [ ] C6. **Structural Bridges** (L4): Patternling art for 7, lessons, cards, 7 exercises, a gym.
 - [ ] C7. **Behavioural Theatre** (L5): split across runs (Patternling art for 11 patterns, lessons, cards, 11 exercises, a gym).

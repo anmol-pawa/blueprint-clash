@@ -406,3 +406,10 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Known gaps: no back sprites yet for the party views; Forgebot's hammer is small; Clonewisp's echo outline is noisy when dithered.
 - CI/deploy: `gh` unavailable here; not confirmed.
 - Next: C5d2 (Foundry tileset and backdrop).
+
+## 2026-11-04: C5d2 Foundry tileset and battle backdrop (closes C5d)
+- The art was committed by the previous run (9e657ed) but the box and log were not updated; this run verified it and did the bookkeeping. `scripts/art/foundry-tiles.mjs` generates the Foundry tileset (steel plates, brick wall with furnaces and gears, lava channel, conveyor, crates, anvil, pipes, chimneys, lamps); `FOUNDRY_SCENE` (20x12) is on `/dev/sprites`, and `BattleStage` has a Foundry battle backdrop.
+- Verification: `lint` (0 errors, 8 warnings, one an unused `IRON` constant in the tile script), `typecheck`, `test` (368 pass), `build`, `build:pages` pass. Playwright on `/dev/sprites` at desktop and iPhone 14: no console errors, no horizontal overflow; the Foundry scene crop was reviewed and is coherent and legible.
+- Known gaps: the battle backdrop was not screenshotted in a live battle (no Foundry battle route until C5e); an unused `IRON` constant should be removed.
+- CI/deploy: `gh` unavailable here; not confirmed. Pushed to the designated branch `claude/funny-ramanujan-f9c2ht` (the session instructions forbid other branches), not `main`, so the Pages deploy will not run until it is merged.
+- Next: C5e (Foundry map, trainers, pattern duels, district master/gym).
