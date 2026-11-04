@@ -447,3 +447,12 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - CI/deploy: confirmation skipped; `gh` is unavailable in this environment (the Actions quota note has expired as of 2026-11-01, so this is an environment limit).
 - Note: pushed to the designated branch `claude/funny-ramanujan-lqm4xh` and to `main` per the run protocol.
 - Next: C6 (Structural Bridges).
+
+## 2026-11-04: C6a Structural Bridges deck
+- C6 split into C6a (done), C6b (lessons), C6c (7 exercises), C6d (art), C6e (map, trainers, hall, master). New 41-card deck `content/cards/structural-bridges.ts` covering Adapter, Bridge, Composite, Decorator, Facade, Flyweight, Proxy plus cross-pattern judgement (Decorator vs Proxy vs Adapter, over-engineering in a 45-minute round): 9 predict, mcq, pattern and smell cards, levels 1-3, each with a trade-off explanation. Registered as `?deck=structural-bridges` (borrows the marble-hall backdrop until C6d).
+- Verification: `content:verify` for the new deck (all 9 predict cards compiled and run natively, output matches; `validateCards` clean), `lint` (0 errors, 8 pre-existing warnings), `typecheck`, `test` (396 pass, incl. the new deck-registry test), `build`, `build:pages` pass. No visual change, so no screenshots.
+- Caught while writing: a first decorator-order card was wrong by hand (an Upper/Bracket pair gives the same result either order); replaced by a Cut3/Bracket pair and proven natively.
+- Known gaps: deck not yet linked from lessons or a master; smell/mcq correctness reviewed by hand.
+- CI/deploy: `gh` unavailable here; Actions/Pages status not confirmed.
+- Note: pushed to the designated branch `claude/funny-ramanujan-f42xvc` and to `main` per the run protocol.
+- Next: C6b (Structural Bridges lessons).
