@@ -474,3 +474,12 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Known gaps: the exercises are registered in the metadata registry but not yet offered by an in-game screen; `content:verify` for the other exercises not rerun.
 - CI/deploy: `gh` is unavailable here, so Actions/Pages status was not confirmed.
 - Next: C6c2 (decorator-stream, facade-checkout).
+
+## 2026-11-04: C6c2 Bridges exercises: decorator, facade
+- Two new full packages (api.h, prompt, starter, reference, tests, meta with hint ladder). **decorator-stream**: `Upper`/`Truncate`/`Bracket`/`Counting` writers over a `Writer` interface (with `flush`), each owning its inner writer via `unique_ptr` through a shared decorator base; tests prove the wrapping order is the caller's choice (`[ab` vs `[abc]`), flush reaches the innermost writer and the whole chain is destroyed once. **facade-checkout**: a `Checkout` facade over `Inventory`/`Payments`/`Shipping`/`Mailer` held by reference; tests use call-logging fakes to prove the order (validate, reserve, charge, ship, email), the compensation (release on decline), no email on failure and that subsystems stay usable directly.
+- 9 known-wrong solutions (4 + 5): no flush forward, truncate off by one, bracket skips empty, leaks inner; no release on decline, charge before reserve, skips validation, emails on decline, charges unit price only. Each is rejected for the documented tests.
+- Caught while writing: my first three-layer decorator expectation was wrong by hand (`HELL` instead of `[HEL`); the native judge caught it before the reference was accepted.
+- Verification: `content:verify` for both exercises (10 pass: reference accepted, Senior Review clean, starter not accepted, all wrongs rejected), `lint` (0 errors, 8 pre-existing warnings), `typecheck`, `test` (402 pass), `build`, `build:pages` pass. No visual change, so no screenshots.
+- Known gaps: exercises are in the metadata registry but not yet offered by an in-game screen; `content:verify` for the other exercises not rerun.
+- CI/deploy: `gh` is unavailable here, so Actions/Pages status was not confirmed.
+- Next: C6c3 (flyweight-glyphs, proxy-cache).

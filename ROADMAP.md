@@ -101,7 +101,7 @@ Work top to bottom: take the **first unchecked box**, and split big boxes into r
   - [x] C6b. Lessons (Adapter, Bridge, Composite, Decorator, Facade, Flyweight, Proxy) with smell, C++ structure, when not to use it, over-application cost.
   - [ ] C6c. Seven judged exercises as `content:verify` packages with wrong solutions. Split below.
     - [x] C6c1. `adapter-payments` (legacy bank behind a gateway), `bridge-renderer` (shapes x renderers, runtime switch) and `composite-fs` (files and folders).
-    - [ ] C6c2. `decorator-stream` (stackable wrappers, order matters) and `facade-checkout` (one entry point over subsystems).
+    - [x] C6c2. `decorator-stream` (stackable wrappers, order matters) and `facade-checkout` (one entry point over subsystems).
     - [ ] C6c3. `flyweight-glyphs` (shared immutable state) and `proxy-cache` (lazy/caching proxy with the same interface).
   - [ ] C6d. Bridges art: 7 Patternling sprites (Axolink, Bridgeback, Fractree, Shellcrab, Facadeon, Flytile, Proxifox), tileset, backdrop.
   - [ ] C6e. Bridges map, trainers, pattern duels, hall, master and badge.

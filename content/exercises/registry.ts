@@ -19,6 +19,8 @@ import { meta as poolLease } from "./pool-lease/meta";
 import { meta as adapterPayments } from "./adapter-payments/meta";
 import { meta as bridgeRenderer } from "./bridge-renderer/meta";
 import { meta as compositeFs } from "./composite-fs/meta";
+import { meta as decoratorStream } from "./decorator-stream/meta";
+import { meta as facadeCheckout } from "./facade-checkout/meta";
 
 export const EXERCISE_META: Record<string, ExerciseMeta> = {
   "file-handle": fileHandle,
@@ -39,4 +41,6 @@ export const EXERCISE_META: Record<string, ExerciseMeta> = {
   "adapter-payments": adapterPayments,
   "bridge-renderer": bridgeRenderer,
   "composite-fs": compositeFs,
+  "decorator-stream": decoratorStream,
+  "facade-checkout": facadeCheckout,
 };
