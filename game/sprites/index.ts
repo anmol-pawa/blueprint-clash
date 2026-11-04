@@ -11,6 +11,10 @@ import { FORGEBOT } from "./creatures/forgebot";
 import { BEAVERBUILD } from "./creatures/beaverbuild";
 import { SOLO } from "./creatures/solo";
 import { CLONEWISP } from "./creatures/clonewisp";
+import { AXOLINK } from "./creatures/axolink";
+import { BRIDGEBACK } from "./creatures/bridgeback";
+import { FRACTREE } from "./creatures/fractree";
+import { SHELLCRAB } from "./creatures/shellcrab";
 
 /** Every creature sprite, in review order (shown on /dev/sprites). */
-export const SPRITES: readonly SpriteDef[] = [DRAFTLING, DRAFTLING_BACK, ARCHITECT, ARCHITECT_BACK, ROUGH_DRAFT, FORGEBOT, BEAVERBUILD, SOLO, CLONEWISP, WARDEN_VANE, PROVOST_MARLOW, FOREMAN_CORVO];
+export const SPRITES: readonly SpriteDef[] = [DRAFTLING, DRAFTLING_BACK, ARCHITECT, ARCHITECT_BACK, ROUGH_DRAFT, FORGEBOT, BEAVERBUILD, SOLO, CLONEWISP, AXOLINK, BRIDGEBACK, FRACTREE, SHELLCRAB, WARDEN_VANE, PROVOST_MARLOW, FOREMAN_CORVO];
