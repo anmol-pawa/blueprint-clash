@@ -195,4 +195,17 @@ describe("SOLID Square trainers", () => {
       expect(PORTRAITS.some((p) => p.id === `${id}-portrait`)).toBe(true);
     }
   });
+
+describe("Foundry Hall", () => {
+  it("opens the roller door as a warp, reaches Corvo, and returns to the yard", () => {
+    let p: PlayerState = { map: "foundry", x: 9, y: 3, facing: "up" };
+    const r = step(MAPS, p, "up");
+    expect(r).toMatchObject({ kind: "warped", state: { map: "foundry-hall", x: 6, y: 8 } });
+    p = (r as { state: PlayerState }).state;
+    for (let i = 0; i < 4; i++) p = step(MAPS, p, "up").state;
+    expect(p).toMatchObject({ map: "foundry-hall", x: 6, y: 4 });
+    expect(facingTarget(MAPS, p)).toMatchObject({ kind: "npc", npc: { id: "corvo" } });
+    expect(step(MAPS, { map: "foundry-hall", x: 7, y: 8, facing: "down" }, "down")).toMatchObject({ kind: "warped", state: { map: "foundry", x: 10, y: 3 } });
+  });
+});
 });

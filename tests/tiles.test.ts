@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { DRAFTING_HALL_SCENE, OLD_TOWN_SCENE, SOLID_SQUARE_SCENE, PRINCIPLE_HALL_SCENE, FOUNDRY_SCENE, FOUNDRY_ROWS, FOUNDRY_LEGEND, FOUNDRY_TILES, TILESETS } from "@/game/sprites/tiles";
+import { DRAFTING_HALL_SCENE, OLD_TOWN_SCENE, SOLID_SQUARE_SCENE, PRINCIPLE_HALL_SCENE, FOUNDRY_SCENE, FOUNDRY_HALL_SCENE, FOUNDRY_HALL_ROWS, FOUNDRY_ROWS, FOUNDRY_LEGEND, FOUNDRY_TILES, TILESETS } from "@/game/sprites/tiles";
 import { composeScene, validateTileSet } from "@/game/sprites/tiles/tileset";
 import { validateSprite } from "@/game/sprites/pixel";
 
@@ -31,10 +31,12 @@ describe("tilesets", () => {
     expect(new Set(FOUNDRY_ROWS.map((r) => r.length)).size).toBe(1);
     for (const r of FOUNDRY_ROWS) for (const ch of r) expect(FOUNDRY_LEGEND[ch]).toBeDefined();
     expect(FOUNDRY_TILES.tiles.conveyor).toHaveLength(4);
+    expect(new Set(FOUNDRY_HALL_ROWS.map((r) => r.length)).size).toBe(1);
+    for (const r of FOUNDRY_HALL_ROWS) for (const ch of r) expect(FOUNDRY_LEGEND[ch]).toBeDefined();
   });
 
   it("composes scenes with animated tiles", () => {
-    for (const s of [OLD_TOWN_SCENE, DRAFTING_HALL_SCENE, SOLID_SQUARE_SCENE, PRINCIPLE_HALL_SCENE, FOUNDRY_SCENE]) {
+    for (const s of [OLD_TOWN_SCENE, DRAFTING_HALL_SCENE, SOLID_SQUARE_SCENE, PRINCIPLE_HALL_SCENE, FOUNDRY_SCENE, FOUNDRY_HALL_SCENE]) {
       expect(validateSprite(s)).toEqual([]);
       expect(new Set(s.anims.idle.map((f) => f.join())).size).toBeGreaterThan(1);
       expect(s.w % 16).toBe(0);

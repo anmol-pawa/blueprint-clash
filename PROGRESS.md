@@ -431,3 +431,11 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - CI/deploy: `gh` unavailable here; Actions/Pages status not confirmed.
 - Note: designated branch `claude/funny-ramanujan-ssak4a`; pushed to it and to `main` per the run protocol.
 - Next: C5e3 (Foundry hall interior, master, `/battle/master?master=creational-foundry`, badge).
+
+## 2026-11-04: C5e3a Foundry Hall interior and Foreman Corvo
+- C5e3 split into C5e3a (done) and C5e3b (master fight, badge). New `FOUNDRY_HALL` map (14x10, `FOUNDRY_HALL_ROWS` in the Foundry tileset: brick wall with furnaces and gears, anvils and crates, a conveyor running to the Foreman's bay). The middle roller door of the yard (x=9-10, y=2) is now a warp in; the conveyor end warps back out. **Foreman Corvo** (forest-green coveralls, grey crop, square glasses, pencil behind the ear) has a 24x32 walker and 48x48 portrait from `scripts/art/characters.mjs`, wired into `OverworldGame` and `PlayClient`, with a `corvo-intro` dialogue (trade-off question: why a Singleton HTTP client instead of injecting one; says the trial is not ready yet).
+- Tests: round trip yard to hall to Corvo and back; hall rows and legend checks (385 pass).
+- Verification: `lint` (0 errors, 8 pre-existing warnings), `typecheck`, `test`, `build`, `build:pages` pass. Playwright on the static export, desktop 1280x800 and iPhone 14: `/dev/sprites` has no console errors and no horizontal overflow; the hall scene was viewed and reads clearly. `content:verify` not rerun (no content change). The in-game walk-in was covered by the unit test, not a screenshot.
+- Known gaps: Corvo has no master sprite or fight yet; the hall reuses the yard backdrop.
+- CI/deploy: confirmation skipped per the Actions quota note (the note says before 2026-11-01, so this is stale: `gh` is unavailable here, so Actions/Pages status was not confirmed).
+- Next: C5e3b (Corvo master fight and badge).

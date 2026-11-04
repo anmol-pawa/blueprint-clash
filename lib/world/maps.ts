@@ -1,4 +1,5 @@
 import {
+  FOUNDRY_HALL_ROWS,
   FOUNDRY_LEGEND,
   FOUNDRY_ROWS,
   HALL_LEGEND,
@@ -107,8 +108,8 @@ export const PRINCIPLE_HALL: MapDef = {
 /**
  * Creational Foundry: a works front with furnaces and roller doors, a conveyor
  * of finished products and a molten channel (impassable) across the yard. The
- * west gate (two tiles) returns to SOLID Square. The roller doors are scenery
- * until the Foundry hall opens (C5e3).
+ * west gate (two tiles) returns to SOLID Square. The middle roller door (two
+ * tiles) is a warp into the Foundry Hall.
  */
 export const FOUNDRY: MapDef = {
   id: "foundry",
@@ -119,12 +120,30 @@ export const FOUNDRY: MapDef = {
     { id: "dova", name: "Dova Kiln", x: 9, y: 6, facing: "up", dialogue: "dova-intro" },
     { id: "bram", name: "Bram Cask", x: 14, y: 8, facing: "left", dialogue: "bram-intro" },
   ],
-  warps: [5, 6].map((y) => ({ x: 0, y, to: "solid-square", toX: 18, toY: y - 2, facing: "left" as const })),
+  warps: [
+    ...[5, 6].map((y) => ({ x: 0, y, to: "solid-square", toX: 18, toY: y - 2, facing: "left" as const })),
+    ...[9, 10].map((x) => ({ x, y: 2, to: "foundry-hall", toX: x - 3, toY: 8, facing: "up" as const })),
+  ],
   signs: { "1,4": "sign-foundry" },
 };
 
-export const MAPS: MapTable = { [OLD_TOWN.id]: OLD_TOWN, [DRAFTING_HALL.id]: DRAFTING_HALL, [SOLID_SQUARE.id]: SOLID_SQUARE, [PRINCIPLE_HALL.id]: PRINCIPLE_HALL, [FOUNDRY.id]: FOUNDRY };
+/**
+ * Foreman Corvo's Foundry Hall: a brick works floor with a conveyor "carpet"
+ * from the roller door to the Foreman's bay, an anvil and a furnace each side.
+ * The conveyor end (bottom row) warps back to the yard.
+ */
+export const FOUNDRY_HALL: MapDef = {
+  id: "foundry-hall",
+  name: "Foundry Hall",
+  rows: FOUNDRY_HALL_ROWS,
+  solid: "BWGeFxa",
+  npcs: [{ id: "corvo", name: "Foreman Corvo", x: 6, y: 3, facing: "down", dialogue: "corvo-intro" }],
+  warps: [6, 7].map((x) => ({ x, y: 9, to: "foundry", toX: x + 3, toY: 3, facing: "down" as const })),
+  signs: {},
+};
 
-export const MAP_LEGENDS = { [OLD_TOWN.id]: OLD_TOWN_LEGEND, [DRAFTING_HALL.id]: HALL_LEGEND, [SOLID_SQUARE.id]: SOLID_SQUARE_LEGEND, [PRINCIPLE_HALL.id]: PRINCIPLE_HALL_LEGEND, [FOUNDRY.id]: FOUNDRY_LEGEND };
+export const MAPS: MapTable = { [OLD_TOWN.id]: OLD_TOWN, [DRAFTING_HALL.id]: DRAFTING_HALL, [SOLID_SQUARE.id]: SOLID_SQUARE, [PRINCIPLE_HALL.id]: PRINCIPLE_HALL, [FOUNDRY.id]: FOUNDRY, [FOUNDRY_HALL.id]: FOUNDRY_HALL };
+
+export const MAP_LEGENDS = { [OLD_TOWN.id]: OLD_TOWN_LEGEND, [DRAFTING_HALL.id]: HALL_LEGEND, [SOLID_SQUARE.id]: SOLID_SQUARE_LEGEND, [PRINCIPLE_HALL.id]: PRINCIPLE_HALL_LEGEND, [FOUNDRY.id]: FOUNDRY_LEGEND, [FOUNDRY_HALL.id]: FOUNDRY_LEGEND };
 
 export const START = { map: "old-town", x: 9, y: 4, facing: "up" } as const;

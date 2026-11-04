@@ -135,3 +135,20 @@ export const FOUNDRY_ROWS: readonly string[] = [
 
 /** A sample of the Creational Foundry for art review: furnaces, smokestacks, a conveyor of finished products, molten metal. */
 export const FOUNDRY_SCENE = composeScene(FOUNDRY_TILES, "foundry-scene", FOUNDRY_ROWS, FOUNDRY_LEGEND);
+
+/** Foundry Hall rows, shared by the scene and the map: a conveyor runs from the roller door to the Foreman's bay. */
+export const FOUNDRY_HALL_ROWS: readonly string[] = [
+  "BWBBeBBBBeBBWB",
+  "GFBGBBBBBBGBFG",
+  "ppppppvvpppppp",
+  "pappppvvppppap",
+  "ppppppvvpppppp",
+  "pxppppvvppppxp",
+  "ppppppvvpppppp",
+  "ppppppvvpppppp",
+  "ppppppvvpppppp",
+  "ppppppvvpppppp",
+];
+
+/** The Foundry Hall interior for art review. */
+export const FOUNDRY_HALL_SCENE = composeScene(FOUNDRY_TILES, "foundry-hall-scene", FOUNDRY_HALL_ROWS, FOUNDRY_LEGEND);

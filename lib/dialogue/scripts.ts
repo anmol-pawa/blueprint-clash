@@ -81,6 +81,24 @@ export const SCRIPTS: Readonly<Record<string, DialogueScript>> = {
       bye: { speaker: "Rook Ferris", text: "Fight me from the Battle menu: Rook Ferris duel. I will bring a fake clock." },
     },
   },
+  "corvo-intro": {
+    id: "corvo-intro",
+    start: "a",
+    nodes: {
+      a: { speaker: "Foreman Corvo", text: "Every pattern on this floor is a tool for one job: deciding who builds, and who knows how it was built. Pick the wrong tool and you pay in tests you cannot write.", next: "q" },
+      q: {
+        speaker: "Foreman Corvo",
+        text: "Your service needs one HTTP client with a base URL and retries. A teammate suggests a Singleton. What do you ask first?",
+        choices: [
+          { text: "Nothing. One client, so a Singleton is the obvious fit.", next: "no" },
+          { text: "Why can't it be created once at startup and passed in? A global hides the dependency and blocks test doubles.", next: "yes", set: ["corvo-singleton"] },
+        ],
+      },
+      no: { speaker: "Foreman Corvo", text: "'Only one exists' is a lifetime fact, not a design reason. A Singleton also hides the dependency and makes every test share state. Inject it, and keep the single instance in main().", next: "bye" },
+      yes: { speaker: "Foreman Corvo", text: "Good. Name the pattern, then name what it costs. Interviewers listen for the second half.", next: "bye" },
+      bye: { speaker: "Foreman Corvo", text: "My formal trial is not ready yet. Train on the Foundry cards and the exercises, then return." },
+    },
+  },
   "dova-intro": {
     id: "dova-intro",
     start: "a",

@@ -93,7 +93,9 @@ Work top to bottom: take the **first unchecked box**, and split big boxes into r
   - [ ] C5e. Foundry map, trainers, pattern duels and the district master/gym. Split below.
     - [x] C5e1. Foundry overworld map (from `FOUNDRY_ROWS`), east gate warp from SOLID Square, sign, tileset wiring, tests.
     - [x] C5e2. Two trainers (walkers, portraits, dialogue, placement) and their pattern duels.
-    - [ ] C5e3. Foundry hall interior, master (96x96 sprite, profile, deck, exercise choice), `/battle/master?master=creational-foundry`, badge.
+    - [ ] C5e3. Foundry hall, master and badge. Split below.
+      - [x] C5e3a. Foundry Hall interior map, roller-door warp, Foreman Corvo placed (walker, portrait, intro dialogue), scene on `/dev/sprites`, tests.
+      - [ ] C5e3b. Corvo master fight: 96x96 master sprite, profile, deck, phase-2 exercise choice from the 6, `/battle/master?master=creational-foundry`, badge saved, Foundry battle backdrop for deck battles.
 - [ ] C6. **Structural Bridges** (L4): Patternling art for 7, lessons, cards, 7 exercises, a gym.
 - [ ] C7. **Behavioural Theatre** (L5): split across runs (Patternling art for 11 patterns, lessons, cards, 11 exercises, a gym).
 - [ ] C8. **Modelling and UML lessons** (L6) and Design Board drills.
