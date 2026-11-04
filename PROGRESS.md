@@ -456,3 +456,11 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - CI/deploy: `gh` unavailable here; Actions/Pages status not confirmed.
 - Note: pushed to the designated branch `claude/funny-ramanujan-f42xvc` and to `main` per the run protocol.
 - Next: C6b (Structural Bridges lessons).
+
+## 2026-11-04: C6b Structural Bridges lessons
+- Added `content/lessons/structural-bridges.ts`: seven L4 lessons (Adapter, Bridge, Composite, Decorator, Facade, Flyweight, Proxy), each with intro (incl. neighbouring-pattern distinctions), smell, a before/after C++ pair, refactor notes with trade-off, interview signal and over-application cost. Registered in `registry.ts`; card topics `L4.*` map to the C6a deck.
+- Verification: every before/after was compiled with `g++ -std=c++17 -Wall -Wextra` (no warnings) and outputs recorded from the run; `content:verify` (lesson suite 21 pass: outputs match, every `after` Senior-Review clean), `lint` (0 errors, 8 pre-existing warnings), `typecheck`, `test` (397 pass), `build`, `build:pages` pass. Playwright on the built `out/` at 1280x800 and iPhone 14: `/learn/` and `/learn/flyweight/` styled correctly, no console errors, no horizontal overflow.
+- Known gaps: lessons not yet linked from a gym/master (C6e); no per-lesson card launcher beyond the existing topic mapping.
+- CI/deploy: `gh` unavailable here; Actions/Pages status not confirmed.
+- Note: pushed to the designated branch `claude/funny-ramanujan-0a7x7m` (main in this clone is stale history-only merges; the branch carries the real tip).
+- Next: C6c (seven judged exercises, split into 3 runs).
