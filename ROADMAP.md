@@ -82,7 +82,7 @@ Work top to bottom: take the **first unchecked box**, and split big boxes into r
       - [x] C4e3c. Trainer duels (Sable, Rook) as short concept battles with flags.
 - [ ] C5. **Creational Foundry** (L3): Patternling art for 5 patterns, lessons, cards, pattern duels, 6 exercises, a gym. Split below.
   - [x] C5a. 41-card Creational Foundry deck (`content/cards/creational-foundry.ts`, 7 predict cards proven natively), registered as `?deck=creational-foundry`.
-  - [ ] C5b. Lessons (Factory Method, Abstract Factory, Builder, Prototype, Singleton, Object Pool, DI) with smell, C++ structure, when not to use it, over-application cost.
+  - [x] C5b. Lessons (Factory Method, Abstract Factory, Builder, Prototype, Singleton, Object Pool, DI) with smell, C++ structure, when not to use it, over-application cost.
   - [ ] C5c. Six judged exercises (factory registry, abstract factory family, fluent builder with validation, prototype clone with `unique_ptr`, thread-safe Meyers singleton + DI alternative, RAII object pool) as `content:verify` packages with wrong solutions.
   - [ ] C5d. Patternling art for Forgebot, Beaverbuild, Solo, Clonewisp (64x64, idle/attack/hurt/faint), a Foundry tileset and backdrop.
   - [ ] C5e. Foundry map, trainers, pattern duels and the district master/gym.

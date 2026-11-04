@@ -365,3 +365,12 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - CI/deploy: Actions quota note expired; `gh` CLI is unavailable here, so status was not confirmed.
 - Note: designated branch `claude/funny-ramanujan-dgoa36`; pushed to it and to `main` per the run protocol.
 - Next: C5b (lessons).
+
+## 2026-11-04: C5b Creational Foundry lessons
+- New `content/lessons/creational-foundry.ts`: 7 lessons (Factory Method, Abstract Factory, Builder, Prototype, Singleton, Object Pool, DI), registered in the lesson registry and shown on `/learn` as L3. Each has a smell, a compiling before/after C++ pair with recorded output, refactor notes with the trade-off and the deciding factor, an interview signal and the cost of over-applying it. Highlights: simple factory vs Factory Method vs Abstract Factory, designated initializers vs Builder, `unique_ptr` non-covariance in `clone()`, Meyers singleton plus injecting it, RAII lease pool, composition root and ownership choices for DI.
+- `content/verify/solid-lessons.verify.ts` now covers both lesson sets: every before/after compiles natively, prints the recorded output, and every `after` is Senior Review clean. Senior Review caught a public mutable field in my first FakeNotifier, fixed.
+- Verification: `lint` (0 errors, 7 pre-existing warnings), `typecheck`, `test` (338 pass), `content:verify` (123 pass), `build`, `build:pages` pass. Playwright on the static export at 1280x800 and iPhone 14: `/learn` and `/learn/builder` viewed; no console errors, no horizontal overflow. A long inline code span clipped on iPhone and single-asterisk emphasis rendered literally; both fixed in the content.
+- Known gaps: Senior Review's parser treats a nested `class Builder;` forward declaration as a public mutable field (false positive), so the Builder lesson uses a friend `HttpRequestBuilder` instead; worth fixing in C11. The lesson markdown renderer does not support single-asterisk italics.
+- CI/deploy: the Actions quota note has expired, but `gh` is unavailable here, so Actions/Pages status was not confirmed.
+- Note: designated branch `claude/funny-ramanujan-shf88p`; pushed to it and to `main` per the run protocol.
+- Next: C5c (six judged exercises).

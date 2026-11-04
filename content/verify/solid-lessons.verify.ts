@@ -1,14 +1,17 @@
 import { describe, expect, it } from "vitest";
+import { CREATIONAL_FOUNDRY_LESSONS } from "@/content/lessons/creational-foundry";
 import { SOLID_SQUARE_LESSONS } from "@/content/lessons/solid-square";
 import { compileAndRun } from "@/lib/judge/native";
 import { validateLessons } from "@/lib/lessons/model";
 import { reviewFiles } from "@/lib/review";
 
-describe("SOLID Square lessons", () => {
+const LESSONS = [...SOLID_SQUARE_LESSONS, ...CREATIONAL_FOUNDRY_LESSONS];
+
+describe("SOLID Square and Creational Foundry lessons", () => {
   it("are well-formed", () => {
-    expect(validateLessons(SOLID_SQUARE_LESSONS)).toEqual([]);
+    expect(validateLessons(LESSONS)).toEqual([]);
   });
-  for (const l of SOLID_SQUARE_LESSONS) {
+  for (const l of LESSONS) {
     it(`${l.id}: before and after compile, print the recorded output, and after is review-clean`, async () => {
       const b = await compileAndRun(l.before);
       expect(b.ok, b.stderr).toBe(true);
