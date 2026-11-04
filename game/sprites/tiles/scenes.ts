@@ -1,4 +1,5 @@
 import { DRAFTING_HALL_TILES } from "./drafting-hall";
+import { FOUNDRY_TILES } from "./foundry";
 import { OLD_TOWN_TILES } from "./old-town";
 import { SOLID_SQUARE_TILES } from "./solid-square";
 import { type Legend, composeScene } from "./tileset";
@@ -107,3 +108,30 @@ export const PRINCIPLE_HALL_ROWS: readonly string[] = [
 
 /** The Principle Hall interior for art review. */
 export const PRINCIPLE_HALL_SCENE = composeScene(SOLID_SQUARE_TILES, "principle-hall-scene", PRINCIPLE_HALL_ROWS, PRINCIPLE_HALL_LEGEND);
+
+export const FOUNDRY_LEGEND: Legend = {
+  c: ["cinder"], C: ["cinder-2"], p: ["plate"], v: ["conveyor"], m: ["molten-channel"],
+  R: ["roof-sawtooth"], E: ["roof-eave"], S: ["roof-sawtooth", "smokestack-top"], s: ["roof-eave", "smokestack-base"],
+  B: ["brick-wall"], W: ["window"], F: ["furnace"], D: ["roller-door"], G: ["girder"], e: ["brick-wall", "gear"],
+  a: ["cinder", "anvil"], x: ["cinder", "crate"], o: ["cinder", "barrel"], I: ["cinder", "sign"],
+  L: ["plate", "lamp-top"], M: ["plate", "lamp-base"], P: ["conveyor", "pallet"], H: ["cinder", "pipe"],
+};
+
+/** Creational Foundry rows, shared by the scene and the map: the works front, a conveyor of products, a molten channel. */
+export const FOUNDRY_ROWS: readonly string[] = [
+  "ccRRSRRRRRRRRRRSRRcc",
+  "ccEEsEEEEEEEEEEsEEcc",
+  "cGBWBeBFBDDBFBeBWBGc",
+  "ccppppppppppppppppcc",
+  "cIpLpppppppppppppLpc",
+  "ccpMpvvPvvvvvPvvvMpc",
+  "ccppppppppppppppppcc",
+  "cmmmmmmmmmmmmmmmmmmc",
+  "ccppoppxxppppppappcc",
+  "CcccccccCcccccccCccc",
+  "cccxcccccHHHHcccocCc",
+  "cCcccccCcccccccccccc",
+];
+
+/** A sample of the Creational Foundry for art review: furnaces, smokestacks, a conveyor of finished products, molten metal. */
+export const FOUNDRY_SCENE = composeScene(FOUNDRY_TILES, "foundry-scene", FOUNDRY_ROWS, FOUNDRY_LEGEND);

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { DRAFTING_HALL_SCENE, OLD_TOWN_SCENE, SOLID_SQUARE_SCENE, PRINCIPLE_HALL_SCENE, TILESETS } from "@/game/sprites/tiles";
+import { DRAFTING_HALL_SCENE, OLD_TOWN_SCENE, SOLID_SQUARE_SCENE, PRINCIPLE_HALL_SCENE, FOUNDRY_SCENE, FOUNDRY_ROWS, FOUNDRY_LEGEND, FOUNDRY_TILES, TILESETS } from "@/game/sprites/tiles";
 import { composeScene, validateTileSet } from "@/game/sprites/tiles/tileset";
 import { validateSprite } from "@/game/sprites/pixel";
 
@@ -26,8 +26,15 @@ describe("tilesets", () => {
     for (const n of ["grass", "path", "plaza", "water", "brick-wall", "roof-slate"]) for (const f of t[n]) expect(f.join("")).not.toContain(".");
   });
 
+  it("Foundry ground tiles are opaque and its map rows are rectangular and fully mapped", () => {
+    for (const n of ["cinder", "cinder-2", "plate", "conveyor", "molten-channel", "brick-wall", "roof-sawtooth"]) for (const f of FOUNDRY_TILES.tiles[n]) expect(f.join("")).not.toContain(".");
+    expect(new Set(FOUNDRY_ROWS.map((r) => r.length)).size).toBe(1);
+    for (const r of FOUNDRY_ROWS) for (const ch of r) expect(FOUNDRY_LEGEND[ch]).toBeDefined();
+    expect(FOUNDRY_TILES.tiles.conveyor).toHaveLength(4);
+  });
+
   it("composes scenes with animated tiles", () => {
-    for (const s of [OLD_TOWN_SCENE, DRAFTING_HALL_SCENE, SOLID_SQUARE_SCENE, PRINCIPLE_HALL_SCENE]) {
+    for (const s of [OLD_TOWN_SCENE, DRAFTING_HALL_SCENE, SOLID_SQUARE_SCENE, PRINCIPLE_HALL_SCENE, FOUNDRY_SCENE]) {
       expect(validateSprite(s)).toEqual([]);
       expect(new Set(s.anims.idle.map((f) => f.join())).size).toBeGreaterThan(1);
       expect(s.w % 16).toBe(0);

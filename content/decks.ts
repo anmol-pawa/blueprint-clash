@@ -18,7 +18,7 @@ export const DECKS: readonly Deck[] = [
   { id: "old-town", title: "Old Town", district: "Foundations: classes, polymorphism, composition", cards: OLD_TOWN_DECK, scene: "old-town" },
   { id: "solid-square", title: "SOLID Square", district: "SRP, OCP, LSP, ISP, DIP and the supporting heuristics", cards: SOLID_SQUARE_DECK, scene: "solid-square" },
   // The Creational Foundry has no backdrop of its own yet; it borrows the marble hall until C5 art lands.
-  { id: "creational-foundry", title: "Creational Foundry", district: "Factory Method, Abstract Factory, Builder, Prototype, Singleton, pools and DI", cards: CREATIONAL_FOUNDRY_DECK, scene: "solid-square" },
+  { id: "creational-foundry", title: "Creational Foundry", district: "Factory Method, Abstract Factory, Builder, Prototype, Singleton, pools and DI", cards: CREATIONAL_FOUNDRY_DECK, scene: "foundry" },
 ];
 
 export const DEFAULT_DECK_ID = "old-town";

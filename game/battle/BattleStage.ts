@@ -49,7 +49,7 @@ export class BattleStage {
     this.host.appendChild(this.app.canvas);
     this.app.canvas.style.imageRendering = "pixelated";
     this.app.stage.addChild(this.root);
-    this.root.addChild(this.scene === "solid-square" ? this.solidSquareBackdrop() : this.backdrop());
+    this.root.addChild(this.scene === "solid-square" ? this.solidSquareBackdrop() : this.scene === "foundry" ? this.foundryBackdrop() : this.backdrop());
     this.foe = new PixelSprite(this.foeDef, 1);
     this.player = new PixelSprite(this.playerDef, 1);
     this.foe.position.set(FOE_HOME.x + 140, FOE_HOME.y);
@@ -158,6 +158,55 @@ export class BattleStage {
     };
     dais(FOE_HOME.x, FOE_HOME.y - 2, 40, 9);
     dais(PLAYER_HOME.x, PLAYER_HOME.y - 2, 50, 11);
+    c.addChild(g);
+    return c;
+  }
+
+  /** Creational Foundry: a sooty brick works, glowing furnace mouths, girders and smokestacks, a conveyor and a steel plate floor. */
+  private foundryBackdrop(): Container {
+    const c = new Container();
+    const g = new Graphics();
+    // back wall: brick courses in dark red-brown
+    g.rect(0, 0, STAGE_W, 96).fill(0x4a2220);
+    for (let y = 0, row = 0; y < 96; y += 6, row++) {
+      g.rect(0, y + 5, STAGE_W, 1).fill(0x2e1514);
+      for (let x = (row % 2) * 12; x < STAGE_W; x += 24) g.rect(x, y, 1, 6).fill(0x2e1514);
+      if (row % 3 === 1) for (let x = (row * 37) % 48; x < STAGE_W; x += 48) g.rect(x + 2, y + 1, 10, 4).fill(0x5e2c28);
+    }
+    g.rect(0, 0, STAGE_W, 10).fill(0x1f2330).rect(0, 10, STAGE_W, 2).fill(0x737b92); // roof beam
+    // steel girders at the edges and between the furnaces
+    for (const gx of [0, 82, 164, 236]) {
+      g.rect(gx, 12, 10, 84).fill(0x33384a).rect(gx, 12, 2, 84).fill(0x737b92).rect(gx + 8, 12, 2, 84).fill(0x1f2330);
+      for (let y = 18; y < 96; y += 12) g.rect(gx + 3, y, 4, 2).fill(0x97a3bc);
+    }
+    // three furnace mouths with a hot orange glow
+    for (const fx of [22, 104, 186]) {
+      const w = 48, top = 30;
+      g.rect(fx - 3, top - 3, w + 6, 60).fill(0x1f2330).rect(fx, top, w, 57).fill(0x33384a);
+      g.rect(fx + 4, top + 8, w - 8, 44).fill(0x2b1d1a);
+      g.rect(fx + 6, top + 24, w - 12, 26).fill(0xa1270b).rect(fx + 10, top + 30, w - 20, 20).fill(0xf0661a).rect(fx + 16, top + 38, w - 32, 12).fill(0xffd35a);
+      g.rect(fx + 4, top + 4, w - 8, 3).fill(0x737b92); // lintel
+      for (let bx = fx + 12; bx < fx + w - 8; bx += 10) g.rect(bx, top + 8, 2, 16).fill(0x1f2330); // grate bars
+    }
+    // hanging pipe with a drip of molten metal above the foe's side
+    g.rect(0, 14, STAGE_W, 4).fill(0x737b92).rect(0, 14, STAGE_W, 1).fill(0x97a3bc).rect(0, 17, STAGE_W, 1).fill(0x1f2330);
+    // floor: steel diamond plate, darker towards the viewer, hazard stripe at the wall foot
+    g.rect(0, 96, STAGE_W, STAGE_H - 96).fill(0x67718a);
+    for (let row = 0, y = 100; y < STAGE_H; row++, y += 8) {
+      g.rect(0, y, STAGE_W, 1).fill(row > 3 ? 0x2f3646 : 0x454d5c);
+      for (let x = (row % 2) * 8; x < STAGE_W; x += 16) g.rect(x + 2, y + 3, 4, 1).fill(row > 3 ? 0x586177 : 0x97a3bc);
+    }
+    for (let x = 0; x < STAGE_W; x += 12) g.poly([x, 96, x + 6, 96, x + 3, 100, x - 3, 100]).fill(0xf0b429);
+    g.rect(0, 96, STAGE_W, 1).fill(0x17121a).rect(0, 100, STAGE_W, 1).fill(0x17121a);
+    // platforms: round steel turntables with a hazard-yellow rim
+    const turntable = (x: number, y: number, rx: number, ry: number) => {
+      g.ellipse(x, y + 3, rx, ry).fill(0x1f2330);
+      g.ellipse(x, y, rx, ry).fill(0xf0b429);
+      g.ellipse(x, y, rx - 2, ry - 1).fill(0x586177);
+      g.ellipse(x, y - 1, rx - 6, ry - 3).fill(0x97a3bc);
+    };
+    turntable(FOE_HOME.x, FOE_HOME.y - 2, 40, 9);
+    turntable(PLAYER_HOME.x, PLAYER_HOME.y - 2, 50, 11);
     c.addChild(g);
     return c;
   }
