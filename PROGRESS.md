@@ -421,3 +421,13 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Known gaps: no NPCs yet; `content:verify` not rerun (no content change).
 - CI/deploy: `gh` unavailable here; Actions/Pages status not confirmed.
 - Next: C5e2 (two Foundry trainers and pattern duels).
+
+## 2026-11-04: C5e2 Foundry trainers and pattern duels
+- Two new trainers via `scripts/art/characters.mjs` (24x32 walk cycles + 48x48 portraits with blink/talk): **Dova Kiln** (rust-orange coverall, hair bun) and **Bram Cask** (slate-blue jacket, pack, sandy hair). Placed on walkable Foundry tiles (9,6) and (14,8, south of the molten channel, reached by the east/west edge columns), with `dova-intro` and `bram-intro` dialogue (a choice each, trade-off stated: factory switch vs registry, Singleton's hidden-state cost).
+- Pattern duels: `DOVA_KILN` (Factory Method, Abstract Factory, Builder) and `BRAM_CASK` (Prototype, Singleton, Object Pool, DI) as 6-card duels from the Creational Foundry deck, reusing the existing `?trainer=` battle route, duel flags and the Battle menu list in `lib/siteInfo.ts`.
+- Tests: trainer pools/hands valid for all four trainers, dialogue points to each duel, and a flood-fill test that both Foundry NPCs are on walkable, reachable tiles with art and dialogue (380 pass).
+- Verification: `lint` (0 errors, 8 pre-existing warnings), `typecheck`, `test`, `build`, `build:pages` pass. Playwright on the static export, desktop 1280x800 and iPhone 14: walked Old Town to SOLID Square to the Foundry, viewed both trainers in the yard and Dova's dialogue with portrait; no console errors, no horizontal overflow. `content:verify` not rerun (no content packages changed).
+- Known gaps: duels use the generic battle backdrop/foe (Foundry backdrop for deck battles lands with C5e3); Dova and Bram share the walker body of the other trainers.
+- CI/deploy: `gh` unavailable here; Actions/Pages status not confirmed.
+- Note: designated branch `claude/funny-ramanujan-ssak4a`; pushed to it and to `main` per the run protocol.
+- Next: C5e3 (Foundry hall interior, master, `/battle/master?master=creational-foundry`, badge).

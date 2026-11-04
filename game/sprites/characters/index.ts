@@ -9,9 +9,13 @@ import { ROOK } from "./rook";
 import { ROOK_PORTRAIT } from "./rook-portrait";
 import { MARLOW } from "./marlow";
 import { MARLOW_PORTRAIT } from "./marlow-portrait";
+import { DOVA } from "./dova";
+import { DOVA_PORTRAIT } from "./dova-portrait";
+import { BRAM } from "./bram";
+import { BRAM_PORTRAIT } from "./bram-portrait";
 
 /** Overworld walkers: `walk-down`, `walk-up` and `walk-right` (mirror it for left), 4 frames each. */
-export const WALKERS: readonly SpriteDef[] = [PLAYER, ADA, SABLE, ROOK, MARLOW];
+export const WALKERS: readonly SpriteDef[] = [PLAYER, ADA, SABLE, ROOK, MARLOW, DOVA, BRAM];
 /** 48×48 dialogue portraits with `idle` (blinks) and `talk`. */
-export const PORTRAITS: readonly SpriteDef[] = [PLAYER_PORTRAIT, ADA_PORTRAIT, SABLE_PORTRAIT, ROOK_PORTRAIT, MARLOW_PORTRAIT];
-export { PLAYER, ADA, SABLE, ROOK, MARLOW, PLAYER_PORTRAIT, ADA_PORTRAIT, SABLE_PORTRAIT, ROOK_PORTRAIT, MARLOW_PORTRAIT };
+export const PORTRAITS: readonly SpriteDef[] = [PLAYER_PORTRAIT, ADA_PORTRAIT, SABLE_PORTRAIT, ROOK_PORTRAIT, MARLOW_PORTRAIT, DOVA_PORTRAIT, BRAM_PORTRAIT];
+export { PLAYER, ADA, SABLE, ROOK, MARLOW, DOVA, BRAM, DOVA_PORTRAIT, BRAM_PORTRAIT, PLAYER_PORTRAIT, ADA_PORTRAIT, SABLE_PORTRAIT, ROOK_PORTRAIT, MARLOW_PORTRAIT };

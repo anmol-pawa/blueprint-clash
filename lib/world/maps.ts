@@ -115,7 +115,10 @@ export const FOUNDRY: MapDef = {
   name: "Creational Foundry",
   rows: FOUNDRY_ROWS,
   solid: "RESsBWFDGeLMmvPaxoIH",
-  npcs: [],
+  npcs: [
+    { id: "dova", name: "Dova Kiln", x: 9, y: 6, facing: "up", dialogue: "dova-intro" },
+    { id: "bram", name: "Bram Cask", x: 14, y: 8, facing: "left", dialogue: "bram-intro" },
+  ],
   warps: [5, 6].map((y) => ({ x: 0, y, to: "solid-square", toX: 18, toY: y - 2, facing: "left" as const })),
   signs: { "1,4": "sign-foundry" },
 };

@@ -81,6 +81,42 @@ export const SCRIPTS: Readonly<Record<string, DialogueScript>> = {
       bye: { speaker: "Rook Ferris", text: "Fight me from the Battle menu: Rook Ferris duel. I will bring a fake clock." },
     },
   },
+  "dova-intro": {
+    id: "dova-intro",
+    start: "a",
+    nodes: {
+      a: { speaker: "Dova Kiln", text: "Every new product used to mean editing the same switch statement in six places. Somebody always missed one.", next: "q" },
+      q: {
+        speaker: "Dova Kiln",
+        text: "Where should the decision of which concrete type to build live?",
+        choices: [
+          { text: "In one place callers ask, so they depend on the abstract product only.", next: "yes", set: ["dova-factory"] },
+          { text: "At every call site, with new next to the code that uses it.", next: "no" },
+        ],
+      },
+      yes: { speaker: "Dova Kiln", text: "Right. A factory keeps the choice in one spot. A switch inside it still grows, so a registry of creators is the next step when types are added often. Do not build one for two types that never change.", next: "bye" },
+      no: { speaker: "Dova Kiln", text: "That is my six-place switch. Callers should name what they need, and one creator decides how it is made.", next: "bye" },
+      bye: { speaker: "Dova Kiln", text: "Want a duel? Battle menu: Dova Kiln duel. Six cards on factories and builders." },
+    },
+  },
+  "bram-intro": {
+    id: "bram-intro",
+    start: "a",
+    nodes: {
+      a: { speaker: "Bram Cask", text: "Our log writer was a global. Tests shared it, ran in a different order, and failed on Tuesdays.", next: "q" },
+      q: {
+        speaker: "Bram Cask",
+        text: "A Singleton guarantees one instance. What is the usual cost?",
+        choices: [
+          { text: "Hidden global state: callers reach for it, so tests and ownership get hard.", next: "yes", set: ["bram-singleton"] },
+          { text: "None. One instance is always cheaper and safer.", next: "no" },
+        ],
+      },
+      yes: { speaker: "Bram Cask", text: "Yes. If you truly need one, use a Meyers singleton, but pass it in as an interface so only the composition root knows it is single.", next: "bye" },
+      no: { speaker: "Bram Cask", text: "One instance is not free. Anyone can reach it, so every test inherits its state. Prefer to inject one object you created once.", next: "bye" },
+      bye: { speaker: "Bram Cask", text: "Duel me from the Battle menu: Bram Cask duel. Prototypes, pools, singletons and DI." },
+    },
+  },
   "board-solid": {
     id: "board-solid",
     start: "a",

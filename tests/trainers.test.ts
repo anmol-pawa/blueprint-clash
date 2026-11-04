@@ -48,5 +48,9 @@ describe("trainer duels", () => {
     expect(getTrainer("nobody")).toBeUndefined();
     expect(JSON.stringify(SCRIPTS["sable-intro"])).toContain("Sable Quill duel");
     expect(JSON.stringify(SCRIPTS["rook-intro"])).toContain("Rook Ferris duel");
+    expect(JSON.stringify(SCRIPTS["dova-intro"])).toContain("Dova Kiln duel");
+    expect(JSON.stringify(SCRIPTS["bram-intro"])).toContain("Bram Cask duel");
+    expect(getTrainer("dova-kiln")?.deckId).toBe("creational-foundry");
+    expect(duelFlag(getTrainer("bram-cask")!)).toBe("duel:bram-cask");
   });
 });

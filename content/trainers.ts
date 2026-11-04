@@ -43,7 +43,31 @@ export const ROOK_FERRIS: TrainerProfile = {
   lose: "Rook shrugs and resets the fake clock. Study the misses and rematch.",
 };
 
-export const TRAINERS: readonly TrainerProfile[] = [SABLE_QUILL, ROOK_FERRIS];
+export const DOVA_KILN: TrainerProfile = {
+  id: "dova-kiln",
+  name: "Dova Kiln",
+  deckId: "creational-foundry",
+  topics: ["L3.factory-method", "L3.abstract-factory", "L3.builder"],
+  cardCount: 6,
+  foeName: "DOVA'S MOLD",
+  intro: "Dova Kiln has a line that must make three kinds of widget and a manager who will add a fourth next month.",
+  win: "Dova hangs up her gloves. Callers ask for a thing, one place decides which: well cast.",
+  lose: "Dova scrapes the mould clean. Re-read the explanations, then pour again.",
+};
+
+export const BRAM_CASK: TrainerProfile = {
+  id: "bram-cask",
+  name: "Bram Cask",
+  deckId: "creational-foundry",
+  topics: ["L3.prototype", "L3.singleton", "L3.object-pool", "L3.di"],
+  cardCount: 6,
+  foeName: "BRAM'S CASK",
+  intro: "Bram Cask counts buffers out of a barrel and wants to know who owns what, and how many there should be.",
+  win: "Bram taps the barrel twice. One owner, one lifetime, injected: nicely done.",
+  lose: "Bram rolls the barrel back to you. Study the misses and rematch.",
+};
+
+export const TRAINERS: readonly TrainerProfile[] = [SABLE_QUILL, ROOK_FERRIS, DOVA_KILN, BRAM_CASK];
 
 /** Duel flag stored in `lessonsDone` (no save-schema change). */
 export const duelFlag = (t: TrainerProfile): string => `duel:${t.id}`;
