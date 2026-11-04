@@ -456,3 +456,12 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - CI/deploy: `gh` unavailable here; Actions/Pages status not confirmed.
 - Note: pushed to the designated branch `claude/funny-ramanujan-f42xvc` and to `main` per the run protocol.
 - Next: C6b (Structural Bridges lessons).
+
+## 2026-11-04: C6b Structural Bridges lessons
+- New `content/lessons/structural-bridges.ts`: 7 L4 lessons (Adapter, Bridge, Composite, Decorator, Facade, Flyweight, Proxy), registered and shown on `/learn`. Each has a smell, a compiling before/after C++ pair with recorded output, refactor notes with the trade-off and deciding factor, an interview signal and the cost of over-applying it. Highlights: object vs class adapter, Bridge as M+N vs M x N grid (and vs Strategy), Composite `add()` transparency vs safety, Decorator order shown with truncate/bracket (a pair where order changes the output), Facade staying thin, Flyweight as a measured optimisation with immutable `shared_ptr<const T>`, caching Proxy with the non-const interface and invalidation caveats.
+- `content/verify/solid-lessons.verify.ts` and `tests/lessons.test.ts` now cover all three lesson sets; every before/after compiles natively, prints the recorded output, and every `after` is Senior Review clean (first run).
+- Verification: `content:verify` (lessons file, 21 pass), `lint` (0 errors, 8 pre-existing warnings), `typecheck`, `test` (397 pass), `build`, `build:pages` pass. Playwright on the static export, desktop 1280x800 and iPhone 14: `/learn/proxy` viewed; no console errors, no horizontal overflow.
+- Known gaps: only the top of the lesson page was screenshotted (code blocks use the existing lesson renderer, unchanged).
+- CI/deploy: `gh` unavailable here; the Actions quota note has expired, so status was not confirmed.
+- Note: pushed to `main` per the run protocol; the designated branch `claude/funny-ramanujan-2ffozu` is fast-forwarded to match.
+- Next: C6c (seven judged exercises, 3 runs).

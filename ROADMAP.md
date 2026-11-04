@@ -98,7 +98,7 @@ Work top to bottom: take the **first unchecked box**, and split big boxes into r
       - [x] C5e3b. Corvo master fight: 96x96 master sprite, profile, deck, phase-2 exercise choice from the 6, `/battle/master?master=creational-foundry`, badge saved, Foundry battle backdrop for deck battles.
 - [ ] C6. **Structural Bridges** (L4): Patternling art for 7, lessons, cards, 7 exercises, a gym. Split below.
   - [x] C6a. 41-card Structural Bridges deck (`content/cards/structural-bridges.ts`, 9 predict cards proven natively), registered as `?deck=structural-bridges`.
-  - [ ] C6b. Lessons (Adapter, Bridge, Composite, Decorator, Facade, Flyweight, Proxy) with smell, C++ structure, when not to use it, over-application cost.
+  - [x] C6b. Lessons (Adapter, Bridge, Composite, Decorator, Facade, Flyweight, Proxy) with smell, C++ structure, when not to use it, over-application cost.
   - [ ] C6c. Seven judged exercises as `content:verify` packages with wrong solutions (split in 3 runs).
   - [ ] C6d. Bridges art: 7 Patternling sprites (Axolink, Bridgeback, Fractree, Shellcrab, Facadeon, Flytile, Proxifox), tileset, backdrop.
   - [ ] C6e. Bridges map, trainers, pattern duels, hall, master and badge.
