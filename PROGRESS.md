@@ -374,3 +374,11 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - CI/deploy: the Actions quota note has expired, but `gh` is unavailable here, so Actions/Pages status was not confirmed.
 - Note: designated branch `claude/funny-ramanujan-shf88p`; pushed to it and to `main` per the run protocol.
 - Next: C5c (six judged exercises).
+
+## 2026-11-04: C5c1 Creational exercises: factory registry and builder
+- C5c split into C5c1 (done), C5c2 and C5c3. Two new judged class exercises, 22 in total. **factory-registry** (Factory Method as a registry of `std::function` factories: lazy creation, a fresh product per call, first registration wins, sorted names, null factory result passes through; the tests register codecs the solution has never seen and count live objects and factory calls). Wrong solutions: hard-coded ladder, overwrite-on-duplicate, eager factory call at registration, unsorted names. **builder-request** (validating fluent `HttpRequestBuilder` with a friend-built immutable `HttpRequest`: URL scheme, method set, body only with POST/PUT, timeout range, case-insensitive header replace-in-place, build() as a reusable snapshot; type traits prove no public construction). Wrong solutions: public constructor, no validation, duplicate headers, GET with body.
+- Verification: `lint` (0 errors, 7 pre-existing warnings), `typecheck`, `test` (340 pass; both ids added to the structural-validity list), `content:verify` for both new exercises natively (reference accepted with a clean Senior Review, starter rejected, every wrong solution fails its documented tests), `build`, `build:pages` pass. No visual change, so no screenshots.
+- Known gaps: the exercises are not yet linked from a lesson or the Foundry master (C5e); the full `content:verify` was not rerun (nothing else changed).
+- CI/deploy: `gh` unavailable here; not confirmed.
+- Note: designated branch `claude/funny-ramanujan-ds4wf4`; pushed to it and to `main` per the run protocol.
+- Next: C5c2 (abstract-factory-family, prototype-clone).
