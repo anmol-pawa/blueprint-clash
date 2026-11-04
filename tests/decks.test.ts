@@ -13,6 +13,10 @@ describe("deck registry", () => {
     expect(deckIdFromSearch("")).toBe("old-town");
     expect(getDeck(null).id).toBe("old-town");
   });
+  it("resolves the Creational Foundry deck", () => {
+    expect(deckIdFromSearch("?deck=creational-foundry")).toBe("creational-foundry");
+    expect(getDeck("creational-foundry").cards.length).toBeGreaterThanOrEqual(36);
+  });
   it("every card has a valid answer index and at least one option", () => {
     for (const d of DECKS) for (const c of d.cards) {
       expect(c.options.length).toBeGreaterThan(1);

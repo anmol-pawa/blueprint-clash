@@ -357,3 +357,11 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - CI/deploy: the Actions quota note has expired, but `gh` is unavailable here, so status was not confirmed.
 - Note: pushed to `main` per the run protocol; the designated branch `claude/funny-ramanujan-1kk2bx` was not force-updated (force push was denied).
 - Next: C5 (Creational Foundry).
+
+## 2026-11-04: C5a Creational Foundry card deck
+- C5 split into C5a (done) to C5e (see ROADMAP). New `content/cards/creational-foundry.ts`: 41 original cards over Factory Method, Abstract Factory, Builder, Prototype, Singleton, Object Pool and DI (MCQ, pattern-to-Patternling, smell spotter, 7 predict-output cards). Each card states the trade-off: simple factory vs Factory Method, Abstract Factory's closed-to-new-product cost, Builder vs C++20 designated initialisers, `unique_ptr` breaking covariant `clone()`, Meyers singleton thread-safety covers construction only (plus the `auto c = instance()` copy trap), static-init-order, Service Locator as hidden global, pool RAII handles. Registered in `content/decks.ts` as `creational-foundry` (works with `/battle?deck=`, `/review` deck selection).
+- Verification: `lint` (0 errors, 7 pre-existing warnings), `typecheck`, `test` (337 pass; new deck-registry test), `content:verify` for the new deck (predict outputs match native g++ output, coverage test), `build`, `build:pages` pass. Playwright on the static export at 1280x800 and iPhone 14: `/battle/?deck=creational-foundry` screenshot viewed (card, options, Attack button readable), no console errors, no horizontal overflow. Did not rerun the full `content:verify` (other decks untouched).
+- Known gaps: the deck borrows the SOLID Square marble backdrop until C5d; no Foundry foes or art yet.
+- CI/deploy: Actions quota note expired; `gh` CLI is unavailable here, so status was not confirmed.
+- Note: designated branch `claude/funny-ramanujan-dgoa36`; pushed to it and to `main` per the run protocol.
+- Next: C5b (lessons).
