@@ -399,3 +399,10 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - CI/deploy: `gh` unavailable here; Actions/Pages status not confirmed.
 - Note: pushed to `main` per the run protocol.
 - Next: C5d (Foundry Patternling art).
+
+## 2026-11-04: C5d1 Foundry Patternling sprites
+- C5d split into C5d1 (done) and C5d2 (tileset, backdrop). `scripts/art/foundry.mjs` generates four 64x64 shaded, outlined sprites in `game/sprites/creatures/`, each with idle 4, attack 3, hurt 2, faint 4 (dithered dissolve) and evolve 4: **Forgebot** (steel foundry-bot, glowing furnace belly, hammer arm, smoke, a little product beside it), **Beaverbuild** (tool-belted beaver, buck teeth, paddle tail, brick stack that grows), **Solo** (one-eyed violet loner behind a padlocked fence under a single halo), **Clonewisp** (teal wisp with a half-formed dithered copy that solidifies on attack). Registered in `SPRITES`, so they appear on `/dev/sprites` and pass the existing sprite tests.
+- Verification: contact sheets reviewed as images (all frames read well, silhouettes distinct); `lint`, `typecheck`, `test`, `build`, `build:pages` run (see commit). No UI change beyond `/dev/sprites`.
+- Known gaps: no back sprites yet for the party views; Forgebot's hammer is small; Clonewisp's echo outline is noisy when dithered.
+- CI/deploy: `gh` unavailable here; not confirmed.
+- Next: C5d2 (Foundry tileset and backdrop).
