@@ -390,3 +390,12 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - CI/deploy: `gh` unavailable here; Actions/Pages status not confirmed.
 - Note: designated branch `claude/funny-ramanujan-i4naek`; pushed to it and to `main` per the run protocol.
 - Next: C5c3 (singleton-meyers, pool-lease).
+
+## 2026-11-04: C5c3 Creational exercises: Meyers singleton and object pool (closes C5c)
+- Two new judged class exercises (26 in total). **singleton-meyers** (`IdGenerator` as a Meyers singleton with private constructor and deleted copy/move, plus an `OrderService` that takes an `IdSource&` so the logic never names the singleton; tests use a fake source and the real one, and type traits prove it cannot be copied or created). Wrong solutions: copyable, `*new` per call (no singleton), service reaches for the global. **pool-lease** (`BufferPool` with a move-only RAII `Lease`: bounded, empty lease when exhausted, buffer cleared and reused on return, move/move-assign/self-move semantics, pool-outlives-lease documented). Wrong solutions: no reset, double release on move, move-assign leaks, never exhausts.
+- Design note: no thread-based tests, because the WASM judge toolchain has no threads; the thread-safety of function-local static initialisation is covered in the lesson and a comment, not by a flaky test.
+- Verification: `lint` (0 errors, 7 pre-existing warnings), `typecheck`, `test` (344 pass), `content:verify` filtered to both new exercises (10 pass: reference accepted, clean Senior Review, starter rejected, every wrong solution fails its documented tests), `build`, `build:pages` pass. No visual change, so no screenshots.
+- Known gaps: not yet linked from a lesson or the Foundry master (C5e); full `content:verify` not rerun.
+- CI/deploy: `gh` unavailable here; Actions/Pages status not confirmed.
+- Note: pushed to `main` per the run protocol.
+- Next: C5d (Foundry Patternling art).

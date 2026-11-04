@@ -3,7 +3,7 @@ import { listExercises, loadExercise } from "@/lib/exercises/load";
 import { validateExercise } from "@/lib/exercises/validate";
 import type { ExercisePackage } from "@/lib/exercises/types";
 
-const IDS = ["bank-account", "file-handle", "inventory", "stack", "counter", "temperature", "shapes", "widgets", "pricing", "roles", "variant-eval", "sink", "srp-invoice", "dip-notifier", "lsp-account", "ocp-shipping", "isp-machine", "dip-clock", "demeter-wallet", "composition-history", "factory-registry", "builder-request", "abstract-factory-family", "prototype-clone"];
+const IDS = ["bank-account", "file-handle", "inventory", "stack", "counter", "temperature", "shapes", "widgets", "pricing", "roles", "variant-eval", "sink", "srp-invoice", "dip-notifier", "lsp-account", "ocp-shipping", "isp-machine", "dip-clock", "demeter-wallet", "composition-history", "factory-registry", "builder-request", "abstract-factory-family", "prototype-clone", "singleton-meyers", "pool-lease"];
 
 describe("exercise packages", () => {
   it("ships the Old Town and SOLID Square class exercises", async () => {

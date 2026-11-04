@@ -14,6 +14,8 @@ import { meta as factoryRegistry } from "./factory-registry/meta";
 import { meta as builderRequest } from "./builder-request/meta";
 import { meta as abstractFactoryFamily } from "./abstract-factory-family/meta";
 import { meta as prototypeClone } from "./prototype-clone/meta";
+import { meta as singletonMeyers } from "./singleton-meyers/meta";
+import { meta as poolLease } from "./pool-lease/meta";
 
 export const EXERCISE_META: Record<string, ExerciseMeta> = {
   "file-handle": fileHandle,
@@ -29,4 +31,6 @@ export const EXERCISE_META: Record<string, ExerciseMeta> = {
   "builder-request": builderRequest,
   "abstract-factory-family": abstractFactoryFamily,
   "prototype-clone": prototypeClone,
+  "singleton-meyers": singletonMeyers,
+  "pool-lease": poolLease,
 };
