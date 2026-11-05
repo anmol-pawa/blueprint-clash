@@ -21,7 +21,7 @@ export const DECKS: readonly Deck[] = [
   // The Creational Foundry has no backdrop of its own yet; it borrows the marble hall until C5 art lands.
   { id: "creational-foundry", title: "Creational Foundry", district: "Factory Method, Abstract Factory, Builder, Prototype, Singleton, pools and DI", cards: CREATIONAL_FOUNDRY_DECK, scene: "foundry" },
   // The Structural Bridges have no backdrop of their own yet (C6d); the deck borrows the marble hall.
-  { id: "structural-bridges", title: "Structural Bridges", district: "Adapter, Bridge, Composite, Decorator, Facade, Flyweight and Proxy", cards: STRUCTURAL_BRIDGES_DECK, scene: "solid-square" },
+  { id: "structural-bridges", title: "Structural Bridges", district: "Adapter, Bridge, Composite, Decorator, Facade, Flyweight and Proxy", cards: STRUCTURAL_BRIDGES_DECK, scene: "bridges" },
 ];
 
 export const DEFAULT_DECK_ID = "old-town";

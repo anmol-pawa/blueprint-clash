@@ -49,7 +49,7 @@ export class BattleStage {
     this.host.appendChild(this.app.canvas);
     this.app.canvas.style.imageRendering = "pixelated";
     this.app.stage.addChild(this.root);
-    this.root.addChild(this.scene === "solid-square" ? this.solidSquareBackdrop() : this.scene === "foundry" ? this.foundryBackdrop() : this.backdrop());
+    this.root.addChild(this.scene === "solid-square" ? this.solidSquareBackdrop() : this.scene === "foundry" ? this.foundryBackdrop() : this.scene === "bridges" ? this.bridgesBackdrop() : this.backdrop());
     this.foe = new PixelSprite(this.foeDef, 1);
     this.player = new PixelSprite(this.playerDef, 1);
     this.foe.position.set(FOE_HOME.x + 140, FOE_HOME.y);
@@ -207,6 +207,55 @@ export class BattleStage {
     };
     turntable(FOE_HOME.x, FOE_HOME.y - 2, 40, 9);
     turntable(PLAYER_HOME.x, PLAYER_HOME.y - 2, 50, 11);
+    c.addChild(g);
+    return c;
+  }
+
+  /** Structural Bridges: a harbour at golden hour, a stone arch bridge and teal-roofed warehouses across the water, a plank quay floor with jetty platforms. */
+  private bridgesBackdrop(): Container {
+    const c = new Container();
+    const g = new Graphics();
+    // sky: warm bands from peach down to pale teal at the horizon
+    const sky = [0xf6c28b, 0xf3b27f, 0xe9a27d, 0xd6a08c, 0xa9b4b8, 0x8ec3c0];
+    sky.forEach((col, i) => g.rect(0, i * 16, STAGE_W, 16).fill(col));
+    g.circle(206, 60, 11).fill(0xfff1c2).circle(206, 60, 7).fill(0xffffff);
+    // far warehouses with teal roofs
+    for (const [x, w, h] of [[6, 40, 24], [52, 30, 18], [176, 44, 26], [224, 32, 20]] as const) {
+      const top = 72 - h;
+      g.rect(x, top, w, h + 4).fill(0xe0cfaa).rect(x, top + 8, w, 1).fill(0xbda985);
+      g.poly([x - 3, top, x + w + 3, top, x + w - 3, top - 8, x + 3, top - 8]).fill(0x3a8a80).rect(x - 3, top, w + 6, 2).fill(0x27534f);
+      for (let wx = x + 5; wx < x + w - 5; wx += 9) g.rect(wx, top + 12, 4, 6).fill(0x2b2a3a).rect(wx, top + 12, 4, 1).fill(0xffd35a);
+    }
+    // harbour crane silhouette
+    g.rect(160, 20, 3, 52).fill(0x33384a).rect(130, 20, 52, 3).fill(0xc4503f).rect(133, 23, 1, 18).fill(0x737b92).rect(131, 41, 5, 2).fill(0xf0b429);
+    // the arch bridge: a stone deck with three arches over the water
+    g.rect(52, 62, 152, 8).fill(0x8c96a6).rect(52, 62, 152, 2).fill(0xc0c8d6).rect(52, 70, 152, 1).fill(0x4c5563);
+    for (let x = 52; x < 204; x += 4) g.rect(x, 62, 1, 8).fill(0x737b92);
+    g.rect(52, 70, 152, 22).fill(0x6c7585);
+    for (let y = 73; y < 92; y += 5) g.rect(52, y, 152, 1).fill(0x4c5563);
+    for (const ax of [78, 128, 178]) {
+      g.ellipse(ax, 92, 17, 17).fill(0x1f2330);
+      g.ellipse(ax, 92, 14, 14).fill(0x1d4e7a);
+      g.ellipse(ax, 92, 17, 17).stroke({ width: 2, color: 0xc0c8d6 });
+    }
+    g.rect(0, 92, STAGE_W, 4).fill(0x2f78a8); // waterline strip behind the floor
+    // floor: a plank quay in perspective, darker boards towards the viewer, mooring line along the wall foot
+    g.rect(0, 96, STAGE_W, STAGE_H - 96).fill(0xb07f45);
+    for (let row = 0, y = 96; y < STAGE_H; row++, y += 8) {
+      g.rect(0, y, STAGE_W, 1).fill(row > 3 ? 0x4a301e : 0x7a5230);
+      for (let x = (row % 2) * 16; x < STAGE_W; x += 32) g.rect(x, y, 1, 8).fill(row > 3 ? 0x4a301e : 0x7a5230);
+      for (let x = (row * 13) % 32; x < STAGE_W; x += 32) g.rect(x + 4, y + 3, 2, 1).fill(row > 3 ? 0x7a5230 : 0xd2a463);
+    }
+    g.rect(0, 96, STAGE_W, 2).fill(0xc0c8d6).rect(0, 98, STAGE_W, 1).fill(0x14161f);
+    // platforms: round mooring pads with a teal rim
+    const pad = (x: number, y: number, rx: number, ry: number) => {
+      g.ellipse(x, y + 3, rx, ry).fill(0x2b1d1a);
+      g.ellipse(x, y, rx, ry).fill(0x3a8a80);
+      g.ellipse(x, y, rx - 2, ry - 1).fill(0x8c96a6);
+      g.ellipse(x, y - 1, rx - 6, ry - 3).fill(0xc0c8d6);
+    };
+    pad(FOE_HOME.x, FOE_HOME.y - 2, 40, 9);
+    pad(PLAYER_HOME.x, PLAYER_HOME.y - 2, 50, 11);
     c.addChild(g);
     return c;
   }

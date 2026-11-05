@@ -504,3 +504,11 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Verification: `lint` (0 errors, 8 pre-existing warnings), `typecheck`, `test` (439 pass), `build`, `build:pages` pass. Playwright on the static export at desktop 1280x800 and iPhone 14: `/dev/sprites` viewed (contact sheets plus page); all three read clearly, no console errors, no horizontal overflow. `content:verify` not rerun (no content change).
 - Known gaps: no back sprites for the Bridges set. CI/deploy: `gh` is unavailable in this environment, so Actions/Pages status was not confirmed.
 - Next: C6d3 (Bridges tileset and battle backdrop).
+
+## 2026-11-05: C6d3 Bridges tileset and battle backdrop (closes C6d)
+- New harbour tileset `game/sprites/tiles/bridges.ts` (generator `scripts/art/bridges-tiles.mjs`): sandstone quays, animated tidal water and quay edge, plank bridge deck with rails, stone arch arcade, wooden piles, teal-roofed warehouse with lit windows and door, harbour crane (swinging hook), bobbing boat, bollard, crates, rope coil, barrels, lamps, district sign, flag. 29 tiles, 16x16, animated water/boat/lamps/crane.
+- `BRIDGES_SCENE`/`BRIDGES_ROWS`/`BRIDGES_LEGEND` added (map rows reusable for C6e) and shown on `/dev/sprites`. New `bridges` battle scene (golden-hour harbour, far warehouses, crane, three-arch stone bridge, plank quay floor, teal mooring pads); the `structural-bridges` deck now uses it.
+- Verification: `lint` (0 errors; no new warnings), `typecheck`, `test` (443 pass, incl. new tileset and deck-scene assertions), `build`, `build:pages` pass. Playwright on the static export, desktop 1280x800 and iPhone 14: `/dev/sprites` scene and `/battle?deck=structural-bridges` viewed; legible, no console errors, no horizontal overflow. `content:verify` not rerun (no content change).
+- Known gaps: no interior (Bridges Hall) tiles yet. CI/deploy: `gh` is unavailable here, so Actions/Pages status was not confirmed.
+- Note: pushed to the designated branch `claude/funny-ramanujan-pizupa` and to `main`.
+- Next: C6e (Bridges map, trainers, pattern duels, hall, master and badge); it is large, so split it first.

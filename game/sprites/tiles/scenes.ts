@@ -1,3 +1,4 @@
+import { BRIDGES_TILES } from "./bridges";
 import { DRAFTING_HALL_TILES } from "./drafting-hall";
 import { FOUNDRY_TILES } from "./foundry";
 import { OLD_TOWN_TILES } from "./old-town";
@@ -152,3 +153,30 @@ export const FOUNDRY_HALL_ROWS: readonly string[] = [
 
 /** The Foundry Hall interior for art review. */
 export const FOUNDRY_HALL_SCENE = composeScene(FOUNDRY_TILES, "foundry-hall-scene", FOUNDRY_HALL_ROWS, FOUNDRY_LEGEND);
+
+export const BRIDGES_LEGEND: Legend = {
+  q: ["quay"], Q: ["quay-2"], w: ["water"], e: ["quay-edge"], p: ["piles"], o: ["boat"],
+  R: ["roof-teal"], E: ["roof-eave"], B: ["warehouse-wall"], W: ["window"], D: ["door"],
+  N: ["bridge-deck", "rail-n"], S: ["bridge-deck", "rail-s"], l: ["arch-left"], c: ["arch-crown"], r: ["arch-right"],
+  C: ["quay", "crane-top"], K: ["quay", "crane-base"], L: ["quay", "lamp-top"], M: ["quay", "lamp-base"],
+  X: ["quay", "crate"], O: ["quay", "barrel"], Y: ["quay", "bollard"], T: ["quay", "ropes"], I: ["quay", "sign"], F: ["quay", "flag"],
+};
+
+/** Structural Bridges rows, shared by the scene and the map: a warehouse bank, a channel crossed by a plank bridge, a crane, a harbour arcade. */
+export const BRIDGES_ROWS: readonly string[] = [
+  "qRRRRRRqwwwwqqQqqqqq",
+  "qEEEEEEqwwwwqqqqCqqq",
+  "qBWBDBWqwwwwqqqqKqqq",
+  "qqqqqqqqwwwwqLqqqqqq",
+  "qFqXOqqqwwwwqMqqYqIq",
+  "qqqqqqqqNNNNqqqqqqqq",
+  "qqqqqqqqSSSSqqqqqqqq",
+  "qqTqqQqqwpwpqqqXqqqq",
+  "eeeeeeeewwwweeeeeeee",
+  "wwwwwwwwwwwwwwwwwwww",
+  "wwowwwwwwwwwwwwwowww",
+  "lcrlcrlcrlcrlcrlcrlc",
+];
+
+/** A sample of the Structural Bridges harbour for art review: warehouses, a plank bridge over a tidal channel, a crane, boats, an arcade. */
+export const BRIDGES_SCENE = composeScene(BRIDGES_TILES, "bridges-scene", BRIDGES_ROWS, BRIDGES_LEGEND);
