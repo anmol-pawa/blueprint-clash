@@ -61,6 +61,12 @@ const CORVO = {
   palette: { ...base, 1: "#6f4a34", 2: "#a87654", 3: "#d9a67c", h: "#4a4d52", H: "#8a8f98", j: "#cfd3da", c: "#1f4a30", C: "#2f7a4a", D: "#6fc07c", p: "#2a2d33", P: "#444850" },
 };
 
+// Structural Bridges master: Harbourmaster Vale, long navy coat with brass accents, silver-streaked braid pinned up.
+const VALE = {
+  id: "vale", name: "Harbourmaster Vale", kind: "trainer", skirt: true, pack: false, strap: false, bun: true, glasses: false, pencil: false, lapel: true,
+  palette: { ...base, 1: "#7a4a32", 2: "#ac7452", 3: "#d9a47c", h: "#20242e", H: "#5a6270", j: "#c8ced8", c: "#17305a", C: "#2b5a9a", D: "#6fa2dc", p: "#1c2230", P: "#323c52" },
+};
+
 /** A limb as a slanted quad from (tx, ty) to (bx, by), `w` wide. */
 function limb(L, tx, ty, bx, by, w, ramp, lit = 0.6) {
   const h = w / 2;
@@ -219,12 +225,12 @@ function portraitSprite(o) {
   };
 }
 
-for (const o of [PLAYER, ADA, SABLE, ROOK, MARLOW, DOVA, BRAM, CORVO, NERYS, TOBIN]) {
+for (const o of [PLAYER, ADA, SABLE, ROOK, MARLOW, DOVA, BRAM, CORVO, NERYS, TOBIN, VALE]) {
   emit(`game/sprites/characters/${o.id}.ts`, {
     id: o.id, name: o.name, w: 24, h: 32, palette: o.palette, script: "characters",
     fps: { idle: 3, "walk-down": 8, "walk-up": 8, "walk-right": 8 },
     anims: walkerSprite(o),
-    comment: o.id === "sable" ? "Sable Quill, SOLID Square trainer: moss-green long coat and a short dark bob." : o.id === "marlow" ? "Provost Marlow, SOLID Square master: burgundy robe, silver bun and round gold glasses." : o.id === "corvo" ? "Foreman Corvo, Creational Foundry master: forest-green coveralls, grey crop, square glasses and a pencil behind the ear." : o.id === "dova" ? "Dova Kiln, Creational Foundry trainer: rust-orange coverall and a hair bun." : o.id === "nerys" ? "Nerys Quay, Structural Bridges trainer: yellow oilskin coat, dark hair and a clipboard pencil." : o.id === "tobin" ? "Tobin Reef, Structural Bridges trainer: sea-green knit, round glasses and a rope-coil pack." : o.id === "bram" ? "Bram Cask, Creational Foundry trainer: slate-blue work jacket, a pack and cropped sandy hair." : o.id === "rook" ? "Rook Ferris, SOLID Square trainer: ochre vest, round glasses and a tool belt." : o.kind === "ada" ? "Ada Lintwell, overworld walker: plum cardigan, long skirt, round glasses and a silver bun." : "The player, overworld walker: teal jacket, a blueprint tube on the back and a tool belt.",
+    comment: o.id === "sable" ? "Sable Quill, SOLID Square trainer: moss-green long coat and a short dark bob." : o.id === "marlow" ? "Provost Marlow, SOLID Square master: burgundy robe, silver bun and round gold glasses." : o.id === "vale" ? "Harbourmaster Vale, Structural Bridges master: long navy coat, pinned silver-streaked braid." : o.id === "corvo" ? "Foreman Corvo, Creational Foundry master: forest-green coveralls, grey crop, square glasses and a pencil behind the ear." : o.id === "dova" ? "Dova Kiln, Creational Foundry trainer: rust-orange coverall and a hair bun." : o.id === "nerys" ? "Nerys Quay, Structural Bridges trainer: yellow oilskin coat, dark hair and a clipboard pencil." : o.id === "tobin" ? "Tobin Reef, Structural Bridges trainer: sea-green knit, round glasses and a rope-coil pack." : o.id === "bram" ? "Bram Cask, Creational Foundry trainer: slate-blue work jacket, a pack and cropped sandy hair." : o.id === "rook" ? "Rook Ferris, SOLID Square trainer: ochre vest, round glasses and a tool belt." : o.kind === "ada" ? "Ada Lintwell, overworld walker: plum cardigan, long skirt, round glasses and a silver bun." : "The player, overworld walker: teal jacket, a blueprint tube on the back and a tool belt.",
   });
   emit(`game/sprites/characters/${o.id}-portrait.ts`, {
     id: `${o.id}-portrait`, name: `${o.name} (portrait)`, w: 48, h: 48, palette: o.palette, script: "characters",

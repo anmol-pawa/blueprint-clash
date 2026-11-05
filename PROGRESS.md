@@ -527,3 +527,11 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Known gaps: no Bridges hall yet; the warehouse door is scenery until C6e3.
 - CI/deploy: `gh` is unavailable here, so Actions/Pages status was not confirmed.
 - Next: C6e3 (Bridges hall, master and badge; split first).
+
+## 2026-11-05: C6e3a Bridges Hall and Harbourmaster Vale placed
+- New `bridges-hall` map (14x10; plank floor, stone runner, crates, barrels, windows, flag) with a warp from the warehouse door (4,2) on the Bridges map and a two-tile return at the bottom of the runner. Added `BRIDGES_HALL_ROWS`/`BRIDGES_HALL_SCENE` (legend gained `d` plain plank) and the scene on `/dev/sprites`.
+- Harbourmaster Vale (master): 24x32 walker and 48x48 portrait via `scripts/art/characters.mjs` (long navy coat, pinned silver-streaked braid), `vale-intro` dialogue (Adapter vs editing every call site, with the cost stated), wired into overworld and portraits. Other characters regenerated unchanged.
+- Tests: door warp, reaching and facing Vale, return warp, walker/portrait/dialogue exist; the old "warehouse blocked" test now checks the walls beside the door.
+- Verification: `lint` (0 errors, 8 pre-existing warnings), `typecheck`, `test` (461 pass), `build`, `build:pages` pass. Playwright on the Pages export at desktop and iPhone 14: `/dev/sprites` hall scene viewed, no console errors, no horizontal overflow. `content:verify` not rerun (no content change).
+- Known gaps: Vale's formal fight is not ready (dialogue says so). CI/deploy not checked (Actions quota note ended 2026-11-01, but `gh` is unavailable here).
+- Next: C6e3b (Vale master fight and badge).

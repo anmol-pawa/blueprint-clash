@@ -3,6 +3,7 @@ import { advance, availableChoices, currentNode, startDialogue, validateScript, 
 import { SCRIPTS } from "@/lib/dialogue/scripts";
 import { MAPS, MAP_LEGENDS, START } from "@/lib/world/maps";
 import { type PlayerState, facingTarget, faceNpcToward, step, validateMaps, walkable } from "@/lib/world/world";
+import { PORTRAITS, WALKERS } from "@/game/sprites/characters";
 
 const start: PlayerState = { ...START };
 
@@ -120,8 +121,9 @@ describe("Structural Bridges", () => {
     expect(step(MAPS, { map: "bridges", x: 7, y: 4, facing: "right" }, "right").kind).toBe("blocked");
     expect(step(MAPS, { map: "bridges", x: 7, y: 7, facing: "right" }, "right").kind).toBe("blocked");
   });
-  it("blocks the warehouse and reads the sign", () => {
-    expect(step(MAPS, { map: "bridges", x: 4, y: 3, facing: "up" }, "up").kind).toBe("blocked");
+  it("blocks the warehouse walls and reads the sign", () => {
+    expect(step(MAPS, { map: "bridges", x: 3, y: 3, facing: "up" }, "up").kind).toBe("blocked");
+    expect(step(MAPS, { map: "bridges", x: 5, y: 3, facing: "up" }, "up").kind).toBe("blocked");
     expect(facingTarget(MAPS, { map: "bridges", x: 18, y: 5, facing: "up" })).toMatchObject({ kind: "sign" });
   });
 });
@@ -265,4 +267,23 @@ describe("Foundry Hall", () => {
     expect(step(MAPS, { map: "foundry-hall", x: 7, y: 8, facing: "down" }, "down")).toMatchObject({ kind: "warped", state: { map: "foundry", x: 10, y: 3 } });
   });
 });
+});
+
+describe("Bridges Hall", () => {
+  it("opens the warehouse door as a warp, reaches Harbourmaster Vale, and returns to the quay", () => {
+    let p: PlayerState = { map: "bridges", x: 4, y: 3, facing: "up" };
+    const r = step(MAPS, p, "up");
+    expect(r).toMatchObject({ kind: "warped", state: { map: "bridges-hall", x: 6, y: 8 } });
+    p = (r as { state: PlayerState }).state;
+    for (let i = 0; i < 4; i++) p = step(MAPS, p, "up").state;
+    expect(p).toMatchObject({ map: "bridges-hall", x: 6, y: 4 });
+    expect(facingTarget(MAPS, p)).toMatchObject({ kind: "npc", npc: { id: "vale" } });
+    expect(step(MAPS, { map: "bridges-hall", x: 7, y: 8, facing: "down" }, "down")).toMatchObject({ kind: "warped", state: { map: "bridges", x: 4, y: 3 } });
+  });
+
+  it("has Vale's walker, portrait and dialogue", () => {
+    expect(WALKERS.some((w) => w.id === "vale")).toBe(true);
+    expect(PORTRAITS.some((q) => q.id === "vale-portrait")).toBe(true);
+    expect(SCRIPTS["vale-intro"]).toBeDefined();
+  });
 });

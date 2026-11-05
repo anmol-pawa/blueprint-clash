@@ -157,7 +157,7 @@ export const FOUNDRY_HALL_SCENE = composeScene(FOUNDRY_TILES, "foundry-hall-scen
 export const BRIDGES_LEGEND: Legend = {
   q: ["quay"], Q: ["quay-2"], w: ["water"], e: ["quay-edge"], p: ["piles"], o: ["boat"],
   R: ["roof-teal"], E: ["roof-eave"], B: ["warehouse-wall"], W: ["window"], D: ["door"],
-  N: ["bridge-deck", "rail-n"], S: ["bridge-deck", "rail-s"], l: ["arch-left"], c: ["arch-crown"], r: ["arch-right"],
+  N: ["bridge-deck", "rail-n"], S: ["bridge-deck", "rail-s"], d: ["bridge-deck"], l: ["arch-left"], c: ["arch-crown"], r: ["arch-right"],
   C: ["quay", "crane-top"], K: ["quay", "crane-base"], L: ["quay", "lamp-top"], M: ["quay", "lamp-base"],
   X: ["quay", "crate"], O: ["quay", "barrel"], Y: ["quay", "bollard"], T: ["quay", "ropes"], I: ["quay", "sign"], F: ["quay", "flag"],
 };
@@ -179,4 +179,21 @@ export const BRIDGES_ROWS: readonly string[] = [
 ];
 
 /** A sample of the Structural Bridges harbour for art review: warehouses, a plank bridge over a tidal channel, a crane, boats, an arcade. */
+/** Bridges Hall rows: a plank floor with a stone runner from the door to the Harbourmaster's berth. */
+export const BRIDGES_HALL_ROWS: readonly string[] = [
+  "BWBBBWBBWBBBWB",
+  "BBBBFBBBBBBBBB",
+  "ddddddqqdddddd",
+  "dXdddqqqqdddOd",
+  "ddddddqqdddddd",
+  "dTdddddddddddd",
+  "ddddddqqdddddd",
+  "dOdddddddddXdd",
+  "ddddddqqdddddd",
+  "ddddddqqdddddd",
+];
+
 export const BRIDGES_SCENE = composeScene(BRIDGES_TILES, "bridges-scene", BRIDGES_ROWS, BRIDGES_LEGEND);
+
+/** The Bridges Hall interior for art review. */
+export const BRIDGES_HALL_SCENE = composeScene(BRIDGES_TILES, "bridges-hall-scene", BRIDGES_HALL_ROWS, BRIDGES_LEGEND);

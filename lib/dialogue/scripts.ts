@@ -176,6 +176,24 @@ export const SCRIPTS: Readonly<Record<string, DialogueScript>> = {
       bye: { speaker: "Tobin Reef", text: "Duel me from the Battle menu: Tobin Reef duel. Composite, decorator, bridge and flyweight." },
     },
   },
+  "vale-intro": {
+    id: "vale-intro",
+    start: "a",
+    nodes: {
+      a: { speaker: "Harbourmaster Vale", text: "Nothing on this quay is built for its own sake. Every structure here exists to let two things that were never designed together work side by side.", next: "q" },
+      q: {
+        speaker: "Harbourmaster Vale",
+        text: "A new payment vendor has a different interface from the one your code already calls. You own the call sites, not the vendor. What do you reach for?",
+        choices: [
+          { text: "Edit every call site to speak the vendor's dialect.", next: "no" },
+          { text: "An Adapter: keep our interface, translate inside one class, and keep the vendor out of the rest of the code.", next: "yes", set: ["vale-adapter"] },
+        ],
+      },
+      no: { speaker: "Harbourmaster Vale", text: "Now the vendor's quirks live in forty files, and the next vendor costs forty more edits. Translate in one place instead.", next: "bye" },
+      yes: { speaker: "Harbourmaster Vale", text: "Good. Say the cost too: one more class, and a lowest-common-denominator interface if the two models differ a lot.", next: "bye" },
+      bye: { speaker: "Harbourmaster Vale", text: "My formal trial is not ready yet. Train on the Bridges cards and the exercises, then return." },
+    },
+  },
   "board-solid": {
     id: "board-solid",
     start: "a",
