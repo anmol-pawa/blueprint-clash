@@ -4,12 +4,12 @@ import { AudioToggle } from "@/components/AudioToggle";
 import { sfx, startMusic, stopMusic } from "@/game/audio/synth";
 import { SpriteCanvas } from "@/components/sprites/SpriteCanvas";
 import { OverworldGame, type OverworldView } from "@/game/overworld/OverworldGame";
-import { ADA_PORTRAIT, PLAYER_PORTRAIT, MARLOW_PORTRAIT, ROOK_PORTRAIT, SABLE_PORTRAIT, DOVA_PORTRAIT, BRAM_PORTRAIT, CORVO_PORTRAIT } from "@/game/sprites/characters";
+import { ADA_PORTRAIT, PLAYER_PORTRAIT, MARLOW_PORTRAIT, ROOK_PORTRAIT, SABLE_PORTRAIT, DOVA_PORTRAIT, BRAM_PORTRAIT, CORVO_PORTRAIT, MAREN_PORTRAIT, PIKE_PORTRAIT } from "@/game/sprites/characters";
 import { availableChoices, currentNode, visibleText } from "@/lib/dialogue/dialogue";
 import type { Dir } from "@/lib/world/world";
 
 const KEYS: Record<string, Dir> = { ArrowUp: "up", ArrowDown: "down", ArrowLeft: "left", ArrowRight: "right", w: "up", s: "down", a: "left", d: "right", W: "up", S: "down", A: "left", D: "right" };
-const PORTRAITS = { ada: ADA_PORTRAIT, player: PLAYER_PORTRAIT, sable: SABLE_PORTRAIT, rook: ROOK_PORTRAIT, marlow: MARLOW_PORTRAIT, dova: DOVA_PORTRAIT, bram: BRAM_PORTRAIT, corvo: CORVO_PORTRAIT } as const;
+const PORTRAITS = { ada: ADA_PORTRAIT, player: PLAYER_PORTRAIT, sable: SABLE_PORTRAIT, rook: ROOK_PORTRAIT, marlow: MARLOW_PORTRAIT, dova: DOVA_PORTRAIT, bram: BRAM_PORTRAIT, corvo: CORVO_PORTRAIT, maren: MAREN_PORTRAIT, pike: PIKE_PORTRAIT } as const;
 
 /** Typewriter text; the parent remounts it (via key) for each line. */
 function Typewriter({ text }: { text: string }) {

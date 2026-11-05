@@ -211,6 +211,38 @@ describe("Creational Foundry trainers", () => {
   });
 });
 
+describe("Structural Bridges trainers", () => {
+  it("places Maren and Pike on reachable walkable tiles on opposite banks, with art and dialogue", async () => {
+    const { WALKERS, PORTRAITS } = await import("@/game/sprites/characters");
+    const m = MAPS["bridges"];
+    const seen = new Set<string>(["1,3"]);
+    const q: [number, number][] = [[1, 3]];
+    while (q.length) {
+      const [x, y] = q.pop()!;
+      for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+        const nx = x + dx, ny = y + dy, k = `${nx},${ny}`;
+        if (ny < 0 || ny >= m.rows.length || nx < 0 || nx >= m.rows[0].length || seen.has(k) || m.solid.includes(m.rows[ny][nx])) continue;
+        seen.add(k);
+        q.push([nx, ny]);
+      }
+    }
+    for (const id of ["maren", "pike"]) {
+      const npc = m.npcs.find((n) => n.id === id);
+      expect(npc, id).toBeDefined();
+      expect(m.solid.includes(m.rows[npc!.y][npc!.x])).toBe(false);
+      expect(WALKERS.some((w) => w.id === id)).toBe(true);
+      expect(PORTRAITS.some((p) => p.id === `${id}-portrait`)).toBe(true);
+      expect(SCRIPTS[npc!.dialogue]).toBeDefined();
+      expect([[1, 0], [-1, 0], [0, 1], [0, -1]].some(([dx, dy]) => seen.has(`${npc!.x + dx},${npc!.y + dy}`)), id).toBe(true);
+    }
+    // The east bank is reachable only across the bridge, and the bridge stays passable past the trainers.
+    expect(seen.has("19,3")).toBe(true);
+    expect(m.npcs.every((n) => !(n.y === 5 && n.x >= 8 && n.x <= 11))).toBe(true);
+    expect(m.npcs.find((n) => n.id === "maren")!.x).toBeLessThan(8);
+    expect(m.npcs.find((n) => n.id === "pike")!.x).toBeGreaterThan(11);
+  });
+});
+
 describe("SOLID Square trainers", () => {
   it("places Sable and Rook on walkable plaza tiles with art and dialogue", async () => {
     const { WALKERS, PORTRAITS } = await import("@/game/sprites/characters");

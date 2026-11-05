@@ -67,7 +67,31 @@ export const BRAM_CASK: TrainerProfile = {
   lose: "Bram rolls the barrel back to you. Study the misses and rematch.",
 };
 
-export const TRAINERS: readonly TrainerProfile[] = [SABLE_QUILL, ROOK_FERRIS, DOVA_KILN, BRAM_CASK];
+export const MAREN_DOCKETT: TrainerProfile = {
+  id: "maren-dockett",
+  name: "Maren Dockett",
+  deckId: "structural-bridges",
+  topics: ["L4.adapter", "L4.bridge", "L4.composite", "L4.decorator"],
+  cardCount: 6,
+  foeName: "MAREN'S MOORING",
+  intro: "Maren Dockett has a vendor library she cannot edit, two kinds of shape and two kinds of canvas, and a folder tree to total up.",
+  win: "Maren coils the rope. Wrap what you cannot change, split what varies twice, treat the part like the whole: well tied.",
+  lose: "Maren shakes out the line. Re-read the explanations, then cast off again.",
+};
+
+export const PIKE_HARLOW: TrainerProfile = {
+  id: "pike-harlow",
+  name: "Pike Harlow",
+  deckId: "structural-bridges",
+  topics: ["L4.facade", "L4.flyweight", "L4.proxy", "L4.compare"],
+  cardCount: 6,
+  foeName: "PIKE'S GATEHOUSE",
+  intro: "Pike Harlow runs the harbour gate: one door for visitors, a shared stock of identical crates and a stand-in that fetches the real thing on demand.",
+  win: "Pike lifts the barrier. One front door, shared state, same interface: you read the harbour well.",
+  lose: "Pike lowers the barrier. Study the misses, then come back to the gate.",
+};
+
+export const TRAINERS: readonly TrainerProfile[] = [SABLE_QUILL, ROOK_FERRIS, DOVA_KILN, BRAM_CASK, MAREN_DOCKETT, PIKE_HARLOW];
 
 /** Duel flag stored in `lessonsDone` (no save-schema change). */
 export const duelFlag = (t: TrainerProfile): string => `duel:${t.id}`;

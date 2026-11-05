@@ -35,6 +35,8 @@ export const PLAYABLE_MODES: readonly PlayableMode[] = [
   { href: "/battle?trainer=rook-ferris", title: "Rook Ferris duel", blurb: "Six cards on DIP, ISP, LSP and coupling." },
   { href: "/battle?trainer=dova-kiln", title: "Dova Kiln duel", blurb: "Six cards on Factory Method, Abstract Factory and Builder." },
   { href: "/battle?trainer=bram-cask", title: "Bram Cask duel", blurb: "Six cards on Prototype, Singleton, Object Pool and DI." },
+  { href: "/battle?trainer=maren-dockett", title: "Maren Dockett duel", blurb: "Six cards on Adapter, Bridge, Composite and Decorator." },
+  { href: "/battle?trainer=pike-harlow", title: "Pike Harlow duel", blurb: "Six cards on Facade, Flyweight, Proxy and how they differ." },
   { href: "/review", title: "Daily Review", blurb: "Spaced cards: misses return soon, mastered cards drift away, overdue ones rust." },
   { href: "/party", title: "Party: design battles", blurb: "Match a Patternling to a design smell; super picks befriend it." },
   { href: "/battle/master", title: "Old Town master", blurb: "Warden Hollis Vane: cards, a build and a smell boss." },

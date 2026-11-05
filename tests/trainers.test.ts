@@ -50,6 +50,9 @@ describe("trainer duels", () => {
     expect(JSON.stringify(SCRIPTS["rook-intro"])).toContain("Rook Ferris duel");
     expect(JSON.stringify(SCRIPTS["dova-intro"])).toContain("Dova Kiln duel");
     expect(JSON.stringify(SCRIPTS["bram-intro"])).toContain("Bram Cask duel");
+    expect(JSON.stringify(SCRIPTS["maren-intro"])).toContain("Maren Dockett duel");
+    expect(JSON.stringify(SCRIPTS["pike-intro"])).toContain("Pike Harlow duel");
+    expect(getTrainer("pike-harlow")?.deckId).toBe("structural-bridges");
     expect(getTrainer("dova-kiln")?.deckId).toBe("creational-foundry");
     expect(duelFlag(getTrainer("bram-cask")!)).toBe("duel:bram-cask");
   });

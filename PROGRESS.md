@@ -519,3 +519,13 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Verification: `lint` (0 errors, 8 pre-existing warnings), `typecheck`, `test` (446 pass), `build`, `build:pages` pass. Playwright on a throwaway static build with a temporary start position (reverted), desktop 1280x800 and iPhone 14: map viewed, bridge walkable, no horizontal overflow; only console error was the missing `sw.js` of that non-Pages build. `content:verify` not rerun (no content change).
 - Known gaps: no trainers yet, no Bridges hall.
 - Next: C6e2 (two trainers, portraits, dialogue and pattern duels).
+
+## 2026-11-05: C6e2 Bridges trainers Maren Dockett and Pike Harlow, with pattern duels
+- Two trainers via `scripts/art/characters.mjs` (24x32 walk cycles, 48x48 portraits with blink/talk): **Maren Dockett** (teal oilskin coat, yellow trim, dark curls) on the west bank at (5,6) and **Pike Harlow** (navy harbour jacket, grey hair) on the east bank at (14,6), both clear of the bridge rows. Dialogues `maren-intro` (Adapter vs Bridge: mismatch after the fact vs design-time independence, cost of one more hop) and `pike-intro` (Proxy vs Decorator: same diagram, different intent and lifetime ownership).
+- Duels `MAREN_DOCKETT` (adapter, bridge, composite, decorator) and `PIKE_HARLOW` (facade, flyweight, proxy, compare): 6 cards each from the Structural Bridges deck, reusing `?trainer=`, duel flags and the Battle menu list.
+- Tests: trainer profiles and dialogue pointers; flood-fill that both NPCs sit on walkable reachable tiles on opposite banks with art and dialogue (455 pass).
+- Verification: `lint` (0 errors, 8 pre-existing warnings), `typecheck`, `test`, `build`, `build:pages` pass. Playwright on the static export with a temporary start position (reverted), desktop 1280x800 and iPhone 14: both trainers and Maren's dialogue with portrait viewed; distinct silhouettes, no console errors, no horizontal overflow. `content:verify` not rerun (no content package changed).
+- Known gaps: Bridges hall, master and badge (C6e3); trainer bodies share the generic walker template. Duels use the Bridges battle backdrop through the deck scene.
+- CI/deploy: `gh` is unavailable here, so Actions/Pages status was not confirmed.
+- Note: pushed to the designated branch `claude/funny-ramanujan-mgxnlf` per the session's branch rule rather than `main`; `origin/main` was the branch base (fad9d42).
+- Next: C6e3 (Bridges hall interior, master, badge; split first).

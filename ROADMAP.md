@@ -109,7 +109,7 @@ Work top to bottom: take the **first unchecked box**, and split big boxes into r
     - [x] C6d3. Bridges tileset and battle backdrop.
   - [ ] C6e. Bridges map, trainers, pattern duels, hall, master and badge. Split below.
     - [x] C6e1. Bridges overworld map (from `BRIDGES_ROWS`), gate warp from the Foundry, sign, tileset wiring, tests.
-    - [ ] C6e2. Two trainers (walkers, portraits, dialogue, placement) and their pattern duels.
+    - [x] C6e2. Two trainers (walkers, portraits, dialogue, placement) and their pattern duels.
     - [ ] C6e3. Bridges hall, master and badge (split again when reached).
 - [ ] C7. **Behavioural Theatre** (L5): split across runs (Patternling art for 11 patterns, lessons, cards, 11 exercises, a gym).
 - [ ] C8. **Modelling and UML lessons** (L6) and Design Board drills.

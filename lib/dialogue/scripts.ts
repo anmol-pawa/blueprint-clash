@@ -140,6 +140,42 @@ export const SCRIPTS: Readonly<Record<string, DialogueScript>> = {
       bye: { speaker: "Bram Cask", text: "Duel me from the Battle menu: Bram Cask duel. Prototypes, pools, singletons and DI." },
     },
   },
+  "maren-intro": {
+    id: "maren-intro",
+    start: "a",
+    nodes: {
+      a: { speaker: "Maren Dockett", text: "Two ropes, one cleat. Adapter and Bridge both put a layer between two sides, so people mix them up.", next: "q" },
+      q: {
+        speaker: "Maren Dockett",
+        text: "A vendor class has the wrong interface and you cannot edit it. Which pattern?",
+        choices: [
+          { text: "Adapter: wrap it so it presents the interface my code expects.", next: "yes", set: ["maren-adapter"] },
+          { text: "Bridge: split abstraction and implementation into two hierarchies.", next: "no" },
+        ],
+      },
+      yes: { speaker: "Maren Dockett", text: "Yes. An Adapter fixes a mismatch after the fact. A Bridge is chosen up front, when two things vary independently. The cost of any wrapper is one more hop to debug, so do not adapt what you can simply change.", next: "bye" },
+      no: { speaker: "Maren Dockett", text: "Bridge is for design-time freedom: shapes times renderers without a class per pair. Here the problem is a mismatch you inherited, and that is an Adapter.", next: "bye" },
+      bye: { speaker: "Maren Dockett", text: "Duel me from the Battle menu: Maren Dockett duel. Adapters, bridges, composites and decorators." },
+    },
+  },
+  "pike-intro": {
+    id: "pike-intro",
+    start: "a",
+    nodes: {
+      a: { speaker: "Pike Harlow", text: "My gate has a stand-in for the slow cargo office, and the stand-in looks exactly like the real thing to callers.", next: "q" },
+      q: {
+        speaker: "Pike Harlow",
+        text: "A Proxy and a Decorator share the interface they wrap. What separates them?",
+        choices: [
+          { text: "Intent: a proxy controls access to the subject (lazy, cached, guarded); a decorator adds behaviour.", next: "yes", set: ["pike-proxy"] },
+          { text: "Nothing. They are the same class diagram, so the names do not matter.", next: "no" },
+        ],
+      },
+      yes: { speaker: "Pike Harlow", text: "Right. The diagram matches, the reason to change differs. A proxy owns when the subject exists; a decorator stacks. A proxy also hides latency and failure behind a call that looks local, so say so in the name.", next: "bye" },
+      no: { speaker: "Pike Harlow", text: "The diagrams match, which is exactly why the intent matters. Interviewers ask which one you meant, because the answer decides who owns the subject's lifetime.", next: "bye" },
+      bye: { speaker: "Pike Harlow", text: "Duel me from the Battle menu: Pike Harlow duel. Facades, flyweights and proxies." },
+    },
+  },
   "board-solid": {
     id: "board-solid",
     start: "a",
