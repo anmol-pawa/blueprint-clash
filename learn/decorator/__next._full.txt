@@ -1,0 +1,130 @@
+1:"$Sreact.fragment"
+2:"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js"
+3:I[39756,["$2"],"default"]
+4:I[37457,["$2"],"default"]
+5:"/blueprint-clash/_next/static/chunks/2n5qeheznvl4u.js"
+6:I[22016,["$2","$5"],""]
+7:I[64576,["$2"],"PwaRegister"]
+d:I[97367,["$2"],"OutletBoundary"]
+e:"$Sreact.suspense"
+10:"ViewportBoundary"
+11:I[97367,["$2"],"$10"]
+13:"MetadataBoundary"
+14:I[97367,["$2"],"$13"]
+16:I[68027,["$2"],"default",1]
+:HL["/blueprint-clash/_next/static/chunks/41u6n81vvwlft.css","style"]
+:HL["/blueprint-clash/_next/static/media/07c7676b89ed2778-s.p.2bn3s6zvc0dyp.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/blueprint-clash/_next/static/media/486a103cae33528f-s.p.309ilb452anpd.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/blueprint-clash/_next/static/media/53897e768d329f66-s.p.3t6q91iet4nsy.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+9:X
+b:[["children",{"s":"__PAGE__","h":512,"d":{"r":["$","$1","c",{"children":["$Lc",[["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/3s1mctvsetnbs.js","async":true,"nonce":"$undefined"}]],["$","$Ld",null,{"children":["$","$e",null,{"name":"Next.MetadataOutlet","children":"$@f"}]}]]}],"p":false,"v":null}}]]
+a:[["children",{"s":{"n":"id","t":"d","k":"decorator","s":[]},"h":66048,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],"p":false,"v":"$9"},"c":"$Qb"}]]
+8:[["children",{"s":"learn","h":131584,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],"p":false,"v":"$9"},"c":"$Qa"}]]
+0:{"P":null,"c":["","learn","decorator",""],"q":"","i":false,"t":{"t":{"s":"","h":131600,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/41u6n81vvwlft.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}],["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js","async":true,"nonce":"$undefined"}]],["$","html",null,{"lang":"en","className":"r7opxW_variable auY9QW_variable u-EJdW_variable h-full","children":["$","body",null,{"className":"min-h-full","children":[["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","main",null,{"className":"flex min-h-dvh flex-col items-center justify-center gap-4 px-4 text-center","children":[["$","div",null,{"className":"font-display text-5xl text-[var(--accent)]","children":"404"}],["$","p",null,{"className":"text-white/60","children":"This room is not on the blueprint yet."}],["$","$L6",null,{"href":"/","className":"text-sm text-white/80 underline","children":"Back to the title screen"}]]}],[]],"forbidden":"$undefined","unauthorized":"$undefined"}],["$","$L7",null,{}]]}]}]]}],"p":false,"v":null},"c":"$Q8"},"h":{"r":["$","$1","h",{"children":[null,["$","$L11",null,{"children":"$L12"}],["$","$L14",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$e",null,{"name":"Next.Metadata","children":"$L15"}]}],null]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"p":false,"v":null}},"m":"$undefined","G":["$16",[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/41u6n81vvwlft.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]]],"S":true,"r":"$undefined","s":"$undefined","a":"$undefined","l":"$undefined","p":"$undefined","d":"$undefined","b":"P1Up-kNwaUETEc_hJ5SHD"}
+17:"/blueprint-clash/_next/static/chunks/3s1mctvsetnbs.js"
+18:I[25039,["$2","$17"],"LessonClient"]
+9:C
+19:T5c0,#include <iostream>
+#include <string>
+
+// Each combination of features is its own class, and order is baked into the name.
+class BracketedMessage {
+public:
+    explicit BracketedMessage(std::string text) : text_(std::move(text)) {}
+    std::string text() const { return "[" + text_ + "]"; }
+
+private:
+    std::string text_;
+};
+
+class TruncatedMessage {
+public:
+    TruncatedMessage(std::string text, std::size_t limit) : text_(std::move(text)), limit_(limit) {}
+    std::string text() const { return text_.substr(0, limit_); }
+
+private:
+    std::string text_;
+    std::size_t limit_;
+};
+
+class TruncatedThenBracketedMessage {
+public:
+    TruncatedThenBracketedMessage(std::string text, std::size_t limit) : text_(std::move(text)), limit_(limit) {}
+    std::string text() const { return "[" + text_.substr(0, limit_) + "]"; }
+
+private:
+    std::string text_;
+    std::size_t limit_;
+};
+
+class BracketedThenTruncatedMessage {
+public:
+    BracketedThenTruncatedMessage(std::string text, std::size_t limit) : text_(std::move(text)), limit_(limit) {}
+    std::string text() const { return ("[" + text_ + "]").substr(0, limit_); }
+
+private:
+    std::string text_;
+    std::size_t limit_;
+};
+
+int main() {
+    std::cout << BracketedMessage("hello").text() << "\n";
+    std::cout << TruncatedMessage("hello", 3).text() << "\n";
+    std::cout << TruncatedThenBracketedMessage("hello", 3).text() << "\n";
+    std::cout << BracketedThenTruncatedMessage("hello", 3).text() << "\n";
+}
+1a:T6a1,#include <iostream>
+#include <memory>
+#include <string>
+#include <utility>
+
+// Component.
+class TextSource {
+public:
+    virtual ~TextSource() = default;
+    virtual std::string text() const = 0;
+};
+
+class PlainText : public TextSource {
+public:
+    explicit PlainText(std::string text) : text_(std::move(text)) {}
+    std::string text() const override { return text_; }
+
+private:
+    std::string text_;
+};
+
+// Decorators: each adds exactly one behaviour and owns what it wraps.
+class Bracketed : public TextSource {
+public:
+    explicit Bracketed(std::unique_ptr<TextSource> inner) : inner_(std::move(inner)) {}
+    std::string text() const override { return "[" + inner_->text() + "]"; }
+
+private:
+    std::unique_ptr<TextSource> inner_;
+};
+
+class Truncated : public TextSource {
+public:
+    Truncated(std::unique_ptr<TextSource> inner, std::size_t limit) : inner_(std::move(inner)), limit_(limit) {}
+    std::string text() const override { return inner_->text().substr(0, limit_); }
+
+private:
+    std::unique_ptr<TextSource> inner_;
+    std::size_t limit_;
+};
+
+int main() {
+    const std::unique_ptr<TextSource> a = std::make_unique<Bracketed>(std::make_unique<PlainText>("hello"));
+    const std::unique_ptr<TextSource> b = std::make_unique<Truncated>(std::make_unique<PlainText>("hello"), 3);
+    const std::unique_ptr<TextSource> c =
+        std::make_unique<Bracketed>(std::make_unique<Truncated>(std::make_unique<PlainText>("hello"), 3));
+    const std::unique_ptr<TextSource> d =
+        std::make_unique<Truncated>(std::make_unique<Bracketed>(std::make_unique<PlainText>("hello")), 3);
+    std::cout << a->text() << "\n" << b->text() << "\n" << c->text() << "\n" << d->text() << "\n";
+}
+c:["$","$L18",null,{"lesson":{"id":"decorator","level":"L4","title":"Decorator: stack behaviour without a subclass per combination","oneLiner":"Wrap an object in another object with the same interface to add one behaviour, and stack wrappers in any order at run time.","cardTopic":"L4.decorator","intro":"A Decorator **implements the same interface it wraps** and holds the wrapped object as a member. A call does its own small piece of work and forwards to the inner object (before, after or around it). Because every decorator is also a `TextSource`, you can wrap a wrapper, and the combination is chosen by the caller when the object is built.\n\nThe point is to escape **inheritance explosion**. With features A and B you would write A, B, A-then-B and B-then-A as subclasses. With decorators you write A and B once and compose. Order matters, and that is a feature: truncate-then-bracket and bracket-then-truncate give different results, and both are expressible.\n\nIt is how streams are layered in many standard libraries (buffering, compression, encryption around a raw stream) and how middleware stacks work. Contrast with Proxy: a decorator **adds behaviour**, a proxy **controls access** to the same behaviour.","smell":"- Class names like `TruncatedThenBracketed`: a feature list encoded in a type name.\n- Flags and `if` chains inside one class to switch features on and off.\n- A new feature requires doubling the number of subclasses.\n- Behaviour that is optional per object is baked in for all objects of the type.","before":"$19","after":"$1a","beforeOutput":"[hello]\nhel\n[hel]\n[he","afterOutput":"[hello]\nhel\n[hel]\n[he","refactorNotes":"Two behaviours, two classes, any order. A third feature (say `Uppercased`) is one class, not a doubling of the grid. The caller composes at the construction site, which is also where the order decision is visible and testable.\n\n**Trade-off:** the pipeline is assembled from many small objects, so debugging a long chain is harder, identity checks stop working (a decorated object is not the object you wrapped), and each layer is a virtual call and sometimes an allocation. Hide the construction behind a factory or builder so callers do not hand-assemble stacks. For compile-time composition without virtuals, C++ also allows mixin or policy templates; mention it, but the run-time form is the pattern interviewers mean.","interviewSignal":"Say \"the features combine, so I do not want one class per combination\". Show that order matters with a concrete example. Senior signal: you contrast Decorator with Proxy and Adapter by intent (add behaviour, control access, change shape), name the debugging and identity downsides, and note that decorators must respect the interface's contract (do not narrow what the inner object promises).","overApplication":"A decorator for a feature that is always on is just an extra indirection: put it in the class. Deep chains of tiny wrappers make stack traces and profiles unreadable, and an interface with many methods makes every decorator a pile of boilerplate forwarding (one forgotten method silently skips a layer). If the combinations are few and fixed, a couple of plain classes or a policy enum is easier to read."},"nextId":"facade"}]
+12:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1, viewport-fit=cover"}],["$","meta","2",{"name":"theme-color","content":"#0a1530"}]]
+1b:I[27201,["$2"],"IconMark"]
+f:null
+15:[["$","title","0",{"children":"Decorator: stack behaviour without a subclass per combination: Blueprint Clash"}],["$","meta","1",{"name":"description","content":"A creature-tactics RPG that teaches low-level design in C++ and high-level system design, from fundamentals to big-tech interview level."}],["$","link","2",{"rel":"manifest","href":"/blueprint-clash/manifest.webmanifest","crossOrigin":"$undefined"}],["$","meta","3",{"name":"mobile-web-app-capable","content":"yes"}],["$","meta","4",{"name":"apple-mobile-web-app-title","content":"Blueprint Clash"}],["$","meta","5",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","link","6",{"rel":"icon","href":"/blueprint-clash/icon.png?icon.27re_xscs-jmw.png","sizes":"256x256","type":"image/png"}],["$","link","7",{"rel":"apple-touch-icon","href":"/blueprint-clash/apple-icon.png?apple-icon.2rac1w0yc3rju.png","sizes":"180x180","type":"image/png"}],["$","$L1b","8",{}]]

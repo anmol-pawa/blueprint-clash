@@ -1,0 +1,90 @@
+1:"$Sreact.fragment"
+2:"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js"
+3:I[39756,["$2"],"default"]
+4:I[37457,["$2"],"default"]
+5:"/blueprint-clash/_next/static/chunks/2n5qeheznvl4u.js"
+6:I[22016,["$2","$5"],""]
+7:I[64576,["$2"],"PwaRegister"]
+10:"/blueprint-clash/_next/static/chunks/3s1mctvsetnbs.js"
+11:I[25039,["$2","$10"],"LessonClient"]
+16:"ViewportBoundary"
+17:I[97367,["$2"],"$16"]
+18:"MetadataBoundary"
+19:I[97367,["$2"],"$18"]
+1a:"$Sreact.suspense"
+1b:I[27201,["$2"],"IconMark"]
+:HL["/blueprint-clash/_next/static/chunks/41u6n81vvwlft.css","style"]
+9:X
+c:X
+c:C
+12:T6c8,#include <iostream>
+#include <memory>
+#include <string>
+#include <utility>
+#include <vector>
+
+class Notifier {
+public:
+    virtual ~Notifier() = default;
+    virtual void notify(const std::string& to, const std::string& text) = 0;
+};
+
+class SmtpNotifier : public Notifier {
+public:
+    void notify(const std::string& to, const std::string& text) override { std::cout << "smtp -> " << to << ": " << text << "\n"; }
+};
+
+class SmsNotifier : public Notifier {
+public:
+    void notify(const std::string& to, const std::string& text) override { std::cout << "sms -> " << to << ": " << text << "\n"; }
+};
+
+class FakeNotifier : public Notifier {
+public:
+    void notify(const std::string& to, const std::string&) override { sent_.push_back(to); }
+    const std::vector<std::string>& sent() const { return sent_; }
+
+private:
+    std::vector<std::string> sent_;
+};
+
+// Constructor injection: the dependency is visible, required and swappable.
+// The service borrows the notifier; the caller decides who owns it.
+class WelcomeService {
+public:
+    explicit WelcomeService(Notifier& notifier) : notifier_(notifier) {}
+    void welcome(const std::string& user) { notifier_.notify(user, "welcome!"); }
+
+private:
+    Notifier& notifier_;
+};
+
+int main() {
+    // The composition root is the one place that knows the concrete types and their lifetimes.
+    // This is hand-written DI; a DI container only automates this wiring when the graph gets large.
+    SmtpNotifier smtp;
+    SmsNotifier sms;
+    WelcomeService(smtp).welcome("ada");
+    WelcomeService(sms).welcome("ada");
+
+    FakeNotifier fake;
+    WelcomeService(fake).welcome("grace");
+    std::cout << "fake saw " << fake.sent().size() << " message(s) for " << fake.sent().front() << "\n";
+}
+f:[["children",{"s":"__PAGE__","h":160,"d":{"r":["$","$1","c",{"children":[["$","$L11",null,{"lesson":{"id":"di","level":"L3","title":"Dependency Injection: receive, do not construct","oneLiner":"A class should be given its collaborators (usually by constructor), not create them itself.","cardTopic":"L3.di","intro":"Dependency Injection (DI) is the practical form of the Dependency Inversion Principle: a class **receives** the things it depends on, as interfaces, instead of building them. The most common form is **constructor injection**, because the dependency is required, visible and fixed for the object's life.\n\nWhere does `new` go then? In the **composition root**, normally `main`, the one place that knows concrete types and decides lifetimes. A **DI container** (conceptually) automates that wiring using registered recipes; C++ has no runtime reflection, so containers rely on templates or lambdas. Hand-wiring is usually enough, and is what interviewers expect.","smell":"- A class creates its own collaborators in its constructor or fields.\n- You cannot unit test a class without a real network, file or clock.\n- Changing a channel (email to SMS) edits the business class.\n- Constructors that quietly start threads or open files.","before":"#include <iostream>\n#include <string>\n\nclass SmtpClient {\npublic:\n    void send(const std::string& to, const std::string& text) { std::cout << \"smtp -> \" << to << \": \" << text << \"\\n\"; }\n};\n\n// The service builds its own dependency: it cannot be tested without a real mail server,\n// and switching to another channel means editing this class.\nclass WelcomeService {\npublic:\n    void welcome(const std::string& user) { smtp_.send(user, \"welcome!\"); }\n\nprivate:\n    SmtpClient smtp_;\n};\n\nint main() {\n    WelcomeService().welcome(\"ada\");\n}\n","after":"$12","beforeOutput":"smtp -> ada: welcome!","afterOutput":"smtp -> ada: welcome!\nsms -> ada: welcome!\nfake saw 1 message(s) for grace","refactorNotes":"`WelcomeService` now depends on the `Notifier` abstraction. Email, SMS and a test fake all work without touching it. The signature tells the truth about what the class needs.\n\n**Ownership choice:** a reference member says \"borrowed, must outlive me\", `std::unique_ptr` says \"I own it\" (sink), and `std::shared_ptr` says shared ownership (use sparingly). Pick deliberately and state it. **Trade-off:** more interfaces and a wiring step; a container adds indirection and makes control flow harder to trace.","interviewSignal":"Say \"constructor injection, wired in the composition root\" and justify the ownership choice. Distinguish DI from the Service Locator (a hidden global registry, which is the Singleton problem again). Mentioning that a container is optional and what it costs is a senior signal.","overApplication":"Injecting everything, including trivial value helpers and pure functions, produces huge constructors and interfaces with one implementation. Inject across real seams (I/O, time, randomness, other bounded contexts), and keep simple collaborators concrete."},"nextId":"adapter"}],["$L13"],"$L14"]}],"p":"$@15","v":null,"s":"$9"}}]]
+d:[["children",{"s":{"n":"id","t":"d","k":"di","s":[]},"h":65632,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}]}]]}],"p":"$@e","v":"$c","s":"$9"},"c":"$Qf"}]]
+a:[["children",{"s":"learn","h":131168,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}]}]]}],"p":"$@b","v":"$c","s":"$9"},"c":"$Qd"}]]
+0:{"t":{"t":{"s":"","h":131152,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/41u6n81vvwlft.css","precedence":"next"}],["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js","async":true}]],["$","html",null,{"lang":"en","className":"r7opxW_variable auY9QW_variable u-EJdW_variable h-full","children":["$","body",null,{"className":"min-h-full","children":[["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}],"notFound":[["$","main",null,{"className":"flex min-h-dvh flex-col items-center justify-center gap-4 px-4 text-center","children":[["$","div",null,{"className":"font-display text-5xl text-[var(--accent)]","children":"404"}],["$","p",null,{"className":"text-white/60","children":"This room is not on the blueprint yet."}],["$","$L6",null,{"href":"/","className":"text-sm text-white/80 underline","children":"Back to the title screen"}]]}],[]]}],["$","$L7",null,{}]]}]}]]}],"p":"$@8","v":null,"s":"$9"},"c":"$Qa"},"h":{"r":["$","$1","h",{"children":[null,["$","$L17",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1, viewport-fit=cover"}],["$","meta","2",{"name":"theme-color","content":"#0a1530"}]]}],["$","$L19",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$1a",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"Dependency Injection: receive, do not construct: Blueprint Clash"}],["$","meta","1",{"name":"description","content":"A creature-tactics RPG that teaches low-level design in C++ and high-level system design, from fundamentals to big-tech interview level."}],["$","link","2",{"rel":"manifest","href":"/blueprint-clash/manifest.webmanifest"}],["$","meta","3",{"name":"mobile-web-app-capable","content":"yes"}],["$","meta","4",{"name":"apple-mobile-web-app-title","content":"Blueprint Clash"}],["$","meta","5",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","link","6",{"rel":"icon","href":"/blueprint-clash/icon.png?icon.27re_xscs-jmw.png","sizes":"256x256","type":"image/png"}],["$","link","7",{"rel":"apple-touch-icon","href":"/blueprint-clash/apple-icon.png?apple-icon.2rac1w0yc3rju.png","sizes":"180x180","type":"image/png"}],["$","$L1b","8",{}]]}]}],null]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"p":"$@1c","v":null,"s":"$9"}},"a":"$@1d","u":"$@1e","b":"P1Up-kNwaUETEc_hJ5SHD"}
+1f:I[97367,["$2"],"OutletBoundary"]
+13:["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/3s1mctvsetnbs.js","async":true}]
+14:["$","$L1f",null,{"children":["$","$1a",null,{"name":"Next.MetadataOutlet","children":"$@20"}]}]
+9:300
+20:null
+1e:true
+9:C
+1d:0
+e:"$undefined"
+b:"$undefined"
+8:"$undefined"
+1c:"$undefined"
+15:"$undefined"

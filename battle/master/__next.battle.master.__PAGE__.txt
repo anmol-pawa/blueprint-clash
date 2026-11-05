@@ -1,0 +1,1529 @@
+1:"$Sreact.fragment"
+2:"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js"
+3:I[39756,["$2"],"default"]
+4:I[37457,["$2"],"default"]
+5:"/blueprint-clash/_next/static/chunks/2n5qeheznvl4u.js"
+6:I[22016,["$2","$5"],""]
+7:I[64576,["$2"],"PwaRegister"]
+10:"/blueprint-clash/_next/static/chunks/0tgw082ypvclg.js"
+11:"/blueprint-clash/_next/static/chunks/0t9qcylqovpy4.js"
+12:"/blueprint-clash/_next/static/chunks/0sblv8l-tiau6.js"
+13:"/blueprint-clash/_next/static/chunks/395ct09f1a2k3.js"
+14:"/blueprint-clash/_next/static/chunks/3h-0dauvqgi9t.js"
+15:"/blueprint-clash/_next/static/chunks/16rdiiyl_5tn4.js"
+16:"/blueprint-clash/_next/static/chunks/2s9app055hcb1.js"
+17:"/blueprint-clash/_next/static/chunks/3e4c_dbyuy-n7.js"
+18:"/blueprint-clash/_next/static/chunks/24t1do-rkj1xf.js"
+19:"/blueprint-clash/_next/static/chunks/29y4ll7dp6aff.js"
+1a:"/blueprint-clash/_next/static/chunks/08oob94tfv3t3.js"
+1b:"/blueprint-clash/_next/static/chunks/1zdu7yjl8efu4.js"
+1c:I[11349,["$2","$10","$11","$12","$13","$14","$15","$16","$17","$18","$19","$1a","$1b"],"MasterClient"]
+44:"ViewportBoundary"
+45:I[97367,["$2"],"$44"]
+46:"MetadataBoundary"
+47:I[97367,["$2"],"$46"]
+48:"$Sreact.suspense"
+49:I[27201,["$2"],"IconMark"]
+:HL["/blueprint-clash/_next/static/chunks/41u6n81vvwlft.css","style"]
+9:X
+c:X
+c:C
+1d:T8f6,#include <type_traits>
+#include <utility>
+#include "api.h"
+#include "bp_test.h"
+#include "solution.h"
+
+namespace os {
+namespace {
+int nextId = 1;
+int openIds = 0;
+int errors = 0;
+bool live[1024];
+}  // namespace
+int open(const std::string&) {
+  int id = nextId++;
+  live[id] = true;
+  ++openIds;
+  return id;
+}
+void close(int id) {
+  if (id <= 0 || id >= 1024 || !live[id]) {
+    ++errors;
+    return;
+  }
+  live[id] = false;
+  --openIds;
+}
+int openCount() { return openIds; }
+int closeErrors() { return errors; }
+void reset() {
+  nextId = 1;
+  openIds = 0;
+  errors = 0;
+  for (bool& b : live) b = false;
+}
+}  // namespace os
+
+TEST(Lifetime, OpensOnConstructionClosesOnScopeExit) {
+  os::reset();
+  {
+    FileHandle f("a.txt");
+    EXPECT_EQ(os::openCount(), 1);
+    EXPECT_TRUE(f.id() > 0);
+  }
+  EXPECT_EQ(os::openCount(), 0);
+  EXPECT_EQ(os::closeErrors(), 0);
+}
+
+TEST(Lifetime, ManyHandlesAreAllReleased) {
+  os::reset();
+  {
+    FileHandle a("a"), b("b"), c("c");
+    EXPECT_EQ(os::openCount(), 3);
+  }
+  EXPECT_EQ(os::openCount(), 0);
+  EXPECT_EQ(os::closeErrors(), 0);
+}
+
+TEST(Ownership, CannotBeCopied) {
+  EXPECT_FALSE(std::is_copy_constructible<FileHandle>::value);
+  EXPECT_FALSE(std::is_copy_assignable<FileHandle>::value);
+}
+
+TEST(Ownership, CanBeMoved) {
+  EXPECT_TRUE(std::is_move_constructible<FileHandle>::value);
+  EXPECT_TRUE(std::is_move_assignable<FileHandle>::value);
+}
+
+TEST(Move, ConstructionTransfersTheId) {
+  os::reset();
+  {
+    FileHandle a("a");
+    int id = a.id();
+    FileHandle b(std::move(a));
+    EXPECT_EQ(b.id(), id);
+    EXPECT_EQ(a.id(), 0);
+    EXPECT_EQ(os::openCount(), 1);
+  }
+  EXPECT_EQ(os::openCount(), 0);
+  EXPECT_EQ(os::closeErrors(), 0);
+}
+
+TEST(Move, AssignmentClosesTheOldFileFirst) {
+  os::reset();
+  {
+    FileHandle a("a");
+    FileHandle b("b");
+    int bid = b.id();
+    a = std::move(b);
+    EXPECT_EQ(os::openCount(), 1);
+    EXPECT_EQ(a.id(), bid);
+    EXPECT_EQ(b.id(), 0);
+  }
+  EXPECT_EQ(os::openCount(), 0);
+  EXPECT_EQ(os::closeErrors(), 0);
+}
+
+TEST(Move, SelfMoveAssignmentKeepsTheFileOpen) {
+  os::reset();
+  {
+    FileHandle a("a");
+    FileHandle& alias = a;
+    a = std::move(alias);
+    EXPECT_TRUE(a.id() > 0);
+    EXPECT_EQ(os::openCount(), 1);
+  }
+  EXPECT_EQ(os::openCount(), 0);
+  EXPECT_EQ(os::closeErrors(), 0);
+}
+1e:T8c5,#include <string>
+#include <type_traits>
+#include <vector>
+#include "bp_test.h"
+#include "solution.h"
+
+namespace {
+struct Memory : InvoiceSink {
+  std::vector<std::string> stored;
+  void store(const std::string& t) override { stored.push_back(t); }
+};
+
+// Detection traits: does T have a member function with this name?
+template <typename T, typename = void>
+struct HasRender : std::false_type {};
+template <typename T>
+struct HasRender<T, std::void_t<decltype(std::declval<const T&>().render(std::declval<const T&>()))>> : std::true_type {};
+template <typename T, typename = void>
+struct HasStore : std::false_type {};
+template <typename T>
+struct HasStore<T, std::void_t<decltype(std::declval<T&>().store(std::string()))>> : std::true_type {};
+
+Invoice sample() {
+  Invoice inv;
+  inv.add({"pen", 150, 3});
+  inv.add({"ink", 5, 1});
+  return inv;
+}
+}  // namespace
+
+TEST(Invoice, EmptyTotalIsZero) {
+  Invoice inv;
+  EXPECT_EQ(inv.totalCents(), 0LL);
+}
+
+TEST(Invoice, TotalSumsUnitTimesQuantity) {
+  EXPECT_EQ(sample().totalCents(), 455LL);
+}
+
+TEST(Invoice, LargeTotalsDoNotOverflow) {
+  Invoice inv;
+  inv.add({"gold", 3000000000LL, 2});
+  EXPECT_EQ(inv.totalCents(), 6000000000LL);
+}
+
+TEST(Srp, InvoiceOnlyHoldsData) {
+  EXPECT_FALSE(HasRender<Invoice>::value);
+  EXPECT_FALSE(HasStore<Invoice>::value);
+}
+
+TEST(Formatter, RendersLinesAndTotal) {
+  InvoiceFormatter f;
+  EXPECT_EQ(f.render(sample()), std::string("pen x3 = 4.50\nink x1 = 0.05\nTOTAL 4.55\n"));
+}
+
+TEST(Formatter, ZeroIsTwoDigits) {
+  InvoiceFormatter f;
+  Invoice inv;
+  EXPECT_EQ(f.render(inv), std::string("TOTAL 0.00\n"));
+}
+
+TEST(Formatter, SingleDigitCentsArePadded) {
+  InvoiceFormatter f;
+  Invoice inv;
+  inv.add({"a", 1205, 1});
+  EXPECT_EQ(f.render(inv), std::string("a x1 = 12.05\nTOTAL 12.05\n"));
+}
+
+TEST(Archiver, StoresTheRenderedTextOnce) {
+  Memory m;
+  InvoiceArchiver a(m);
+  a.archive(sample());
+  ASSERT_EQ(m.stored.size(), static_cast<size_t>(1));
+  EXPECT_EQ(m.stored[0], InvoiceFormatter().render(sample()));
+}
+
+TEST(Archiver, EachArchiveCallStoresOnce) {
+  Memory m;
+  InvoiceArchiver a(m);
+  a.archive(sample());
+  a.archive(Invoice());
+  ASSERT_EQ(m.stored.size(), static_cast<size_t>(2));
+  EXPECT_EQ(m.stored[1], std::string("TOTAL 0.00\n"));
+}
+1f:T93e,#include <memory>
+#include <string>
+#include "bp_test.h"
+#include "solution.h"
+
+namespace {
+int liveRules = 0;
+
+struct Flat : ShippingRule {  // a carrier the solution has never seen
+  std::string where;
+  long long price;
+  Flat(std::string c, long long p) : where(std::move(c)), price(p) { ++liveRules; }
+  ~Flat() override { --liveRules; }
+  bool matches(const Parcel& p) const override { return p.country == where; }
+  long long cents(const Parcel&) const override { return price; }
+};
+struct PerKilo : ShippingRule {  // price depends on weight
+  bool matches(const Parcel& p) const override { return p.grams > 0; }
+  long long cents(const Parcel& p) const override { return 100 + 200LL * ((p.grams + 999) / 1000); }
+};
+}  // namespace
+
+TEST(Quote, NoMatchingRuleIsMinusOne) {
+  ShippingCalculator calc;
+  EXPECT_EQ(calc.quote(Parcel{500, "FR"}), -1LL);
+  calc.add(std::make_unique<Flat>("US", 700));
+  EXPECT_EQ(calc.quote(Parcel{500, "FR"}), -1LL);
+}
+
+TEST(Quote, UsesRegisteredRules) {
+  ShippingCalculator calc;
+  calc.add(std::make_unique<Flat>("DE", 900));
+  calc.add(std::make_unique<Flat>("JP", 1500));
+  EXPECT_EQ(calc.quote(Parcel{100, "DE"}), 900LL);
+  EXPECT_EQ(calc.quote(Parcel{100, "JP"}), 1500LL);
+  EXPECT_EQ(calc.ruleCount(), static_cast<std::size_t>(2));
+}
+
+TEST(Quote, PicksTheCheapestMatchingRule) {
+  ShippingCalculator calc;
+  calc.add(std::make_unique<Flat>("US", 800));
+  calc.add(std::make_unique<PerKilo>());  // 1500 g -> 100 + 2*200 = 500
+  calc.add(std::make_unique<Flat>("US", 650));
+  EXPECT_EQ(calc.quote(Parcel{1500, "US"}), 500LL);
+  EXPECT_EQ(calc.quote(Parcel{3000, "US"}), 650LL);  // PerKilo is now 700
+}
+
+TEST(Quote, WeightRuleSeesTheParcel) {
+  ShippingCalculator calc;
+  calc.add(std::make_unique<PerKilo>());
+  EXPECT_EQ(calc.quote(Parcel{1, "ZZ"}), 300LL);
+  EXPECT_EQ(calc.quote(Parcel{1001, "ZZ"}), 500LL);
+  EXPECT_EQ(calc.quote(Parcel{0, "ZZ"}), -1LL);
+}
+
+TEST(Ownership, NullRuleIsIgnored) {
+  ShippingCalculator calc;
+  calc.add(nullptr);
+  EXPECT_EQ(calc.ruleCount(), static_cast<std::size_t>(0));
+  EXPECT_EQ(calc.quote(Parcel{10, "US"}), -1LL);
+}
+
+TEST(Ownership, CalculatorDestroysItsRules) {
+  EXPECT_EQ(liveRules, 0);
+  {
+    ShippingCalculator calc;
+    calc.add(std::make_unique<Flat>("A", 1));
+    calc.add(std::make_unique<Flat>("B", 2));
+    EXPECT_EQ(liveRules, 2);
+  }
+  EXPECT_EQ(liveRules, 0);
+}
+20:T4c4,Code that works with an `Account` (see the contract in `api.h`) must keep working when it is handed *any* kind of account. Write three types in `solution.h` that honour that contract:
+
+- `SavingsAccount(long long openingCents)`: the plain account. `withdraw(x)` succeeds exactly when `0 < x <= balance()`. A failed withdrawal changes nothing (no fees).
+- `CheckingAccount(long long openingCents, long long overdraftCents)`: may go below zero down to `-overdraftCents`. `withdraw(x)` succeeds when `0 < x` and `x <= balance() + overdraftCents`. This accepts *more* than the base promises, which is allowed.
+- `FixedDeposit(long long principalCents)`: money locked until it matures. It cannot honour the Account contract (a withdrawal that is always refused breaks "succeeds whenever 0 < x <= balance()"), so it must **not** derive from `Account`. Give it `long long principal() const`, `bool matured() const`, `void mature()` (marks it matured) and `long long redeem(Account& into)`: if matured, deposit the principal into `into`, set the principal to 0 and return the amount moved; if not matured, do nothing and return 0.
+
+Tests run the same generic code over the accounts and check `FixedDeposit` is not an `Account`.
+21:T475,#pragma once
+#include "api.h"
+
+// TODO: honour the Account contract in api.h. A subtype may accept more, never fewer.
+class SavingsAccount : public Account {
+ public:
+  explicit SavingsAccount(long long openingCents) : balance_(openingCents) {}
+  void deposit(long long) override {}
+  bool withdraw(long long) override { return false; }
+  long long balance() const override { return balance_; }
+
+ private:
+  long long balance_;
+};
+
+class CheckingAccount : public Account {
+ public:
+  CheckingAccount(long long openingCents, long long overdraftCents) : balance_(openingCents) { (void)overdraftCents; }
+  void deposit(long long) override {}
+  bool withdraw(long long) override { return false; }
+  long long balance() const override { return balance_; }
+
+ private:
+  long long balance_;
+};
+
+// TODO: this must NOT be an Account. Why not?
+class FixedDeposit {
+ public:
+  explicit FixedDeposit(long long principalCents) : principal_(principalCents) {}
+  long long principal() const { return principal_; }
+  bool matured() const { return false; }
+  void mature() {}
+  long long redeem(Account&) { return 0; }
+
+ private:
+  long long principal_;
+};
+22:Tcbb,#include <memory>
+#include <type_traits>
+#include <vector>
+#include "bp_test.h"
+#include "solution.h"
+
+namespace {
+// Generic client code: it only knows the Account contract.
+long long drain(Account& a, long long step) {
+  long long taken = 0;
+  while (a.withdraw(step)) taken += step;
+  return taken;
+}
+
+// Checks the contract for one withdrawal and returns whether it succeeded.
+bool contractHolds(Account& a, long long amount) {
+  const long long before = a.balance();
+  const bool ok = a.withdraw(amount);
+  return ok ? (a.balance() == before - amount) : (a.balance() == before);
+}
+}  // namespace
+
+TEST(Savings, DepositAndWithdraw) {
+  SavingsAccount s(100);
+  s.deposit(50);
+  EXPECT_EQ(s.balance(), 150LL);
+  EXPECT_TRUE(s.withdraw(150));
+  EXPECT_EQ(s.balance(), 0LL);
+}
+
+TEST(Savings, WithdrawsUpToTheWholeBalanceInOneCall) {
+  SavingsAccount s(1000000);
+  EXPECT_TRUE(s.withdraw(1000000));
+  EXPECT_EQ(s.balance(), 0LL);
+}
+
+TEST(Savings, RejectsOverdrawAndNonPositive) {
+  SavingsAccount s(100);
+  EXPECT_FALSE(s.withdraw(101));
+  EXPECT_FALSE(s.withdraw(0));
+  EXPECT_FALSE(s.withdraw(-5));
+  EXPECT_EQ(s.balance(), 100LL);
+}
+
+TEST(Savings, NonPositiveDepositIsIgnored) {
+  SavingsAccount s(100);
+  s.deposit(0);
+  s.deposit(-40);
+  EXPECT_EQ(s.balance(), 100LL);
+}
+
+TEST(Contract, FailedWithdrawLeavesBalanceUntouched) {
+  SavingsAccount s(100);
+  CheckingAccount c(100, 20);
+  EXPECT_TRUE(contractHolds(s, 500));
+  EXPECT_TRUE(contractHolds(c, 500));
+  EXPECT_EQ(s.balance(), 100LL);
+  EXPECT_EQ(c.balance(), 100LL);
+}
+
+TEST(Contract, SuccessfulWithdrawFallsByExactlyTheAmount) {
+  SavingsAccount s(100);
+  CheckingAccount c(100, 20);
+  EXPECT_TRUE(contractHolds(s, 40));
+  EXPECT_TRUE(contractHolds(c, 40));
+  EXPECT_EQ(s.balance(), 60LL);
+  EXPECT_EQ(c.balance(), 60LL);
+}
+
+TEST(Checking, OverdraftAllowsGoingBelowZero) {
+  CheckingAccount c(100, 50);
+  EXPECT_TRUE(c.withdraw(150));
+  EXPECT_EQ(c.balance(), -50LL);
+  EXPECT_FALSE(c.withdraw(1));
+  EXPECT_EQ(c.balance(), -50LL);
+}
+
+TEST(Substitution, GenericDrainWorksForAnyAccount) {
+  std::vector<std::unique_ptr<Account>> accounts;
+  accounts.push_back(std::make_unique<SavingsAccount>(100));
+  accounts.push_back(std::make_unique<CheckingAccount>(100, 50));
+  EXPECT_EQ(drain(*accounts[0], 30), 90LL);   // 30+30+30; 10 left
+  EXPECT_EQ(drain(*accounts[1], 30), 150LL);  // five withdrawals reach -50
+}
+
+TEST(Substitution, EveryAccountHonoursTheBasePromise) {
+  // Base promise: withdraw(x) succeeds whenever 0 < x <= balance().
+  SavingsAccount s(500);
+  CheckingAccount c(500, 0);
+  EXPECT_TRUE(s.withdraw(500));
+  EXPECT_TRUE(c.withdraw(500));
+}
+
+TEST(Lsp, FixedDepositIsNotAnAccount) {
+  EXPECT_FALSE((std::is_base_of<Account, FixedDeposit>::value));
+  EXPECT_TRUE((std::is_base_of<Account, SavingsAccount>::value));
+  EXPECT_TRUE((std::is_base_of<Account, CheckingAccount>::value));
+}
+
+TEST(FixedDeposit, RedeemsOnlyWhenMatured) {
+  FixedDeposit fd(1000);
+  SavingsAccount s(10);
+  EXPECT_EQ(fd.redeem(s), 0LL);
+  EXPECT_EQ(s.balance(), 10LL);
+  EXPECT_EQ(fd.principal(), 1000LL);
+  fd.mature();
+  EXPECT_TRUE(fd.matured());
+  EXPECT_EQ(fd.redeem(s), 1000LL);
+  EXPECT_EQ(s.balance(), 1010LL);
+  EXPECT_EQ(fd.principal(), 0LL);
+  EXPECT_EQ(fd.redeem(s), 0LL);  // already redeemed
+}
+23:T67d,#include <string>
+#include <type_traits>
+#include "bp_test.h"
+#include "solution.h"
+
+namespace {
+struct FixedScanner : Scanner {  // a scanner the solution has never seen
+  std::string text;
+  explicit FixedScanner(std::string t) : text(std::move(t)) {}
+  std::string scan() override { return text; }
+};
+struct CountingPrinter : Printer {
+  int jobs = 0;
+  int print(const std::string& t) override {
+    ++jobs;
+    return static_cast<int>(t.size());
+  }
+};
+}  // namespace
+
+TEST(Roles, BasicPrinterIsOnlyAPrinter) {
+  EXPECT_TRUE((std::is_base_of<Printer, BasicPrinter>::value));
+}
+
+TEST(Roles, BasicPrinterIsNotAScanner) {
+  EXPECT_FALSE((std::is_base_of<Scanner, BasicPrinter>::value));
+}
+
+TEST(Roles, AllInOneHasBothRoles) {
+  EXPECT_TRUE((std::is_base_of<Printer, AllInOne>::value));
+  EXPECT_TRUE((std::is_base_of<Scanner, AllInOne>::value));
+}
+
+TEST(Print, RoundsPagesUp) {
+  BasicPrinter p;
+  EXPECT_EQ(p.print(""), 0);
+  EXPECT_EQ(p.print("a"), 1);
+  EXPECT_EQ(p.print("0123456789"), 1);
+  EXPECT_EQ(p.print("0123456789a"), 2);
+  AllInOne m;
+  EXPECT_EQ(m.print(std::string(25, 'x')), 3);
+}
+
+TEST(Scan, NumbersEachDocument) {
+  AllInOne m;
+  EXPECT_EQ(m.scan(), std::string("scan#1"));
+  EXPECT_EQ(m.scan(), std::string("scan#2"));
+}
+
+TEST(Copy, WorksWithSeparateScannerAndPrinter) {
+  FixedScanner s(std::string(25, 'y'));
+  BasicPrinter p;
+  EXPECT_EQ(copyDocument(s, p), 3);
+}
+
+TEST(Copy, ScansOnceAndPrintsOnce) {
+  FixedScanner s("hello");
+  CountingPrinter p;
+  EXPECT_EQ(copyDocument(s, p), 5);
+  EXPECT_EQ(p.jobs, 1);
+}
+
+TEST(Copy, AnAllInOneCanCopyOntoItself) {
+  AllInOne m;
+  EXPECT_EQ(copyDocument(m, m), 1);  // "scan#1" is 6 characters
+}
+24:T848,#include <string>
+#include <utility>
+#include <vector>
+#include "bp_test.h"
+#include "solution.h"
+
+namespace {
+struct Recorder : MessageSender {  // a sender the solution has never seen
+  std::vector<std::pair<std::string, std::string>> sent;
+  bool send(const std::string& to, const std::string& body) override {
+    sent.emplace_back(to, body);
+    return true;
+  }
+};
+struct Down : MessageSender {  // delivery always fails
+  int attempts = 0;
+  bool send(const std::string&, const std::string&) override {
+    ++attempts;
+    return false;
+  }
+};
+}  // namespace
+
+TEST(Order, SendsOneConfirmationThroughTheInjectedSender) {
+  Recorder r;
+  OrderService svc(r);
+  EXPECT_TRUE(svc.placeOrder("ana", 3));
+  ASSERT_EQ(r.sent.size(), static_cast<size_t>(1));
+  EXPECT_EQ(r.sent[0].first, std::string("ana"));
+  EXPECT_EQ(r.sent[0].second, std::string("Order confirmed: 3 item(s)"));
+}
+
+TEST(Order, RejectsNonPositiveQuantityWithoutSending) {
+  Recorder r;
+  OrderService svc(r);
+  EXPECT_FALSE(svc.placeOrder("ana", 0));
+  EXPECT_FALSE(svc.placeOrder("ana", -2));
+  EXPECT_EQ(r.sent.size(), static_cast<size_t>(0));
+  EXPECT_EQ(svc.confirmedCount(), 0);
+}
+
+TEST(Order, CountsOnlyDeliveredOrders) {
+  Recorder r;
+  OrderService svc(r);
+  svc.placeOrder("a", 1);
+  svc.placeOrder("b", 2);
+  svc.placeOrder("c", 0);
+  EXPECT_EQ(svc.confirmedCount(), 2);
+}
+
+TEST(Order, FailedDeliveryIsNotAConfirmedOrder) {
+  Down d;
+  OrderService svc(d);
+  EXPECT_FALSE(svc.placeOrder("ana", 4));
+  EXPECT_EQ(d.attempts, 1);
+  EXPECT_EQ(svc.confirmedCount(), 0);
+}
+
+TEST(Injection, TwoServicesUseTheirOwnSenders) {
+  Recorder a, b;
+  OrderService sa(a), sb(b);
+  sa.placeOrder("x", 1);
+  sb.placeOrder("y", 1);
+  sb.placeOrder("z", 1);
+  EXPECT_EQ(a.sent.size(), static_cast<size_t>(1));
+  EXPECT_EQ(b.sent.size(), static_cast<size_t>(2));
+}
+
+TEST(Injection, MessageGoesToTheNamedCustomer) {
+  Recorder r;
+  OrderService svc(r);
+  svc.placeOrder("zed", 9);
+  svc.placeOrder("amy", 1);
+  ASSERT_EQ(r.sent.size(), static_cast<size_t>(2));
+  EXPECT_EQ(r.sent[0].first, std::string("zed"));
+  EXPECT_EQ(r.sent[1].first, std::string("amy"));
+}
+25:T7e4,#include <memory>
+#include <string>
+#include "bp_test.h"
+#include "solution.h"
+
+namespace {
+int liveClocks = 0;
+
+struct FakeClock : Clock {  // a clock the test can move
+  long long now = 1000;
+  FakeClock() { ++liveClocks; }
+  ~FakeClock() override { --liveClocks; }
+  long long nowSeconds() const override { return now; }
+};
+
+// The store owns the clock; the test keeps a non-owning pointer to move time.
+struct Fixture {
+  FakeClock* clock;
+  SessionStore store;
+  explicit Fixture(long long ttl) : clock(new FakeClock), store(std::unique_ptr<Clock>(clock), ttl) {}
+};
+}  // namespace
+
+TEST(Sessions, TokensAreNumberedInOrder) {
+  Fixture f(60);
+  EXPECT_EQ(f.store.open("ana"), std::string("s1"));
+  EXPECT_EQ(f.store.open("bo"), std::string("s2"));
+}
+
+TEST(Sessions, UnknownTokenIsInvalid) {
+  Fixture f(60);
+  f.store.open("ana");
+  EXPECT_FALSE(f.store.isValid("s99"));
+  EXPECT_FALSE(f.store.isValid(""));
+}
+
+TEST(Expiry, SessionExpiresWhenTheInjectedClockAdvances) {
+  Fixture f(60);
+  const std::string t = f.store.open("ana");
+  EXPECT_TRUE(f.store.isValid(t));
+  f.clock->now += 59;
+  EXPECT_TRUE(f.store.isValid(t));
+  f.clock->now += 100;
+  EXPECT_FALSE(f.store.isValid(t));
+}
+
+TEST(Expiry, ExpiresExactlyAtTheTtl) {
+  Fixture f(60);
+  const std::string t = f.store.open("ana");
+  f.clock->now += 60;
+  EXPECT_FALSE(f.store.isValid(t));
+}
+
+TEST(Expiry, ActiveCountDropsAsSessionsExpire) {
+  Fixture f(60);
+  f.store.open("a");           // created at 1000
+  f.clock->now += 30;
+  f.store.open("b");           // created at 1030
+  EXPECT_EQ(f.store.activeCount(), static_cast<std::size_t>(2));
+  f.clock->now += 40;          // 1070: a is 70 old, b is 40 old
+  EXPECT_EQ(f.store.activeCount(), static_cast<std::size_t>(1));
+  f.clock->now += 40;          // 1110: both expired
+  EXPECT_EQ(f.store.activeCount(), static_cast<std::size_t>(0));
+}
+
+TEST(Ownership, StoreDestroysTheClockItOwns) {
+  EXPECT_EQ(liveClocks, 0);
+  {
+    Fixture f(10);
+    EXPECT_EQ(liveClocks, 1);
+  }
+  EXPECT_EQ(liveClocks, 0);
+}
+26:T6b7,#include <string>
+#include <type_traits>
+#include <utility>
+#include "bp_test.h"
+#include "solution.h"
+
+namespace {
+template <class T, class = void>
+struct HasWalletAccessor : std::false_type {};
+template <class T>
+struct HasWalletAccessor<T, std::void_t<decltype(std::declval<T&>().wallet())>> : std::true_type {};
+}  // namespace
+
+TEST(Wallet, ChargeReducesBalance) {
+  Wallet w(1000);
+  EXPECT_TRUE(w.charge(250));
+  EXPECT_EQ(w.balance(), 750LL);
+}
+
+TEST(Wallet, CannotOverdraw) {
+  Wallet w(100);
+  EXPECT_FALSE(w.charge(101));
+  EXPECT_EQ(w.balance(), 100LL);
+  EXPECT_TRUE(w.charge(100));
+  EXPECT_EQ(w.balance(), 0LL);
+}
+
+TEST(Wallet, RejectsNonPositiveCharges) {
+  Wallet w(100);
+  EXPECT_FALSE(w.charge(0));
+  EXPECT_FALSE(w.charge(-50));
+  EXPECT_EQ(w.balance(), 100LL);
+}
+
+TEST(Wallet, DepositIgnoresNonPositive) {
+  Wallet w(10);
+  w.deposit(5);
+  w.deposit(-100);
+  w.deposit(0);
+  EXPECT_EQ(w.balance(), 15LL);
+}
+
+TEST(Demeter, CustomerDoesNotHandOutItsWallet) {
+  EXPECT_FALSE(HasWalletAccessor<Customer>::value);
+}
+
+TEST(Customer, PayTopUpAndFunds) {
+  Customer c("ana", 500);
+  EXPECT_EQ(c.name(), std::string("ana"));
+  EXPECT_TRUE(c.pay(200));
+  EXPECT_EQ(c.funds(), 300LL);
+  c.topUp(50);
+  EXPECT_EQ(c.funds(), 350LL);
+  EXPECT_FALSE(c.pay(351));
+  EXPECT_EQ(c.funds(), 350LL);
+}
+
+TEST(Shop, SellChargesTheCustomerAndCountsRevenue) {
+  Shop shop;
+  Customer c("bo", 1000);
+  EXPECT_TRUE(shop.sell(c, 400));
+  EXPECT_TRUE(shop.sell(c, 100));
+  EXPECT_EQ(c.funds(), 500LL);
+  EXPECT_EQ(shop.revenue(), 500LL);
+}
+
+TEST(Shop, FailedPaymentIsNotRevenue) {
+  Shop shop;
+  Customer poor("cy", 50);
+  EXPECT_FALSE(shop.sell(poor, 80));
+  EXPECT_EQ(shop.revenue(), 0LL);
+  EXPECT_EQ(poor.funds(), 50LL);
+}
+27:T6a6,#include <string>
+#include <type_traits>
+#include <utility>
+#include <vector>
+#include "bp_test.h"
+#include "solution.h"
+
+namespace {
+template <class T, class = void>
+struct HasPushBack : std::false_type {};
+template <class T>
+struct HasPushBack<T, std::void_t<decltype(std::declval<T&>().push_back(std::string()))>> : std::true_type {};
+}  // namespace
+
+TEST(History, KeepsEntriesOldestFirst) {
+  BoundedHistory h(5);
+  h.add("a");
+  h.add("b");
+  h.add("c");
+  ASSERT_EQ(h.size(), static_cast<std::size_t>(3));
+  EXPECT_EQ(h.at(0), std::string("a"));
+  EXPECT_EQ(h.at(2), std::string("c"));
+}
+
+TEST(History, DropsTheOldestWhenFull) {
+  BoundedHistory h(3);
+  for (const char* s : {"a", "b", "c", "d", "e"}) h.add(s);
+  ASSERT_EQ(h.size(), static_cast<std::size_t>(3));
+  EXPECT_EQ(h.at(0), std::string("c"));
+  EXPECT_EQ(h.at(1), std::string("d"));
+  EXPECT_EQ(h.at(2), std::string("e"));
+}
+
+TEST(History, LatestIsTheNewestEntry) {
+  BoundedHistory h(2);
+  EXPECT_EQ(h.latest(), std::string(""));
+  h.add("x");
+  EXPECT_EQ(h.latest(), std::string("x"));
+  h.add("y");
+  h.add("z");
+  EXPECT_EQ(h.latest(), std::string("z"));
+}
+
+TEST(History, CapacityZeroKeepsNothing) {
+  BoundedHistory h(0);
+  h.add("a");
+  EXPECT_EQ(h.size(), static_cast<std::size_t>(0));
+  EXPECT_EQ(h.latest(), std::string(""));
+}
+
+TEST(History, CapacityOneKeepsOnlyTheLast) {
+  BoundedHistory h(1);
+  h.add("a");
+  h.add("b");
+  ASSERT_EQ(h.size(), static_cast<std::size_t>(1));
+  EXPECT_EQ(h.at(0), std::string("b"));
+}
+
+TEST(Design, NotDerivedFromVector) {
+  EXPECT_FALSE((std::is_base_of<std::vector<std::string>, BoundedHistory>::value));
+}
+
+TEST(Design, NoPushBack) {
+  EXPECT_FALSE(HasPushBack<BoundedHistory>::value);
+}
+28:T46f,A tool converts text with codecs chosen by name (`"rot13"`, `"upper"`, ...). Today a `makeCodec(name)` function holds an `if (name == ...)` ladder, so every new codec edits it and recompiles every caller. Replace the ladder with a **registry of factories**. `api.h` gives the `Codec` interface and the `CodecFactory` alias. Write `CodecRegistry` in `solution.h`:
+
+- `bool registerCodec(const std::string& name, CodecFactory factory)`: returns `true` when added. It returns `false` and changes nothing when the name is empty, the factory is empty (`!factory`), or the name is already registered (the first registration wins).
+- `std::unique_ptr<Codec> create(const std::string& name) const`: calls that name's factory and returns the result, a **fresh** codec on every call. Unknown names give `nullptr`. If the factory itself returns `nullptr`, so does `create`.
+- `std::vector<std::string> names() const`: every registered name in alphabetical order.
+
+Factories are called **lazily**, only inside `create`: registering must not build anything. The registry never names a concrete codec; the tests register codecs you have never seen.
+29:Tc2e,#include <memory>
+#include <string>
+#include "bp_test.h"
+#include "solution.h"
+
+namespace {
+int liveCodecs = 0;
+int factoryCalls = 0;
+
+struct Tag : Codec {  // a codec the solution has never seen
+  std::string label;
+  explicit Tag(std::string l) : label(std::move(l)) { ++liveCodecs; }
+  ~Tag() override { --liveCodecs; }
+  std::string name() const override { return label; }
+  std::string encode(const std::string& t) const override { return label + ":" + t; }
+};
+
+CodecFactory tagFactory(const std::string& label) {
+  return [label] {
+    ++factoryCalls;
+    return std::make_unique<Tag>(label);
+  };
+}
+}  // namespace
+
+TEST(Registry, CreatesWhatWasRegistered) {
+  CodecRegistry reg;
+  EXPECT_TRUE(reg.registerCodec("zip", tagFactory("zip")));
+  EXPECT_TRUE(reg.registerCodec("b64", tagFactory("b64")));
+  auto zip = reg.create("zip");
+  ASSERT_TRUE(zip != nullptr);
+  EXPECT_EQ(zip->encode("x"), std::string("zip:x"));
+  auto b64 = reg.create("b64");
+  ASSERT_TRUE(b64 != nullptr);
+  EXPECT_EQ(b64->name(), std::string("b64"));
+}
+
+TEST(Registry, UnknownNameIsNull) {
+  CodecRegistry reg;
+  EXPECT_TRUE(reg.create("zip") == nullptr);
+  reg.registerCodec("zip", tagFactory("zip"));
+  EXPECT_TRUE(reg.create("gzip") == nullptr);
+  EXPECT_TRUE(reg.create("") == nullptr);
+}
+
+TEST(Registry, EveryCallMakesAFreshCodec) {
+  liveCodecs = 0;
+  CodecRegistry reg;
+  reg.registerCodec("zip", tagFactory("zip"));
+  auto a = reg.create("zip");
+  auto b = reg.create("zip");
+  ASSERT_TRUE(a != nullptr && b != nullptr);
+  EXPECT_TRUE(a.get() != b.get());
+  EXPECT_EQ(liveCodecs, 2);
+  a.reset();
+  EXPECT_EQ(liveCodecs, 1);
+}
+
+TEST(Registry, FactoriesRunLazily) {
+  factoryCalls = 0;
+  CodecRegistry reg;
+  reg.registerCodec("zip", tagFactory("zip"));
+  reg.registerCodec("b64", tagFactory("b64"));
+  EXPECT_EQ(factoryCalls, 0);
+  auto c = reg.create("zip");
+  EXPECT_EQ(factoryCalls, 1);
+  auto d = reg.create("zip");
+  EXPECT_EQ(factoryCalls, 2);
+}
+
+TEST(Registry, FirstRegistrationWins) {
+  CodecRegistry reg;
+  EXPECT_TRUE(reg.registerCodec("zip", tagFactory("first")));
+  EXPECT_FALSE(reg.registerCodec("zip", tagFactory("second")));
+  auto c = reg.create("zip");
+  ASSERT_TRUE(c != nullptr);
+  EXPECT_EQ(c->name(), std::string("first"));
+  EXPECT_EQ(reg.names().size(), static_cast<std::size_t>(1));
+}
+
+TEST(Registry, RejectsEmptyNameAndEmptyFactory) {
+  CodecRegistry reg;
+  EXPECT_FALSE(reg.registerCodec("", tagFactory("x")));
+  EXPECT_FALSE(reg.registerCodec("zip", CodecFactory{}));
+  EXPECT_EQ(reg.names().size(), static_cast<std::size_t>(0));
+  EXPECT_TRUE(reg.create("zip") == nullptr);
+}
+
+TEST(Registry, NamesAreAlphabetical) {
+  CodecRegistry reg;
+  reg.registerCodec("rot13", tagFactory("rot13"));
+  reg.registerCodec("b64", tagFactory("b64"));
+  reg.registerCodec("upper", tagFactory("upper"));
+  const std::vector<std::string> expected{"b64", "rot13", "upper"};
+  EXPECT_TRUE(reg.names() == expected);
+}
+
+TEST(Registry, FactoryReturningNullGivesNull) {
+  CodecRegistry reg;
+  EXPECT_TRUE(reg.registerCodec("broken", [] { return std::unique_ptr<Codec>(); }));
+  EXPECT_TRUE(reg.create("broken") == nullptr);
+}
+2a:T5b2,Building an HTTP request by hand means a constructor with six positional arguments, half of them optional, and nothing stops a caller from sending a body with `GET`. Write a validating **builder** in `solution.h`.
+
+**`HttpRequest`**: an immutable value. It has *no* public constructor (only the builder, a friend, can make one) and only getters: `method()`, `url()`, `body()` (all `const std::string&`), `timeoutMs()` (`int`) and `headers()` (`const std::vector<std::pair<std::string, std::string>>&`). It must stay copyable.
+
+**`HttpRequestBuilder`**: fluent setters that each return `*this` (`HttpRequestBuilder&`): `method(std::string)`, `url(std::string)`, `header(std::string name, std::string value)`, `body(std::string)`, `timeoutMs(int)`. Then `std::optional<HttpRequest> build() const`, which returns `std::nullopt` when the settings are invalid. Defaults: method `"GET"`, timeout `30000`, no headers, empty body.
+
+Rules checked in `build()`:
+- the URL is required and starts with `http://` or `https://`;
+- the method is one of `GET`, `POST`, `PUT`, `DELETE`;
+- a non-empty body needs `POST` or `PUT`;
+- the timeout is between 1 and 120000 inclusive;
+- header names are not empty, and header names are compared **case-insensitively**: setting the same name again replaces its value, keeping the first position and the first spelling.
+
+`build()` is `const`: the builder can be reused or changed afterwards without affecting a request already built.
+2b:T467,#pragma once
+#include <optional>
+#include <string>
+#include <utility>
+#include <vector>
+
+// TODO: HttpRequest must be immutable with no public constructor; the builder validates.
+class HttpRequest {
+ public:
+  HttpRequest() = default;
+  const std::string& method() const { return method_; }
+  const std::string& url() const { return url_; }
+  const std::string& body() const { return body_; }
+  int timeoutMs() const { return timeoutMs_; }
+  const std::vector<std::pair<std::string, std::string>>& headers() const { return headers_; }
+
+ private:
+  std::string method_;
+  std::string url_;
+  std::string body_;
+  int timeoutMs_ = 0;
+  std::vector<std::pair<std::string, std::string>> headers_;
+};
+
+class HttpRequestBuilder {
+ public:
+  HttpRequestBuilder& method(std::string m) { return *this; }
+  HttpRequestBuilder& url(std::string u) { return *this; }
+  HttpRequestBuilder& header(std::string name, std::string value) { return *this; }
+  HttpRequestBuilder& body(std::string b) { return *this; }
+  HttpRequestBuilder& timeoutMs(int ms) { return *this; }
+  std::optional<HttpRequest> build() const { return std::nullopt; }
+};
+2c:Tff4,#include <optional>
+#include <string>
+#include <type_traits>
+#include "bp_test.h"
+#include "solution.h"
+
+TEST(Defaults, GetWithThirtySecondTimeout) {
+  auto r = HttpRequestBuilder().url("https://example.com/a").build();
+  ASSERT_TRUE(r.has_value());
+  EXPECT_EQ(r->method(), std::string("GET"));
+  EXPECT_EQ(r->url(), std::string("https://example.com/a"));
+  EXPECT_EQ(r->timeoutMs(), 30000);
+  EXPECT_TRUE(r->body().empty());
+  EXPECT_TRUE(r->headers().empty());
+}
+
+TEST(Fluent, SettersChainAndAreApplied) {
+  HttpRequestBuilder b;
+  b.method("POST").url("http://x.test/p").body("{}").timeoutMs(500).header("Accept", "json");
+  auto r = b.build();
+  ASSERT_TRUE(r.has_value());
+  EXPECT_EQ(r->method(), std::string("POST"));
+  EXPECT_EQ(r->body(), std::string("{}"));
+  EXPECT_EQ(r->timeoutMs(), 500);
+  ASSERT_EQ(r->headers().size(), static_cast<std::size_t>(1));
+  EXPECT_EQ(r->headers()[0].first, std::string("Accept"));
+  EXPECT_EQ(r->headers()[0].second, std::string("json"));
+}
+
+TEST(Validation, UrlIsRequiredAndMustBeHttp) {
+  EXPECT_FALSE(HttpRequestBuilder().build().has_value());
+  EXPECT_FALSE(HttpRequestBuilder().url("").build().has_value());
+  EXPECT_FALSE(HttpRequestBuilder().url("ftp://x.test").build().has_value());
+  EXPECT_FALSE(HttpRequestBuilder().url("example.com").build().has_value());
+  EXPECT_TRUE(HttpRequestBuilder().url("http://x.test").build().has_value());
+}
+
+TEST(Validation, MethodMustBeKnown) {
+  for (const char* m : {"GET", "POST", "PUT", "DELETE"}) {
+    EXPECT_TRUE(HttpRequestBuilder().url("https://a.test").method(m).build().has_value());
+  }
+  EXPECT_FALSE(HttpRequestBuilder().url("https://a.test").method("PATCH").build().has_value());
+  EXPECT_FALSE(HttpRequestBuilder().url("https://a.test").method("get").build().has_value());
+}
+
+TEST(Validation, BodyNeedsPostOrPut) {
+  EXPECT_FALSE(HttpRequestBuilder().url("https://a.test").body("x").build().has_value());
+  EXPECT_FALSE(HttpRequestBuilder().url("https://a.test").method("DELETE").body("x").build().has_value());
+  EXPECT_TRUE(HttpRequestBuilder().url("https://a.test").method("PUT").body("x").build().has_value());
+  EXPECT_TRUE(HttpRequestBuilder().url("https://a.test").method("POST").body("").build().has_value());
+}
+
+TEST(Validation, TimeoutRangeIsInclusive) {
+  auto make = [](int ms) { return HttpRequestBuilder().url("https://a.test").timeoutMs(ms).build().has_value(); };
+  EXPECT_FALSE(make(0));
+  EXPECT_FALSE(make(-5));
+  EXPECT_TRUE(make(1));
+  EXPECT_TRUE(make(120000));
+  EXPECT_FALSE(make(120001));
+}
+
+TEST(Headers, NamesAreCaseInsensitiveAndReplaceInPlace) {
+  auto r = HttpRequestBuilder()
+               .url("https://a.test")
+               .header("Content-Type", "a")
+               .header("X-Id", "1")
+               .header("content-type", "b")
+               .build();
+  ASSERT_TRUE(r.has_value());
+  ASSERT_EQ(r->headers().size(), static_cast<std::size_t>(2));
+  EXPECT_EQ(r->headers()[0].first, std::string("Content-Type"));
+  EXPECT_EQ(r->headers()[0].second, std::string("b"));
+  EXPECT_EQ(r->headers()[1].first, std::string("X-Id"));
+}
+
+TEST(Headers, EmptyNameIsInvalid) {
+  EXPECT_FALSE(HttpRequestBuilder().url("https://a.test").header("", "v").build().has_value());
+}
+
+TEST(Reuse, BuiltRequestIsASnapshot) {
+  HttpRequestBuilder b;
+  b.url("https://a.test").header("A", "1");
+  auto first = b.build();
+  b.url("https://b.test").header("A", "2").header("B", "3");
+  auto second = b.build();
+  ASSERT_TRUE(first.has_value() && second.has_value());
+  EXPECT_EQ(first->url(), std::string("https://a.test"));
+  EXPECT_EQ(first->headers().size(), static_cast<std::size_t>(1));
+  EXPECT_EQ(first->headers()[0].second, std::string("1"));
+  EXPECT_EQ(second->headers().size(), static_cast<std::size_t>(2));
+}
+
+TEST(Shape, RequestHasNoPublicConstructorButIsCopyable) {
+  EXPECT_FALSE(std::is_default_constructible<HttpRequest>::value);
+  EXPECT_FALSE((std::is_constructible<HttpRequest, std::string, std::string>::value));
+  EXPECT_TRUE(std::is_copy_constructible<HttpRequest>::value);
+  EXPECT_TRUE(std::is_nothrow_move_constructible<HttpRequest>::value);
+}
+2d:T503,A settings screen draws buttons and checkboxes. Today each call site picks `LightButton` or `DarkCheckbox` by hand, and last week a dark button ended up beside a light checkbox. Fix it with an **abstract factory**: one factory per visual family, and screens that only ever hold a `WidgetFactory`. `api.h` gives `Button`, `Checkbox` and `WidgetFactory`. Write these in `solution.h`:
+
+- `LightFactory` and `DarkFactory`, both `WidgetFactory`s. Every product a factory makes reports that factory's family from `family()`: `"light"` or `"dark"`. Rendering:
+  - light: button `[Sign in]`, checkbox `[x] Remember me` / `[ ] Remember me`
+  - dark: button `<Sign in>`, checkbox `(x) Remember me` / `( ) Remember me`
+- `std::unique_ptr<WidgetFactory> makeFactory(const std::string& family)`: `"light"` or `"dark"`; anything else (including `""`) gives `nullptr`.
+- `std::string renderLogin(const WidgetFactory& factory)`: the login screen, built **only** through the factory: the checkbox `"Remember me"` (checked), a newline, then the button `"Sign in"`. It must work for a factory you have never seen: the tests pass in a new family.
+
+Each `create...` call returns a new object. Keep the concrete product classes out of the public face of the screen code: `renderLogin` must not name them.
+2e:Tb10,#include <memory>
+#include <string>
+#include "bp_test.h"
+#include "solution.h"
+
+namespace {
+// A family the solution has never seen.
+class ContrastButton : public Button {
+ public:
+  std::string family() const override { return "contrast"; }
+  std::string render(const std::string& l) const override { return "#" + l + "#"; }
+};
+class ContrastCheckbox : public Checkbox {
+ public:
+  std::string family() const override { return "contrast"; }
+  std::string render(const std::string& l, bool c) const override { return std::string(c ? "#X# " : "#_# ") + l; }
+};
+class ContrastFactory : public WidgetFactory {
+ public:
+  std::unique_ptr<Button> createButton() const override { return std::make_unique<ContrastButton>(); }
+  std::unique_ptr<Checkbox> createCheckbox() const override { return std::make_unique<ContrastCheckbox>(); }
+};
+}  // namespace
+
+TEST(Family, LightRendersLightWidgets) {
+  const auto f = makeFactory("light");
+  ASSERT_TRUE(f != nullptr);
+  EXPECT_EQ(f->createButton()->render("Sign in"), std::string("[Sign in]"));
+  EXPECT_EQ(f->createCheckbox()->render("Remember me", true), std::string("[x] Remember me"));
+  EXPECT_EQ(f->createCheckbox()->render("Remember me", false), std::string("[ ] Remember me"));
+}
+
+TEST(Family, DarkRendersDarkWidgets) {
+  const auto f = makeFactory("dark");
+  ASSERT_TRUE(f != nullptr);
+  EXPECT_EQ(f->createButton()->render("Sign in"), std::string("<Sign in>"));
+  EXPECT_EQ(f->createCheckbox()->render("Remember me", true), std::string("(x) Remember me"));
+  EXPECT_EQ(f->createCheckbox()->render("Remember me", false), std::string("( ) Remember me"));
+}
+
+TEST(Family, ProductsOfOneFactoryShareItsFamily) {
+  for (const char* name : {"light", "dark"}) {
+    const auto f = makeFactory(name);
+    ASSERT_TRUE(f != nullptr);
+    const auto b = f->createButton();
+    const auto c = f->createCheckbox();
+    ASSERT_TRUE(b != nullptr && c != nullptr);
+    EXPECT_EQ(b->family(), std::string(name));
+    EXPECT_EQ(c->family(), std::string(name));
+  }
+}
+
+TEST(Family, UnknownFamilyIsNull) {
+  EXPECT_TRUE(makeFactory("") == nullptr);
+  EXPECT_TRUE(makeFactory("sepia") == nullptr);
+  EXPECT_TRUE(makeFactory("Light") == nullptr);
+}
+
+TEST(Family, EveryCreateCallMakesANewObject) {
+  const auto f = makeFactory("dark");
+  ASSERT_TRUE(f != nullptr);
+  const auto a = f->createButton();
+  const auto b = f->createButton();
+  ASSERT_TRUE(a != nullptr && b != nullptr);
+  EXPECT_TRUE(a.get() != b.get());
+}
+
+TEST(Screen, LoginUsesTheFactoryItIsGiven) {
+  EXPECT_EQ(renderLogin(*makeFactory("light")), std::string("[x] Remember me\n[Sign in]"));
+  EXPECT_EQ(renderLogin(*makeFactory("dark")), std::string("(x) Remember me\n<Sign in>"));
+}
+
+TEST(Screen, WorksWithAFamilyItHasNeverSeen) {
+  ContrastFactory contrast;
+  EXPECT_EQ(renderLogin(contrast), std::string("#X# Remember me\n#Sign in#"));
+}
+2f:T58c,A form designer lets users stamp out copies of a prepared element: a label, a badge, or a whole panel of them. The copy must be completely independent, and callers only hold a `Widget`. `api.h` gives the `Widget` interface with its `clone()`. Write in `solution.h`:
+
+- `Label(std::string text)`: `describe()` is `label(<text>)`.
+- `Badge(std::string text)`: a kind of `Label` that `describe()`s as `badge(<text>)`.
+- `Panel(std::string title)`: owns children. `Panel& add(std::unique_ptr<Widget> child)` appends and returns `*this`; `std::size_t size() const`; `Widget* child(std::size_t i)` (`nullptr` out of range). `describe()` is `panel(<title>)[<child>,<child>]` using each child's `describe()`, e.g. `panel(form)[label(Name),badge(new)]`; with no children `panel(form)[]`. `setText` changes the title.
+- `Palette`: a registry of prototypes. `bool add(const std::string& name, const Widget& prototype)` stores a **private copy** and returns `true`; it returns `false` and changes nothing for an empty or duplicate name. `std::unique_ptr<Widget> spawn(const std::string& name) const` returns a new independent copy, or `nullptr` for an unknown name.
+
+`clone()` must return an object of the **same dynamic type** (a cloned `Badge` is still a `Badge`) and a **deep** copy: editing a clone, or any child of a cloned panel, must never change the original, and the other way round. For `Label::setText` replace its text.
+30:T5e6,#pragma once
+#include <cstddef>
+#include <map>
+#include <memory>
+#include <string>
+#include <utility>
+#include <vector>
+#include "api.h"
+
+// TODO: implement Label, Badge, Panel and Palette. Every concrete widget overrides clone() and
+// returns a deep copy of the SAME dynamic type.
+class Label : public Widget {
+ public:
+  explicit Label(std::string text) : text_(std::move(text)) {}
+  std::unique_ptr<Widget> clone() const override { return nullptr; }
+  std::string describe() const override { return ""; }
+  void setText(const std::string& text) override { text_ = text; }
+
+ protected:
+  std::string text_;
+};
+
+class Badge : public Label {
+ public:
+  explicit Badge(std::string text) : Label(std::move(text)) {}
+};
+
+class Panel : public Widget {
+ public:
+  explicit Panel(std::string title) : title_(std::move(title)) {}
+  Panel& add(std::unique_ptr<Widget> child) {
+    (void)child;
+    return *this;
+  }
+  std::size_t size() const { return 0; }
+  Widget* child(std::size_t i) const {
+    (void)i;
+    return nullptr;
+  }
+  std::unique_ptr<Widget> clone() const override { return nullptr; }
+  std::string describe() const override { return ""; }
+  void setText(const std::string& text) override { title_ = text; }
+
+ private:
+  std::string title_;
+};
+
+class Palette {
+ public:
+  bool add(const std::string& name, const Widget& prototype) {
+    (void)name;
+    (void)prototype;
+    return false;
+  }
+  std::unique_ptr<Widget> spawn(const std::string& name) const {
+    (void)name;
+    return nullptr;
+  }
+};
+31:Te95,#include <memory>
+#include <string>
+#include "bp_test.h"
+#include "solution.h"
+
+TEST(Describe, WidgetsDescribeThemselves) {
+  EXPECT_EQ(Label("Name").describe(), std::string("label(Name)"));
+  EXPECT_EQ(Badge("new").describe(), std::string("badge(new)"));
+  Panel p("form");
+  EXPECT_EQ(p.describe(), std::string("panel(form)[]"));
+  p.add(std::make_unique<Label>("Name")).add(std::make_unique<Badge>("new"));
+  EXPECT_EQ(p.describe(), std::string("panel(form)[label(Name),badge(new)]"));
+  EXPECT_EQ(p.size(), static_cast<std::size_t>(2));
+  EXPECT_TRUE(p.child(2) == nullptr);
+}
+
+TEST(Clone, KeepsTheDynamicType) {
+  const Badge b("new");
+  const std::unique_ptr<Widget> c = b.clone();
+  ASSERT_TRUE(c != nullptr);
+  EXPECT_EQ(c->describe(), std::string("badge(new)"));
+  const Label l("hi");
+  EXPECT_EQ(l.clone()->describe(), std::string("label(hi)"));
+}
+
+TEST(Clone, ThroughTheBaseInterface) {
+  std::unique_ptr<Widget> w = std::make_unique<Badge>("beta");
+  std::unique_ptr<Widget> copy = w->clone();
+  EXPECT_TRUE(copy.get() != w.get());
+  EXPECT_EQ(copy->describe(), std::string("badge(beta)"));
+}
+
+TEST(Clone, EditingACopyLeavesTheOriginalAlone) {
+  Label original("a");
+  auto copy = original.clone();
+  copy->setText("b");
+  EXPECT_EQ(original.describe(), std::string("label(a)"));
+  EXPECT_EQ(copy->describe(), std::string("label(b)"));
+  original.setText("c");
+  EXPECT_EQ(copy->describe(), std::string("label(b)"));
+}
+
+TEST(Clone, PanelCopiesAreDeep) {
+  Panel original("form");
+  original.add(std::make_unique<Label>("Name")).add(std::make_unique<Badge>("new"));
+  auto copy = original.clone();
+  ASSERT_TRUE(copy != nullptr);
+  EXPECT_EQ(copy->describe(), original.describe());
+  auto& copyPanel = static_cast<Panel&>(*copy);
+  ASSERT_TRUE(copyPanel.child(0) != nullptr);
+  copyPanel.child(0)->setText("Email");
+  copy->setText("signup");
+  EXPECT_EQ(original.describe(), std::string("panel(form)[label(Name),badge(new)]"));
+  EXPECT_EQ(copy->describe(), std::string("panel(signup)[label(Email),badge(new)]"));
+  EXPECT_TRUE(copyPanel.child(0) != original.child(0));
+  original.child(1)->setText("old");
+  EXPECT_EQ(copy->describe(), std::string("panel(signup)[label(Email),badge(new)]"));
+}
+
+TEST(Clone, NestedPanelsAreDeep) {
+  Panel outer("outer");
+  auto inner = std::make_unique<Panel>("inner");
+  inner->add(std::make_unique<Badge>("x"));
+  outer.add(std::move(inner));
+  auto copy = outer.clone();
+  static_cast<Panel*>(static_cast<Panel&>(*copy).child(0))->child(0)->setText("y");
+  EXPECT_EQ(outer.describe(), std::string("panel(outer)[panel(inner)[badge(x)]]"));
+  EXPECT_EQ(copy->describe(), std::string("panel(outer)[panel(inner)[badge(y)]]"));
+}
+
+TEST(Palette, SpawnsIndependentCopies) {
+  Panel proto("card");
+  proto.add(std::make_unique<Badge>("hot"));
+  Palette palette;
+  EXPECT_TRUE(palette.add("card", proto));
+  auto a = palette.spawn("card");
+  auto b = palette.spawn("card");
+  ASSERT_TRUE(a != nullptr && b != nullptr);
+  EXPECT_TRUE(a.get() != b.get());
+  a->setText("changed");
+  EXPECT_EQ(b->describe(), std::string("panel(card)[badge(hot)]"));
+  EXPECT_EQ(palette.spawn("card")->describe(), std::string("panel(card)[badge(hot)]"));
+}
+
+TEST(Palette, KeepsItsOwnSnapshot) {
+  Label source("v1");
+  Palette palette;
+  EXPECT_TRUE(palette.add("title", source));
+  source.setText("v2");
+  EXPECT_EQ(palette.spawn("title")->describe(), std::string("label(v1)"));
+}
+
+TEST(Palette, RejectsBadNamesAndUnknownSpawn) {
+  Label a("a");
+  Label b("b");
+  Palette palette;
+  EXPECT_FALSE(palette.add("", a));
+  EXPECT_TRUE(palette.add("x", a));
+  EXPECT_FALSE(palette.add("x", b));
+  EXPECT_EQ(palette.spawn("x")->describe(), std::string("label(a)"));
+  EXPECT_TRUE(palette.spawn("nope") == nullptr);
+}
+32:T44e,An order service needs unique, increasing order numbers. Today it reaches for a global counter, so nothing can test it with known numbers and nothing stops two counters from existing. Do both halves in `solution.h`; `api.h` gives the `IdSource` interface.
+
+**1. `IdGenerator`**: the one real counter, as a *Meyers singleton* implementing `IdSource`.
+- `static IdGenerator& instance()`: always the same object (a function-local `static`, so construction is thread-safe).
+- `long next() override`: returns 1, 2, 3, ... across **all** callers of `instance()`.
+- Nobody else can create one: private constructor, and no copy or move (a stray `auto g = IdGenerator::instance();` must not compile).
+
+**2. `OrderService`**: takes an `IdSource&` in its constructor and never names `IdGenerator`. `std::string place(const std::string& item)` returns `"ORD-<id>:<item>"`, for example `"ORD-7:tea"`.
+
+The tests build `OrderService` with a fake `IdSource` that returns known numbers, and with the real singleton. The singleton exists once, at the edge; the logic that needs numbers does not know it is a singleton.
+33:T79f,#include <string>
+#include <type_traits>
+#include "bp_test.h"
+#include "solution.h"
+
+namespace {
+struct FakeIds : IdSource {  // known numbers, no singleton involved
+  long value;
+  explicit FakeIds(long start) : value(start) {}
+  long next() override { return value++; }
+};
+}  // namespace
+
+TEST(Singleton, SameObjectEveryTime) {
+  IdGenerator& a = IdGenerator::instance();
+  IdGenerator& b = IdGenerator::instance();
+  EXPECT_TRUE(&a == &b);
+}
+
+TEST(Singleton, CountsAcrossAllCallers) {
+  IdGenerator& a = IdGenerator::instance();
+  IdGenerator& b = IdGenerator::instance();
+  const long first = a.next();
+  EXPECT_EQ(b.next(), first + 1);
+  EXPECT_EQ(IdGenerator::instance().next(), first + 2);
+}
+
+TEST(Singleton, CannotBeCopiedOrCreated) {
+  EXPECT_FALSE(std::is_copy_constructible<IdGenerator>::value);
+  EXPECT_FALSE(std::is_copy_assignable<IdGenerator>::value);
+  EXPECT_FALSE(std::is_move_constructible<IdGenerator>::value);
+  EXPECT_FALSE(std::is_move_assignable<IdGenerator>::value);
+  EXPECT_FALSE(std::is_default_constructible<IdGenerator>::value);
+}
+
+TEST(OrderService, UsesTheInjectedSource) {
+  FakeIds ids(100);
+  OrderService service(ids);
+  EXPECT_EQ(service.place("tea"), std::string("ORD-100:tea"));
+  EXPECT_EQ(service.place("cake"), std::string("ORD-101:cake"));
+  EXPECT_EQ(ids.value, 102L);
+}
+
+TEST(OrderService, TwoServicesShareOneSourceWhenGivenOne) {
+  FakeIds ids(1);
+  OrderService a(ids);
+  OrderService b(ids);
+  EXPECT_EQ(a.place("x"), std::string("ORD-1:x"));
+  EXPECT_EQ(b.place("y"), std::string("ORD-2:y"));
+}
+
+TEST(OrderService, WorksWithTheRealSingleton) {
+  OrderService service(IdGenerator::instance());
+  const std::string first = service.place("a");
+  const std::string second = service.place("b");
+  EXPECT_TRUE(first.rfind("ORD-", 0) == 0);
+  EXPECT_TRUE(first.size() > 6 && first.substr(first.size() - 2) == ":a");
+  EXPECT_TRUE(second.substr(second.size() - 2) == ":b");
+  EXPECT_TRUE(first != second);
+}
+34:T4bb,A server builds a response in a scratch `Buffer` (`api.h`: an alias for `std::string`) for every request, and allocating a big one each time is slow. Write `BufferPool` in `solution.h`: it owns a fixed number of buffers and **leases** them out.
+
+- `explicit BufferPool(std::size_t capacity)` creates `capacity` buffers up front. `capacity()` and `available()` (idle buffers right now) report counts.
+- `Lease acquire()` hands out an idle buffer. When none is idle it returns an **empty** lease (`explicit operator bool` is `false`); it never allocates a new one and never throws.
+- `BufferPool::Lease` is the RAII handle: `*lease` / `lease->` reach the buffer. It is **move-only**. When a lease is destroyed, or overwritten by a move-assignment, its buffer goes back to the pool, **cleared**, so the next user never sees the previous request's data. A moved-from lease is empty and gives nothing back.
+
+Pitfalls the tests probe: a returned buffer must be reset; a move must hand over ownership exactly once (no double release); move-assigning onto a live lease must first release what it held; and a pooled buffer is *reused* (same object), not recreated. The pool must outlive its leases; say so in a comment.
+35:Td24,#include <string>
+#include <type_traits>
+#include <utility>
+#include "bp_test.h"
+#include "solution.h"
+
+TEST(Pool, StartsFullAndExhaustsAtCapacity) {
+  BufferPool pool(2);
+  EXPECT_EQ(pool.capacity(), static_cast<std::size_t>(2));
+  EXPECT_EQ(pool.available(), static_cast<std::size_t>(2));
+  auto a = pool.acquire();
+  auto b = pool.acquire();
+  EXPECT_TRUE(static_cast<bool>(a));
+  EXPECT_TRUE(static_cast<bool>(b));
+  EXPECT_TRUE(&*a != &*b);
+  EXPECT_EQ(pool.available(), static_cast<std::size_t>(0));
+}
+
+TEST(Pool, ExhaustedGivesAnEmptyLease) {
+  BufferPool pool(1);
+  auto a = pool.acquire();
+  auto b = pool.acquire();
+  EXPECT_TRUE(static_cast<bool>(a));
+  EXPECT_FALSE(static_cast<bool>(b));
+  EXPECT_EQ(pool.capacity(), static_cast<std::size_t>(1));
+  EXPECT_EQ(pool.available(), static_cast<std::size_t>(0));
+}
+
+TEST(Pool, LeaseReturnsOnScopeExit) {
+  BufferPool pool(2);
+  {
+    auto a = pool.acquire();
+    EXPECT_EQ(pool.available(), static_cast<std::size_t>(1));
+  }
+  EXPECT_EQ(pool.available(), static_cast<std::size_t>(2));
+}
+
+TEST(Pool, ReturnedBufferIsClearedAndReused) {
+  BufferPool pool(1);
+  const Buffer* first = nullptr;
+  {
+    auto a = pool.acquire();
+    ASSERT_TRUE(static_cast<bool>(a));
+    *a += "secret of request 1";
+    first = &*a;
+  }
+  auto b = pool.acquire();
+  ASSERT_TRUE(static_cast<bool>(b));
+  EXPECT_TRUE(b->empty());
+  EXPECT_TRUE(&*b == first);  // reused, not recreated
+}
+
+TEST(Pool, EmptyLeaseGivesNothingBack) {
+  BufferPool pool(1);
+  auto a = pool.acquire();
+  {
+    auto none = pool.acquire();
+    EXPECT_FALSE(static_cast<bool>(none));
+  }
+  EXPECT_EQ(pool.available(), static_cast<std::size_t>(0));
+}
+
+TEST(Lease, IsMoveOnly) {
+  EXPECT_FALSE(std::is_copy_constructible<BufferPool::Lease>::value);
+  EXPECT_FALSE(std::is_copy_assignable<BufferPool::Lease>::value);
+  EXPECT_TRUE(std::is_move_constructible<BufferPool::Lease>::value);
+  EXPECT_TRUE(std::is_move_assignable<BufferPool::Lease>::value);
+}
+
+TEST(Lease, MoveTransfersOwnershipOnce) {
+  BufferPool pool(2);
+  {
+    auto a = pool.acquire();
+    *a = "hello";
+    BufferPool::Lease b = std::move(a);
+    EXPECT_FALSE(static_cast<bool>(a));
+    ASSERT_TRUE(static_cast<bool>(b));
+    EXPECT_EQ(*b, std::string("hello"));
+    EXPECT_EQ(pool.available(), static_cast<std::size_t>(1));
+  }
+  EXPECT_EQ(pool.available(), static_cast<std::size_t>(2));  // exactly one give-back, not two
+  auto x = pool.acquire();
+  auto y = pool.acquire();
+  EXPECT_TRUE(&*x != &*y);
+  EXPECT_FALSE(static_cast<bool>(pool.acquire()));
+}
+
+TEST(Lease, MoveAssignReleasesWhatItHeld) {
+  BufferPool pool(2);
+  auto a = pool.acquire();
+  auto b = pool.acquire();
+  EXPECT_EQ(pool.available(), static_cast<std::size_t>(0));
+  a = std::move(b);  // a's old buffer must go back to the pool
+  EXPECT_EQ(pool.available(), static_cast<std::size_t>(1));
+  EXPECT_TRUE(static_cast<bool>(a));
+  EXPECT_FALSE(static_cast<bool>(b));
+  a = BufferPool::Lease();  // overwrite with an empty lease: releases the second buffer too
+  EXPECT_EQ(pool.available(), static_cast<std::size_t>(2));
+}
+
+TEST(Lease, SelfMoveAssignKeepsTheBuffer) {
+  BufferPool pool(1);
+  auto a = pool.acquire();
+  *a = "kept";
+  BufferPool::Lease& same = a;
+  a = std::move(same);
+  ASSERT_TRUE(static_cast<bool>(a));
+  EXPECT_EQ(*a, std::string("kept"));
+  EXPECT_EQ(pool.available(), static_cast<std::size_t>(0));
+}
+f:[["children",{"s":"__PAGE__","h":160,"d":{"r":["$","$1","c",{"children":[["$","$L1c",null,{"exercises":{"old-town":[{"id":"file-handle","title":"FileHandle: RAII and move-only ownership","prompt":"The `os` namespace in `api.h` hands out numeric ids you must give back with `os::close`. Forgetting leaks an id; closing twice is an error.\n\nWrite `FileHandle` in `solution.h` so that nobody ever has to remember:\n\n- `explicit FileHandle(const std::string& path)` opens the file; the destructor closes it.\n- `int id() const` returns the id, or `0` for a moved-from handle.\n- It **cannot be copied** (two owners would close twice) but it **can be moved**: a move transfers the id and leaves the source empty (`id() == 0`), and the empty source closes nothing.\n- Move assignment closes whatever the target already held before taking the new id. Self-move-assignment must not close anything.\n","api":"#pragma once\n#include <string>\n\n// A tiny pretend operating system. open() hands out ids, close() takes them back.\nnamespace os {\nint open(const std::string& path);   // returns a fresh id (> 0)\nvoid close(int id);                  // closing an id that is not open counts as an error\nint openCount();                     // how many ids are open right now\nint closeErrors();                   // how many bad closes (double close, unknown id) happened\nvoid reset();\n}  // namespace os\n","starter":[{"path":"solution.h","content":"#pragma once\n#include <string>\n#include \"api.h\"\n\n// TODO: own the id, release it in the destructor, forbid copying, allow moving.\nclass FileHandle {\n public:\n  explicit FileHandle(const std::string& path) : id_(os::open(path)) {}\n  int id() const { return id_; }\n\n private:\n  int id_;\n};\n"}],"tests":[{"path":"tests.cpp","content":"$1d"}],"hints":["Who is responsible for calling `os::close`? Make that the destructor's job, never the caller's.","If two objects could hold the same id, both destructors would close it. Delete the copy operations and write the moves.","A move must leave the source owning nothing. `std::exchange(other.id_, 0)` takes the id and empties the source in one expression. Close the old id before overwriting it in move assignment."],"driver":{"path":"driver.cpp","content":"#define BP_TEST_MAIN\n#include \"bp_test.h\"\n","readOnly":true},"testCount":7}],"solid-square":[{"id":"srp-invoice","title":"Invoice: one class, one reason to change","prompt":"A single `Invoice` class used to hold line items, add up the total, format the text *and* save it. Four reasons to change in one class. Split it so each class has one job. In `solution.h` write:\n\n- `Invoice`: holds data and the arithmetic of its own data only. `void add(const LineItem&)`, `long long totalCents() const` (sum of `unitCents * quantity`), `const std::vector<LineItem>& items() const`. It must **not** know how to render or store itself.\n- `InvoiceFormatter` with `std::string render(const Invoice&) const`. One line per item in the form `\"<name> x<quantity> = <money>\\n\"`, then `\"TOTAL <money>\\n\"`. `<money>` is cents as dollars with two digits: `1250` is `12.50`, `5` is `0.05`, `0` is `0.00`.\n- `InvoiceArchiver` constructed with an `InvoiceSink&`, with `void archive(const Invoice&)` that renders the invoice (using `InvoiceFormatter`) and passes the text to the sink's `store` exactly once.\n\nA test checks with a compile-time trait that `Invoice` has no `render` or `store` member.\n","api":"#pragma once\n#include <string>\n\nstruct LineItem {\n  std::string name;\n  long long unitCents;\n  int quantity;\n};\n\n// Where finished invoice text goes (a file, a database, a test double).\nclass InvoiceSink {\n public:\n  virtual ~InvoiceSink() = default;\n  virtual void store(const std::string& text) = 0;\n};\n","starter":[{"path":"solution.h","content":"#pragma once\n#include <string>\n#include <vector>\n#include \"api.h\"\n\n// TODO: one class per reason to change. Invoice holds data and its total only.\nclass Invoice {\n public:\n  void add(const LineItem& item) { items_.push_back(item); }\n  long long totalCents() const { return 0; }\n  const std::vector<LineItem>& items() const { return items_; }\n\n private:\n  std::vector<LineItem> items_;\n};\n\nclass InvoiceFormatter {\n public:\n  std::string render(const Invoice&) const { return \"\"; }\n};\n\nclass InvoiceArchiver {\n public:\n  explicit InvoiceArchiver(InvoiceSink& sink) { (void)sink; }\n  void archive(const Invoice&) {}\n};\n"}],"tests":[{"path":"tests.cpp","content":"$1e"}],"hints":["List who would ask for a change: finance (how totals work), design (how text looks), operations (where it is saved). Each is a different reason to change.","`Invoice` keeps items and sums them. `InvoiceFormatter` only turns an `Invoice` into text. `InvoiceArchiver` only hands text to an `InvoiceSink`.","`money(cents)`: dollars are `cents / 100`; the remainder `cents % 100` needs a leading `0` when below 10. `archive` is `sink_.store(formatter_.render(invoice))`."],"driver":"$f:0:1:d:r:props:children:0:props:exercises:old-town:0:driver","testCount":9},{"id":"ocp-shipping","title":"Shipping quotes: add a carrier without editing the calculator","prompt":"A shop prices shipping with rules. Today it has a big `if (country == ...) ... else if (grams > ...)` ladder, and every new carrier means editing it. Make the calculator **closed for modification, open for extension**. `api.h` gives `Parcel` and the `ShippingRule` interface. Write `ShippingCalculator` in `solution.h`:\n\n- `void add(std::unique_ptr<ShippingRule> rule)`: the calculator takes ownership of the rule. A null rule is ignored.\n- `long long quote(const Parcel& parcel) const`: the **cheapest** price among the rules that `matches` the parcel; `-1` when no rule matches.\n- `std::size_t ruleCount() const`.\n\nThe calculator must not know any concrete rule: the tests register rules you have never seen, and destroying the calculator must destroy every rule it owns.\n","api":"#pragma once\n#include <string>\n\nstruct Parcel {\n  int grams;\n  std::string country;\n};\n\n// One way of pricing a parcel. New carriers and promotions are new subclasses.\nclass ShippingRule {\n public:\n  virtual ~ShippingRule() = default;\n  // Does this rule apply to the parcel?\n  virtual bool matches(const Parcel& parcel) const = 0;\n  // Price in cents (only meaningful when matches() is true).\n  virtual long long cents(const Parcel& parcel) const = 0;\n};\n","starter":[{"path":"solution.h","content":"#pragma once\n#include <cstddef>\n#include <memory>\n#include \"api.h\"\n\n// TODO: the price must come from registered ShippingRule objects, not from an if-ladder here.\nclass ShippingCalculator {\n public:\n  void add(std::unique_ptr<ShippingRule> rule) { (void)rule; }\n  long long quote(const Parcel& parcel) const {\n    if (parcel.country == \"US\") return 500;\n    return -1;\n  }\n  std::size_t ruleCount() const { return 0; }\n};\n"}],"tests":[{"path":"tests.cpp","content":"$1f"}],"hints":["Which part changes every time marketing invents a carrier, and which part (pick the cheapest, handle none) never does? Put only the stable part in the calculator.","Keep a `std::vector<std::unique_ptr<ShippingRule>>`. `add` moves the rule in; `quote` loops over the rules and never names a concrete class.","`quote`: `long long best = -1; for (const auto& r : rules_) { if (!r->matches(p)) continue; const long long c = r->cents(p); if (best < 0 || c < best) best = c; } return best;`"],"driver":"$f:0:1:d:r:props:children:0:props:exercises:old-town:0:driver","testCount":6},{"id":"lsp-account","title":"Accounts: subtypes that keep the base's promises","prompt":"$20","api":"#pragma once\n\n// The contract every Account must honour (callers rely on it, so subtypes must not break it):\n//   deposit(x):  ignored when x <= 0, otherwise balance() grows by exactly x.\n//   withdraw(x): when it returns true, balance() fell by exactly x;\n//                when it returns false, balance() is unchanged.\n//   A subtype may accept MORE withdrawals than the base promises, never fewer.\n//   Base promise: withdraw(x) succeeds whenever 0 < x <= balance().\nclass Account {\n public:\n  virtual ~Account() = default;\n  virtual void deposit(long long cents) = 0;\n  virtual bool withdraw(long long cents) = 0;\n  virtual long long balance() const = 0;\n};\n","starter":[{"path":"solution.h","content":"$21"}],"tests":[{"path":"tests.cpp","content":"$22"}],"hints":["Read the contract in `api.h`: after a failed withdraw nothing may change, and after a successful one the balance falls by exactly the amount. Which kind of subclass would break that?","`CheckingAccount` may accept more (overdraft) but must never refuse something the base promises. `FixedDeposit` cannot promise anything about `withdraw`, so it should not claim to be an `Account` at all.","Both accounts: ignore non-positive amounts, check the limit (`balance_` for savings, `balance_ + overdraft_` for checking), then `balance_ -= cents`. `FixedDeposit::redeem` deposits the principal into `into` only when matured, then zeroes it."],"driver":"$f:0:1:d:r:props:children:0:props:exercises:old-town:0:driver","testCount":11},{"id":"isp-machine","title":"Office machines: no client forced to depend on what it does not use","prompt":"An office once had a fat `Machine` interface with `print`, `scan` and `fax`, so the cheap `BasicPrinter` had to implement `scan` and `fax` as stubs that did nothing. `api.h` already splits the roles into `Printer` and `Scanner`. Write in `solution.h`:\n\n- `class BasicPrinter : public Printer`: **only** a printer. One page holds 10 characters, so `print` returns `ceil(text.size() / 10)` pages (`0` for an empty text).\n- `class AllInOne : public Printer, public Scanner`: prints like `BasicPrinter`; `scan` returns `\"scan#1\"`, then `\"scan#2\"`, and so on.\n- `int copyDocument(Scanner& from, Printer& to)`: scan one document, print it, return the pages printed. It must work with *any* scanner and *any* printer, including two different objects.\n\n`BasicPrinter` must not be a `Scanner`.\n","api":"#pragma once\n#include <string>\n\n// Narrow roles. A client depends only on the role it uses.\nclass Printer {\n public:\n  virtual ~Printer() = default;\n  // Prints the text and returns the number of pages used.\n  virtual int print(const std::string& text) = 0;\n};\n\nclass Scanner {\n public:\n  virtual ~Scanner() = default;\n  // Returns the text of the next scanned document.\n  virtual std::string scan() = 0;\n};\n","starter":[{"path":"solution.h","content":"#pragma once\n#include <string>\n#include \"api.h\"\n\n// TODO: split the roles. BasicPrinter must not be a Scanner; copyDocument takes the narrow roles.\nclass BasicPrinter : public Printer {\n public:\n  int print(const std::string& text) override {\n    (void)text;\n    return 0;\n  }\n};\n\nclass AllInOne : public Printer {\n public:\n  int print(const std::string& text) override {\n    (void)text;\n    return 0;\n  }\n};\n\ninline int copyDocument(Printer& to, Printer& from) {\n  (void)to;\n  (void)from;\n  return 0;\n}\n"}],"tests":[{"path":"tests.cpp","content":"$23"}],"hints":["Who is forced to carry a `scan` they cannot do? Let each class implement exactly the roles it really has.","`BasicPrinter : Printer`; `AllInOne : Printer, Scanner`. Share the page maths in one small helper instead of copying it. `copyDocument` takes the two roles, not a machine.","Pages: `static_cast<int>((text.size() + 9) / 10)`. `copyDocument(Scanner& from, Printer& to) { return to.print(from.scan()); }`."],"driver":"$f:0:1:d:r:props:children:0:props:exercises:old-town:0:driver","testCount":8},{"id":"dip-notifier","title":"Order service: depend on an abstraction, not on email","prompt":"An order service must tell customers their order is confirmed, but it must not know *how*. `api.h` gives the abstraction `MessageSender`. Write `OrderService` in `solution.h`:\n\n- `explicit OrderService(MessageSender& sender)`: the service uses the sender it is given. It does not create one, and it does not use a global.\n- `bool placeOrder(const std::string& customer, int quantity)`:\n  - `quantity <= 0` is rejected: return `false` and send nothing.\n  - otherwise send one message to `customer` with the body `\"Order confirmed: <quantity> item(s)\"` (for example `\"Order confirmed: 3 item(s)\"`).\n  - return `true` only when the sender reports delivery; if `send` returns `false`, the order is not confirmed and `placeOrder` returns `false`.\n- `int confirmedCount() const`: how many orders were confirmed (delivered) so far.\n\nThe tests pass in senders of their own: one that records messages and one that always fails.\n","api":"#pragma once\n#include <string>\n\n// The abstraction the order service depends on. Real senders (email, SMS, a test double) implement it.\nclass MessageSender {\n public:\n  virtual ~MessageSender() = default;\n  // Returns true when the message was delivered.\n  virtual bool send(const std::string& to, const std::string& body) = 0;\n};\n","starter":[{"path":"solution.h","content":"#pragma once\n#include <string>\n#include \"api.h\"\n\n// TODO: depend on the MessageSender abstraction. Do not create a sender yourself.\nclass OrderService {\n public:\n  explicit OrderService(MessageSender& sender) { (void)sender; }\n  bool placeOrder(const std::string& customer, int quantity) {\n    (void)customer;\n    (void)quantity;\n    return false;\n  }\n  int confirmedCount() const { return 0; }\n};\n"}],"tests":[{"path":"tests.cpp","content":"$24"}],"hints":["The tests give you a sender you have never seen. Where can the service get it from, if it must not create one or reach for a global?","Take `MessageSender&` in the constructor and keep it in a member. The service decides *when* to notify; the sender decides *how*.","`placeOrder`: reject `quantity <= 0` first; build the body with `std::to_string`; `if (!sender_.send(customer, body)) return false;` then `++confirmed_` and return true."],"driver":"$f:0:1:d:r:props:children:0:props:exercises:old-town:0:driver","testCount":6},{"id":"dip-clock","title":"Sessions: inject the clock and own it","prompt":"Code that calls the system clock directly cannot be tested: you would have to sleep. Make time an injected dependency. `api.h` gives the `Clock` abstraction. Write `SessionStore` in `solution.h`:\n\n- `SessionStore(std::unique_ptr<Clock> clock, long long ttlSeconds)`: the store **owns** its clock (the caller hands it over with `std::move`). It never reads the system clock itself.\n- `std::string open(const std::string& user)`: creates a session at the current time and returns its token: `\"s1\"`, `\"s2\"`, ...\n- `bool isValid(const std::string& token) const`: true when the token exists and `now - createdAt < ttlSeconds` (a session created exactly `ttl` seconds ago has expired).\n- `std::size_t activeCount() const`: how many sessions are valid right now.\n\nThe tests give you a clock they can move, and check that destroying the store destroys the clock it owns.\n","api":"#pragma once\n\n// Where \"now\" comes from. Production uses the system clock; tests use a clock they can move.\nclass Clock {\n public:\n  virtual ~Clock() = default;\n  virtual long long nowSeconds() const = 0;\n};\n","starter":[{"path":"solution.h","content":"#pragma once\n#include <cstddef>\n#include <memory>\n#include <string>\n#include \"api.h\"\n\n// TODO: use the injected Clock (and own it); never read the system clock here.\nclass SessionStore {\n public:\n  SessionStore(std::unique_ptr<Clock> clock, long long ttlSeconds) {\n    (void)clock;\n    (void)ttlSeconds;\n  }\n  std::string open(const std::string& user) {\n    (void)user;\n    return \"\";\n  }\n  bool isValid(const std::string& token) const {\n    (void)token;\n    return false;\n  }\n  std::size_t activeCount() const { return 0; }\n};\n"}],"tests":[{"path":"tests.cpp","content":"$25"}],"hints":["How would a test ever make a session expire without waiting? The store needs a time source it does not create itself.","Take `std::unique_ptr<Clock>` by value in the constructor and `std::move` it into a member: that says \"the store owns this clock\". Keep a `std::map<std::string, long long>` of token to creation time.","`isValid`: find the token; `return it != end && clock_->nowSeconds() - it->second < ttl_;`. `activeCount` counts the valid ones. Tokens: `\"s\" + std::to_string(++counter_)`."],"driver":"$f:0:1:d:r:props:children:0:props:exercises:old-town:0:driver","testCount":6},{"id":"demeter-wallet","title":"Shop and customer: tell, don't ask","prompt":"A shop sells to customers who have money. The tempting code is `customer.getWallet().getBalance() >= price` followed by `customer.getWallet().setBalance(...)`: the shop reaches through the customer into its wallet, so every caller depends on the customer's internals. Follow the Law of Demeter and *tell, don't ask*. Write in `solution.h`:\n\n- `class Wallet`: `explicit Wallet(long long cents = 0)`; `bool charge(long long cents)` (false and no change unless `0 < cents <= balance`); `void deposit(long long cents)` (ignores `cents <= 0`); `long long balance() const`.\n- `class Customer`: `Customer(std::string name, long long openingCents)`; `const std::string& name() const`; `bool pay(long long cents)`; `void topUp(long long cents)`; `long long funds() const`. A `Customer` must **not** hand out its wallet: no `wallet()` accessor.\n- `class Shop`: `bool sell(Customer& buyer, long long priceCents)` asks the customer to pay and counts the price as revenue only when the payment succeeded; `long long revenue() const`.\n","starter":[{"path":"solution.h","content":"#pragma once\n#include <string>\n\n// TODO: Customer must not expose its Wallet; Shop only calls customer.pay(...).\nclass Wallet {\n public:\n  explicit Wallet(long long cents = 0) : balance_(cents) {}\n  bool charge(long long cents) {\n    (void)cents;\n    return false;\n  }\n  void deposit(long long cents) { (void)cents; }\n  long long balance() const { return balance_; }\n\n private:\n  long long balance_;\n};\n\nclass Customer {\n public:\n  Customer(std::string name, long long openingCents) : name_(name), wallet_(openingCents) {}\n  const std::string& name() const { return name_; }\n  Wallet& wallet() { return wallet_; }\n\n private:\n  std::string name_;\n  Wallet wallet_;\n};\n\nclass Shop {\n public:\n  bool sell(Customer& buyer, long long priceCents) {\n    (void)buyer;\n    (void)priceCents;\n    return false;\n  }\n  long long revenue() const { return 0; }\n};\n"}],"tests":[{"path":"tests.cpp","content":"$26"}],"hints":["Who knows whether a payment is allowed? The object that holds the money. The shop should not need to know a wallet exists.","`Customer` owns a `Wallet` member and forwards `pay`, `topUp` and `funds` to it. The rule (positive amount, enough money) lives in `Wallet::charge`. `Shop::sell` only calls `buyer.pay(price)`.","`Shop::sell`: `if (!buyer.pay(priceCents)) return false; revenue_ += priceCents; return true;`. `Wallet::charge`: `if (cents <= 0 || cents > balance_) return false; balance_ -= cents; return true;`."],"driver":"$f:0:1:d:r:props:children:0:props:exercises:old-town:0:driver","testCount":8},{"id":"composition-history","title":"Command history: has-a container, not is-a container","prompt":"A text editor keeps the last few commands. The quick way is `class History : public std::vector<std::string>`, and it works until someone calls `push_back` in a loop, `insert` in the middle or `clear` and the \"at most N entries\" rule is gone. Inheritance gave away the whole `vector` interface; you only wanted storage. Use **composition**. Write `BoundedHistory` in `solution.h`:\n\n- `explicit BoundedHistory(std::size_t capacity)`.\n- `void add(const std::string& entry)`: appends; when the history is already at capacity the **oldest** entry is dropped first. A capacity of `0` keeps nothing.\n- `std::size_t size() const`.\n- `const std::string& at(std::size_t index) const`: index `0` is the oldest kept entry (the caller passes `index < size()`).\n- `std::string latest() const`: the newest entry, or `\"\"` when empty.\n\n`BoundedHistory` must not derive from `std::vector` and must not offer `push_back`.\n","starter":[{"path":"solution.h","content":"#pragma once\n#include <cstddef>\n#include <string>\n#include <vector>\n\n// TODO: do not inherit std::vector. Hold the storage as a private member and enforce the capacity.\nclass BoundedHistory : public std::vector<std::string> {\n public:\n  explicit BoundedHistory(std::size_t capacity) : capacity_(capacity) {}\n  void add(const std::string& entry) { (void)entry; }\n  std::string latest() const { return \"\"; }\n\n private:\n  std::size_t capacity_;\n};\n"}],"tests":[{"path":"tests.cpp","content":"$27"}],"hints":["Does a history *behave like* a vector everywhere a vector is used? What would `history.insert(history.begin(), x)` do to the capacity rule?","Hold a `std::deque<std::string>` as a private member and expose only the five operations in the prompt. The invariant `size() <= capacity` can then only be broken inside the class.","`add`: `if (capacity_ == 0) return; if (items_.size() == capacity_) items_.pop_front(); items_.push_back(entry);`. `latest`: `items_.empty() ? std::string() : items_.back()`."],"driver":"$f:0:1:d:r:props:children:0:props:exercises:old-town:0:driver","testCount":7}],"creational-foundry":[{"id":"factory-registry","title":"Codec factory: new codecs without editing the creator","prompt":"$28","api":"#pragma once\n#include <functional>\n#include <memory>\n#include <string>\n\n// A product that callers want by name, without knowing its concrete class.\nclass Codec {\n public:\n  virtual ~Codec() = default;\n  virtual std::string name() const = 0;\n  virtual std::string encode(const std::string& text) const = 0;\n};\n\n// How to make one Codec. New codecs ship a new factory, nothing else.\nusing CodecFactory = std::function<std::unique_ptr<Codec>()>;\n","starter":[{"path":"solution.h","content":"#pragma once\n#include <memory>\n#include <string>\n#include <vector>\n#include \"api.h\"\n\n// TODO: look the factory up in a registry instead of hard-coding names here.\nclass CodecRegistry {\n public:\n  bool registerCodec(const std::string& name, CodecFactory factory) {\n    (void)name;\n    (void)factory;\n    return false;\n  }\n  std::unique_ptr<Codec> create(const std::string& name) const {\n    (void)name;\n    return nullptr;\n  }\n  std::vector<std::string> names() const { return {}; }\n};\n"}],"tests":[{"path":"tests.cpp","content":"$29"}],"hints":["What changes when someone invents a codec, and what never does? The registry should only know how to look a name up and call what it finds.","Store `std::map<std::string, CodecFactory>`. `registerCodec` inserts; `create` finds the entry and calls the stored function. Nothing is built at registration.","`return factories_.emplace(name, std::move(factory)).second;` rejects duplicates and keeps the first. `std::map` iterates in key order, so `names()` is already sorted."],"driver":"$f:0:1:d:r:props:children:0:props:exercises:old-town:0:driver","testCount":8},{"id":"builder-request","title":"HTTP request builder: only valid requests can exist","prompt":"$2a","starter":[{"path":"solution.h","content":"$2b"}],"tests":[{"path":"tests.cpp","content":"$2c"}],"hints":["Who may create an `HttpRequest`? If only the builder can, then every request that exists was validated. Make the constructor private and befriend the builder.","The builder keeps defaults in its own members. Each setter returns `*this`. `build()` checks all the rules, then copies the fields into a new `HttpRequest` (build is const, so the builder stays reusable).","For headers, scan for a case-insensitive match before appending: `std::tolower(static_cast<unsigned char>(c))` on both sides. Replace the value in place if found."],"driver":"$f:0:1:d:r:props:children:0:props:exercises:old-town:0:driver","testCount":10},{"id":"abstract-factory-family","title":"Widget families: products that must match","prompt":"$2d","api":"#pragma once\n#include <memory>\n#include <string>\n\n// Two kinds of widget. Every widget belongs to one visual family (\"light\", \"dark\", ...).\nclass Button {\n public:\n  virtual ~Button() = default;\n  virtual std::string family() const = 0;\n  virtual std::string render(const std::string& label) const = 0;\n};\n\nclass Checkbox {\n public:\n  virtual ~Checkbox() = default;\n  virtual std::string family() const = 0;\n  virtual std::string render(const std::string& label, bool checked) const = 0;\n};\n\n// Makes a matching set of widgets. A screen is built from ONE factory, so it can never mix families.\nclass WidgetFactory {\n public:\n  virtual ~WidgetFactory() = default;\n  virtual std::unique_ptr<Button> createButton() const = 0;\n  virtual std::unique_ptr<Checkbox> createCheckbox() const = 0;\n};\n","starter":[{"path":"solution.h","content":"#pragma once\n#include <memory>\n#include <string>\n#include \"api.h\"\n\n// TODO: one concrete factory per family (LightFactory, DarkFactory) that makes MATCHING products,\n// a makeFactory(name) lookup, and a renderLogin(factory) that only talks to the WidgetFactory interface.\ninline std::unique_ptr<WidgetFactory> makeFactory(const std::string& family) {\n  (void)family;\n  return nullptr;\n}\n\ninline std::string renderLogin(const WidgetFactory& factory) {\n  (void)factory;\n  return \"\";\n}\n"}],"tests":[{"path":"tests.cpp","content":"$2e"}],"hints":["Which two decisions must always agree? The button and the checkbox come from the same family. Put that choice in one object, so call sites cannot disagree.","`LightFactory` and `DarkFactory` each return their own button and checkbox. `renderLogin` takes a `const WidgetFactory&` and calls `createCheckbox()` and `createButton()` on it, nothing else.","Do not look at the concrete factory type inside `renderLogin` (no `dynamic_cast`, no family name compare). The test hands in a family you have never seen."],"driver":"$f:0:1:d:r:props:children:0:props:exercises:old-town:0:driver","testCount":7},{"id":"prototype-clone","title":"Prototype: copy a widget tree without knowing its types","prompt":"$2f","api":"#pragma once\n#include <memory>\n#include <string>\n\n// A UI element that can copy itself without the caller knowing its concrete type.\nclass Widget {\n public:\n  virtual ~Widget() = default;\n  // The prototype operation. C++ cannot make `unique_ptr<Derived>` covariant with `unique_ptr<Widget>`,\n  // so every class returns `unique_ptr<Widget>` and must override this itself.\n  virtual std::unique_ptr<Widget> clone() const = 0;\n  virtual std::string describe() const = 0;\n  virtual void setText(const std::string& text) = 0;  // a Panel's text is its title\n};\n","starter":[{"path":"solution.h","content":"$30"}],"tests":[{"path":"tests.cpp","content":"$31"}],"hints":["A copy constructor on the base class cannot know the derived type. Put the copy behind a virtual `clone()`; each concrete class creates its own type with `std::make_unique<Self>(*this)`.","`Badge` inherits from `Label`, so it inherits `Label::clone()` too, and that would return a `Label`. Override `clone()` in `Badge`.","A `Panel` owns `unique_ptr` children, so the compiler cannot copy it for you. Its `clone()` makes a new `Panel` and adds `child->clone()` for each child. `Palette::add` must store `prototype.clone()`, not the address you were handed."],"driver":"$f:0:1:d:r:props:children:0:props:exercises:old-town:0:driver","testCount":9},{"id":"singleton-meyers","title":"Meyers singleton, injected where it is used","prompt":"$32","api":"#pragma once\n\n// Anything that hands out unique, increasing order numbers.\nclass IdSource {\n public:\n  virtual ~IdSource() = default;\n  virtual long next() = 0;\n};\n","starter":[{"path":"solution.h","content":"#pragma once\n#include <string>\n#include \"api.h\"\n\n// TODO: make IdGenerator a Meyers singleton (private constructor, deleted copy and move,\n// instance() returning a reference), and give OrderService an IdSource& instead of a global.\nclass IdGenerator : public IdSource {\n public:\n  static IdGenerator& instance() {\n    static IdGenerator generator;\n    return generator;\n  }\n  long next() override { return 0; }\n\n private:\n  IdGenerator() = default;\n};\n\nclass OrderService {\n public:\n  std::string place(const std::string& item) { return item; }\n};\n"}],"tests":[{"path":"tests.cpp","content":"$33"}],"hints":["Two jobs: make exactly one `IdGenerator` possible, and keep `OrderService` from depending on that fact. The second job is just a constructor parameter of type `IdSource&`.","`static IdGenerator& instance() { static IdGenerator g; return g; }` with a private default constructor and `= delete` for copy and move. Return a reference, never a value.","`OrderService` stores `IdSource& ids_` and builds `\"ORD-\" + std::to_string(ids_.next()) + \":\" + item`. Only the code that wires the app calls `IdGenerator::instance()`."],"driver":"$f:0:1:d:r:props:children:0:props:exercises:old-town:0:driver","testCount":6},{"id":"pool-lease","title":"Object pool with RAII leases","prompt":"$34","api":"#pragma once\n#include <cstddef>\n#include <string>\n\n// What a caller sees of a pooled resource: a scratch buffer it may fill and read.\nusing Buffer = std::string;\n","starter":[{"path":"solution.h","content":"#pragma once\n#include <cstddef>\n#include \"api.h\"\n\n// TODO: own `capacity` buffers; make Lease a move-only RAII handle that returns its buffer\n// (cleared) to the pool when destroyed or overwritten.\nclass BufferPool {\n public:\n  class Lease {\n   public:\n    explicit operator bool() const { return false; }\n    Buffer& operator*() const { return *buffer_; }\n    Buffer* operator->() const { return buffer_; }\n\n   private:\n    Buffer* buffer_ = nullptr;\n  };\n\n  explicit BufferPool(std::size_t capacity) : capacity_(capacity) {}\n  Lease acquire() { return Lease(); }\n  std::size_t capacity() const { return capacity_; }\n  std::size_t available() const { return 0; }\n\n private:\n  std::size_t capacity_;\n};\n"}],"tests":[{"path":"tests.cpp","content":"$35"}],"hints":["Callers must never have to remember to give the buffer back. Return a small handle object whose destructor does it.","The pool holds `std::vector<std::unique_ptr<Buffer>>` for stable addresses and a `std::vector<Buffer*>` of idle ones. `acquire` pops from the idle list; `giveBack` clears the buffer and pushes it.","Lease: delete copy; move constructor steals the pointers and nulls the source; move assignment does `release()` first, then steals (guard self-assignment); the destructor calls `release()`."],"driver":"$f:0:1:d:r:props:children:0:props:exercises:old-town:0:driver","testCount":9}]}}],["$L36","$L37","$L38","$L39","$L3a","$L3b","$L3c","$L3d","$L3e","$L3f","$L40","$L41"],"$L42"]}],"p":"$@43","v":null,"s":"$9"}}]]
+d:[["children",{"s":"master","h":96,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}]}]]}],"p":"$@e","v":"$c","s":"$9"},"c":"$Qf"}]]
+a:[["children",{"s":"battle","h":96,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}]}]]}],"p":"$@b","v":"$c","s":"$9"},"c":"$Qd"}]]
+0:{"t":{"t":{"s":"","h":80,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/41u6n81vvwlft.css","precedence":"next"}],["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js","async":true}]],["$","html",null,{"lang":"en","className":"r7opxW_variable auY9QW_variable u-EJdW_variable h-full","children":["$","body",null,{"className":"min-h-full","children":[["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}],"notFound":[["$","main",null,{"className":"flex min-h-dvh flex-col items-center justify-center gap-4 px-4 text-center","children":[["$","div",null,{"className":"font-display text-5xl text-[var(--accent)]","children":"404"}],["$","p",null,{"className":"text-white/60","children":"This room is not on the blueprint yet."}],["$","$L6",null,{"href":"/","className":"text-sm text-white/80 underline","children":"Back to the title screen"}]]}],[]]}],["$","$L7",null,{}]]}]}]]}],"p":"$@8","v":null,"s":"$9"},"c":"$Qa"},"h":{"r":["$","$1","h",{"children":[null,["$","$L45",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1, viewport-fit=cover"}],["$","meta","2",{"name":"theme-color","content":"#0a1530"}]]}],["$","$L47",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$48",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"District master: Blueprint Clash"}],["$","meta","1",{"name":"description","content":"A creature-tactics RPG that teaches low-level design in C++ and high-level system design, from fundamentals to big-tech interview level."}],["$","link","2",{"rel":"manifest","href":"/blueprint-clash/manifest.webmanifest"}],["$","meta","3",{"name":"mobile-web-app-capable","content":"yes"}],["$","meta","4",{"name":"apple-mobile-web-app-title","content":"Blueprint Clash"}],["$","meta","5",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","link","6",{"rel":"icon","href":"/blueprint-clash/icon.png?icon.27re_xscs-jmw.png","sizes":"256x256","type":"image/png"}],["$","link","7",{"rel":"apple-touch-icon","href":"/blueprint-clash/apple-icon.png?apple-icon.2rac1w0yc3rju.png","sizes":"180x180","type":"image/png"}],["$","$L49","8",{}]]}]}],null]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"p":"$@4a","v":null,"s":"$9"}},"a":"$@4b","u":"$@4c","b":"P1Up-kNwaUETEc_hJ5SHD"}
+4d:I[97367,["$2"],"OutletBoundary"]
+36:["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/0tgw082ypvclg.js","async":true}]
+37:["$","script","script-1",{"src":"/blueprint-clash/_next/static/chunks/0t9qcylqovpy4.js","async":true}]
+38:["$","script","script-2",{"src":"/blueprint-clash/_next/static/chunks/0sblv8l-tiau6.js","async":true}]
+39:["$","script","script-3",{"src":"/blueprint-clash/_next/static/chunks/395ct09f1a2k3.js","async":true}]
+3a:["$","script","script-4",{"src":"/blueprint-clash/_next/static/chunks/3h-0dauvqgi9t.js","async":true}]
+3b:["$","script","script-5",{"src":"/blueprint-clash/_next/static/chunks/16rdiiyl_5tn4.js","async":true}]
+3c:["$","script","script-6",{"src":"/blueprint-clash/_next/static/chunks/2s9app055hcb1.js","async":true}]
+3d:["$","script","script-7",{"src":"/blueprint-clash/_next/static/chunks/3e4c_dbyuy-n7.js","async":true}]
+3e:["$","script","script-8",{"src":"/blueprint-clash/_next/static/chunks/24t1do-rkj1xf.js","async":true}]
+3f:["$","script","script-9",{"src":"/blueprint-clash/_next/static/chunks/29y4ll7dp6aff.js","async":true}]
+40:["$","script","script-10",{"src":"/blueprint-clash/_next/static/chunks/08oob94tfv3t3.js","async":true}]
+41:["$","script","script-11",{"src":"/blueprint-clash/_next/static/chunks/1zdu7yjl8efu4.js","async":true}]
+42:["$","$L4d",null,{"children":["$","$48",null,{"name":"Next.MetadataOutlet","children":"$@4e"}]}]
+9:300
+4e:null
+4c:true
+9:C
+4b:0
+e:"$undefined"
+b:"$undefined"
+8:"$undefined"
+4a:"$undefined"
+43:"$undefined"

@@ -1,0 +1,81 @@
+1:"$Sreact.fragment"
+2:"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js"
+3:I[39756,["$2"],"default"]
+4:I[37457,["$2"],"default"]
+5:"/blueprint-clash/_next/static/chunks/2n5qeheznvl4u.js"
+6:I[22016,["$2","$5"],""]
+7:I[64576,["$2"],"PwaRegister"]
+d:I[97367,["$2"],"OutletBoundary"]
+e:"$Sreact.suspense"
+10:"ViewportBoundary"
+11:I[97367,["$2"],"$10"]
+13:"MetadataBoundary"
+14:I[97367,["$2"],"$13"]
+16:I[68027,["$2"],"default",1]
+:HL["/blueprint-clash/_next/static/chunks/41u6n81vvwlft.css","style"]
+:HL["/blueprint-clash/_next/static/media/07c7676b89ed2778-s.p.2bn3s6zvc0dyp.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/blueprint-clash/_next/static/media/486a103cae33528f-s.p.309ilb452anpd.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/blueprint-clash/_next/static/media/53897e768d329f66-s.p.3t6q91iet4nsy.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+9:X
+b:[["children",{"s":"__PAGE__","h":512,"d":{"r":["$","$1","c",{"children":["$Lc",[["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/3s1mctvsetnbs.js","async":true,"nonce":"$undefined"}]],["$","$Ld",null,{"children":["$","$e",null,{"name":"Next.MetadataOutlet","children":"$@f"}]}]]}],"p":false,"v":null}}]]
+a:[["children",{"s":{"n":"id","t":"d","k":"adapter","s":[]},"h":66048,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],"p":false,"v":"$9"},"c":"$Qb"}]]
+8:[["children",{"s":"learn","h":131584,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],"p":false,"v":"$9"},"c":"$Qa"}]]
+0:{"P":null,"c":["","learn","adapter",""],"q":"","i":false,"t":{"t":{"s":"","h":131600,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/41u6n81vvwlft.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}],["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js","async":true,"nonce":"$undefined"}]],["$","html",null,{"lang":"en","className":"r7opxW_variable auY9QW_variable u-EJdW_variable h-full","children":["$","body",null,{"className":"min-h-full","children":[["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","main",null,{"className":"flex min-h-dvh flex-col items-center justify-center gap-4 px-4 text-center","children":[["$","div",null,{"className":"font-display text-5xl text-[var(--accent)]","children":"404"}],["$","p",null,{"className":"text-white/60","children":"This room is not on the blueprint yet."}],["$","$L6",null,{"href":"/","className":"text-sm text-white/80 underline","children":"Back to the title screen"}]]}],[]],"forbidden":"$undefined","unauthorized":"$undefined"}],["$","$L7",null,{}]]}]}]]}],"p":false,"v":null},"c":"$Q8"},"h":{"r":["$","$1","h",{"children":[null,["$","$L11",null,{"children":"$L12"}],["$","$L14",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$e",null,{"name":"Next.Metadata","children":"$L15"}]}],null]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"p":false,"v":null}},"m":"$undefined","G":["$16",[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/41u6n81vvwlft.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]]],"S":true,"r":"$undefined","s":"$undefined","a":"$undefined","l":"$undefined","p":"$undefined","d":"$undefined","b":"P1Up-kNwaUETEc_hJ5SHD"}
+17:"/blueprint-clash/_next/static/chunks/3s1mctvsetnbs.js"
+18:I[25039,["$2","$17"],"LessonClient"]
+9:C
+19:T5f1,#include <iostream>
+
+// The legacy class, unchanged.
+class LegacyThermometer {
+public:
+    explicit LegacyThermometer(double fahrenheit) : fahrenheit_(fahrenheit) {}
+    double readFahrenheit() const { return fahrenheit_; }
+
+private:
+    double fahrenheit_;
+};
+
+// Target: the interface the application wants.
+class TemperatureSource {
+public:
+    virtual ~TemperatureSource() = default;
+    virtual double celsius() const = 0;
+};
+
+// Object adapter: owns a copy of the (cheap) adaptee and converts in exactly one place.
+class FahrenheitAdapter : public TemperatureSource {
+public:
+    explicit FahrenheitAdapter(const LegacyThermometer& legacy) : legacy_(legacy) {}
+    double celsius() const override { return (legacy_.readFahrenheit() - 32.0) * 5.0 / 9.0; }
+
+private:
+    LegacyThermometer legacy_;
+};
+
+// A native implementation needs no adapter.
+class CelsiusProbe : public TemperatureSource {
+public:
+    explicit CelsiusProbe(double celsius) : celsius_(celsius) {}
+    double celsius() const override { return celsius_; }
+
+private:
+    double celsius_;
+};
+
+void printReading(const TemperatureSource& source) { std::cout << source.celsius() << " C\n"; }
+bool isHot(const TemperatureSource& source) { return source.celsius() > 30.0; }
+
+int main() {
+    const FahrenheitAdapter legacy{LegacyThermometer(104.0)};
+    const CelsiusProbe modern(25.0);
+    printReading(legacy);
+    std::cout << (isHot(legacy) ? "hot" : "ok") << "\n";
+    printReading(modern);
+    std::cout << (isHot(modern) ? "hot" : "ok") << "\n";
+}
+c:["$","$L18",null,{"lesson":{"id":"adapter","level":"L4","title":"Adapter: make the old interface fit the new caller","oneLiner":"Wrap a class you cannot (or should not) change so it speaks the interface your code already depends on.","cardTopic":"L4.adapter","intro":"An Adapter is a thin class that **implements the interface your code wants** and **forwards to the interface you were given**. The caller never learns that a legacy library, a vendor SDK or a generated client is underneath.\n\nTwo shapes exist. An **object adapter** holds the adaptee as a member (composition) and is what you want almost every time in C++. A **class adapter** inherits from the adaptee privately and from the target publicly; it needs multiple inheritance, ties you to one concrete adaptee and cannot adapt a subclass. Interviewers like to hear that you picked the object form and why.\n\nAn Adapter changes the shape of a call (units, names, argument order, error style). It should not add behaviour. If it starts caching or checking permissions, that is a Proxy; if it starts simplifying a whole subsystem, that is a Facade.","smell":"- The same unit or format conversion is copy-pasted at every call site.\n- Business code includes a vendor header or names a legacy type directly.\n- Swapping the vendor means editing dozens of files.\n- Tests need the real legacy system because there is no seam to fake.","before":"#include <iostream>\n\n// A legacy class we do not own. It reports Fahrenheit.\nclass LegacyThermometer {\npublic:\n    explicit LegacyThermometer(double fahrenheit) : fahrenheit_(fahrenheit) {}\n    double readFahrenheit() const { return fahrenheit_; }\n\nprivate:\n    double fahrenheit_;\n};\n\n// Every caller repeats the conversion and the legacy type leaks into business code.\nvoid printReading(const LegacyThermometer& t) {\n    std::cout << (t.readFahrenheit() - 32.0) * 5.0 / 9.0 << \" C\\n\";\n}\n\nbool isHot(const LegacyThermometer& t) {\n    return (t.readFahrenheit() - 32.0) * 5.0 / 9.0 > 30.0;\n}\n\nint main() {\n    const LegacyThermometer t(104.0);\n    printReading(t);\n    std::cout << (isHot(t) ? \"hot\" : \"ok\") << \"\\n\";\n}\n","after":"$19","beforeOutput":"40 C\nhot","afterOutput":"40 C\nhot\n25 C\nok","refactorNotes":"Application code now depends on `TemperatureSource` and never sees Fahrenheit. The conversion lives in one class with one test, and a second sensor type (here a native Celsius probe) plugs in without touching `printReading` or `isHot`.\n\n**Trade-off:** an extra class and a virtual call per reading. That is nothing next to the cost of a vendor type leaking everywhere, but if you have exactly one call site and no plans to swap the library, a local helper function is a perfectly honest answer. The adapter stores the adaptee by value because it is small; for a heavyweight adaptee hold a `std::unique_ptr` or a reference and state who owns the lifetime.","interviewSignal":"Say \"this is a seam against something I do not control\". Name the object-versus-class adapter choice and pick composition. Senior signal: you keep the adapter free of business rules, mention that it is where you translate error models (error codes to exceptions or `std::optional`) as well as units, and point out that it makes the vendor replaceable and fakeable in tests.","overApplication":"Adapting your own code is a smell: if you control both sides, change one of them instead of stacking a wrapper. A pile of adapters can also hide a bad abstraction, because every layer is a place where meaning can be lost or a performance cost (copies, allocations) can creep in. One adapter per foreign boundary is healthy; adapters between your own modules usually are not."},"nextId":"bridge"}]
+12:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1, viewport-fit=cover"}],["$","meta","2",{"name":"theme-color","content":"#0a1530"}]]
+1a:I[27201,["$2"],"IconMark"]
+f:null
+15:[["$","title","0",{"children":"Adapter: make the old interface fit the new caller: Blueprint Clash"}],["$","meta","1",{"name":"description","content":"A creature-tactics RPG that teaches low-level design in C++ and high-level system design, from fundamentals to big-tech interview level."}],["$","link","2",{"rel":"manifest","href":"/blueprint-clash/manifest.webmanifest","crossOrigin":"$undefined"}],["$","meta","3",{"name":"mobile-web-app-capable","content":"yes"}],["$","meta","4",{"name":"apple-mobile-web-app-title","content":"Blueprint Clash"}],["$","meta","5",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","link","6",{"rel":"icon","href":"/blueprint-clash/icon.png?icon.27re_xscs-jmw.png","sizes":"256x256","type":"image/png"}],["$","link","7",{"rel":"apple-touch-icon","href":"/blueprint-clash/apple-icon.png?apple-icon.2rac1w0yc3rju.png","sizes":"180x180","type":"image/png"}],["$","$L1a","8",{}]]
