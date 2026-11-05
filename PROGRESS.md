@@ -498,3 +498,9 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Verification: `lint` (0 errors, 8 pre-existing warnings), `typecheck`, `test` (424 pass), `build`, `build:pages` pass. Playwright on the static export at desktop 1280x800 and iPhone 14: `/dev/sprites` viewed for all four creatures; clear silhouettes, no console errors, no horizontal overflow.
 - Known gaps: no back sprites for the Bridges set yet (the front sprites are what battles use today). CI/deploy not checked.
 - Next: C6d2 (Facadeon, Flytile, Proxifox sprites).
+
+## 2026-11-05: C6d2 Facadeon, Flytile, Proxifox sprites
+- Three new 64x64 Patternlings via `scripts/art/bridges2.mjs`, registered in `game/sprites/index.ts` (idle 4, attack 3, hurt 2, faint 4, evolve 4). **Facadeon** (Facade): cream house-front with one door and a face; a tangle of pipes and wires hides behind it. **Flytile** (Flyweight): teal mosaic tile with a row of tiny identical tiles behind it (shared glaze, differing position). **Proxifox** (Proxy): orange fox holding a blank stand-in mask, with a pale ghost of the real subject behind.
+- Verification: `lint` (0 errors, 8 pre-existing warnings), `typecheck`, `test` (439 pass), `build`, `build:pages` pass. Playwright on the static export at desktop 1280x800 and iPhone 14: `/dev/sprites` viewed (contact sheets plus page); all three read clearly, no console errors, no horizontal overflow. `content:verify` not rerun (no content change).
+- Known gaps: no back sprites for the Bridges set. CI/deploy: `gh` is unavailable in this environment, so Actions/Pages status was not confirmed.
+- Next: C6d3 (Bridges tileset and battle backdrop).

@@ -105,7 +105,7 @@ Work top to bottom: take the **first unchecked box**, and split big boxes into r
     - [x] C6c3. `flyweight-glyphs` (shared immutable state) and `proxy-cache` (lazy/caching proxy with the same interface).
   - [ ] C6d. Bridges art. Split below.
     - [x] C6d1. Patternling sprites for Axolink, Bridgeback, Fractree, Shellcrab (64x64, full animation set), on `/dev/sprites`.
-    - [ ] C6d2. Patternling sprites for Facadeon, Flytile, Proxifox.
+    - [x] C6d2. Patternling sprites for Facadeon, Flytile, Proxifox.
     - [ ] C6d3. Bridges tileset and battle backdrop.
   - [ ] C6e. Bridges map, trainers, pattern duels, hall, master and badge.
 - [ ] C7. **Behavioural Theatre** (L5): split across runs (Patternling art for 11 patterns, lessons, cards, 11 exercises, a gym).

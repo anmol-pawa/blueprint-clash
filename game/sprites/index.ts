@@ -15,6 +15,9 @@ import { AXOLINK } from "./creatures/axolink";
 import { BRIDGEBACK } from "./creatures/bridgeback";
 import { FRACTREE } from "./creatures/fractree";
 import { SHELLCRAB } from "./creatures/shellcrab";
+import { FACADEON } from "./creatures/facadeon";
+import { FLYTILE } from "./creatures/flytile";
+import { PROXIFOX } from "./creatures/proxifox";
 
 /** Every creature sprite, in review order (shown on /dev/sprites). */
-export const SPRITES: readonly SpriteDef[] = [DRAFTLING, DRAFTLING_BACK, ARCHITECT, ARCHITECT_BACK, ROUGH_DRAFT, FORGEBOT, BEAVERBUILD, SOLO, CLONEWISP, AXOLINK, BRIDGEBACK, FRACTREE, SHELLCRAB, WARDEN_VANE, PROVOST_MARLOW, FOREMAN_CORVO];
+export const SPRITES: readonly SpriteDef[] = [DRAFTLING, DRAFTLING_BACK, ARCHITECT, ARCHITECT_BACK, ROUGH_DRAFT, FORGEBOT, BEAVERBUILD, SOLO, CLONEWISP, AXOLINK, BRIDGEBACK, FRACTREE, SHELLCRAB, FACADEON, FLYTILE, PROXIFOX, WARDEN_VANE, PROVOST_MARLOW, FOREMAN_CORVO];
