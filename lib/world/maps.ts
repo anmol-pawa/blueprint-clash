@@ -157,7 +157,10 @@ export const BRIDGES: MapDef = {
   name: "Structural Bridges",
   rows: BRIDGES_ROWS,
   solid: "wpoeRERBWDlcrCKLMXOYTIF",
-  npcs: [],
+  npcs: [
+    { id: "nerys", name: "Nerys Quay", x: 4, y: 6, facing: "right", dialogue: "nerys-intro" },
+    { id: "tobin", name: "Tobin Reef", x: 14, y: 5, facing: "left", dialogue: "tobin-intro" },
+  ],
   warps: [3, 4].map((y) => ({ x: 0, y, to: "foundry", toX: 18, toY: y + 2, facing: "left" as const })),
   signs: { "18,4": "sign-bridges" },
 };

@@ -35,6 +35,8 @@ export const PLAYABLE_MODES: readonly PlayableMode[] = [
   { href: "/battle?trainer=rook-ferris", title: "Rook Ferris duel", blurb: "Six cards on DIP, ISP, LSP and coupling." },
   { href: "/battle?trainer=dova-kiln", title: "Dova Kiln duel", blurb: "Six cards on Factory Method, Abstract Factory and Builder." },
   { href: "/battle?trainer=bram-cask", title: "Bram Cask duel", blurb: "Six cards on Prototype, Singleton, Object Pool and DI." },
+  { href: "/battle?trainer=nerys-quay", title: "Nerys Quay duel", blurb: "Six cards on Adapter, Facade and Proxy." },
+  { href: "/battle?trainer=tobin-reef", title: "Tobin Reef duel", blurb: "Six cards on Composite, Decorator, Bridge and Flyweight." },
   { href: "/review", title: "Daily Review", blurb: "Spaced cards: misses return soon, mastered cards drift away, overdue ones rust." },
   { href: "/party", title: "Party: design battles", blurb: "Match a Patternling to a design smell; super picks befriend it." },
   { href: "/battle/master", title: "Old Town master", blurb: "Warden Hollis Vane: cards, a build and a smell boss." },

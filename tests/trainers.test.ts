@@ -46,6 +46,13 @@ describe("trainer duels", () => {
     expect(duelFlag(SABLE_QUILL)).toBe("duel:sable-quill");
     expect(getTrainer("rook-ferris")).toBe(ROOK_FERRIS);
     expect(getTrainer("nobody")).toBeUndefined();
+    expect(JSON.stringify(SCRIPTS["nerys-intro"])).toContain("Nerys Quay duel");
+    expect(JSON.stringify(SCRIPTS["tobin-intro"])).toContain("Tobin Reef duel");
+    expect(getTrainer("nerys-quay")?.deckId).toBe("structural-bridges");
+    expect(duelFlag(getTrainer("tobin-reef")!)).toBe("duel:tobin-reef");
+    expect(new Set(trainerPool(getTrainer("nerys-quay")!).map((c) => c.id)).size).toBeGreaterThanOrEqual(6);
+    const nerys = new Set(trainerPool(getTrainer("nerys-quay")!).map((c) => c.id));
+    expect(trainerPool(getTrainer("tobin-reef")!).some((c) => nerys.has(c.id))).toBe(false);
     expect(JSON.stringify(SCRIPTS["sable-intro"])).toContain("Sable Quill duel");
     expect(JSON.stringify(SCRIPTS["rook-intro"])).toContain("Rook Ferris duel");
     expect(JSON.stringify(SCRIPTS["dova-intro"])).toContain("Dova Kiln duel");

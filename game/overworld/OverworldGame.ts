@@ -3,7 +3,7 @@ import { MAPS, MAP_LEGENDS, START } from "@/lib/world/maps";
 import { type Dir, type MapDef, type Npc, type PlayerState, DELTA, facingTarget, faceNpcToward, step } from "@/lib/world/world";
 import { type DialogueState, advance, startDialogue } from "@/lib/dialogue/dialogue";
 import { SCRIPTS } from "@/lib/dialogue/scripts";
-import { ADA, BRAM, CORVO, DOVA, MARLOW, PLAYER, ROOK, SABLE } from "@/game/sprites/characters";
+import { ADA, BRAM, CORVO, DOVA, MARLOW, NERYS, TOBIN, PLAYER, ROOK, SABLE } from "@/game/sprites/characters";
 import { animTextures, frameCanvas } from "@/game/sprites/texture";
 import { BRIDGES_TILES, DRAFTING_HALL_TILES, FOUNDRY_TILES, OLD_TOWN_TILES, SOLID_SQUARE_TILES } from "@/game/sprites/tiles";
 import type { SpriteDef } from "@/game/sprites/pixel";
@@ -13,7 +13,7 @@ const TILE = 16;
 /** Seconds to walk one tile. */
 const STEP_SECONDS = 0.2;
 const TILESET_FOR: Record<string, TileSetDef> = { "old-town": OLD_TOWN_TILES, "drafting-hall": DRAFTING_HALL_TILES, "solid-square": SOLID_SQUARE_TILES, "principle-hall": SOLID_SQUARE_TILES, "foundry-hall": FOUNDRY_TILES, foundry: FOUNDRY_TILES, bridges: BRIDGES_TILES };
-const WALKER_FOR: Record<string, SpriteDef> = { ada: ADA, sable: SABLE, rook: ROOK, marlow: MARLOW, dova: DOVA, bram: BRAM, corvo: CORVO };
+const WALKER_FOR: Record<string, SpriteDef> = { ada: ADA, sable: SABLE, rook: ROOK, marlow: MARLOW, dova: DOVA, bram: BRAM, corvo: CORVO, nerys: NERYS, tobin: TOBIN };
 
 export interface OverworldView {
   mapName: string;

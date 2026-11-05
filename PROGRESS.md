@@ -519,3 +519,11 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Verification: `lint` (0 errors, 8 pre-existing warnings), `typecheck`, `test` (446 pass), `build`, `build:pages` pass. Playwright on a throwaway static build with a temporary start position (reverted), desktop 1280x800 and iPhone 14: map viewed, bridge walkable, no horizontal overflow; only console error was the missing `sw.js` of that non-Pages build. `content:verify` not rerun (no content change).
 - Known gaps: no trainers yet, no Bridges hall.
 - Next: C6e2 (two trainers, portraits, dialogue and pattern duels).
+
+## 2026-11-05: C6e2 Bridges trainers Nerys Quay and Tobin Reef
+- Two trainers on the Structural Bridges map: **Nerys Quay** (west bank; yellow oilskin, clipboard pencil) duels on Adapter, Facade and Proxy; **Tobin Reef** (east bank across the plank bridge; sea-green knit, glasses, rope-coil pack) duels on Composite, Decorator, Bridge and Flyweight. Each has a 24x32 walker, 48x48 portrait (via `scripts/art/characters.mjs`), an intro dialogue with a design question and trade-off answer, a `TrainerProfile` (six cards from `structural-bridges`, no overlap between the two pools) and a Play-menu entry (`/battle?trainer=nerys-quay`, `tobin-reef`).
+- Tests: placement/reachability/art/dialogue for both trainers on the Bridges map, duel scripts name their Battle-menu entry, pool sizes and disjointness.
+- Verification: `lint` (0 errors, 8 pre-existing warnings), `typecheck`, `test` (455 pass), `build`, `build:pages` pass. Playwright on a throwaway static build with a temporary start position (reverted), desktop 1280x800 and iPhone 14: both trainers visible on their banks, Nerys's dialogue with portrait opens, no horizontal overflow; only console error is the missing `sw.js` of that non-Pages build.
+- Known gaps: no Bridges hall yet; the warehouse door is scenery until C6e3.
+- CI/deploy: `gh` is unavailable here, so Actions/Pages status was not confirmed.
+- Next: C6e3 (Bridges hall, master and badge; split first).

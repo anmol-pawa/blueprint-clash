@@ -140,6 +140,42 @@ export const SCRIPTS: Readonly<Record<string, DialogueScript>> = {
       bye: { speaker: "Bram Cask", text: "Duel me from the Battle menu: Bram Cask duel. Prototypes, pools, singletons and DI." },
     },
   },
+  "nerys-intro": {
+    id: "nerys-intro",
+    start: "a",
+    nodes: {
+      a: { speaker: "Nerys Quay", text: "A supplier's SDK returns dollars as doubles and error codes as ints. Our code speaks cents and enums. Do I rewrite our code?", next: "q" },
+      q: {
+        speaker: "Nerys Quay",
+        text: "How do you let our code use that SDK without spreading its quirks everywhere?",
+        choices: [
+          { text: "Wrap it in an adapter that implements our interface and translates at the edge.", next: "yes", set: ["nerys-adapter"] },
+          { text: "Call the SDK directly and convert at every call site.", next: "no" },
+        ],
+      },
+      yes: { speaker: "Nerys Quay", text: "Right. One class owns the translation, so the rest of the code never learns the vendor's units. If you only need a simpler front for your own subsystems, that is a facade, not an adapter.", next: "bye" },
+      no: { speaker: "Nerys Quay", text: "Then every caller owns a copy of the conversion, and one of them will forget the cents. Translate once, at the boundary.", next: "bye" },
+      bye: { speaker: "Nerys Quay", text: "Duel me from the Battle menu: Nerys Quay duel. Six cards on adapters, facades and proxies." },
+    },
+  },
+  "tobin-intro": {
+    id: "tobin-intro",
+    start: "a",
+    nodes: {
+      a: { speaker: "Tobin Reef", text: "We ship crates, pallets of crates and containers of pallets. Customs wants the total weight of any of them.", next: "q" },
+      q: {
+        speaker: "Tobin Reef",
+        text: "Which structure lets callers treat one crate and a whole container the same way?",
+        choices: [
+          { text: "Composite: one interface, with leaves and containers that forward to their children.", next: "yes", set: ["tobin-composite"] },
+          { text: "A type check at every call site: crate here, container there.", next: "no" },
+        ],
+      },
+      yes: { speaker: "Tobin Reef", text: "Yes. Callers ask for the weight and the tree does the walking. The cost is that the shared interface can force leaves to carry methods they cannot meaningfully answer.", next: "bye" },
+      no: { speaker: "Tobin Reef", text: "Those checks multiply with every new kind of crate. Give both one interface and let each decide how to answer.", next: "bye" },
+      bye: { speaker: "Tobin Reef", text: "Duel me from the Battle menu: Tobin Reef duel. Composite, decorator, bridge and flyweight." },
+    },
+  },
   "board-solid": {
     id: "board-solid",
     start: "a",

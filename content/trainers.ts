@@ -67,7 +67,31 @@ export const BRAM_CASK: TrainerProfile = {
   lose: "Bram rolls the barrel back to you. Study the misses and rematch.",
 };
 
-export const TRAINERS: readonly TrainerProfile[] = [SABLE_QUILL, ROOK_FERRIS, DOVA_KILN, BRAM_CASK];
+export const NERYS_QUAY: TrainerProfile = {
+  id: "nerys-quay",
+  name: "Nerys Quay",
+  deckId: "structural-bridges",
+  topics: ["L4.adapter", "L4.facade", "L4.proxy"],
+  cardCount: 6,
+  foeName: "NERYS'S GATE",
+  intro: "Nerys Quay runs the harbour gate: every ship speaks a different dialect and only some are allowed in.",
+  win: "Nerys stamps your pass. Translate at the edge, hide the tangle, guard behind the same face: well done.",
+  lose: "Nerys keeps the gate shut. Read the explanations, then come back to the quay.",
+};
+
+export const TOBIN_REEF: TrainerProfile = {
+  id: "tobin-reef",
+  name: "Tobin Reef",
+  deckId: "structural-bridges",
+  topics: ["L4.composite", "L4.decorator", "L4.bridge", "L4.flyweight"],
+  cardCount: 6,
+  foeName: "TOBIN'S REEF",
+  intro: "Tobin Reef stacks crates, wraps cargo and counts how many identical labels the harbour really needs.",
+  win: "Tobin tips his cap. Trees of parts, layers by choice, two axes apart, shared state shared: good.",
+  lose: "Tobin points at the tide table. Study the misses and rematch.",
+};
+
+export const TRAINERS: readonly TrainerProfile[] = [SABLE_QUILL, ROOK_FERRIS, DOVA_KILN, BRAM_CASK, NERYS_QUAY, TOBIN_REEF];
 
 /** Duel flag stored in `lessonsDone` (no save-schema change). */
 export const duelFlag = (t: TrainerProfile): string => `duel:${t.id}`;
