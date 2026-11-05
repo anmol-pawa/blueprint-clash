@@ -40,10 +40,15 @@ export const SCRIPTS: Readonly<Record<string, DialogueScript>> = {
     start: "a",
     nodes: { a: { text: "SOLID SQUARE. Five pillars, five habits: one reason to change, open for extension, honest substitutes, small interfaces, depend on abstractions. Old Town is back south; the Creational Foundry is through the east gate." } },
   },
+  "sign-bridges": {
+    id: "sign-bridges",
+    start: "a",
+    nodes: { a: { text: "STRUCTURAL BRIDGES. Two parts that do not fit, one part that must look like many, a thing too heavy to build twice. Adapters, bridges, composites, decorators, facades, flyweights, proxies. The Creational Foundry is back west." } },
+  },
   "sign-foundry": {
     id: "sign-foundry",
     start: "a",
-    nodes: { a: { text: "CREATIONAL FOUNDRY. Who decides which object gets built, and how? Factories, builders, prototypes, pools. Mind the molten channel. SOLID Square is back west." } },
+    nodes: { a: { text: "CREATIONAL FOUNDRY. Who decides which object gets built, and how? Factories, builders, prototypes, pools. Mind the molten channel. SOLID Square is back west; the Structural Bridges are through the east gate." } },
   },
   "sable-intro": {
     id: "sable-intro",

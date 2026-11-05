@@ -512,3 +512,10 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Known gaps: no interior (Bridges Hall) tiles yet. CI/deploy: `gh` is unavailable here, so Actions/Pages status was not confirmed.
 - Note: pushed to the designated branch `claude/funny-ramanujan-pizupa` and to `main`.
 - Next: C6e (Bridges map, trainers, pattern duels, hall, master and badge); it is large, so split it first.
+
+## 2026-11-05: C6e1 Structural Bridges overworld map and Foundry east gate
+- New `BRIDGES` map (`lib/world/maps.ts`, from `BRIDGES_ROWS`, legend, tileset wired in `OverworldGame`): west-bank warehouse, tidal channel crossable only by the plank bridge, crane, lamps, crates, boats and an arcade. Two-tile east gate from the Creational Foundry and a matching west gate back; `sign-bridges` added and the Foundry sign now points east. The flag tile moved one column in `BRIDGES_ROWS` so both gate landings are walkable. The warehouse door is scenery until C6e3.
+- Tests: gate round trip, crossing the channel on the bridge row only (water above and below blocks), warehouse blocked, sign read; the existing "every warp lands on a walkable tile" test covers the new warps.
+- Verification: `lint` (0 errors, 8 pre-existing warnings), `typecheck`, `test` (446 pass), `build`, `build:pages` pass. Playwright on a throwaway static build with a temporary start position (reverted), desktop 1280x800 and iPhone 14: map viewed, bridge walkable, no horizontal overflow; only console error was the missing `sw.js` of that non-Pages build. `content:verify` not rerun (no content change).
+- Known gaps: no trainers yet, no Bridges hall.
+- Next: C6e2 (two trainers, portraits, dialogue and pattern duels).

@@ -168,7 +168,7 @@ export const BRIDGES_ROWS: readonly string[] = [
   "qEEEEEEqwwwwqqqqCqqq",
   "qBWBDBWqwwwwqqqqKqqq",
   "qqqqqqqqwwwwqLqqqqqq",
-  "qFqXOqqqwwwwqMqqYqIq",
+  "qqFXOqqqwwwwqMqqYqIq",
   "qqqqqqqqNNNNqqqqqqqq",
   "qqqqqqqqSSSSqqqqqqqq",
   "qqTqqQqqwpwpqqqXqqqq",

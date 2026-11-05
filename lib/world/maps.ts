@@ -1,4 +1,6 @@
 import {
+  BRIDGES_LEGEND,
+  BRIDGES_ROWS,
   FOUNDRY_HALL_ROWS,
   FOUNDRY_LEGEND,
   FOUNDRY_ROWS,
@@ -123,6 +125,8 @@ export const FOUNDRY: MapDef = {
   warps: [
     ...[5, 6].map((y) => ({ x: 0, y, to: "solid-square", toX: 18, toY: y - 2, facing: "left" as const })),
     ...[9, 10].map((x) => ({ x, y: 2, to: "foundry-hall", toX: x - 3, toY: 8, facing: "up" as const })),
+    // the east gate leads to the Structural Bridges
+    ...[5, 6].map((y) => ({ x: 19, y, to: "bridges", toX: 1, toY: y - 2, facing: "right" as const })),
   ],
   signs: { "1,4": "sign-foundry" },
 };
@@ -142,8 +146,24 @@ export const FOUNDRY_HALL: MapDef = {
   signs: {},
 };
 
-export const MAPS: MapTable = { [OLD_TOWN.id]: OLD_TOWN, [DRAFTING_HALL.id]: DRAFTING_HALL, [SOLID_SQUARE.id]: SOLID_SQUARE, [PRINCIPLE_HALL.id]: PRINCIPLE_HALL, [FOUNDRY.id]: FOUNDRY, [FOUNDRY_HALL.id]: FOUNDRY_HALL };
+/**
+ * Structural Bridges: a harbour of warehouses (west bank), a tidal channel
+ * crossed only by the plank bridge, a crane and boats. The west gate (two
+ * tiles) returns to the Creational Foundry. The warehouse door is scenery until
+ * the Bridges hall opens (C6e3).
+ */
+export const BRIDGES: MapDef = {
+  id: "bridges",
+  name: "Structural Bridges",
+  rows: BRIDGES_ROWS,
+  solid: "wpoeRERBWDlcrCKLMXOYTIF",
+  npcs: [],
+  warps: [3, 4].map((y) => ({ x: 0, y, to: "foundry", toX: 18, toY: y + 2, facing: "left" as const })),
+  signs: { "18,4": "sign-bridges" },
+};
 
-export const MAP_LEGENDS = { [OLD_TOWN.id]: OLD_TOWN_LEGEND, [DRAFTING_HALL.id]: HALL_LEGEND, [SOLID_SQUARE.id]: SOLID_SQUARE_LEGEND, [PRINCIPLE_HALL.id]: PRINCIPLE_HALL_LEGEND, [FOUNDRY.id]: FOUNDRY_LEGEND, [FOUNDRY_HALL.id]: FOUNDRY_LEGEND };
+export const MAPS: MapTable = { [OLD_TOWN.id]: OLD_TOWN, [DRAFTING_HALL.id]: DRAFTING_HALL, [SOLID_SQUARE.id]: SOLID_SQUARE, [PRINCIPLE_HALL.id]: PRINCIPLE_HALL, [FOUNDRY.id]: FOUNDRY, [FOUNDRY_HALL.id]: FOUNDRY_HALL, [BRIDGES.id]: BRIDGES };
+
+export const MAP_LEGENDS = { [OLD_TOWN.id]: OLD_TOWN_LEGEND, [DRAFTING_HALL.id]: HALL_LEGEND, [SOLID_SQUARE.id]: SOLID_SQUARE_LEGEND, [PRINCIPLE_HALL.id]: PRINCIPLE_HALL_LEGEND, [FOUNDRY.id]: FOUNDRY_LEGEND, [FOUNDRY_HALL.id]: FOUNDRY_LEGEND, [BRIDGES.id]: BRIDGES_LEGEND };
 
 export const START = { map: "old-town", x: 9, y: 4, facing: "up" } as const;
