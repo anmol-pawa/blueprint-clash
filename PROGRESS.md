@@ -498,3 +498,10 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Verification: `lint` (0 errors, 8 pre-existing warnings), `typecheck`, `test` (424 pass), `build`, `build:pages` pass. Playwright on the static export at desktop 1280x800 and iPhone 14: `/dev/sprites` viewed for all four creatures; clear silhouettes, no console errors, no horizontal overflow.
 - Known gaps: no back sprites for the Bridges set yet (the front sprites are what battles use today). CI/deploy not checked.
 - Next: C6d2 (Facadeon, Flytile, Proxifox sprites).
+
+## 2026-11-05: C6d2 Bridges Patternling sprites: Facadeon, Flytile, Proxifox
+- New generator `scripts/art/bridges2.mjs` and sprites `game/sprites/creatures/{facadeon,flytile,proxifox}.ts` (64x64, 3-4 shade ramps, outlines; idle 4 / attack 3 / hurt 2 / faint 4 / evolve 4), registered in `game/sprites/index.ts`. Facadeon: lilac creature behind one tidy storefront with a single door, messy gears hidden behind. Flytile: teal tile with a carved gold glyph, small identical copies around it and a shared stone pedestal. Proxifox: butler-masked fox holding a key before a gate.
+- Verification: `lint` (0 errors, 8 pre-existing warnings), `typecheck`, `test` (439 pass), `build`, `build:pages` pass. Playwright on the static export (served under the `/blueprint-clash/` base path), desktop 1280x800 and iPhone 14: `/dev/sprites` viewed (Facadeon and Proxifox in full, Flytile partly); clear silhouettes, no console errors, no horizontal overflow. `content:verify` not rerun (no content change).
+- Known gaps: no back sprites for the Bridges set; only the iPhone overflow/error check was automated for iPhone, its screenshot was not inspected.
+- CI/deploy: `gh` unavailable here; not confirmed. Pushed to the designated branch `claude/funny-ramanujan-j6omnj` (not `main`), as the session instructions require.
+- Next: C6d3 (Bridges tileset and battle backdrop).
