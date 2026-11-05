@@ -491,3 +491,10 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Verification: `content:verify` for both exercises (10 pass: reference accepted, Senior Review clean, starter not accepted, all wrongs rejected). `lint` (0 errors, 8 pre-existing warnings), `typecheck`, `test` (404 pass), `build`, `build:pages` pass. No visual change, so no screenshots. CI/deploy: `gh` is unavailable here, so Actions/Pages status was not confirmed.
 - Known gaps: the exercises are in the metadata registry but not yet offered by an in-game screen (C6e).
 - Next: C6d (Bridges art: 7 Patternling sprites, tileset, backdrop).
+
+## 2026-11-05: C6d1 Bridges Patternling sprites (verified and closed)
+- The previous run committed the art (`game/sprites/creatures/{axolink,bridgeback,fractree,shellcrab}.ts`, generator `scripts/art/bridges.mjs`, registered in `game/sprites/index.ts`) but was cut off before ticking the box or logging. This run reviewed it and closed the box.
+- Designs: Axolink (axolotl with a plug-adapter tail), Bridgeback (turtle carrying an arched bridge, flag), Fractree (tree whose crowns repeat as small trees), Shellcrab (crab wearing nested shells, the Decorator). 64x64, 3-4 shade ramps, outlines, idle(4)/attack(3)/hurt(2)/faint(4)/evolve(4).
+- Verification: `lint` (0 errors, 8 pre-existing warnings), `typecheck`, `test` (424 pass), `build`, `build:pages` pass. Playwright on the static export at desktop 1280x800 and iPhone 14: `/dev/sprites` viewed for all four creatures; clear silhouettes, no console errors, no horizontal overflow.
+- Known gaps: no back sprites for the Bridges set yet (the front sprites are what battles use today). CI/deploy not checked.
+- Next: C6d2 (Facadeon, Flytile, Proxifox sprites).
