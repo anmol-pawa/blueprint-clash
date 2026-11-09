@@ -191,7 +191,7 @@ export const SCRIPTS: Readonly<Record<string, DialogueScript>> = {
       },
       no: { speaker: "Harbourmaster Vale", text: "Now the vendor's quirks live in forty files, and the next vendor costs forty more edits. Translate in one place instead.", next: "bye" },
       yes: { speaker: "Harbourmaster Vale", text: "Good. Say the cost too: one more class, and a lowest-common-denominator interface if the two models differ a lot.", next: "bye" },
-      bye: { speaker: "Harbourmaster Vale", text: "My formal trial is not ready yet. Train on the Bridges cards and the exercises, then return." },
+      bye: { speaker: "Harbourmaster Vale", text: "When you have trained on the Bridges cards and the seven structure drills, take my trial from the Battle menu: Bridges master. Three phases, one badge." },
     },
   },
   "board-solid": {

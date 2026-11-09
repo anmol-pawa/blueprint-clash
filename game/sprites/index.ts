@@ -6,6 +6,7 @@ import { ARCHITECT_BACK } from "./creatures/architect-back";
 import { WARDEN_VANE } from "./creatures/warden-vane";
 import { PROVOST_MARLOW } from "./creatures/provost-marlow";
 import { FOREMAN_CORVO } from "./creatures/foreman-corvo";
+import { HARBOURMASTER_VALE } from "./creatures/harbourmaster-vale";
 import { ROUGH_DRAFT } from "./creatures/rough-draft";
 import { FORGEBOT } from "./creatures/forgebot";
 import { BEAVERBUILD } from "./creatures/beaverbuild";
@@ -20,4 +21,4 @@ import { FLYTILE } from "./creatures/flytile";
 import { PROXIFOX } from "./creatures/proxifox";
 
 /** Every creature sprite, in review order (shown on /dev/sprites). */
-export const SPRITES: readonly SpriteDef[] = [DRAFTLING, DRAFTLING_BACK, ARCHITECT, ARCHITECT_BACK, ROUGH_DRAFT, FORGEBOT, BEAVERBUILD, SOLO, CLONEWISP, AXOLINK, BRIDGEBACK, FRACTREE, SHELLCRAB, FACADEON, FLYTILE, PROXIFOX, WARDEN_VANE, PROVOST_MARLOW, FOREMAN_CORVO];
+export const SPRITES: readonly SpriteDef[] = [DRAFTLING, DRAFTLING_BACK, ARCHITECT, ARCHITECT_BACK, ROUGH_DRAFT, FORGEBOT, BEAVERBUILD, SOLO, CLONEWISP, AXOLINK, BRIDGEBACK, FRACTREE, SHELLCRAB, FACADEON, FLYTILE, PROXIFOX, WARDEN_VANE, PROVOST_MARLOW, FOREMAN_CORVO, HARBOURMASTER_VALE];

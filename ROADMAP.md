@@ -96,7 +96,7 @@ Work top to bottom: take the **first unchecked box**, and split big boxes into r
     - [x] C5e3. Foundry hall, master and badge. Split below.
       - [x] C5e3a. Foundry Hall interior map, roller-door warp, Foreman Corvo placed (walker, portrait, intro dialogue), scene on `/dev/sprites`, tests.
       - [x] C5e3b. Corvo master fight: 96x96 master sprite, profile, deck, phase-2 exercise choice from the 6, `/battle/master?master=creational-foundry`, badge saved, Foundry battle backdrop for deck battles.
-- [ ] C6. **Structural Bridges** (L4): Patternling art for 7, lessons, cards, 7 exercises, a gym. Split below.
+- [x] C6. **Structural Bridges** (L4): Patternling art for 7, lessons, cards, 7 exercises, a gym. Split below.
   - [x] C6a. 41-card Structural Bridges deck (`content/cards/structural-bridges.ts`, 9 predict cards proven natively), registered as `?deck=structural-bridges`.
   - [x] C6b. Lessons (Adapter, Bridge, Composite, Decorator, Facade, Flyweight, Proxy) with smell, C++ structure, when not to use it, over-application cost.
   - [x] C6c. Seven judged exercises as `content:verify` packages with wrong solutions. Split below.
@@ -107,12 +107,12 @@ Work top to bottom: take the **first unchecked box**, and split big boxes into r
     - [x] C6d1. Patternling sprites for Axolink, Bridgeback, Fractree, Shellcrab (64x64, full animation set), on `/dev/sprites`.
     - [x] C6d2. Patternling sprites for Facadeon, Flytile, Proxifox.
     - [x] C6d3. Bridges tileset and battle backdrop.
-  - [ ] C6e. Bridges map, trainers, pattern duels, hall, master and badge. Split below.
+  - [x] C6e. Bridges map, trainers, pattern duels, hall, master and badge. Split below.
     - [x] C6e1. Bridges overworld map (from `BRIDGES_ROWS`), gate warp from the Foundry, sign, tileset wiring, tests.
     - [x] C6e2. Two trainers (walkers, portraits, dialogue, placement) and their pattern duels.
-    - [ ] C6e3. Bridges hall, master and badge. Split below.
+    - [x] C6e3. Bridges hall, master and badge. Split below.
       - [x] C6e3a. Bridges Hall interior map, warehouse-door warp, Harbourmaster Vale placed (walker, portrait, intro dialogue), scene on `/dev/sprites`, tests.
-      - [ ] C6e3b. Vale master fight: 96x96 master sprite, profile, deck, phase-2 exercise choice from the 7, `/battle/master?master=structural-bridges`, badge saved.
+      - [x] C6e3b. Vale master fight: 96x96 master sprite, profile, deck, phase-2 exercise choice from the 7, `/battle/master?master=structural-bridges`, badge saved.
 - [ ] C7. **Behavioural Theatre** (L5): split across runs (Patternling art for 11 patterns, lessons, cards, 11 exercises, a gym).
 - [ ] C8. **Modelling and UML lessons** (L6) and Design Board drills.
 - [ ] C9. **Race Hunter engine** (ARCH §5), with the explorer and tests.

@@ -12,6 +12,9 @@ import { SOLID_SQUARE_MASTER_SMELLS } from "@/content/masters/solid-square-smell
 import { CREATIONAL_FOUNDRY_DECK } from "@/content/cards/creational-foundry";
 import { CREATIONAL_FOUNDRY_MASTER, creationalFoundryMasterDeck } from "@/content/masters/creational-foundry";
 import { CREATIONAL_FOUNDRY_MASTER_SMELLS } from "@/content/masters/creational-foundry-smells";
+import { STRUCTURAL_BRIDGES_DECK } from "@/content/cards/structural-bridges";
+import { STRUCTURAL_BRIDGES_MASTER, structuralBridgesMasterDeck } from "@/content/masters/structural-bridges";
+import { STRUCTURAL_BRIDGES_MASTER_SMELLS } from "@/content/masters/structural-bridges-smells";
 import { loadExercise } from "@/lib/exercises/load";
 
 const mcq = (n: number, prefix = "c"): Card[] =>
@@ -234,6 +237,44 @@ describe("Foreman Corvo (Creational Foundry master)", () => {
 
   it("a full clean run earns the badge", () => {
     let s = startMaster(creationalFoundryMasterDeck(), 3);
+    s = clear(s);
+    expect(s.phase).toBe("workshop");
+    s = submitWorkshop(s, { passed: 5, total: 5 }).state;
+    s = clear(s);
+    expect(s.phase).toBe("won");
+    expect(earnsBadge(s)).toBe(true);
+  });
+});
+
+describe("Harbourmaster Vale (Structural Bridges master)", () => {
+  it("has well-formed, all-smell dedicated cards that do not repeat the deck", () => {
+    expect(validateCards(STRUCTURAL_BRIDGES_MASTER_SMELLS)).toEqual([]);
+    expect(STRUCTURAL_BRIDGES_MASTER_SMELLS.every((c) => c.kind === "smell")).toBe(true);
+    const ids = new Set(STRUCTURAL_BRIDGES_DECK.map((c) => c.id));
+    expect(STRUCTURAL_BRIDGES_MASTER_SMELLS.some((c) => ids.has(c.id))).toBe(false);
+    expect(new Set(STRUCTURAL_BRIDGES_MASTER_SMELLS.map((c) => c.topic)).size).toBeGreaterThanOrEqual(6);
+  });
+
+  it("has enough cards for phase 1 and all seven structures exist and are registered", async () => {
+    const d = structuralBridgesMasterDeck();
+    expect(d.cards.length).toBeGreaterThanOrEqual(15);
+    expect(validateCards(d.cards)).toEqual([]);
+    expect(d.cards.some((c) => c.kind === "smell")).toBe(false);
+    expect(STRUCTURAL_BRIDGES_MASTER.exercises).toHaveLength(7);
+    for (const e of STRUCTURAL_BRIDGES_MASTER.exercises) {
+      expect(EXERCISE_META[e], e).toBeTruthy();
+      expect(await loadExercise(e), e).toBeTruthy();
+    }
+  });
+
+  it("is selected by ?master= and uses Vale's sprite and the Bridges badge", () => {
+    expect(masterIdFromSearch("?master=structural-bridges")).toBe("structural-bridges");
+    expect(MASTERS["structural-bridges"].visual).toBe("harbourmaster-vale");
+    expect(MASTERS["structural-bridges"].profile.badge).toBe("structural-bridges");
+  });
+
+  it("a full clean run earns the badge", () => {
+    let s = startMaster(structuralBridgesMasterDeck(), 3);
     s = clear(s);
     expect(s.phase).toBe("workshop");
     s = submitWorkshop(s, { passed: 5, total: 5 }).state;
