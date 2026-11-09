@@ -21,6 +21,10 @@ describe("deck registry", () => {
     expect(deckIdFromSearch("?deck=structural-bridges")).toBe("structural-bridges");
     expect(getDeck("structural-bridges").cards.length).toBeGreaterThanOrEqual(36);
   });
+  it("resolves the Behavioural Theatre deck", () => {
+    expect(deckIdFromSearch("?deck=behavioural-theatre")).toBe("behavioural-theatre");
+    expect(getDeck("behavioural-theatre").cards.length).toBeGreaterThanOrEqual(30);
+  });
   it("every card has a valid answer index and at least one option", () => {
     for (const d of DECKS) for (const c of d.cards) {
       expect(c.options.length).toBeGreaterThan(1);

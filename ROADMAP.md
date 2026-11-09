@@ -114,7 +114,7 @@ Work top to bottom: take the **first unchecked box**, and split big boxes into r
       - [x] C6e3a. Bridges Hall interior map, warehouse-door warp, Harbourmaster Vale placed (walker, portrait, intro dialogue), scene on `/dev/sprites`, tests.
       - [x] C6e3b. Vale master fight: 96x96 master sprite, profile, deck, phase-2 exercise choice from the 7, `/battle/master?master=structural-bridges`, badge saved.
 - [ ] C7. **Behavioural Theatre** (L5): Patternling art for 11 patterns, lessons, cards, 11 exercises, a gym. Split below.
-  - [ ] C7a. Behavioural Theatre deck, part 1 (`content/cards/behavioural-theatre.ts`): cards for Strategy, Observer, Command, State, Template Method, Iterator; predict cards proven natively; registered as `?deck=behavioural-theatre`.
+  - [x] C7a. Behavioural Theatre deck, part 1 (`content/cards/behavioural-theatre.ts`): cards for Strategy, Observer, Command, State, Template Method, Iterator; predict cards proven natively; registered as `?deck=behavioural-theatre`.
   - [ ] C7a2. Deck part 2: Chain of Responsibility, Mediator, Memento, Visitor, Interpreter, plus Null Object and Specification cards.
   - [ ] C7b. Lessons (11 patterns + Null Object, Specification, event-driven) with smell, C++ structure, when not to use it, over-application cost. Split by 4 patterns per run.
   - [ ] C7c. Eleven judged exercises as `content:verify` packages with wrong solutions (3-4 per run).

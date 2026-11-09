@@ -543,3 +543,11 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Verification: `lint` (0 errors, 8 pre-existing warnings), `typecheck`, `test` (471 pass), `build`, `build:pages` pass. Playwright on the Pages export, desktop 1280x800 and iPhone 14: `/battle/master?master=structural-bridges` viewed; Vale and the harbour backdrop read clearly, no console errors, no horizontal overflow. `content:verify` not rerun (no exercise change).
 - Known gaps: no back sprites for the Bridges set; Vale's lantern is small at battle scale. CI/deploy: `gh` is unavailable here, so Actions/Pages status was not confirmed.
 - Next: C7 (Behavioural Theatre; split first).
+
+## 2026-11-09: C7a Behavioural Theatre deck, part 1 (and C7 split)
+- Split C7 into C7a (deck part 1), C7a2 (deck part 2), C7b (lessons), C7c (11 exercises), C7d (art), C7e (map, trainers, master).
+- New `content/cards/behavioural-theatre.ts`: 30 original cards, five per pattern for Strategy, Observer, Command, State, Template Method and Iterator (mcq, pattern, predict, smell). Predict cards cover stable_sort with a swappable ordering, `weak_ptr` observers (expired observer skipped), command history with undo, a turnstile State machine, NVI Template Method with a hook, and a custom range-for iterator. Registered as `?deck=behavioural-theatre` (borrows the Bridges backdrop until C7d) with a Play-menu entry.
+- Patternling names reserved for the pattern cards (art in C7d): Swapaw (Strategy), Watchowl (Observer), Scrollhound (Command), Chamelyn (State), Stencilmoth (Template Method), Stepede (Iterator).
+- Verification: `content/verify/theatre-cards.verify.ts` compiles and runs every predict card natively (a first run caught a trailing-space mismatch, fixed). `lint` (0 errors, 8 pre-existing warnings), `typecheck`, `test` (472 pass), `build`, `build:pages` pass; `content:verify` (8 files, 199 tests, ~10 min) passes. Playwright on the Pages export at desktop 1280x800 and iPhone 14: `/battle?deck=behavioural-theatre` viewed, card text readable, no console errors, no horizontal overflow.
+- Known gaps: deck has no Chain of Responsibility, Mediator, Memento, Visitor, Interpreter, Null Object or Specification cards yet. Actions quota note ended 2026-11-01 but `gh` is unavailable here, so CI/deploy were not confirmed.
+- Next: C7a2 (deck part 2).
