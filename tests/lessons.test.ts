@@ -4,6 +4,7 @@ import { validateLessons } from "@/lib/lessons/model";
 import { SOLID_SQUARE_DECK } from "@/content/cards/solid-square";
 import { CREATIONAL_FOUNDRY_DECK } from "@/content/cards/creational-foundry";
 import { STRUCTURAL_BRIDGES_DECK } from "@/content/cards/structural-bridges";
+import { BEHAVIOURAL_THEATRE_DECK } from "@/content/cards/behavioural-theatre";
 
 describe("lessons", () => {
   it("are structurally valid with unique ids", () => {
@@ -24,8 +25,11 @@ describe("lessons", () => {
       "adapter", "bridge", "composite", "decorator", "facade", "flyweight", "proxy",
     ]);
   });
+  it("start the Behavioural Theatre lessons with Strategy, Observer, Command and State", () => {
+    expect(ALL_LESSONS.filter((l) => l.level === "L5").map((l) => l.id)).toEqual(["strategy", "observer", "command", "state"]);
+  });
   it("each lesson's card topic has cards to drill", () => {
-    const cards = [...SOLID_SQUARE_DECK, ...CREATIONAL_FOUNDRY_DECK, ...STRUCTURAL_BRIDGES_DECK];
+    const cards = [...SOLID_SQUARE_DECK, ...CREATIONAL_FOUNDRY_DECK, ...STRUCTURAL_BRIDGES_DECK, ...BEHAVIOURAL_THEATRE_DECK];
     for (const l of ALL_LESSONS) {
       expect(cards.some((c) => c.topic.startsWith(l.cardTopic)), l.id).toBe(true);
     }

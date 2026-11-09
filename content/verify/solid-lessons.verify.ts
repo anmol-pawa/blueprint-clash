@@ -2,13 +2,14 @@ import { describe, expect, it } from "vitest";
 import { CREATIONAL_FOUNDRY_LESSONS } from "@/content/lessons/creational-foundry";
 import { SOLID_SQUARE_LESSONS } from "@/content/lessons/solid-square";
 import { STRUCTURAL_BRIDGES_LESSONS } from "@/content/lessons/structural-bridges";
+import { BEHAVIOURAL_THEATRE_LESSONS } from "@/content/lessons/behavioural-theatre";
 import { compileAndRun } from "@/lib/judge/native";
 import { validateLessons } from "@/lib/lessons/model";
 import { reviewFiles } from "@/lib/review";
 
-const LESSONS = [...SOLID_SQUARE_LESSONS, ...CREATIONAL_FOUNDRY_LESSONS, ...STRUCTURAL_BRIDGES_LESSONS];
+const LESSONS = [...SOLID_SQUARE_LESSONS, ...CREATIONAL_FOUNDRY_LESSONS, ...STRUCTURAL_BRIDGES_LESSONS, ...BEHAVIOURAL_THEATRE_LESSONS];
 
-describe("SOLID Square, Creational Foundry and Structural Bridges lessons", () => {
+describe("SOLID Square, Creational Foundry, Structural Bridges and Behavioural Theatre lessons", () => {
   it("are well-formed", () => {
     expect(validateLessons(LESSONS)).toEqual([]);
   });

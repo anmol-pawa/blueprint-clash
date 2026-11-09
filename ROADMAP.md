@@ -117,6 +117,10 @@ Work top to bottom: take the **first unchecked box**, and split big boxes into r
   - [x] C7a. Behavioural Theatre deck, part 1 (`content/cards/behavioural-theatre.ts`): cards for Strategy, Observer, Command, State, Template Method, Iterator; predict cards proven natively; registered as `?deck=behavioural-theatre`.
   - [x] C7a2. Deck part 2: Chain of Responsibility, Mediator, Memento, Visitor, Interpreter, plus Null Object and Specification cards.
   - [ ] C7b. Lessons (11 patterns + Null Object, Specification, event-driven) with smell, C++ structure, when not to use it, over-application cost. Split by 4 patterns per run.
+    - [x] C7b1. Lessons: Strategy, Observer, Command, State (`content/lessons/behavioural-theatre.ts`).
+    - [ ] C7b2. Lessons: Template Method, Iterator, Chain of Responsibility, Mediator.
+    - [ ] C7b3. Lessons: Memento, Visitor, Interpreter, Null Object.
+    - [ ] C7b4. Lessons: Specification and event-driven design (Observer vs queue vs event sourcing).
   - [ ] C7c. Eleven judged exercises as `content:verify` packages with wrong solutions (3-4 per run).
   - [ ] C7d. Theatre art: 11 Patternling sprites (3-4 per run), tileset and battle backdrop.
   - [ ] C7e. Theatre map, trainers, duels, hall, master and badge (split like C6e).
