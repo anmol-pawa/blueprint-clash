@@ -25,8 +25,10 @@ describe("lessons", () => {
       "adapter", "bridge", "composite", "decorator", "facade", "flyweight", "proxy",
     ]);
   });
-  it("start the Behavioural Theatre lessons with Strategy, Observer, Command and State", () => {
-    expect(ALL_LESSONS.filter((l) => l.level === "L5").map((l) => l.id)).toEqual(["strategy", "observer", "command", "state"]);
+  it("start the Behavioural Theatre lessons with eight of the patterns", () => {
+    expect(ALL_LESSONS.filter((l) => l.level === "L5").map((l) => l.id)).toEqual([
+      "strategy", "observer", "command", "state", "template-method", "iterator", "chain-of-responsibility", "mediator",
+    ]);
   });
   it("each lesson's card topic has cards to drill", () => {
     const cards = [...SOLID_SQUARE_DECK, ...CREATIONAL_FOUNDRY_DECK, ...STRUCTURAL_BRIDGES_DECK, ...BEHAVIOURAL_THEATRE_DECK];
