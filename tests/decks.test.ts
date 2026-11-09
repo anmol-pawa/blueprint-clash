@@ -23,7 +23,7 @@ describe("deck registry", () => {
   });
   it("resolves the Behavioural Theatre deck", () => {
     expect(deckIdFromSearch("?deck=behavioural-theatre")).toBe("behavioural-theatre");
-    expect(getDeck("behavioural-theatre").cards.length).toBeGreaterThanOrEqual(30);
+    expect(getDeck("behavioural-theatre").cards.length).toBeGreaterThanOrEqual(65);
   });
   it("every card has a valid answer index and at least one option", () => {
     for (const d of DECKS) for (const c of d.cards) {

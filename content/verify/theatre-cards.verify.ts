@@ -8,9 +8,9 @@ describe("Behavioural Theatre deck", () => {
     expect(validateCards(BEHAVIOURAL_THEATRE_DECK)).toEqual([]);
     expect(await verifyPredictCards(BEHAVIOURAL_THEATRE_DECK)).toEqual([]);
   });
-  it("covers each part-1 pattern with at least 5 cards and a predict card", () => {
-    expect(BEHAVIOURAL_THEATRE_DECK.length).toBeGreaterThanOrEqual(30);
-    for (const t of ["strategy", "observer", "command", "state", "template-method", "iterator"]) {
+  it("covers each pattern with at least 5 cards and a predict card", () => {
+    expect(BEHAVIOURAL_THEATRE_DECK.length).toBeGreaterThanOrEqual(65);
+    for (const t of ["strategy", "observer", "command", "state", "template-method", "iterator", "chain-of-responsibility", "mediator", "memento", "visitor", "interpreter", "null-object", "specification"]) {
       const cs = BEHAVIOURAL_THEATRE_DECK.filter((c) => c.topic === `L5.${t}`);
       expect(cs.length).toBeGreaterThanOrEqual(5);
       expect(cs.some((c) => c.kind === "predict")).toBe(true);

@@ -1,4 +1,5 @@
 import type { Card } from "@/lib/battle/cards";
+import { BEHAVIOURAL_THEATRE_PART2 } from "./behavioural-theatre-2";
 
 /**
  * Behavioural Theatre concept deck (CURRICULUM L5). Original wording. Predict cards are compiled and run
@@ -719,5 +720,5 @@ for (size_t i = 0; i < pl.songs().size(); ++i) play(pl.songs()[i]);`,
   },
 ];
 
-/** The full deck; part 2 (C7a2) will add its cards to this list. */
-export const BEHAVIOURAL_THEATRE_DECK: Card[] = [...BEHAVIOURAL_THEATRE_PART1];
+/** The full deck: part 1 (six patterns) plus part 2 (five patterns, Null Object and Specification). */
+export const BEHAVIOURAL_THEATRE_DECK: Card[] = [...BEHAVIOURAL_THEATRE_PART1, ...BEHAVIOURAL_THEATRE_PART2];

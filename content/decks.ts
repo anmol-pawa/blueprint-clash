@@ -24,7 +24,7 @@ export const DECKS: readonly Deck[] = [
   // The Structural Bridges have no backdrop of their own yet (C6d); the deck borrows the marble hall.
   { id: "structural-bridges", title: "Structural Bridges", district: "Adapter, Bridge, Composite, Decorator, Facade, Flyweight and Proxy", cards: STRUCTURAL_BRIDGES_DECK, scene: "bridges" },
   // Behavioural Theatre borrows the Bridges backdrop until its own scene lands (C7d).
-  { id: "behavioural-theatre", title: "Behavioural Theatre", district: "Strategy, Observer, Command, State, Template Method and Iterator (more patterns follow)", cards: BEHAVIOURAL_THEATRE_DECK, scene: "bridges" },
+  { id: "behavioural-theatre", title: "Behavioural Theatre", district: "Strategy to Iterator, Chain, Mediator, Memento, Visitor, Interpreter, Null Object and Specification", cards: BEHAVIOURAL_THEATRE_DECK, scene: "bridges" },
 ];
 
 export const DEFAULT_DECK_ID = "old-town";
