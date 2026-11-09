@@ -119,7 +119,7 @@ Work top to bottom: take the **first unchecked box**, and split big boxes into r
   - [ ] C7b. Lessons (11 patterns + Null Object, Specification, event-driven) with smell, C++ structure, when not to use it, over-application cost. Split by 4 patterns per run.
     - [x] C7b1. Lessons: Strategy, Observer, Command, State (`content/lessons/behavioural-theatre.ts`).
     - [x] C7b2. Lessons: Template Method, Iterator, Chain of Responsibility, Mediator.
-    - [ ] C7b3. Lessons: Memento, Visitor, Interpreter, Null Object.
+    - [x] C7b3. Lessons: Memento, Visitor, Interpreter, Null Object.
     - [ ] C7b4. Lessons: Specification and event-driven design (Observer vs queue vs event sourcing).
   - [ ] C7c. Eleven judged exercises as `content:verify` packages with wrong solutions (3-4 per run).
   - [ ] C7d. Theatre art: 11 Patternling sprites (3-4 per run), tileset and battle backdrop.
