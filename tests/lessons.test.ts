@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { MODELLING_DECK } from "@/content/cards/modelling";
 import { ALL_LESSONS, lessonById } from "@/content/lessons/registry";
 import { validateLessons } from "@/lib/lessons/model";
 import { SOLID_SQUARE_DECK } from "@/content/cards/solid-square";
@@ -31,8 +32,11 @@ describe("lessons", () => {
       "memento", "visitor", "interpreter", "null-object", "specification", "event-driven",
     ]);
   });
+  it("cover the first Modelling and UML lessons", () => {
+    expect(ALL_LESSONS.filter((l) => l.level === "L6").map((l) => l.id)).toEqual(["entities-from-requirements", "class-diagram-ownership", "state-diagram-vending"]);
+  });
   it("each lesson's card topic has cards to drill", () => {
-    const cards = [...SOLID_SQUARE_DECK, ...CREATIONAL_FOUNDRY_DECK, ...STRUCTURAL_BRIDGES_DECK, ...BEHAVIOURAL_THEATRE_DECK];
+    const cards = [...SOLID_SQUARE_DECK, ...CREATIONAL_FOUNDRY_DECK, ...STRUCTURAL_BRIDGES_DECK, ...BEHAVIOURAL_THEATRE_DECK, ...MODELLING_DECK];
     for (const l of ALL_LESSONS) {
       expect(cards.some((c) => c.topic.startsWith(l.cardTopic)), l.id).toBe(true);
     }

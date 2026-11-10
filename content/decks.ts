@@ -5,6 +5,7 @@ import { SOLID_SQUARE_DECK } from "./cards/solid-square";
 import { CREATIONAL_FOUNDRY_DECK } from "./cards/creational-foundry";
 import { STRUCTURAL_BRIDGES_DECK } from "./cards/structural-bridges";
 import { BEHAVIOURAL_THEATRE_DECK } from "./cards/behavioural-theatre";
+import { MODELLING_DECK } from "./cards/modelling";
 
 /** A district concept deck. Card ids are globally unique, so one SRS map serves every deck. */
 export interface Deck {
@@ -25,6 +26,8 @@ export const DECKS: readonly Deck[] = [
   { id: "structural-bridges", title: "Structural Bridges", district: "Adapter, Bridge, Composite, Decorator, Facade, Flyweight and Proxy", cards: STRUCTURAL_BRIDGES_DECK, scene: "bridges" },
   // Behavioural Theatre borrows the Bridges backdrop until its own scene lands (C7d).
   { id: "behavioural-theatre", title: "Behavioural Theatre", district: "Strategy to Iterator, Chain, Mediator, Memento, Visitor, Interpreter, Null Object and Specification", cards: BEHAVIOURAL_THEATRE_DECK, scene: "theatre" },
+  // The Drafting Studio (L6) borrows the Old Town backdrop until it has its own art.
+  { id: "modelling", title: "Drafting Studio", district: "Requirements to entities, class diagrams and state diagrams", cards: MODELLING_DECK, scene: "old-town" },
 ];
 
 export const DEFAULT_DECK_ID = "old-town";

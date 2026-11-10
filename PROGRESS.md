@@ -668,3 +668,10 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Verification: `lint` (0 errors, 8 pre-existing warnings), `typecheck`, `test` (565 pass), `build`, `build:pages` pass. Playwright on the Pages export, desktop 1280x800 and iPhone 14: `/battle/master?master=behavioural-theatre` viewed; Voss and the theatre backdrop read clearly, no console errors, no horizontal overflow. `content:verify` not rerun (no exercise change). `gh` unavailable here, so CI/Pages status was not confirmed.
 - Known gaps: no back sprites for the Theatre set; Voss's glasses read as a gold band at battle scale; Null Object and Specification still have no exercise.
 - Next: C8 (Modelling and UML lessons and Design Board drills; split first).
+
+## 2026-11-10 - C8a: Modelling lessons part 1 and the Drafting Studio deck
+- Three L6 lessons in `content/lessons/modelling.ts`: requirements to entities (noun/verb analysis and CRC cards, library loans with a named `FinePolicy`), class-diagram relationships as C++ ownership (composition by value, aggregation as non-owning pointer, dependency as parameter), and state diagrams (vending machine, boolean flags to an `enum class` state). Each has smell, native-compiled before/after with recorded output, trade-offs, interview signal and over-application cost.
+- New `modelling` deck (`content/cards/modelling.ts`, 12 mcq cards, topics `L6.entities`, `L6.class-diagram`, `L6.state-diagram`) registered as "Drafting Studio" on the Old Town backdrop (own art later). ROADMAP: C8 split into C8a-C8d.
+- Verification: `content:verify` lessons suite (38 incl. the 3 new, review-clean) passes; `lint` (0 errors, 8 pre-existing warnings), `typecheck`, `test` (566 pass), `build`, `build:pages` pass. Playwright on the Pages export, desktop and iPhone 14: `/learn/class-diagram-ownership/` viewed, readable, no console errors, no horizontal overflow. CI/Pages not confirmed (`gh` unavailable here).
+- Known gaps: no UML-reading cards or diagrams yet (need the Design Board, C8c); deck has no backdrop of its own.
+- Next: C8b (sequence diagrams and extension-point lessons).
