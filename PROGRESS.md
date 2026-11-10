@@ -629,3 +629,9 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Verification: `lint` (0 errors, 8 pre-existing warnings), `typecheck`, `test` (519 pass), `build`, `build:pages` pass. Playwright on the Pages export, desktop 1280x800 and iPhone 14: `/dev/sprites/` viewed, new sprites readable, no console errors, no horizontal overflow. `content:verify` not rerun (no content change). `gh` is unavailable here, so CI/Pages status was not confirmed.
 - Known gaps: no back sprites; not yet used in a map or duel (C7e).
 - Next: C7d3 (Mediowl, Mementortoise, Visitorb).
+
+## 2026-11-10: C7d3 Theatre art, part 3 (Mediowl, Mementortoise, Visitorb)
+- New `scripts/art/theatre3.mjs` generates three 64x64 Patternlings (idle 4 / attack 3 / hurt 2 / faint 4 / evolve 4): Mediowl (Mediator: headset operator with three cables to peer nodes, one pinged at a time), Mementortoise (Memento: tortoise with a sealed shell hatch and a ghost shell as the snapshot), Visitorb (Visitor: lens-orb whose beam visits a square, circle and triangle). Registered in `game/sprites/index.ts`, shown on `/dev/sprites`.
+- Verification: `lint` (0 errors, 8 pre-existing warnings), `typecheck`, `test` (534 pass), `build`, `build:pages` pass. Contact sheets reviewed; Playwright on the Pages export, desktop and iPhone 14: `/dev/sprites/` loads, new names present, no console errors, no horizontal overflow. `content:verify` not rerun (no content change). `gh` unavailable, so CI/Pages status not confirmed.
+- Known gaps: Visitorb's ring is faint; no back sprites; not yet used in a map or duel (C7e).
+- Next: C7d4 (Theatre tileset and battle backdrop).

@@ -128,7 +128,7 @@ Work top to bottom: take the **first unchecked box**, and split big boxes into r
   - [ ] C7d. Theatre art: 11 Patternling sprites (3-4 per run), tileset and battle backdrop. Split below.
     - [x] C7d1. Sprites: Chamelstrat, Owlserver, Commandant (`scripts/art/theatre1.mjs`).
     - [x] C7d2. Sprites: Shapeshift, Templar, Inchworm, Antchain (`scripts/art/theatre2.mjs`).
-    - [ ] C7d3. Sprites: Mediowl, Mementortoise, Visitorb.
+    - [x] C7d3. Sprites: Mediowl, Mementortoise, Visitorb (`scripts/art/theatre3.mjs`).
     - [ ] C7d4. Theatre tileset and battle backdrop.
   - [ ] C7e. Theatre map, trainers, duels, hall, master and badge (split like C6e).
 - [ ] C8. **Modelling and UML lessons** (L6) and Design Board drills.
