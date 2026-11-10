@@ -49,7 +49,7 @@ export class BattleStage {
     this.host.appendChild(this.app.canvas);
     this.app.canvas.style.imageRendering = "pixelated";
     this.app.stage.addChild(this.root);
-    this.root.addChild(this.scene === "solid-square" ? this.solidSquareBackdrop() : this.scene === "foundry" ? this.foundryBackdrop() : this.scene === "bridges" ? this.bridgesBackdrop() : this.backdrop());
+    this.root.addChild(this.scene === "solid-square" ? this.solidSquareBackdrop() : this.scene === "foundry" ? this.foundryBackdrop() : this.scene === "bridges" ? this.bridgesBackdrop() : this.scene === "theatre" ? this.theatreBackdrop() : this.backdrop());
     this.foe = new PixelSprite(this.foeDef, 1);
     this.player = new PixelSprite(this.playerDef, 1);
     this.foe.position.set(FOE_HOME.x + 140, FOE_HOME.y);
@@ -253,6 +253,49 @@ export class BattleStage {
       g.ellipse(x, y, rx, ry).fill(0x3a8a80);
       g.ellipse(x, y, rx - 2, ry - 1).fill(0x8c96a6);
       g.ellipse(x, y - 1, rx - 6, ry - 3).fill(0xc0c8d6);
+    };
+    pad(FOE_HOME.x, FOE_HOME.y - 2, 40, 9);
+    pad(PLAYER_HOME.x, PLAYER_HOME.y - 2, 50, 11);
+    c.addChild(g);
+    return c;
+  }
+
+  /** Behavioural Theatre: a playhouse stage seen from the stalls: proscenium arch, velvet curtains, a painted flat, plank stage, spotlight pools as platforms. */
+  private theatreBackdrop(): Container {
+    const c = new Container();
+    const g = new Graphics();
+    // back wall: deep plum, a painted night-sky flat with stars and a moon
+    g.rect(0, 0, STAGE_W, 96).fill(0x2a2540);
+    g.rect(28, 10, STAGE_W - 56, 80).fill(0x1d2a5a);
+    for (let i = 0; i < 4; i++) g.rect(28, 10 + i * 20, STAGE_W - 56, 20).fill([0x1d2a5a, 0x263a78, 0x31509a, 0x4a6fb8][i]);
+    g.circle(190, 34, 9).fill(0xfff1c2).circle(194, 32, 8).fill(0x31509a);
+    for (const [x, y] of [[60, 24], [84, 40], [120, 20], [150, 46], [214, 52], [48, 58]] as const) g.rect(x, y, 2, 2).fill(0xfff1c2);
+    // painted rooftops silhouette on the flat
+    for (const [x, w, h] of [[28, 30, 16], [58, 24, 26], [82, 34, 14], [116, 22, 22], [138, 40, 12], [178, 26, 20], [204, 24, 14]] as const) g.rect(x, 90 - h, w, h).fill(0x14161f);
+    // proscenium: gilt frame and swagged pelmet, velvet curtains tied back at both sides
+    g.rect(0, 0, STAGE_W, 10).fill(0x9c2236).rect(0, 10, STAGE_W, 2).fill(0xd9a52c).rect(0, 12, STAGE_W, 1).fill(0x8a6420);
+    for (let x = 0; x < STAGE_W; x += 16) g.ellipse(x + 8, 10, 8, 5).fill(0x9c2236).ellipse(x + 8, 9, 6, 3).fill(0xd4445a);
+    for (const side of [0, 1]) {
+      const x0 = side ? STAGE_W - 28 : 0;
+      g.rect(x0, 10, 28, 86).fill(0x9c2236);
+      for (let i = 0; i < 7; i++) g.rect(x0 + i * 4, 10, 2, 86).fill(i % 2 ? 0x5c1424 : 0xd4445a);
+      g.rect(side ? x0 - 2 : x0 + 28, 10, 2, 86).fill(0xd9a52c);
+      g.rect(side ? x0 + 2 : x0 + 18, 60, 8, 5).fill(0xd9a52c).rect(side ? x0 + 2 : x0 + 18, 60, 8, 1).fill(0xfbe27a);
+    }
+    // stage floor: planks in perspective, footlight row along the front lip
+    g.rect(0, 96, STAGE_W, STAGE_H - 96).fill(0xb07f45);
+    for (let row = 0, y = 96; y < STAGE_H; row++, y += 8) {
+      g.rect(0, y, STAGE_W, 1).fill(row > 3 ? 0x4a301e : 0x7a5230);
+      for (let x = (row % 2) * 16; x < STAGE_W; x += 32) g.rect(x, y, 1, 8).fill(row > 3 ? 0x4a301e : 0x7a5230);
+    }
+    g.rect(0, 96, STAGE_W, 2).fill(0xd9a52c).rect(0, 98, STAGE_W, 1).fill(0x14161f);
+    for (let x = 6; x < STAGE_W; x += 20) g.rect(x, STAGE_H - 6, 6, 3).fill(0xffd35a).rect(x + 1, STAGE_H - 6, 2, 1).fill(0xffffff);
+    // platforms: spotlight pools with a gilt rim
+    const pad = (x: number, y: number, rx: number, ry: number) => {
+      g.ellipse(x, y + 3, rx, ry).fill(0x2b1d1a);
+      g.ellipse(x, y, rx, ry).fill(0xd9a52c);
+      g.ellipse(x, y, rx - 2, ry - 1).fill(0xe9d9a2);
+      g.ellipse(x, y - 1, rx - 6, ry - 3).fill(0xfff1c2);
     };
     pad(FOE_HOME.x, FOE_HOME.y - 2, 40, 9);
     pad(PLAYER_HOME.x, PLAYER_HOME.y - 2, 50, 11);

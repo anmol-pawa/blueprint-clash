@@ -1,6 +1,7 @@
 import { BRIDGES_TILES } from "./bridges";
 import { DRAFTING_HALL_TILES } from "./drafting-hall";
 import { FOUNDRY_TILES } from "./foundry";
+import { THEATRE_TILES } from "./theatre";
 import { OLD_TOWN_TILES } from "./old-town";
 import { SOLID_SQUARE_TILES } from "./solid-square";
 import { type Legend, composeScene } from "./tileset";
@@ -197,3 +198,32 @@ export const BRIDGES_SCENE = composeScene(BRIDGES_TILES, "bridges-scene", BRIDGE
 
 /** The Bridges Hall interior for art review. */
 export const BRIDGES_HALL_SCENE = composeScene(BRIDGES_TILES, "bridges-hall-scene", BRIDGES_HALL_ROWS, BRIDGES_LEGEND);
+
+export const THEATRE_LEGEND: Legend = {
+  q: ["plaza"], Q: ["plaza-2"], f: ["stage-floor"], m: ["stage-mark"], r: ["carpet"], R: ["carpet-2"], u: ["footlights"],
+  S: ["roof-slate"], E: ["roof-eave"], B: ["theatre-wall"], W: ["window"], D: ["door"], K: ["marquee"],
+  l: ["curtain-left"], c: ["curtain-mid"], t: ["curtain-right"], P: ["pelmet"],
+  C: ["plaza", "column-top"], V: ["plaza", "column-base"], H: ["stage-floor", "spotlight"], A: ["carpet", "seats"],
+  X: ["plaza", "poster"], T: ["plaza", "booth-top"], U: ["plaza", "booth-front"], Z: ["plaza", "trunk"], I: ["plaza", "sign"],
+  L: ["plaza", "lamp-top"], M: ["plaza", "lamp-base"], F: ["plaza", "bunting"], G: ["plaza", "laurel"],
+};
+
+/** Behavioural Theatre rows, shared by the scene and the map: a playhouse front with marquee, a ticket booth, a plaza, and a stage behind a curtain. */
+export const THEATRE_ROWS: readonly string[] = [
+  "SSSSSSSSSSSSSSSSSSSS",
+  "EEEEEEEEEEEEEEEEEEEE",
+  "BWBWBBKKKBBWBWBBBBBB",
+  "BBBBBBBDBBBBBBBBBBBB",
+  "qFqqqqGqGqqqqLqqTqIq",
+  "qqXqqqqqqqqqqMqqUqqq",
+  "qqqqqqqqqqqqqqqqqqqq",
+  "PPPPPPPPPPPPPPPPPPPP",
+  "lcccctlcccctlcccctlc",
+  "ffffffffmffffffffHff",
+  "ffffffffffffffffffff",
+  "uuuuuuuuuuuuuuuuuuuu",
+  "rrRrrAArrRrrAArrRrrr",
+];
+
+/** A sample of the Behavioural Theatre for art review: a marquee playhouse, a plaza, and a curtained stage with footlights. */
+export const THEATRE_SCENE = composeScene(THEATRE_TILES, "theatre-scene", THEATRE_ROWS, THEATRE_LEGEND);
