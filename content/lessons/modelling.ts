@@ -338,4 +338,246 @@ int main() {
     interviewSignal: `Say "let me draw the states and events first". Name the states, list the events, and say what happens for each (state, event) pair, including the rejected ones. Level signal: SDE II gets the happy path; Senior covers the invalid transitions and the guard conditions; Staff discusses persistence of the state and concurrent events.`,
     overApplication: `A full State-pattern class hierarchy for a machine with three states and no state-specific data is ceremony. And a state diagram for something that has no real life cycle (a plain data record) adds nothing; draw one when behaviour depends on history.`,
   },
+  {
+    id: "sequence-diagrams",
+    level: "L6",
+    title: "Sequence diagrams: one scenario, call by call",
+    oneLiner: "A sequence diagram is one scenario drawn as calls in time order; draw the failure branch too, because that is where the missing code hides.",
+    cardTopic: "L6.sequence",
+    intro: `A **class diagram** shows what exists; a **sequence diagram** shows what happens in one scenario. Participants sit along the top as boxes with lifelines hanging down. Each solid arrow is a method call, each dashed arrow a return, and time runs downward. Fragments add control flow: \`alt\` is an if/else, \`opt\` is an if, \`loop\` is a loop.
+
+The habit that matters in an interview is to draw the **happy path first, then each failure as an alt**. Every arrow you draw must already exist as a method on the receiver, so the diagram doubles as a check of your class diagram. And every \`alt\` you forget to draw tends to be an \`if\` you forget to write.`,
+    smell: `- The code handles the success case and quietly returns \`false\` on every failure, leaving earlier steps half-done.
+- A step that acquires something (a reservation, a lock, a hold) has no matching release on the failure path.
+- You can describe the flow only by reading the code top to bottom; there is no scenario you could draw in a minute.
+- A "sequence" with one participant calling its own private helpers: nothing to draw, so nothing was designed.`,
+    before: `#include <iostream>
+#include <map>
+#include <string>
+
+class Inventory {
+public:
+    void stock(const std::string& sku, int count) { counts_[sku] = count; }
+    bool reserve(const std::string& sku) {
+        auto it = counts_.find(sku);
+        if (it == counts_.end() || it->second == 0) return false;
+        --it->second;
+        return true;
+    }
+    int left(const std::string& sku) const {
+        auto it = counts_.find(sku);
+        return it == counts_.end() ? 0 : it->second;
+    }
+
+private:
+    std::map<std::string, int> counts_;
+};
+
+class Gateway {
+public:
+    explicit Gateway(int limitCents) : limitCents_(limitCents) {}
+    bool charge(int cents) const { return cents <= limitCents_; }
+
+private:
+    int limitCents_;
+};
+
+class Checkout {
+public:
+    Checkout(Inventory& inventory, const Gateway& gateway) : inventory_(inventory), gateway_(gateway) {}
+
+    // Happy path only: reserve, then charge.
+    bool pay(const std::string& sku, int cents) {
+        if (!inventory_.reserve(sku)) return false;
+        if (!gateway_.charge(cents)) return false;
+        return true;
+    }
+
+private:
+    Inventory& inventory_;
+    const Gateway& gateway_;
+};
+
+int main() {
+    Inventory inventory;
+    inventory.stock("mug", 1);
+    Gateway gateway(500);
+    Checkout checkout(inventory, gateway);
+    std::cout << "declined card paid=" << checkout.pay("mug", 900) << " left=" << inventory.left("mug") << "\\n";
+    std::cout << "retry with cheaper price paid=" << checkout.pay("mug", 300) << "\\n";
+}
+`,
+    after: `#include <iostream>
+#include <map>
+#include <string>
+
+class Inventory {
+public:
+    void stock(const std::string& sku, int count) { counts_[sku] = count; }
+    bool reserve(const std::string& sku) {
+        auto it = counts_.find(sku);
+        if (it == counts_.end() || it->second == 0) return false;
+        --it->second;
+        return true;
+    }
+    void release(const std::string& sku) { ++counts_[sku]; }
+    int left(const std::string& sku) const {
+        auto it = counts_.find(sku);
+        return it == counts_.end() ? 0 : it->second;
+    }
+
+private:
+    std::map<std::string, int> counts_;
+};
+
+class Gateway {
+public:
+    explicit Gateway(int limitCents) : limitCents_(limitCents) {}
+    bool charge(int cents) const { return cents <= limitCents_; }
+
+private:
+    int limitCents_;
+};
+
+class Checkout {
+public:
+    Checkout(Inventory& inventory, const Gateway& gateway) : inventory_(inventory), gateway_(gateway) {}
+
+    // Follows the diagram: reserve, charge, and on decline release the reservation before returning.
+    bool pay(const std::string& sku, int cents) {
+        if (!inventory_.reserve(sku)) return false;
+        if (!gateway_.charge(cents)) {
+            inventory_.release(sku);  // the alt fragment: compensate when the charge is declined
+            return false;
+        }
+        return true;
+    }
+
+private:
+    Inventory& inventory_;
+    const Gateway& gateway_;
+};
+
+int main() {
+    Inventory inventory;
+    inventory.stock("mug", 1);
+    Gateway gateway(500);
+    Checkout checkout(inventory, gateway);
+    std::cout << "declined card paid=" << checkout.pay("mug", 900) << " left=" << inventory.left("mug") << "\\n";
+    std::cout << "retry with cheaper price paid=" << checkout.pay("mug", 300) << "\\n";
+}
+`,
+    beforeOutput: "declined card paid=0 left=0\nretry with cheaper price paid=0",
+    afterOutput: "declined card paid=0 left=1\nretry with cheaper price paid=1",
+    refactorNotes: `Drawing \`Checkout\` as a sequence (Client to Checkout: pay; Checkout to Inventory: reserve; Checkout to Gateway: charge; \`alt\` declined: Checkout to Inventory: release) exposes the gap at once: the first version has no release arrow, so a declined card keeps the mug reserved forever. The fix is the one missing call. The output changes in exactly the two places the diagram predicts: stock is back after a decline, and the retry succeeds. Trade-off: compensation by hand is fine for two steps; with many steps, model the flow as a saga or a scoped guard that releases in its destructor.`,
+    interviewSignal: `Say "let me walk one scenario end to end, then the failure cases". Name the participants, draw reserve then charge, and add the declined branch as an alt before the interviewer asks. Level signal: SDE II draws the happy path; Senior adds the failure and compensation branches unprompted; Staff also asks what happens if the process dies between the two calls.`,
+    overApplication: `Drawing a sequence diagram for every method is noise: pick the two or three scenarios that cross object boundaries or have a failure branch worth discussing. And a diagram with every internal helper call is a transcript of the code, not a design; keep only calls between participants that matter.`,
+  },
+  {
+    id: "extension-points",
+    level: "L6",
+    title: "Finding extension points in the requirements",
+    oneLiner: "Abstract only what the brief says will vary (\"later\", \"or\", \"different for\"); keep the rest concrete.",
+    cardTopic: "L6.extension-points",
+    intro: `In a Change Storm the interviewer changes a requirement and watches how much code you touch. You cannot make everything flexible, so you pick **seams**: the few places where behaviour is allowed to vary. The brief tells you where. Listen for trigger phrases:
+
+- "**later** we may add…", "marketing might want…" means a new variant is coming: an interface with the current case as the first implementation.
+- "**either** X **or** Y", "depends on the customer" means variants exist today: an interface now.
+- "**different rules for** weekends / regions / tiers" means a policy object chosen by data.
+- A noun with a fixed definition ("a receipt shows the total") needs no seam.
+
+Say each seam out loud and name what it hides. An interface with one implementation and no hint of a second is a guess, not a seam.`,
+    smell: `- The variant is a string or enum that every method switches on, so each new variant edits the old code.
+- Or the opposite: interfaces for every noun in the brief, each with a single implementation and a factory.
+- You cannot say which sentence of the requirements justifies a given abstraction.
+- Adding the "obvious next" requirement means changing three files and a switch.`,
+    before: `#include <iostream>
+#include <string>
+
+// "Send a receipt by email; marketing may want SMS later." The channel is a string and every send branches on it.
+class ReceiptService {
+public:
+    void send(const std::string& channel, const std::string& to, int totalCents) const {
+        const std::string body = "Total: " + std::to_string(totalCents / 100) + "." + (totalCents % 100 < 10 ? "0" : "") + std::to_string(totalCents % 100);
+        if (channel == "email") {
+            std::cout << "EMAIL to " << to << ": " << body << "\\n";
+        } else if (channel == "sms") {
+            std::cout << "SMS to " << to << ": " << body << "\\n";
+        } else {
+            std::cout << "unknown channel " << channel << "\\n";
+        }
+    }
+};
+
+int main() {
+    ReceiptService service;
+    service.send("email", "asha@example.com", 1250);
+    service.send("sms", "555-0101", 1250);
+    service.send("push", "device-9", 1250);
+}
+`,
+    after: `#include <iostream>
+#include <memory>
+#include <string>
+#include <utility>
+#include <vector>
+
+// Extension point, found from the phrase "may want SMS later": how a receipt is delivered. Everything else is concrete.
+class Channel {
+public:
+    virtual ~Channel() = default;
+    virtual void deliver(const std::string& to, const std::string& body) const = 0;
+};
+
+class EmailChannel : public Channel {
+public:
+    void deliver(const std::string& to, const std::string& body) const override {
+        std::cout << "EMAIL to " << to << ": " << body << "\\n";
+    }
+};
+
+class SmsChannel : public Channel {
+public:
+    void deliver(const std::string& to, const std::string& body) const override {
+        std::cout << "SMS to " << to << ": " << body << "\\n";
+    }
+};
+
+// Not an extension point: the receipt text. Nothing in the brief says it varies, so it stays a plain function.
+std::string formatTotal(int totalCents) {
+    const int cents = totalCents % 100;
+    return "Total: " + std::to_string(totalCents / 100) + "." + (cents < 10 ? "0" : "") + std::to_string(cents);
+}
+
+class ReceiptService {
+public:
+    void addChannel(std::unique_ptr<Channel> channel) { channels_.push_back(std::move(channel)); }
+
+    void send(std::size_t channelIndex, const std::string& to, int totalCents) const {
+        if (channelIndex >= channels_.size()) {
+            std::cout << "unknown channel " << channelIndex << "\\n";
+            return;
+        }
+        channels_[channelIndex]->deliver(to, formatTotal(totalCents));
+    }
+
+private:
+    std::vector<std::unique_ptr<Channel>> channels_;
+};
+
+int main() {
+    ReceiptService service;
+    service.addChannel(std::make_unique<EmailChannel>());
+    service.addChannel(std::make_unique<SmsChannel>());
+    service.send(0, "asha@example.com", 1250);
+    service.send(1, "555-0101", 1250);
+    service.send(2, "device-9", 1250);
+}
+`,
+    beforeOutput: "EMAIL to asha@example.com: Total: 12.50\nSMS to 555-0101: Total: 12.50\nunknown channel push",
+    afterOutput: "EMAIL to asha@example.com: Total: 12.50\nSMS to 555-0101: Total: 12.50\nunknown channel 2",
+    refactorNotes: `The phrase "may want SMS later" produced exactly one seam, \`Channel\`, with email and SMS as implementations; \`ReceiptService\` no longer knows what a channel is. The receipt text has no trigger phrase, so \`formatTotal\` stays an ordinary function. The observable output is the same for the two supported channels; only the unknown-channel line differs because the string name became an index. Adding push now means one new class and one \`addChannel\` call. Trade-off: the seam costs an interface and a vector of owners; if SMS never arrives, that was ceremony, which is why the seam follows the brief and not a guess.`,
+    interviewSignal: `Say "the brief says X may change later, so I will put a seam there, and I will keep Y concrete because nothing says it varies". Then show the one-line cost of the next requirement. Level signal: SDE II finds the obvious seam; Senior also names what they deliberately left concrete and why; Staff considers who owns the seam's contract across teams.`,
+    overApplication: `Seams for every noun give you interface-per-class, a factory for each, and a codebase where nothing can be read without jumping three files. Each unused abstraction is code to maintain and a reader to mislead; wait for the second real variant when the brief gives no hint.`,
+  },
 ];

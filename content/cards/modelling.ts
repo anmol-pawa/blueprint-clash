@@ -1,8 +1,8 @@
 import type { Card } from "@/lib/battle/cards";
 
 /**
- * Modelling and UML concept deck, part 1 (CURRICULUM L6). Original wording. Multiple-choice only for now: UML-reading
- * cards arrive with the Design Board (C8c). Topics: entities, class-diagram, state-diagram.
+ * Modelling and UML concept deck, parts 1-2 (CURRICULUM L6). Original wording. Multiple-choice only for now: UML-reading
+ * cards arrive with the Design Board (C8c). Topics: entities, class-diagram, state-diagram, sequence, extension-points.
  */
 export const MODELLING_DECK: Card[] = [
   // ---- Requirements to entities ----------------------------------------
@@ -91,5 +91,63 @@ export const MODELLING_DECK: Card[] = [
     options: ["Not yet: use the enum; move to State when states gain their own behaviour, data or frequent additions", "Always, because switches are forbidden", "Only for machines with exactly two states", "Whenever a mutex is present"],
     answer: [0],
     explain: "The pattern pays for itself when every new state would otherwise touch many switches. For a small closed machine the enum is clearer and cheaper; say that, then name the trigger for refactoring.",
+  },
+  // ---- Sequence diagrams -----------------------------------------------
+  {
+    id: "ml-mcq-sq-arrow", kind: "mcq", topic: "L6.sequence", level: 1,
+    prompt: "In a sequence diagram, what does a solid arrow from `Checkout` to `Inventory` labelled `reserve(sku)` mean?",
+    options: ["`Checkout` calls the `reserve` method on `Inventory`", "`Checkout` inherits from `Inventory`", "`Inventory` owns a `Checkout`", "`reserve` runs on a new thread"],
+    answer: [0],
+    explain: "Arrows are messages, which in C++ are method calls on the receiver. If `Inventory` has no `reserve`, the diagram has found a missing method.",
+  },
+  {
+    id: "ml-mcq-sq-alt", kind: "mcq", topic: "L6.sequence", level: 2,
+    prompt: "Which fragment shows 'if the card is declined, release the reservation, otherwise confirm the order'?",
+    options: ["`alt` with two branches", "`loop`", "`opt` with one branch only", "A self-call on `Checkout`"],
+    answer: [0],
+    explain: "`alt` is if/else with guards on each branch; `opt` is a bare if; `loop` repeats. Two outcomes needing different calls is `alt`.",
+  },
+  {
+    id: "ml-mcq-sq-failure", kind: "mcq", topic: "L6.sequence", level: 2,
+    prompt: "You drew only the happy path of reserve-then-charge. What is the most likely bug you have not drawn?",
+    options: ["Stock stays reserved when the charge is declined", "The class names are too long", "The destructor is not virtual", "The method is not `const`"],
+    answer: [0],
+    explain: "A step that acquires something needs a matching release on every failure branch. Drawing the declined `alt` is how you notice the release call is missing.",
+  },
+  {
+    id: "ml-mcq-sq-vs-class", kind: "mcq", topic: "L6.sequence", level: 1,
+    prompt: "What does a sequence diagram show that a class diagram does not?",
+    options: ["The order of calls in one scenario", "Which classes exist", "Which members are private", "Which base class is abstract"],
+    answer: [0],
+    explain: "Class diagrams are structure; sequence diagrams are behaviour over time for a single scenario. Use both: arrows must match methods that the class diagram lists.",
+  },
+  // ---- Extension points ------------------------------------------------
+  {
+    id: "ml-mcq-ep-later", kind: "mcq", topic: "L6.extension-points", level: 1,
+    prompt: "A brief says 'we send receipts by email, and marketing may want SMS later'. What does that phrase suggest?",
+    options: ["A seam (interface) for the delivery channel", "A global `if (channel == ...)` chain", "A singleton `Notifier`", "Nothing; ignore it until it ships"],
+    answer: [0],
+    explain: "'Later' and 'may want' are trigger phrases for a variation point. Put an interface there, with email as the first implementation.",
+  },
+  {
+    id: "ml-mcq-ep-fixed", kind: "mcq", topic: "L6.extension-points", level: 2,
+    prompt: "The brief says 'a receipt shows the order total' and says nothing about variation. What should you do with the formatting?",
+    options: ["Keep it concrete: a plain function or method", "Create `ReceiptFormatter` with an interface and a factory", "Make it a template parameter", "Move it into a plugin system"],
+    answer: [0],
+    explain: "No trigger phrase, no seam. Abstractions you cannot justify from the requirements are guesses, and each one costs reading effort.",
+  },
+  {
+    id: "ml-mcq-ep-justify", kind: "mcq", topic: "L6.extension-points", level: 3,
+    prompt: "An interviewer asks why `PaymentMethod` is an interface but `Cart` is a plain class. Which answer is strongest?",
+    options: ["The brief names several payment methods that differ in behaviour, while nothing says carts vary", "Interfaces are always better", "Plain classes are faster", "It is how the tutorial did it"],
+    answer: [0],
+    explain: "Tie each seam to a sentence of the requirements, and name what you left concrete. That is the Senior signal in a Change Storm discussion.",
+  },
+  {
+    id: "ml-mcq-ep-cost", kind: "mcq", topic: "L6.extension-points", level: 3,
+    prompt: "What is the main cost of putting an interface behind every noun in the brief?",
+    options: ["Indirection and unused abstractions that readers must follow and maintain", "It cannot compile", "It removes virtual dispatch", "It makes code thread-unsafe"],
+    answer: [0],
+    explain: "Speculative generality. Wait for the second real variant, or for a requirement that names it, before paying for the seam.",
   },
 ];

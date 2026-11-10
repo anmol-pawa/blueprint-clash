@@ -675,3 +675,9 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Verification: `content:verify` lessons suite (38 incl. the 3 new, review-clean) passes; `lint` (0 errors, 8 pre-existing warnings), `typecheck`, `test` (566 pass), `build`, `build:pages` pass. Playwright on the Pages export, desktop and iPhone 14: `/learn/class-diagram-ownership/` viewed, readable, no console errors, no horizontal overflow. CI/Pages not confirmed (`gh` unavailable here).
 - Known gaps: no UML-reading cards or diagrams yet (need the Design Board, C8c); deck has no backdrop of its own.
 - Next: C8b (sequence diagrams and extension-point lessons).
+
+## 2026-11-10 - C8b: sequence-diagram and extension-point lessons
+- Two L6 lessons in `content/lessons/modelling.ts`: sequence diagrams (checkout reserve/charge, the forgotten `alt` release branch exposed by drawing the failure path) and finding extension points from requirement trigger phrases ("later", "either/or", "different rules for") with a Channel seam and a deliberately concrete formatter. Each has native-compiled before/after with recorded output, trade-offs, interview signal by level and over-application cost. Eight new mcq cards (topics `L6.sequence`, `L6.extension-points`) added to the Drafting Studio deck.
+- Verification: `content:verify` (8 files, 273 tests, incl. both new lessons and Senior Review) passes; `lint` (0 errors, 8 pre-existing warnings), `typecheck`, `test` (566 pass), `build`, `build:pages` pass. Playwright on the Pages export, desktop and iPhone 14: both lesson pages viewed, no console errors, no horizontal overflow; fixed two markdown spans the renderer does not support. CI/Pages confirmation skipped (Actions quota note).
+- Known gaps: no diagrams drawn yet (Design Board, C8c-d); lessons are text plus C++.
+- Next: C8c (Design Board engine: UML model, rubric scorer, tests).

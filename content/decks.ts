@@ -27,7 +27,7 @@ export const DECKS: readonly Deck[] = [
   // Behavioural Theatre borrows the Bridges backdrop until its own scene lands (C7d).
   { id: "behavioural-theatre", title: "Behavioural Theatre", district: "Strategy to Iterator, Chain, Mediator, Memento, Visitor, Interpreter, Null Object and Specification", cards: BEHAVIOURAL_THEATRE_DECK, scene: "theatre" },
   // The Drafting Studio (L6) borrows the Old Town backdrop until it has its own art.
-  { id: "modelling", title: "Drafting Studio", district: "Requirements to entities, class diagrams and state diagrams", cards: MODELLING_DECK, scene: "old-town" },
+  { id: "modelling", title: "Drafting Studio", district: "Requirements to entities, class, state and sequence diagrams, extension points", cards: MODELLING_DECK, scene: "old-town" },
 ];
 
 export const DEFAULT_DECK_ID = "old-town";
