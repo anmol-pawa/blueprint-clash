@@ -25,10 +25,10 @@ describe("lessons", () => {
       "adapter", "bridge", "composite", "decorator", "facade", "flyweight", "proxy",
     ]);
   });
-  it("cover twelve Behavioural Theatre patterns in order", () => {
+  it("cover fourteen Behavioural Theatre patterns in order", () => {
     expect(ALL_LESSONS.filter((l) => l.level === "L5").map((l) => l.id)).toEqual([
       "strategy", "observer", "command", "state", "template-method", "iterator", "chain-of-responsibility", "mediator",
-      "memento", "visitor", "interpreter", "null-object",
+      "memento", "visitor", "interpreter", "null-object", "specification", "event-driven",
     ]);
   });
   it("each lesson's card topic has cards to drill", () => {
