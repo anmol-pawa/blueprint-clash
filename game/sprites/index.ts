@@ -22,6 +22,10 @@ import { PROXIFOX } from "./creatures/proxifox";
 import { CHAMELSTRAT } from "./creatures/chamelstrat";
 import { OWLSERVER } from "./creatures/owlserver";
 import { COMMANDANT } from "./creatures/commandant";
+import { SHAPESHIFT } from "./creatures/shapeshift";
+import { TEMPLAR } from "./creatures/templar";
+import { INCHWORM } from "./creatures/inchworm";
+import { ANTCHAIN } from "./creatures/antchain";
 
 /** Every creature sprite, in review order (shown on /dev/sprites). */
-export const SPRITES: readonly SpriteDef[] = [DRAFTLING, DRAFTLING_BACK, ARCHITECT, ARCHITECT_BACK, ROUGH_DRAFT, FORGEBOT, BEAVERBUILD, SOLO, CLONEWISP, AXOLINK, BRIDGEBACK, FRACTREE, SHELLCRAB, FACADEON, FLYTILE, PROXIFOX, CHAMELSTRAT, OWLSERVER, COMMANDANT, WARDEN_VANE, PROVOST_MARLOW, FOREMAN_CORVO, HARBOURMASTER_VALE];
+export const SPRITES: readonly SpriteDef[] = [DRAFTLING, DRAFTLING_BACK, ARCHITECT, ARCHITECT_BACK, ROUGH_DRAFT, FORGEBOT, BEAVERBUILD, SOLO, CLONEWISP, AXOLINK, BRIDGEBACK, FRACTREE, SHELLCRAB, FACADEON, FLYTILE, PROXIFOX, CHAMELSTRAT, OWLSERVER, COMMANDANT, SHAPESHIFT, TEMPLAR, INCHWORM, ANTCHAIN, WARDEN_VANE, PROVOST_MARLOW, FOREMAN_CORVO, HARBOURMASTER_VALE];

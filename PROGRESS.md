@@ -623,3 +623,9 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Verification: `lint` (0 errors, 8 pre-existing warnings), `typecheck`, `test` (499 pass), `build`, `build:pages` pass. Playwright on the Pages export, desktop 1280x800 and iPhone 14: `/dev/sprites/` viewed, sprites readable, no console errors, no horizontal overflow. CI/Pages deploy not checked (`gh` unavailable here).
 - Known gaps: no back sprites for these (same as other Patternlings); not yet used in a map or duel (C7e).
 - Next: C7d2 (Shapeshift, Templar, Inchworm, Antchain).
+
+## 2026-11-10: C7d2 Theatre art, part 2 (Shapeshift, Templar, Inchworm, Antchain)
+- New `scripts/art/theatre2.mjs` generates four 64x64 Patternlings (idle 4 / attack 3 / hurt 2 / faint 4 / evolve 4): Shapeshift (State: gel blob re-tinting teal/amber/violet with a mode dial), Templar (Template Method: mason beetle with a stencil of fixed rungs and one lit hook), Inchworm (Iterator: segmented worm with a cursor ring), Antchain (Chain of Responsibility: ant with linked rings and a parcel). Registered in `game/sprites/index.ts` and shown on `/dev/sprites`.
+- Verification: `lint` (0 errors, 8 pre-existing warnings), `typecheck`, `test` (519 pass), `build`, `build:pages` pass. Playwright on the Pages export, desktop 1280x800 and iPhone 14: `/dev/sprites/` viewed, new sprites readable, no console errors, no horizontal overflow. `content:verify` not rerun (no content change). `gh` is unavailable here, so CI/Pages status was not confirmed.
+- Known gaps: no back sprites; not yet used in a map or duel (C7e).
+- Next: C7d3 (Mediowl, Mementortoise, Visitorb).

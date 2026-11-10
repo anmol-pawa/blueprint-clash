@@ -127,7 +127,7 @@ Work top to bottom: take the **first unchecked box**, and split big boxes into r
     - [x] C7c3. Memento, Visitor, Interpreter (`memento-editor`, `visitor-basket`, `interpreter-calc`).
   - [ ] C7d. Theatre art: 11 Patternling sprites (3-4 per run), tileset and battle backdrop. Split below.
     - [x] C7d1. Sprites: Chamelstrat, Owlserver, Commandant (`scripts/art/theatre1.mjs`).
-    - [ ] C7d2. Sprites: Shapeshift, Templar, Inchworm, Antchain.
+    - [x] C7d2. Sprites: Shapeshift, Templar, Inchworm, Antchain (`scripts/art/theatre2.mjs`).
     - [ ] C7d3. Sprites: Mediowl, Mementortoise, Visitorb.
     - [ ] C7d4. Theatre tileset and battle backdrop.
   - [ ] C7e. Theatre map, trainers, duels, hall, master and badge (split like C6e).
