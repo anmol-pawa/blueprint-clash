@@ -694,3 +694,9 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Verification: `lint` (0 errors, 8 pre-existing warnings), `typecheck`, `test` (586 pass), `build`, `build:pages` pass. Playwright on the Pages export, desktop and iPhone 14: `/board/parking-lot/` draw and result views read well, no console errors, no horizontal overflow. `content:verify` not rerun (no exercise change).
 - Known gaps: the reference is text-only (no rendered diagram); drills do not feed XP/save yet; UML-reading cards still absent.
 - Next: C9 (Race Hunter engine).
+
+## 2026-11-10 - C9a: Race Hunter engine (interleaving explorer)
+- New `lib/concurrency/`: step IR (load/store/set/lock/unlock/wait/notify/notifyAll/cas/atomicAdd/jmp/assert, each with an attached `cpp` line), pure `step` engine, `runSchedule` manual scheduler, and a breadth-first exhaustive `explore` (state-hash de-dup, shortest counterexample, `proved` only when the whole space is searched within the bound). Detects invariant/assertion failures, lockset data races, deadlock, lost wake-up, unlock-not-owned, wait-without-lock and lock leaks; optional spurious wake-ups. Sample programs in `samples.ts` (racy/locked/atomic counter, AB-BA deadlock and lock ordering, condvar handshake with unlocked producer / `if` wait / `while` wait). ARCH §5 and ROADMAP updated (C9 split into C9a/C9b).
+- Verification: `lint` (0 errors, 8 pre-existing warnings), `typecheck`, `npm test` (597 pass, 11 new in `tests/concurrency.test.ts`), `build`, `build:pages` pass. No visual change, so no screenshots; `content:verify` not rerun (no content change).
+- Known gaps: `notify` wakes FIFO only (no nondeterministic choice of waiter); no memory-model reorderings (all steps sequentially consistent), stated in ARCH; no UI yet.
+- Next: C9b (Race Hunter UI at `/race`).
