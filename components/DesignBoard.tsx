@@ -48,7 +48,7 @@ function saveBlob(blob: Blob, name: string) {
   setTimeout(() => URL.revokeObjectURL(a.href), 1000);
 }
 
-export function DesignBoard({ rubric, initial, draftId, onFinish }: { rubric: Responsibility[]; initial?: Board; /** Saves the board to this device under this id and restores it on return. */ draftId?: string; onFinish: (board: Board) => void }) {
+export function DesignBoard({ rubric, initial, draftId, finishLabel, onFinish }: { rubric: Responsibility[]; initial?: Board; /** Saves the board to this device under this id and restores it on return. */ draftId?: string; /** Overrides the finish button text (default: lock the board and start coding). */ finishLabel?: string; onFinish: (board: Board) => void }) {
   // Mounted only after a click on the client, so reading localStorage in the initialiser cannot mismatch server HTML.
   const [saved] = useState<Board | null>(() => {
     if (!draftId || initial) return null;
@@ -244,7 +244,7 @@ export function DesignBoard({ rubric, initial, draftId, onFinish }: { rubric: Re
       </div>
       <div className="flex flex-wrap items-center gap-2">
         <button className="px-btn px-btn-primary min-h-11 px-4 text-sm" onClick={() => onFinish(board)} data-testid="finish-board">
-          {board.classes.length === 0 ? "Skip the board and start coding" : "Lock the board and start coding"}
+          {finishLabel ?? (board.classes.length === 0 ? "Skip the board and start coding" : "Lock the board and start coding")}
         </button>
         {errors.length > 0 && <p className="text-sm text-red-300">{errors.length} problem{errors.length === 1 ? "" : "s"}: {errors[0].message}</p>}
       </div>

@@ -687,3 +687,10 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Verification: lint (0 errors), typecheck, `npm test` (566 passed), build, build:pages passed. content:verify was still running when this entry was written (see below if updated). No visual change, so no screenshots. CI/deploy confirmation skipped (Actions quota).
 - Known gaps: no UI yet; UML-reading cards still need diagrams.
 - Next: C8d (Design Board UI and 4-6 drills with rubrics).
+
+## 2026-11-10 - C8d: Design Board drills (closes C8)
+- The Design Board UI already existed (workshop step 2). New standalone drills: `content/drills/` (4 drills: parking lot, elevator, vending machine, notification service; each with brief, responsibility rubric, reference board, trade-offs and SDE II/Senior/Staff level signal), routes `/board` and `/board/[id]` (draw, score, then reference + trade-offs), home tile, optional `finishLabel` on `DesignBoard`.
+- Tests: `tests/boardDrills.test.ts` (reference scores 100% with no flags, each responsibility has one permitted owner, god-class and misplaced variants score lower and are flagged).
+- Verification: `lint` (0 errors, 8 pre-existing warnings), `typecheck`, `test` (586 pass), `build`, `build:pages` pass. Playwright on the Pages export, desktop and iPhone 14: `/board/parking-lot/` draw and result views read well, no console errors, no horizontal overflow. `content:verify` not rerun (no exercise change).
+- Known gaps: the reference is text-only (no rendered diagram); drills do not feed XP/save yet; UML-reading cards still absent.
+- Next: C9 (Race Hunter engine).

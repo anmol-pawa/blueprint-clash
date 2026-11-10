@@ -136,11 +136,11 @@ Work top to bottom: take the **first unchecked box**, and split big boxes into r
     - [x] C7e3. Theatre hall interior, master fight and badge. Split below.
       - [x] C7e3a. Theatre Hall interior map, playhouse-door warp, Director Voss placed (walker, portrait, intro dialogue), scene on `/dev/sprites`, tests.
       - [x] C7e3b. Voss master fight: 96x96 master sprite, profile, deck, phase-2 exercise choice from the 11, `/battle/master?master=behavioural-theatre`, badge saved.
-- [ ] C8. **Modelling and UML lessons** (L6) and Design Board drills. Split below.
+- [x] C8. **Modelling and UML lessons** (L6) and Design Board drills. Split below.
   - [x] C8a. Lessons: requirements to entities (noun/verb, CRC), class-diagram relationships as C++ ownership, state diagrams (`content/lessons/modelling.ts`), plus a 12-card `modelling` deck (Drafting Studio).
   - [x] C8b. Lessons: sequence diagrams, and identifying extension points from requirements; 10 more cards (UML-reading cards need C8c).
   - [x] C8c. Design Board engine (GDD 5.3 step 2): pure-logic UML model, rubric scorer, tests. (Found already built in `lib/board/`: model, edit, persist, rubric, skeleton; 28 tests incl. g++-compiled skeletons. Verified this run.)
-  - [ ] C8d. Design Board UI (vector pixel-styled canvas) and 4-6 drills with rubrics.
+  - [x] C8d. Design Board UI (vector canvas, in `components/DesignBoard.tsx` since C6) and 4 drills with rubrics at `/board` (parking lot, elevator, vending machine, notification service).
 - [ ] C9. **Race Hunter engine** (ARCH §5), with the explorer and tests.
 - [ ] C10. **Concurrency Docks** (L7): lessons, 12 Race Hunter puzzles, 5 C++ exercises, a gym.
 - [ ] C11. **Senior Review v2:** all rules from GDD §5.3 step 5, with fixtures.
