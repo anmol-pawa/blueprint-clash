@@ -595,3 +595,14 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Verification: `content:verify` filtered to the four ids (20 tests: load/valid, reference accepted, Senior Review clean, starter not accepted, every wrong rejected as documented) passes; `lint` (0 errors, 8 pre-existing warnings), `typecheck`, `test` (477 pass), `build`, `build:pages` pass. No UI change, so no screenshots this run; full `content:verify` not rerun.
 - Known gaps: exercises are not yet attached to Theatre lessons or a gym (C7e). `gh` is unavailable here, so CI/Pages status was not confirmed.
 - Next: C7c2 (Template Method, Iterator, Chain of Responsibility, Mediator).
+
+## 2026-11-10: C7c2 Behavioural Theatre exercises, part 2 (Template Method, Iterator, Chain of Responsibility, Mediator)
+- Four new judged packages (api/prompt/meta/starter/reference/tests/wrong), registered in `content/exercises/registry.ts` and listed in `tests/exercises.test.ts`:
+  - `template-report`: `ReportGenerator` with a public non-virtual const `generate()`, private virtual steps and an optional footer hook; rows() called exactly once. Six wrongs (rows twice, footer before rows, hook never called, no empty placeholder, pure-virtual hook and non-const generate as compile rejections).
+  - `iterator-roster`: `Roster::const_iterator`, a forward iterator that hides tombstones at the start, middle and tail, with the five typedefs, const-reference deref and correct post-increment. Seven wrongs (skip-one-only, no skip in begin, no skip after increment, size counts slots, post-increment returns new, by-value deref and missing typedefs as compile rejections).
+  - `chain-approval`: `Approver` links that own their successor, `then()` returns the appended link, stop at the first approver, explicit "rejected" fallback; a test-only `BlocklistApprover` and a call-counting spy prove extension and short-circuit. Seven wrongs.
+  - `mediator-lobby`: `Lobby` owning fan-out and the start rule (>= 2 players, all ready, announced once, re-checked on `leave`). Seven wrongs.
+- Wrong solutions are derived from each reference by a one-edit-per-bug script (kept out of the repo), so each documented bug is the only difference.
+- Verification: `content:verify` filtered to the four ids (20 tests: valid, reference accepted, Senior Review clean, starter not accepted, every wrong rejected as documented) passes; `lint` (0 errors, 8 pre-existing warnings), `typecheck`, `test` (481 pass), `build`, `build:pages` pass. No UI change, so no screenshots this run; full `content:verify` not rerun. `gh` is unavailable here, so CI/Pages status was not confirmed.
+- Known gaps: exercises are not yet attached to Theatre lessons or a gym (C7e).
+- Next: C7c3 (Memento, Visitor, Interpreter).

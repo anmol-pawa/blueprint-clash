@@ -27,6 +27,10 @@ import { meta as strategyRanker } from "./strategy-ranker/meta";
 import { meta as observerTopic } from "./observer-topic/meta";
 import { meta as commandUndo } from "./command-undo/meta";
 import { meta as stateDocument } from "./state-document/meta";
+import { meta as templateReport } from "./template-report/meta";
+import { meta as iteratorRoster } from "./iterator-roster/meta";
+import { meta as chainApproval } from "./chain-approval/meta";
+import { meta as mediatorLobby } from "./mediator-lobby/meta";
 
 export const EXERCISE_META: Record<string, ExerciseMeta> = {
   "file-handle": fileHandle,
@@ -55,4 +59,8 @@ export const EXERCISE_META: Record<string, ExerciseMeta> = {
   "observer-topic": observerTopic,
   "command-undo": commandUndo,
   "state-document": stateDocument,
+  "template-report": templateReport,
+  "iterator-roster": iteratorRoster,
+  "chain-approval": chainApproval,
+  "mediator-lobby": mediatorLobby,
 };
