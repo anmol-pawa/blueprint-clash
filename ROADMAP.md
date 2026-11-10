@@ -138,7 +138,7 @@ Work top to bottom: take the **first unchecked box**, and split big boxes into r
       - [x] C7e3b. Voss master fight: 96x96 master sprite, profile, deck, phase-2 exercise choice from the 11, `/battle/master?master=behavioural-theatre`, badge saved.
 - [ ] C8. **Modelling and UML lessons** (L6) and Design Board drills. Split below.
   - [x] C8a. Lessons: requirements to entities (noun/verb, CRC), class-diagram relationships as C++ ownership, state diagrams (`content/lessons/modelling.ts`), plus a 12-card `modelling` deck (Drafting Studio).
-  - [ ] C8b. Lessons: sequence diagrams, and identifying extension points from requirements; more cards (UML-reading cards need C8c).
+  - [x] C8b. Lessons: sequence diagrams, and identifying extension points from requirements; 10 more cards (UML-reading cards need C8c).
   - [ ] C8c. Design Board engine (GDD 5.3 step 2): pure-logic UML model, rubric scorer, tests.
   - [ ] C8d. Design Board UI (vector pixel-styled canvas) and 4-6 drills with rubrics.
 - [ ] C9. **Race Hunter engine** (ARCH §5), with the explorer and tests.

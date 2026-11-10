@@ -7,11 +7,12 @@ import { BEHAVIOURAL_THEATRE_LESSONS_2 } from "@/content/lessons/behavioural-the
 import { BEHAVIOURAL_THEATRE_LESSONS_3 } from "@/content/lessons/behavioural-theatre-3";
 import { BEHAVIOURAL_THEATRE_LESSONS_4 } from "@/content/lessons/behavioural-theatre-4";
 import { MODELLING_LESSONS } from "@/content/lessons/modelling";
+import { MODELLING_LESSONS_2 } from "@/content/lessons/modelling-2";
 import { compileAndRun } from "@/lib/judge/native";
 import { validateLessons } from "@/lib/lessons/model";
 import { reviewFiles } from "@/lib/review";
 
-const LESSONS = [...SOLID_SQUARE_LESSONS, ...CREATIONAL_FOUNDRY_LESSONS, ...STRUCTURAL_BRIDGES_LESSONS, ...BEHAVIOURAL_THEATRE_LESSONS, ...BEHAVIOURAL_THEATRE_LESSONS_2, ...BEHAVIOURAL_THEATRE_LESSONS_3, ...BEHAVIOURAL_THEATRE_LESSONS_4, ...MODELLING_LESSONS];
+const LESSONS = [...SOLID_SQUARE_LESSONS, ...CREATIONAL_FOUNDRY_LESSONS, ...STRUCTURAL_BRIDGES_LESSONS, ...BEHAVIOURAL_THEATRE_LESSONS, ...BEHAVIOURAL_THEATRE_LESSONS_2, ...BEHAVIOURAL_THEATRE_LESSONS_3, ...BEHAVIOURAL_THEATRE_LESSONS_4, ...MODELLING_LESSONS, ...MODELLING_LESSONS_2];
 
 describe("SOLID Square, Creational Foundry, Structural Bridges and Behavioural Theatre lessons", () => {
   it("are well-formed", () => {
