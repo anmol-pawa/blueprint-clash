@@ -31,6 +31,9 @@ import { meta as templateReport } from "./template-report/meta";
 import { meta as iteratorRoster } from "./iterator-roster/meta";
 import { meta as chainApproval } from "./chain-approval/meta";
 import { meta as mediatorLobby } from "./mediator-lobby/meta";
+import { meta as mementoEditor } from "./memento-editor/meta";
+import { meta as visitorBasket } from "./visitor-basket/meta";
+import { meta as interpreterCalc } from "./interpreter-calc/meta";
 
 export const EXERCISE_META: Record<string, ExerciseMeta> = {
   "file-handle": fileHandle,
@@ -63,4 +66,7 @@ export const EXERCISE_META: Record<string, ExerciseMeta> = {
   "iterator-roster": iteratorRoster,
   "chain-approval": chainApproval,
   "mediator-lobby": mediatorLobby,
+  "memento-editor": mementoEditor,
+  "visitor-basket": visitorBasket,
+  "interpreter-calc": interpreterCalc,
 };
