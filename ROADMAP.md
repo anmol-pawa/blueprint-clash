@@ -121,7 +121,10 @@ Work top to bottom: take the **first unchecked box**, and split big boxes into r
     - [x] C7b2. Lessons: Template Method, Iterator, Chain of Responsibility, Mediator.
     - [x] C7b3. Lessons: Memento, Visitor, Interpreter, Null Object.
     - [x] C7b4. Lessons: Specification and event-driven design (Observer vs queue vs event sourcing).
-  - [ ] C7c. Eleven judged exercises as `content:verify` packages with wrong solutions (3-4 per run).
+  - [ ] C7c. Eleven judged exercises as `content:verify` packages with wrong solutions (3-4 per run). Split below.
+    - [x] C7c1. `strategy-ranker`, `observer-topic`, `command-undo`, `state-document`.
+    - [ ] C7c2. Template Method, Iterator, Chain of Responsibility, Mediator.
+    - [ ] C7c3. Memento, Visitor, Interpreter.
   - [ ] C7d. Theatre art: 11 Patternling sprites (3-4 per run), tileset and battle backdrop.
   - [ ] C7e. Theatre map, trainers, duels, hall, master and badge (split like C6e).
 - [ ] C8. **Modelling and UML lessons** (L6) and Design Board drills.

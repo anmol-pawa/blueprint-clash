@@ -23,6 +23,10 @@ import { meta as decoratorStream } from "./decorator-stream/meta";
 import { meta as facadeCheckout } from "./facade-checkout/meta";
 import { meta as flyweightGlyphs } from "./flyweight-glyphs/meta";
 import { meta as proxyCache } from "./proxy-cache/meta";
+import { meta as strategyRanker } from "./strategy-ranker/meta";
+import { meta as observerTopic } from "./observer-topic/meta";
+import { meta as commandUndo } from "./command-undo/meta";
+import { meta as stateDocument } from "./state-document/meta";
 
 export const EXERCISE_META: Record<string, ExerciseMeta> = {
   "file-handle": fileHandle,
@@ -47,4 +51,8 @@ export const EXERCISE_META: Record<string, ExerciseMeta> = {
   "facade-checkout": facadeCheckout,
   "flyweight-glyphs": flyweightGlyphs,
   "proxy-cache": proxyCache,
+  "strategy-ranker": strategyRanker,
+  "observer-topic": observerTopic,
+  "command-undo": commandUndo,
+  "state-document": stateDocument,
 };

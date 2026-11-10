@@ -584,3 +584,14 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Verification: `lint` (0 errors, 8 pre-existing warnings), `typecheck`, `test` (473 pass), `build`, `build:pages` pass. Playwright on the Pages export (served under `/blueprint-clash`), desktop 1280x800 and iPhone 14: `/learn/specification/` and `/learn/event-driven/` viewed, readable, no console errors, no horizontal overflow. Full `content:verify` not rerun (only the lesson file changed). `gh` is unavailable here, so CI/Pages status was not confirmed.
 - Known gaps: no dedicated event-driven cards in the deck.
 - Next: C7c (eleven judged exercises, 3-4 per run).
+
+## 2026-11-10: C7c1 Behavioural Theatre exercises, part 1 (Strategy, Observer, Command, State)
+- Four new judged packages (api/prompt/meta/starter/reference/tests/wrong), registered in `content/exercises/registry.ts`:
+  - `strategy-ranker`: `RankingPolicy` strategies behind a `Leaderboard`; stable ties, runtime swap, a policy defined in the tests proves open/closed. Six wrong solutions (hard-coded rule, `std::sort`, non-strict `>=`, ignored swap, null policy stored, `top()` overrun).
+  - `observer-topic`: `Topic` holding `weak_ptr` listeners; no lifetime extension, duplicate-subscribe guard, snapshot iteration for re-entrant (un)subscribe, pruning. Five wrongs (shared_ptr leak, no pruning, duplicates, live-list iteration, reversed order).
+  - `command-undo`: `AppendCommand`, `EraseCommand` (saves what was actually removed) and a two-stack `History` that clears redo on a new action. Six wrongs.
+  - `state-document`: draft/review/published workflow with one class per state, handlers return the next state, refused actions change nothing. Five wrongs.
+- The judge builds without exceptions, so the strategy exercise falls back to `HighestScore` on a null policy instead of throwing (documented in its prompt). A wrong that crashes the test binary only reports its first failing test, so those entries list one test.
+- Verification: `content:verify` filtered to the four ids (20 tests: load/valid, reference accepted, Senior Review clean, starter not accepted, every wrong rejected as documented) passes; `lint` (0 errors, 8 pre-existing warnings), `typecheck`, `test` (477 pass), `build`, `build:pages` pass. No UI change, so no screenshots this run; full `content:verify` not rerun.
+- Known gaps: exercises are not yet attached to Theatre lessons or a gym (C7e). `gh` is unavailable here, so CI/Pages status was not confirmed.
+- Next: C7c2 (Template Method, Iterator, Chain of Responsibility, Mediator).
