@@ -681,3 +681,9 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Verification: `content/verify/solid-lessons.verify.ts` (40 tests incl. both new lessons, compiled natively and review-clean) passes; `lint` (0 errors, 8 pre-existing warnings), `typecheck`, `test` (566 pass), `build`, `build:pages` pass. Playwright on the Pages export, desktop and iPhone 14: both lesson pages viewed, no console errors, no horizontal overflow; a stray single-asterisk italic that rendered literally was fixed. Full `content:verify` was not run to completion (slow); only the lessons suite. CI/Pages not confirmed (Actions quota).
 - Known gaps: no UML-reading cards or diagrams (need the Design Board, C8c).
 - Next: C8c (Design Board engine: pure-logic UML model, rubric scorer, tests).
+
+## 2026-11-10: C8c Design Board engine (verification-only)
+- On inspection the engine already exists in `lib/board/` (model with validation, edit operations, persistence, rubric scorer with phase limits and god-class/empty/unconnected flags, C++ skeleton generator) with 28 passing tests (`board`, `boardEdit`, `boardPersist`), including g++-compiled skeleton headers. No code change was needed; box ticked.
+- Verification: lint (0 errors), typecheck, `npm test` (566 passed), build, build:pages passed. content:verify was still running when this entry was written (see below if updated). No visual change, so no screenshots. CI/deploy confirmation skipped (Actions quota).
+- Known gaps: no UI yet; UML-reading cards still need diagrams.
+- Next: C8d (Design Board UI and 4-6 drills with rubrics).
