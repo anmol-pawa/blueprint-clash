@@ -700,3 +700,10 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Verification: `lint` (0 errors, 8 pre-existing warnings), `typecheck`, `npm test` (597 pass, 11 new in `tests/concurrency.test.ts`), `build`, `build:pages` pass. No visual change, so no screenshots; `content:verify` not rerun (no content change).
 - Known gaps: `notify` wakes FIFO only (no nondeterministic choice of waiter); no memory-model reorderings (all steps sequentially consistent), stated in ARCH; no UI yet.
 - Next: C9b (Race Hunter UI at `/race`).
+
+## 2026-11-10 - C9b: Race Hunter UI at /race (closes C9)
+- `/race` index and `/race/[id]` pages, `components/RaceHunter.tsx` (per-thread code panels with a program-counter marker, per-thread Step buttons, undo/reset, state and trace view, "Explore all interleavings" that replays the shortest counterexample or reports a bounded proof), `lib/concurrency/describe.ts` (plain-C++ line per IR step), `content/race/puzzles.ts` (2 puzzles: lost update with plain/mutex/atomic variants; opposite lock order with fixed ordering), home tile.
+- Tests: `tests/raceHunter.test.ts` (explorer finds a bug in each buggy variant and proves each correct one; describe fallbacks).
+- Verification: `lint` (0 errors, 8 pre-existing warnings), `typecheck`, `npm test`, `build`, `build:pages` pass. Playwright on the Pages export, desktop 1280x900 and iPhone 14: `/race/lost-update/` viewed, readable, no console errors, no horizontal overflow; mutex variant shows "Proved". `content:verify` not rerun (no exercise change). CI/Pages: see below.
+- Known gaps: the data-race detector fires before the lost-update value shows (explained in the goal text); no "pick the fix" scoring or XP yet; no ABA or condvar puzzles (C10).
+- Next: C10 (Concurrency Docks: lessons, 12 puzzles, 5 C++ exercises; split first).
