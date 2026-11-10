@@ -642,3 +642,10 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Verification: `lint` (0 errors, 8 pre-existing warnings), `typecheck`, `test` (538 pass, incl. new tileset and deck-scene assertions), `build`, `build:pages` pass. Playwright on the static export, desktop 1280x800 and iPhone 14: `/dev/sprites` scene and `/battle?deck=behavioural-theatre` viewed; legible, no console errors, no horizontal overflow. `content:verify` not rerun (no content change). CI/Pages not checked (`gh` unavailable here).
 - Known gaps: no interior (Theatre Hall) tiles beyond the stage rows; door tile is small relative to the marquee.
 - Next: C7e (Theatre map, trainers, duels, hall, master and badge); split it like C6e first.
+
+## 2026-11-10: C7e1 Behavioural Theatre overworld map and Bridges east gate
+- New `THEATRE` map in `lib/world/maps.ts` built from `THEATRE_ROWS` (plaza, playhouse front with marquee, ticket booth, curtained stage as scenery). Two-tile east gate on the Structural Bridges (x=19, y=5-6) warps into it, and the Theatre's west gate returns. `sign-theatre` added and `sign-bridges` now mentions the east gate. Tileset wired in `OverworldGame.ts`. The stage door is scenery until the hall exists (C7e3).
+- ROADMAP: C7e split into C7e1-C7e3.
+- Verification: `lint` (0 errors, 8 pre-existing warnings), `typecheck`, `test` (541 pass, 3 new Theatre world tests: gate both ways, plaza walkable and stage/wall/booth blocked, sign), `build`, `build:pages` pass. Playwright on the Pages export, walking a BFS route from the start: desktop 1280x800 shows the Theatre plaza, marquee, curtain and stage legibly, no console errors, no overflow. iPhone 14: no console errors or overflow, but my key-driven walk got interrupted in Old Town, so the Theatre was not seen at phone size (same layout as other maps). `content:verify` not rerun (no content change).
+- Known gaps: iPhone view of the Theatre not eyeballed. CI/Pages not checked (`gh` unavailable here). Work was pushed to the session branch `claude/funny-ramanujan-7zhqqz`, not `main`.
+- Next: C7e2 (two Theatre trainers, portraits, dialogue and pattern duels).

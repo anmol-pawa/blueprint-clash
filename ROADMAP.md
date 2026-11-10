@@ -130,7 +130,10 @@ Work top to bottom: take the **first unchecked box**, and split big boxes into r
     - [x] C7d2. Sprites: Shapeshift, Templar, Inchworm, Antchain (`scripts/art/theatre2.mjs`).
     - [x] C7d3. Sprites: Mediowl, Mementortoise, Visitorb (`scripts/art/theatre3.mjs`).
     - [x] C7d4. Theatre tileset and battle backdrop (`scripts/art/theatre-tiles.mjs`).
-  - [ ] C7e. Theatre map, trainers, duels, hall, master and badge (split like C6e).
+  - [ ] C7e. Theatre map, trainers, duels, hall, master and badge. Split below.
+    - [x] C7e1. Theatre overworld map (from `THEATRE_ROWS`), Bridges east gate warp, sign, tileset wiring, tests.
+    - [ ] C7e2. Two trainers (walkers, portraits, dialogue, placement) and their pattern duels.
+    - [ ] C7e3. Theatre hall, master and badge (hall interior and Director placed, then the master fight and badge).
 - [ ] C8. **Modelling and UML lessons** (L6) and Design Board drills.
 - [ ] C9. **Race Hunter engine** (ARCH §5), with the explorer and tests.
 - [ ] C10. **Concurrency Docks** (L7): lessons, 12 Race Hunter puzzles, 5 C++ exercises, a gym.

@@ -128,6 +128,31 @@ describe("Structural Bridges", () => {
   });
 });
 
+describe("Behavioural Theatre", () => {
+  it("is reached through the Bridges' east gate and back", () => {
+    let p: PlayerState = { map: "bridges", x: 18, y: 5, facing: "right" };
+    const r = step(MAPS, p, "right");
+    expect(r).toMatchObject({ kind: "warped", state: { map: "theatre", x: 1, y: 5 } });
+    p = (r as { state: PlayerState }).state;
+    p = step(MAPS, p, "left").state; // turn to face the gate
+    expect(step(MAPS, p, "left")).toMatchObject({ kind: "warped", state: { map: "bridges", x: 18, y: 5 } });
+  });
+  it("lets the player walk the plaza but not the stage, the booth or the playhouse front", () => {
+    let p: PlayerState = { map: "theatre", x: 3, y: 6, facing: "right" };
+    for (let i = 0; i < 5; i++) {
+      const r = step(MAPS, p, "right");
+      expect(r.kind, `step ${i}`).toBe("moved");
+      p = (r as { state: PlayerState }).state;
+    }
+    expect(step(MAPS, { map: "theatre", x: 3, y: 6, facing: "down" }, "down").kind).toBe("blocked"); // pelmet
+    expect(step(MAPS, { map: "theatre", x: 5, y: 4, facing: "up" }, "up").kind).toBe("blocked"); // playhouse wall
+    expect(step(MAPS, { map: "theatre", x: 15, y: 4, facing: "right" }, "right").kind).toBe("blocked"); // ticket booth
+  });
+  it("reads the sign", () => {
+    expect(facingTarget(MAPS, { map: "theatre", x: 18, y: 5, facing: "up" })).toMatchObject({ kind: "sign" });
+  });
+});
+
 describe("interaction", () => {
   it("finds the NPC or sign being faced", () => {
     const t = facingTarget(MAPS, { map: "drafting-hall", x: 2, y: 5, facing: "right" });

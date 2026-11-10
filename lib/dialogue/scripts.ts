@@ -43,7 +43,12 @@ export const SCRIPTS: Readonly<Record<string, DialogueScript>> = {
   "sign-bridges": {
     id: "sign-bridges",
     start: "a",
-    nodes: { a: { text: "STRUCTURAL BRIDGES. Two parts that do not fit, one part that must look like many, a thing too heavy to build twice. Adapters, bridges, composites, decorators, facades, flyweights, proxies. The Creational Foundry is back west." } },
+    nodes: { a: { text: "STRUCTURAL BRIDGES. Two parts that do not fit, one part that must look like many, a thing too heavy to build twice. Adapters, bridges, composites, decorators, facades, flyweights, proxies. The Creational Foundry is back west; the Behavioural Theatre is through the east gate." } },
+  },
+  "sign-theatre": {
+    id: "sign-theatre",
+    start: "a",
+    nodes: { a: { text: "BEHAVIOURAL THEATRE. Objects playing roles: who decides, who listens, who remembers, who walks the list. Strategy, Observer, Command, State and the rest of the cast. Tonight's rule: the show must not know the audience. The Structural Bridges are back west." } },
   },
   "sign-foundry": {
     id: "sign-foundry",
