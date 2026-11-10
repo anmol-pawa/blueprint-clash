@@ -616,3 +616,10 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Verification: `content:verify` filtered to the three ids (15 tests) passes; `lint` (0 errors, 8 pre-existing warnings), `typecheck`, `test` (484 pass), `build`, `build:pages` pass. No UI change, so no screenshots; full `content:verify` not rerun. `gh` is unavailable here, so CI/Pages status was not confirmed (quota note ended 2026-11-01).
 - Known gaps: exercises are not yet attached to Theatre lessons or a gym (C7e).
 - Next: C7d (Theatre art: 11 Patternling sprites, 3-4 per run).
+
+## 2026-11-10: C7d1 Theatre art, part 1 (Chamelstrat, Owlserver, Commandant)
+- New `scripts/art/theatre1.mjs` generates three 64x64 Patternlings (idle 4 / attack 3 / hurt 2 / faint 4 / evolve 4): Chamelstrat (Strategy: chameleon with three swappable colour patches, one active), Owlserver (Observer: owl on a perch whose hoot rings reach a row of bell-chicks), Commandant (Command: officer-toad with a sealed order scroll). Registered in `game/sprites/index.ts`, so they show on `/dev/sprites`.
+- ROADMAP: C7d split into C7d1-C7d4.
+- Verification: `lint` (0 errors, 8 pre-existing warnings), `typecheck`, `test` (499 pass), `build`, `build:pages` pass. Playwright on the Pages export, desktop 1280x800 and iPhone 14: `/dev/sprites/` viewed, sprites readable, no console errors, no horizontal overflow. CI/Pages deploy not checked (`gh` unavailable here).
+- Known gaps: no back sprites for these (same as other Patternlings); not yet used in a map or duel (C7e).
+- Next: C7d2 (Shapeshift, Templar, Inchworm, Antchain).
