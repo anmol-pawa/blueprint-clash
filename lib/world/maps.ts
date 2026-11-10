@@ -191,7 +191,7 @@ export const BRIDGES_HALL: MapDef = {
 /**
  * Behavioural Theatre: a playhouse front with a marquee, a ticket booth and a
  * plaza. The curtained stage below the pelmet is scenery, and the playhouse
- * door is scenery until the Theatre hall opens (C7e3). The west gate (two
+ * door is scenery until the Theatre hall opens (C7e3). Ilsa Cue and Perrin Wick duel on the plaza. The west gate (two
  * tiles) returns to the Structural Bridges.
  */
 export const THEATRE: MapDef = {
@@ -199,7 +199,10 @@ export const THEATRE: MapDef = {
   name: "Behavioural Theatre",
   rows: THEATRE_ROWS,
   solid: "SEBWDKlctPuCVXTUZILMFG",
-  npcs: [],
+  npcs: [
+    { id: "ilsa", name: "Ilsa Cue", x: 5, y: 5, facing: "right", dialogue: "ilsa-intro" },
+    { id: "perrin", name: "Perrin Wick", x: 13, y: 6, facing: "left", dialogue: "perrin-intro" },
+  ],
   warps: [5, 6].map((y) => ({ x: 0, y, to: "bridges", toX: 18, toY: y, facing: "left" as const })),
   signs: { "18,4": "sign-theatre" },
 };

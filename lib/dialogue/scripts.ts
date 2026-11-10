@@ -199,6 +199,42 @@ export const SCRIPTS: Readonly<Record<string, DialogueScript>> = {
       bye: { speaker: "Harbourmaster Vale", text: "When you have trained on the Bridges cards and the seven structure drills, take my trial from the Battle menu: Bridges master. Three phases, one badge." },
     },
   },
+  "ilsa-intro": {
+    id: "ilsa-intro",
+    start: "a",
+    nodes: {
+      a: { speaker: "Ilsa Cue", text: "Tonight the venue wants three lighting plans: matinee, gala and rehearsal. The show code is the same; only the plan changes.", next: "q" },
+      q: {
+        speaker: "Ilsa Cue",
+        text: "How do you let the show swap plans without an if-chain on a plan name?",
+        choices: [
+          { text: "Strategy: put each plan behind one interface and inject the one you want.", next: "yes", set: ["ilsa-strategy"] },
+          { text: "A switch on a plan enum inside the show, extended for every new plan.", next: "no" },
+        ],
+      },
+      yes: { speaker: "Ilsa Cue", text: "Right. Adding a plan is a new class, and the show never changes. The cost is more small types and a choice of who picks the plan. For two stable plans, a plain if is fine.", next: "bye" },
+      no: { speaker: "Ilsa Cue", text: "That switch grows with every venue and every change reopens the show class. Pull the varying part out behind an interface.", next: "bye" },
+      bye: { speaker: "Ilsa Cue", text: "Duel me from the Battle menu: Ilsa Cue duel. Six cards on Strategy, Observer, Command and State." },
+    },
+  },
+  "perrin-intro": {
+    id: "perrin-intro",
+    start: "a",
+    nodes: {
+      a: { speaker: "Perrin Wick", text: "Every rehearsal runs the same steps: set the stage, run the scene, strike the set. Only the scene differs between plays.", next: "q" },
+      q: {
+        speaker: "Perrin Wick",
+        text: "How do you fix the order of the steps but let each play supply its own scene?",
+        choices: [
+          { text: "Template Method: a base class owns the sequence and calls overridable steps.", next: "yes", set: ["perrin-template"] },
+          { text: "Copy the whole rehearsal routine into each play and edit the middle.", next: "no" },
+        ],
+      },
+      yes: { speaker: "Perrin Wick", text: "Yes. The skeleton lives once and subclasses fill the gaps. The price is inheritance: if the steps need to change at runtime, a strategy is the better fit.", next: "bye" },
+      no: { speaker: "Perrin Wick", text: "Then a fix to the strike step has to be made in every copy, and one will be missed. Keep the sequence in one place.", next: "bye" },
+      bye: { speaker: "Perrin Wick", text: "Duel me from the Battle menu: Perrin Wick duel. Template Method, Iterator, Chain of Responsibility and Mediator." },
+    },
+  },
   "board-solid": {
     id: "board-solid",
     start: "a",
