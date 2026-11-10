@@ -11,6 +11,8 @@ import {
   PRINCIPLE_HALL_ROWS,
   SOLID_SQUARE_LEGEND,
   SOLID_SQUARE_ROWS,
+  THEATRE_LEGEND,
+  THEATRE_ROWS,
 } from "@/game/sprites/tiles/scenes";
 import type { MapDef, MapTable } from "./world";
 
@@ -165,6 +167,8 @@ export const BRIDGES: MapDef = {
   warps: [
     ...[3, 4].map((y) => ({ x: 0, y, to: "foundry", toX: 18, toY: y + 2, facing: "left" as const })),
     { x: 4, y: 2, to: "bridges-hall", toX: 6, toY: 8, facing: "up" as const },
+    // the east gate leads to the Behavioural Theatre
+    ...[5, 6].map((y) => ({ x: 19, y, to: "theatre", toX: 1, toY: y, facing: "right" as const })),
   ],
   signs: { "18,4": "sign-bridges" },
 };
@@ -184,8 +188,24 @@ export const BRIDGES_HALL: MapDef = {
   signs: {},
 };
 
-export const MAPS: MapTable = { [OLD_TOWN.id]: OLD_TOWN, [DRAFTING_HALL.id]: DRAFTING_HALL, [SOLID_SQUARE.id]: SOLID_SQUARE, [PRINCIPLE_HALL.id]: PRINCIPLE_HALL, [FOUNDRY.id]: FOUNDRY, [FOUNDRY_HALL.id]: FOUNDRY_HALL, [BRIDGES.id]: BRIDGES, [BRIDGES_HALL.id]: BRIDGES_HALL };
+/**
+ * Behavioural Theatre: a playhouse front with a marquee, a ticket booth and a
+ * plaza. The curtained stage below the pelmet is scenery, and the playhouse
+ * door is scenery until the Theatre hall opens (C7e3). The west gate (two
+ * tiles) returns to the Structural Bridges.
+ */
+export const THEATRE: MapDef = {
+  id: "theatre",
+  name: "Behavioural Theatre",
+  rows: THEATRE_ROWS,
+  solid: "SEBWDKlctPuCVXTUZILMFG",
+  npcs: [],
+  warps: [5, 6].map((y) => ({ x: 0, y, to: "bridges", toX: 18, toY: y, facing: "left" as const })),
+  signs: { "18,4": "sign-theatre" },
+};
 
-export const MAP_LEGENDS = { [OLD_TOWN.id]: OLD_TOWN_LEGEND, [DRAFTING_HALL.id]: HALL_LEGEND, [SOLID_SQUARE.id]: SOLID_SQUARE_LEGEND, [PRINCIPLE_HALL.id]: PRINCIPLE_HALL_LEGEND, [FOUNDRY.id]: FOUNDRY_LEGEND, [FOUNDRY_HALL.id]: FOUNDRY_LEGEND, [BRIDGES.id]: BRIDGES_LEGEND, [BRIDGES_HALL.id]: BRIDGES_LEGEND };
+export const MAPS: MapTable = { [OLD_TOWN.id]: OLD_TOWN, [DRAFTING_HALL.id]: DRAFTING_HALL, [SOLID_SQUARE.id]: SOLID_SQUARE, [PRINCIPLE_HALL.id]: PRINCIPLE_HALL, [FOUNDRY.id]: FOUNDRY, [FOUNDRY_HALL.id]: FOUNDRY_HALL, [BRIDGES.id]: BRIDGES, [BRIDGES_HALL.id]: BRIDGES_HALL, [THEATRE.id]: THEATRE };
+
+export const MAP_LEGENDS = { [OLD_TOWN.id]: OLD_TOWN_LEGEND, [DRAFTING_HALL.id]: HALL_LEGEND, [SOLID_SQUARE.id]: SOLID_SQUARE_LEGEND, [PRINCIPLE_HALL.id]: PRINCIPLE_HALL_LEGEND, [FOUNDRY.id]: FOUNDRY_LEGEND, [FOUNDRY_HALL.id]: FOUNDRY_LEGEND, [BRIDGES.id]: BRIDGES_LEGEND, [BRIDGES_HALL.id]: BRIDGES_LEGEND, [THEATRE.id]: THEATRE_LEGEND };
 
 export const START = { map: "old-town", x: 9, y: 4, facing: "up" } as const;

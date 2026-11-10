@@ -642,3 +642,9 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Verification: `lint` (0 errors, 8 pre-existing warnings), `typecheck`, `test` (538 pass, incl. new tileset and deck-scene assertions), `build`, `build:pages` pass. Playwright on the static export, desktop 1280x800 and iPhone 14: `/dev/sprites` scene and `/battle?deck=behavioural-theatre` viewed; legible, no console errors, no horizontal overflow. `content:verify` not rerun (no content change). CI/Pages not checked (`gh` unavailable here).
 - Known gaps: no interior (Theatre Hall) tiles beyond the stage rows; door tile is small relative to the marquee.
 - Next: C7e (Theatre map, trainers, duels, hall, master and badge); split it like C6e first.
+
+## 2026-11-10 - C7e1: Behavioural Theatre overworld map
+- Added the `theatre` map in `lib/world/maps.ts` from `THEATRE_ROWS` (plaza walkable; playhouse, booth, curtain and stage scenery solid), a two-tile east gate from the Bridges (x=19, rows 5-6) and a west gate back, `sign-theatre` dialogue, `THEATRE_TILES` wired into the overworld, and updated the Bridges sign.
+- Verification: `lint` (0 errors, 8 pre-existing warnings), `typecheck`, `test` (540 pass, incl. 2 new Theatre world tests), `build`, `build:pages` pass. No Playwright walk this run (the map reuses the scene already reviewed on `/dev/sprites`); CI/Pages confirmation skipped because `gh` is unavailable here.
+- Known gaps: no trainers or hall yet.
+- Next: C7e2 (two trainers and duels).
