@@ -206,6 +206,8 @@ export const THEATRE_LEGEND: Legend = {
   C: ["plaza", "column-top"], V: ["plaza", "column-base"], H: ["stage-floor", "spotlight"], A: ["carpet", "seats"],
   X: ["plaza", "poster"], T: ["plaza", "booth-top"], U: ["plaza", "booth-front"], Z: ["plaza", "trunk"], I: ["plaza", "sign"],
   L: ["plaza", "lamp-top"], M: ["plaza", "lamp-base"], F: ["plaza", "bunting"], G: ["plaza", "laurel"],
+  // Hall interior: props standing on stage boards.
+  z: ["stage-floor", "trunk"], x: ["stage-floor", "poster"], h: ["stage-floor", "sign"],
 };
 
 /** Behavioural Theatre rows, shared by the scene and the map: a playhouse front with marquee, a ticket booth, a plaza, and a stage behind a curtain. */
@@ -227,3 +229,20 @@ export const THEATRE_ROWS: readonly string[] = [
 
 /** A sample of the Behavioural Theatre for art review: a marquee playhouse, a plaza, and a curtained stage with footlights. */
 export const THEATRE_SCENE = composeScene(THEATRE_TILES, "theatre-scene", THEATRE_ROWS, THEATRE_LEGEND);
+
+/** Theatre Hall rows: a stage-board floor with a red carpet runner from the door to Director Voss's spotlight. */
+export const THEATRE_HALL_ROWS: readonly string[] = [
+  "BWBBBWBBWBBBWB",
+  "BBBBhBBBBBBBBB",
+  "ffffffHHffffff",
+  "fzfffrRrRfffxf",
+  "ffffffrRffffff",
+  "fxffffrRffffff",
+  "ffffffrRffffff",
+  "fzffffRrfffzff",
+  "ffffffrRffffff",
+  "ffffffrRffffff",
+];
+
+/** The Theatre Hall interior for art review. */
+export const THEATRE_HALL_SCENE = composeScene(THEATRE_TILES, "theatre-hall-scene", THEATRE_HALL_ROWS, THEATRE_LEGEND);

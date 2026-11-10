@@ -133,7 +133,9 @@ Work top to bottom: take the **first unchecked box**, and split big boxes into r
   - [ ] C7e. Theatre map, trainers, duels, hall, master and badge. Split below.
     - [x] C7e1. Theatre overworld map (from `THEATRE_ROWS`), east-gate warp from the Bridges, sign, tileset wiring, tests.
     - [x] C7e2. Two trainers (walkers, portraits, dialogue, placement) and their pattern duels.
-    - [ ] C7e3. Theatre hall interior, master fight and badge (split like C6e3).
+    - [ ] C7e3. Theatre hall interior, master fight and badge. Split below.
+      - [x] C7e3a. Theatre Hall interior map, playhouse-door warp, Director Voss placed (walker, portrait, intro dialogue), scene on `/dev/sprites`, tests.
+      - [ ] C7e3b. Voss master fight: 96x96 master sprite, profile, deck, phase-2 exercise choice from the 11, `/battle/master?master=behavioural-theatre`, badge saved.
 - [ ] C8. **Modelling and UML lessons** (L6) and Design Board drills.
 - [ ] C9. **Race Hunter engine** (ARCH §5), with the explorer and tests.
 - [ ] C10. **Concurrency Docks** (L7): lessons, 12 Race Hunter puzzles, 5 C++ exercises, a gym.

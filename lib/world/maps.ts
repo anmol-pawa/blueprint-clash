@@ -11,6 +11,7 @@ import {
   PRINCIPLE_HALL_ROWS,
   SOLID_SQUARE_LEGEND,
   SOLID_SQUARE_ROWS,
+  THEATRE_HALL_ROWS,
   THEATRE_LEGEND,
   THEATRE_ROWS,
 } from "@/game/sprites/tiles/scenes";
@@ -191,24 +192,41 @@ export const BRIDGES_HALL: MapDef = {
 /**
  * Behavioural Theatre: a playhouse front with a marquee, a ticket booth and a
  * plaza. The curtained stage below the pelmet is scenery, and the playhouse
- * door is scenery until the Theatre hall opens (C7e3). Ilsa Cue and Perrin Wick duel on the plaza. The west gate (two
+ * door (7,3) is a warp into the Theatre Hall. Ilsa Cue and Perrin Wick duel on the plaza. The west gate (two
  * tiles) returns to the Structural Bridges.
  */
 export const THEATRE: MapDef = {
   id: "theatre",
   name: "Behavioural Theatre",
   rows: THEATRE_ROWS,
-  solid: "SEBWDKlctPuCVXTUZILMFG",
+  solid: "SEBWKlctPuCVXTUZILMFG",
   npcs: [
     { id: "ilsa", name: "Ilsa Cue", x: 5, y: 5, facing: "right", dialogue: "ilsa-intro" },
     { id: "perrin", name: "Perrin Wick", x: 13, y: 6, facing: "left", dialogue: "perrin-intro" },
   ],
-  warps: [5, 6].map((y) => ({ x: 0, y, to: "bridges", toX: 18, toY: y, facing: "left" as const })),
+  warps: [
+    ...[5, 6].map((y) => ({ x: 0, y, to: "bridges", toX: 18, toY: y, facing: "left" as const })),
+    { x: 7, y: 3, to: "theatre-hall", toX: 6, toY: 8, facing: "up" as const },
+  ],
   signs: { "18,4": "sign-theatre" },
 };
 
-export const MAPS: MapTable = { [OLD_TOWN.id]: OLD_TOWN, [DRAFTING_HALL.id]: DRAFTING_HALL, [SOLID_SQUARE.id]: SOLID_SQUARE, [PRINCIPLE_HALL.id]: PRINCIPLE_HALL, [FOUNDRY.id]: FOUNDRY, [FOUNDRY_HALL.id]: FOUNDRY_HALL, [BRIDGES.id]: BRIDGES, [BRIDGES_HALL.id]: BRIDGES_HALL, [THEATRE.id]: THEATRE };
+/**
+ * Director Voss's Theatre Hall: stage boards with a red carpet runner from
+ * the door to the spotlight. The runner's end warps back to the plaza.
+ */
+export const THEATRE_HALL: MapDef = {
+  id: "theatre-hall",
+  name: "Theatre Hall",
+  rows: THEATRE_HALL_ROWS,
+  solid: "BWhzx",
+  npcs: [{ id: "voss", name: "Director Voss", x: 6, y: 3, facing: "down", dialogue: "voss-intro" }],
+  warps: [6, 7].map((x) => ({ x, y: 9, to: "theatre", toX: 7, toY: 4, facing: "down" as const })),
+  signs: {},
+};
 
-export const MAP_LEGENDS = { [OLD_TOWN.id]: OLD_TOWN_LEGEND, [DRAFTING_HALL.id]: HALL_LEGEND, [SOLID_SQUARE.id]: SOLID_SQUARE_LEGEND, [PRINCIPLE_HALL.id]: PRINCIPLE_HALL_LEGEND, [FOUNDRY.id]: FOUNDRY_LEGEND, [FOUNDRY_HALL.id]: FOUNDRY_LEGEND, [BRIDGES.id]: BRIDGES_LEGEND, [BRIDGES_HALL.id]: BRIDGES_LEGEND, [THEATRE.id]: THEATRE_LEGEND };
+export const MAPS: MapTable = { [OLD_TOWN.id]: OLD_TOWN, [DRAFTING_HALL.id]: DRAFTING_HALL, [SOLID_SQUARE.id]: SOLID_SQUARE, [PRINCIPLE_HALL.id]: PRINCIPLE_HALL, [FOUNDRY.id]: FOUNDRY, [FOUNDRY_HALL.id]: FOUNDRY_HALL, [BRIDGES.id]: BRIDGES, [BRIDGES_HALL.id]: BRIDGES_HALL, [THEATRE.id]: THEATRE, [THEATRE_HALL.id]: THEATRE_HALL };
+
+export const MAP_LEGENDS = { [OLD_TOWN.id]: OLD_TOWN_LEGEND, [DRAFTING_HALL.id]: HALL_LEGEND, [SOLID_SQUARE.id]: SOLID_SQUARE_LEGEND, [PRINCIPLE_HALL.id]: PRINCIPLE_HALL_LEGEND, [FOUNDRY.id]: FOUNDRY_LEGEND, [FOUNDRY_HALL.id]: FOUNDRY_LEGEND, [BRIDGES.id]: BRIDGES_LEGEND, [BRIDGES_HALL.id]: BRIDGES_LEGEND, [THEATRE.id]: THEATRE_LEGEND, [THEATRE_HALL.id]: THEATRE_LEGEND };
 
 export const START = { map: "old-town", x: 9, y: 4, facing: "up" } as const;

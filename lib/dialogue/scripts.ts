@@ -235,6 +235,24 @@ export const SCRIPTS: Readonly<Record<string, DialogueScript>> = {
       bye: { speaker: "Perrin Wick", text: "Duel me from the Battle menu: Perrin Wick duel. Template Method, Iterator, Chain of Responsibility and Mediator." },
     },
   },
+  "voss-intro": {
+    id: "voss-intro",
+    start: "a",
+    nodes: {
+      a: { speaker: "Director Voss", text: "A play runs because nobody on stage needs to know who else is on stage. They respond to cues, not to each other.", next: "q" },
+      q: {
+        speaker: "Director Voss",
+        text: "Your editor must notify the minimap, the status bar and autosave whenever the document changes. Tomorrow there will be a fourth listener. What shape do you give it?",
+        choices: [
+          { text: "The document calls each of the three directly, and we add a fourth call later.", next: "no" },
+          { text: "Observer: listeners subscribe to the document, which publishes changes and never names them.", next: "yes", set: ["voss-observer"] },
+        ],
+      },
+      no: { speaker: "Director Voss", text: "Now every new listener edits the document class, and the document cannot be tested without all of them. Invert the dependency.", next: "bye" },
+      yes: { speaker: "Director Voss", text: "Good. Name the cost too: notification order is implicit, and a listener that unsubscribes mid-callback can bite you.", next: "bye" },
+      bye: { speaker: "Director Voss", text: "My formal trial is not ready yet. Rehearse on the Theatre cards and exercises, then return." },
+    },
+  },
   "board-solid": {
     id: "board-solid",
     start: "a",

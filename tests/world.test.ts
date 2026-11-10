@@ -146,7 +146,7 @@ describe("Behavioural Theatre", () => {
     }
     expect(step(MAPS, { map: "theatre", x: 3, y: 6, facing: "down" }, "down").kind).toBe("blocked"); // pelmet
     expect(step(MAPS, { map: "theatre", x: 3, y: 4, facing: "up" }, "up").kind).toBe("blocked"); // playhouse wall
-    expect(step(MAPS, { map: "theatre", x: 7, y: 4, facing: "up" }, "up").kind).toBe("blocked"); // door is scenery for now
+    expect(step(MAPS, { map: "theatre", x: 7, y: 4, facing: "up" }, "up").kind).toBe("warped"); // the playhouse door is a warp into the hall
     expect(facingTarget(MAPS, { map: "theatre", x: 18, y: 5, facing: "up" })).toMatchObject({ kind: "sign" });
   });
 });
@@ -336,5 +336,24 @@ describe("Bridges Hall", () => {
     expect(WALKERS.some((w) => w.id === "vale")).toBe(true);
     expect(PORTRAITS.some((q) => q.id === "vale-portrait")).toBe(true);
     expect(SCRIPTS["vale-intro"]).toBeDefined();
+  });
+});
+
+describe("Theatre Hall", () => {
+  it("opens the playhouse door as a warp, reaches Director Voss, and returns to the plaza", () => {
+    let p: PlayerState = { map: "theatre", x: 7, y: 4, facing: "up" };
+    const r = step(MAPS, p, "up");
+    expect(r).toMatchObject({ kind: "warped", state: { map: "theatre-hall", x: 6, y: 8 } });
+    p = (r as { state: PlayerState }).state;
+    for (let i = 0; i < 4; i++) p = step(MAPS, p, "up").state;
+    expect(p).toMatchObject({ map: "theatre-hall", x: 6, y: 4 });
+    expect(facingTarget(MAPS, p)).toMatchObject({ kind: "npc", npc: { id: "voss" } });
+    expect(step(MAPS, { map: "theatre-hall", x: 7, y: 8, facing: "down" }, "down")).toMatchObject({ kind: "warped", state: { map: "theatre", x: 7, y: 4 } });
+  });
+
+  it("has Voss's walker, portrait and dialogue", () => {
+    expect(WALKERS.some((w) => w.id === "voss")).toBe(true);
+    expect(PORTRAITS.some((q) => q.id === "voss-portrait")).toBe(true);
+    expect(SCRIPTS["voss-intro"]).toBeDefined();
   });
 });

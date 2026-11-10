@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { DRAFTING_HALL_SCENE, OLD_TOWN_SCENE, SOLID_SQUARE_SCENE, PRINCIPLE_HALL_SCENE, FOUNDRY_SCENE, FOUNDRY_HALL_SCENE, FOUNDRY_HALL_ROWS, FOUNDRY_ROWS, FOUNDRY_LEGEND, FOUNDRY_TILES, BRIDGES_SCENE, BRIDGES_HALL_SCENE, BRIDGES_HALL_ROWS, BRIDGES_ROWS, BRIDGES_LEGEND, BRIDGES_TILES, THEATRE_SCENE, THEATRE_ROWS, THEATRE_LEGEND, THEATRE_TILES, TILESETS } from "@/game/sprites/tiles";
+import { DRAFTING_HALL_SCENE, OLD_TOWN_SCENE, SOLID_SQUARE_SCENE, PRINCIPLE_HALL_SCENE, FOUNDRY_SCENE, FOUNDRY_HALL_SCENE, FOUNDRY_HALL_ROWS, FOUNDRY_ROWS, FOUNDRY_LEGEND, FOUNDRY_TILES, BRIDGES_SCENE, BRIDGES_HALL_SCENE, BRIDGES_HALL_ROWS, BRIDGES_ROWS, BRIDGES_LEGEND, BRIDGES_TILES, THEATRE_SCENE, THEATRE_HALL_SCENE, THEATRE_HALL_ROWS, THEATRE_ROWS, THEATRE_LEGEND, THEATRE_TILES, TILESETS } from "@/game/sprites/tiles";
 import { composeScene, validateTileSet } from "@/game/sprites/tiles/tileset";
 import { validateSprite } from "@/game/sprites/pixel";
 
@@ -49,10 +49,12 @@ describe("tilesets", () => {
     expect(new Set(THEATRE_ROWS.map((r) => r.length)).size).toBe(1);
     for (const r of THEATRE_ROWS) for (const ch of r) expect(THEATRE_LEGEND[ch]).toBeDefined();
     expect(THEATRE_TILES.tiles.footlights).toHaveLength(4);
+    expect(new Set(THEATRE_HALL_ROWS.map((r) => r.length)).size).toBe(1);
+    for (const r of THEATRE_HALL_ROWS) for (const ch of r) expect(THEATRE_LEGEND[ch]).toBeDefined();
   });
 
   it("composes scenes with animated tiles", () => {
-    for (const s of [OLD_TOWN_SCENE, DRAFTING_HALL_SCENE, SOLID_SQUARE_SCENE, PRINCIPLE_HALL_SCENE, FOUNDRY_SCENE, FOUNDRY_HALL_SCENE, BRIDGES_SCENE, BRIDGES_HALL_SCENE, THEATRE_SCENE]) {
+    for (const s of [OLD_TOWN_SCENE, DRAFTING_HALL_SCENE, SOLID_SQUARE_SCENE, PRINCIPLE_HALL_SCENE, FOUNDRY_SCENE, FOUNDRY_HALL_SCENE, BRIDGES_SCENE, BRIDGES_HALL_SCENE, THEATRE_SCENE, THEATRE_HALL_SCENE]) {
       expect(validateSprite(s)).toEqual([]);
       expect(new Set(s.anims.idle.map((f) => f.join())).size).toBeGreaterThan(1);
       expect(s.w % 16).toBe(0);
