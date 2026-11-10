@@ -141,9 +141,9 @@ Work top to bottom: take the **first unchecked box**, and split big boxes into r
   - [x] C8b. Lessons: sequence diagrams, and identifying extension points from requirements; 10 more cards (UML-reading cards need C8c).
   - [x] C8c. Design Board engine (GDD 5.3 step 2): pure-logic UML model, rubric scorer, tests. (Found already built in `lib/board/`: model, edit, persist, rubric, skeleton; 28 tests incl. g++-compiled skeletons. Verified this run.)
   - [x] C8d. Design Board UI (vector canvas, in `components/DesignBoard.tsx` since C6) and 4 drills with rubrics at `/board` (parking lot, elevator, vending machine, notification service).
-- [ ] C9. **Race Hunter engine** (ARCH §5), with the explorer and tests.
+- [x] C9. **Race Hunter engine** (ARCH §5), with the explorer and tests.
   - [x] C9a. Pure-logic IR, step engine, manual scheduler and exhaustive explorer in `lib/concurrency/` with `tests/concurrency.test.ts` (counter, AB-BA, condvar samples).
-  - [ ] C9b. Race Hunter UI at `/race`: code panel with per-thread step buttons, state view, "explore all" counterexample replay, one sample puzzle, home tile.
+  - [x] C9b. Race Hunter UI at `/race`: code panel with per-thread step buttons, state view, "explore all" counterexample replay, one sample puzzle, home tile.
 - [ ] C10. **Concurrency Docks** (L7): lessons, 12 Race Hunter puzzles, 5 C++ exercises, a gym.
 - [ ] C11. **Senior Review v2:** all rules from GDD §5.3 step 5, with fixtures.
 - [ ] C12. **Workshop Row**, about 36 problems from CUR L8, **2 problems per box**, each with all storms, bad designs and an editorial. Split into C12a…C12r as you go.

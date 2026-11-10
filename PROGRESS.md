@@ -700,3 +700,9 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Verification: `lint` (0 errors, 8 pre-existing warnings), `typecheck`, `npm test` (597 pass, 11 new in `tests/concurrency.test.ts`), `build`, `build:pages` pass. No visual change, so no screenshots; `content:verify` not rerun (no content change).
 - Known gaps: `notify` wakes FIFO only (no nondeterministic choice of waiter); no memory-model reorderings (all steps sequentially consistent), stated in ARCH; no UI yet.
 - Next: C9b (Race Hunter UI at `/race`).
+
+## 2026-11-10 - C9b: Race Hunter UI at /race (closes C9)
+- `lib/concurrency/puzzles.ts`: 3 puzzles (lost update, AB-BA deadlock, missed signal) with fix choices, each proved or refuted by `explore` in `tests/racePuzzles.test.ts`. `/race` page: per-thread Step buttons with C++ pc marker, shared state and trace, "Explore all interleavings" replays the shortest counterexample, fix picker shows the explorer's verdict plus why. Home tile added.
+- Verification: lint (0 errors), typecheck, npm test (607 pass), build, build:pages pass. Playwright desktop + iPhone 14: stepping, explore, fix verdict work; no console errors, no horizontal overflow. content:verify not rerun (no content change).
+- Known gaps: unannotated IR steps show as `// set`; progress is not saved; puzzles are the 3 samples (C10 adds 12).
+- Next: C10 (Concurrency Docks). CI/deploy confirmation skipped. Work pushed to the session branch claude/funny-ramanujan-tdfsd3, not main, per session branch rules.

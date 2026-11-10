@@ -30,6 +30,7 @@ export const PLAYABLE_MODES: readonly PlayableMode[] = [
   { href: "/battle", title: "Concept battle", blurb: "Patternling cards: name the smell, pick the principle." },
   { href: "/workshop/library-management", title: "Workshop: Library", blurb: "Write C++ against hidden tests, then survive a Change Storm." },
   { href: "/board", title: "Design Board drills", blurb: "Draw the classes for a short brief, tag who owns each responsibility, then compare with a reference." },
+  { href: "/race", title: "Race Hunter", blurb: "Schedule threads by hand to break a counter, a lock order and a condition variable, then prove the fix over every interleaving." },
   { href: "/learn", title: "Lessons", blurb: "SOLID in C++: smell, before/after code, interview phrasing, and the cost of overdoing it." },
   { href: "/battle?deck=solid-square", title: "SOLID Square battle", blurb: "43 cards on SRP, OCP, LSP, ISP and DIP, with the over-application costs." },
   { href: "/battle?trainer=sable-quill", title: "Sable Quill duel", blurb: "Six cards on SRP, cohesion, OCP, KISS and DRY." },
