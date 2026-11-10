@@ -113,7 +113,7 @@ Work top to bottom: take the **first unchecked box**, and split big boxes into r
     - [x] C6e3. Bridges hall, master and badge. Split below.
       - [x] C6e3a. Bridges Hall interior map, warehouse-door warp, Harbourmaster Vale placed (walker, portrait, intro dialogue), scene on `/dev/sprites`, tests.
       - [x] C6e3b. Vale master fight: 96x96 master sprite, profile, deck, phase-2 exercise choice from the 7, `/battle/master?master=structural-bridges`, badge saved.
-- [ ] C7. **Behavioural Theatre** (L5): Patternling art for 11 patterns, lessons, cards, 11 exercises, a gym. Split below.
+- [x] C7. **Behavioural Theatre** (L5): Patternling art for 11 patterns, lessons, cards, 11 exercises, a gym. Split below.
   - [x] C7a. Behavioural Theatre deck, part 1 (`content/cards/behavioural-theatre.ts`): cards for Strategy, Observer, Command, State, Template Method, Iterator; predict cards proven natively; registered as `?deck=behavioural-theatre`.
   - [x] C7a2. Deck part 2: Chain of Responsibility, Mediator, Memento, Visitor, Interpreter, plus Null Object and Specification cards.
   - [x] C7b. Lessons (11 patterns + Null Object, Specification, event-driven) with smell, C++ structure, when not to use it, over-application cost. Split by 4 patterns per run.
@@ -130,12 +130,12 @@ Work top to bottom: take the **first unchecked box**, and split big boxes into r
     - [x] C7d2. Sprites: Shapeshift, Templar, Inchworm, Antchain (`scripts/art/theatre2.mjs`).
     - [x] C7d3. Sprites: Mediowl, Mementortoise, Visitorb (`scripts/art/theatre3.mjs`).
     - [x] C7d4. Theatre tileset and battle backdrop (`scripts/art/theatre-tiles.mjs`).
-  - [ ] C7e. Theatre map, trainers, duels, hall, master and badge. Split below.
+  - [x] C7e. Theatre map, trainers, duels, hall, master and badge. Split below.
     - [x] C7e1. Theatre overworld map (from `THEATRE_ROWS`), east-gate warp from the Bridges, sign, tileset wiring, tests.
     - [x] C7e2. Two trainers (walkers, portraits, dialogue, placement) and their pattern duels.
-    - [ ] C7e3. Theatre hall interior, master fight and badge. Split below.
+    - [x] C7e3. Theatre hall interior, master fight and badge. Split below.
       - [x] C7e3a. Theatre Hall interior map, playhouse-door warp, Director Voss placed (walker, portrait, intro dialogue), scene on `/dev/sprites`, tests.
-      - [ ] C7e3b. Voss master fight: 96x96 master sprite, profile, deck, phase-2 exercise choice from the 11, `/battle/master?master=behavioural-theatre`, badge saved.
+      - [x] C7e3b. Voss master fight: 96x96 master sprite, profile, deck, phase-2 exercise choice from the 11, `/battle/master?master=behavioural-theatre`, badge saved.
 - [ ] C8. **Modelling and UML lessons** (L6) and Design Board drills.
 - [ ] C9. **Race Hunter engine** (ARCH §5), with the explorer and tests.
 - [ ] C10. **Concurrency Docks** (L7): lessons, 12 Race Hunter puzzles, 5 C++ exercises, a gym.

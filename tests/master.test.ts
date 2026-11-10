@@ -15,6 +15,9 @@ import { CREATIONAL_FOUNDRY_MASTER_SMELLS } from "@/content/masters/creational-f
 import { STRUCTURAL_BRIDGES_DECK } from "@/content/cards/structural-bridges";
 import { STRUCTURAL_BRIDGES_MASTER, structuralBridgesMasterDeck } from "@/content/masters/structural-bridges";
 import { STRUCTURAL_BRIDGES_MASTER_SMELLS } from "@/content/masters/structural-bridges-smells";
+import { BEHAVIOURAL_THEATRE_DECK } from "@/content/cards/behavioural-theatre";
+import { BEHAVIOURAL_THEATRE_MASTER, behaviouralTheatreMasterDeck } from "@/content/masters/behavioural-theatre";
+import { BEHAVIOURAL_THEATRE_MASTER_SMELLS } from "@/content/masters/behavioural-theatre-smells";
 import { loadExercise } from "@/lib/exercises/load";
 
 const mcq = (n: number, prefix = "c"): Card[] =>
@@ -275,6 +278,44 @@ describe("Harbourmaster Vale (Structural Bridges master)", () => {
 
   it("a full clean run earns the badge", () => {
     let s = startMaster(structuralBridgesMasterDeck(), 3);
+    s = clear(s);
+    expect(s.phase).toBe("workshop");
+    s = submitWorkshop(s, { passed: 5, total: 5 }).state;
+    s = clear(s);
+    expect(s.phase).toBe("won");
+    expect(earnsBadge(s)).toBe(true);
+  });
+});
+
+describe("Director Voss (Behavioural Theatre master)", () => {
+  it("has well-formed, all-smell dedicated cards that do not repeat the deck", () => {
+    expect(validateCards(BEHAVIOURAL_THEATRE_MASTER_SMELLS)).toEqual([]);
+    expect(BEHAVIOURAL_THEATRE_MASTER_SMELLS.every((c) => c.kind === "smell")).toBe(true);
+    const ids = new Set(BEHAVIOURAL_THEATRE_DECK.map((c) => c.id));
+    expect(BEHAVIOURAL_THEATRE_MASTER_SMELLS.some((c) => ids.has(c.id))).toBe(false);
+    expect(new Set(BEHAVIOURAL_THEATRE_MASTER_SMELLS.map((c) => c.topic)).size).toBeGreaterThanOrEqual(6);
+  });
+
+  it("has enough cards for phase 1 and all eleven patterns exist and are registered", async () => {
+    const d = behaviouralTheatreMasterDeck();
+    expect(d.cards.length).toBeGreaterThanOrEqual(15);
+    expect(validateCards(d.cards)).toEqual([]);
+    expect(d.cards.some((c) => c.kind === "smell")).toBe(false);
+    expect(BEHAVIOURAL_THEATRE_MASTER.exercises).toHaveLength(11);
+    for (const e of BEHAVIOURAL_THEATRE_MASTER.exercises) {
+      expect(EXERCISE_META[e], e).toBeTruthy();
+      expect(await loadExercise(e), e).toBeTruthy();
+    }
+  });
+
+  it("is selected by ?master= and uses Voss's sprite and the Theatre badge", () => {
+    expect(masterIdFromSearch("?master=behavioural-theatre")).toBe("behavioural-theatre");
+    expect(MASTERS["behavioural-theatre"].visual).toBe("director-voss");
+    expect(MASTERS["behavioural-theatre"].profile.badge).toBe("behavioural-theatre");
+  });
+
+  it("a full clean run earns the badge", () => {
+    let s = startMaster(behaviouralTheatreMasterDeck(), 3);
     s = clear(s);
     expect(s.phase).toBe("workshop");
     s = submitWorkshop(s, { passed: 5, total: 5 }).state;

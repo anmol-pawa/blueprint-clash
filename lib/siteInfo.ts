@@ -45,6 +45,7 @@ export const PLAYABLE_MODES: readonly PlayableMode[] = [
   { href: "/battle/master?master=solid-square", title: "Principle Hall master", blurb: "Provost Marlow: concepts, a refactor of your choice and a smell boss." },
   { href: "/battle/master?master=creational-foundry", title: "Foundry master", blurb: "Foreman Corvo: concepts, one of six builds and a smell boss." },
   { href: "/battle/master?master=structural-bridges", title: "Bridges master", blurb: "Harbourmaster Vale: concepts, one of seven structures and a smell boss." },
+  { href: "/battle/master?master=behavioural-theatre", title: "Theatre master", blurb: "Director Voss: concepts, one of eleven patterns and a smell boss." },
   { href: "/battle?deck=behavioural-theatre", title: "Behavioural Theatre battle", blurb: "30 cards on Strategy, Observer, Command, State, Template Method and Iterator." },
 ];
 

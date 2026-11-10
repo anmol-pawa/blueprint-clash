@@ -250,7 +250,7 @@ export const SCRIPTS: Readonly<Record<string, DialogueScript>> = {
       },
       no: { speaker: "Director Voss", text: "Now every new listener edits the document class, and the document cannot be tested without all of them. Invert the dependency.", next: "bye" },
       yes: { speaker: "Director Voss", text: "Good. Name the cost too: notification order is implicit, and a listener that unsubscribes mid-callback can bite you.", next: "bye" },
-      bye: { speaker: "Director Voss", text: "My formal trial is not ready yet. Rehearse on the Theatre cards and exercises, then return." },
+      bye: { speaker: "Director Voss", text: "When you have rehearsed the Theatre cards and the eleven pattern drills, take my trial from the Battle menu: Theatre master. Three phases, one badge." },
     },
   },
   "board-solid": {
