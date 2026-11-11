@@ -147,7 +147,7 @@ Work top to bottom: take the **first unchecked box**, and split big boxes into r
 - [ ] C10. **Concurrency Docks** (L7): lessons, 12 Race Hunter puzzles, 5 C++ exercises, a gym. Split below.
   - [x] C10a. Race Hunter puzzles 3-6: check-then-act, two-variable invariant, CAS slot claim, condvar handshake (6 of 12).
   - [x] C10b. Six more puzzles (ABA, bounded queue, reader-writer, double-checked locking, atomic flag publication, livelock): 12 of 12.
-  - [ ] C10c. L7 lessons (threads, mutex, condvar, atomics, deadlock, thread pool).
+  - [x] C10c. L7 lessons (threads, mutex, condvar, atomics, deadlock, thread pool) and a 12-card Concurrency Docks deck.
   - [ ] C10d. Five judged C++ exercises and a gym.
 - [ ] C11. **Senior Review v2:** all rules from GDD §5.3 step 5, with fixtures.
 - [ ] C12. **Workshop Row**, about 36 problems from CUR L8, **2 problems per box**, each with all storms, bad designs and an editorial. Split into C12a…C12r as you go.

@@ -37,7 +37,7 @@ export async function judgeNative(files: ProjectFile[], opts: NativeOptions = {}
       await writeFile(full, f.content);
     }
     const bin = join(dir, "a.out");
-    const args = [`-std=${opts.std ?? "c++20"}`, "-O1", ...(opts.noExceptions ? ["-fno-exceptions"] : []), "-Wall", "-Wextra", `-I${dir}`, `-I${HEADER_DIR}`, ...translationUnits(files), "-o", bin];
+    const args = [`-std=${opts.std ?? "c++20"}`, "-O1", "-pthread", ...(opts.noExceptions ? ["-fno-exceptions"] : []), "-Wall", "-Wextra", `-I${dir}`, `-I${HEADER_DIR}`, ...translationUnits(files), "-o", bin];
     let compileErr = "";
     try {
       await run("g++", args, { cwd: dir, maxBuffer: 16 << 20 });
@@ -85,7 +85,7 @@ export async function compileAndRun(source: string, opts: { std?: string; timeou
   try {
     await writeFile(join(dir, "main.cpp"), source);
     try {
-      await run("g++", [`-std=${opts.std ?? "c++20"}`, "-O0", "-Wall", "-o", join(dir, "a.out"), join(dir, "main.cpp")], { cwd: dir, maxBuffer: 16 << 20 });
+      await run("g++", [`-std=${opts.std ?? "c++20"}`, "-O0", "-pthread", "-Wall", "-o", join(dir, "a.out"), join(dir, "main.cpp")], { cwd: dir, maxBuffer: 16 << 20 });
     } catch (e) {
       return { ok: false, stdout: "", stderr: (e as { stderr?: string }).stderr ?? String(e) };
     }

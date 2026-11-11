@@ -722,3 +722,11 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Verification: `lint` (0 errors, 8 pre-existing warnings), `typecheck`, `npm test`, `build`, `build:pages` pass. Playwright on the Pages export, desktop and iPhone 14: `/race/polite-livelock/` and `/race/bounded-queue/` explore-all viewed, readable, no console errors, no horizontal overflow. `content:verify` not rerun (no exercise change).
 - Known gaps: raw `goto N` lines for jumps; no shared-lock (shared_mutex) op; no puzzle score/XP.
 - Next: C10c (L7 lessons).
+
+## 2026-11-11 - C10c: L7 concurrency lessons and deck
+- Six lessons in `content/lessons/concurrency-docks.ts` (share less and join, RAII mutex, condvar predicate, atomics check-then-act with CAS, deadlock and `scoped_lock`, thread pool with futures and clean shutdown), each with a before/after program, trade-offs, interview signal and over-application cost. Deterministic output: the bad interleaving is pinned with a latch/barrier or pause seam (documented in the file header), mirroring Race Hunter schedules. New 12-card deck `content/cards/concurrency-docks.ts` registered as the "Concurrency Docks" deck (Old Town backdrop for now). `compileAndRun` and `judgeNative` now pass `-pthread`.
+- Caught while verifying: the first deadlock demo was nondeterministic (one thread timing out released its lock and let the other finish); fixed with a second barrier so neither releases until both have tried.
+- Tests: `tests/lessons.test.ts` (L7 ids and card coverage). `content:verify` lessons file: all six new lessons compile, print the recorded output (stable over 3 runs) and pass Senior Review clean.
+- Verification: `lint` (0 errors, 8 pre-existing warnings), `typecheck`, `npm test` (647 pass), `build`, `build:pages` pass. Playwright on the Pages export, desktop and iPhone 14: `/learn/` and `/learn/atomics-check-then-act/` viewed, readable, no console errors, no horizontal overflow. CI/Pages confirmation: see note below.
+- Known gaps: no predict-output cards for L7 yet; lessons run natively only (the wasm sysroot has no threads, ADR 0001), so the in-browser "try it" for these is not offered; the deck has no dedicated backdrop.
+- Next: C10d (five judged C++ exercises and a gym). Per DECISIONS #2, the exercises use the deterministic cooperative thread shim.

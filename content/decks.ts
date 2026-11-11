@@ -6,6 +6,7 @@ import { CREATIONAL_FOUNDRY_DECK } from "./cards/creational-foundry";
 import { STRUCTURAL_BRIDGES_DECK } from "./cards/structural-bridges";
 import { BEHAVIOURAL_THEATRE_DECK } from "./cards/behavioural-theatre";
 import { MODELLING_DECK } from "./cards/modelling";
+import { CONCURRENCY_DOCKS_DECK } from "./cards/concurrency-docks";
 
 /** A district concept deck. Card ids are globally unique, so one SRS map serves every deck. */
 export interface Deck {
@@ -28,6 +29,8 @@ export const DECKS: readonly Deck[] = [
   { id: "behavioural-theatre", title: "Behavioural Theatre", district: "Strategy to Iterator, Chain, Mediator, Memento, Visitor, Interpreter, Null Object and Specification", cards: BEHAVIOURAL_THEATRE_DECK, scene: "theatre" },
   // The Drafting Studio (L6) borrows the Old Town backdrop until it has its own art.
   { id: "modelling", title: "Drafting Studio", district: "Requirements to entities, class diagrams and state diagrams", cards: MODELLING_DECK, scene: "old-town" },
+  // The Concurrency Docks borrow the Old Town backdrop until they have their own art.
+  { id: "concurrency-docks", title: "Concurrency Docks", district: "Threads, mutexes, condition variables, atomics, deadlock and thread pools", cards: CONCURRENCY_DOCKS_DECK, scene: "old-town" },
 ];
 
 export const DEFAULT_DECK_ID = "old-town";
