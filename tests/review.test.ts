@@ -109,6 +109,68 @@ describe("god-class", () => {
   });
 });
 
+describe("object-slicing", () => {
+  const base = "class Shape { public: virtual ~Shape() = default; virtual double area() const = 0; };";
+  it("flags a polymorphic parameter taken by value, in-class and out-of-class", () => {
+    expect(has(base + "class Canvas { public: void draw(Shape s); };", "object-slicing")).toBe(true);
+    expect(has(base + "void render(const int n, Shape s) { }", "object-slicing")).toBe(true);
+  });
+  it("accepts references, pointers, smart pointers and non-polymorphic values", () => {
+    expect(has(base + "void a(const Shape& s); void b(Shape* s); void c(std::unique_ptr<Shape> s); void d(std::vector<Shape*> v);", "object-slicing")).toBe(false);
+    expect(has("struct Point { int x; int y; }; void move(Point p, std::string label);", "object-slicing")).toBe(false);
+  });
+  it("sees polymorphism inherited from a known base", () => {
+    expect(has(base + "class Circle : public Shape { public: double area() const override; }; void f(Circle c) {}", "object-slicing")).toBe(true);
+  });
+});
+
+describe("deep-inheritance", () => {
+  const chain = (n: number) => Array.from({ length: n }, (_, i) => `class C${i}${i ? ` : public C${i - 1}` : ""} { public: virtual ~C${i}() = default; };`).join("\n");
+  it("flags a chain more than 3 levels deep", () => {
+    const out = reviewFiles([{ path: "a.h", content: chain(5) }]).findings.filter((f) => f.rule === "deep-inheritance");
+    expect(out.map((f) => f.subject)).toEqual(["C4"]);
+  });
+  it("accepts exactly 3 levels below the root", () => {
+    expect(has(chain(4), "deep-inheritance")).toBe(false);
+  });
+  it("survives an inheritance cycle", () => {
+    expect(() => rules("class A : public B {}; class B : public A {};")).not.toThrow();
+  });
+});
+
+describe("long-function", () => {
+  const body = (n: number) => Array.from({ length: n }, (_, i) => `  total += ${i};`).join("\n");
+  it("flags an out-of-class function over 40 lines and an in-class method", () => {
+    expect(has(`int run() {\n int total = 0;\n${body(45)}\n return total;\n}`, "long-function")).toBe(true);
+    expect(has(`class A { public:\n int run() {\n int total = 0;\n${body(45)}\n return total;\n }\n};`, "long-function")).toBe(true);
+  });
+  it("accepts a function at the limit", () => {
+    expect(has(`int run() {\n int total = 0;\n${body(36)}\n return total;\n}`, "long-function")).toBe(false);
+  });
+});
+
+describe("type-tag-switch", () => {
+  it("flags a switch on a type tag with several arms", () => {
+    const src = "double area(const Shape& s) { switch (s.type) { case CIRCLE: return 1; case SQUARE: return 2; case TRIANGLE: return 3; } return 0; }";
+    expect(has(src, "type-tag-switch")).toBe(true);
+    expect(has("class P { double f() { switch (kind()) { case 0: return 1; case 1: return 2; case 2: return 3; } return 0; } };", "type-tag-switch")).toBe(true);
+  });
+  it("accepts small switches and switches on non-tag values", () => {
+    expect(has("int f(int day) { switch (day) { case 1: return 1; case 2: return 2; case 3: return 3; } return 0; }", "type-tag-switch")).toBe(false);
+    expect(has("int f(Shape s) { switch (s.type) { case A: return 1; case B: return 2; } return 0; }", "type-tag-switch")).toBe(false);
+  });
+});
+
+describe("dynamic-cast-chain", () => {
+  it("flags two or more dynamic_casts in one function", () => {
+    const src = "double area(Shape* s) { if (auto* c = dynamic_cast<Circle*>(s)) return 1; if (auto* q = dynamic_cast<Square*>(s)) return 2; return 0; }";
+    expect(has(src, "dynamic-cast-chain")).toBe(true);
+  });
+  it("accepts a single probing cast", () => {
+    expect(has("bool isCircle(Shape* s) { return dynamic_cast<Circle*>(s) != nullptr; }", "dynamic-cast-chain")).toBe(false);
+  });
+});
+
 describe("parser robustness", () => {
   it("handles templates, nested classes, namespaces, init lists, lambdas and std::function members", () => {
     const src = `

@@ -3,6 +3,13 @@
 export type Access = "public" | "protected" | "private";
 export type Severity = "blocker" | "major" | "minor";
 
+/** A parameter reduced to what the rules need: the plain type name and whether it is passed by value. */
+export interface ParamInfo {
+  /** Simple type name, or empty when the type has template arguments or is a pointer/reference. */
+  type: string;
+  byValue: boolean;
+}
+
 export interface MethodInfo {
   name: string;
   line: number;
@@ -19,6 +26,7 @@ export interface MethodInfo {
   isDeleted: boolean;
   isOperator: boolean;
   paramCount: number;
+  params: ParamInfo[];
   /** Lines of the body when defined in the class; 0 for declarations. */
   bodyLines: number;
 }
@@ -52,6 +60,20 @@ export interface FunctionDef {
   name: string;
   line: number;
   endLine: number;
+  params: ParamInfo[];
+}
+
+/** What a function body does that the design rules care about (in-class methods and out-of-class definitions alike). */
+export interface BodyInfo {
+  file: string;
+  owner?: string;
+  name: string;
+  /** Line of the opening brace. */
+  line: number;
+  bodyLines: number;
+  /** Lines of every `dynamic_cast`. */
+  dynamicCasts: number[];
+  switches: { line: number; expr: string; cases: string[] }[];
 }
 
 export interface NewExpr {
@@ -65,6 +87,7 @@ export interface FileModel {
   file: string;
   classes: ClassInfo[];
   functions: FunctionDef[];
+  bodies: BodyInfo[];
   news: NewExpr[];
 }
 

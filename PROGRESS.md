@@ -780,3 +780,9 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Verification: `lint` (0 errors, 9 pre-existing warnings), `typecheck`, `test`, `build`, `build:pages` pass. Playwright on the Pages export, desktop 1280x800 and iPhone 14: `/battle/master/?master=concurrency-docks` viewed; Halyard and the harbour backdrop read clearly, no console errors, no horizontal overflow. `content:verify` not rerun (no exercise content changed). CI/Pages confirmation: no `gh` in this session.
 - Known gaps: the phase-2 workshop was covered by tests, not driven in the browser; the exercises run on the cooperative thread shim (DECISIONS #2).
 - Next: C11 (Senior Review v2).
+
+## 2026-11-11 - C11a: Senior Review v2 (blocker and major rules)
+- C11 split into C11a (done) and C11b (minor rules + debrief/doc tables). `lib/review/` gained `object-slicing` (blocker), `deep-inheritance` (>3), `long-function` (>40 lines), `type-tag-switch` (>=3 cases on a type/kind/tag expression) and `dynamic-cast-chain` (>=2 casts in one function), all major. `parse.ts` now records parameters (type, by-value) and scans each function body (`FileModel.bodies`). ARCH Senior Review paragraph updated.
+- Verification: `lint` (0 errors), `typecheck`, `test` (695 pass; 13 new positive/negative fixtures in `tests/review.test.ts`), `content:verify` (304 pass; every existing reference still has no blocker/major findings), `build`, `build:pages` pass. No UI change, so no screenshots. Actions quota note expired 2026-11-01, but `gh` is unavailable here, so CI/deploy not confirmed.
+- Known gaps: free-function declarations without a body are not checked for slicing; the type-tag heuristic is name-based.
+- Next: C11b.

@@ -1,7 +1,7 @@
 // A declaration-level C++ parser: classes, bases, member functions and fields with access, function extents and
 // `new` expressions. It does not parse expressions or resolve names, so it is a deliberate approximation of the
 // clang AST model (ADR 0002). `tests/review.test.ts` cross-checks it against clang's JSON AST on the fixtures.
-import type { Access, ClassInfo, FieldInfo, FileModel, FunctionDef, MethodInfo, NewExpr } from "./model";
+import type { Access, BodyInfo, ClassInfo, FieldInfo, FileModel, FunctionDef, MethodInfo, NewExpr, ParamInfo } from "./model";
 import { tokenize, type Token } from "./tokenize";
 
 const SKIP_STATEMENT = new Set(["using", "typedef", "friend", "static_assert", "enum", "extern"]);
@@ -24,6 +24,7 @@ export function parseFile(file: string, src: string): FileModel {
   const T = tokenize(src);
   const classes: ClassInfo[] = [];
   const functions: FunctionDef[] = [];
+  const bodies: BodyInfo[] = [];
 
   const matching = (i: number): number => {
     const open = T[i].t;
@@ -98,6 +99,77 @@ export function parseFile(file: string, src: string): FileModel {
     return n;
   };
 
+  const QUALIFIERS = new Set(["const", "volatile", "struct", "class", "typename", "unsigned", "signed", "register"]);
+
+  /** Splits a parameter list and keeps, per parameter, the plain type and whether it is by value. */
+  const parseParams = (open: number, close: number): ParamInfo[] => {
+    const out: ParamInfo[] = [];
+    const n = countParams(open, close);
+    if (n === 0) return out;
+    let cur: Token[] = [];
+    let angle = 0;
+    let skipDefault = false;
+    const flush = () => {
+      const ids = cur.filter((x) => x.kind === "id" && !QUALIFIERS.has(x.t));
+      const ptrOrRef = cur.some((x) => x.t === "*" || x.t === "&" || x.t === "&&" || x.t === "[" || x.t === "<" || x.t === "...");
+      // `Shape s` -> ids [Shape, s]; an unnamed `Shape` -> [Shape]. Qualified names keep the last segment before the name.
+      const named = ids.length >= 2 && T[T.indexOf(ids[ids.length - 1]) - 1]?.t !== "::";
+      const typeTok = named ? ids[ids.length - 2] : ids[ids.length - 1];
+      out.push({ type: ptrOrRef || !typeTok ? "" : typeTok.t, byValue: !ptrOrRef });
+      cur = [];
+      skipDefault = false;
+    };
+    for (let j = open + 1; j < close; j++) {
+      const tk = T[j];
+      if (tk.t === "(" || tk.t === "{" || tk.t === "[") {
+        const m = matching(j);
+        if (tk.t === "[") cur.push(tk);
+        j = m;
+        continue;
+      }
+      if (tk.t === "<" && T[j - 1]?.kind === "id") {
+        angle++;
+        cur.push(tk);
+        continue;
+      }
+      if (tk.t === ">" && angle > 0) {
+        angle--;
+        continue;
+      }
+      if (tk.t === "," && angle === 0) {
+        flush();
+        continue;
+      }
+      if (tk.t === "=" && angle === 0) skipDefault = true;
+      if (!skipDefault) cur.push(tk);
+    }
+    flush();
+    return out;
+  };
+
+  /** Scans one function body for `dynamic_cast` and `switch` statements. */
+  const analyseBody = (open: number, close: number, owner: string | undefined, name: string): void => {
+    const body: BodyInfo = { file, owner, name, line: T[open].line, bodyLines: T[close].line - T[open].line + 1, dynamicCasts: [], switches: [] };
+    for (let k = open + 1; k < close; k++) {
+      if (T[k].t === "dynamic_cast") body.dynamicCasts.push(T[k].line);
+      else if (T[k].t === "switch" && T[k + 1]?.t === "(") {
+        const pc = matching(k + 1);
+        const expr = T.slice(k + 2, pc).map((x) => x.t).join(" ");
+        const block = T[pc + 1]?.t === "{" ? matching(pc + 1) : pc;
+        const cases: string[] = [];
+        for (let c = pc + 2; c < block; c++) {
+          if (T[c].t !== "case") continue;
+          let e = c + 1;
+          const parts: string[] = [];
+          while (e < block && T[e].t !== ":") parts.push(T[e++].t);
+          cases.push(parts.join(""));
+        }
+        body.switches.push({ line: T[k].line, expr, cases });
+      }
+    }
+    bodies.push(body);
+  };
+
   const parseMethod = (st: Stmt, cls: ClassInfo, access: Access): MethodInfo | null => {
     let paren = st.paren;
     let nameIdx = paren - 1;
@@ -159,6 +231,7 @@ export function parseFile(file: string, src: string): FileModel {
       isDeleted,
       isOperator,
       paramCount: countParams(paren, close),
+      params: parseParams(paren, close),
       bodyLines: st.bodyStart >= 0 ? T[st.bodyEnd].line - T[st.bodyStart].line + 1 : 0,
     };
   };
@@ -308,12 +381,16 @@ export function parseFile(file: string, src: string): FileModel {
       if (st.paren >= 0 && !(T[st.paren + 1]?.t === "*" || T[st.paren + 1]?.t === "&")) {
         if (cls) {
           const m = parseMethod(st, cls, access);
-          if (m) cls.methods.push(m);
+          if (m) {
+            cls.methods.push(m);
+            if (st.bodyStart >= 0) analyseBody(st.bodyStart, st.bodyEnd, cls.name, m.name);
+          }
         } else if (st.bodyStart >= 0) {
           const nameIdx = st.paren - 1;
           if (T[nameIdx]?.kind === "id") {
             const owner = T[nameIdx - 1]?.t === "::" && T[nameIdx - 2]?.kind === "id" ? T[nameIdx - 2].t : undefined;
-            functions.push({ file, owner, name: T[nameIdx].t, line: T[st.s].line, endLine: T[st.bodyEnd].line });
+            functions.push({ file, owner, name: T[nameIdx].t, line: T[st.s].line, endLine: T[st.bodyEnd].line, params: parseParams(st.paren, matching(st.paren)) });
+            analyseBody(st.bodyStart, st.bodyEnd, owner, T[nameIdx].t);
           }
         }
       } else if (cls && st.e > st.s) {
@@ -335,5 +412,5 @@ export function parseFile(file: string, src: string): FileModel {
     }
     news.push({ file, line: T[i].line, owned });
   }
-  return { file, classes, functions, news };
+  return { file, classes, functions, bodies, news };
 }

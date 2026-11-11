@@ -157,4 +157,114 @@ export const godClass: Rule = (m) => {
   return out;
 };
 
-export const RULES: Rule[] = [virtualDestructor, rawNew, publicMutableFields, missingOverride, godClass];
+const isPolymorphic = (m: ReviewModel, c: ClassInfo) => [c, ...ancestors(m, c)].some((k) => k.methods.some((x) => x.isVirtual && !x.isCtor));
+
+/** Passing a polymorphic type by value copies only the base subobject: the derived part and its overrides are sliced away. */
+export const objectSlicing: Rule = (m) => {
+  const out: Finding[] = [];
+  const check = (file: string, line: number, where: string, params: { type: string; byValue: boolean }[]) => {
+    for (const p of params) {
+      const c = p.type ? m.byName.get(p.type) : undefined;
+      if (!c || !p.byValue || !isPolymorphic(m, c)) continue;
+      out.push({
+        rule: "object-slicing",
+        severity: "blocker",
+        file,
+        line,
+        subject: c.name,
+        message: `${where} takes a ${c.name} by value. ${c.name} is polymorphic, so a derived object passed here is sliced down to its base part.`,
+        fix: `Take \`const ${c.name}&\` (or \`${c.name}&\`) for use, or a \`std::unique_ptr<${c.name}>\` to take ownership.`,
+        lesson: "CUR L1 · Object slicing",
+      });
+    }
+  };
+  for (const c of m.classes) for (const meth of c.methods) if (!meth.isCtor || meth.params.length) check(c.file, meth.line, `${c.name}::${meth.name}`, meth.params);
+  for (const f of m.files) for (const fn of f.functions) check(f.file, fn.line, fn.owner ? `${fn.owner}::${fn.name}` : fn.name, fn.params);
+  return out;
+};
+
+export const DEEP_INHERITANCE_DEPTH = 3;
+
+/** Longest chain of known bases above `c`; unknown (library) bases count as the root. */
+function depthOf(m: ReviewModel, c: ClassInfo, seen = new Set<string>()): number {
+  if (seen.has(c.name)) return 0;
+  seen.add(c.name);
+  let best = 0;
+  for (const b of c.bases) {
+    const base = m.byName.get(b);
+    if (base) best = Math.max(best, 1 + depthOf(m, base, new Set(seen)));
+  }
+  return best;
+}
+
+export const deepInheritance: Rule = (m) =>
+  m.classes
+    .filter((c) => depthOf(m, c) > DEEP_INHERITANCE_DEPTH)
+    .map((c) => ({
+      rule: "deep-inheritance",
+      severity: "major" as const,
+      file: c.file,
+      line: c.line,
+      subject: c.name,
+      message: `${c.name} sits ${depthOf(m, c)} levels below its root (limit ${DEEP_INHERITANCE_DEPTH}). Each level couples it to every ancestor's details.`,
+      fix: "Prefer composition: hold the varying part behind an interface (Strategy/Decorator) instead of adding another subclass level.",
+      lesson: "CUR L2 · Composition over inheritance",
+    }));
+
+export const LONG_FUNCTION_LINES = 40;
+
+export const longFunction: Rule = (m) =>
+  m.files.flatMap((f) =>
+    f.bodies
+      .filter((b) => b.bodyLines > LONG_FUNCTION_LINES)
+      .map((b) => ({
+        rule: "long-function",
+        severity: "major" as const,
+        file: f.file,
+        line: b.line,
+        subject: b.owner,
+        message: `${b.owner ? `${b.owner}::` : ""}${b.name} is ${b.bodyLines} lines long (limit ${LONG_FUNCTION_LINES}). A reader cannot hold it in their head, and neither can a test.`,
+        fix: "Extract the steps into small named functions (or collaborators) so the body reads as an outline.",
+        lesson: "CUR L2 · Small functions",
+      })),
+  );
+
+const TAG_WORDS = /type|kind|tag|category|variant/i;
+
+/** A `switch` over a type tag with several arms is the shape polymorphism replaces: adding a type means editing this switch (and every sibling). */
+export const typeTagSwitch: Rule = (m) =>
+  m.files.flatMap((f) =>
+    f.bodies.flatMap((b) =>
+      b.switches
+        .filter((s) => s.cases.length >= 3 && (TAG_WORDS.test(s.expr) || s.cases.some((c) => TAG_WORDS.test(c))))
+        .map((s) => ({
+          rule: "type-tag-switch",
+          severity: "major" as const,
+          file: f.file,
+          line: s.line,
+          subject: b.owner,
+          message: `${b.owner ? `${b.owner}::` : ""}${b.name} switches on a type tag (\`${s.expr}\`, ${s.cases.length} cases). Every new type must edit this function: it is closed to extension.`,
+          fix: "Give the varying behaviour a virtual function (or a Strategy) and let each type implement it.",
+          lesson: "CUR L2 · Open/Closed",
+        })),
+    ),
+  );
+
+/** One `dynamic_cast` can be a legitimate probe; two or more in a function is a hand-written type switch. */
+export const dynamicCastChain: Rule = (m) =>
+  m.files.flatMap((f) =>
+    f.bodies
+      .filter((b) => b.dynamicCasts.length >= 2)
+      .map((b) => ({
+        rule: "dynamic-cast-chain",
+        severity: "major" as const,
+        file: f.file,
+        line: b.dynamicCasts[0],
+        subject: b.owner,
+        message: `${b.owner ? `${b.owner}::` : ""}${b.name} uses dynamic_cast ${b.dynamicCasts.length} times: it asks each object what it is instead of letting the object do the work.`,
+        fix: "Move the behaviour into a virtual function on the base (or use double dispatch/Visitor if operations must stay outside the types).",
+        lesson: "CUR L2 · Liskov and polymorphism",
+      })),
+  );
+
+export const RULES: Rule[] = [virtualDestructor, rawNew, publicMutableFields, objectSlicing, missingOverride, godClass, deepInheritance, longFunction, typeTagSwitch, dynamicCastChain];
