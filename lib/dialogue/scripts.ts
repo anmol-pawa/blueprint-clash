@@ -258,6 +258,42 @@ export const SCRIPTS: Readonly<Record<string, DialogueScript>> = {
       bye: { speaker: "Director Voss", text: "When you have rehearsed the Theatre cards and the eleven pattern drills, take my trial from the Battle menu: Theatre master. Three phases, one badge." },
     },
   },
+  "wren-intro": {
+    id: "wren-intro",
+    start: "a",
+    nodes: {
+      a: { speaker: "Wren Latch", text: "Two crews are tallying the same crate count on a shared sheet. Both read 40, both write 41. One crate vanishes from the books.", next: "q" },
+      q: {
+        speaker: "Wren Latch",
+        text: "What fixes the lost update without leaving a lock stuck on an early return?",
+        choices: [
+          { text: "Hold a std::lock_guard for the read-modify-write, so the unlock follows scope exit.", next: "yes", set: ["wren-raii"] },
+          { text: "Call lock() at the top and unlock() at the bottom of the function.", next: "no" },
+        ],
+      },
+      yes: { speaker: "Wren Latch", text: "Yes. The guard releases on every path, including exceptions. The cost is that you must keep the critical section small, and better still is to share less in the first place.", next: "bye" },
+      no: { speaker: "Wren Latch", text: "Any early return or throw between the two calls leaves the lock held forever. Tie the unlock to scope.", next: "bye" },
+      bye: { speaker: "Wren Latch", text: "Duel me from the Battle menu: Wren Latch duel. Six cards on threads, mutexes and condition variables." },
+    },
+  },
+  "otis-intro": {
+    id: "otis-intro",
+    start: "a",
+    nodes: {
+      a: { speaker: "Otis Spindle", text: "One crew takes the east winch and then asks for the west. Another takes the west and then asks for the east. Both wait politely, forever.", next: "q" },
+      q: {
+        speaker: "Otis Spindle",
+        text: "What is the simplest dependable cure for that deadlock?",
+        choices: [
+          { text: "Every crew takes the two locks in one agreed order, or takes both at once with std::scoped_lock.", next: "yes", set: ["otis-order"] },
+          { text: "Add a sleep before the second lock so the other crew can finish.", next: "no" },
+        ],
+      },
+      yes: { speaker: "Otis Spindle", text: "Right. A global order breaks the circular wait. The price is that every call site must agree on it, which is why a single helper that locks both is worth the extra line.", next: "bye" },
+      no: { speaker: "Otis Spindle", text: "A sleep only moves the odds. Under load the bad interleaving still shows up, and now it is slower too.", next: "bye" },
+      bye: { speaker: "Otis Spindle", text: "Duel me from the Battle menu: Otis Spindle duel. Six cards on atomics, deadlock and thread pools." },
+    },
+  },
   "board-solid": {
     id: "board-solid",
     start: "a",

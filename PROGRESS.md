@@ -757,3 +757,10 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Verification: `lint` (0 errors, 8 pre-existing warnings), `typecheck`, `test`, `build`, `build:pages` pass. Playwright on the dev server, desktop 1280x800 and iPhone 14: Docks viewed in `/play/` (temporary start position, reverted), legible, no console errors, no horizontal overflow. `content:verify` not rerun (no content change). CI/Pages not checked (no `gh` in this session).
 - Known gaps: no trainers or hall yet; Docks battle backdrop still Old Town.
 - Next: C10d3c (two trainers and their duels on the Concurrency deck).
+
+## 2026-11-11 - C10d3c: Concurrency Docks trainers
+- Wren Latch (threads, mutexes, condition variables) and Otis Spindle (atomics, deadlock, thread pools): generated walker and portrait sprites (`scripts/art/characters.mjs`), `wren-intro`/`otis-intro` dialogue with a trade-off in each answer, two `TrainerProfile` duels on the Concurrency Docks deck (disjoint 6-card pools), placed on the quay (row 5, clear of the walking row), wired into `OverworldGame`, `PlayClient` and the playable-mode list.
+- Tests: trainer scripts/pools and a reachability test for both NPCs. `npm test` 667 pass.
+- Verification: `lint` (0 errors, 8 pre-existing warnings), `typecheck`, `test`, `build`, `build:pages` pass. Playwright on the dev server, desktop and iPhone 14: Docks quay with both trainers viewed, legible, no console errors, no horizontal overflow (temporary start position reverted). `content:verify` not rerun (no exercise change). CI/Pages: not checked (no `gh`).
+- Known gaps: Docks battle backdrop still Old Town; dialogue screenshot not captured this run (same code path as Theatre trainers).
+- Next: C10d3d (Docks hall interior, master fight, badge).

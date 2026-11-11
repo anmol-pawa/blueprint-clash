@@ -115,7 +115,31 @@ export const PERRIN_WICK: TrainerProfile = {
   lose: "Perrin shuts the prop cupboard. Study the misses and rematch.",
 };
 
-export const TRAINERS: readonly TrainerProfile[] = [SABLE_QUILL, ROOK_FERRIS, DOVA_KILN, BRAM_CASK, NERYS_QUAY, TOBIN_REEF, ILSA_CUE, PERRIN_WICK];
+export const WREN_LATCH: TrainerProfile = {
+  id: "wren-latch",
+  name: "Wren Latch",
+  deckId: "concurrency-docks",
+  topics: ["L7.threads", "L7.mutex", "L7.condvar"],
+  cardCount: 6,
+  foeName: "WREN'S CRANE LOG",
+  intro: "Wren Latch signals the crane: who may touch the cargo, for how long, and what a waiting hand does until the load is ready.",
+  win: "Wren lowers the flag. Share less, lock with RAII, wait on a predicate in a loop: safe lift.",
+  lose: "Wren points at the log. Read the explanations, then call the lift again.",
+};
+
+export const OTIS_SPINDLE: TrainerProfile = {
+  id: "otis-spindle",
+  name: "Otis Spindle",
+  deckId: "concurrency-docks",
+  topics: ["L7.atomics", "L7.deadlock", "L7.pool"],
+  cardCount: 6,
+  foeName: "OTIS'S TIDE LEDGER",
+  intro: "Otis Spindle has seen every knot: a flag that is not a lock, two crews each holding the other's rope, and a gang of workers that must go home cleanly.",
+  win: "Otis coils the line. Atomic steps, one lock order, a pool that drains and stops: shipshape.",
+  lose: "Otis taps the ledger. Study the misses and rematch.",
+};
+
+export const TRAINERS: readonly TrainerProfile[] = [SABLE_QUILL, ROOK_FERRIS, DOVA_KILN, BRAM_CASK, NERYS_QUAY, TOBIN_REEF, ILSA_CUE, PERRIN_WICK, WREN_LATCH, OTIS_SPINDLE];
 
 /** Duel flag stored in `lessonsDone` (no save-schema change). */
 export const duelFlag = (t: TrainerProfile): string => `duel:${t.id}`;
