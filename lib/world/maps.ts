@@ -241,7 +241,10 @@ export const DOCKS: MapDef = {
   name: "Concurrency Docks",
   rows: DOCKS_ROWS,
   solid: "SEBWDcbkoTULMNIxyzw",
-  npcs: [],
+  npcs: [
+    { id: "joss", name: "Joss Latch", x: 7, y: 6, facing: "left", dialogue: "joss-intro" },
+    { id: "wren", name: "Wren Spindle", x: 13, y: 6, facing: "left", dialogue: "wren-intro" },
+  ],
   warps: [5, 6].map((y) => ({ x: 0, y, to: "theatre", toX: 18, toY: y, facing: "left" as const })),
   signs: { "18,4": "sign-docks" },
 };

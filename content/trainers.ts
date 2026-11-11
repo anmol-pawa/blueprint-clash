@@ -115,7 +115,31 @@ export const PERRIN_WICK: TrainerProfile = {
   lose: "Perrin shuts the prop cupboard. Study the misses and rematch.",
 };
 
-export const TRAINERS: readonly TrainerProfile[] = [SABLE_QUILL, ROOK_FERRIS, DOVA_KILN, BRAM_CASK, NERYS_QUAY, TOBIN_REEF, ILSA_CUE, PERRIN_WICK];
+export const JOSS_LATCH: TrainerProfile = {
+  id: "joss-latch",
+  name: "Joss Latch",
+  deckId: "concurrency-docks",
+  topics: ["L7.threads", "L7.mutex", "L7.condvar"],
+  cardCount: 6,
+  foeName: "JOSS'S TALLY BOARD",
+  intro: "Joss Latch counts crates onto the quay from three cranes at once and wants to know who guards the tally, and how a loader waits for a delivery.",
+  win: "Joss chalks a tick. Share less, lock with RAII, wait on a predicate: no lost crates.",
+  lose: "Joss wipes the tally board. Read the explanations, then come back for a recount.",
+};
+
+export const WREN_SPINDLE: TrainerProfile = {
+  id: "wren-spindle",
+  name: "Wren Spindle",
+  deckId: "concurrency-docks",
+  topics: ["L7.atomics", "L7.deadlock", "L7.pool"],
+  cardCount: 6,
+  foeName: "WREN'S BERTH LEDGER",
+  intro: "Wren Spindle assigns berths: two ships each hold one mooring and want the other's, and a crew of workers must stop cleanly at closing time.",
+  win: "Wren stamps the ledger. One atomic step, one lock order, and a pool that drains before it joins: tidy.",
+  lose: "Wren closes the ledger. Study the misses and rematch.",
+};
+
+export const TRAINERS: readonly TrainerProfile[] = [SABLE_QUILL, ROOK_FERRIS, DOVA_KILN, BRAM_CASK, NERYS_QUAY, TOBIN_REEF, ILSA_CUE, PERRIN_WICK, JOSS_LATCH, WREN_SPINDLE];
 
 /** Duel flag stored in `lessonsDone` (no save-schema change). */
 export const duelFlag = (t: TrainerProfile): string => `duel:${t.id}`;

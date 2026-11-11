@@ -757,3 +757,9 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Verification: `lint` (0 errors, 8 pre-existing warnings), `typecheck`, `test`, `build`, `build:pages` pass. Playwright on the dev server, desktop 1280x800 and iPhone 14: Docks viewed in `/play/` (temporary start position, reverted), legible, no console errors, no horizontal overflow. `content:verify` not rerun (no content change). CI/Pages not checked (no `gh` in this session).
 - Known gaps: no trainers or hall yet; Docks battle backdrop still Old Town.
 - Next: C10d3c (two trainers and their duels on the Concurrency deck).
+
+## 2026-11-11 - C10d3c: Concurrency Docks trainers and duels
+- Two trainers on the Docks quay: Joss Latch (threads, mutex, condvar) and Wren Spindle (atomics, deadlock, pool), each with a 24x32 walker, 48x48 portrait (`scripts/art/characters.mjs`), intro dialogue with a trade-off answer, a `TrainerProfile` on the Concurrency deck (6 cards each, disjoint topics) and a Battle-menu entry. Placed at (7,6) and (13,6); the quay-edge row below stays walkable, and the old quay-walk test now uses it.
+- Verification: `lint` (0 errors, 8 pre-existing warnings), `typecheck`, `npm test` (667 pass), `build`, `build:pages` pass. Playwright on the Pages export, desktop and iPhone 14: `/dev/sprites` characters viewed (Joss orange hi-vis, Wren navy peacoat, distinct), no console errors, no horizontal overflow. `content:verify` not rerun (no exercise change). CI/Pages not checked (no `gh` here).
+- Known gaps: the Docks overworld itself was not re-screenshotted with the trainers in place; duels still use the Old Town backdrop; the 6-card pool equals the hand, so only order varies.
+- Next: C10d3d (Docks hall interior, master fight, badge).

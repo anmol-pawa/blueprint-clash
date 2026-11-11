@@ -59,6 +59,12 @@ describe("trainer duels", () => {
     expect(ilsa.size).toBeGreaterThanOrEqual(6);
     expect(trainerPool(getTrainer("perrin-wick")!).length).toBeGreaterThanOrEqual(6);
     expect(trainerPool(getTrainer("perrin-wick")!).some((c) => ilsa.has(c.id))).toBe(false);
+    expect(JSON.stringify(SCRIPTS["joss-intro"])).toContain("Joss Latch duel");
+    expect(JSON.stringify(SCRIPTS["wren-intro"])).toContain("Wren Spindle duel");
+    const joss = new Set(trainerPool(getTrainer("joss-latch")!).map((c) => c.id));
+    expect(joss.size).toBeGreaterThanOrEqual(6);
+    expect(trainerPool(getTrainer("wren-spindle")!).length).toBeGreaterThanOrEqual(6);
+    expect(trainerPool(getTrainer("wren-spindle")!).some((c) => joss.has(c.id))).toBe(false);
     expect(JSON.stringify(SCRIPTS["sable-intro"])).toContain("Sable Quill duel");
     expect(JSON.stringify(SCRIPTS["rook-intro"])).toContain("Rook Ferris duel");
     expect(JSON.stringify(SCRIPTS["dova-intro"])).toContain("Dova Kiln duel");

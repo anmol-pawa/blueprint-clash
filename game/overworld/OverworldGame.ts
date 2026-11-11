@@ -3,7 +3,7 @@ import { MAPS, MAP_LEGENDS, START } from "@/lib/world/maps";
 import { type Dir, type MapDef, type Npc, type PlayerState, DELTA, facingTarget, faceNpcToward, step } from "@/lib/world/world";
 import { type DialogueState, advance, startDialogue } from "@/lib/dialogue/dialogue";
 import { SCRIPTS } from "@/lib/dialogue/scripts";
-import { ADA, BRAM, CORVO, DOVA, MARLOW, NERYS, TOBIN, ILSA, PERRIN, VOSS, PLAYER, ROOK, SABLE, VALE } from "@/game/sprites/characters";
+import { ADA, BRAM, CORVO, DOVA, MARLOW, NERYS, TOBIN, ILSA, PERRIN, JOSS, WREN, VOSS, PLAYER, ROOK, SABLE, VALE } from "@/game/sprites/characters";
 import { animTextures, frameCanvas } from "@/game/sprites/texture";
 import { BRIDGES_TILES, DRAFTING_HALL_TILES, FOUNDRY_TILES, OLD_TOWN_TILES, SOLID_SQUARE_TILES, THEATRE_TILES, DOCKS_TILES } from "@/game/sprites/tiles";
 import type { SpriteDef } from "@/game/sprites/pixel";
@@ -13,7 +13,7 @@ const TILE = 16;
 /** Seconds to walk one tile. */
 const STEP_SECONDS = 0.2;
 const TILESET_FOR: Record<string, TileSetDef> = { "old-town": OLD_TOWN_TILES, "drafting-hall": DRAFTING_HALL_TILES, "solid-square": SOLID_SQUARE_TILES, "principle-hall": SOLID_SQUARE_TILES, "bridges-hall": BRIDGES_TILES, "theatre-hall": THEATRE_TILES, "foundry-hall": FOUNDRY_TILES, foundry: FOUNDRY_TILES, bridges: BRIDGES_TILES, theatre: THEATRE_TILES, docks: DOCKS_TILES };
-const WALKER_FOR: Record<string, SpriteDef> = { ada: ADA, sable: SABLE, rook: ROOK, marlow: MARLOW, dova: DOVA, bram: BRAM, corvo: CORVO, nerys: NERYS, tobin: TOBIN, ilsa: ILSA, perrin: PERRIN, voss: VOSS, vale: VALE };
+const WALKER_FOR: Record<string, SpriteDef> = { ada: ADA, sable: SABLE, rook: ROOK, marlow: MARLOW, dova: DOVA, bram: BRAM, corvo: CORVO, nerys: NERYS, tobin: TOBIN, ilsa: ILSA, perrin: PERRIN, joss: JOSS, wren: WREN, voss: VOSS, vale: VALE };
 
 export interface OverworldView {
   mapName: string;

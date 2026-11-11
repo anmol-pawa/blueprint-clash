@@ -258,6 +258,42 @@ export const SCRIPTS: Readonly<Record<string, DialogueScript>> = {
       bye: { speaker: "Director Voss", text: "When you have rehearsed the Theatre cards and the eleven pattern drills, take my trial from the Battle menu: Theatre master. Three phases, one badge." },
     },
   },
+  "joss-intro": {
+    id: "joss-intro",
+    start: "a",
+    nodes: {
+      a: { speaker: "Joss Latch", text: "Three cranes unload at once and each one adds its crates to the same tally. At the end of the shift the tally is short.", next: "q" },
+      q: {
+        speaker: "Joss Latch",
+        text: "What is the first fix to reach for?",
+        choices: [
+          { text: "Guard the tally with a mutex taken through an RAII guard, so every path releases it.", next: "yes", set: ["joss-mutex"] },
+          { text: "Sleep a few milliseconds before each update so the cranes stop colliding.", next: "no" },
+        ],
+      },
+      yes: { speaker: "Joss Latch", text: "Right. Make the read-modify-write one critical section. Better still, give each crane its own tally and merge at the end, so nothing is shared. A lock costs contention, not just speed.", next: "bye" },
+      no: { speaker: "Joss Latch", text: "A sleep only moves the collision somewhere you will not test. The race is still there; it just fires on a busier day.", next: "bye" },
+      bye: { speaker: "Joss Latch", text: "Duel me from the Battle menu: Joss Latch duel. Six cards on threads, mutexes and condition variables." },
+    },
+  },
+  "wren-intro": {
+    id: "wren-intro",
+    start: "a",
+    nodes: {
+      a: { speaker: "Wren Spindle", text: "Ship A holds berth 1 and wants berth 2. Ship B holds berth 2 and wants berth 1. Neither will let go, and the harbour is stuck.", next: "q" },
+      q: {
+        speaker: "Wren Spindle",
+        text: "How do you stop this from ever happening?",
+        choices: [
+          { text: "Always take berths in one global order, or take both at once with std::scoped_lock.", next: "yes", set: ["wren-order"] },
+          { text: "Add a longer timeout and hope one ship backs off.", next: "no" },
+        ],
+      },
+      yes: { speaker: "Wren Spindle", text: "Yes. Deadlock needs a cycle of waits, and a total order on the locks makes a cycle impossible. A timeout with retry can trade the deadlock for a livelock.", next: "bye" },
+      no: { speaker: "Wren Spindle", text: "A timeout detects the stall but does not remove it, and two ships backing off in step can repeat forever. Remove the cycle instead.", next: "bye" },
+      bye: { speaker: "Wren Spindle", text: "Duel me from the Battle menu: Wren Spindle duel. Atomics, deadlock and thread pools." },
+    },
+  },
   "board-solid": {
     id: "board-solid",
     start: "a",

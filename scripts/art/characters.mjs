@@ -66,6 +66,17 @@ const VOSS = {
   palette: { ...base, 1: "#8a5a40", 2: "#bf8862", 3: "#e6b88e", h: "#3a3a42", H: "#8c8c98", j: "#d6d6de", c: "#4a1f4f", C: "#8a3a8f", D: "#d98fd8", p: "#1f1a24", P: "#3a3244" },
 };
 
+// Concurrency Docks trainers. Joss: orange hi-vis jacket, rope-strap pack, dark crop.
+// Wren: navy peacoat, hair in a bun, pencil behind the ear (the dock clerk).
+const JOSS = {
+  id: "joss", name: "Joss Latch", kind: "trainer", skirt: false, pack: true, strap: true, bun: false, glasses: false, pencil: false, lapel: false,
+  palette: { ...base, 1: "#8a5a3c", 2: "#b98058", 3: "#e0a97e", h: "#1a1612", H: "#3a3028", j: "#5e5044", c: "#d2661a", C: "#f08c2e", D: "#ffc66a", p: "#2c3442", P: "#46526a" },
+};
+const WREN = {
+  id: "wren", name: "Wren Spindle", kind: "trainer", skirt: false, pack: false, strap: false, bun: true, glasses: false, pencil: true, lapel: false,
+  palette: { ...base, 1: "#c08a68", 2: "#e8b490", 3: "#f9d6b8", h: "#5a2a1c", H: "#8a4a2c", j: "#b8744a", c: "#1c3a5e", C: "#3a6ca8", D: "#8cb8e8", p: "#2a2e3a", P: "#434a5c" },
+};
+
 // SOLID Square master: Provost Marlow, burgundy robe, silver bun, round gold glasses.
 const MARLOW = {
   id: "marlow", name: "Provost Marlow", kind: "trainer", skirt: true, pack: false, bun: true, glasses: true, pencil: false, lapel: true,
@@ -242,7 +253,7 @@ function portraitSprite(o) {
   };
 }
 
-for (const o of [PLAYER, ADA, SABLE, ROOK, MARLOW, DOVA, BRAM, CORVO, NERYS, TOBIN, VALE, ILSA, PERRIN, VOSS]) {
+for (const o of [PLAYER, ADA, SABLE, ROOK, MARLOW, DOVA, BRAM, CORVO, NERYS, TOBIN, VALE, ILSA, PERRIN, VOSS, JOSS, WREN]) {
   emit(`game/sprites/characters/${o.id}.ts`, {
     id: o.id, name: o.name, w: 24, h: 32, palette: o.palette, script: "characters",
     fps: { idle: 3, "walk-down": 8, "walk-up": 8, "walk-right": 8 },
