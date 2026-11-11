@@ -34,6 +34,11 @@ import { meta as mediatorLobby } from "./mediator-lobby/meta";
 import { meta as mementoEditor } from "./memento-editor/meta";
 import { meta as visitorBasket } from "./visitor-basket/meta";
 import { meta as interpreterCalc } from "./interpreter-calc/meta";
+import { meta as lockedStats } from "./locked-stats/meta";
+import { meta as orderedTransfer } from "./ordered-transfer/meta";
+import { meta as blockingQueue } from "./blocking-queue/meta";
+import { meta as lazyOnce } from "./lazy-once/meta";
+import { meta as taskQueue } from "./task-queue/meta";
 
 export const EXERCISE_META: Record<string, ExerciseMeta> = {
   "file-handle": fileHandle,
@@ -69,4 +74,9 @@ export const EXERCISE_META: Record<string, ExerciseMeta> = {
   "memento-editor": mementoEditor,
   "visitor-basket": visitorBasket,
   "interpreter-calc": interpreterCalc,
+  "locked-stats": lockedStats,
+  "ordered-transfer": orderedTransfer,
+  "blocking-queue": blockingQueue,
+  "lazy-once": lazyOnce,
+  "task-queue": taskQueue,
 };
