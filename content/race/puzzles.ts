@@ -1,4 +1,20 @@
-import { claimSlot, counterAtomic, counterLocked, counterRacy, handshake, lazyInit, transferDeadlock, transferOrdered, twoVariableInvariant } from "@/lib/concurrency";
+import {
+  abaStack,
+  boundedQueue,
+  claimSlot,
+  counterAtomic,
+  counterLocked,
+  counterRacy,
+  doubleCheckedLocking,
+  flagPublication,
+  handshake,
+  lazyInit,
+  pairReadWrite,
+  politeLocking,
+  transferDeadlock,
+  transferOrdered,
+  twoVariableInvariant,
+} from "@/lib/concurrency";
 import type { Program } from "@/lib/concurrency";
 
 export interface RaceVariant {
@@ -80,6 +96,71 @@ export const RACE_PUZZLES: RacePuzzle[] = [
       { id: "unlocked", label: "Producer sets ready without the mutex", note: "The consumer can check, then the producer sets and notifies before the consumer sleeps: the notify is lost for good.", build: () => handshake("unlocked-producer"), correct: false },
       { id: "if", label: "if (!ready) cv.wait(lk)", note: "A spurious wake-up passes the if with ready still false.", build: () => handshake("if-wait"), correct: false },
       { id: "while", label: "while (!ready) cv.wait(lk)", note: "Re-check after every wake-up; or use the predicate overload cv.wait(lk, pred).", build: () => handshake("while-wait"), correct: true },
+    ],
+  },
+  {
+    id: "aba-stack",
+    title: "The ABA problem",
+    brief: "A lock-free stack holds A, B, C. The Popper reads top = A and A's next = B, then pauses. The Recycler pops A, pops B and frees it, then pushes A back. top is A again.",
+    goal: "Make the Popper's compare-and-swap succeed against a stack that has changed underneath it, so top points at freed memory.",
+    variants: [
+      { id: "bare", label: "CAS on a bare pointer", note: "CAS only asks 'is top still A?'. It cannot tell that A left and came back. Result: B, already freed, becomes the new top.", build: () => abaStack(false), correct: false },
+      { id: "tagged", label: "Pointer plus version counter", note: "Pack a counter into the head word (a 128-bit CAS or spare pointer bits). Re-pushing A bumps the counter, so the stale CAS fails. Other cures: hazard pointers or epoch reclamation (never free a node someone may still read), or a garbage-collected language.", build: () => abaStack(true), correct: true },
+    ],
+  },
+  {
+    id: "bounded-queue",
+    title: "A bounded buffer",
+    brief: "A buffer holds at most one item. One producer pushes two items; two consumers pop one each. All state is under one mutex, with while-loops around every wait.",
+    goal: "Share one condition variable between 'not full' and 'not empty' and use notify_one: find the schedule where a wake-up goes to the wrong kind of waiter and everyone sleeps. (Spurious wake-ups are switched off here so the stuck state is visible; real code must still use while.)",
+    variants: [
+      { id: "one-cv-notify-one", label: "One cv, notify_one", note: "notify_one wakes whoever has waited longest, maybe another consumer who finds the buffer empty and sleeps again, while the producer who needed the signal sleeps on.", build: () => boundedQueue("one-cv-notify-one"), correct: false },
+      { id: "one-cv-notify-all", label: "One cv, notify_all", note: "Correct: everyone wakes, re-checks, and the right thread proceeds. Cost: a thundering herd on every operation.", build: () => boundedQueue("one-cv-notify-all"), correct: true },
+      { id: "two-cvs", label: "notFull and notEmpty", note: "One condition variable per predicate lets notify_one reach a thread that can actually use it. The standard design; the mutex is still shared.", build: () => boundedQueue("two-cvs"), correct: true },
+    ],
+  },
+  {
+    id: "reader-writer",
+    title: "Readers need the lock too",
+    brief: "A writer changes a pair (a, b) from (0, 0) to (1, 1). A reader copies both. The invariant is a == b.",
+    goal: "Catch the reader between the two writes. First without any lock on the reader, then with locks that are too small.",
+    variants: [
+      { id: "reader-skips-lock", label: "Writer locks, reader does not", note: "'It only reads' is not an exemption: a read racing with a write is a data race (undefined behaviour), and can see a torn pair.", build: () => pairReadWrite("reader-skips-lock"), correct: false },
+      { id: "split-sections", label: "Lock each assignment separately", note: "No data race, yet the pair is torn: the lock must cover the whole invariant, not each variable.", build: () => pairReadWrite("split-sections"), correct: false },
+      { id: "one-section", label: "One critical section for the pair", note: "Correct. If reads dominate and are long, std::shared_mutex lets readers overlap (not modelled here; writers then wait for readers, so writer starvation is the cost to watch).", build: () => pairReadWrite("one-section"), correct: true },
+    ],
+  },
+  {
+    id: "double-checked-locking",
+    title: "Double-checked locking",
+    brief: "Two threads call getInstance(). The fast path checks the pointer without the lock; only a null pointer takes the lock, checks again and constructs.",
+    goal: "Break it twice: first the plain pointer (a data race), then a relaxed atomic whose pointer store can become visible before the fields it points to.",
+    variants: [
+      { id: "plain-pointer", label: "Plain pointer", note: "The unlocked first read races with the write under the lock. In C++ that is undefined behaviour even if the machine seems to behave.", build: () => doubleCheckedLocking("plain-pointer"), correct: false },
+      { id: "relaxed-reordered", label: "atomic pointer, relaxed", note: "The engine is sequentially consistent, so this version is written in the order a relaxed store is allowed to become visible: pointer first, fields second. A reader that sees the pointer then uses half-built state.", build: () => doubleCheckedLocking("relaxed-reordered"), correct: false },
+      { id: "release-acquire", label: "release store, acquire load", note: "The release store publishes everything written before it; the acquire load sees all of it. Proved here for sequentially consistent runs. Prefer a function-local static or std::call_once and skip the pattern.", build: () => doubleCheckedLocking("release-acquire"), correct: true },
+    ],
+  },
+  {
+    id: "flag-publication",
+    title: "Publishing data with a flag",
+    brief: "A producer writes data = 42 and then raises ready. A consumer spins until ready, then reads data.",
+    goal: "Make the consumer read data before it was written, or find the data race in the plain bool.",
+    variants: [
+      { id: "plain-flag", label: "Plain bool ready", note: "Two unsynchronised accesses to ready, one a write: a data race. The compiler may also hoist the load out of the spin loop and hang forever.", build: () => flagPublication("plain-flag"), correct: false },
+      { id: "relaxed-reordered", label: "atomic<bool>, relaxed", note: "Atomicity alone gives no ordering. Shown in the order a relaxed store may become visible: flag first, data later.", build: () => flagPublication("relaxed-reordered"), correct: false },
+      { id: "release-acquire", label: "release store, acquire load", note: "Everything the producer wrote before the release store is visible after the acquire load sees the flag. The default seq_cst also works and costs a little more on some CPUs.", build: () => flagPublication("release-acquire"), correct: true },
+    ],
+  },
+  {
+    id: "polite-livelock",
+    title: "Too polite to finish",
+    brief: "Two workers each need both locks. To avoid deadlock, each takes one lock, try_locks the other, and if that fails releases what it holds and retries immediately.",
+    goal: "Find the cycle in which both keep running, never deadlock, and never finish. The explorer reports a livelock only when every unfinished thread takes steps in the cycle.",
+    variants: [
+      { id: "retry-immediately", label: "try_lock, back off, retry at once", note: "Symmetric politeness can repeat forever in lockstep. A random back-off makes the loop unlikely in practice but not impossible, so the explorer cannot prove it away.", build: () => politeLocking("retry-immediately"), correct: false },
+      { id: "global-order", label: "Both lock a then b", note: "A global lock order removes the cycle and the need to retry; std::scoped_lock(a, b) does this for you.", build: () => politeLocking("global-order"), correct: true },
+      { id: "one-side-insists", label: "One side blocks, one yields", note: "Breaking the symmetry also works: the insisting worker waits for the lock, the polite one backs off. Cost: the polite worker can be starved under constant contention.", build: () => politeLocking("one-side-insists"), correct: true },
     ],
   },
 ];

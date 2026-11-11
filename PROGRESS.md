@@ -714,3 +714,11 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Verification: `lint` (0 errors, 8 pre-existing warnings), `typecheck`, `npm test` (618 pass), `build`, `build:pages` pass. Playwright on the Pages export, desktop and iPhone 14: `/race/claim-slot/` and `/race/wait-handshake/` viewed, readable, no console errors, no horizontal overflow. `content:verify` not rerun (no exercise change). CI/Pages not confirmed (no `gh`; checked via MCP below if available).
 - Known gaps: raw `goto N` lines show for un-authored jumps; no puzzle selection/score/XP yet.
 - Next: C10b (six more puzzles).
+
+## 2026-11-11 - C10b: six more Race Hunter puzzles (12 of 12) and livelock detection
+- Engine: new `trylock` op and a `livelock` finding (complete search, Tarjan SCCs, reported only when every unfinished thread steps inside the cycle, so a spin-wait on a flag is not flagged). The new check exposed a real bug in the existing `handshake("while-wait")` sample (a wrong jump target made the consumer loop forever, previously reported as "proved"); fixed.
+- Puzzles (`lib/concurrency/samples.ts`, `content/race/puzzles.ts`): ABA lock-free stack (bare vs tagged), bounded buffer (one cv + notify_one loses a wake-up; notify_all and two cvs are correct), readers need the lock (skipped lock, split sections, one section), double-checked locking (plain, relaxed-reordered, release/acquire), flag publication (same three), polite livelock (try_lock retry, global order, one side insists). Relaxed-ordering variants are authored in the visible-order a relaxed store may take, since the engine is sequentially consistent (stated in notes and ARCH §5).
+- Tests: every variant proved or caught; first-finding kinds pinned; try_lock, spin-not-livelock and livelock-lap replay tests. 646 pass.
+- Verification: `lint` (0 errors, 8 pre-existing warnings), `typecheck`, `npm test`, `build`, `build:pages` pass. Playwright on the Pages export, desktop and iPhone 14: `/race/polite-livelock/` and `/race/bounded-queue/` explore-all viewed, readable, no console errors, no horizontal overflow. `content:verify` not rerun (no exercise change).
+- Known gaps: raw `goto N` lines for jumps; no shared-lock (shared_mutex) op; no puzzle score/XP.
+- Next: C10c (L7 lessons).

@@ -16,6 +16,24 @@ describe("Race Hunter puzzles", () => {
       expect(puzzle.variants.some((v) => !v.correct)).toBe(true);
     });
   }
+  it("has 12 puzzles with unique ids", () => {
+    expect(RACE_PUZZLES).toHaveLength(12);
+    expect(new Set(RACE_PUZZLES.map((p) => p.id)).size).toBe(12);
+  });
+  it("the first finding of each buggy variant is the kind the puzzle teaches", () => {
+    const kind = (puzzle: string, variant: string) => {
+      const v = RACE_PUZZLES.find((p) => p.id === puzzle)?.variants.find((x) => x.id === variant);
+      return explore((v as NonNullable<typeof v>).build()).findings[0].violation.kind;
+    };
+    expect(kind("aba-stack", "bare")).toBe("invariant");
+    expect(kind("bounded-queue", "one-cv-notify-one")).toBe("lost-wakeup");
+    expect(kind("reader-writer", "reader-skips-lock")).toBe("data-race");
+    expect(kind("reader-writer", "split-sections")).toBe("invariant");
+    expect(kind("double-checked-locking", "plain-pointer")).toBe("data-race");
+    expect(kind("double-checked-locking", "relaxed-reordered")).toBe("assertion");
+    expect(kind("flag-publication", "relaxed-reordered")).toBe("assertion");
+    expect(kind("polite-livelock", "retry-immediately")).toBe("livelock");
+  });
   it("describeInstr falls back to a plain description and prefers authored C++", () => {
     expect(describeInstr({ op: "lock", m: "a" })).toBe("a.lock();");
     expect(describeInstr({ op: "set", reg: "r", value: { reg: "r", add: 1 } })).toBe("r = r + 1;");

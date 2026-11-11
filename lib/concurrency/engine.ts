@@ -124,6 +124,13 @@ export function step(p: Program, prev: State, tid: number): StepResult {
       s.owner[ins.m] = tid;
       text = `locks ${ins.m}`;
       break;
+    case "trylock": {
+      const free = s.owner[ins.m] === undefined;
+      if (free) s.owner[ins.m] = tid;
+      t.regs[ins.reg] = free ? 1 : 0;
+      text = free ? `try_lock ${ins.m} succeeds` : `try_lock ${ins.m} fails (held by ${p.threads[s.owner[ins.m]].name})`;
+      break;
+    }
     case "unlock":
       if (s.owner[ins.m] !== tid) {
         return fail("unlock-not-owned", `${name} unlocks ${ins.m} without holding it (undefined behaviour in C++).`, `unlocks ${ins.m} (not held)`);

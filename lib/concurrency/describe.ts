@@ -11,6 +11,7 @@ export function describeInstr(i: Instr): string {
     case "store": return `${i.var} = ${operand(i.value)};${i.atomic ? " // atomic" : ""}`;
     case "set": return `${i.reg} = ${operand(i.value)};`;
     case "lock": return `${i.m}.lock();`;
+    case "trylock": return `${i.reg} = ${i.m}.try_lock();`;
     case "unlock": return `${i.m}.unlock();`;
     case "wait": return `${i.cv}.wait(${i.m});`;
     case "notify": return `${i.cv}.notify_one();`;

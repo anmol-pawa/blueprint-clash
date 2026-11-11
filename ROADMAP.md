@@ -146,7 +146,7 @@ Work top to bottom: take the **first unchecked box**, and split big boxes into r
   - [x] C9b. Race Hunter UI at `/race`: code panel with per-thread step buttons, state view, "explore all" counterexample replay, one sample puzzle, home tile.
 - [ ] C10. **Concurrency Docks** (L7): lessons, 12 Race Hunter puzzles, 5 C++ exercises, a gym. Split below.
   - [x] C10a. Race Hunter puzzles 3-6: check-then-act, two-variable invariant, CAS slot claim, condvar handshake (6 of 12).
-  - [ ] C10b. Six more puzzles (ABA, bounded queue, reader-writer, double-checked locking, atomic flag publication, livelock).
+  - [x] C10b. Six more puzzles (ABA, bounded queue, reader-writer, double-checked locking, atomic flag publication, livelock): 12 of 12.
   - [ ] C10c. L7 lessons (threads, mutex, condvar, atomics, deadlock, thread pool).
   - [ ] C10d. Five judged C++ exercises and a gym.
 - [ ] C11. **Senior Review v2:** all rules from GDD §5.3 step 5, with fixtures.

@@ -11,6 +11,8 @@ export type Instr = (
   | { op: "store"; var: string; value: Operand; atomic?: boolean }
   | { op: "set"; reg: string; value: Operand }
   | { op: "lock"; m: string }
+  /** Never blocks: reg = 1 and the mutex is taken when free, otherwise reg = 0. */
+  | { op: "trylock"; m: string; reg: string }
   | { op: "unlock"; m: string }
   /** Atomically releases `m` and sleeps on `cv`; on wake it must re-acquire `m` before continuing. */
   | { op: "wait"; cv: string; m: string }
@@ -79,6 +81,8 @@ export type ViolationKind =
   | "data-race"
   | "deadlock"
   | "lost-wakeup"
+  /** A cycle in which every unfinished thread keeps running but none can ever finish (fair schedule). */
+  | "livelock"
   | "unlock-not-owned"
   | "wait-without-lock"
   | "lock-leak";

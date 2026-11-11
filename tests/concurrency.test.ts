@@ -9,6 +9,7 @@ import {
   runSchedule,
   transferDeadlock,
   transferOrdered,
+  type Instr,
   type Program,
 } from "@/lib/concurrency";
 
@@ -131,5 +132,59 @@ describe("race explorer", () => {
       "int r = counter;",
       "counter = r + 1;",
     ]);
+  });
+});
+
+describe("livelock and try_lock", () => {
+  it("try_lock never blocks and reports failure in its register", () => {
+    const p: Program = {
+      id: "t",
+      shared: {},
+      threads: [
+        { name: "A", code: [{ op: "lock", m: "m" }, { op: "unlock", m: "m" }], regs: {} },
+        { name: "B", code: [{ op: "trylock", m: "m", reg: "got" }], regs: { got: 9 } },
+      ],
+      detectRaces: false,
+    };
+    const r = runSchedule(p, [0, 1]);
+    expect(r.state.threads[1].regs.got).toBe(0);
+    expect(r.trace[1].text).toContain("fails");
+    expect(runSchedule(p, [1]).state.threads[1].regs.got).toBe(1);
+  });
+  it("a lone spinner waiting for a thread that never steps in the cycle is not a livelock", () => {
+    const p: Program = {
+      id: "spin",
+      shared: { flag: 0 },
+      threads: [
+        { name: "Setter", code: [{ op: "store", var: "flag", value: 1, atomic: true }] },
+        { name: "Spinner", code: [{ op: "load", reg: "r", var: "flag", atomic: true }, { op: "jmpIf", a: { reg: "r" }, cmp: "eq", b: 0, to: 0 }], regs: { r: 0 } },
+      ],
+    };
+    const r = explore(p);
+    expect(r.findings).toEqual([]);
+    expect(r.proved).toBe(true);
+  });
+  it("two threads that undo each other's progress forever are a livelock with a replayable lap", () => {
+    const loop = (first: string, second: string): Instr[] => [
+      { op: "lock", m: first },
+      { op: "trylock", m: second, reg: "g" },
+      { op: "jmpIf", a: { reg: "g" }, cmp: "ne", b: 0, to: 5 },
+      { op: "unlock", m: first },
+      { op: "jmp", to: 0 },
+      { op: "unlock", m: second },
+      { op: "unlock", m: first },
+    ];
+    const p: Program = {
+      id: "polite",
+      shared: {},
+      threads: [
+        { name: "X", code: loop("a", "b"), regs: { g: 0 } },
+        { name: "Y", code: loop("b", "a"), regs: { g: 0 } },
+      ],
+    };
+    const f = explore(p).findings[0];
+    expect(f.violation.kind).toBe("livelock");
+    expect(new Set(f.schedule)).toEqual(new Set([0, 1]));
+    expect(runSchedule(p, f.schedule).violation).toBeUndefined();
   });
 });
