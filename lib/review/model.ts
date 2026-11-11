@@ -27,6 +27,10 @@ export interface MethodInfo {
   isOperator: boolean;
   paramCount: number;
   params: ParamInfo[];
+  /** The declared return type is plain `void`. */
+  returnsVoid: boolean;
+  /** Returns a pointer or reference that is not `const`: a deliberate mutable accessor, not a getter. */
+  returnsMutableIndirect: boolean;
   /** Lines of the body when defined in the class; 0 for declarations. */
   bodyLines: number;
 }
@@ -74,6 +78,10 @@ export interface BodyInfo {
   /** Lines of every `dynamic_cast`. */
   dynamicCasts: number[];
   switches: { line: number; expr: string; cases: string[] }[];
+  /** The body assigns, increments or calls a well-known mutating member (`push_back`, `erase`, ...). */
+  mutates: boolean;
+  /** Numeric literals other than 0, 1 and 2 used outside a `const`/`constexpr` declaration or `case` label. */
+  magicNumbers: { line: number; text: string }[];
 }
 
 export interface NewExpr {

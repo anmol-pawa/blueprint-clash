@@ -6,6 +6,10 @@ import { tokenize, type Token } from "./tokenize";
 
 const SKIP_STATEMENT = new Set(["using", "typedef", "friend", "static_assert", "enum", "extern"]);
 const BODY_PRECEDERS = new Set(["const", "override", "final", "noexcept", "&", "&&", "volatile"]);
+const MUTATING_CALLS = new Set(["push_back", "emplace_back", "pop_back", "push", "pop", "erase", "insert", "emplace", "clear", "reset", "swap", "resize", "assign"]);
+const ASSIGN_OPS = new Set(["++", "--", "+=", "-=", "*=", "/="]);
+/** A token before an identifier that means the identifier starts a statement, so a following `=` is an assignment, not a declaration. */
+const STATEMENT_LEAD = new Set([";", "{", "}", ")", ".", "->", "::", ",", "else", "do", "("]);
 const OWNERS = new Set(["unique_ptr", "shared_ptr", "reset", "auto_ptr", "make_unique", "make_shared", "owner"]);
 
 interface Stmt {
@@ -18,6 +22,13 @@ interface Stmt {
   /** Index one past the whole statement, including its body or `;`. */
   next: number;
   paren: number;
+}
+
+/** 0, 1 and 2 (any integer/float spelling) are universal; everything else deserves a name. */
+function isMagicNumber(text: string): boolean {
+  const clean = text.replace(/'/g, "").replace(/(ull|ul|lu|ll|u|l|f)$/i, "");
+  const v = /^0x/i.test(clean) ? parseInt(clean, 16) : parseFloat(clean);
+  return !(v === 0 || v === 1 || v === 2);
 }
 
 export function parseFile(file: string, src: string): FileModel {
@@ -147,10 +158,29 @@ export function parseFile(file: string, src: string): FileModel {
     return out;
   };
 
+  /** True when the statement holding token `k` declares a `const`/`constexpr` (that is how a constant gets its name). */
+  const inNamedConstant = (k: number, floor: number): boolean => {
+    for (let j = k - 1; j > floor; j--) {
+      const t = T[j].t;
+      if (t === ";" || t === "{" || t === "}") break;
+      if (t === "const" || t === "constexpr" || t === "static_assert") return true;
+    }
+    return false;
+  };
+
   /** Scans one function body for `dynamic_cast` and `switch` statements. */
   const analyseBody = (open: number, close: number, owner: string | undefined, name: string): void => {
-    const body: BodyInfo = { file, owner, name, line: T[open].line, bodyLines: T[close].line - T[open].line + 1, dynamicCasts: [], switches: [] };
+    const body: BodyInfo = { file, owner, name, line: T[open].line, bodyLines: T[close].line - T[open].line + 1, dynamicCasts: [], switches: [], mutates: false, magicNumbers: [] };
+    const seenNumbers = new Set<string>();
     for (let k = open + 1; k < close; k++) {
+      const tk = T[k];
+      if (ASSIGN_OPS.has(tk.t)) body.mutates = true;
+      else if (tk.t === "=" && (T[k - 1]?.t === "]" || (T[k - 1]?.kind === "id" && (T[k - 2] === undefined || STATEMENT_LEAD.has(T[k - 2].t))))) body.mutates = true;
+      else if (MUTATING_CALLS.has(tk.t) && T[k + 1]?.t === "(" && (T[k - 1]?.t === "." || T[k - 1]?.t === "->")) body.mutates = true;
+      if (tk.kind === "num" && isMagicNumber(tk.t) && !seenNumbers.has(tk.t) && !inNamedConstant(k, open) && T[k - 1]?.t !== "case") {
+        seenNumbers.add(tk.t);
+        body.magicNumbers.push({ line: tk.line, text: tk.t });
+      }
       if (T[k].t === "dynamic_cast") body.dynamicCasts.push(T[k].line);
       else if (T[k].t === "switch" && T[k + 1]?.t === "(") {
         const pc = matching(k + 1);
@@ -215,6 +245,9 @@ export function parseFile(file: string, src: string): FileModel {
       if (T[k].t === "static") isStatic = true;
     }
     const isDtor = name.startsWith("~");
+    const retToks = T.slice(st.s, nameIdx).map((x) => x.t).filter((x) => !["virtual", "static", "inline", "constexpr", "explicit", "friend", "::"].includes(x));
+    const attrEnd = retToks.lastIndexOf("]");
+    const ret = attrEnd >= 0 ? retToks.slice(attrEnd + 1) : retToks;
     return {
       name,
       line: T[nameIdx].line,
@@ -232,6 +265,8 @@ export function parseFile(file: string, src: string): FileModel {
       isOperator,
       paramCount: countParams(paren, close),
       params: parseParams(paren, close),
+      returnsVoid: ret.length === 1 && ret[0] === "void",
+      returnsMutableIndirect: (ret.includes("&") || ret.includes("&&") || ret.includes("*")) && !ret.includes("const"),
       bodyLines: st.bodyStart >= 0 ? T[st.bodyEnd].line - T[st.bodyStart].line + 1 : 0,
     };
   };

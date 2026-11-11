@@ -285,3 +285,53 @@ describe("review score wiring", () => {
     expect(isProvidedHeader("library.h")).toBe(false);
   });
 });
+
+describe("non-const-getter (minor)", () => {
+  it("flags a getter-named, value-returning member that is not const", () => {
+    expect(has("class A { public: int getCount() { return n_; } private: int n_ = 0; };", "non-const-getter")).toBe(true);
+    expect(has("class A { public: bool isEmpty(); };", "non-const-getter")).toBe(true);
+  });
+  it("accepts const getters, mutating 'getters', mutable accessors, void and parameterised members", () => {
+    expect(has("class A { public: int getCount() const { return n_; } private: int n_ = 0; };", "non-const-getter")).toBe(false);
+    expect(has("class A { public: int getNext() { return ++n_; } private: int n_ = 0; };", "non-const-getter")).toBe(false);
+    expect(has("class A { public: int getNext() { n_ = n_ + 1; return n_; } private: int n_ = 0; };", "non-const-getter")).toBe(false);
+    expect(has("class A { public: int& getRef() { return n_; } private: int n_ = 0; };", "non-const-getter")).toBe(false);
+    expect(has("class A { public: void getReady(); int getAt(int i); int next() { return 1; } };", "non-const-getter")).toBe(false);
+  });
+  it("judges out-of-class definitions and skips overrides", () => {
+    expect(has("class A { public: int size(); }; int A::size() { return 3 - 3; }", "non-const-getter")).toBe(true);
+    expect(has("class A { public: int size(); int n_ = 0; }; int A::size() { n_ += 1; return n_; }", "non-const-getter")).toBe(false);
+    expect(has("class B { public: virtual ~B() = default; virtual int getId() const = 0; }; class D : public B { public: int getId() override; };", "non-const-getter")).toBe(false);
+  });
+});
+
+describe("magic-number (minor)", () => {
+  it("flags unnamed constants in a function body, once per function", () => {
+    const f = reviewFiles([{ path: "a.cpp", content: "int fee(int days) { return days * 15 + 15 + 0x20; }" }]).findings.find((x) => x.rule === "magic-number");
+    expect(f?.message).toContain("15, 0x20");
+  });
+  it("accepts 0, 1, 2, named constants, case labels, fields and comments", () => {
+    expect(has("int f(int x) { return x * 2 + 1 - 0; }", "magic-number")).toBe(false);
+    expect(has("int f(int x) { constexpr int kMax = 40; static const double kRate = 0.15; return x < kMax ? 0 : 1; }", "magic-number")).toBe(false);
+    expect(has("int f(int x) { switch (x) { case 7: return 1; default: return 0; } }", "magic-number")).toBe(false);
+    expect(has("class A { int limit_ = 5; public: int g() const { return limit_; } };", "magic-number")).toBe(false);
+    expect(has("int f() { return 1; } // 99 problems", "magic-number")).toBe(false);
+  });
+  it("sees numbers inside in-class method bodies", () => {
+    expect(has("class A { public: bool full() const { return n_ >= 10; } private: int n_ = 0; };", "magic-number")).toBe(true);
+  });
+});
+
+describe("unclear-name (minor)", () => {
+  it("flags placeholder class, method and field names", () => {
+    expect(has("class Helper { public: int g() const; };", "unclear-name")).toBe(true);
+    expect(has("class OrderUtils { };", "unclear-name")).toBe(true);
+    expect(has("class A { public: void doIt(); };", "unclear-name")).toBe(true);
+    expect(has("class A { private: int tmp_ = 0; };", "unclear-name")).toBe(true);
+  });
+  it("accepts domain names, struct coordinates and the names of constructors/operators", () => {
+    expect(has("class LoanPolicy { public: bool allows(int copies) const; private: int maxLoans_ = 0; };", "unclear-name")).toBe(false);
+    expect(has("struct Point { int x; int y; };", "unclear-name")).toBe(false);
+    expect(has("class Money { public: bool operator==(const Money&) const; };", "unclear-name")).toBe(false);
+  });
+});

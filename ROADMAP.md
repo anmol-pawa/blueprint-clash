@@ -158,9 +158,9 @@ Work top to bottom: take the **first unchecked box**, and split big boxes into r
       - [x] C10d3d. Docks hall interior, master fight (exercise choice from the five) and badge. Split below.
         - [x] C10d3d1. Docks Hall interior, cargo-door warp, Dockmaster Halyard (walker, portrait, intro dialogue).
         - [x] C10d3d2. Halyard 96x96 master sprite, master profile (phases, exercise choice from the five, smell cards), `?master=concurrency-docks` and the Docks Badge.
-- [ ] C11. **Senior Review v2:** all rules from GDD §5.3 step 5, with fixtures. Split below.
+- [x] C11. **Senior Review v2:** all rules from GDD §5.3 step 5, with fixtures. Split below.
   - [x] C11a. Blocker and major rules: object slicing, deep inheritance (> 3), long function (> 40 lines), type-tag switch, `dynamic_cast` chain; positive and negative fixtures.
-  - [ ] C11b. Minor rules: non-const getter, magic numbers, unclear names; fixtures; show the new rules in the debrief and update GDD/ARCH rule tables.
+  - [x] C11b. Minor rules: non-const getter, magic numbers, unclear names; fixtures; show the new rules in the debrief and update GDD/ARCH rule tables.
 - [ ] C12. **Workshop Row**, about 36 problems from CUR L8, **2 problems per box**, each with all storms, bad designs and an editorial. Split into C12a…C12r as you go.
 - [ ] C13. **Refactor Arena** (L9): the mode, plus 12 legacy modules (split across runs).
 - [ ] C14. **Machine-coding mock** (GDD §5.9) with the review conversation.

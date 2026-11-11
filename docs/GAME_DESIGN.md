@@ -142,7 +142,7 @@ A problem plays out in phases, each with a timer in Interview mode:
 5. **Senior Review:** an automated reviewer reads your code's **clang AST** (`-Xclang -ast-dump=json -fsyntax-only`, run in-browser) and raises findings:
    - **Blockers:** a polymorphic base without a virtual destructor, raw `new` without ownership, public mutable fields on domain entities, object slicing (pass by value of a polymorphic type).
    - **Majors:** a god class (> 12 methods or > 300 lines), switching on a type tag where polymorphism fits, `dynamic_cast` chains, very long functions (> 40 lines), deep inheritance (> 3).
-   - **Minors:** non-const getters, missing `override`, magic numbers, unclear names (a heuristic list).
+   - **Minors:** non-const getters, missing `override`, magic numbers, unclear names (a heuristic list). Implemented as `non-const-getter` (getter-named, value-returning, body does not mutate), `magic-number` (literals other than 0/1/2 outside named constants) and `unclear-name` (placeholder names like `tmp`, `doIt`, `Helper`); each costs a small score penalty but never blocks the star.
 
    Each finding links to the lesson that explains it. Every rule is tested on positive and negative fixtures.
 6. **Debrief:** a reference design (UML + code) with commentary, *alternatives and when they're better*, a diff of yours vs the reference, the follow-up questions interviewers ask, and a short "how this is scored in real interviews" section.

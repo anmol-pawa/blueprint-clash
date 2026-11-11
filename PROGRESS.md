@@ -786,3 +786,9 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Verification: `lint` (0 errors), `typecheck`, `test` (695 pass; 13 new positive/negative fixtures in `tests/review.test.ts`), `content:verify` (304 pass; every existing reference still has no blocker/major findings), `build`, `build:pages` pass. No UI change, so no screenshots. Actions quota note expired 2026-11-01, but `gh` is unavailable here, so CI/deploy not confirmed.
 - Known gaps: free-function declarations without a body are not checked for slicing; the type-tag heuristic is name-based.
 - Next: C11b.
+
+## 2026-11-11 - C11b: Senior Review minor rules (closes C11)
+- `lib/review/` gained three heuristic minors: `non-const-getter` (getter-named, zero-arg, value-returning, not `const`/override, body has no assignment/increment/mutating call), `magic-number` (literals other than 0/1/2 outside `const`/`constexpr` statements and `case` labels, one finding per function) and `unclear-name` (placeholder method/field names like `tmp`, `doIt`; class names like `Helper`, `Utils`, `Manager`). Parser now records return-type shape on methods and `mutates`/`magicNumbers` on bodies. The debrief lists findings generically, so they show with no UI change. ARCH §3 and GDD §5.3 rule tables updated.
+- Verification: `lint` (0 errors, 9 pre-existing warnings), `typecheck`, `npm test` (703 pass; 9 new positive/negative fixtures), `content:verify` (304 pass; no reference gets a blocker or major), `build`, `build:pages` pass. No visual change, so no screenshots. CI and Pages status not checked this run (no gh CLI in this session).
+- Known gaps: single-letter names deliberately not flagged (fixtures use them); getter mutation detection cannot see through calls to other non-const members; field initialisers are not scanned for magic numbers.
+- Next: C12 (Workshop Row problems), or C3c when its modes exist.

@@ -267,4 +267,79 @@ export const dynamicCastChain: Rule = (m) =>
       })),
   );
 
-export const RULES: Rule[] = [virtualDestructor, rawNew, publicMutableFields, objectSlicing, missingOverride, godClass, deepInheritance, longFunction, typeTagSwitch, dynamicCastChain];
+const GETTER_NAME = /^(get|is|has|can|should|total|count|size|empty|length|name|id|balance|capacity)([A-Z_]|$)/;
+
+/** A zero-argument, value-returning, getter-named member that is not `const` cannot be called through a const reference, and hints that it changes state. */
+export const nonConstGetter: Rule = (m) => {
+  const out: Finding[] = [];
+  for (const c of m.classes) {
+    for (const meth of c.methods) {
+      if (meth.isConst || meth.isStatic || meth.isCtor || meth.isDtor || meth.isOperator || meth.isOverride || meth.isDeleted) continue;
+      if (meth.paramCount !== 0 || meth.returnsVoid || meth.returnsMutableIndirect || !GETTER_NAME.test(meth.name)) continue;
+      const bodies = m.files.flatMap((f) => f.bodies).filter((b) => b.owner === c.name && b.name === meth.name);
+      if (bodies.some((b) => b.mutates)) continue;
+      out.push({
+        rule: "non-const-getter",
+        severity: "minor",
+        file: c.file,
+        line: meth.line,
+        subject: c.name,
+        message: `${c.name}::${meth.name}() looks like a getter but is not \`const\`, so it cannot be called through a const reference and hints that it changes state.`,
+        fix: "Add `const` after the parameter list (and to the same function in any base class).",
+        lesson: "CUR L1 · const-correctness",
+      });
+    }
+  }
+  return out;
+};
+
+/** An unexplained literal hides a business rule; a named constant documents it and gives one place to change it. */
+export const magicNumbers: Rule = (m) =>
+  m.files.flatMap((f) =>
+    f.bodies
+      .filter((b) => b.magicNumbers.length > 0)
+      .map((b) => ({
+        rule: "magic-number",
+        severity: "minor" as const,
+        file: f.file,
+        line: b.magicNumbers[0].line,
+        subject: b.owner,
+        message: `${b.owner ? `${b.owner}::` : ""}${b.name} uses unnamed constants (${b.magicNumbers.map((n) => n.text).join(", ")}). A reader cannot tell what they mean or where else they must change.`,
+        fix: "Give each a name: `static constexpr int kMaxLoans = 5;` (or a config value injected through the constructor).",
+        lesson: "CUR L2 · Named constants",
+      })),
+  );
+
+const VAGUE_MEMBER = new Set(["tmp", "temp", "foo", "bar", "baz", "stuff", "thing", "things", "doit", "dostuff", "dothing", "func", "obj", "val", "var"]);
+const VAGUE_CLASS = new Set(["helper", "helpers", "util", "utils", "misc", "stuff", "thing", "manager", "handler", "data", "info"]);
+const bare = (n: string) => n.replace(/^m_/, "").replace(/_+$/, "").replace(/^_+/, "");
+
+/** A short, heuristic list of placeholder names; it cannot judge good names, only flag the usual non-names. */
+export const unclearNames: Rule = (m) => {
+  const out: Finding[] = [];
+  const add = (file: string, line: number, subject: string, what: string, name: string) =>
+    out.push({
+      rule: "unclear-name",
+      severity: "minor",
+      file,
+      line,
+      subject,
+      message: `${what} \`${name}\` does not say what it is for. Names are the cheapest documentation a reviewer gets.`,
+      fix: "Rename it after its role in the domain (what it holds or what it does), not its shape.",
+      lesson: "CUR L2 · Naming",
+    });
+  for (const c of m.classes) {
+    if (VAGUE_CLASS.has(c.name.toLowerCase()) || /(Helper|Utils?)$/.test(c.name)) add(c.file, c.line, c.name, "The class name", c.name);
+    for (const meth of c.methods) {
+      if (meth.isCtor || meth.isDtor || meth.isOperator) continue;
+      if (VAGUE_MEMBER.has(meth.name.toLowerCase())) add(c.file, meth.line, c.name, "The method name", `${c.name}::${meth.name}`);
+    }
+    for (const f of c.fields) {
+      const n = bare(f.name);
+      if (VAGUE_MEMBER.has(n.toLowerCase())) add(c.file, f.line, c.name, "The field name", `${c.name}::${f.name}`);
+    }
+  }
+  return out;
+};
+
+export const RULES: Rule[] = [virtualDestructor, rawNew, publicMutableFields, objectSlicing, missingOverride, godClass, deepInheritance, longFunction, typeTagSwitch, dynamicCastChain, nonConstGetter, magicNumbers, unclearNames];
