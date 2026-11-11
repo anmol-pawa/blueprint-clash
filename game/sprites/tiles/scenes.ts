@@ -2,6 +2,7 @@ import { BRIDGES_TILES } from "./bridges";
 import { DRAFTING_HALL_TILES } from "./drafting-hall";
 import { FOUNDRY_TILES } from "./foundry";
 import { THEATRE_TILES } from "./theatre";
+import { DOCKS_TILES } from "./docks";
 import { OLD_TOWN_TILES } from "./old-town";
 import { SOLID_SQUARE_TILES } from "./solid-square";
 import { type Legend, composeScene } from "./tileset";
@@ -246,3 +247,31 @@ export const THEATRE_HALL_ROWS: readonly string[] = [
 
 /** The Theatre Hall interior for art review. */
 export const THEATRE_HALL_SCENE = composeScene(THEATRE_TILES, "theatre-hall-scene", THEATRE_HALL_ROWS, THEATRE_LEGEND);
+
+export const DOCKS_LEGEND: Legend = {
+  q: ["quay"], Q: ["quay-2"], p: ["pier"], P: ["pier-2"], w: ["water"], e: ["quay-edge"],
+  S: ["roof-slate"], E: ["roof-eave"], B: ["brick-wall"], W: ["shutter"], D: ["cargo-door"],
+  c: ["quay", "crate"], k: ["quay", "crate-locked"], b: ["quay", "barrel"], o: ["quay", "bollard"], r: ["quay", "rope"],
+  T: ["quay", "crane-top"], U: ["quay", "crane-base"], L: ["quay", "lantern-top"], M: ["quay", "lantern-base"],
+  N: ["brick-wall", "net"], I: ["quay", "sign-board"], x: ["pier", "crate-locked"], y: ["pier", "barrel"], z: ["water", "boat"],
+};
+
+/** Concurrency Docks rows, shared by the scene and the map: a warehouse front with a padlocked cargo door, a quay with crates and a crane, piers into the harbour. */
+export const DOCKS_ROWS: readonly string[] = [
+  "SSSSSSSSSSSSSSSSSSSS",
+  "EEEEEEEEEEEEEEEEEEEE",
+  "BWBWBBNBBBWBWBBNBBWB",
+  "BBBBBBBBDBBBBBBBBBBB",
+  "qLqcqbqqqqqqkqqqTqIq",
+  "qMqkqqrqQqqoqbqqUqqq",
+  "qqqqqqqqqqqqqqqqqqqq",
+  "eeeeeeeeeeeeeeeeeeee",
+  "wwwwwppppwwwwwppppww",
+  "wwzwwppxpwwwwwppyppw",
+  "wwwwwppppwwwwwppppww",
+  "wwwwwppppwzwwwppppww",
+  "wwwwwwwwwwwwwwwwwwww",
+];
+
+/** The Concurrency Docks for art review: warehouse, quay, crane and piers over animated water. */
+export const DOCKS_SCENE = composeScene(DOCKS_TILES, "docks-scene", DOCKS_ROWS, DOCKS_LEGEND);

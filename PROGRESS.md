@@ -743,3 +743,10 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Verification: `content:verify` exercises file filtered to the three ids (15 tests: loads, reference accepted, Senior Review clean, starter not accepted, every wrong rejected); `lint`, `typecheck`, `npm test`, `build`, `build:pages` see below. No visual change, so no screenshots.
 - Known gaps: not reachable from a screen yet (gym, C10d3); memory-order correctness of `lazy-once` is explained but cannot be proven by a sequentially consistent test (stated in the prompt).
 - Next: C10d3 (Docks gym wired to the Concurrency deck and the five exercises).
+
+## 2026-11-11 - C10d3a: Concurrency Docks tileset and scene
+- New `scripts/art/docks-tiles.mjs` generating `game/sprites/tiles/docks.ts` (harbour tileset: cobbled quay, pier boards, 4-frame animated water and quay edge, brick warehouse, slate roof, shuttered windows, padlocked cargo door, crates (one padlocked), barrels, bollard, rope, crane, lanterns, net, bobbing boats). `DOCKS_LEGEND`, `DOCKS_ROWS` and `DOCKS_SCENE` in `scenes.ts`, scene added to `/dev/sprites`, tileset registered. ROADMAP: C10d3 split into d3a-d3d.
+- Tests: `tests/tiles.test.ts` (opaque ground tiles, rectangular fully-mapped rows, animated water). `npm test` 656 pass.
+- Verification: `lint` (0 errors; one new warning fixed, 8 pre-existing), `typecheck`, `test`, `build`, `build:pages` pass. Playwright on the Pages export, desktop 1280x900 and iPhone 14: `/dev/sprites` Docks scene viewed, legible, no console errors, no horizontal overflow. `content:verify` not rerun (no content change). CI/Pages not confirmed (no `gh`).
+- Known gaps: cargo door tile is small relative to the warehouse; no battle backdrop for the Docks deck yet (still Old Town).
+- Next: C10d3b (Docks overworld map, warp from the Theatre east gate, sign).
