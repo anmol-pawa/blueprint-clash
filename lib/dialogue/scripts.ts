@@ -258,6 +258,42 @@ export const SCRIPTS: Readonly<Record<string, DialogueScript>> = {
       bye: { speaker: "Director Voss", text: "When you have rehearsed the Theatre cards and the eleven pattern drills, take my trial from the Battle menu: Theatre master. Three phases, one badge." },
     },
   },
+  "wren-intro": {
+    id: "wren-intro",
+    start: "a",
+    nodes: {
+      a: { speaker: "Wren Latch", text: "Two cranes keep updating the same tally board. Every few days the total is a little short, and nobody can reproduce it.", next: "q" },
+      q: {
+        speaker: "Wren Latch",
+        text: "What is the first thing you check when a shared counter loses updates?",
+        choices: [
+          { text: "That every read-modify-write on it happens under one lock, or as one atomic operation.", next: "yes", set: ["wren-lock"] },
+          { text: "Add a sleep before the update so the cranes stop colliding.", next: "no" },
+        ],
+      },
+      yes: { speaker: "Wren Latch", text: "Right. A sleep only moves the race around. The lock (or an atomic) makes the update indivisible. The price is contention: keep the critical section short.", next: "bye" },
+      no: { speaker: "Wren Latch", text: "Timing hides a race, it never fixes one. The bug returns on a slower machine. Make the update atomic with respect to the other thread.", next: "bye" },
+      bye: { speaker: "Wren Latch", text: "Duel me from the Battle menu: Wren Latch duel. Six cards on threads, mutexes and condition variables." },
+    },
+  },
+  "cass-intro": {
+    id: "cass-intro",
+    start: "a",
+    nodes: {
+      a: { speaker: "Cass Barrow", text: "My crane needs the berth and then the fuel line. The other crane takes them in the opposite order. Both stop dead at noon.", next: "q" },
+      q: {
+        speaker: "Cass Barrow",
+        text: "How do you rule out that deadlock without giving up on locking?",
+        choices: [
+          { text: "Make every thread take the locks in one agreed global order (or lock both at once).", next: "yes", set: ["cass-order"] },
+          { text: "Wrap each lock in a timeout and hope one side gives up in time.", next: "no" },
+        ],
+      },
+      yes: { speaker: "Cass Barrow", text: "Yes. Break the circular wait and the deadlock cannot form. The cost is that the order must be known and obeyed everywhere, so keep it written down.", next: "bye" },
+      no: { speaker: "Cass Barrow", text: "A timeout turns a deadlock into a retry storm, and the two cranes can livelock. Prevent the cycle instead of reacting to it.", next: "bye" },
+      bye: { speaker: "Cass Barrow", text: "Duel me from the Battle menu: Cass Barrow duel. Six cards on atomics, deadlock and thread pools." },
+    },
+  },
   "board-solid": {
     id: "board-solid",
     start: "a",

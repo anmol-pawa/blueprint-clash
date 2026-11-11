@@ -234,6 +234,7 @@ export const THEATRE_HALL: MapDef = {
  * crates and a crane, and two piers into the harbour. Water and the crates
  * on the piers are solid; the quay lip is walkable so both piers can be
  * reached. The cargo door is scenery until the Docks hall opens (C10d3d).
+ * Wren Latch and Cass Barrow duel on the quay.
  * The west gate (two tiles) returns to the Behavioural Theatre.
  */
 export const DOCKS: MapDef = {
@@ -241,7 +242,10 @@ export const DOCKS: MapDef = {
   name: "Concurrency Docks",
   rows: DOCKS_ROWS,
   solid: "SEBWDcbkoTULMNIxyzw",
-  npcs: [],
+  npcs: [
+    { id: "wren", name: "Wren Latch", x: 6, y: 5, facing: "down", dialogue: "wren-intro" },
+    { id: "cass", name: "Cass Barrow", x: 14, y: 5, facing: "down", dialogue: "cass-intro" },
+  ],
   warps: [5, 6].map((y) => ({ x: 0, y, to: "theatre", toX: 18, toY: y, facing: "left" as const })),
   signs: { "18,4": "sign-docks" },
 };

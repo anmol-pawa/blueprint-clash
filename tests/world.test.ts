@@ -322,6 +322,34 @@ describe("Behavioural Theatre trainers", () => {
   });
 });
 
+describe("Concurrency Docks trainers", () => {
+  it("places Wren and Cass on reachable quay tiles with art and dialogue", async () => {
+    const { WALKERS, PORTRAITS } = await import("@/game/sprites/characters");
+    const m = MAPS["docks"];
+    const seen = new Set<string>(["1,6"]);
+    const q: [number, number][] = [[1, 6]];
+    while (q.length) {
+      const [x, y] = q.pop()!;
+      for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+        const nx = x + dx, ny = y + dy, k = `${nx},${ny}`;
+        if (ny < 0 || ny >= m.rows.length || nx < 0 || nx >= m.rows[0].length || seen.has(k) || m.solid.includes(m.rows[ny][nx])) continue;
+        seen.add(k);
+        q.push([nx, ny]);
+      }
+    }
+    for (const id of ["wren", "cass"]) {
+      const npc = m.npcs.find((n) => n.id === id);
+      expect(npc, id).toBeDefined();
+      expect(m.solid.includes(m.rows[npc!.y][npc!.x])).toBe(false);
+      expect(WALKERS.some((w) => w.id === id)).toBe(true);
+      expect(PORTRAITS.some((p) => p.id === `${id}-portrait`)).toBe(true);
+      expect(SCRIPTS[npc!.dialogue]).toBeDefined();
+      const adjacent = [[1, 0], [-1, 0], [0, 1], [0, -1]].some(([dx, dy]) => seen.has(`${npc!.x + dx},${npc!.y + dy}`));
+      expect(adjacent, id).toBe(true);
+    }
+  });
+});
+
 describe("SOLID Square trainers", () => {
   it("places Sable and Rook on walkable plaza tiles with art and dialogue", async () => {
     const { WALKERS, PORTRAITS } = await import("@/game/sprites/characters");

@@ -66,6 +66,17 @@ const VOSS = {
   palette: { ...base, 1: "#8a5a40", 2: "#bf8862", 3: "#e6b88e", h: "#3a3a42", H: "#8c8c98", j: "#d6d6de", c: "#4a1f4f", C: "#8a3a8f", D: "#d98fd8", p: "#1f1a24", P: "#3a3244" },
 };
 
+// Concurrency Docks trainers. Wren: dockhand in a violet jacket with a dark bun and a pencil.
+// Cass: crane operator in a steel-grey hoodie, auburn hair and a gear pack.
+const WREN = {
+  id: "wren", name: "Wren Latch", kind: "trainer", skirt: false, pack: false, strap: false, bun: true, glasses: false, pencil: true, lapel: false,
+  palette: { ...base, 1: "#9a6240", 2: "#c98f66", 3: "#ecbb94", h: "#16121e", H: "#2e2640", j: "#52467a", c: "#4a2f86", C: "#7c58c9", D: "#b79cf0", p: "#2a2a3c", P: "#42425c" },
+};
+const CASS = {
+  id: "cass", name: "Cass Barrow", kind: "trainer", skirt: false, pack: true, strap: true, bun: false, glasses: false, pencil: false, lapel: false,
+  palette: { ...base, 1: "#c68a66", 2: "#ecb18a", 3: "#fad2b0", h: "#6a2410", H: "#a8401c", j: "#d9743a", c: "#4a5560", C: "#7a8896", D: "#b4c2d0", p: "#2c3a4a", P: "#44566c" },
+};
+
 // SOLID Square master: Provost Marlow, burgundy robe, silver bun, round gold glasses.
 const MARLOW = {
   id: "marlow", name: "Provost Marlow", kind: "trainer", skirt: true, pack: false, bun: true, glasses: true, pencil: false, lapel: true,
@@ -242,7 +253,7 @@ function portraitSprite(o) {
   };
 }
 
-for (const o of [PLAYER, ADA, SABLE, ROOK, MARLOW, DOVA, BRAM, CORVO, NERYS, TOBIN, VALE, ILSA, PERRIN, VOSS]) {
+for (const o of [PLAYER, ADA, SABLE, ROOK, MARLOW, DOVA, BRAM, CORVO, NERYS, TOBIN, VALE, ILSA, PERRIN, VOSS, WREN, CASS]) {
   emit(`game/sprites/characters/${o.id}.ts`, {
     id: o.id, name: o.name, w: 24, h: 32, palette: o.palette, script: "characters",
     fps: { idle: 3, "walk-down": 8, "walk-up": 8, "walk-right": 8 },

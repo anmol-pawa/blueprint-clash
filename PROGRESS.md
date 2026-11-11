@@ -757,3 +757,10 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Verification: `lint` (0 errors, 8 pre-existing warnings), `typecheck`, `test`, `build`, `build:pages` pass. Playwright on the dev server, desktop 1280x800 and iPhone 14: Docks viewed in `/play/` (temporary start position, reverted), legible, no console errors, no horizontal overflow. `content:verify` not rerun (no content change). CI/Pages not checked (no `gh` in this session).
 - Known gaps: no trainers or hall yet; Docks battle backdrop still Old Town.
 - Next: C10d3c (two trainers and their duels on the Concurrency deck).
+
+## 2026-11-11 - C10d3c: Docks trainers Wren Latch and Cass Barrow
+- New walkers and portraits (`scripts/art/characters.mjs` -> `game/sprites/characters/{wren,cass}*.ts`: violet jacket and bun; steel hoodie, auburn hair and gear pack), placed on the quay in `DOCKS`, intro dialogues with a flagged choice, and two duel profiles on the Concurrency deck (`wren-latch`: threads/mutex/condvar; `cass-barrow`: atomics/deadlock/pool; 6 disjoint cards each), listed in the Battle menu.
+- Tests: trainer pools and scripts in `tests/trainers.test.ts`; reachable quay tiles, art and dialogue in `tests/world.test.ts`. 667 pass.
+- Verification: `lint` (0 errors, 8 pre-existing warnings), `typecheck`, `npm test`, `build`, `build:pages` pass. Playwright on the dev server, desktop 1280x800 and iPhone 14: both trainers visible on the quay, legible, no console errors, no horizontal overflow (temporary start position reverted). `content:verify` not rerun (no content change).
+- Known gaps: Docks battle backdrop still Old Town; the hall and master (C10d3d) are next.
+- Next: C10d3d (Docks hall interior, master fight and badge).
