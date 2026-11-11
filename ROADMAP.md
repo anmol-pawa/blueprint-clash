@@ -145,6 +145,11 @@ Work top to bottom: take the **first unchecked box**, and split big boxes into r
   - [x] C9a. Pure-logic IR, step engine, manual scheduler and exhaustive explorer in `lib/concurrency/` with `tests/concurrency.test.ts` (counter, AB-BA, condvar samples).
   - [x] C9b. Race Hunter UI at `/race`: code panel with per-thread step buttons, state view, "explore all" counterexample replay, one sample puzzle, home tile.
 - [ ] C10. **Concurrency Docks** (L7): lessons, 12 Race Hunter puzzles, 5 C++ exercises, a gym.
+  - [x] C10a. Race Hunter puzzles 3-6: check-then-act (race condition vs data race), forgotten unlock vs RAII, missed wake-up, double-checked locking (6 puzzles total).
+  - [ ] C10b. Race Hunter puzzles 7-12 (bounded buffer, reader-writer, ABA, thread-pool shutdown, lock ordering with std::scoped_lock, idempotent retry); may need IR additions.
+  - [ ] C10c. L7 lessons (mutex family, deadlock/Coffman, condition variables, atomics and ordering, futures, DCL/ABA) with native-compiled before/after.
+  - [ ] C10d. Five C++ exercises (bounded queue, token bucket, connection pool, locked LRU, thread pool) with hidden tests and Change Storms.
+  - [ ] C10e. Concurrency gym: deck + trainer + hall, linked from the map.
 - [ ] C11. **Senior Review v2:** all rules from GDD §5.3 step 5, with fixtures.
 - [ ] C12. **Workshop Row**, about 36 problems from CUR L8, **2 problems per box**, each with all storms, bad designs and an editorial. Split into C12a…C12r as you go.
 - [ ] C13. **Refactor Arena** (L9): the mode, plus 12 legacy modules (split across runs).

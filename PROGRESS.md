@@ -707,3 +707,10 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Verification: `lint` (0 errors, 8 pre-existing warnings), `typecheck`, `npm test`, `build`, `build:pages` pass. Playwright on the Pages export, desktop 1280x900 and iPhone 14: `/race/lost-update/` viewed, readable, no console errors, no horizontal overflow; mutex variant shows "Proved". `content:verify` not rerun (no exercise change). CI/Pages: see below.
 - Known gaps: the data-race detector fires before the lost-update value shows (explained in the goal text); no "pick the fix" scoring or XP yet; no ABA or condvar puzzles (C10).
 - Next: C10 (Concurrency Docks: lessons, 12 puzzles, 5 C++ exercises; split first).
+
+## 2026-11-11 - C10a: Race Hunter puzzles 3-6
+- Four new puzzles on the existing IR (`content/race/programs.ts`, `content/race/puzzles.ts`): check-then-act (atomic steps still overdraw: a race condition without a data race; mutex and CAS-loop fixes), the early return that skips a manual unlock vs `lock_guard`, the missed wake-up (unlocked producer, `if` wait, `while` wait), and double-checked locking (plain flag vs atomic flag). ROADMAP: C10 split into C10a-C10e.
+- Tests: explorer finds a bug in each buggy variant and proves each fix; new tests pin the documented bug kind (invariant without data-race, lock-leak, data-race) and that every step has a displayable line.
+- Verification: `lint` (0 errors, 8 pre-existing warnings), `typecheck`, `npm test` (30 files pass), `build`, `build:pages` pass. Playwright on the Pages export, desktop 1280x900 and iPhone 14: `/race/check-then-act/` and `/race/double-checked/` viewed, readable, no console errors, no horizontal overflow; raw `goto` lines were replaced by annotations. `content:verify` not rerun (no exercise change).
+- Known gaps: explorer is sequentially consistent only, so DCL reordering is explained in text, not shown. Worked on the designated branch `claude/funny-ramanujan-9s7cos`, not main (session instruction), so it needs merging. CI/Pages not checked (`gh` unavailable).
+- Next: C10b (puzzles 7-12).

@@ -24,3 +24,33 @@ describe("Race Hunter puzzles", () => {
     expect(describeInstr(p.threads[0].code[0])).toBe("int r = counter;");
   });
 });
+
+describe("Race Hunter puzzle bugs are the documented ones", () => {
+  const kinds = (puzzle: string, variant: string) => {
+    const v = RACE_PUZZLES.find((p) => p.id === puzzle)!.variants.find((x) => x.id === variant)!;
+    return explore(v.build(), { collectAll: true }).findings.map((f) => f.violation.kind);
+  };
+  it("check-then-act with atomics is a race condition, not a data race", () => {
+    const k = kinds("check-then-act", "atomic-steps");
+    expect(k).toContain("invariant");
+    expect(k).not.toContain("data-race");
+  });
+  it("a forgotten unlock leaks the mutex", () => {
+    expect(kinds("forgotten-unlock", "manual")).toContain("lock-leak");
+  });
+  it("the plain double-checked flag is a data race", () => {
+    expect(kinds("double-checked", "plain-flag")).toContain("data-race");
+  });
+  it("the unlocked producer loses a wake-up or races", () => {
+    const k = kinds("missed-wakeup", "unlocked-producer");
+    expect(k.includes("lost-wakeup") || k.includes("data-race") || k.includes("deadlock")).toBe(true);
+  });
+  it("every step of every variant has a displayable C++ line", () => {
+    for (const puzzle of RACE_PUZZLES) {
+      for (const v of puzzle.variants) {
+        const p = v.build();
+        p.threads.forEach((t, i) => expect(t.code.every((ins) => describeInstr(ins).length > 0), `${puzzle.id}/${v.id} thread ${i}`).toBe(true));
+      }
+    }
+  });
+});
