@@ -1,5 +1,9 @@
 // Static registry of Workshop problems for the app build. The Node loader (`lib/workshop/load.ts`) imports the
 // TypeScript modules by path, which a bundler cannot follow, so the app lists them here explicitly.
+import { clarify as elevatorClarify } from "./elevator-system/clarify";
+import { followups as elevatorFollowups } from "./elevator-system/followups";
+import { meta as elevatorMeta } from "./elevator-system/meta";
+import { rubric as elevatorRubric } from "./elevator-system/rubric";
 import { clarify as libraryClarify } from "./library-management/clarify";
 import { followups as libraryFollowups } from "./library-management/followups";
 import { meta as libraryMeta } from "./library-management/meta";
@@ -15,6 +19,7 @@ import { rubric as vendingRubric } from "./vending-machine/rubric";
 import type { PackageModules } from "@/lib/workshop/load";
 
 export const WORKSHOP_REGISTRY: Record<string, PackageModules> = {
+  "elevator-system": { meta: elevatorMeta, clarify: elevatorClarify, rubric: elevatorRubric, followups: elevatorFollowups },
   "library-management": { meta: libraryMeta, clarify: libraryClarify, rubric: libraryRubric, followups: libraryFollowups },
   "parking-lot": { meta: parkingMeta, clarify: parkingClarify, rubric: parkingRubric, followups: parkingFollowups },
   "vending-machine": { meta: vendingMeta, clarify: vendingClarify, rubric: vendingRubric, followups: vendingFollowups },
