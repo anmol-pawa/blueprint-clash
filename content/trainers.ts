@@ -115,7 +115,31 @@ export const PERRIN_WICK: TrainerProfile = {
   lose: "Perrin shuts the prop cupboard. Study the misses and rematch.",
 };
 
-export const TRAINERS: readonly TrainerProfile[] = [SABLE_QUILL, ROOK_FERRIS, DOVA_KILN, BRAM_CASK, NERYS_QUAY, TOBIN_REEF, ILSA_CUE, PERRIN_WICK];
+export const MARA_LATCH: TrainerProfile = {
+  id: "mara-latch",
+  name: "Mara Latch",
+  deckId: "concurrency-docks",
+  topics: ["L7.threads", "L7.mutex", "L7.condvar"],
+  cardCount: 6,
+  foeName: "MARA'S TALLY BOARD",
+  intro: "Mara Latch runs the quay: who may touch the cargo, how to lock it with RAII, and how a waiting thread wakes for the right reason.",
+  win: "Mara chalks a tick. Share less, lock with RAII, wait on a predicate: the quay stays safe.",
+  lose: "Mara wipes the tally board. Read the explanations, then rematch.",
+};
+
+export const ODO_BERTH: TrainerProfile = {
+  id: "odo-berth",
+  name: "Odo Berth",
+  deckId: "concurrency-docks",
+  topics: ["L7.atomics", "L7.deadlock", "L7.pool"],
+  cardCount: 6,
+  foeName: "ODO'S BERTH LEDGER",
+  intro: "Odo Berth keeps the berths: lock-free flags that are not enough, two ships waiting on each other, and a crew that must shut down cleanly.",
+  win: "Odo stamps the ledger. Atomic steps compose badly, lock in one order, drain the crew before you close the gate.",
+  lose: "Odo closes the ledger on your misses. Study them and come back on the next tide.",
+};
+
+export const TRAINERS: readonly TrainerProfile[] = [SABLE_QUILL, ROOK_FERRIS, DOVA_KILN, BRAM_CASK, NERYS_QUAY, TOBIN_REEF, ILSA_CUE, PERRIN_WICK, MARA_LATCH, ODO_BERTH];
 
 /** Duel flag stored in `lessonsDone` (no save-schema change). */
 export const duelFlag = (t: TrainerProfile): string => `duel:${t.id}`;

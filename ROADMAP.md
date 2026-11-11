@@ -154,7 +154,7 @@ Work top to bottom: take the **first unchecked box**, and split big boxes into r
     - [ ] C10d3. Docks gym: map/trainers/master wired to the Concurrency deck and the five exercises (follow the C7e pattern). Split below.
       - [x] C10d3a. Concurrency Docks tileset (`scripts/art/docks-tiles.mjs`), harbour scene rows and `/dev/sprites` scene, tests.
       - [x] C10d3b. Docks overworld map, warp from the Theatre east gate, sign, tileset wiring, tests.
-      - [ ] C10d3c. Two trainers (walkers, portraits, dialogue) and their duels on the Concurrency deck.
+      - [x] C10d3c. Two trainers (walkers, portraits, dialogue) and their duels on the Concurrency deck.
       - [ ] C10d3d. Docks hall interior, master fight (exercise choice from the five) and badge.
 - [ ] C11. **Senior Review v2:** all rules from GDD §5.3 step 5, with fixtures.
 - [ ] C12. **Workshop Row**, about 36 problems from CUR L8, **2 problems per box**, each with all storms, bad designs and an editorial. Split into C12a…C12r as you go.

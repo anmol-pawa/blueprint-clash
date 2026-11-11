@@ -60,6 +60,17 @@ const PERRIN = {
   palette: { ...base, 1: "#d09a78", 2: "#efc09c", 3: "#fbddc0", h: "#8a8a92", H: "#b9b9c2", j: "#dcdce4", c: "#b8861c", C: "#e0a92e", D: "#f7d36a", p: "#2a5a5a", P: "#3f8585" },
 };
 
+// Concurrency Docks trainers. Mara: hi-vis lime dock jacket, hair in a bun, charcoal trousers.
+// Odo: deep-blue fisherman knit, rope strap and pack, pencil behind the ear, russet hair.
+const MARA = {
+  id: "mara", name: "Mara Latch", kind: "trainer", skirt: false, pack: false, strap: false, bun: true, glasses: false, pencil: false, lapel: false,
+  palette: { ...base, 1: "#8a5a40", 2: "#bf8a66", 3: "#e6b58c", h: "#1c1a24", H: "#3a3650", j: "#5f5a80", c: "#6a8a14", C: "#a8d42c", D: "#e2f77a", p: "#2c3038", P: "#464c58" },
+};
+const ODO = {
+  id: "odo", name: "Odo Berth", kind: "trainer", skirt: false, pack: true, strap: true, bun: false, glasses: false, pencil: true, lapel: false,
+  palette: { ...base, 1: "#c89070", 2: "#ecb894", 3: "#fbd8bc", h: "#7a3414", H: "#b8561f", j: "#e0884a", c: "#1c3a6a", C: "#3a68a8", D: "#86b2e6", p: "#3e3a2e", P: "#5e5846" },
+};
+
 // Behavioural Theatre master: Director Voss, long plum frock coat with gold trim, swept-back grey hair, round glasses.
 const VOSS = {
   id: "voss", name: "Director Voss", kind: "trainer", skirt: true, pack: false, strap: false, bun: false, glasses: true, pencil: false, lapel: true,
@@ -242,12 +253,12 @@ function portraitSprite(o) {
   };
 }
 
-for (const o of [PLAYER, ADA, SABLE, ROOK, MARLOW, DOVA, BRAM, CORVO, NERYS, TOBIN, VALE, ILSA, PERRIN, VOSS]) {
+for (const o of [PLAYER, ADA, SABLE, ROOK, MARLOW, DOVA, BRAM, CORVO, NERYS, TOBIN, VALE, ILSA, PERRIN, VOSS, MARA, ODO]) {
   emit(`game/sprites/characters/${o.id}.ts`, {
     id: o.id, name: o.name, w: 24, h: 32, palette: o.palette, script: "characters",
     fps: { idle: 3, "walk-down": 8, "walk-up": 8, "walk-right": 8 },
     anims: walkerSprite(o),
-    comment: o.id === "voss" ? "Director Voss, Behavioural Theatre master: long plum frock coat, swept-back grey hair and round glasses." : o.id === "ilsa" ? "Ilsa Cue, Behavioural Theatre trainer: black stage-crew jacket, magenta scarf and a pencil behind the ear." : o.id === "perrin" ? "Perrin Wick, Behavioural Theatre trainer: mustard waistcoat, wire glasses, silver hair and a prop-tool pack." : o.id === "sable" ? "Sable Quill, SOLID Square trainer: moss-green long coat and a short dark bob." : o.id === "marlow" ? "Provost Marlow, SOLID Square master: burgundy robe, silver bun and round gold glasses." : o.id === "vale" ? "Harbourmaster Vale, Structural Bridges master: long navy coat, pinned silver-streaked braid." : o.id === "corvo" ? "Foreman Corvo, Creational Foundry master: forest-green coveralls, grey crop, square glasses and a pencil behind the ear." : o.id === "dova" ? "Dova Kiln, Creational Foundry trainer: rust-orange coverall and a hair bun." : o.id === "nerys" ? "Nerys Quay, Structural Bridges trainer: yellow oilskin coat, dark hair and a clipboard pencil." : o.id === "tobin" ? "Tobin Reef, Structural Bridges trainer: sea-green knit, round glasses and a rope-coil pack." : o.id === "bram" ? "Bram Cask, Creational Foundry trainer: slate-blue work jacket, a pack and cropped sandy hair." : o.id === "rook" ? "Rook Ferris, SOLID Square trainer: ochre vest, round glasses and a tool belt." : o.kind === "ada" ? "Ada Lintwell, overworld walker: plum cardigan, long skirt, round glasses and a silver bun." : "The player, overworld walker: teal jacket, a blueprint tube on the back and a tool belt.",
+    comment: o.id === "mara" ? "Mara Latch, Concurrency Docks trainer: hi-vis lime dock jacket, hair in a bun and charcoal trousers." : o.id === "odo" ? "Odo Berth, Concurrency Docks trainer: deep-blue fisherman knit, rope-strapped pack and a pencil behind the ear." : o.id === "voss" ? "Director Voss, Behavioural Theatre master: long plum frock coat, swept-back grey hair and round glasses." : o.id === "ilsa" ? "Ilsa Cue, Behavioural Theatre trainer: black stage-crew jacket, magenta scarf and a pencil behind the ear." : o.id === "perrin" ? "Perrin Wick, Behavioural Theatre trainer: mustard waistcoat, wire glasses, silver hair and a prop-tool pack." : o.id === "sable" ? "Sable Quill, SOLID Square trainer: moss-green long coat and a short dark bob." : o.id === "marlow" ? "Provost Marlow, SOLID Square master: burgundy robe, silver bun and round gold glasses." : o.id === "vale" ? "Harbourmaster Vale, Structural Bridges master: long navy coat, pinned silver-streaked braid." : o.id === "corvo" ? "Foreman Corvo, Creational Foundry master: forest-green coveralls, grey crop, square glasses and a pencil behind the ear." : o.id === "dova" ? "Dova Kiln, Creational Foundry trainer: rust-orange coverall and a hair bun." : o.id === "nerys" ? "Nerys Quay, Structural Bridges trainer: yellow oilskin coat, dark hair and a clipboard pencil." : o.id === "tobin" ? "Tobin Reef, Structural Bridges trainer: sea-green knit, round glasses and a rope-coil pack." : o.id === "bram" ? "Bram Cask, Creational Foundry trainer: slate-blue work jacket, a pack and cropped sandy hair." : o.id === "rook" ? "Rook Ferris, SOLID Square trainer: ochre vest, round glasses and a tool belt." : o.kind === "ada" ? "Ada Lintwell, overworld walker: plum cardigan, long skirt, round glasses and a silver bun." : "The player, overworld walker: teal jacket, a blueprint tube on the back and a tool belt.",
   });
   emit(`game/sprites/characters/${o.id}-portrait.ts`, {
     id: `${o.id}-portrait`, name: `${o.name} (portrait)`, w: 48, h: 48, palette: o.palette, script: "characters",

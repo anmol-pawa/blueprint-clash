@@ -233,7 +233,7 @@ export const THEATRE_HALL: MapDef = {
  * Concurrency Docks: a warehouse front with a padlocked cargo door, a quay of
  * crates and a crane, and two piers into the harbour. Water and the crates
  * on the piers are solid; the quay lip is walkable so both piers can be
- * reached. The cargo door is scenery until the Docks hall opens (C10d3d).
+ * reached. The cargo door is scenery until the Docks hall opens (C10d3d). Mara Latch and Odo Berth duel on the quay.
  * The west gate (two tiles) returns to the Behavioural Theatre.
  */
 export const DOCKS: MapDef = {
@@ -241,7 +241,10 @@ export const DOCKS: MapDef = {
   name: "Concurrency Docks",
   rows: DOCKS_ROWS,
   solid: "SEBWDcbkoTULMNIxyzw",
-  npcs: [],
+  npcs: [
+    { id: "mara", name: "Mara Latch", x: 5, y: 5, facing: "right", dialogue: "mara-intro" },
+    { id: "odo", name: "Odo Berth", x: 14, y: 5, facing: "left", dialogue: "odo-intro" },
+  ],
   warps: [5, 6].map((y) => ({ x: 0, y, to: "theatre", toX: 18, toY: y, facing: "left" as const })),
   signs: { "18,4": "sign-docks" },
 };

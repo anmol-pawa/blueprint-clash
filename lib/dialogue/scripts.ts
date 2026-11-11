@@ -258,6 +258,42 @@ export const SCRIPTS: Readonly<Record<string, DialogueScript>> = {
       bye: { speaker: "Director Voss", text: "When you have rehearsed the Theatre cards and the eleven pattern drills, take my trial from the Battle menu: Theatre master. Three phases, one badge." },
     },
   },
+  "mara-intro": {
+    id: "mara-intro",
+    start: "a",
+    nodes: {
+      a: { speaker: "Mara Latch", text: "Two cranes keep adding to the same tally of crates. Some nights the board is short by a few. Nobody dropped anything.", next: "q" },
+      q: {
+        speaker: "Mara Latch",
+        text: "What is the cleanest fix when two threads update one shared count?",
+        choices: [
+          { text: "Guard it with a mutex through an RAII lock, so it unlocks on every path.", next: "yes", set: ["mara-raii"] },
+          { text: "Hope the update is fast enough that the threads rarely collide.", next: "no" },
+        ],
+      },
+      yes: { speaker: "Mara Latch", text: "Yes. The lock covers the whole read-modify-write and the guard releases it even on an early return. The price is contention, so keep the critical section short. Sharing less beats locking more.", next: "bye" },
+      no: { speaker: "Mara Latch", text: "Rare is not never. A data race is undefined behaviour, and the bug will show on the busiest night. Protect the invariant, not the odds.", next: "bye" },
+      bye: { speaker: "Mara Latch", text: "Duel me from the Battle menu: Mara Latch duel. Six cards on threads, mutexes and condition variables." },
+    },
+  },
+  "odo-intro": {
+    id: "odo-intro",
+    start: "a",
+    nodes: {
+      a: { speaker: "Odo Berth", text: "Two ships, two berths. Each captain grabbed one berth and now waits for the other. Neither will ever move.", next: "q" },
+      q: {
+        speaker: "Odo Berth",
+        text: "How do you stop two threads from deadlocking on a pair of locks?",
+        choices: [
+          { text: "Always take the locks in one agreed order, or take both at once with std::scoped_lock.", next: "yes", set: ["odo-order"] },
+          { text: "Add a long sleep after the first lock so the other thread can finish.", next: "no" },
+        ],
+      },
+      yes: { speaker: "Odo Berth", text: "Right. A global order breaks the cycle, and scoped_lock does the ordering for you. The cost is that every caller must follow the rule. Fewer locks held at once is better still.", next: "bye" },
+      no: { speaker: "Odo Berth", text: "A sleep only moves the race. The cycle is still there under a different timing. Break the circular wait instead.", next: "bye" },
+      bye: { speaker: "Odo Berth", text: "Duel me from the Battle menu: Odo Berth duel. Six cards on atomics, deadlock and thread pools." },
+    },
+  },
   "board-solid": {
     id: "board-solid",
     start: "a",

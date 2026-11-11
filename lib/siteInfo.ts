@@ -40,6 +40,8 @@ export const PLAYABLE_MODES: readonly PlayableMode[] = [
   { href: "/battle?trainer=nerys-quay", title: "Nerys Quay duel", blurb: "Six cards on Adapter, Facade and Proxy." },
   { href: "/battle?trainer=tobin-reef", title: "Tobin Reef duel", blurb: "Six cards on Composite, Decorator, Bridge and Flyweight." },
   { href: "/battle?trainer=ilsa-cue", title: "Ilsa Cue duel", blurb: "Six cards on Strategy, Observer, Command and State." },
+  { href: "/battle?trainer=mara-latch", title: "Mara Latch duel", blurb: "Six cards on threads, mutexes and condition variables." },
+  { href: "/battle?trainer=odo-berth", title: "Odo Berth duel", blurb: "Six cards on atomics, deadlock and thread pools." },
   { href: "/battle?trainer=perrin-wick", title: "Perrin Wick duel", blurb: "Six cards on Template Method, Iterator, Chain of Responsibility and Mediator." },
   { href: "/review", title: "Daily Review", blurb: "Spaced cards: misses return soon, mastered cards drift away, overdue ones rust." },
   { href: "/party", title: "Party: design battles", blurb: "Match a Patternling to a design smell; super picks befriend it." },
