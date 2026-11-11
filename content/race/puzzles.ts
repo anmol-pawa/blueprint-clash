@@ -1,4 +1,4 @@
-import { counterAtomic, counterLocked, counterRacy, transferDeadlock, transferOrdered } from "@/lib/concurrency";
+import { claimSlot, counterAtomic, counterLocked, counterRacy, handshake, lazyInit, transferDeadlock, transferOrdered, twoVariableInvariant } from "@/lib/concurrency";
 import type { Program } from "@/lib/concurrency";
 
 export interface RaceVariant {
@@ -39,6 +39,47 @@ export const RACE_PUZZLES: RacePuzzle[] = [
     variants: [
       { id: "abba", label: "Lock in argument order", note: "Each thread locks its source first: a cycle is possible.", build: transferDeadlock, correct: false },
       { id: "ordered", label: "Always lock A before B", note: "A fixed global order removes the cycle. In C++17 std::scoped_lock(a, b) does this for you.", build: transferOrdered, correct: true },
+    ],
+  },
+  {
+    id: "lazy-init",
+    title: "Check, then act",
+    brief: "Two threads call getResource(). Each checks a flag, and if it is unset creates the resource and sets it. Creation is expensive and must happen exactly once.",
+    goal: "Find the schedule in which both threads see the flag unset. The check and the action are separate steps, so nothing stops this.",
+    variants: [
+      { id: "racy", label: "if (!inited) create()", note: "The gap between the check and the set lets both threads in.", build: () => lazyInit(false), correct: false },
+      { id: "mutex", label: "Hold a mutex over check and act", note: "Correct. In real C++ prefer std::call_once or a function-local static (thread-safe since C++11); they say the intent and cannot be misused.", build: () => lazyInit(true), correct: true },
+    ],
+  },
+  {
+    id: "two-variables",
+    title: "An invariant across two variables",
+    brief: "A mover shifts 10 from account a to account b (total 100). An auditor reads both. Each balance is std::atomic<int>.",
+    goal: "Make the auditor see a total other than 100, although every single access is atomic.",
+    variants: [
+      { id: "atomics", label: "Two atomics", note: "Each access is safe, the pair is not. Atomics protect one variable, not a relationship between variables.", build: () => twoVariableInvariant("atomics"), correct: false },
+      { id: "mutex", label: "One mutex guards both", note: "The invariant lives under one lock, so the auditor never sees the middle. Cost: readers now contend with writers.", build: () => twoVariableInvariant("mutex"), correct: true },
+    ],
+  },
+  {
+    id: "claim-slot",
+    title: "Claiming a slot",
+    brief: "Two threads try to become the owner of a free slot. Only one may win. The owner field is atomic.",
+    goal: "Get both threads to believe they won, even though load and store are each atomic.",
+    variants: [
+      { id: "check-then-set", label: "load, then store", note: "Two atomic operations are not one atomic operation: both can load 0.", build: () => claimSlot("check-then-set"), correct: false },
+      { id: "cas", label: "compare_exchange_strong(0, id)", note: "Check and set are one indivisible step; exactly one thread sees it succeed. Beware ABA when the value can return to a previous state.", build: () => claimSlot("cas"), correct: true },
+    ],
+  },
+  {
+    id: "wait-handshake",
+    title: "Waiting for a signal",
+    brief: "A consumer waits on a condition variable until a producer sets ready. Spurious wake-ups are allowed by the standard.",
+    goal: "Break each version: publish without the lock (lost wake-up), wake spuriously past an if, and then see why while (!ready) is the only safe form.",
+    variants: [
+      { id: "unlocked", label: "Producer sets ready without the mutex", note: "The consumer can check, then the producer sets and notifies before the consumer sleeps: the notify is lost for good.", build: () => handshake("unlocked-producer"), correct: false },
+      { id: "if", label: "if (!ready) cv.wait(lk)", note: "A spurious wake-up passes the if with ready still false.", build: () => handshake("if-wait"), correct: false },
+      { id: "while", label: "while (!ready) cv.wait(lk)", note: "Re-check after every wake-up; or use the predicate overload cv.wait(lk, pred).", build: () => handshake("while-wait"), correct: true },
     ],
   },
 ];

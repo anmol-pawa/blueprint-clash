@@ -707,3 +707,10 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Verification: `lint` (0 errors, 8 pre-existing warnings), `typecheck`, `npm test`, `build`, `build:pages` pass. Playwright on the Pages export, desktop 1280x900 and iPhone 14: `/race/lost-update/` viewed, readable, no console errors, no horizontal overflow; mutex variant shows "Proved". `content:verify` not rerun (no exercise change). CI/Pages: see below.
 - Known gaps: the data-race detector fires before the lost-update value shows (explained in the goal text); no "pick the fix" scoring or XP yet; no ABA or condvar puzzles (C10).
 - Next: C10 (Concurrency Docks: lessons, 12 puzzles, 5 C++ exercises; split first).
+
+## 2026-11-11 - C10a: four more Race Hunter puzzles (6 of 12)
+- New programs in `lib/concurrency/samples.ts` (`lazyInit`, `twoVariableInvariant`, `claimSlot`) and four puzzles in `content/race/puzzles.ts`: check-then-act (with `call_once` note), invariant across two atomics vs one mutex, load-then-store vs `compare_exchange_strong` slot claim (ABA caveat), and the condvar handshake (unlocked producer, `if` wait, `while` wait). ROADMAP: C10 split into C10a-C10d.
+- Tests: existing `tests/raceHunter.test.ts` loops over every puzzle variant; the explorer finds a bug in each buggy variant and proves each correct one (21 tests, all pass).
+- Verification: `lint` (0 errors, 8 pre-existing warnings), `typecheck`, `npm test` (618 pass), `build`, `build:pages` pass. Playwright on the Pages export, desktop and iPhone 14: `/race/claim-slot/` and `/race/wait-handshake/` viewed, readable, no console errors, no horizontal overflow. `content:verify` not rerun (no exercise change). CI/Pages not confirmed (no `gh`; checked via MCP below if available).
+- Known gaps: raw `goto N` lines show for un-authored jumps; no puzzle selection/score/XP yet.
+- Next: C10b (six more puzzles).

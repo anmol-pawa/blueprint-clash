@@ -93,3 +93,81 @@ export function handshake(variant: "unlocked-producer" | "if-wait" | "while-wait
     detectRaces: variant !== "unlocked-producer",
   };
 }
+
+/** Check-then-act: two threads lazily initialise a resource; it must be created exactly once. */
+export function lazyInit(locked: boolean): Program {
+  const code: Instr[] = [
+    ...(locked ? ([{ op: "lock", m: "m" }] as Instr[]) : []),
+    { op: "load", reg: "r", var: "inited", cpp: "if (!inited) {" },
+    { op: "jmpIf", a: { reg: "r" }, cmp: "ne", b: 0, to: locked ? 5 : 4 },
+    { op: "atomicAdd", var: "created", delta: 1, cpp: "  create();  // expensive, must run once" },
+    { op: "store", var: "inited", value: 1, cpp: "  inited = true; }" },
+    ...(locked ? ([{ op: "unlock", m: "m" }] as Instr[]) : []),
+  ];
+  return {
+    id: locked ? "lazy-init-locked" : "lazy-init-racy",
+    shared: { inited: 0, created: 0 },
+    threads: [
+      { name: "T1", code },
+      { name: "T2", code },
+    ],
+    detectRaces: locked,
+    final: (v) => (v.shared.created === 1 ? null : `create() ran ${v.shared.created} times, expected 1`),
+  };
+}
+
+/** Moving 10 between two accounts: the total must never be observed changed. */
+export function twoVariableInvariant(variant: "atomics" | "mutex"): Program {
+  const mover: Instr[] =
+    variant === "mutex"
+      ? [
+          { op: "lock", m: "m" },
+          { op: "atomicAdd", var: "a", delta: -10, cpp: "a -= 10;" },
+          { op: "atomicAdd", var: "b", delta: 10, cpp: "b += 10;" },
+          { op: "unlock", m: "m" },
+        ]
+      : [
+          { op: "atomicAdd", var: "a", delta: -10, cpp: "a -= 10;  // std::atomic" },
+          { op: "atomicAdd", var: "b", delta: 10, cpp: "b += 10;  // std::atomic" },
+        ];
+  const auditor: Instr[] = [
+    ...(variant === "mutex" ? ([{ op: "lock", m: "m" }] as Instr[]) : []),
+    { op: "load", reg: "x", var: "a", cpp: "int x = a;" },
+    { op: "load", reg: "y", var: "b", cpp: "int y = b;" },
+    { op: "set", reg: "t", value: { reg: "x" } },
+    ...(variant === "mutex" ? ([{ op: "unlock", m: "m" }] as Instr[]) : []),
+  ];
+  return {
+    id: `total-${variant}`,
+    shared: { a: 100, b: 0 },
+    threads: [
+      { name: "Mover", code: mover },
+      { name: "Auditor", code: auditor, regs: { x: 0, y: 0, t: 0 } },
+    ],
+    detectRaces: false,
+    final: (v) => (v.regs[1].x + v.regs[1].y === 100 ? null : `auditor saw a=${v.regs[1].x}, b=${v.regs[1].y}: total ${v.regs[1].x + v.regs[1].y}, expected 100`),
+  };
+}
+
+/** Claiming a slot: read-then-write races, a CAS retry loop does not. */
+export function claimSlot(variant: "check-then-set" | "cas"): Program {
+  const code: Instr[] =
+    variant === "cas"
+      ? [{ op: "cas", var: "owner", expected: 0, desired: { reg: "id" }, reg: "won", cpp: "bool won = owner.compare_exchange_strong(zero, id);" },
+         { op: "jmpIf", a: { reg: "won" }, cmp: "eq", b: 0, to: 3 },
+         { op: "atomicAdd", var: "winners", delta: 1, cpp: "if (won) ++winners;" }]
+      : [{ op: "load", reg: "o", var: "owner", atomic: true, cpp: "if (owner.load() == 0) {" },
+         { op: "jmpIf", a: { reg: "o" }, cmp: "ne", b: 0, to: 4 },
+         { op: "store", var: "owner", value: { reg: "id" }, atomic: true, cpp: "  owner.store(id);" },
+         { op: "atomicAdd", var: "winners", delta: 1, cpp: "  ++winners; }" }];
+  return {
+    id: `claim-${variant}`,
+    shared: { owner: 0, winners: 0 },
+    threads: [
+      { name: "T1", code, regs: { id: 1, won: 0, o: 0, w: 0 } },
+      { name: "T2", code, regs: { id: 2, won: 0, o: 0, w: 0 } },
+    ],
+    detectRaces: false,
+    final: (v) => (v.shared.winners === 1 ? null : `${v.shared.winners} threads think they own the slot, expected 1`),
+  };
+}
