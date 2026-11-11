@@ -240,6 +240,42 @@ export const SCRIPTS: Readonly<Record<string, DialogueScript>> = {
       bye: { speaker: "Perrin Wick", text: "Duel me from the Battle menu: Perrin Wick duel. Template Method, Iterator, Chain of Responsibility and Mediator." },
     },
   },
+  "wren-intro": {
+    id: "wren-intro",
+    start: "a",
+    nodes: {
+      a: { speaker: "Wren Halyard", text: "Three crane crews add to one tally board. Last week the board said 97 when we moved 100 crates.", next: "q" },
+      q: {
+        speaker: "Wren Halyard",
+        text: "What do you do about the lost counts?",
+        choices: [
+          { text: "Guard the count with a mutex held through a RAII guard, so every update is one critical section.", next: "yes", set: ["wren-mutex"] },
+          { text: "Mark the counter volatile so every crew sees the latest value.", next: "no" },
+        ],
+      },
+      yes: { speaker: "Wren Halyard", text: "Yes. A lock makes read-modify-write atomic as a unit, and the guard releases it on every path. A lone atomic counter is enough for one number; the moment two fields must agree, take a lock.", next: "bye" },
+      no: { speaker: "Wren Halyard", text: "volatile is not synchronisation in C++: two crews can still read the same value and both write back. You need a mutex or an atomic read-modify-write.", next: "bye" },
+      bye: { speaker: "Wren Halyard", text: "Duel me from the Battle menu: Wren Halyard duel. Six cards on threads, mutexes and atomics." },
+    },
+  },
+  "osk-intro": {
+    id: "osk-intro",
+    start: "a",
+    nodes: {
+      a: { speaker: "Osk Tiller", text: "Two cranes each need the red lock and the blue lock to move a container. Crane one takes red first; crane two takes blue first.", next: "q" },
+      q: {
+        speaker: "Osk Tiller",
+        text: "How do you stop them freezing each other?",
+        choices: [
+          { text: "Make every crane take the locks in one agreed order, or take both together with std::scoped_lock.", next: "yes", set: ["osk-order"] },
+          { text: "Add a long sleep after the first lock so the other crane can finish.", next: "no" },
+        ],
+      },
+      yes: { speaker: "Osk Tiller", text: "Right. Breaking the circular wait is the cheap fix. The cost is that every call site must follow the rule, so wrap it in one helper.", next: "bye" },
+      no: { speaker: "Osk Tiller", text: "A sleep only moves the timing; the deadlock is still there under load. Remove the cycle instead of hoping to dodge it.", next: "bye" },
+      bye: { speaker: "Osk Tiller", text: "Duel me from the Battle menu: Osk Tiller duel. Condition variables, deadlock and thread pools." },
+    },
+  },
   "voss-intro": {
     id: "voss-intro",
     start: "a",

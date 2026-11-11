@@ -115,7 +115,31 @@ export const PERRIN_WICK: TrainerProfile = {
   lose: "Perrin shuts the prop cupboard. Study the misses and rematch.",
 };
 
-export const TRAINERS: readonly TrainerProfile[] = [SABLE_QUILL, ROOK_FERRIS, DOVA_KILN, BRAM_CASK, NERYS_QUAY, TOBIN_REEF, ILSA_CUE, PERRIN_WICK];
+export const WREN_HALYARD: TrainerProfile = {
+  id: "wren-halyard",
+  name: "Wren Halyard",
+  deckId: "concurrency-docks",
+  topics: ["L7.threads", "L7.mutex", "L7.atomics"],
+  cardCount: 6,
+  foeName: "WREN'S TALLY BOARD",
+  intro: "Wren Halyard counts crates on a tally board that three crane crews all write to, and wants to know what keeps the count honest.",
+  win: "Wren chalks a tick. Share less, guard the invariant with RAII, and know when one atomic is not enough: well counted.",
+  lose: "Wren wipes the board clean. Read the explanations, then count again.",
+};
+
+export const OSK_TILLER: TrainerProfile = {
+  id: "osk-tiller",
+  name: "Osk Tiller",
+  deckId: "concurrency-docks",
+  topics: ["L7.condvar", "L7.deadlock", "L7.pool"],
+  cardCount: 6,
+  foeName: "OSK'S LOADING BAY",
+  intro: "Osk Tiller runs the loading bay: workers wait for cargo, two cranes want the same two locks, and the shift must end without dropping a crate.",
+  win: "Osk taps the bell. Wait on a predicate, lock in one order, drain the queue before you close the bay: clean shift.",
+  lose: "Osk rings the bell for a rematch. Study the misses and come back.",
+};
+
+export const TRAINERS: readonly TrainerProfile[] = [SABLE_QUILL, ROOK_FERRIS, DOVA_KILN, BRAM_CASK, NERYS_QUAY, TOBIN_REEF, ILSA_CUE, PERRIN_WICK, WREN_HALYARD, OSK_TILLER];
 
 /** Duel flag stored in `lessonsDone` (no save-schema change). */
 export const duelFlag = (t: TrainerProfile): string => `duel:${t.id}`;
