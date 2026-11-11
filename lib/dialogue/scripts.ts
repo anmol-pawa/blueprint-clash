@@ -240,6 +240,42 @@ export const SCRIPTS: Readonly<Record<string, DialogueScript>> = {
       bye: { speaker: "Perrin Wick", text: "Duel me from the Battle menu: Perrin Wick duel. Template Method, Iterator, Chain of Responsibility and Mediator." },
     },
   },
+  "wren-intro": {
+    id: "wren-intro",
+    start: "a",
+    nodes: {
+      a: { speaker: "Wren Latch", text: "Two crews bump the same tally counter. Sometimes the total comes out short, and never the same way twice.", next: "q" },
+      q: {
+        speaker: "Wren Latch",
+        text: "What is the cleanest fix when the counter must stay shared?",
+        choices: [
+          { text: "Guard it with a mutex through a RAII lock, so every path releases it.", next: "yes", set: ["wren-mutex"] },
+          { text: "Add a short sleep before each update so the crews rarely collide.", next: "no" },
+        ],
+      },
+      yes: { speaker: "Wren Latch", text: "Right. A sleep only hides the race. The lock costs some contention; if the sharing can go away (a counter per crew, summed at the end), that is cheaper still.", next: "bye" },
+      no: { speaker: "Wren Latch", text: "A race is not a timing problem you can tune away; it just fails less often and at the worst moment. Make the update one protected step.", next: "bye" },
+      bye: { speaker: "Wren Latch", text: "Duel me from the Battle menu: Wren Latch duel. Six cards on threads, mutexes and deadlock." },
+    },
+  },
+  "dax-intro": {
+    id: "dax-intro",
+    start: "a",
+    nodes: {
+      a: { speaker: "Dax Tackle", text: "My workers sleep until cargo arrives. Sometimes one wakes with nothing to carry, and once a crate was lost at closing time.", next: "q" },
+      q: {
+        speaker: "Dax Tackle",
+        text: "How should a worker wait for cargo on a condition variable?",
+        choices: [
+          { text: "Wait inside a loop that re-checks the queue, because a wake-up does not promise there is work.", next: "yes", set: ["dax-predicate"] },
+          { text: "Wait once under an if, since a notify means there is something to do.", next: "no" },
+        ],
+      },
+      yes: { speaker: "Dax Tackle", text: "Yes. Spurious wake-ups and a rival worker taking the item both happen. The predicate lives in the loop, under the lock.", next: "bye" },
+      no: { speaker: "Dax Tackle", text: "Then a spurious wake-up, or another worker winning the item, sends you on with an empty queue. Re-check in a while loop.", next: "bye" },
+      bye: { speaker: "Dax Tackle", text: "Duel me from the Battle menu: Dax Tackle duel. Condition variables, atomics and thread pools." },
+    },
+  },
   "voss-intro": {
     id: "voss-intro",
     start: "a",

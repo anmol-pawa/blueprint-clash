@@ -115,7 +115,31 @@ export const PERRIN_WICK: TrainerProfile = {
   lose: "Perrin shuts the prop cupboard. Study the misses and rematch.",
 };
 
-export const TRAINERS: readonly TrainerProfile[] = [SABLE_QUILL, ROOK_FERRIS, DOVA_KILN, BRAM_CASK, NERYS_QUAY, TOBIN_REEF, ILSA_CUE, PERRIN_WICK];
+export const WREN_LATCH: TrainerProfile = {
+  id: "wren-latch",
+  name: "Wren Latch",
+  deckId: "concurrency-docks",
+  topics: ["L7.threads", "L7.mutex", "L7.deadlock"],
+  cardCount: 6,
+  foeName: "WREN'S LOCKER",
+  intro: "Wren Latch guards the cargo locker: two crews, one counter, and a rule about which key you take first.",
+  win: "Wren clicks the padlock shut. Share less, lock with RAII, take locks in one order: safe cargo.",
+  lose: "Wren shakes the padlock. Read the explanations, then come back to the quay.",
+};
+
+export const DAX_TACKLE: TrainerProfile = {
+  id: "dax-tackle",
+  name: "Dax Tackle",
+  deckId: "concurrency-docks",
+  topics: ["L7.condvar", "L7.atomics", "L7.pool"],
+  cardCount: 6,
+  foeName: "DAX'S TACKLE BOX",
+  intro: "Dax Tackle runs the dock crew: workers sleep until there is cargo, one flag says 'ready', and shutdown must not drop a crate.",
+  win: "Dax whistles the crew home. Wait on a predicate, make the check and the act one step, drain before you stop: well run.",
+  lose: "Dax drops the tackle box. Study the misses and rematch.",
+};
+
+export const TRAINERS: readonly TrainerProfile[] = [SABLE_QUILL, ROOK_FERRIS, DOVA_KILN, BRAM_CASK, NERYS_QUAY, TOBIN_REEF, ILSA_CUE, PERRIN_WICK, WREN_LATCH, DAX_TACKLE];
 
 /** Duel flag stored in `lessonsDone` (no save-schema change). */
 export const duelFlag = (t: TrainerProfile): string => `duel:${t.id}`;
