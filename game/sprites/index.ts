@@ -8,6 +8,7 @@ import { PROVOST_MARLOW } from "./creatures/provost-marlow";
 import { FOREMAN_CORVO } from "./creatures/foreman-corvo";
 import { HARBOURMASTER_VALE } from "./creatures/harbourmaster-vale";
 import { DIRECTOR_VOSS } from "./creatures/director-voss";
+import { DOCKMASTER_HALYARD } from "./creatures/dockmaster-halyard";
 import { ROUGH_DRAFT } from "./creatures/rough-draft";
 import { FORGEBOT } from "./creatures/forgebot";
 import { BEAVERBUILD } from "./creatures/beaverbuild";
@@ -32,4 +33,4 @@ import { MEMENTORTOISE } from "./creatures/mementortoise";
 import { VISITORB } from "./creatures/visitorb";
 
 /** Every creature sprite, in review order (shown on /dev/sprites). */
-export const SPRITES: readonly SpriteDef[] = [DRAFTLING, DRAFTLING_BACK, ARCHITECT, ARCHITECT_BACK, ROUGH_DRAFT, FORGEBOT, BEAVERBUILD, SOLO, CLONEWISP, AXOLINK, BRIDGEBACK, FRACTREE, SHELLCRAB, FACADEON, FLYTILE, PROXIFOX, CHAMELSTRAT, OWLSERVER, COMMANDANT, SHAPESHIFT, TEMPLAR, INCHWORM, ANTCHAIN, MEDIOWL, MEMENTORTOISE, VISITORB, WARDEN_VANE, PROVOST_MARLOW, FOREMAN_CORVO, HARBOURMASTER_VALE, DIRECTOR_VOSS];
+export const SPRITES: readonly SpriteDef[] = [DRAFTLING, DRAFTLING_BACK, ARCHITECT, ARCHITECT_BACK, ROUGH_DRAFT, FORGEBOT, BEAVERBUILD, SOLO, CLONEWISP, AXOLINK, BRIDGEBACK, FRACTREE, SHELLCRAB, FACADEON, FLYTILE, PROXIFOX, CHAMELSTRAT, OWLSERVER, COMMANDANT, SHAPESHIFT, TEMPLAR, INCHWORM, ANTCHAIN, MEDIOWL, MEMENTORTOISE, VISITORB, WARDEN_VANE, PROVOST_MARLOW, FOREMAN_CORVO, HARBOURMASTER_VALE, DIRECTOR_VOSS, DOCKMASTER_HALYARD];

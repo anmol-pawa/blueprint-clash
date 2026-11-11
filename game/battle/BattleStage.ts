@@ -49,7 +49,7 @@ export class BattleStage {
     this.host.appendChild(this.app.canvas);
     this.app.canvas.style.imageRendering = "pixelated";
     this.app.stage.addChild(this.root);
-    this.root.addChild(this.scene === "solid-square" ? this.solidSquareBackdrop() : this.scene === "foundry" ? this.foundryBackdrop() : this.scene === "bridges" ? this.bridgesBackdrop() : this.scene === "theatre" ? this.theatreBackdrop() : this.backdrop());
+    this.root.addChild(this.scene === "solid-square" ? this.solidSquareBackdrop() : this.scene === "foundry" ? this.foundryBackdrop() : this.scene === "bridges" ? this.bridgesBackdrop() : this.scene === "docks" ? this.docksBackdrop() : this.scene === "theatre" ? this.theatreBackdrop() : this.backdrop());
     this.foe = new PixelSprite(this.foeDef, 1);
     this.player = new PixelSprite(this.playerDef, 1);
     this.foe.position.set(FOE_HOME.x + 140, FOE_HOME.y);
@@ -296,6 +296,50 @@ export class BattleStage {
       g.ellipse(x, y, rx, ry).fill(0xd9a52c);
       g.ellipse(x, y, rx - 2, ry - 1).fill(0xe9d9a2);
       g.ellipse(x, y - 1, rx - 6, ry - 3).fill(0xfff1c2);
+    };
+    pad(FOE_HOME.x, FOE_HOME.y - 2, 40, 9);
+    pad(PLAYER_HOME.x, PLAYER_HOME.y - 2, 50, 11);
+    c.addChild(g);
+    return c;
+  }
+
+  /** Concurrency Docks: a harbour at dusk seen from the quay: sky, cranes, moored boats, plank quay, mooring-ring pads. */
+  private docksBackdrop(): Container {
+    const c = new Container();
+    const g = new Graphics();
+    // dusk sky in bands, a low sun, and a far shoreline of warehouses
+    for (let i = 0; i < 6; i++) g.rect(0, i * 14, STAGE_W, 14).fill([0x2b3a6a, 0x4a5a8c, 0x7a78a8, 0xc08a9a, 0xf0a878, 0xffd08a][i]);
+    g.circle(60, 80, 14).fill(0xfff0b8).circle(60, 80, 10).fill(0xffffe0);
+    for (const [x, w, h] of [[0, 34, 22], [34, 20, 30], [54, 40, 18], [150, 30, 26], [180, 44, 20], [224, 32, 28]] as const) g.rect(x, 84 - h, w, h).fill(0x2a2f4a);
+    for (const [x, w] of [[8, 6], [40, 6], [160, 6], [196, 6]] as const) g.rect(x, 60, w, 4).fill(0xffd35a);
+    // harbour cranes: lattice towers with a jib and a hanging load
+    for (const x of [104, 214]) {
+      g.rect(x, 30, 4, 56).fill(0x14161f).rect(x - 14, 30, 36, 3).fill(0x14161f).rect(x + 18, 33, 1, 16).fill(0x14161f).rect(x + 14, 49, 9, 6).fill(0xb0502a);
+      for (let y = 36; y < 84; y += 8) g.rect(x, y, 4, 1).fill(0x5a6280);
+    }
+    // water: layered teal bands with glints, boats riding on it
+    g.rect(0, 84, STAGE_W, 14).fill(0x1f5a78);
+    for (let i = 0; i < 14; i += 2) g.rect(0, 84 + i, STAGE_W, 1).fill(i % 4 ? 0x2a7a96 : 0x174a66);
+    for (const x of [20, 70, 120, 170, 228]) g.rect(x, 90, 8, 1).fill(0xffd8a0);
+    for (const x of [30, 150]) {
+      g.rect(x, 80, 32, 5).fill(0x7a3a24).rect(x + 4, 85, 24, 2).fill(0x4a2216).rect(x + 14, 62, 2, 18).fill(0x3a2a20).poly([x + 16, 64, x + 28, 78, x + 16, 78]).fill(0xe8dcc0);
+    }
+    // quay: plank floor in perspective, a stone edge with bollards and a rope coil
+    g.rect(0, 98, STAGE_W, STAGE_H - 98).fill(0x9a7448);
+    for (let row = 0, y = 98; y < STAGE_H; row++, y += 8) {
+      g.rect(0, y, STAGE_W, 1).fill(row > 3 ? 0x3e2a18 : 0x6a4a2a);
+      for (let x = (row % 2) * 16; x < STAGE_W; x += 32) g.rect(x, y, 1, 8).fill(row > 3 ? 0x3e2a18 : 0x6a4a2a);
+    }
+    g.rect(0, 96, STAGE_W, 3).fill(0x8a8f9c).rect(0, 99, STAGE_W, 1).fill(0x14161f);
+    for (const x of [18, 110, 240]) g.rect(x, 90, 5, 8).fill(0x2a2d36).rect(x - 1, 89, 7, 2).fill(0x5a6070);
+    for (const [x, y] of [[6, 106], [238, 124]] as const) g.rect(x, y, 14, 10).fill(0xa0602c).rect(x, y, 14, 2).fill(0xd09050).rect(x + 6, y, 2, 10).fill(0x6a3c18);
+    // platforms: pontoon discs with a rope ring
+    const pad = (x: number, y: number, rx: number, ry: number) => {
+      g.ellipse(x, y + 3, rx, ry).fill(0x1a2a3a);
+      g.ellipse(x, y, rx, ry).fill(0x6a4a2a);
+      g.ellipse(x, y, rx - 2, ry - 1).fill(0xb08a54);
+      g.ellipse(x, y - 1, rx - 6, ry - 3).fill(0xd0aa72);
+      g.ellipse(x, y, rx - 1, ry - 0.5).stroke({ width: 1, color: 0xe8dcc0, alpha: 0.7 });
     };
     pad(FOE_HOME.x, FOE_HOME.y - 2, 40, 9);
     pad(PLAYER_HOME.x, PLAYER_HOME.y - 2, 50, 11);

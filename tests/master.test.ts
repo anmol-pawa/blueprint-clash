@@ -18,6 +18,9 @@ import { STRUCTURAL_BRIDGES_MASTER_SMELLS } from "@/content/masters/structural-b
 import { BEHAVIOURAL_THEATRE_DECK } from "@/content/cards/behavioural-theatre";
 import { BEHAVIOURAL_THEATRE_MASTER, behaviouralTheatreMasterDeck } from "@/content/masters/behavioural-theatre";
 import { BEHAVIOURAL_THEATRE_MASTER_SMELLS } from "@/content/masters/behavioural-theatre-smells";
+import { CONCURRENCY_DOCKS_DECK } from "@/content/cards/concurrency-docks";
+import { CONCURRENCY_DOCKS_MASTER, concurrencyDocksMasterDeck } from "@/content/masters/concurrency-docks";
+import { CONCURRENCY_DOCKS_MASTER_SMELLS } from "@/content/masters/concurrency-docks-smells";
 import { loadExercise } from "@/lib/exercises/load";
 
 const mcq = (n: number, prefix = "c"): Card[] =>
@@ -316,6 +319,45 @@ describe("Director Voss (Behavioural Theatre master)", () => {
 
   it("a full clean run earns the badge", () => {
     let s = startMaster(behaviouralTheatreMasterDeck(), 3);
+    s = clear(s);
+    expect(s.phase).toBe("workshop");
+    s = submitWorkshop(s, { passed: 5, total: 5 }).state;
+    s = clear(s);
+    expect(s.phase).toBe("won");
+    expect(earnsBadge(s)).toBe(true);
+  });
+});
+
+describe("Dockmaster Halyard (Concurrency Docks master)", () => {
+  it("has well-formed, all-smell dedicated cards that do not repeat the deck", () => {
+    expect(validateCards(CONCURRENCY_DOCKS_MASTER_SMELLS)).toEqual([]);
+    expect(CONCURRENCY_DOCKS_MASTER_SMELLS.every((c) => c.kind === "smell")).toBe(true);
+    const ids = new Set(CONCURRENCY_DOCKS_DECK.map((c) => c.id));
+    expect(CONCURRENCY_DOCKS_MASTER_SMELLS.some((c) => ids.has(c.id))).toBe(false);
+    expect(new Set(CONCURRENCY_DOCKS_MASTER_SMELLS.map((c) => c.topic)).size).toBeGreaterThanOrEqual(5);
+  });
+
+  it("has enough cards for phase 1 and all five builds exist and are registered", async () => {
+    const d = concurrencyDocksMasterDeck();
+    expect(d.cards.length).toBeGreaterThanOrEqual(15);
+    expect(validateCards(d.cards)).toEqual([]);
+    expect(new Set(d.cards.map((c) => c.id)).size).toBe(d.cards.length);
+    expect(d.cards.some((c) => c.kind === "smell")).toBe(false);
+    expect(CONCURRENCY_DOCKS_MASTER.exercises).toHaveLength(5);
+    for (const e of CONCURRENCY_DOCKS_MASTER.exercises) {
+      expect(EXERCISE_META[e], e).toBeTruthy();
+      expect(await loadExercise(e), e).toBeTruthy();
+    }
+  });
+
+  it("is selected by ?master= and uses Halyard's sprite and the Docks badge", () => {
+    expect(masterIdFromSearch("?master=concurrency-docks")).toBe("concurrency-docks");
+    expect(MASTERS["concurrency-docks"].visual).toBe("dockmaster-halyard");
+    expect(MASTERS["concurrency-docks"].profile.badge).toBe("concurrency-docks");
+  });
+
+  it("a full clean run earns the badge", () => {
+    let s = startMaster(concurrencyDocksMasterDeck(), 3);
     s = clear(s);
     expect(s.phase).toBe("workshop");
     s = submitWorkshop(s, { passed: 5, total: 5 }).state;

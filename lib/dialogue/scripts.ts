@@ -309,7 +309,7 @@ export const SCRIPTS: Readonly<Record<string, DialogueScript>> = {
       },
       no: { speaker: "Dockmaster Halyard", text: "volatile is not synchronisation in C++. The check and the set are still two steps, so both threads can still win. Make them one step.", next: "bye" },
       yes: { speaker: "Dockmaster Halyard", text: "Good. Name the trade-off as well: a mutex is simple but taxes every later read; call_once or an atomic flag with acquire/release makes the fast path cheap and is harder to get right.", next: "bye" },
-      bye: { speaker: "Dockmaster Halyard", text: "My formal trial is not ready yet. Rehearse on the Docks cards, Race Hunter and exercises, then return." },
+      bye: { speaker: "Dockmaster Halyard", text: "When you have rehearsed the Docks cards, Race Hunter and the five drills, take my trial from the Battle menu: Docks master. Three phases, one badge." },
     },
   },
   "board-solid": {
