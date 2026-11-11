@@ -48,7 +48,12 @@ export const SCRIPTS: Readonly<Record<string, DialogueScript>> = {
   "sign-theatre": {
     id: "sign-theatre",
     start: "a",
-    nodes: { a: { text: "BEHAVIOURAL THEATRE. Objects are cast, cues are passed, scripts are swapped mid-act. Strategy, observer, command, state, and the rest of the cast: who does what, and who tells whom. The Structural Bridges are back west." } },
+    nodes: { a: { text: "BEHAVIOURAL THEATRE. Objects are cast, cues are passed, scripts are swapped mid-act. Strategy, observer, command, state, and the rest of the cast: who does what, and who tells whom. The Structural Bridges are back west; the Concurrency Docks are through the east gate." } },
+  },
+  "sign-docks": {
+    id: "sign-docks",
+    start: "a",
+    nodes: { a: { text: "CONCURRENCY DOCKS. Many hands, one quay. Lock the crate, keep the order, wait on the right signal, and never trust a flag nobody published. Mutexes, condition variables, atomics, deadlocks and thread pools. The Behavioural Theatre is back west." } },
   },
   "sign-foundry": {
     id: "sign-foundry",

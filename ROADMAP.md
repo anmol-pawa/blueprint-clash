@@ -153,7 +153,7 @@ Work top to bottom: take the **first unchecked box**, and split big boxes into r
     - [x] C10d2. Three more: bounded blocking queue with a spy condition variable (`while` predicate loop), thread-safe lazy init / once, cooperative task queue with clean shutdown.
     - [ ] C10d3. Docks gym: map/trainers/master wired to the Concurrency deck and the five exercises (follow the C7e pattern). Split below.
       - [x] C10d3a. Concurrency Docks tileset (`scripts/art/docks-tiles.mjs`), harbour scene rows and `/dev/sprites` scene, tests.
-      - [ ] C10d3b. Docks overworld map, warp from the Theatre east gate, sign, tileset wiring, tests.
+      - [x] C10d3b. Docks overworld map, warp from the Theatre east gate, sign, tileset wiring, tests.
       - [ ] C10d3c. Two trainers (walkers, portraits, dialogue) and their duels on the Concurrency deck.
       - [ ] C10d3d. Docks hall interior, master fight (exercise choice from the five) and badge.
 - [ ] C11. **Senior Review v2:** all rules from GDD §5.3 step 5, with fixtures.

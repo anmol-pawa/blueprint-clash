@@ -151,6 +151,35 @@ describe("Behavioural Theatre", () => {
   });
 });
 
+describe("Concurrency Docks", () => {
+  it("is reached through the Theatre's east gate and back", () => {
+    let p: PlayerState = { map: "theatre", x: 18, y: 5, facing: "right" };
+    const r = step(MAPS, p, "right");
+    expect(r).toMatchObject({ kind: "warped", state: { map: "docks", x: 1, y: 6 } });
+    p = (r as { state: PlayerState }).state;
+    p = step(MAPS, p, "left").state;
+    expect(step(MAPS, p, "left")).toMatchObject({ kind: "warped", state: { map: "theatre", x: 18, y: 6 } });
+  });
+  it("lets the player walk the quay and out along both piers but not into the water or the warehouse", () => {
+    let p: PlayerState = { map: "docks", x: 1, y: 6, facing: "right" };
+    for (let i = 0; i < 17; i++) {
+      const r = step(MAPS, p, "right");
+      expect(r.kind, `step ${i}`).toBe("moved");
+      p = (r as { state: PlayerState }).state;
+    }
+    for (const x of [5, 14]) {
+      let q: PlayerState = { map: "docks", x, y: 7, facing: "down" };
+      expect(step(MAPS, q, "down").kind).toBe("moved"); // onto the pier
+      q = { ...q, y: 8 };
+      expect(step(MAPS, q, "down").kind).toBe("moved");
+    }
+    expect(step(MAPS, { map: "docks", x: 2, y: 7, facing: "down" }, "down").kind).toBe("blocked"); // water
+    expect(step(MAPS, { map: "docks", x: 7, y: 8, facing: "down" }, "down").kind).toBe("blocked"); // crate on the pier
+    expect(step(MAPS, { map: "docks", x: 8, y: 4, facing: "up" }, "up").kind).toBe("blocked"); // cargo door is scenery for now
+    expect(facingTarget(MAPS, { map: "docks", x: 18, y: 5, facing: "up" })).toMatchObject({ kind: "sign" });
+  });
+});
+
 describe("interaction", () => {
   it("finds the NPC or sign being faced", () => {
     const t = facingTarget(MAPS, { map: "drafting-hall", x: 2, y: 5, facing: "right" });

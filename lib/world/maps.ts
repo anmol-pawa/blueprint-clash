@@ -2,6 +2,8 @@ import {
   BRIDGES_HALL_ROWS,
   BRIDGES_LEGEND,
   BRIDGES_ROWS,
+  DOCKS_LEGEND,
+  DOCKS_ROWS,
   FOUNDRY_HALL_ROWS,
   FOUNDRY_LEGEND,
   FOUNDRY_ROWS,
@@ -207,6 +209,8 @@ export const THEATRE: MapDef = {
   warps: [
     ...[5, 6].map((y) => ({ x: 0, y, to: "bridges", toX: 18, toY: y, facing: "left" as const })),
     { x: 7, y: 3, to: "theatre-hall", toX: 6, toY: 8, facing: "up" as const },
+    // the east gate leads to the Concurrency Docks
+    ...[5, 6].map((y) => ({ x: 19, y, to: "docks", toX: 1, toY: 6, facing: "right" as const })),
   ],
   signs: { "18,4": "sign-theatre" },
 };
@@ -225,8 +229,25 @@ export const THEATRE_HALL: MapDef = {
   signs: {},
 };
 
-export const MAPS: MapTable = { [OLD_TOWN.id]: OLD_TOWN, [DRAFTING_HALL.id]: DRAFTING_HALL, [SOLID_SQUARE.id]: SOLID_SQUARE, [PRINCIPLE_HALL.id]: PRINCIPLE_HALL, [FOUNDRY.id]: FOUNDRY, [FOUNDRY_HALL.id]: FOUNDRY_HALL, [BRIDGES.id]: BRIDGES, [BRIDGES_HALL.id]: BRIDGES_HALL, [THEATRE.id]: THEATRE, [THEATRE_HALL.id]: THEATRE_HALL };
+/**
+ * Concurrency Docks: a warehouse front with a padlocked cargo door, a quay of
+ * crates and a crane, and two piers into the harbour. Water and the crates
+ * on the piers are solid; the quay lip is walkable so both piers can be
+ * reached. The cargo door is scenery until the Docks hall opens (C10d3d).
+ * The west gate (two tiles) returns to the Behavioural Theatre.
+ */
+export const DOCKS: MapDef = {
+  id: "docks",
+  name: "Concurrency Docks",
+  rows: DOCKS_ROWS,
+  solid: "SEBWDcbkoTULMNIxyzw",
+  npcs: [],
+  warps: [5, 6].map((y) => ({ x: 0, y, to: "theatre", toX: 18, toY: y, facing: "left" as const })),
+  signs: { "18,4": "sign-docks" },
+};
 
-export const MAP_LEGENDS = { [OLD_TOWN.id]: OLD_TOWN_LEGEND, [DRAFTING_HALL.id]: HALL_LEGEND, [SOLID_SQUARE.id]: SOLID_SQUARE_LEGEND, [PRINCIPLE_HALL.id]: PRINCIPLE_HALL_LEGEND, [FOUNDRY.id]: FOUNDRY_LEGEND, [FOUNDRY_HALL.id]: FOUNDRY_LEGEND, [BRIDGES.id]: BRIDGES_LEGEND, [BRIDGES_HALL.id]: BRIDGES_LEGEND, [THEATRE.id]: THEATRE_LEGEND, [THEATRE_HALL.id]: THEATRE_LEGEND };
+export const MAPS: MapTable = { [OLD_TOWN.id]: OLD_TOWN, [DRAFTING_HALL.id]: DRAFTING_HALL, [SOLID_SQUARE.id]: SOLID_SQUARE, [PRINCIPLE_HALL.id]: PRINCIPLE_HALL, [FOUNDRY.id]: FOUNDRY, [FOUNDRY_HALL.id]: FOUNDRY_HALL, [BRIDGES.id]: BRIDGES, [BRIDGES_HALL.id]: BRIDGES_HALL, [THEATRE.id]: THEATRE, [THEATRE_HALL.id]: THEATRE_HALL, [DOCKS.id]: DOCKS };
+
+export const MAP_LEGENDS = { [OLD_TOWN.id]: OLD_TOWN_LEGEND, [DRAFTING_HALL.id]: HALL_LEGEND, [SOLID_SQUARE.id]: SOLID_SQUARE_LEGEND, [PRINCIPLE_HALL.id]: PRINCIPLE_HALL_LEGEND, [FOUNDRY.id]: FOUNDRY_LEGEND, [FOUNDRY_HALL.id]: FOUNDRY_LEGEND, [BRIDGES.id]: BRIDGES_LEGEND, [BRIDGES_HALL.id]: BRIDGES_LEGEND, [THEATRE.id]: THEATRE_LEGEND, [THEATRE_HALL.id]: THEATRE_LEGEND, [DOCKS.id]: DOCKS_LEGEND };
 
 export const START = { map: "old-town", x: 9, y: 4, facing: "up" } as const;

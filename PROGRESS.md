@@ -750,3 +750,10 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Verification: `lint` (0 errors; one new warning fixed, 8 pre-existing), `typecheck`, `test`, `build`, `build:pages` pass. Playwright on the Pages export, desktop 1280x900 and iPhone 14: `/dev/sprites` Docks scene viewed, legible, no console errors, no horizontal overflow. `content:verify` not rerun (no content change). CI/Pages not confirmed (no `gh`).
 - Known gaps: cargo door tile is small relative to the warehouse; no battle backdrop for the Docks deck yet (still Old Town).
 - Next: C10d3b (Docks overworld map, warp from the Theatre east gate, sign).
+
+## 2026-11-11 - C10d3b: Concurrency Docks overworld map
+- `DOCKS` map in `lib/world/maps.ts` (from `DOCKS_ROWS`): east-gate warp from the Behavioural Theatre and a west gate back, `sign-docks` and updated `sign-theatre` dialogue, Docks tileset wired in `OverworldGame.ts`. Water, crates on the piers and boats are solid; the quay lip is walkable so both piers can be reached; the cargo door is scenery until C10d3d. Arrival from the Theatre is on row 6 (a lantern base blocks (1,5)).
+- Tests: `tests/world.test.ts` Concurrency Docks block (warp there and back, walking the quay, both piers, blocked water/crate/door, sign). `npm test` 658 pass.
+- Verification: `lint` (0 errors, 8 pre-existing warnings), `typecheck`, `test`, `build`, `build:pages` pass. Playwright on the dev server, desktop 1280x800 and iPhone 14: Docks viewed in `/play/` (temporary start position, reverted), legible, no console errors, no horizontal overflow. `content:verify` not rerun (no content change). CI/Pages not checked (no `gh` in this session).
+- Known gaps: no trainers or hall yet; Docks battle backdrop still Old Town.
+- Next: C10d3c (two trainers and their duels on the Concurrency deck).
