@@ -163,7 +163,7 @@ Work top to bottom: take the **first unchecked box**, and split big boxes into r
   - [x] C11b. Minor rules: non-const getter, magic numbers, unclear names; fixtures; show the new rules in the debrief and update GDD/ARCH rule tables.
 - [ ] C12. **Workshop Row**, about 36 problems from CUR L8, each with all storms, bad designs and an editorial. One problem per run now (a full package is a whole run); the list below follows CUR L8 order.
   - [x] C12a. Library management (B-phase) and Parking lot (State/Strategy: fit rules, best fit, pricing storm).
-  - [ ] C12b. Vending machine (State).
+  - [x] C12b. Vending machine (State).
   - [ ] C12c. Elevator system (State, scheduling Strategy).
   - [ ] C12d. Tic-tac-toe to Connect-N.
   - [ ] C12e onward: Snake and ladder, Logger framework, LRU/LFU, KV store with TTL and transactions, ... (CUR L8 items 6 to 36, one per box as reached).

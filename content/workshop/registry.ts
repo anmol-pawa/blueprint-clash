@@ -8,9 +8,14 @@ import { clarify as parkingClarify } from "./parking-lot/clarify";
 import { followups as parkingFollowups } from "./parking-lot/followups";
 import { meta as parkingMeta } from "./parking-lot/meta";
 import { rubric as parkingRubric } from "./parking-lot/rubric";
+import { clarify as vendingClarify } from "./vending-machine/clarify";
+import { followups as vendingFollowups } from "./vending-machine/followups";
+import { meta as vendingMeta } from "./vending-machine/meta";
+import { rubric as vendingRubric } from "./vending-machine/rubric";
 import type { PackageModules } from "@/lib/workshop/load";
 
 export const WORKSHOP_REGISTRY: Record<string, PackageModules> = {
   "library-management": { meta: libraryMeta, clarify: libraryClarify, rubric: libraryRubric, followups: libraryFollowups },
   "parking-lot": { meta: parkingMeta, clarify: parkingClarify, rubric: parkingRubric, followups: parkingFollowups },
+  "vending-machine": { meta: vendingMeta, clarify: vendingClarify, rubric: vendingRubric, followups: vendingFollowups },
 };

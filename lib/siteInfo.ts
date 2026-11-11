@@ -30,6 +30,7 @@ export const PLAYABLE_MODES: readonly PlayableMode[] = [
   { href: "/battle", title: "Concept battle", blurb: "Patternling cards: name the smell, pick the principle." },
   { href: "/workshop/library-management", title: "Workshop: Library", blurb: "Write C++ against hidden tests, then survive a Change Storm." },
   { href: "/workshop/parking-lot", title: "Workshop: Parking lot", blurb: "Fit rules, best-fit allocation and a pricing Change Storm." },
+  { href: "/workshop/vending-machine", title: "Workshop: Vending machine", blurb: "The State pattern: coins, refusals that change nothing, and a maintenance-mode Change Storm." },
   { href: "/board", title: "Design Board drills", blurb: "Draw the classes for a short brief, tag who owns each responsibility, then compare with a reference." },
   { href: "/race", title: "Race Hunter", blurb: "Schedule threads step by step to break a program, then let the explorer check every interleaving of the fix." },
   { href: "/learn", title: "Lessons", blurb: "SOLID in C++: smell, before/after code, interview phrasing, and the cost of overdoing it." },
