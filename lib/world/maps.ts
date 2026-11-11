@@ -3,6 +3,7 @@ import {
   BRIDGES_LEGEND,
   BRIDGES_ROWS,
   DOCKS_LEGEND,
+  DOCKS_HALL_ROWS,
   DOCKS_ROWS,
   FOUNDRY_HALL_ROWS,
   FOUNDRY_LEGEND,
@@ -240,17 +241,35 @@ export const DOCKS: MapDef = {
   id: "docks",
   name: "Concurrency Docks",
   rows: DOCKS_ROWS,
-  solid: "SEBWDcbkoTULMNIxyzw",
+  solid: "SEBWcbkoTULMNIxyzw",
   npcs: [
     { id: "wren", name: "Wren Latch", x: 6, y: 6, facing: "right", dialogue: "wren-intro" },
     { id: "pike", name: "Pike Tallow", x: 14, y: 6, facing: "left", dialogue: "pike-intro" },
   ],
-  warps: [5, 6].map((y) => ({ x: 0, y, to: "theatre", toX: 18, toY: y, facing: "left" as const })),
+  warps: [
+    ...[5, 6].map((y) => ({ x: 0, y, to: "theatre", toX: 18, toY: y, facing: "left" as const })),
+    { x: 8, y: 3, to: "docks-hall", toX: 6, toY: 8, facing: "up" as const },
+  ],
   signs: { "18,4": "sign-docks" },
 };
 
-export const MAPS: MapTable = { [OLD_TOWN.id]: OLD_TOWN, [DRAFTING_HALL.id]: DRAFTING_HALL, [SOLID_SQUARE.id]: SOLID_SQUARE, [PRINCIPLE_HALL.id]: PRINCIPLE_HALL, [FOUNDRY.id]: FOUNDRY, [FOUNDRY_HALL.id]: FOUNDRY_HALL, [BRIDGES.id]: BRIDGES, [BRIDGES_HALL.id]: BRIDGES_HALL, [THEATRE.id]: THEATRE, [THEATRE_HALL.id]: THEATRE_HALL, [DOCKS.id]: DOCKS };
+/**
+ * Dockmaster Halyard's Docks Hall: a warehouse floor of pier boards with a
+ * dark plank runner from the door to the master. The runner's end warps back
+ * to the quay.
+ */
+export const DOCKS_HALL: MapDef = {
+  id: "docks-hall",
+  name: "Docks Hall",
+  rows: DOCKS_HALL_ROWS,
+  solid: "BWNjxyJK",
+  npcs: [{ id: "halyard", name: "Dockmaster Halyard", x: 6, y: 3, facing: "down", dialogue: "halyard-intro" }],
+  warps: [6, 7].map((x) => ({ x, y: 9, to: "docks", toX: 8, toY: 4, facing: "down" as const })),
+  signs: {},
+};
 
-export const MAP_LEGENDS = { [OLD_TOWN.id]: OLD_TOWN_LEGEND, [DRAFTING_HALL.id]: HALL_LEGEND, [SOLID_SQUARE.id]: SOLID_SQUARE_LEGEND, [PRINCIPLE_HALL.id]: PRINCIPLE_HALL_LEGEND, [FOUNDRY.id]: FOUNDRY_LEGEND, [FOUNDRY_HALL.id]: FOUNDRY_LEGEND, [BRIDGES.id]: BRIDGES_LEGEND, [BRIDGES_HALL.id]: BRIDGES_LEGEND, [THEATRE.id]: THEATRE_LEGEND, [THEATRE_HALL.id]: THEATRE_LEGEND, [DOCKS.id]: DOCKS_LEGEND };
+export const MAPS: MapTable = { [OLD_TOWN.id]: OLD_TOWN, [DRAFTING_HALL.id]: DRAFTING_HALL, [SOLID_SQUARE.id]: SOLID_SQUARE, [PRINCIPLE_HALL.id]: PRINCIPLE_HALL, [FOUNDRY.id]: FOUNDRY, [FOUNDRY_HALL.id]: FOUNDRY_HALL, [BRIDGES.id]: BRIDGES, [BRIDGES_HALL.id]: BRIDGES_HALL, [THEATRE.id]: THEATRE, [THEATRE_HALL.id]: THEATRE_HALL, [DOCKS.id]: DOCKS, [DOCKS_HALL.id]: DOCKS_HALL };
+
+export const MAP_LEGENDS = { [OLD_TOWN.id]: OLD_TOWN_LEGEND, [DRAFTING_HALL.id]: HALL_LEGEND, [SOLID_SQUARE.id]: SOLID_SQUARE_LEGEND, [PRINCIPLE_HALL.id]: PRINCIPLE_HALL_LEGEND, [FOUNDRY.id]: FOUNDRY_LEGEND, [FOUNDRY_HALL.id]: FOUNDRY_LEGEND, [BRIDGES.id]: BRIDGES_LEGEND, [BRIDGES_HALL.id]: BRIDGES_LEGEND, [THEATRE.id]: THEATRE_LEGEND, [THEATRE_HALL.id]: THEATRE_LEGEND, [DOCKS.id]: DOCKS_LEGEND, [DOCKS_HALL.id]: DOCKS_LEGEND };
 
 export const START = { map: "old-town", x: 9, y: 4, facing: "up" } as const;

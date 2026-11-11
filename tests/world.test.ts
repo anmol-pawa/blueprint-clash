@@ -176,7 +176,7 @@ describe("Concurrency Docks", () => {
     }
     expect(step(MAPS, { map: "docks", x: 2, y: 7, facing: "down" }, "down").kind).toBe("blocked"); // water
     expect(step(MAPS, { map: "docks", x: 7, y: 8, facing: "down" }, "down").kind).toBe("blocked"); // crate on the pier
-    expect(step(MAPS, { map: "docks", x: 8, y: 4, facing: "up" }, "up").kind).toBe("blocked"); // cargo door is scenery for now
+    expect(step(MAPS, { map: "docks", x: 8, y: 4, facing: "up" }, "up").kind).toBe("warped"); // the cargo door is a warp into the hall
     expect(facingTarget(MAPS, { map: "docks", x: 18, y: 5, facing: "up" })).toMatchObject({ kind: "sign" });
   });
 });
@@ -416,5 +416,25 @@ describe("Theatre Hall", () => {
     expect(WALKERS.some((w) => w.id === "voss")).toBe(true);
     expect(PORTRAITS.some((q) => q.id === "voss-portrait")).toBe(true);
     expect(SCRIPTS["voss-intro"]).toBeDefined();
+  });
+});
+
+describe("Docks Hall", () => {
+  it("opens the cargo door as a warp, reaches Dockmaster Halyard, and returns to the quay", () => {
+    let p: PlayerState = { map: "docks", x: 8, y: 4, facing: "up" };
+    const r = step(MAPS, p, "up");
+    expect(r).toMatchObject({ kind: "warped", state: { map: "docks-hall", x: 6, y: 8 } });
+    p = (r as { state: PlayerState }).state;
+    for (let i = 0; i < 4; i++) p = step(MAPS, p, "up").state;
+    expect(p).toMatchObject({ map: "docks-hall", x: 6, y: 4 });
+    expect(facingTarget(MAPS, p)).toMatchObject({ kind: "npc", npc: { id: "halyard" } });
+    expect(step(MAPS, { map: "docks-hall", x: 7, y: 8, facing: "down" }, "down")).toMatchObject({ kind: "warped", state: { map: "docks", x: 8, y: 4 } });
+  });
+
+  it("has Halyard's walker, portrait and dialogue", async () => {
+    const { WALKERS, PORTRAITS } = await import("@/game/sprites/characters");
+    expect(WALKERS.some((w) => w.id === "halyard")).toBe(true);
+    expect(PORTRAITS.some((q) => q.id === "halyard-portrait")).toBe(true);
+    expect(SCRIPTS["halyard-intro"]).toBeDefined();
   });
 });

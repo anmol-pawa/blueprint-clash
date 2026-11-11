@@ -294,6 +294,24 @@ export const SCRIPTS: Readonly<Record<string, DialogueScript>> = {
       bye: { speaker: "Pike Tallow", text: "Duel me from the Battle menu: Pike Tallow duel. Six cards on atomics, deadlock and thread pools." },
     },
   },
+  "halyard-intro": {
+    id: "halyard-intro",
+    start: "a",
+    nodes: {
+      a: { speaker: "Dockmaster Halyard", text: "Every crate on this quay is safe if only one person touches it at a time. The hard part is not the lock. It is deciding what the lock is protecting.", next: "q" },
+      q: {
+        speaker: "Dockmaster Halyard",
+        text: "Two threads each do `if (!ready) { ready = true; init(); }` on a plain bool. Both pass the check. What fixes it?",
+        choices: [
+          { text: "Make the check and the set one atomic step: std::call_once, or a mutex around the whole check-and-init.", next: "yes", set: ["halyard-once"] },
+          { text: "Mark the bool volatile so each thread sees the other's write.", next: "no" },
+        ],
+      },
+      no: { speaker: "Dockmaster Halyard", text: "volatile is not synchronisation in C++. The check and the set are still two steps, so both threads can still win. Make them one step.", next: "bye" },
+      yes: { speaker: "Dockmaster Halyard", text: "Good. Name the trade-off as well: a mutex is simple but taxes every later read; call_once or an atomic flag with acquire/release makes the fast path cheap and is harder to get right.", next: "bye" },
+      bye: { speaker: "Dockmaster Halyard", text: "My formal trial is not ready yet. Rehearse on the Docks cards, Race Hunter and exercises, then return." },
+    },
+  },
   "board-solid": {
     id: "board-solid",
     start: "a",

@@ -253,7 +253,9 @@ export const DOCKS_LEGEND: Legend = {
   S: ["roof-slate"], E: ["roof-eave"], B: ["brick-wall"], W: ["shutter"], D: ["cargo-door"],
   c: ["quay", "crate"], k: ["quay", "crate-locked"], b: ["quay", "barrel"], o: ["quay", "bollard"], r: ["quay", "rope"],
   T: ["quay", "crane-top"], U: ["quay", "crane-base"], L: ["quay", "lantern-top"], M: ["quay", "lantern-base"],
-  N: ["brick-wall", "net"], I: ["quay", "sign-board"], x: ["pier", "crate-locked"], y: ["pier", "barrel"], z: ["water", "boat"],
+  N: ["brick-wall", "net"],
+  // Hall interior: props standing on pier boards.
+  j: ["pier", "crate"], J: ["pier", "lantern-top"], K: ["pier", "lantern-base"], I: ["quay", "sign-board"], x: ["pier", "crate-locked"], y: ["pier", "barrel"], z: ["water", "boat"],
 };
 
 /** Concurrency Docks rows, shared by the scene and the map: a warehouse front with a padlocked cargo door, a quay with crates and a crane, piers into the harbour. */
@@ -275,3 +277,20 @@ export const DOCKS_ROWS: readonly string[] = [
 
 /** The Concurrency Docks for art review: warehouse, quay, crane and piers over animated water. */
 export const DOCKS_SCENE = composeScene(DOCKS_TILES, "docks-scene", DOCKS_ROWS, DOCKS_LEGEND);
+
+/** Docks Hall rows: a warehouse floor of pier boards with a darker plank runner from the door to Dockmaster Halyard. */
+export const DOCKS_HALL_ROWS: readonly string[] = [
+  "BWBBBWBBWBBBWB",
+  "BBBBNBBBBBNBBB",
+  "ppppppppppppjp",
+  "pxpppPPPPpppyp",
+  "ppjpppPPppppjp",
+  "pyppppPPppppxp",
+  "ppppppPPpppppp",
+  "pxppJpPPpJpppp",
+  "ppppKpPPpKpppp",
+  "ppppppPPpppppp",
+];
+
+/** The Docks Hall interior for art review. */
+export const DOCKS_HALL_SCENE = composeScene(DOCKS_TILES, "docks-hall-scene", DOCKS_HALL_ROWS, DOCKS_LEGEND);
