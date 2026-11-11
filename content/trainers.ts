@@ -115,7 +115,31 @@ export const PERRIN_WICK: TrainerProfile = {
   lose: "Perrin shuts the prop cupboard. Study the misses and rematch.",
 };
 
-export const TRAINERS: readonly TrainerProfile[] = [SABLE_QUILL, ROOK_FERRIS, DOVA_KILN, BRAM_CASK, NERYS_QUAY, TOBIN_REEF, ILSA_CUE, PERRIN_WICK];
+export const WREN_LATCH: TrainerProfile = {
+  id: "wren-latch",
+  name: "Wren Latch",
+  deckId: "concurrency-docks",
+  topics: ["L7.threads", "L7.mutex", "L7.condvar"],
+  cardCount: 6,
+  foeName: "WREN'S TALLY BOARD",
+  intro: "Wren Latch counts crates with a crew of threads: share less, lock with a guard, and wait on a condition, not on luck.",
+  win: "Wren chalks a clean tally. Join your threads, let RAII hold the lock, and re-check the predicate: solid.",
+  lose: "Wren wipes the tally board. Read the explanations, then count again.",
+};
+
+export const PIKE_TALLOW: TrainerProfile = {
+  id: "pike-tallow",
+  name: "Pike Tallow",
+  deckId: "concurrency-docks",
+  topics: ["L7.atomics", "L7.deadlock", "L7.pool"],
+  cardCount: 6,
+  foeName: "PIKE'S CRANE HOOK",
+  intro: "Pike Tallow runs the crane: one atomic step, two locks in the right order, and a pool of workers that shuts down without dropping a crate.",
+  win: "Pike lowers the hook gently. Atomic where it counts, one lock order, a clean shutdown: well lifted.",
+  lose: "Pike swings the hook back to the quay. Study the misses and rematch.",
+};
+
+export const TRAINERS: readonly TrainerProfile[] = [SABLE_QUILL, ROOK_FERRIS, DOVA_KILN, BRAM_CASK, NERYS_QUAY, TOBIN_REEF, ILSA_CUE, PERRIN_WICK, WREN_LATCH, PIKE_TALLOW];
 
 /** Duel flag stored in `lessonsDone` (no save-schema change). */
 export const duelFlag = (t: TrainerProfile): string => `duel:${t.id}`;

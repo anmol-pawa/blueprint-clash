@@ -258,6 +258,42 @@ export const SCRIPTS: Readonly<Record<string, DialogueScript>> = {
       bye: { speaker: "Director Voss", text: "When you have rehearsed the Theatre cards and the eleven pattern drills, take my trial from the Battle menu: Theatre master. Three phases, one badge." },
     },
   },
+  "wren-intro": {
+    id: "wren-intro",
+    start: "a",
+    nodes: {
+      a: { speaker: "Wren Latch", text: "Four crane crews add crates to one shared tally. Some nights the total comes out short, and never by the same amount.", next: "q" },
+      q: {
+        speaker: "Wren Latch",
+        text: "What is going on, and what is the smallest honest fix?",
+        choices: [
+          { text: "A data race: two read-modify-writes interleave. Guard the tally with a mutex held by an RAII lock.", next: "yes", set: ["wren-mutex"] },
+          { text: "The compiler is dropping writes. Mark the tally volatile.", next: "no" },
+        ],
+      },
+      yes: { speaker: "Wren Latch", text: "Yes. The lost update is the interleaving, not the compiler. A scoped guard also releases on every return path. If it is only a counter, an atomic is lighter; if several fields must agree, keep the mutex.", next: "bye" },
+      no: { speaker: "Wren Latch", text: "volatile does not make a read-modify-write atomic or order anything between threads. Use a mutex, or an atomic if one variable is all there is.", next: "bye" },
+      bye: { speaker: "Wren Latch", text: "Duel me from the Battle menu: Wren Latch duel. Six cards on threads, mutexes and condition variables." },
+    },
+  },
+  "pike-intro": {
+    id: "pike-intro",
+    start: "a",
+    nodes: {
+      a: { speaker: "Pike Tallow", text: "Two cranes each need the same pair of hooks. One grabs hook A then B; the other grabs B then A. At dusk they both stop and neither moves.", next: "q" },
+      q: {
+        speaker: "Pike Tallow",
+        text: "How do you stop the standoff without adding timeouts everywhere?",
+        choices: [
+          { text: "Make every crane take the hooks in one agreed order, or lock both at once with std::scoped_lock.", next: "yes", set: ["pike-order"] },
+          { text: "Sleep a random moment before each grab and hope they miss each other.", next: "no" },
+        ],
+      },
+      yes: { speaker: "Pike Tallow", text: "Right: break the circular wait. A global order is free at run time but needs discipline; scoped_lock does the ordering for you when you can take both together.", next: "bye" },
+      no: { speaker: "Pike Tallow", text: "That only makes the standoff rarer, which is worse to debug. Remove the cycle instead of dodging it.", next: "bye" },
+      bye: { speaker: "Pike Tallow", text: "Duel me from the Battle menu: Pike Tallow duel. Six cards on atomics, deadlock and thread pools." },
+    },
+  },
   "board-solid": {
     id: "board-solid",
     start: "a",
