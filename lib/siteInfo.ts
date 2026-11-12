@@ -34,6 +34,7 @@ export const PLAYABLE_MODES: readonly PlayableMode[] = [
   { href: "/workshop/elevator-system", title: "Workshop: Elevator system", blurb: "State and Strategy: sweeping cars, a dispatch policy, and an out-of-service Change Storm." },
   { href: "/workshop/tic-tac-toe", title: "Workshop: Tic-tac-toe to Connect-N", blurb: "A small rules engine that must survive two Change Storms: any board size and line length, then undo." },
   { href: "/workshop/snake-and-ladder", title: "Workshop: Snake and Ladder", blurb: "An injected dice, links that must not chain, and two Change Storms: house rules for the end of the board, then players who leave." },
+  { href: "/workshop/logger-framework", title: "Workshop: Logger Framework", blurb: "Levels, sinks and an injected clock, then two Change Storms: formatted lines from a pattern, and collapsing repeated messages." },
   { href: "/board", title: "Design Board drills", blurb: "Draw the classes for a short brief, tag who owns each responsibility, then compare with a reference." },
   { href: "/race", title: "Race Hunter", blurb: "Schedule threads step by step to break a program, then let the explorer check every interleaving of the fix." },
   { href: "/learn", title: "Lessons", blurb: "SOLID in C++: smell, before/after code, interview phrasing, and the cost of overdoing it." },
