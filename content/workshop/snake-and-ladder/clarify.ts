@@ -1,0 +1,15 @@
+import type { ClarifyQuestion } from "@/lib/workshop/types";
+
+export const clarify: ClarifyQuestion[] = [
+  { id: "q-dice", text: "Where do the dice rolls come from? How do we test a game that is random?", answer: "The game never makes its own randomness. A Dice is passed in, and each roll() is a number from 1 to 6. The tests script it.", reveals: ["R-turns"], quality: "essential" },
+  { id: "q-finish", text: "What happens near the end: do you have to land exactly on the last square, and what if the roll is too big?", answer: "Exactly. A roll that would go past the last square is not played: the player stays put and the turn passes. Landing on the last square wins.", reveals: ["R-finish"], quality: "essential" },
+  { id: "q-links", text: "How do snakes and ladders work? Can a ladder end on a snake, can two start on one square, can one end on the last square?", answer: "A stop on the start of a link moves the piece to its end, once. A link may not end where another begins, two links may not start on one square, none may start on the last square, and all squares must be on the board. A link may end on the last square, and that wins. Bad setups are refused with nullptr.", reveals: ["R-links", "R-setup"], quality: "essential" },
+  { id: "q-over", text: "What happens after someone wins? Can the game carry on?", answer: "Nothing happens: takeTurn() returns an empty Turn and does not even roll the dice.", reveals: ["R-over"], quality: "essential" },
+  { id: "q-future", text: "Will the rules always be this simple? Players, house rules, anything people might ask for next?", answer: "Good question. People play it with house rules: bouncing off the end, and extra rolls for sixes. Players also walk away mid-game. Details arrive with the change.", reveals: ["R-bounce", "R-sixes", "R-resign"], quality: "essential" },
+  { id: "q-start", text: "Where do pieces start, and can pieces share a square?", answer: "Everyone starts on square 0, off the board. Pieces share squares freely; there are no captures.", reveals: [], quality: "useful" },
+  { id: "q-turn", text: "How is the turn order decided, and what does takeTurn() report?", answer: "Player 0 first, then in index order. takeTurn() returns who rolled, the roll, where they were, where they ended, any snake or ladder, and whether they won.", reveals: [], quality: "useful" },
+  { id: "q-size", text: "How big is the board, and how many players?", answer: "Any board of at least 2 squares and any number of players from 2 up. The classic 100-square board is just one configuration.", reveals: [], quality: "useful" },
+  { id: "q-random", text: "Should the board's snakes and ladders be generated randomly?", answer: "No. The links are passed in. A generator, if wanted, would be a separate tool.", reveals: [], quality: "useful" },
+  { id: "q-ui", text: "Is there a board drawing, an animation or a sound to design?", answer: "No UI. Only the interface in api.h is tested.", reveals: [], quality: "noise" },
+  { id: "q-net", text: "Is it online, with accounts, rooms and a leaderboard?", answer: "No. In memory, one process, no accounts.", reveals: [], quality: "noise" },
+];
