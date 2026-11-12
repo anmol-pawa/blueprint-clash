@@ -4,6 +4,10 @@ import { clarify as elevatorClarify } from "./elevator-system/clarify";
 import { followups as elevatorFollowups } from "./elevator-system/followups";
 import { meta as elevatorMeta } from "./elevator-system/meta";
 import { rubric as elevatorRubric } from "./elevator-system/rubric";
+import { clarify as kvClarify } from "./kv-store/clarify";
+import { followups as kvFollowups } from "./kv-store/followups";
+import { meta as kvMeta } from "./kv-store/meta";
+import { rubric as kvRubric } from "./kv-store/rubric";
 import { clarify as libraryClarify } from "./library-management/clarify";
 import { followups as libraryFollowups } from "./library-management/followups";
 import { meta as libraryMeta } from "./library-management/meta";
@@ -36,6 +40,7 @@ import type { PackageModules } from "@/lib/workshop/load";
 
 export const WORKSHOP_REGISTRY: Record<string, PackageModules> = {
   "elevator-system": { meta: elevatorMeta, clarify: elevatorClarify, rubric: elevatorRubric, followups: elevatorFollowups },
+  "kv-store": { meta: kvMeta, clarify: kvClarify, rubric: kvRubric, followups: kvFollowups },
   "library-management": { meta: libraryMeta, clarify: libraryClarify, rubric: libraryRubric, followups: libraryFollowups },
   "logger-framework": { meta: loggerMeta, clarify: loggerClarify, rubric: loggerRubric, followups: loggerFollowups },
   "lru-lfu-cache": { meta: lruMeta, clarify: lruClarify, rubric: lruRubric, followups: lruFollowups },

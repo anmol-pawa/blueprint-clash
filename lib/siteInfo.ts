@@ -35,6 +35,7 @@ export const PLAYABLE_MODES: readonly PlayableMode[] = [
   { href: "/workshop/tic-tac-toe", title: "Workshop: Tic-tac-toe to Connect-N", blurb: "A small rules engine that must survive two Change Storms: any board size and line length, then undo." },
   { href: "/workshop/snake-and-ladder", title: "Workshop: Snake and Ladder", blurb: "An injected dice, links that must not chain, and two Change Storms: house rules for the end of the board, then players who leave." },
   { href: "/workshop/logger-framework", title: "Workshop: Logger framework", blurb: "Sinks and levels, a chain of handlers per sink, and two Change Storms: levels per category, then collapsing repeated lines." },
+  { href: "/workshop/kv-store", title: "Workshop: Key-value store with TTL", blurb: "Expiry against an injected clock, then nested transactions with an undo journal and ordered prefix scans across two Change Storms." },
   { href: "/workshop/lru-lfu-cache", title: "Workshop: LRU / LFU cache", blurb: "Hash map plus recency list, then a pluggable eviction Strategy and a removal listener across two Change Storms." },
   { href: "/board", title: "Design Board drills", blurb: "Draw the classes for a short brief, tag who owns each responsibility, then compare with a reference." },
   { href: "/race", title: "Race Hunter", blurb: "Schedule threads step by step to break a program, then let the explorer check every interleaving of the fix." },

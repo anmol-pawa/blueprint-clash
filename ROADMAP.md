@@ -169,7 +169,8 @@ Work top to bottom: take the **first unchecked box**, and split big boxes into r
   - [x] C12e. Snake and ladder.
   - [x] C12f. Logger framework (Chain of Responsibility; two storms: levels per category, collapsing sinks).
   - [x] C12g. LRU/LFU cache (Strategy eviction policy, removal listener; two storms).
-  - [ ] C12h onward: KV store with TTL and transactions (next), rate limiter library, pub-sub, ... (CUR L8 items 9 to 36, one per box as reached).
+  - [x] C12h. KV store with TTL and nested transactions (Command/Memento undo journal; two storms: transactions, ordered prefix scan).
+  - [ ] C12i onward: rate limiter library (next), pub-sub, ... (CUR L8 items 10 to 36, one per box as reached).
 - [ ] C13. **Refactor Arena** (L9): the mode, plus 12 legacy modules (split across runs).
 - [ ] C14. **Machine-coding mock** (GDD §5.9) with the review conversation.
 
