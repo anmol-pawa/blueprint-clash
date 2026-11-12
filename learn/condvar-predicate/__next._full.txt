@@ -1,0 +1,116 @@
+1:"$Sreact.fragment"
+2:"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js"
+3:I[39756,["$2"],"default"]
+4:I[37457,["$2"],"default"]
+5:"/blueprint-clash/_next/static/chunks/2n5qeheznvl4u.js"
+6:I[22016,["$2","$5"],""]
+7:I[64576,["$2"],"PwaRegister"]
+d:I[97367,["$2"],"OutletBoundary"]
+e:"$Sreact.suspense"
+10:"ViewportBoundary"
+11:I[97367,["$2"],"$10"]
+13:"MetadataBoundary"
+14:I[97367,["$2"],"$13"]
+16:I[68027,["$2"],"default",1]
+:HL["/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","style"]
+:HL["/blueprint-clash/_next/static/media/07c7676b89ed2778-s.p.2bn3s6zvc0dyp.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/blueprint-clash/_next/static/media/486a103cae33528f-s.p.309ilb452anpd.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/blueprint-clash/_next/static/media/53897e768d329f66-s.p.3t6q91iet4nsy.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+9:X
+b:[["children",{"s":"__PAGE__","h":512,"d":{"r":["$","$1","c",{"children":["$Lc",[["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/3s1mctvsetnbs.js","async":true,"nonce":"$undefined"}]],["$","$Ld",null,{"children":["$","$e",null,{"name":"Next.MetadataOutlet","children":"$@f"}]}]]}],"p":false,"v":null}}]]
+a:[["children",{"s":{"n":"id","t":"d","k":"condvar-predicate","s":[]},"h":66048,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],"p":false,"v":"$9"},"c":"$Qb"}]]
+8:[["children",{"s":"learn","h":131584,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],"p":false,"v":"$9"},"c":"$Qa"}]]
+0:{"P":null,"c":["","learn","condvar-predicate",""],"q":"","i":false,"t":{"t":{"s":"","h":131600,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}],["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js","async":true,"nonce":"$undefined"}]],["$","html",null,{"lang":"en","className":"r7opxW_variable auY9QW_variable u-EJdW_variable h-full","children":["$","body",null,{"className":"min-h-full","children":[["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","main",null,{"className":"flex min-h-dvh flex-col items-center justify-center gap-4 px-4 text-center","children":[["$","div",null,{"className":"font-display text-5xl text-[var(--accent)]","children":"404"}],["$","p",null,{"className":"text-white/60","children":"This room is not on the blueprint yet."}],["$","$L6",null,{"href":"/","className":"text-sm text-white/80 underline","children":"Back to the title screen"}]]}],[]],"forbidden":"$undefined","unauthorized":"$undefined"}],["$","$L7",null,{}]]}]}]]}],"p":false,"v":null},"c":"$Q8"},"h":{"r":["$","$1","h",{"children":[null,["$","$L11",null,{"children":"$L12"}],["$","$L14",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$e",null,{"name":"Next.Metadata","children":"$L15"}]}],null]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"p":false,"v":null}},"m":"$undefined","G":["$16",[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]]],"S":true,"r":"$undefined","s":"$undefined","a":"$undefined","l":"$undefined","p":"$undefined","d":"$undefined","b":"U2e90Mr6iueJEoRJLmd0s"}
+17:"/blueprint-clash/_next/static/chunks/3s1mctvsetnbs.js"
+18:I[25039,["$2","$17"],"LessonClient"]
+9:C
+19:T51a,#include <chrono>
+#include <condition_variable>
+#include <iostream>
+#include <mutex>
+#include <optional>
+#include <thread>
+
+// The consumer treats "I was notified" as "there is an item". The producer notified earlier, so the item is missed.
+class Mailbox {
+public:
+    void post(int value) {
+        {
+            std::lock_guard<std::mutex> guard(mutex_);
+            value_ = value;
+            has_ = true;
+        }
+        cv_.notify_one();
+    }
+
+    std::optional<int> waitFor(std::chrono::milliseconds timeout) {
+        std::unique_lock<std::mutex> lock(mutex_);
+        const std::cv_status status = cv_.wait_for(lock, timeout);  // BUG: no predicate
+        if (status == std::cv_status::no_timeout) return value_;
+        return std::nullopt;
+    }
+
+private:
+    std::mutex mutex_;
+    std::condition_variable cv_;
+    int value_ = 0;
+    bool has_ = false;
+};
+
+int main() {
+    Mailbox box;
+    std::thread producer([&box] { box.post(42); });
+    producer.join();  // the post (and its notify) is over before anyone waits
+    std::optional<int> got;
+    std::thread consumer([&box, &got] { got = box.waitFor(std::chrono::milliseconds(50)); });
+    consumer.join();
+    std::cout << "consumer saw: " << (got ? std::to_string(*got) : std::string("nothing (item was already posted)")) << "\n";
+}
+1a:T48f,#include <chrono>
+#include <condition_variable>
+#include <iostream>
+#include <mutex>
+#include <optional>
+#include <string>
+#include <thread>
+
+// The consumer waits for the state (has_), so a notification that came early cannot be lost.
+class Mailbox {
+public:
+    void post(int value) {
+        {
+            std::lock_guard<std::mutex> guard(mutex_);
+            value_ = value;
+            has_ = true;
+        }
+        cv_.notify_one();
+    }
+
+    std::optional<int> waitFor(std::chrono::milliseconds timeout) {
+        std::unique_lock<std::mutex> lock(mutex_);
+        if (!cv_.wait_for(lock, timeout, [this] { return has_; })) return std::nullopt;
+        has_ = false;
+        return value_;
+    }
+
+private:
+    std::mutex mutex_;
+    std::condition_variable cv_;
+    int value_ = 0;
+    bool has_ = false;
+};
+
+int main() {
+    Mailbox box;
+    std::thread producer([&box] { box.post(42); });
+    producer.join();
+    std::optional<int> got;
+    std::thread consumer([&box, &got] { got = box.waitFor(std::chrono::milliseconds(50)); });
+    consumer.join();
+    std::cout << "consumer saw: " << (got ? std::to_string(*got) : std::string("nothing")) << "\n";
+}
+c:["$","$L18",null,{"lesson":{"id":"condvar-predicate","level":"L7","title":"Condition variables: wait on a predicate, not a notification","oneLiner":"A notification is a hint to re-check the state; the state, under the mutex, is the truth.","cardTopic":"L7.condvar","intro":"A condition variable lets a thread sleep until some **condition over shared state** may have changed. The shared state lives under a mutex; `wait` atomically releases the mutex and sleeps, then reacquires it before returning.\n\nTwo facts shape every correct use:\n\n- **A notification is not remembered.** If the producer notifies before the consumer starts waiting, that notification is gone. A consumer that waits for \"a notify\" instead of \"the item exists\" sleeps forever (a **lost wake-up**).\n- **Wake-ups can be spurious**, and another consumer may take the item first. So you always re-check the condition: wait with a predicate (`cv.wait(lock, pred)`), which is exactly a `while (!pred) wait(lock)` loop.\n\nThe producer changes the state **under the mutex**, then notifies (before or after unlocking is fine; after is slightly cheaper). Use `notify_all` when waiters wait for different conditions on the same variable; `notify_one` is only safe when any one waiter can make progress.","smell":"- `cv.wait(lock)` with no predicate, or `if (!ready) cv.wait(lock)` instead of a loop.\n- The wake-up is treated as proof that the data exists.\n- A flag read outside the mutex that guards it.\n- `notify_one` with different kinds of waiters on one condition variable.","before":"$19","after":"$1a","beforeOutput":"consumer saw: nothing (item was already posted)","afterOutput":"consumer saw: 42","refactorNotes":"The predicate overload re-checks `has_` under the mutex before sleeping and after every wake-up, which covers the early notification, spurious wake-ups and a rival consumer stealing the item. The consumer also clears `has_` while still holding the lock, so the take is atomic with the check.\n\n**Trade-offs:** a timeout returns an empty `optional`, which pushes a decision to the caller (retry, give up, alert). A one-slot mailbox is the simplest shape; for many items you want a bounded queue, where you need two conditions (not full, not empty): either two condition variables or `notify_all`, because a single `notify_one` can wake the wrong kind of waiter. The Race Hunter \"bounded queue\" puzzle explores exactly that.","interviewSignal":"Say \"the condition variable carries no data; the predicate under the mutex is the truth\", and write the predicate overload without being asked. Senior signal: you name lost wake-up and spurious wake-up separately, explain why the flag is set under the mutex, and choose `notify_all` or two variables for a bounded buffer. Staff signal: you offer a design that avoids the primitive (a blocking queue abstraction) and say what to test with a stress run plus a model checker.","overApplication":"A condition variable is the wrong tool for a one-shot result (use `std::promise`/`std::future`) or a simple \"stop\" request (use `std::stop_token` or an atomic flag). Hand-rolled wait loops all over a codebase are a smell; wrap the pattern in one small blocking-queue class and reuse it."},"nextId":"atomics-check-then-act"}]
+12:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1, viewport-fit=cover"}],["$","meta","2",{"name":"theme-color","content":"#0a1530"}]]
+1b:I[27201,["$2"],"IconMark"]
+f:null
+15:[["$","title","0",{"children":"Condition variables: wait on a predicate, not a notification: Blueprint Clash"}],["$","meta","1",{"name":"description","content":"A creature-tactics RPG that teaches low-level design in C++ and high-level system design, from fundamentals to big-tech interview level."}],["$","link","2",{"rel":"manifest","href":"/blueprint-clash/manifest.webmanifest","crossOrigin":"$undefined"}],["$","meta","3",{"name":"mobile-web-app-capable","content":"yes"}],["$","meta","4",{"name":"apple-mobile-web-app-title","content":"Blueprint Clash"}],["$","meta","5",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","link","6",{"rel":"icon","href":"/blueprint-clash/icon.png?icon.27re_xscs-jmw.png","sizes":"256x256","type":"image/png"}],["$","link","7",{"rel":"apple-touch-icon","href":"/blueprint-clash/apple-icon.png?apple-icon.2rac1w0yc3rju.png","sizes":"180x180","type":"image/png"}],["$","$L1b","8",{}]]

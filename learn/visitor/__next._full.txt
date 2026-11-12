@@ -1,0 +1,148 @@
+1:"$Sreact.fragment"
+2:"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js"
+3:I[39756,["$2"],"default"]
+4:I[37457,["$2"],"default"]
+5:"/blueprint-clash/_next/static/chunks/2n5qeheznvl4u.js"
+6:I[22016,["$2","$5"],""]
+7:I[64576,["$2"],"PwaRegister"]
+d:I[97367,["$2"],"OutletBoundary"]
+e:"$Sreact.suspense"
+10:"ViewportBoundary"
+11:I[97367,["$2"],"$10"]
+13:"MetadataBoundary"
+14:I[97367,["$2"],"$13"]
+16:I[68027,["$2"],"default",1]
+:HL["/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","style"]
+:HL["/blueprint-clash/_next/static/media/07c7676b89ed2778-s.p.2bn3s6zvc0dyp.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/blueprint-clash/_next/static/media/486a103cae33528f-s.p.309ilb452anpd.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/blueprint-clash/_next/static/media/53897e768d329f66-s.p.3t6q91iet4nsy.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+9:X
+b:[["children",{"s":"__PAGE__","h":512,"d":{"r":["$","$1","c",{"children":["$Lc",[["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/3s1mctvsetnbs.js","async":true,"nonce":"$undefined"}]],["$","$Ld",null,{"children":["$","$e",null,{"name":"Next.MetadataOutlet","children":"$@f"}]}]]}],"p":false,"v":null}}]]
+a:[["children",{"s":{"n":"id","t":"d","k":"visitor","s":[]},"h":66048,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],"p":false,"v":"$9"},"c":"$Qb"}]]
+8:[["children",{"s":"learn","h":131584,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],"p":false,"v":"$9"},"c":"$Qa"}]]
+0:{"P":null,"c":["","learn","visitor",""],"q":"","i":false,"t":{"t":{"s":"","h":131600,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}],["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js","async":true,"nonce":"$undefined"}]],["$","html",null,{"lang":"en","className":"r7opxW_variable auY9QW_variable u-EJdW_variable h-full","children":["$","body",null,{"className":"min-h-full","children":[["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","main",null,{"className":"flex min-h-dvh flex-col items-center justify-center gap-4 px-4 text-center","children":[["$","div",null,{"className":"font-display text-5xl text-[var(--accent)]","children":"404"}],["$","p",null,{"className":"text-white/60","children":"This room is not on the blueprint yet."}],["$","$L6",null,{"href":"/","className":"text-sm text-white/80 underline","children":"Back to the title screen"}]]}],[]],"forbidden":"$undefined","unauthorized":"$undefined"}],["$","$L7",null,{}]]}]}]]}],"p":false,"v":null},"c":"$Q8"},"h":{"r":["$","$1","h",{"children":[null,["$","$L11",null,{"children":"$L12"}],["$","$L14",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$e",null,{"name":"Next.Metadata","children":"$L15"}]}],null]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"p":false,"v":null}},"m":"$undefined","G":["$16",[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]]],"S":true,"r":"$undefined","s":"$undefined","a":"$undefined","l":"$undefined","p":"$undefined","d":"$undefined","b":"U2e90Mr6iueJEoRJLmd0s"}
+17:"/blueprint-clash/_next/static/chunks/3s1mctvsetnbs.js"
+18:I[25039,["$2","$17"],"LessonClient"]
+9:C
+19:T427,#include <iostream>
+#include <memory>
+#include <string>
+#include <vector>
+
+struct Shape {
+    virtual ~Shape() = default;
+};
+struct Circle : Shape {
+    explicit Circle(int r) : radius(r) {}
+    int radius;
+};
+struct Rect : Shape {
+    Rect(int w, int h) : width(w), height(h) {}
+    int width, height;
+};
+struct Triangle : Shape {};
+
+// Each new operation is another type-switch, and a new shape falls into "unknown" at run time.
+std::string describe(const Shape& shape) {
+    if (const auto* circle = dynamic_cast<const Circle*>(&shape)) return "circle r=" + std::to_string(circle->radius);
+    if (const auto* rect = dynamic_cast<const Rect*>(&shape)) return "rect " + std::to_string(rect->width) + "x" + std::to_string(rect->height);
+    return "unknown shape";
+}
+
+int main() {
+    std::vector<std::unique_ptr<Shape>> shapes;
+    shapes.push_back(std::make_unique<Circle>(2));
+    shapes.push_back(std::make_unique<Rect>(3, 4));
+    shapes.push_back(std::make_unique<Triangle>());
+    for (const auto& shape : shapes) std::cout << describe(*shape) << "\n";
+}
+1a:T9da,#include <iostream>
+#include <memory>
+#include <string>
+#include <vector>
+
+class Circle;
+class Rect;
+class Triangle;
+
+// One visit() per concrete shape. A new shape means a new pure virtual, so every visitor stops compiling until it handles it.
+class ShapeVisitor {
+public:
+    virtual ~ShapeVisitor() = default;
+    virtual void visit(const Circle& circle) = 0;
+    virtual void visit(const Rect& rect) = 0;
+    virtual void visit(const Triangle& triangle) = 0;
+};
+
+class Shape {
+public:
+    virtual ~Shape() = default;
+    virtual void accept(ShapeVisitor& visitor) const = 0;
+};
+
+class Circle final : public Shape {
+public:
+    explicit Circle(int radius) : radius_(radius) {}
+    int radius() const { return radius_; }
+    void accept(ShapeVisitor& visitor) const override { visitor.visit(*this); }
+
+private:
+    int radius_;
+};
+
+class Rect final : public Shape {
+public:
+    Rect(int width, int height) : width_(width), height_(height) {}
+    int width() const { return width_; }
+    int height() const { return height_; }
+    void accept(ShapeVisitor& visitor) const override { visitor.visit(*this); }
+
+private:
+    int width_;
+    int height_;
+};
+
+class Triangle final : public Shape {
+public:
+    void accept(ShapeVisitor& visitor) const override { visitor.visit(*this); }
+};
+
+// Operation 1: describe. Added without touching the shape classes.
+class DescribeVisitor final : public ShapeVisitor {
+public:
+    void visit(const Circle& circle) override { std::cout << "circle r=" << circle.radius() << "\n"; }
+    void visit(const Rect& rect) override { std::cout << "rect " << rect.width() << "x" << rect.height() << "\n"; }
+    void visit(const Triangle&) override { std::cout << "triangle\n"; }
+};
+
+// Operation 2: count corners. A visitor can keep state across the walk.
+class CornerCounter final : public ShapeVisitor {
+public:
+    void visit(const Circle&) override {}
+    void visit(const Rect&) override { corners_ += 4; }
+    void visit(const Triangle&) override { corners_ += 3; }
+    int corners() const { return corners_; }
+
+private:
+    int corners_ = 0;
+};
+
+int main() {
+    std::vector<std::unique_ptr<Shape>> shapes;
+    shapes.push_back(std::make_unique<Circle>(2));
+    shapes.push_back(std::make_unique<Rect>(3, 4));
+    shapes.push_back(std::make_unique<Triangle>());
+
+    DescribeVisitor describe;
+    CornerCounter counter;
+    for (const auto& shape : shapes) {
+        shape->accept(describe);
+        shape->accept(counter);
+    }
+    std::cout << "corners " << counter.corners() << "\n";
+}
+c:["$","$L18",null,{"lesson":{"id":"visitor","level":"L5","title":"Visitor: add operations without editing the classes","oneLiner":"Move an operation out of a class hierarchy into a visitor, so new operations do not touch the element classes.","cardTopic":"L5.visitor","intro":"A Visitor lets you **add a new operation over a stable family of types** without editing those types. Each element class has one tiny method, `accept(visitor)`, that calls back `visitor.visit(*this)`. Because the call happens inside the concrete class, the compiler picks the right `visit` overload for that concrete type. This is called **double dispatch**: the first virtual call picks the element, the second picks the operation.\n\nThe visitor interface has one `visit` per concrete element. Each new operation is a new class implementing it, and it can keep its own state (a running total, a string builder) across the walk.\n\nThe deciding factor is **which axis changes**. If you add operations often and the set of element types is stable (an AST, a document model, a set of shapes), Visitor is a good fit. If you add element types often, Visitor is a poor fit: every new element forces a change in every visitor. That is the **expression problem**; no design gives you both for free.","smell":"- A chain of `dynamic_cast` or `typeid` checks to find out what an object is.\n- Every new operation (print, export, price, validate) is another function with the same type-switch.\n- A new subclass compiles fine but falls into an \"unknown\" branch at run time.\n- The base class keeps growing virtual methods for unrelated jobs.","before":"$19","after":"$1a","beforeOutput":"circle r=2\nrect 3x4\nunknown shape","afterOutput":"circle r=2\nrect 3x4\ntriangle\ncorners 7","refactorNotes":"The type-switch is gone. `describe` and `CornerCounter` are two operations added without editing `Circle`, `Rect` or `Triangle`. The safety property is the point: add a fourth shape and `ShapeVisitor` gets a new pure virtual, so every visitor refuses to compile until it handles the newcomer, instead of printing \"unknown shape\" in production.\n\n**Trade-offs:** Visitor makes new types expensive (touch the interface and all visitors) and creates a cyclic dependency between the interface and the elements, which is why the code forward-declares them. Elements must expose enough accessors for the visitor to work, which weakens encapsulation. If you are on C++17 and the set of types is closed, `std::variant` with `std::visit` gives the same exhaustiveness check with much less ceremony and no base class; mention it as the modern alternative.","interviewSignal":"Say \"operations change more often than the types\" before reaching for it, and name double dispatch. Show `accept` calling `visitor.visit(*this)` and explain why the call must be in the concrete class. Senior signal: you state the expression-problem trade-off, offer `std::variant` + `std::visit` as the lighter option, and explain that adding a type breaks the build on purpose. It appears in AST walkers, file-system trees (size, search, export) and pricing rules over a fixed set of item kinds.","overApplication":"For two element types and one operation, a virtual method is simpler. Visitors over a hierarchy that grows monthly turn every addition into a many-file change. The accept/visit pair is boilerplate that readers have to learn, and visitors that need to reach into every element's private data end up forcing public getters. Do not use Visitor to avoid writing a virtual function you are allowed to add."},"nextId":"interpreter"}]
+12:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1, viewport-fit=cover"}],["$","meta","2",{"name":"theme-color","content":"#0a1530"}]]
+1b:I[27201,["$2"],"IconMark"]
+f:null
+15:[["$","title","0",{"children":"Visitor: add operations without editing the classes: Blueprint Clash"}],["$","meta","1",{"name":"description","content":"A creature-tactics RPG that teaches low-level design in C++ and high-level system design, from fundamentals to big-tech interview level."}],["$","link","2",{"rel":"manifest","href":"/blueprint-clash/manifest.webmanifest","crossOrigin":"$undefined"}],["$","meta","3",{"name":"mobile-web-app-capable","content":"yes"}],["$","meta","4",{"name":"apple-mobile-web-app-title","content":"Blueprint Clash"}],["$","meta","5",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","link","6",{"rel":"icon","href":"/blueprint-clash/icon.png?icon.27re_xscs-jmw.png","sizes":"256x256","type":"image/png"}],["$","link","7",{"rel":"apple-touch-icon","href":"/blueprint-clash/apple-icon.png?apple-icon.2rac1w0yc3rju.png","sizes":"180x180","type":"image/png"}],["$","$L1b","8",{}]]

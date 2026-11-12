@@ -1,0 +1,125 @@
+1:"$Sreact.fragment"
+2:"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js"
+3:I[39756,["$2"],"default"]
+4:I[37457,["$2"],"default"]
+5:"/blueprint-clash/_next/static/chunks/2n5qeheznvl4u.js"
+6:I[22016,["$2","$5"],""]
+7:I[64576,["$2"],"PwaRegister"]
+d:I[97367,["$2"],"OutletBoundary"]
+e:"$Sreact.suspense"
+10:"ViewportBoundary"
+11:I[97367,["$2"],"$10"]
+13:"MetadataBoundary"
+14:I[97367,["$2"],"$13"]
+16:I[68027,["$2"],"default",1]
+:HL["/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","style"]
+:HL["/blueprint-clash/_next/static/media/07c7676b89ed2778-s.p.2bn3s6zvc0dyp.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/blueprint-clash/_next/static/media/486a103cae33528f-s.p.309ilb452anpd.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/blueprint-clash/_next/static/media/53897e768d329f66-s.p.3t6q91iet4nsy.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+9:X
+b:[["children",{"s":"__PAGE__","h":512,"d":{"r":["$","$1","c",{"children":["$Lc",[["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/3s1mctvsetnbs.js","async":true,"nonce":"$undefined"}]],["$","$Ld",null,{"children":["$","$e",null,{"name":"Next.MetadataOutlet","children":"$@f"}]}]]}],"p":false,"v":null}}]]
+a:[["children",{"s":{"n":"id","t":"d","k":"proxy","s":[]},"h":66048,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],"p":false,"v":"$9"},"c":"$Qb"}]]
+8:[["children",{"s":"learn","h":131584,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],"p":false,"v":"$9"},"c":"$Qa"}]]
+0:{"P":null,"c":["","learn","proxy",""],"q":"","i":false,"t":{"t":{"s":"","h":131600,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}],["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js","async":true,"nonce":"$undefined"}]],["$","html",null,{"lang":"en","className":"r7opxW_variable auY9QW_variable u-EJdW_variable h-full","children":["$","body",null,{"className":"min-h-full","children":[["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","main",null,{"className":"flex min-h-dvh flex-col items-center justify-center gap-4 px-4 text-center","children":[["$","div",null,{"className":"font-display text-5xl text-[var(--accent)]","children":"404"}],["$","p",null,{"className":"text-white/60","children":"This room is not on the blueprint yet."}],["$","$L6",null,{"href":"/","className":"text-sm text-white/80 underline","children":"Back to the title screen"}]]}],[]],"forbidden":"$undefined","unauthorized":"$undefined"}],["$","$L7",null,{}]]}]}]]}],"p":false,"v":null},"c":"$Q8"},"h":{"r":["$","$1","h",{"children":[null,["$","$L11",null,{"children":"$L12"}],["$","$L14",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$e",null,{"name":"Next.Metadata","children":"$L15"}]}],null]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"p":false,"v":null}},"m":"$undefined","G":["$16",[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]]],"S":true,"r":"$undefined","s":"$undefined","a":"$undefined","l":"$undefined","p":"$undefined","d":"$undefined","b":"U2e90Mr6iueJEoRJLmd0s"}
+17:"/blueprint-clash/_next/static/chunks/3s1mctvsetnbs.js"
+18:I[25039,["$2","$17"],"LessonClient"]
+9:C
+19:T44d,#include <iostream>
+#include <map>
+#include <memory>
+#include <string>
+
+class RealPriceService {
+public:
+    explicit RealPriceService(int& calls) : calls_(calls) {}
+    int priceCents(const std::string& sku) {
+        ++calls_;  // imagine a slow remote lookup
+        return sku == "apple" ? 40 : 55;
+    }
+
+private:
+    int& calls_;
+};
+
+// Caching is done by hand at some call sites and forgotten at others.
+void showPrice(RealPriceService& service, std::map<std::string, int>& cache, const std::string& sku) {
+    if (cache.find(sku) == cache.end()) cache[sku] = service.priceCents(sku);
+    std::cout << sku << "=" << cache[sku] << "\n";
+}
+
+void showTotal(RealPriceService& service, const std::string& sku, int quantity) {
+    std::cout << "total=" << service.priceCents(sku) * quantity << "\n";  // bypasses the cache
+}
+
+int main() {
+    int calls = 0;
+    RealPriceService service(calls);
+    std::map<std::string, int> cache;
+    showPrice(service, cache, "apple");
+    showPrice(service, cache, "apple");
+    showTotal(service, "apple", 3);
+    std::cout << "real calls=" << calls << "\n";
+}
+1a:T6d7,#include <iostream>
+#include <map>
+#include <memory>
+#include <string>
+#include <utility>
+
+// Subject: the interface callers depend on. Not const: even a read may update a cache.
+class PriceService {
+public:
+    virtual ~PriceService() = default;
+    virtual int priceCents(const std::string& sku) = 0;
+};
+
+class RealPriceService : public PriceService {
+public:
+    explicit RealPriceService(int& calls) : calls_(calls) {}
+    int priceCents(const std::string& sku) override {
+        ++calls_;  // imagine a slow remote lookup
+        return sku == "apple" ? 40 : 55;
+    }
+
+private:
+    int& calls_;
+};
+
+// Caching proxy: same interface, remembers answers. Callers cannot forget to use it.
+class CachingPriceProxy : public PriceService {
+public:
+    explicit CachingPriceProxy(std::unique_ptr<PriceService> real) : real_(std::move(real)) {}
+    int priceCents(const std::string& sku) override {
+        const auto found = cache_.find(sku);
+        if (found != cache_.end()) return found->second;
+        const int price = real_->priceCents(sku);
+        cache_.emplace(sku, price);
+        return price;
+    }
+
+private:
+    std::unique_ptr<PriceService> real_;
+    std::map<std::string, int> cache_;
+};
+
+void showPrice(PriceService& service, const std::string& sku) {
+    std::cout << sku << "=" << service.priceCents(sku) << "\n";
+}
+
+void showTotal(PriceService& service, const std::string& sku, int quantity) {
+    std::cout << "total=" << service.priceCents(sku) * quantity << "\n";
+}
+
+int main() {
+    int calls = 0;
+    CachingPriceProxy service(std::make_unique<RealPriceService>(calls));
+    showPrice(service, "apple");
+    showPrice(service, "apple");
+    showTotal(service, "apple", 3);
+    std::cout << "real calls=" << calls << "\n";
+}
+c:["$","$L18",null,{"lesson":{"id":"proxy","level":"L4","title":"Proxy: a stand-in that controls access","oneLiner":"Put an object with the same interface in front of another to add laziness, caching, protection or remoting without the caller noticing.","cardTopic":"L4.proxy","intro":"A Proxy **implements the same interface as the real object and holds (or lazily creates) it**. The caller cannot tell the difference, but every call passes through the proxy, which can decide whether, when and how to forward it.\n\nFour common jobs: a **virtual proxy** defers an expensive construction until first use; a **caching proxy** remembers results; a **protection proxy** checks permissions; a **remote proxy** hides a network call behind a local-looking method. Rate limiting, retries, logging and circuit breakers are the same shape, which is why service clients in real systems are often a stack of them.\n\nThe line between Proxy and Decorator is intent. A decorator adds new behaviour to the output; a proxy controls access to the same behaviour. The code is nearly identical, so say the intent out loud.","smell":"- Every caller that needs a cache writes its own, and one forgets.\n- Permission or null checks repeated before each use of an object.\n- The expensive resource is created at start-up although most runs never use it.\n- Changing the caching or retry policy means editing many call sites.","before":"$19","after":"$1a","beforeOutput":"apple=40\napple=40\ntotal=120\nreal calls=2","afterOutput":"apple=40\napple=40\ntotal=120\nreal calls=1","refactorNotes":"Every path to the price now goes through one object, so the real service is called once. Callers depend on `PriceService` and cannot tell a proxy from the real thing, which means a protection or retry proxy can be stacked later without touching them. The proxy owns the real service with a `unique_ptr`.\n\n**Trade-off:** identical interfaces hide latency and behaviour. A cache needs an invalidation story (TTL, version keys, explicit eviction) or it serves stale prices; it also needs a size bound and a thread-safety decision (a mutex, or one proxy per thread). Because a cached read mutates state, the interface method cannot honestly be `const`, which is worth saying aloud.","interviewSignal":"Name the flavour (virtual, caching, protection, remote) and say \"same interface, so callers are unchanged\". Senior signal: you raise invalidation, bounded size and concurrency before the interviewer does, you separate Proxy from Decorator by intent, and you note that a remote proxy must expose failure (timeouts, errors) in its contract instead of pretending the call is local.","overApplication":"A proxy in front of something cheap and local only adds a hop. Stacking five transparent layers (cache, retry, auth, logging, metrics) makes behaviour surprising and latency hard to attribute; make each layer explicit in one composition root. Never let a proxy change what the call means: a \"get\" that sometimes returns stale data is a decision the caller should be able to see."},"nextId":"strategy"}]
+12:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1, viewport-fit=cover"}],["$","meta","2",{"name":"theme-color","content":"#0a1530"}]]
+1b:I[27201,["$2"],"IconMark"]
+f:null
+15:[["$","title","0",{"children":"Proxy: a stand-in that controls access: Blueprint Clash"}],["$","meta","1",{"name":"description","content":"A creature-tactics RPG that teaches low-level design in C++ and high-level system design, from fundamentals to big-tech interview level."}],["$","link","2",{"rel":"manifest","href":"/blueprint-clash/manifest.webmanifest","crossOrigin":"$undefined"}],["$","meta","3",{"name":"mobile-web-app-capable","content":"yes"}],["$","meta","4",{"name":"apple-mobile-web-app-title","content":"Blueprint Clash"}],["$","meta","5",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","link","6",{"rel":"icon","href":"/blueprint-clash/icon.png?icon.27re_xscs-jmw.png","sizes":"256x256","type":"image/png"}],["$","link","7",{"rel":"apple-touch-icon","href":"/blueprint-clash/apple-icon.png?apple-icon.2rac1w0yc3rju.png","sizes":"180x180","type":"image/png"}],["$","$L1b","8",{}]]

@@ -1,0 +1,98 @@
+1:"$Sreact.fragment"
+2:"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js"
+3:I[39756,["$2"],"default"]
+4:I[37457,["$2"],"default"]
+5:"/blueprint-clash/_next/static/chunks/2n5qeheznvl4u.js"
+6:I[22016,["$2","$5"],""]
+7:I[64576,["$2"],"PwaRegister"]
+d:I[97367,["$2"],"OutletBoundary"]
+e:"$Sreact.suspense"
+10:"ViewportBoundary"
+11:I[97367,["$2"],"$10"]
+13:"MetadataBoundary"
+14:I[97367,["$2"],"$13"]
+16:I[68027,["$2"],"default",1]
+:HL["/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","style"]
+:HL["/blueprint-clash/_next/static/media/07c7676b89ed2778-s.p.2bn3s6zvc0dyp.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/blueprint-clash/_next/static/media/486a103cae33528f-s.p.309ilb452anpd.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/blueprint-clash/_next/static/media/53897e768d329f66-s.p.3t6q91iet4nsy.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+9:X
+b:[["children",{"s":"__PAGE__","h":512,"d":{"r":["$","$1","c",{"children":["$Lc",[["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/3s1mctvsetnbs.js","async":true,"nonce":"$undefined"}]],["$","$Ld",null,{"children":["$","$e",null,{"name":"Next.MetadataOutlet","children":"$@f"}]}]]}],"p":false,"v":null}}]]
+a:[["children",{"s":{"n":"id","t":"d","k":"object-pool","s":[]},"h":66048,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],"p":false,"v":"$9"},"c":"$Qb"}]]
+8:[["children",{"s":"learn","h":131584,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],"p":false,"v":"$9"},"c":"$Qa"}]]
+0:{"P":null,"c":["","learn","object-pool",""],"q":"","i":false,"t":{"t":{"s":"","h":131600,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}],["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js","async":true,"nonce":"$undefined"}]],["$","html",null,{"lang":"en","className":"r7opxW_variable auY9QW_variable u-EJdW_variable h-full","children":["$","body",null,{"className":"min-h-full","children":[["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","main",null,{"className":"flex min-h-dvh flex-col items-center justify-center gap-4 px-4 text-center","children":[["$","div",null,{"className":"font-display text-5xl text-[var(--accent)]","children":"404"}],["$","p",null,{"className":"text-white/60","children":"This room is not on the blueprint yet."}],["$","$L6",null,{"href":"/","className":"text-sm text-white/80 underline","children":"Back to the title screen"}]]}],[]],"forbidden":"$undefined","unauthorized":"$undefined"}],["$","$L7",null,{}]]}]}]]}],"p":false,"v":null},"c":"$Q8"},"h":{"r":["$","$1","h",{"children":[null,["$","$L11",null,{"children":"$L12"}],["$","$L14",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$e",null,{"name":"Next.Metadata","children":"$L15"}]}],null]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"p":false,"v":null}},"m":"$undefined","G":["$16",[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]]],"S":true,"r":"$undefined","s":"$undefined","a":"$undefined","l":"$undefined","p":"$undefined","d":"$undefined","b":"U2e90Mr6iueJEoRJLmd0s"}
+17:"/blueprint-clash/_next/static/chunks/3s1mctvsetnbs.js"
+18:I[25039,["$2","$17"],"LessonClient"]
+9:C
+19:T884,#include <cstddef>
+#include <iostream>
+#include <memory>
+#include <vector>
+
+class Connection {
+public:
+    explicit Connection(int id) : id_(id) { std::cout << "open " << id_ << "\n"; }
+    ~Connection() { std::cout << "close " << id_ << "\n"; }
+    int id() const { return id_; }
+
+private:
+    int id_;
+};
+
+// A fixed-size pool. A lease is a unique_ptr whose deleter hands the object back instead of
+// destroying it, so a caller cannot forget to release (RAII). The pool must outlive its leases.
+class ConnectionPool {
+public:
+    explicit ConnectionPool(std::size_t size) {
+        for (std::size_t i = 0; i < size; ++i) idle_.push_back(std::make_unique<Connection>(static_cast<int>(i)));
+    }
+
+    class Returner {
+    public:
+        explicit Returner(ConnectionPool* pool) : pool_(pool) {}
+        void operator()(Connection* c) const { pool_->giveBack(c); }
+
+    private:
+        ConnectionPool* pool_;
+    };
+    using Lease = std::unique_ptr<Connection, Returner>;
+
+    // Returns an empty lease when exhausted: the caller decides whether to wait, fail or shed load.
+    Lease acquire() {
+        if (idle_.empty()) return Lease(nullptr, Returner(this));
+        Connection* c = idle_.back().release();
+        idle_.pop_back();
+        return Lease(c, Returner(this));
+    }
+    std::size_t idleCount() const { return idle_.size(); }
+
+private:
+    void giveBack(Connection* c) { idle_.push_back(std::unique_ptr<Connection>(c)); }
+    std::vector<std::unique_ptr<Connection>> idle_;
+};
+
+void handleRequest(ConnectionPool& pool, int requestId) {
+    ConnectionPool::Lease lease = pool.acquire();
+    if (!lease) {
+        std::cout << "request " << requestId << " rejected: pool exhausted\n";
+        return;
+    }
+    std::cout << "request " << requestId << " used connection " << lease->id() << "\n";
+}  // the lease goes out of scope here and the connection returns to the pool
+
+int main() {
+    ConnectionPool pool(2);
+    handleRequest(pool, 1);
+    handleRequest(pool, 2);
+    {
+        auto a = pool.acquire();
+        auto b = pool.acquire();
+        handleRequest(pool, 3);  // both leased: rejected
+    }
+    std::cout << "idle " << pool.idleCount() << "\n";
+}
+c:["$","$L18",null,{"lesson":{"id":"object-pool","level":"L3","title":"Object Pool: reuse expensive objects","oneLiner":"Keep a fixed set of costly objects and lend them out, returning them automatically with RAII.","cardTopic":"L3.object-pool","intro":"An Object Pool pre-creates objects that are **expensive to build or limited in number** (database connections, threads, large buffers) and lends them to callers. The pool bounds resource use and removes the cost of repeated creation.\n\nThe C++ idiom is a **lease**: a `unique_ptr` with a custom deleter that returns the object to the pool instead of deleting it. The caller cannot forget to release, even on an early return or an exception. Decide what happens when the pool is empty: block, fail fast (shown here), grow, or shed load.","smell":"- Opening and closing a connection (or allocating a big buffer) per request.\n- Latency spikes caused by creation cost.\n- Unbounded resource use under load, hitting a server's connection limit.\n- Manual `acquire()`/`release()` pairs that leak when an error path skips the release.","before":"#include <iostream>\n\nclass Connection {\npublic:\n    explicit Connection(int id) : id_(id) { std::cout << \"open \" << id_ << \"\\n\"; }\n    ~Connection() { std::cout << \"close \" << id_ << \"\\n\"; }\n    int id() const { return id_; }\n\nprivate:\n    int id_;\n};\n\n// Pretend opening a connection costs a network round trip. Every request pays it again.\nvoid handleRequest(int requestId) {\n    Connection conn(requestId);\n    std::cout << \"request \" << requestId << \" used connection \" << conn.id() << \"\\n\";\n}\n\nint main() {\n    handleRequest(1);\n    handleRequest(2);\n    handleRequest(3);\n}\n","after":"$19","beforeOutput":"open 1\nrequest 1 used connection 1\nclose 1\nopen 2\nrequest 2 used connection 2\nclose 2\nopen 3\nrequest 3 used connection 3\nclose 3","afterOutput":"open 0\nopen 1\nrequest 1 used connection 1\nrequest 2 used connection 1\nrequest 3 rejected: pool exhausted\nidle 2\nclose 0\nclose 1","refactorNotes":"Two connections are opened once and reused by every request. The lease's deleter returns the connection when the scope ends, and an exhausted pool is an explicit, testable outcome rather than a crash.\n\n**Trade-offs:** pooled objects are long-lived, so they must be reset to a clean state before reuse (stale state leaks between callers). The pool must outlive its leases. This version is single-threaded: a real pool needs a mutex around the idle list and a condition variable if callers wait. And a pool only pays off if creation is genuinely costly; measure first.","interviewSignal":"Show the lease idea (RAII return) and name the policy for exhaustion. Mention reset-on-return, lifetime ordering (the pool outlives the leases) and thread safety. Many machine-coding rounds (connection pool, thread pool, rate limiter) are this pattern plus concurrency.","overApplication":"Pooling cheap objects makes things slower and more complex than `make_unique`, since allocators are already fast. Pools also hide bugs: a dirty object handed to the next caller causes data leaks that are hard to reproduce."},"nextId":"di"}]
+12:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1, viewport-fit=cover"}],["$","meta","2",{"name":"theme-color","content":"#0a1530"}]]
+1a:I[27201,["$2"],"IconMark"]
+f:null
+15:[["$","title","0",{"children":"Object Pool: reuse expensive objects: Blueprint Clash"}],["$","meta","1",{"name":"description","content":"A creature-tactics RPG that teaches low-level design in C++ and high-level system design, from fundamentals to big-tech interview level."}],["$","link","2",{"rel":"manifest","href":"/blueprint-clash/manifest.webmanifest","crossOrigin":"$undefined"}],["$","meta","3",{"name":"mobile-web-app-capable","content":"yes"}],["$","meta","4",{"name":"apple-mobile-web-app-title","content":"Blueprint Clash"}],["$","meta","5",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","link","6",{"rel":"icon","href":"/blueprint-clash/icon.png?icon.27re_xscs-jmw.png","sizes":"256x256","type":"image/png"}],["$","link","7",{"rel":"apple-touch-icon","href":"/blueprint-clash/apple-icon.png?apple-icon.2rac1w0yc3rju.png","sizes":"180x180","type":"image/png"}],["$","$L1a","8",{}]]

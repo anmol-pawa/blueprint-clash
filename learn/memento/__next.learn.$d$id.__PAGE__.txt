@@ -1,0 +1,92 @@
+1:"$Sreact.fragment"
+2:"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js"
+3:I[39756,["$2"],"default"]
+4:I[37457,["$2"],"default"]
+5:"/blueprint-clash/_next/static/chunks/2n5qeheznvl4u.js"
+6:I[22016,["$2","$5"],""]
+7:I[64576,["$2"],"PwaRegister"]
+10:"/blueprint-clash/_next/static/chunks/3s1mctvsetnbs.js"
+11:I[25039,["$2","$10"],"LessonClient"]
+16:"ViewportBoundary"
+17:I[97367,["$2"],"$16"]
+18:"MetadataBoundary"
+19:I[97367,["$2"],"$18"]
+1a:"$Sreact.suspense"
+1b:I[27201,["$2"],"IconMark"]
+:HL["/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","style"]
+9:X
+c:X
+c:C
+12:T5b0,#include <iostream>
+#include <string>
+#include <utility>
+#include <vector>
+
+class Editor {
+public:
+    // An opaque token: only Editor can build one or read it. History just carries it.
+    class Snapshot {
+    private:
+        friend class Editor;
+        Snapshot(std::string text, std::size_t cursor) : text_(std::move(text)), cursor_(cursor) {}
+        std::string text_;
+        std::size_t cursor_;
+    };
+
+    void type(const std::string& more) {
+        text_ += more;
+        cursor_ = text_.size();
+    }
+    Snapshot save() const { return Snapshot(text_, cursor_); }
+    void restore(const Snapshot& snapshot) {
+        text_ = snapshot.text_;
+        cursor_ = snapshot.cursor_;
+    }
+    void print() const { std::cout << text_ << " cursor " << cursor_ << "\n"; }
+
+private:
+    std::string text_;
+    std::size_t cursor_ = 0;
+};
+
+class History {
+public:
+    void push(Editor::Snapshot snapshot) { snapshots_.push_back(std::move(snapshot)); }
+    bool empty() const { return snapshots_.empty(); }
+    Editor::Snapshot pop() {
+        Editor::Snapshot last = std::move(snapshots_.back());
+        snapshots_.pop_back();
+        return last;
+    }
+
+private:
+    std::vector<Editor::Snapshot> snapshots_;
+};
+
+int main() {
+    Editor editor;
+    History history;
+    editor.type("hello");
+    history.push(editor.save());
+    editor.type(" world");
+    editor.print();
+    if (!history.empty()) editor.restore(history.pop());
+    editor.print();
+}
+f:[["children",{"s":"__PAGE__","h":160,"d":{"r":["$","$1","c",{"children":[["$","$L11",null,{"lesson":{"id":"memento","level":"L5","title":"Memento: save and restore state without breaking encapsulation","oneLiner":"Capture an object's state in an opaque token so it can be restored later, without exposing its internals.","cardTopic":"L5.memento","intro":"A Memento is **a sealed snapshot of an object's state**. The object (the originator) creates it and is the only one who can read it; a caretaker (an undo history, a save slot) stores it and hands it back, without ever looking inside. That is what makes undo possible without making every field public.\n\nThe roles: the originator has `save()` and `restore(snapshot)`; the memento is a small value type with a private constructor and a `friend` (or nested-class access) for the originator only; the caretaker keeps a stack of mementos. In C++ a nested `Snapshot` class with a private constructor and `friend class Editor;` gives exactly this.\n\nMementos are an alternative to Command-with-undo. Command stores how to reverse an action; Memento stores what the state was. Memento is simpler when reversing is hard or the state is small; Command is cheaper when the state is large and the change is tiny.","smell":"- Fields are public (or have setters for everything) just so another class can save and restore them.\n- The save code lives in the caller and has to list every field; adding a field silently breaks undo.\n- A restore brings back some fields and forgets others, leaving an inconsistent object (a cursor past the end of the text).\n- The history class knows the editor's internals.","before":"#include <iostream>\n#include <string>\n\n// Every field is public, so the caller does the saving, and has to remember every field.\nclass Editor {\npublic:\n    std::string text;\n    int cursor = 0;\n};\n\nint main() {\n    Editor editor;\n    editor.text = \"hello\";\n    editor.cursor = 5;\n\n    std::string savedText = editor.text;  // the caller copies the insides...\n    editor.text += \" world\";\n    editor.cursor = 11;\n\n    editor.text = savedText;  // ...and forgets the cursor when restoring\n    std::cout << editor.text << \" cursor \" << editor.cursor << \"\\n\";\n}\n","after":"$12","beforeOutput":"hello cursor 11","afterOutput":"hello world cursor 11\nhello cursor 5","refactorNotes":"The caller used to copy `text` and forget `cursor`; now `save()` captures every field in one place, next to the fields, so a new field is added to the snapshot in the same edit. The `Snapshot` constructor is private and only `Editor` is a friend, so `History` can store and return snapshots but cannot read or forge one. The fields are private again.\n\n**Trade-offs:** a snapshot copies the whole state, so a big document times a long history is memory-hungry. Options are to store diffs (then you are close to Command), to cap the history, or to share unchanged parts (persistent data structures). Mementos also freeze invariants at one moment: restoring a snapshot into an object whose environment has moved on (a file that was deleted) needs care. If the snapshot must outlive the program (save files), you have a serialisation format and a versioning problem, which is a different design.","interviewSignal":"Name the three roles, then say \"the history never sees inside the snapshot\". In an editor, text-box or game-save question, point at the encapsulation win (private fields, one `save()`), then offer the cost model: full copy versus deltas, with a cap on history depth. Senior signal: you compare it with Command-based undo, say which you would pick for this size of state, and mention what happens to redo (clear it on a new edit).","overApplication":"Snapshotting a large object on every keystroke is a performance bug. If the state is two integers, passing them back is simpler. A memento that exposes getters for the caretaker to \"peek\" has lost its point. And if only one operation needs undo, a single reverse function is lighter than a whole snapshot protocol."},"nextId":"visitor"}],["$L13"],"$L14"]}],"p":"$@15","v":null,"s":"$9"}}]]
+d:[["children",{"s":{"n":"id","t":"d","k":"memento","s":[]},"h":65632,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}]}]]}],"p":"$@e","v":"$c","s":"$9"},"c":"$Qf"}]]
+a:[["children",{"s":"learn","h":131168,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}]}]]}],"p":"$@b","v":"$c","s":"$9"},"c":"$Qd"}]]
+0:{"t":{"t":{"s":"","h":131152,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","precedence":"next"}],["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js","async":true}]],["$","html",null,{"lang":"en","className":"r7opxW_variable auY9QW_variable u-EJdW_variable h-full","children":["$","body",null,{"className":"min-h-full","children":[["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}],"notFound":[["$","main",null,{"className":"flex min-h-dvh flex-col items-center justify-center gap-4 px-4 text-center","children":[["$","div",null,{"className":"font-display text-5xl text-[var(--accent)]","children":"404"}],["$","p",null,{"className":"text-white/60","children":"This room is not on the blueprint yet."}],["$","$L6",null,{"href":"/","className":"text-sm text-white/80 underline","children":"Back to the title screen"}]]}],[]]}],["$","$L7",null,{}]]}]}]]}],"p":"$@8","v":null,"s":"$9"},"c":"$Qa"},"h":{"r":["$","$1","h",{"children":[null,["$","$L17",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1, viewport-fit=cover"}],["$","meta","2",{"name":"theme-color","content":"#0a1530"}]]}],["$","$L19",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$1a",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"Memento: save and restore state without breaking encapsulation: Blueprint Clash"}],["$","meta","1",{"name":"description","content":"A creature-tactics RPG that teaches low-level design in C++ and high-level system design, from fundamentals to big-tech interview level."}],["$","link","2",{"rel":"manifest","href":"/blueprint-clash/manifest.webmanifest"}],["$","meta","3",{"name":"mobile-web-app-capable","content":"yes"}],["$","meta","4",{"name":"apple-mobile-web-app-title","content":"Blueprint Clash"}],["$","meta","5",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","link","6",{"rel":"icon","href":"/blueprint-clash/icon.png?icon.27re_xscs-jmw.png","sizes":"256x256","type":"image/png"}],["$","link","7",{"rel":"apple-touch-icon","href":"/blueprint-clash/apple-icon.png?apple-icon.2rac1w0yc3rju.png","sizes":"180x180","type":"image/png"}],["$","$L1b","8",{}]]}]}],null]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"p":"$@1c","v":null,"s":"$9"}},"a":"$@1d","u":"$@1e","b":"U2e90Mr6iueJEoRJLmd0s"}
+1f:I[97367,["$2"],"OutletBoundary"]
+13:["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/3s1mctvsetnbs.js","async":true}]
+14:["$","$L1f",null,{"children":["$","$1a",null,{"name":"Next.MetadataOutlet","children":"$@20"}]}]
+9:300
+20:null
+1e:true
+9:C
+1d:0
+e:"$undefined"
+b:"$undefined"
+8:"$undefined"
+1c:"$undefined"
+15:"$undefined"

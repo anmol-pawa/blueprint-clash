@@ -1,0 +1,83 @@
+1:"$Sreact.fragment"
+2:"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js"
+3:I[39756,["$2"],"default"]
+4:I[37457,["$2"],"default"]
+5:"/blueprint-clash/_next/static/chunks/2n5qeheznvl4u.js"
+6:I[22016,["$2","$5"],""]
+7:I[64576,["$2"],"PwaRegister"]
+d:I[97367,["$2"],"OutletBoundary"]
+e:"$Sreact.suspense"
+10:"ViewportBoundary"
+11:I[97367,["$2"],"$10"]
+13:"MetadataBoundary"
+14:I[97367,["$2"],"$13"]
+16:I[68027,["$2"],"default",1]
+:HL["/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","style"]
+:HL["/blueprint-clash/_next/static/media/07c7676b89ed2778-s.p.2bn3s6zvc0dyp.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/blueprint-clash/_next/static/media/486a103cae33528f-s.p.309ilb452anpd.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/blueprint-clash/_next/static/media/53897e768d329f66-s.p.3t6q91iet4nsy.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+9:X
+b:[["children",{"s":"__PAGE__","h":512,"d":{"r":["$","$1","c",{"children":["$Lc",[["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/3s1mctvsetnbs.js","async":true,"nonce":"$undefined"}]],["$","$Ld",null,{"children":["$","$e",null,{"name":"Next.MetadataOutlet","children":"$@f"}]}]]}],"p":false,"v":null}}]]
+a:[["children",{"s":{"n":"id","t":"d","k":"extension-points-from-requirements","s":[]},"h":66048,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],"p":false,"v":"$9"},"c":"$Qb"}]]
+8:[["children",{"s":"learn","h":131584,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],"p":false,"v":"$9"},"c":"$Qa"}]]
+0:{"P":null,"c":["","learn","extension-points-from-requirements",""],"q":"","i":false,"t":{"t":{"s":"","h":131600,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}],["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js","async":true,"nonce":"$undefined"}]],["$","html",null,{"lang":"en","className":"r7opxW_variable auY9QW_variable u-EJdW_variable h-full","children":["$","body",null,{"className":"min-h-full","children":[["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","main",null,{"className":"flex min-h-dvh flex-col items-center justify-center gap-4 px-4 text-center","children":[["$","div",null,{"className":"font-display text-5xl text-[var(--accent)]","children":"404"}],["$","p",null,{"className":"text-white/60","children":"This room is not on the blueprint yet."}],["$","$L6",null,{"href":"/","className":"text-sm text-white/80 underline","children":"Back to the title screen"}]]}],[]],"forbidden":"$undefined","unauthorized":"$undefined"}],["$","$L7",null,{}]]}]}]]}],"p":false,"v":null},"c":"$Q8"},"h":{"r":["$","$1","h",{"children":[null,["$","$L11",null,{"children":"$L12"}],["$","$L14",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$e",null,{"name":"Next.Metadata","children":"$L15"}]}],null]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"p":false,"v":null}},"m":"$undefined","G":["$16",[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]]],"S":true,"r":"$undefined","s":"$undefined","a":"$undefined","l":"$undefined","p":"$undefined","d":"$undefined","b":"U2e90Mr6iueJEoRJLmd0s"}
+17:"/blueprint-clash/_next/static/chunks/3s1mctvsetnbs.js"
+18:I[25039,["$2","$17"],"LessonClient"]
+9:C
+19:T628,#include <iostream>
+#include <memory>
+#include <utility>
+
+// The one seam: the requirement said discounts change, so only discounts are an interface.
+class DiscountRule {
+public:
+    virtual ~DiscountRule() = default;
+    virtual int apply(int cents) const = 0;
+};
+
+class NoDiscount : public DiscountRule {
+public:
+    int apply(int cents) const override { return cents; }
+};
+
+class PercentOff : public DiscountRule {
+public:
+    explicit PercentOff(int percent) : percent_(percent) {}
+    int apply(int cents) const override { return cents - cents * percent_ / 100; }
+
+private:
+    int percent_;
+};
+
+class FlatOff : public DiscountRule {
+public:
+    explicit FlatOff(int cents) : cents_(cents) {}
+    int apply(int cents) const override { return cents > cents_ ? cents - cents_ : 0; }
+
+private:
+    int cents_;
+};
+
+// Cart stays concrete: its arithmetic is stable, so it only depends on the seam.
+class Cart {
+public:
+    Cart(int cents, std::unique_ptr<DiscountRule> rule) : cents_(cents), rule_(std::move(rule)) {}
+    int total() const { return rule_->apply(cents_); }
+
+private:
+    int cents_;
+    std::unique_ptr<DiscountRule> rule_;
+};
+
+int main() {
+    std::cout << "gold " << Cart(1000, std::make_unique<PercentOff>(10)).total() << "\n";
+    std::cout << "silver " << Cart(1000, std::make_unique<PercentOff>(5)).total() << "\n";
+    std::cout << "basic " << Cart(1000, std::make_unique<NoDiscount>()).total() << "\n";
+    // A new promotion is a new class; Cart is not edited.
+    std::cout << "flat " << Cart(1000, std::make_unique<FlatOff>(200)).total() << "\n";
+}
+c:["$","$L18",null,{"lesson":{"id":"extension-points-from-requirements","level":"L6","title":"Extension points: ask what will change, then put one seam there","oneLiner":"Read the requirements for words like 'later', 'each month' and 'per customer', and give only those places an interface; keep everything stable concrete.","cardTopic":"L6.extension","intro":"Interviewers end many rounds with a **change request**: \"now add a new kind of discount\". The design that survives it has an abstraction exactly where the requirements hinted at variation, and nowhere else.\n\nRun a short extension-point pass after the entities: for each rule or entity, ask **\"what is the evidence that this changes, and how often?\"** Evidence is in the wording: \"promotions change every month\" (extension point), \"rounding is to whole cents\" (stable). Then pay for a seam only at the first kind: an interface, with the stable parts left as plain classes and functions. The skill is choosing **few** seams and naming why each one exists.","smell":"- Tier or type names compared as strings inside a calculation (`if (tier == \"gold\")`).\n- Adding a new variant means editing the class that also holds unrelated stable logic.\n- The opposite smell: an interface for every noun \"in case\", with one implementation each.","before":"#include <iostream>\n#include <string>\n#include <utility>\n\n// Requirement: \"promotions change every month\". The discount rules are welded into the cart.\nclass Cart {\npublic:\n    Cart(std::string tier, int cents) : tier_(std::move(tier)), cents_(cents) {}\n\n    int total() const {\n        int total = cents_;\n        if (tier_ == \"gold\") {\n            total -= total / 10;\n        } else if (tier_ == \"silver\") {\n            total -= total / 20;\n        }\n        return total;\n    }\n\nprivate:\n    std::string tier_;\n    int cents_;\n};\n\nint main() {\n    std::cout << \"gold \" << Cart(\"gold\", 1000).total() << \"\\n\";\n    std::cout << \"silver \" << Cart(\"silver\", 1000).total() << \"\\n\";\n    std::cout << \"basic \" << Cart(\"basic\", 1000).total() << \"\\n\";\n}\n","after":"$19","beforeOutput":"gold 900\nsilver 950\nbasic 1000","afterOutput":"gold 900\nsilver 950\nbasic 1000\nflat 800","refactorNotes":"The three existing lines are unchanged, so the refactor is behaviour-preserving, and the fourth line is a promotion the old `Cart` could only gain by editing its `total()`. Only the discount became an interface; `Cart` itself, money as integer cents and the arithmetic stayed concrete because nothing in the requirements said they vary. The cart owns its rule through `unique_ptr` (composition), which is also what the class diagram should show. Trade-off: a string tier like \"gold\" now has to be mapped to a rule somewhere (a small factory or a lookup table at the edge), which is the right place for that string.","interviewSignal":"Say the evidence aloud: \"you said promotions change monthly, so discounts are my extension point; tax rounding is fixed, so I keep it concrete.\" Level signal: SDE II adds a seam when asked for the change; Senior predicts the seam from the wording before being asked; Staff also names what is deliberately closed and what the cost of the seam is (an indirection, a mapping at the edge).","overApplication":"Putting an interface behind every noun \"for flexibility\" gives you a dozen one-implementation hierarchies, more files and indirection to read, and still not the right seam when the real change arrives. A seam is a bet on a specific axis of change; spread bets thinly and you pay for all of them."},"nextId":"threads-share-less"}]
+12:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1, viewport-fit=cover"}],["$","meta","2",{"name":"theme-color","content":"#0a1530"}]]
+1a:I[27201,["$2"],"IconMark"]
+f:null
+15:[["$","title","0",{"children":"Extension points: ask what will change, then put one seam there: Blueprint Clash"}],["$","meta","1",{"name":"description","content":"A creature-tactics RPG that teaches low-level design in C++ and high-level system design, from fundamentals to big-tech interview level."}],["$","link","2",{"rel":"manifest","href":"/blueprint-clash/manifest.webmanifest","crossOrigin":"$undefined"}],["$","meta","3",{"name":"mobile-web-app-capable","content":"yes"}],["$","meta","4",{"name":"apple-mobile-web-app-title","content":"Blueprint Clash"}],["$","meta","5",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","link","6",{"rel":"icon","href":"/blueprint-clash/icon.png?icon.27re_xscs-jmw.png","sizes":"256x256","type":"image/png"}],["$","link","7",{"rel":"apple-touch-icon","href":"/blueprint-clash/apple-icon.png?apple-icon.2rac1w0yc3rju.png","sizes":"180x180","type":"image/png"}],["$","$L1a","8",{}]]

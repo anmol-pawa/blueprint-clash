@@ -1,0 +1,121 @@
+1:"$Sreact.fragment"
+2:"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js"
+3:I[39756,["$2"],"default"]
+4:I[37457,["$2"],"default"]
+5:"/blueprint-clash/_next/static/chunks/2n5qeheznvl4u.js"
+6:I[22016,["$2","$5"],""]
+7:I[64576,["$2"],"PwaRegister"]
+10:"/blueprint-clash/_next/static/chunks/3s1mctvsetnbs.js"
+11:I[25039,["$2","$10"],"LessonClient"]
+17:"ViewportBoundary"
+18:I[97367,["$2"],"$17"]
+19:"MetadataBoundary"
+1a:I[97367,["$2"],"$19"]
+1b:"$Sreact.suspense"
+1c:I[27201,["$2"],"IconMark"]
+:HL["/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","style"]
+9:X
+c:X
+c:C
+12:T430,#include <iostream>
+#include <mutex>
+#include <thread>
+
+// Inventory with hand-written locking. The early return forgets to unlock, so the lock leaks.
+class Inventory {
+public:
+    explicit Inventory(int stock) : stock_(stock) {}
+
+    bool take(int n) {
+        mutex_.lock();
+        if (n > stock_) return false;  // BUG: still locked
+        stock_ -= n;
+        mutex_.unlock();
+        return true;
+    }
+
+    // Asks "could another thread get the lock right now?" from a probe thread.
+    bool lockIsFree() {
+        bool free = false;
+        std::thread probe([this, &free] {
+            free = mutex_.try_lock();
+            if (free) mutex_.unlock();
+        });
+        probe.join();
+        return free;
+    }
+
+    void rescueForTest() { mutex_.unlock(); }
+
+private:
+    std::mutex mutex_;
+    int stock_;
+};
+
+int main() {
+    Inventory inventory(3);
+    std::cout << "take 5: " << (inventory.take(5) ? "ok" : "refused") << "\n";
+    std::cout << "lock free after refusal? " << (inventory.lockIsFree() ? "yes" : "no") << "\n";
+    inventory.rescueForTest();
+}
+13:T4b0,#include <iostream>
+#include <mutex>
+#include <thread>
+
+// Same behaviour, but the guard releases the lock on every path.
+class Inventory {
+public:
+    explicit Inventory(int stock) : stock_(stock) {}
+
+    bool take(int n) {
+        std::lock_guard<std::mutex> guard(mutex_);
+        if (n > stock_) return false;
+        stock_ -= n;
+        return true;
+    }
+
+    int stock() const {
+        std::lock_guard<std::mutex> guard(mutex_);
+        return stock_;
+    }
+
+    // Asks "could another thread get the lock right now?" from a probe thread.
+    bool lockIsFree() {
+        bool free = false;
+        std::thread probe([this, &free] {
+            free = mutex_.try_lock();
+            if (free) mutex_.unlock();
+        });
+        probe.join();
+        return free;
+    }
+
+private:
+    mutable std::mutex mutex_;
+    int stock_;
+};
+
+int main() {
+    Inventory inventory(3);
+    std::cout << "take 5: " << (inventory.take(5) ? "ok" : "refused") << "\n";
+    std::cout << "lock free after refusal? " << (inventory.lockIsFree() ? "yes" : "no") << "\n";
+    std::cout << "take 2: " << (inventory.take(2) ? "ok" : "refused") << "\n";
+    std::cout << "stock left: " << inventory.stock() << "\n";
+}
+f:[["children",{"s":"__PAGE__","h":160,"d":{"r":["$","$1","c",{"children":[["$","$L11",null,{"lesson":{"id":"mutex-raii","level":"L7","title":"Mutex: lock with RAII, never by hand","oneLiner":"Own the lock with a guard object so every exit path (early return, exception) releases it.","cardTopic":"L7.mutex","intro":"A mutex protects an **invariant**, not a variable: \"stock is never negative\", \"the map and its size agree\". Every access to the data that invariant covers happens while holding the same mutex, and the lock is held for as short a **critical section** as the invariant allows.\n\nCalling `lock()` and `unlock()` yourself is the C++ equivalent of `malloc`/`free`: correct only if every path remembers. RAII fixes it. Use `std::lock_guard` for plain scoped locking, `std::unique_lock` when you need to unlock early or hand the lock to a condition variable, and `std::scoped_lock` for several mutexes at once (next lessons).\n\nKeep the mutex **private, next to the data it guards**, and expose operations (\"take n\") instead of \"lock, then touch fields\". Never call unknown code (a callback, a virtual function) while holding a lock: you cannot know what locks it takes.","smell":"- `mutex.lock()` and `mutex.unlock()` written out by hand.\n- An early `return`, `continue` or `throw` between lock and unlock.\n- Public data members plus a public mutex: callers are trusted to lock.\n- Locking inside a loop body just to read a flag that never changes.","before":"$12","after":"$13","beforeOutput":"take 5: refused\nlock free after refusal? no","afterOutput":"take 5: refused\nlock free after refusal? yes\ntake 2: ok\nstock left: 1","refactorNotes":"`lock_guard` ties the lock to the scope: the refusal path, the success path and any exception all release it. The mutex is `mutable` so a `const` reader such as `stock()` can lock it, which keeps const-correctness honest (a const method that is safe to call from many threads).\n\n**Trade-off:** a guard held for a whole function can be too coarse. When the slow part (I/O, a callback) does not touch the invariant, narrow the scope with a block or switch to `unique_lock` and unlock early. Coarse locks are simple and usually right first; fine-grained locks buy throughput at the price of reasoning about more invariants.","interviewSignal":"Name the invariant the mutex guards, state that the guard is private, and show `lock_guard` unprompted. Senior signal: const methods lock a `mutable` mutex, no callbacks run under the lock, and you can say why a global lock is a fine v1. Staff signal: you discuss contention, lock scope versus invariant scope, and when to shard the lock.","overApplication":"Locking everything \"to be safe\" serialises the program and invites deadlock. A lock around data only one thread ever touches is pure cost, and a lock around a single independent counter is often better as an atomic. Guards also do not make a multi-step operation atomic if you drop and retake the lock between the steps."},"nextId":"condvar-predicate"}],["$L14"],"$L15"]}],"p":"$@16","v":null,"s":"$9"}}]]
+d:[["children",{"s":{"n":"id","t":"d","k":"mutex-raii","s":[]},"h":65632,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}]}]]}],"p":"$@e","v":"$c","s":"$9"},"c":"$Qf"}]]
+a:[["children",{"s":"learn","h":131168,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}]}]]}],"p":"$@b","v":"$c","s":"$9"},"c":"$Qd"}]]
+0:{"t":{"t":{"s":"","h":131152,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","precedence":"next"}],["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js","async":true}]],["$","html",null,{"lang":"en","className":"r7opxW_variable auY9QW_variable u-EJdW_variable h-full","children":["$","body",null,{"className":"min-h-full","children":[["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}],"notFound":[["$","main",null,{"className":"flex min-h-dvh flex-col items-center justify-center gap-4 px-4 text-center","children":[["$","div",null,{"className":"font-display text-5xl text-[var(--accent)]","children":"404"}],["$","p",null,{"className":"text-white/60","children":"This room is not on the blueprint yet."}],["$","$L6",null,{"href":"/","className":"text-sm text-white/80 underline","children":"Back to the title screen"}]]}],[]]}],["$","$L7",null,{}]]}]}]]}],"p":"$@8","v":null,"s":"$9"},"c":"$Qa"},"h":{"r":["$","$1","h",{"children":[null,["$","$L18",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1, viewport-fit=cover"}],["$","meta","2",{"name":"theme-color","content":"#0a1530"}]]}],["$","$L1a",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$1b",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"Mutex: lock with RAII, never by hand: Blueprint Clash"}],["$","meta","1",{"name":"description","content":"A creature-tactics RPG that teaches low-level design in C++ and high-level system design, from fundamentals to big-tech interview level."}],["$","link","2",{"rel":"manifest","href":"/blueprint-clash/manifest.webmanifest"}],["$","meta","3",{"name":"mobile-web-app-capable","content":"yes"}],["$","meta","4",{"name":"apple-mobile-web-app-title","content":"Blueprint Clash"}],["$","meta","5",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","link","6",{"rel":"icon","href":"/blueprint-clash/icon.png?icon.27re_xscs-jmw.png","sizes":"256x256","type":"image/png"}],["$","link","7",{"rel":"apple-touch-icon","href":"/blueprint-clash/apple-icon.png?apple-icon.2rac1w0yc3rju.png","sizes":"180x180","type":"image/png"}],["$","$L1c","8",{}]]}]}],null]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"p":"$@1d","v":null,"s":"$9"}},"a":"$@1e","u":"$@1f","b":"U2e90Mr6iueJEoRJLmd0s"}
+20:I[97367,["$2"],"OutletBoundary"]
+14:["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/3s1mctvsetnbs.js","async":true}]
+15:["$","$L20",null,{"children":["$","$1b",null,{"name":"Next.MetadataOutlet","children":"$@21"}]}]
+9:300
+21:null
+1f:true
+9:C
+1e:0
+e:"$undefined"
+b:"$undefined"
+8:"$undefined"
+1d:"$undefined"
+16:"$undefined"

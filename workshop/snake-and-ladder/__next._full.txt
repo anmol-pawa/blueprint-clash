@@ -1,0 +1,1112 @@
+1:"$Sreact.fragment"
+2:"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js"
+3:I[39756,["$2"],"default"]
+4:I[37457,["$2"],"default"]
+5:"/blueprint-clash/_next/static/chunks/2n5qeheznvl4u.js"
+6:I[22016,["$2","$5"],""]
+7:I[64576,["$2"],"PwaRegister"]
+d:I[97367,["$2"],"OutletBoundary"]
+e:"$Sreact.suspense"
+10:"ViewportBoundary"
+11:I[97367,["$2"],"$10"]
+13:"MetadataBoundary"
+14:I[97367,["$2"],"$13"]
+16:I[68027,["$2"],"default",1]
+:HL["/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","style"]
+:HL["/blueprint-clash/_next/static/media/07c7676b89ed2778-s.p.2bn3s6zvc0dyp.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/blueprint-clash/_next/static/media/486a103cae33528f-s.p.309ilb452anpd.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/blueprint-clash/_next/static/media/53897e768d329f66-s.p.3t6q91iet4nsy.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+9:X
+b:[["children",{"s":"__PAGE__","h":512,"d":{"r":["$","$1","c",{"children":["$Lc",[["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/2uk3wcjwqg0tl.js","async":true,"nonce":"$undefined"}],["$","script","script-1",{"src":"/blueprint-clash/_next/static/chunks/1zdu7yjl8efu4.js","async":true,"nonce":"$undefined"}]],["$","$Ld",null,{"children":["$","$e",null,{"name":"Next.MetadataOutlet","children":"$@f"}]}]]}],"p":false,"v":null}}]]
+a:[["children",{"s":{"n":"id","t":"d","k":"snake-and-ladder","s":[]},"h":66048,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],"p":false,"v":"$9"},"c":"$Qb"}]]
+8:[["children",{"s":"workshop","h":131584,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],"p":false,"v":"$9"},"c":"$Qa"}]]
+0:{"P":null,"c":["","workshop","snake-and-ladder",""],"q":"","i":false,"t":{"t":{"s":"","h":131600,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}],["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js","async":true,"nonce":"$undefined"}]],["$","html",null,{"lang":"en","className":"r7opxW_variable auY9QW_variable u-EJdW_variable h-full","children":["$","body",null,{"className":"min-h-full","children":[["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","main",null,{"className":"flex min-h-dvh flex-col items-center justify-center gap-4 px-4 text-center","children":[["$","div",null,{"className":"font-display text-5xl text-[var(--accent)]","children":"404"}],["$","p",null,{"className":"text-white/60","children":"This room is not on the blueprint yet."}],["$","$L6",null,{"href":"/","className":"text-sm text-white/80 underline","children":"Back to the title screen"}]]}],[]],"forbidden":"$undefined","unauthorized":"$undefined"}],["$","$L7",null,{}]]}]}]]}],"p":false,"v":null},"c":"$Q8"},"h":{"r":["$","$1","h",{"children":[null,["$","$L11",null,{"children":"$L12"}],["$","$L14",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$e",null,{"name":"Next.Metadata","children":"$L15"}]}],null]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"p":false,"v":null}},"m":"$undefined","G":["$16",[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]]],"S":true,"r":"$undefined","s":"$undefined","a":"$undefined","l":"$undefined","p":"$undefined","d":"$undefined","b":"U2e90Mr6iueJEoRJLmd0s"}
+9:C
+12:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1, viewport-fit=cover"}],["$","meta","2",{"name":"theme-color","content":"#0a1530"}]]
+17:I[27201,["$2"],"IconMark"]
+f:null
+15:[["$","title","0",{"children":"Snake and Ladder: Blueprint Clash"}],["$","meta","1",{"name":"description","content":"A creature-tactics RPG that teaches low-level design in C++ and high-level system design, from fundamentals to big-tech interview level."}],["$","link","2",{"rel":"manifest","href":"/blueprint-clash/manifest.webmanifest","crossOrigin":"$undefined"}],["$","meta","3",{"name":"mobile-web-app-capable","content":"yes"}],["$","meta","4",{"name":"apple-mobile-web-app-title","content":"Blueprint Clash"}],["$","meta","5",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","link","6",{"rel":"icon","href":"/blueprint-clash/icon.png?icon.27re_xscs-jmw.png","sizes":"256x256","type":"image/png"}],["$","link","7",{"rel":"apple-touch-icon","href":"/blueprint-clash/apple-icon.png?apple-icon.2rac1w0yc3rju.png","sizes":"180x180","type":"image/png"}],["$","$L17","8",{}]]
+18:"/blueprint-clash/_next/static/chunks/2uk3wcjwqg0tl.js"
+19:"/blueprint-clash/_next/static/chunks/1zdu7yjl8efu4.js"
+1a:I[65612,["$2","$18","$19"],"WorkshopClient"]
+1b:T1984,# Editorial: Snake and Ladder
+
+## Requirements
+Functional: two or more players share a board of squares `1..N` and start on square 0. Each `takeTurn()` rolls an injected dice for the current player, moves the piece, applies a snake or ladder if the piece stopped on its start, and passes the turn. The first to land exactly on the last square wins. Hidden until asked: a roll past the end is not played (the piece stays and the turn still passes), nothing happens after the game is won (not even a roll), the links must be sane (no chains, no shared starts, none starting on the last square) and bad setups return `nullptr`. Non-goals: a UI, a random board generator, networking, persistence.
+
+**Change Storm 1, house rules:** `Rules::bounceBack` makes an overshoot bounce off the last square, and a snake or ladder on the bounce square still applies. `Rules::sixRerolls` gives a six another roll, with the third six in a row forfeited. Both are revealable by asking whether the rules will stay this simple.
+
+**Change Storm 2, resigning:** `resign(player)` removes a player. The rotation skips them, the turn passes if it was theirs (with a fresh run of sixes), and the last player in wins at once.
+
+## Reference design
+- `Board` owns the squares and the links: whether a link set is acceptable, where a stop leads (`endOf`) and what kind of jump it is. It knows nothing about players or dice.
+- `OvershootPolicy` is a Strategy for the one decision that varies: where a roll past the end lands. `StayPolicy` and `BouncePolicy` are two small classes. The game asks for the landing square and never branches on which rule is on.
+- `TurnOrder` owns the rotation, who has left, and the run of sixes. Every way a turn can pass (a normal roll, a forfeit, a resignation) goes through one private `passOn()`, which resets the run and moves to the next active player.
+- `GameImpl` is the facade: roll, ask the policy for the landing square, let the board apply the link, record the win, ask the turn order what happens next. The dice is injected and owned.
+- `game.cpp` validates the setup in one place and picks the policy; the three factory functions share it.
+
+**Storm 1 in the reference:** one new class (`BouncePolicy`) and the bonus-roll logic inside `TurnOrder`, which already owned the rotation. `Board` and `GameImpl::move()` do not change. Because every landing goes through the same board lookup, a snake on the bounce square works with no extra code.
+
+**Storm 2 in the reference:** one `leave()` method on `TurnOrder` and one `resign()` on `GameImpl`. Skipping is already the rotation's job, so a departed player is just another flag that `passOn()` consults. Nothing about movement, links or the policies changes.
+
+## Alternatives
+- **A `Player` class with a position and `move(n)`** is the first thing most candidates draw, and it is fine. The reference keeps positions in a vector because a player has no behaviour: the interesting rules (links, overshoot, turn order) live elsewhere, and a class with only a field and a setter is a struct in a costume. If players grow behaviour (a bot, a handicap) extract it then.
+- **A `Dice` class created inside the game** with `rand()` makes every test flaky and every bug unreproducible. Injecting the dice is the single most important decision in this problem, and the one an interviewer is probing when they say "how do you test it?".
+- **`Snake` and `Ladder` subclasses of a `Jump` base class** model a difference that is one comparison (`to > from`). The reference stores `from -> to` and derives the kind. Subclasses earn their place only if snakes and ladders get different behaviour (a snake that can be avoided with a shield, say).
+- **An overshoot `enum` and an `if`** in `takeTurn()` is the right answer when there are two rules and no more are expected. The Strategy is cheap here and keeps `GameImpl::move()` unchanged by the storm; do not extend it to a registry of rules until a third one shows up.
+- **A `std::function<int(int,int,int)>`** as the overshoot rule is lighter than an interface with two classes, and perfectly acceptable. A named class wins when the rule gets its own tests, state or documentation.
+- **Following chains** (a ladder that ends on a snake) at build time with cycle detection is friendlier to board designers than refusing them. Refusing chains is easier to specify and test; either is defensible if stated.
+
+## Trade-offs
+Returning `nullptr` for a bad setup (and a `Turn` value for every move) avoids exceptions, which this toolchain does not provide, at the cost of an error that carries no reason; a `Result` type with a message would help a real caller. Keeping the turn order separate from the game costs one more file but lets three different events (a roll, a forfeit, a resignation) share one definition of "next". Putting the six-run in `TurnOrder` mixes a game rule into a rotation class; the alternative, a `TurnPolicy` interface, is worth it once there is a third rule.
+
+The bounce limit (`boardSize >= 6`) exists only so that a bounce cannot land below square 1. A product might instead clamp the bounce; that would be a rule change, not a correctness fix.
+
+## What breaks at 10x
+At 10x the board (a 1000-square board) nothing changes: a link lookup is O(1) in a vector. At 10x the players (a hundred seats) the rotation's `passOn()` is O(players) in the worst case when most have resigned; a circular list or an index of active players makes it O(1), and is the first thing to change. At 10x the games (a server), the engine stays a pure state machine of a few integers, so work is outside it: one owner per game so two clients cannot roll for the same turn, a server-side dice that is seeded and logged, sequence numbers for idempotent retries, and the roll log (not snapshots) as the stored state, which also gives replays.
+
+## Level signals
+- **SDE2:** correct moves, links and exact finish; injects the dice or at least can explain why they should; validates link input; tests the endgame and the snake direction.
+- **Senior:** asks about overshoot, chains and the dice before drawing anything; keeps the board, the rotation and the facade in separate small classes; identifies overshoot as the varying decision and the run of sixes as state; makes every path that passes the turn go through one method.
+- **Staff:** names the next seams and why they are not built (a `TurnPolicy`, chain-following boards), explains how the roll log gives replay, fairness and idempotency, and discusses a trusted server-side dice unprompted.
+1c:Tbae,#pragma once
+// Public API for the Snake and Ladder problem. The hidden tests only use what is declared here.
+// You implement snl::makeGame() (in any of your .cpp files); everything behind it is your design.
+#include <memory>
+#include <vector>
+
+namespace snl {
+
+// A source of dice rolls. The game never creates its own randomness: tests hand it a scripted dice.
+// Every roll() returns a number from 1 to 6.
+class Dice {
+ public:
+  virtual ~Dice() = default;
+  virtual int roll() = 0;
+};
+
+// A snake or a ladder: a piece that stops on square `from` is moved to square `to`.
+// It is a ladder when to > from and a snake when to < from.
+struct Link {
+  int from;
+  int to;
+};
+
+enum class Jump {
+  None,
+  Ladder,
+  Snake
+};
+
+// What happened in one call to takeTurn().
+struct Turn {
+  int player = -1;       // who rolled; -1 if the game was already over and nothing happened
+  int roll = 0;          // the number rolled; 0 if the game was already over
+  int from = 0;          // the square the player stood on before the roll
+  int to = 0;            // the square the player stands on afterwards
+  Jump jump = Jump::None;  // the snake or ladder that moved the player after the roll, if any
+  bool won = false;      // true if this turn ended the game in the player's favour
+};
+
+class Game {
+ public:
+  virtual ~Game() = default;
+
+  // The current player rolls the dice and moves. Returns what happened.
+  // Once the game is over this does nothing (the dice is not rolled) and returns a Turn with player == -1.
+  virtual Turn takeTurn() = 0;
+
+  // Index of the player to roll next (players are numbered from 0); -1 once the game is over.
+  virtual int currentPlayer() const = 0;
+  // Square of a player: 0 before entering the board, then 1..boardSize. -1 if there is no such player.
+  virtual int positionOf(int player) const = 0;
+  virtual bool finished() const = 0;
+  // The winner's index; -1 while the game is going.
+  virtual int winner() const = 0;
+  // Number of takeTurn() calls that rolled the dice.
+  virtual int turnsTaken() const = 0;
+};
+
+// A board of squares 1..boardSize. Everyone starts at square 0 (off the board), player 0 rolls first and
+// the turn passes round in index order. Roll the dice, move forward that many squares. The first player to
+// land exactly on boardSize wins. A roll that would go past boardSize is not played: the player stays put.
+// A player who stops on the start of a snake or a ladder is moved to its end. Players share squares freely.
+//
+// Returns nullptr unless: players >= 2, boardSize >= 2, dice is not null, and the links are sane:
+// every `from` and `to` is on the board (1..boardSize), from != to, no two links share a `from`, no link
+// starts on boardSize, and no link ends on the start of another link (so one stop causes at most one jump).
+// A link may end on boardSize: landing there wins.
+std::unique_ptr<Game> makeGame(int players, int boardSize, std::vector<Link> links, std::unique_ptr<Dice> dice);
+
+}  // namespace snl
+1d:T4c6,#pragma once
+// Change Storm 1 adds house rules. Everything from api.h still holds, and makeGame() keeps working as before.
+// Only games made by makeGameWithRules() follow the options below.
+#include "api.h"
+
+namespace snl {
+
+struct Rules {
+  // Overshoot: instead of staying put, a roll past boardSize bounces back. The piece goes to the end and
+  // counts the leftover squares backwards: it lands on boardSize - (position + roll - boardSize).
+  // The square it bounces to is an ordinary landing, so a snake or ladder there still applies.
+  bool bounceBack = false;
+  // A six gives the same player another roll straight away (a game-winning six ends the game).
+  // A third six in a row by the same player is not played: the player stays put, the turn passes to the
+  // next player, and the count starts again. Any roll other than a six ends the run.
+  bool sixRerolls = false;
+};
+
+// Returns nullptr in the cases makeGame() does, and also if bounceBack is set and boardSize < 6
+// (a bounce could land below square 1).
+std::unique_ptr<Game> makeGameWithRules(int players, int boardSize, std::vector<Link> links, Rules rules,
+                                        std::unique_ptr<Dice> dice);
+
+}  // namespace snl
+1e:T44c,#pragma once
+// Change Storm 2 lets players leave. Everything from api.h and api_storm1.h still holds.
+#include "api_storm1.h"
+
+namespace snl {
+
+class ResignableGame : public Game {
+ public:
+  // The player leaves the game. Their piece stays where it is and is never moved again, and the turn order skips
+  // them from now on. If it was their turn (including a bonus roll after a six), the turn passes to the next
+  // player still in the game. When only one player is left in, that player wins at once.
+  // Returns false and changes nothing if the game is over, the index is not a player, or the player already left.
+  virtual bool resign(int player) = 0;
+  // True while the player is still in the game; false once they resigned (or if there is no such player).
+  virtual bool isActive(int player) const = 0;
+};
+
+// Same rules and the same nullptr cases as makeGameWithRules().
+std::unique_ptr<ResignableGame> makeResignableGame(int players, int boardSize, std::vector<Link> links, Rules rules,
+                                                   std::unique_ptr<Dice> dice);
+
+}  // namespace snl
+1f:T1e4d,#include <cstddef>
+#include <initializer_list>
+#include <utility>
+#include <vector>
+
+#include "api.h"
+#include "bp_test.h"
+
+using snl::Jump;
+using snl::Link;
+using snl::Turn;
+
+namespace {
+// The rolls a test wants, and how many have been used. The game owns the Dice, the test owns the script.
+struct Script {
+  std::vector<int> rolls;
+  std::size_t next = 0;
+};
+
+class ScriptedDice : public snl::Dice {
+ public:
+  explicit ScriptedDice(Script* script) : script_(script) {}
+  int roll() override { return script_->next < script_->rolls.size() ? script_->rolls[script_->next++] : 1; }
+
+ private:
+  Script* script_;
+};
+
+std::unique_ptr<snl::Dice> diceFor(Script& s) { return std::make_unique<ScriptedDice>(&s); }
+
+const std::vector<Link> kNoLinks;
+// On a 20-square board: a ladder 4 -> 14 and a snake 17 -> 7.
+const std::vector<Link> kLinks = {{4, 14}, {17, 7}};
+
+void rollAll(snl::Game& g, int times) {
+  for (int i = 0; i < times; ++i) g.takeTurn();
+}
+}  // namespace
+
+TEST(Turns, EveryoneStartsOffTheBoard) {
+  Script s;
+  auto g = snl::makeGame(3, 20, kLinks, diceFor(s));
+  ASSERT_TRUE(g != nullptr);
+  for (int p = 0; p < 3; ++p) EXPECT_EQ(g->positionOf(p), 0);
+  EXPECT_EQ(g->currentPlayer(), 0);
+  EXPECT_FALSE(g->finished());
+  EXPECT_EQ(g->winner(), -1);
+  EXPECT_EQ(g->turnsTaken(), 0);
+}
+
+TEST(Turns, ARollMovesTheCurrentPlayer) {
+  Script s{{3}};
+  auto g = snl::makeGame(2, 20, kNoLinks, diceFor(s));
+  const Turn t = g->takeTurn();
+  EXPECT_EQ(t.player, 0);
+  EXPECT_EQ(t.roll, 3);
+  EXPECT_EQ(t.from, 0);
+  EXPECT_EQ(t.to, 3);
+  EXPECT_TRUE(t.jump == Jump::None);
+  EXPECT_FALSE(t.won);
+  EXPECT_EQ(g->positionOf(0), 3);
+  EXPECT_EQ(g->positionOf(1), 0);
+  EXPECT_EQ(g->turnsTaken(), 1);
+}
+
+TEST(Turns, PlayersTakeTurnsInOrderAndWrapAround) {
+  Script s{{1, 2, 3, 4}};
+  auto g = snl::makeGame(3, 50, kNoLinks, diceFor(s));
+  EXPECT_EQ(g->takeTurn().player, 0);
+  EXPECT_EQ(g->currentPlayer(), 1);
+  EXPECT_EQ(g->takeTurn().player, 1);
+  EXPECT_EQ(g->takeTurn().player, 2);
+  EXPECT_EQ(g->currentPlayer(), 0);
+  const Turn fourth = g->takeTurn();
+  EXPECT_EQ(fourth.player, 0);
+  EXPECT_EQ(fourth.from, 1);
+  EXPECT_EQ(fourth.to, 5);
+  EXPECT_EQ(g->positionOf(1), 2);
+  EXPECT_EQ(g->positionOf(2), 3);
+}
+
+TEST(Turns, PlayersMayShareASquare) {
+  Script s{{2, 2}};
+  auto g = snl::makeGame(2, 20, kNoLinks, diceFor(s));
+  rollAll(*g, 2);
+  EXPECT_EQ(g->positionOf(0), 2);
+  EXPECT_EQ(g->positionOf(1), 2);
+}
+
+TEST(Turns, PositionOfAnUnknownPlayerIsMinusOne) {
+  Script s;
+  auto g = snl::makeGame(2, 20, kNoLinks, diceFor(s));
+  EXPECT_EQ(g->positionOf(-1), -1);
+  EXPECT_EQ(g->positionOf(2), -1);
+}
+
+TEST(Links, ALadderCarriesThePieceUp) {
+  Script s{{4}};
+  auto g = snl::makeGame(2, 20, kLinks, diceFor(s));
+  const Turn t = g->takeTurn();
+  EXPECT_EQ(t.from, 0);
+  EXPECT_EQ(t.to, 14);
+  EXPECT_TRUE(t.jump == Jump::Ladder);
+  EXPECT_EQ(g->positionOf(0), 14);
+  EXPECT_EQ(g->currentPlayer(), 1);
+}
+
+TEST(Links, ASnakeSlidesThePieceDown) {
+  Script s{{6, 1, 6, 1, 5}};  // player 0 reaches 6, 12, then 17; player 1 shuffles along
+  auto g = snl::makeGame(2, 20, kLinks, diceFor(s));
+  rollAll(*g, 4);
+  const Turn t = g->takeTurn();
+  EXPECT_EQ(t.player, 0);
+  EXPECT_EQ(t.from, 12);
+  EXPECT_EQ(t.to, 7);
+  EXPECT_TRUE(t.jump == Jump::Snake);
+  EXPECT_EQ(g->positionOf(0), 7);
+}
+
+TEST(Links, PassingOverALinkDoesNothing) {
+  Script s{{3, 1, 3}};  // 0 -> 3, then 3 -> 6 steps over the ladder at 4
+  auto g = snl::makeGame(2, 20, kLinks, diceFor(s));
+  rollAll(*g, 3);
+  EXPECT_EQ(g->positionOf(0), 6);
+}
+
+TEST(Links, ALinkOnlyAppliesToThePlayerWhoStoppedThere) {
+  Script s{{4}};
+  auto g = snl::makeGame(3, 20, kLinks, diceFor(s));
+  g->takeTurn();
+  EXPECT_EQ(g->positionOf(0), 14);
+  EXPECT_EQ(g->positionOf(1), 0);
+  EXPECT_EQ(g->positionOf(2), 0);
+}
+
+TEST(Links, ASnakeCanSendYouBackToSquareOne) {
+  Script s{{3, 1, 1}};
+  auto g = snl::makeGame(2, 20, {{4, 1}}, diceFor(s));
+  rollAll(*g, 2);  // player 0 on 3, player 1 on 1
+  const Turn t = g->takeTurn();  // player 0 rolls 1 and stops on the snake's head at 4
+  EXPECT_TRUE(t.jump == Jump::Snake);
+  EXPECT_EQ(g->positionOf(0), 1);
+}
+
+TEST(Finish, AnExactRollWins) {
+  Script s{{6, 1, 4}};
+  auto g = snl::makeGame(2, 10, kNoLinks, diceFor(s));
+  rollAll(*g, 2);
+  const Turn t = g->takeTurn();
+  EXPECT_EQ(t.to, 10);
+  EXPECT_TRUE(t.won);
+  EXPECT_TRUE(g->finished());
+  EXPECT_EQ(g->winner(), 0);
+  EXPECT_EQ(g->currentPlayer(), -1);
+  EXPECT_EQ(g->positionOf(0), 10);
+}
+
+TEST(Finish, OvershootingStaysPutAndPassesTheTurn) {
+  Script s{{6, 1, 6}};
+  auto g = snl::makeGame(2, 10, kNoLinks, diceFor(s));
+  rollAll(*g, 2);
+  const Turn t = g->takeTurn();  // 6 + 6 = 12, past the last square
+  EXPECT_EQ(t.from, 6);
+  EXPECT_EQ(t.to, 6);
+  EXPECT_FALSE(t.won);
+  EXPECT_EQ(g->positionOf(0), 6);
+  EXPECT_FALSE(g->finished());
+  EXPECT_EQ(g->currentPlayer(), 1);
+}
+
+TEST(Finish, ALadderToTheLastSquareWins) {
+  Script s{{5}};
+  auto g = snl::makeGame(2, 20, {{5, 20}}, diceFor(s));
+  const Turn t = g->takeTurn();
+  EXPECT_TRUE(t.jump == Jump::Ladder);
+  EXPECT_TRUE(t.won);
+  EXPECT_EQ(g->winner(), 0);
+}
+
+TEST(Finish, TheSecondPlayerCanWin) {
+  Script s{{1, 6, 2, 4}};
+  auto g = snl::makeGame(2, 10, kNoLinks, diceFor(s));
+  rollAll(*g, 3);  // player 0 on 3, player 1 on 6
+  const Turn t = g->takeTurn();
+  EXPECT_EQ(t.player, 1);
+  EXPECT_TRUE(t.won);
+  EXPECT_EQ(g->winner(), 1);
+}
+
+TEST(Finish, NothingHappensAfterTheGameIsOver) {
+  Script s{{6, 1, 4, 3, 3}};
+  auto g = snl::makeGame(2, 10, kNoLinks, diceFor(s));
+  rollAll(*g, 3);
+  ASSERT_TRUE(g->finished());
+  const std::size_t used = s.next;
+  const Turn t = g->takeTurn();
+  EXPECT_EQ(t.player, -1);
+  EXPECT_EQ(t.roll, 0);
+  EXPECT_FALSE(t.won);
+  EXPECT_EQ(s.next, used);  // the dice was not rolled
+  EXPECT_EQ(g->turnsTaken(), 3);
+  EXPECT_EQ(g->positionOf(1), 1);
+  EXPECT_EQ(g->winner(), 0);
+}
+
+TEST(Finish, ABlockedRollStillCountsAsATurn) {
+  Script s{{6, 1, 6}};
+  auto g = snl::makeGame(2, 10, kNoLinks, diceFor(s));
+  rollAll(*g, 3);
+  EXPECT_EQ(g->turnsTaken(), 3);
+}
+
+TEST(Setup, NeedsAtLeastTwoPlayers) {
+  Script s;
+  EXPECT_TRUE(snl::makeGame(1, 20, kNoLinks, diceFor(s)) == nullptr);
+  EXPECT_TRUE(snl::makeGame(0, 20, kNoLinks, diceFor(s)) == nullptr);
+  EXPECT_TRUE(snl::makeGame(2, 20, kNoLinks, diceFor(s)) != nullptr);
+}
+
+TEST(Setup, NeedsABoardAndADice) {
+  Script s;
+  EXPECT_TRUE(snl::makeGame(2, 1, kNoLinks, diceFor(s)) == nullptr);
+  EXPECT_TRUE(snl::makeGame(2, 2, kNoLinks, diceFor(s)) != nullptr);
+  EXPECT_TRUE(snl::makeGame(2, 20, kNoLinks, nullptr) == nullptr);
+}
+
+TEST(Setup, LinksMustBeOnTheBoard) {
+  Script s;
+  EXPECT_TRUE(snl::makeGame(2, 20, {{0, 5}}, diceFor(s)) == nullptr);
+  EXPECT_TRUE(snl::makeGame(2, 20, {{5, 21}}, diceFor(s)) == nullptr);
+  EXPECT_TRUE(snl::makeGame(2, 20, {{-3, 5}}, diceFor(s)) == nullptr);
+  EXPECT_TRUE(snl::makeGame(2, 20, {{5, 0}}, diceFor(s)) == nullptr);
+}
+
+TEST(Setup, ALinkMustGoSomewhere) {
+  Script s;
+  EXPECT_TRUE(snl::makeGame(2, 20, {{5, 5}}, diceFor(s)) == nullptr);
+}
+
+TEST(Setup, TheLastSquareCannotStartALink) {
+  Script s;
+  EXPECT_TRUE(snl::makeGame(2, 20, {{20, 3}}, diceFor(s)) == nullptr);
+}
+
+TEST(Setup, TwoLinksCannotStartOnTheSameSquare) {
+  Script s;
+  EXPECT_TRUE(snl::makeGame(2, 20, {{5, 9}, {5, 2}}, diceFor(s)) == nullptr);
+}
+
+TEST(Setup, ALinkCannotEndWhereAnotherBegins) {
+  Script s;
+  EXPECT_TRUE(snl::makeGame(2, 20, {{3, 8}, {8, 12}}, diceFor(s)) == nullptr);
+  EXPECT_TRUE(snl::makeGame(2, 20, {{9, 3}, {3, 12}}, diceFor(s)) == nullptr);
+}
+
+TEST(Setup, TwoLinksMayShareAnEnd) {
+  Script s;
+  EXPECT_TRUE(snl::makeGame(2, 20, {{3, 12}, {9, 12}, {16, 12}}, diceFor(s)) != nullptr);
+}
+
+TEST(Setup, ALinkMayEndOnTheLastSquare) {
+  Script s;
+  EXPECT_TRUE(snl::makeGame(2, 20, {{3, 20}}, diceFor(s)) != nullptr);
+}
+20:T1f63,#include <cstddef>
+#include <utility>
+#include <vector>
+
+#include "api_storm1.h"
+#include "bp_test.h"
+
+using snl::Jump;
+using snl::Link;
+using snl::Rules;
+using snl::Turn;
+
+namespace {
+struct Script {
+  std::vector<int> rolls;
+  std::size_t next = 0;
+};
+
+class ScriptedDice : public snl::Dice {
+ public:
+  explicit ScriptedDice(Script* script) : script_(script) {}
+  int roll() override { return script_->next < script_->rolls.size() ? script_->rolls[script_->next++] : 1; }
+
+ private:
+  Script* script_;
+};
+
+std::unique_ptr<snl::Dice> diceFor(Script& s) { return std::make_unique<ScriptedDice>(&s); }
+
+const std::vector<Link> kNoLinks;
+
+Rules bounce() {
+  Rules r;
+  r.bounceBack = true;
+  return r;
+}
+
+Rules sixes() {
+  Rules r;
+  r.sixRerolls = true;
+  return r;
+}
+
+void rollAll(snl::Game& g, int times) {
+  for (int i = 0; i < times; ++i) g.takeTurn();
+}
+}  // namespace
+
+TEST(Rules, DefaultRulesPlayLikeTheBasicGame) {
+  Script s{{6, 6, 1, 6, 4}};
+  auto g = snl::makeGameWithRules(2, 10, kNoLinks, Rules{}, diceFor(s));
+  ASSERT_TRUE(g != nullptr);
+  g->takeTurn();
+  EXPECT_EQ(g->currentPlayer(), 1);  // a six does not reroll
+  rollAll(*g, 2);                    // player 1 rolls 6, player 0 rolls 1
+  EXPECT_EQ(g->positionOf(1), 6);
+  const Turn t = g->takeTurn();  // player 1 rolls 6 from 6: past the end, stays
+  EXPECT_EQ(t.to, 6);
+  EXPECT_FALSE(g->finished());
+}
+
+TEST(Rules, InvalidSetupsAreStillRejected) {
+  Script s;
+  EXPECT_TRUE(snl::makeGameWithRules(1, 20, kNoLinks, sixes(), diceFor(s)) == nullptr);
+  EXPECT_TRUE(snl::makeGameWithRules(2, 20, {{3, 8}, {8, 12}}, sixes(), diceFor(s)) == nullptr);
+  EXPECT_TRUE(snl::makeGameWithRules(2, 20, kNoLinks, sixes(), nullptr) == nullptr);
+}
+
+TEST(Rules, BouncingNeedsABoardOfAtLeastSix) {
+  Script s;
+  EXPECT_TRUE(snl::makeGameWithRules(2, 5, kNoLinks, bounce(), diceFor(s)) == nullptr);
+  EXPECT_TRUE(snl::makeGameWithRules(2, 6, kNoLinks, bounce(), diceFor(s)) != nullptr);
+  EXPECT_TRUE(snl::makeGameWithRules(2, 2, kNoLinks, sixes(), diceFor(s)) != nullptr);
+}
+
+TEST(Bounce, AnOvershootBouncesOffTheLastSquare) {
+  Script s{{6, 1, 6}};
+  auto g = snl::makeGameWithRules(2, 10, kNoLinks, bounce(), diceFor(s));
+  rollAll(*g, 2);
+  const Turn t = g->takeTurn();  // 6 + 6 = 12, two past the end: back to 8
+  EXPECT_EQ(t.from, 6);
+  EXPECT_EQ(t.to, 8);
+  EXPECT_EQ(g->positionOf(0), 8);
+  EXPECT_EQ(g->currentPlayer(), 1);
+}
+
+TEST(Bounce, TheLeftoverCountsBackwards) {
+  Script s{{6, 1, 3, 1, 6}};
+  auto g = snl::makeGameWithRules(2, 10, kNoLinks, bounce(), diceFor(s));
+  rollAll(*g, 4);
+  EXPECT_EQ(g->positionOf(0), 9);
+  const Turn t = g->takeTurn();  // 9 + 6 = 15, five past the end: back to 5
+  EXPECT_EQ(t.to, 5);
+}
+
+TEST(Bounce, AnExactRollStillWins) {
+  Script s{{6, 1, 4}};
+  auto g = snl::makeGameWithRules(2, 10, kNoLinks, bounce(), diceFor(s));
+  rollAll(*g, 2);
+  EXPECT_TRUE(g->takeTurn().won);
+  EXPECT_EQ(g->winner(), 0);
+}
+
+TEST(Bounce, TheBounceSquareCanHoldASnake) {
+  Script s{{6, 1, 6}};
+  auto g = snl::makeGameWithRules(2, 10, {{8, 3}}, bounce(), diceFor(s));
+  rollAll(*g, 2);
+  const Turn t = g->takeTurn();  // bounces to 8, where a snake waits
+  EXPECT_TRUE(t.jump == Jump::Snake);
+  EXPECT_EQ(t.to, 3);
+  EXPECT_EQ(g->positionOf(0), 3);
+}
+
+TEST(Bounce, TheBounceSquareCanHoldAWinningLadder) {
+  Script s{{6, 1, 6}};
+  auto g = snl::makeGameWithRules(2, 10, {{8, 10}}, bounce(), diceFor(s));
+  rollAll(*g, 2);
+  const Turn t = g->takeTurn();
+  EXPECT_TRUE(t.jump == Jump::Ladder);
+  EXPECT_TRUE(t.won);
+  EXPECT_EQ(g->winner(), 0);
+}
+
+TEST(Bounce, WithoutTheOptionOvershootStillStays) {
+  Script s{{6, 1, 6}};
+  auto g = snl::makeGameWithRules(2, 10, kNoLinks, Rules{}, diceFor(s));
+  rollAll(*g, 2);
+  EXPECT_EQ(g->takeTurn().to, 6);
+}
+
+TEST(Sixes, ASixGivesTheSamePlayerAnotherRoll) {
+  Script s{{6, 2}};
+  auto g = snl::makeGameWithRules(2, 30, kNoLinks, sixes(), diceFor(s));
+  const Turn first = g->takeTurn();
+  EXPECT_EQ(first.to, 6);
+  EXPECT_EQ(g->currentPlayer(), 0);
+  const Turn second = g->takeTurn();
+  EXPECT_EQ(second.player, 0);
+  EXPECT_EQ(second.to, 8);
+  EXPECT_EQ(g->currentPlayer(), 1);
+}
+
+TEST(Sixes, EveryPlayerGetsTheBonus) {
+  Script s{{2, 6, 3}};
+  auto g = snl::makeGameWithRules(2, 30, kNoLinks, sixes(), diceFor(s));
+  g->takeTurn();
+  g->takeTurn();
+  EXPECT_EQ(g->currentPlayer(), 1);
+  EXPECT_EQ(g->takeTurn().player, 1);
+  EXPECT_EQ(g->currentPlayer(), 0);
+}
+
+TEST(Sixes, TwoSixesInARowAreBothPlayed) {
+  Script s{{6, 6, 1, 6}};
+  auto g = snl::makeGameWithRules(2, 18, kNoLinks, sixes(), diceFor(s));
+  rollAll(*g, 2);  // player 0: 6, 12 (both sixes), still player 0
+  EXPECT_EQ(g->currentPlayer(), 0);
+  g->takeTurn();  // roll 1: 13, turn passes
+  g->takeTurn();  // player 1 rolls 6 from 0 and rolls again
+  EXPECT_EQ(g->currentPlayer(), 1);
+  EXPECT_EQ(g->positionOf(1), 6);
+}
+
+TEST(Sixes, AWinningSixEndsTheGameWithoutAnotherRoll) {
+  Script s{{6, 6, 6, 3, 6}};
+  auto g = snl::makeGameWithRules(2, 12, kNoLinks, sixes(), diceFor(s));
+  g->takeTurn();  // player 0: 6
+  g->takeTurn();  // player 0: 12, wins
+  EXPECT_TRUE(g->finished());
+  EXPECT_EQ(g->winner(), 0);
+  EXPECT_EQ(g->currentPlayer(), -1);
+  const std::size_t used = s.next;
+  g->takeTurn();
+  EXPECT_EQ(s.next, used);
+}
+
+TEST(Sixes, ABlockedSixStillCountsAsASix) {
+  Script s{{6, 6, 4}};
+  auto g = snl::makeGameWithRules(2, 10, kNoLinks, sixes(), diceFor(s));
+  g->takeTurn();  // 6
+  const Turn blocked = g->takeTurn();  // 12 is past the end: stays on 6, rolls again
+  EXPECT_EQ(blocked.to, 6);
+  EXPECT_EQ(g->currentPlayer(), 0);
+  EXPECT_TRUE(g->takeTurn().won);
+}
+
+TEST(Sixes, ASixLandingOnASnakeStillRollsAgain) {
+  Script s{{6, 3}};
+  auto g = snl::makeGameWithRules(2, 30, {{6, 2}}, sixes(), diceFor(s));
+  const Turn t = g->takeTurn();
+  EXPECT_TRUE(t.jump == Jump::Snake);
+  EXPECT_EQ(g->positionOf(0), 2);
+  EXPECT_EQ(g->currentPlayer(), 0);
+}
+
+TEST(Sixes, TheThirdSixInARowIsNotPlayed) {
+  Script s{{6, 6, 6}};
+  auto g = snl::makeGameWithRules(2, 40, kNoLinks, sixes(), diceFor(s));
+  rollAll(*g, 2);
+  EXPECT_EQ(g->positionOf(0), 12);
+  const Turn t = g->takeTurn();
+  EXPECT_EQ(t.player, 0);
+  EXPECT_EQ(t.roll, 6);
+  EXPECT_EQ(t.from, 12);
+  EXPECT_EQ(t.to, 12);
+  EXPECT_TRUE(t.jump == Jump::None);
+  EXPECT_EQ(g->positionOf(0), 12);
+  EXPECT_EQ(g->currentPlayer(), 1);
+  EXPECT_EQ(g->turnsTaken(), 3);
+}
+
+TEST(Sixes, TheRunStartsAgainAfterAForfeit) {
+  Script s{{6, 6, 6, 2, 6, 5}};
+  auto g = snl::makeGameWithRules(2, 40, kNoLinks, sixes(), diceFor(s));
+  rollAll(*g, 4);  // player 0 forfeits the third six, player 1 rolls 2
+  EXPECT_EQ(g->currentPlayer(), 0);
+  g->takeTurn();  // a fresh six: moves and keeps the turn
+  EXPECT_EQ(g->positionOf(0), 18);
+  EXPECT_EQ(g->currentPlayer(), 0);
+}
+
+TEST(Sixes, AnyOtherRollBreaksTheRun) {
+  Script s{{6, 6, 3, 1, 6}};
+  auto g = snl::makeGameWithRules(2, 40, kNoLinks, sixes(), diceFor(s));
+  rollAll(*g, 4);  // player 0: 6, 6, 3 (turn passes), player 1: 1
+  EXPECT_EQ(g->positionOf(0), 15);
+  g->takeTurn();  // player 0 rolls a six: a run of one, so it is played
+  EXPECT_EQ(g->positionOf(0), 21);
+  EXPECT_EQ(g->currentPlayer(), 0);
+}
+
+TEST(Sixes, EachPlayerKeepsTheirOwnRun) {
+  Script s{{6, 6, 2, 6, 6, 2}};
+  auto g = snl::makeGameWithRules(2, 60, kNoLinks, sixes(), diceFor(s));
+  rollAll(*g, 6);
+  EXPECT_EQ(g->positionOf(0), 14);
+  EXPECT_EQ(g->positionOf(1), 14);
+}
+
+TEST(Sixes, WithoutTheOptionASixPassesTheTurn) {
+  Script s{{6, 2}};
+  auto g = snl::makeGameWithRules(2, 30, kNoLinks, Rules{}, diceFor(s));
+  g->takeTurn();
+  EXPECT_EQ(g->currentPlayer(), 1);
+}
+
+TEST(Combined, BounceAndSixesWorkTogether) {
+  Rules both;
+  both.bounceBack = true;
+  both.sixRerolls = true;
+  Script s{{6, 6, 3}};
+  auto g = snl::makeGameWithRules(2, 10, kNoLinks, both, diceFor(s));
+  g->takeTurn();  // 6
+  const Turn t = g->takeTurn();  // 12 bounces to 8, and the six still rolls again
+  EXPECT_EQ(t.to, 8);
+  EXPECT_EQ(g->currentPlayer(), 0);
+  g->takeTurn();  // 8 + 3 = 11, bounces to 9
+  EXPECT_EQ(g->positionOf(0), 9);
+  EXPECT_EQ(g->currentPlayer(), 1);
+}
+21:T134d,#include <cstddef>
+#include <utility>
+#include <vector>
+
+#include "api_storm2.h"
+#include "bp_test.h"
+
+using snl::Link;
+using snl::Rules;
+using snl::Turn;
+
+namespace {
+struct Script {
+  std::vector<int> rolls;
+  std::size_t next = 0;
+};
+
+class ScriptedDice : public snl::Dice {
+ public:
+  explicit ScriptedDice(Script* script) : script_(script) {}
+  int roll() override { return script_->next < script_->rolls.size() ? script_->rolls[script_->next++] : 1; }
+
+ private:
+  Script* script_;
+};
+
+std::unique_ptr<snl::Dice> diceFor(Script& s) { return std::make_unique<ScriptedDice>(&s); }
+
+const std::vector<Link> kNoLinks;
+
+Rules sixes() {
+  Rules r;
+  r.sixRerolls = true;
+  return r;
+}
+
+std::unique_ptr<snl::ResignableGame> gameOf(int players, int size, Script& s, Rules rules = Rules{}) {
+  return snl::makeResignableGame(players, size, kNoLinks, rules, diceFor(s));
+}
+}  // namespace
+
+TEST(Resign, InvalidSetupsAreRejected) {
+  Script s;
+  EXPECT_TRUE(gameOf(1, 20, s) == nullptr);
+  EXPECT_TRUE(snl::makeResignableGame(2, 20, kNoLinks, Rules{}, nullptr) == nullptr);
+  EXPECT_TRUE(snl::makeResignableGame(2, 20, {{3, 8}, {8, 12}}, Rules{}, diceFor(s)) == nullptr);
+}
+
+TEST(Resign, PlaysLikeTheOtherGamesUntilSomeoneLeaves) {
+  Script s{{4, 5}};
+  auto g = gameOf(2, 20, s);
+  ASSERT_TRUE(g != nullptr);
+  EXPECT_EQ(g->takeTurn().to, 4);
+  EXPECT_EQ(g->takeTurn().to, 5);
+  EXPECT_TRUE(g->isActive(0));
+  EXPECT_TRUE(g->isActive(1));
+}
+
+TEST(Resign, LeavingWorksOnceAndOnlyForRealPlayers) {
+  Script s;
+  auto g = gameOf(3, 20, s);
+  EXPECT_TRUE(g->resign(1));
+  EXPECT_FALSE(g->isActive(1));
+  EXPECT_TRUE(g->isActive(0));
+  EXPECT_FALSE(g->resign(1));
+  EXPECT_FALSE(g->resign(3));
+  EXPECT_FALSE(g->resign(-1));
+  EXPECT_FALSE(g->isActive(3));
+  EXPECT_FALSE(g->isActive(-1));
+}
+
+TEST(Resign, LeavingOutOfTurnKeepsTheTurnWhereItIs) {
+  Script s{{1, 1, 1}};
+  auto g = gameOf(3, 50, s);
+  EXPECT_TRUE(g->resign(2));
+  EXPECT_EQ(g->currentPlayer(), 0);
+  g->takeTurn();
+  EXPECT_EQ(g->currentPlayer(), 1);
+}
+
+TEST(Resign, LeavingOnYourTurnPassesTheTurn) {
+  Script s;
+  auto g = gameOf(3, 50, s);
+  EXPECT_TRUE(g->resign(0));
+  EXPECT_EQ(g->currentPlayer(), 1);
+}
+
+TEST(Resign, TheLastIndexWrapsRoundToTheFirst) {
+  Script s{{1, 1}};
+  auto g = gameOf(3, 50, s);
+  g->takeTurn();
+  g->takeTurn();
+  EXPECT_EQ(g->currentPlayer(), 2);
+  EXPECT_TRUE(g->resign(2));
+  EXPECT_EQ(g->currentPlayer(), 0);
+}
+
+TEST(Resign, TheTurnOrderSkipsPlayersWhoLeft) {
+  Script s{{1, 2, 3, 4}};
+  auto g = gameOf(3, 50, s);
+  g->resign(1);
+  EXPECT_EQ(g->takeTurn().player, 0);
+  EXPECT_EQ(g->takeTurn().player, 2);
+  EXPECT_EQ(g->takeTurn().player, 0);
+  EXPECT_EQ(g->takeTurn().player, 2);
+}
+
+TEST(Resign, AGameWithOnePlayerLeftIsWon) {
+  Script s;
+  auto g = gameOf(2, 20, s);
+  EXPECT_TRUE(g->resign(0));
+  EXPECT_TRUE(g->finished());
+  EXPECT_EQ(g->winner(), 1);
+  EXPECT_EQ(g->currentPlayer(), -1);
+}
+
+TEST(Resign, ThreePlayersNeedTwoDepartures) {
+  Script s;
+  auto g = gameOf(3, 20, s);
+  EXPECT_TRUE(g->resign(0));
+  EXPECT_FALSE(g->finished());
+  EXPECT_EQ(g->winner(), -1);
+  EXPECT_TRUE(g->resign(1));
+  EXPECT_TRUE(g->finished());
+  EXPECT_EQ(g->winner(), 2);
+}
+
+TEST(Resign, NothingHappensAfterTheGameIsWonByDefault) {
+  Script s{{3, 3}};
+  auto g = gameOf(2, 20, s);
+  g->resign(1);
+  const Turn t = g->takeTurn();
+  EXPECT_EQ(t.player, -1);
+  EXPECT_EQ(s.next, 0u);
+  EXPECT_EQ(g->turnsTaken(), 0);
+}
+
+TEST(Resign, YouCannotLeaveAFinishedGame) {
+  Script s{{6, 1, 4}};
+  auto g = gameOf(2, 10, s);
+  g->takeTurn();
+  g->takeTurn();
+  g->takeTurn();
+  ASSERT_TRUE(g->finished());
+  EXPECT_FALSE(g->resign(1));
+  EXPECT_EQ(g->winner(), 0);
+  EXPECT_TRUE(g->isActive(1));
+}
+
+TEST(Resign, ThePieceStaysWhereItWas) {
+  Script s{{2, 5}};
+  auto g = gameOf(3, 50, s);
+  g->takeTurn();
+  g->takeTurn();
+  g->resign(1);
+  EXPECT_EQ(g->positionOf(1), 5);
+}
+
+TEST(Resign, TheRemainingPlayersFinishTheRace) {
+  Script s{{3, 3, 5, 4, 3, 5}};
+  auto g = gameOf(3, 12, s);
+  g->takeTurn();  // player 0: 3
+  g->resign(1);
+  g->takeTurn();  // player 2: 3
+  g->takeTurn();  // player 0: 8
+  g->takeTurn();  // player 2: 7
+  g->takeTurn();  // player 0: 11
+  const Turn t = g->takeTurn();  // player 2 rolls 5: exactly 12
+  EXPECT_EQ(t.player, 2);
+  EXPECT_TRUE(t.won);
+  EXPECT_EQ(g->winner(), 2);
+}
+
+TEST(Resign, LeavingDuringABonusRollPassesTheTurn) {
+  Script s{{6}};
+  auto g = gameOf(3, 50, s, sixes());
+  g->takeTurn();
+  EXPECT_EQ(g->currentPlayer(), 0);  // the six earned another roll
+  EXPECT_TRUE(g->resign(0));
+  EXPECT_EQ(g->currentPlayer(), 1);
+}
+
+TEST(Resign, TheNextPlayerStartsWithAFreshRunOfSixes) {
+  Script s{{6, 6, 6, 4}};
+  auto g = gameOf(3, 60, s, sixes());
+  g->takeTurn();
+  g->takeTurn();  // player 0 has rolled two sixes in a row
+  g->resign(0);
+  const Turn t = g->takeTurn();  // player 1 rolls a six: the first of their run, so it is played
+  EXPECT_EQ(t.player, 1);
+  EXPECT_EQ(t.to, 6);
+  EXPECT_EQ(g->currentPlayer(), 1);
+}
+22:T627,#pragma once
+#include <cstddef>
+#include <vector>
+
+#include "api.h"
+
+// The squares and the snakes and ladders on them. It knows nothing about players, dice or turns.
+class Board {
+ public:
+  // True if the links obey the rules in api.h for a board of this size.
+  static bool acceptsLinks(int size, const std::vector<snl::Link>& links) {
+    if (size < 2) return false;
+    std::vector<bool> isFrom(static_cast<std::size_t>(size) + 1, false);
+    for (const auto& link : links) {
+      if (!onBoard(size, link.from) || !onBoard(size, link.to)) return false;
+      if (link.from == link.to || link.from == size || isFrom[link.from]) return false;
+      isFrom[link.from] = true;
+    }
+    for (const auto& link : links) {
+      if (isFrom[link.to]) return false;
+    }
+    return true;
+  }
+
+  Board(int size, const std::vector<snl::Link>& links) : size_(size), end_(static_cast<std::size_t>(size) + 1, 0) {
+    for (const auto& link : links) end_[link.from] = link.to;
+  }
+
+  int size() const { return size_; }
+
+  // Where a piece that stops on `square` ends up: the far end of a link, or the square itself.
+  int endOf(int square) const { return end_[square] != 0 ? end_[square] : square; }
+
+  snl::Jump jumpAt(int square) const {
+    if (end_[square] == 0) return snl::Jump::None;
+    return end_[square] > square ? snl::Jump::Ladder : snl::Jump::Snake;
+  }
+
+ private:
+  static bool onBoard(int size, int square) { return square >= 1 && square <= size; }
+
+  int size_;
+  std::vector<int> end_;  // end_[s] is the far end of the link starting on s, or 0 if there is none
+};
+23:T628,#include "game_impl.h"
+
+namespace {
+constexpr int kMinPlayers = 2;
+constexpr int kMinBoardForBounce = 6;  // a bounce from the last-but-one square with a six must stay on the board
+
+std::unique_ptr<GameImpl> build(int players, int size, const std::vector<snl::Link>& links, snl::Rules rules,
+                                std::unique_ptr<snl::Dice> dice) {
+  if (players < kMinPlayers || dice == nullptr || !Board::acceptsLinks(size, links)) return nullptr;
+  if (rules.bounceBack && size < kMinBoardForBounce) return nullptr;
+  std::unique_ptr<OvershootPolicy> overshoot;
+  if (rules.bounceBack) {
+    overshoot = std::make_unique<BouncePolicy>();
+  } else {
+    overshoot = std::make_unique<StayPolicy>();
+  }
+  return std::make_unique<GameImpl>(players, Board(size, links), std::move(overshoot), rules.sixRerolls, std::move(dice));
+}
+}  // namespace
+
+std::unique_ptr<snl::Game> snl::makeGame(int players, int size, std::vector<Link> links, std::unique_ptr<Dice> dice) {
+  return build(players, size, links, Rules{}, std::move(dice));
+}
+
+std::unique_ptr<snl::Game> snl::makeGameWithRules(int players, int size, std::vector<Link> links, Rules rules,
+                                                  std::unique_ptr<Dice> dice) {
+  return build(players, size, links, rules, std::move(dice));
+}
+
+std::unique_ptr<snl::ResignableGame> snl::makeResignableGame(int players, int size, std::vector<Link> links, Rules rules,
+                                                              std::unique_ptr<Dice> dice) {
+  return build(players, size, links, rules, std::move(dice));
+}
+24:T969,#pragma once
+#include <memory>
+#include <utility>
+#include <vector>
+
+#include "api_storm2.h"
+#include "board.h"
+#include "overshoot.h"
+#include "turn_order.h"
+
+// The public face. takeTurn() rolls, asks the policy where the piece lands, lets the board apply any snake or
+// ladder, and then asks the turn order what happens next. Each question is answered by the object that owns it.
+class GameImpl : public snl::ResignableGame {
+ public:
+  GameImpl(int players, Board board, std::unique_ptr<OvershootPolicy> overshoot, bool sixRerolls, std::unique_ptr<snl::Dice> dice)
+      : board_(std::move(board)),
+        overshoot_(std::move(overshoot)),
+        turns_(players, sixRerolls),
+        dice_(std::move(dice)),
+        positions_(static_cast<std::size_t>(players), 0) {}
+
+  snl::Turn takeTurn() override {
+    if (finished()) return snl::Turn{};
+    snl::Turn turn;
+    turn.player = turns_.current();
+    turn.roll = dice_->roll();
+    turn.from = turn.to = positions_[turn.player];
+    ++turnsTaken_;
+    if (!turns_.forfeits(turn.roll)) move(turn);
+    if (!finished()) turns_.settle(turn.roll);
+    return turn;
+  }
+
+  int currentPlayer() const override { return finished() ? -1 : turns_.current(); }
+  int positionOf(int player) const override { return inRange(player) ? positions_[player] : -1; }
+  bool finished() const override { return winner_ != -1; }
+  int winner() const override { return winner_; }
+  int turnsTaken() const override { return turnsTaken_; }
+
+  bool resign(int player) override {
+    if (finished() || !turns_.isActive(player)) return false;
+    turns_.leave(player);
+    if (turns_.activeCount() == 1) winner_ = turns_.firstActive();
+    return true;
+  }
+
+  bool isActive(int player) const override { return turns_.isActive(player); }
+
+ private:
+  bool inRange(int player) const { return player >= 0 && player < static_cast<int>(positions_.size()); }
+
+  void move(snl::Turn& turn) {
+    const int landing = overshoot_->landing(turn.from, turn.roll, board_.size());
+    turn.jump = board_.jumpAt(landing);
+    turn.to = board_.endOf(landing);
+    positions_[turn.player] = turn.to;
+    if (turn.to == board_.size()) {
+      winner_ = turn.player;
+      turn.won = true;
+    }
+  }
+
+  Board board_;
+  std::unique_ptr<OvershootPolicy> overshoot_;
+  TurnOrder turns_;
+  std::unique_ptr<snl::Dice> dice_;
+  std::vector<int> positions_;
+  int winner_ = -1;
+  int turnsTaken_ = 0;
+};
+25:T69a,#pragma once
+#include <cstddef>
+#include <vector>
+
+// Whose turn it is. It owns the rotation, the players who have left, and the run of sixes.
+class TurnOrder {
+ public:
+  TurnOrder(int players, bool sixRerolls)
+      : active_(static_cast<std::size_t>(players), true), remaining_(players), sixRerolls_(sixRerolls) {}
+
+  int current() const { return current_; }
+  int activeCount() const { return remaining_; }
+  bool isActive(int player) const { return player >= 0 && player < size() && active_[player]; }
+
+  // The one player still in, once everyone else has left.
+  int firstActive() const {
+    for (int p = 0; p < size(); ++p) {
+      if (active_[p]) return p;
+    }
+    return -1;
+  }
+
+  // Count this roll in the current run of sixes. True if it is the third six in a row, which is not played.
+  bool forfeits(int roll) {
+    sixes_ = (sixRerolls_ && roll == kSix) ? sixes_ + 1 : 0;
+    return sixes_ >= kSixesToForfeit;
+  }
+
+  // End of a roll: a six keeps the turn (unless the run is now forfeited), anything else passes it on.
+  void settle(int roll) {
+    if (sixRerolls_ && roll == kSix && sixes_ < kSixesToForfeit) return;
+    passOn();
+  }
+
+  void leave(int player) {
+    active_[player] = false;
+    --remaining_;
+    if (player == current_) passOn();
+  }
+
+ private:
+  static constexpr int kSix = 6;
+  static constexpr int kSixesToForfeit = 3;
+
+  int size() const { return static_cast<int>(active_.size()); }
+
+  void passOn() {
+    sixes_ = 0;
+    if (remaining_ == 0) return;
+    do {
+      current_ = (current_ + 1) % size();
+    } while (!active_[current_]);
+  }
+
+  std::vector<bool> active_;
+  int remaining_;
+  bool sixRerolls_;
+  int current_ = 0;
+  int sixes_ = 0;
+};
+c:["$","$L1a",null,{"bundle":{"id":"snake-and-ladder","title":"Snake and Ladder","level":"SDE2","parMinutes":45,"patterns":["Strategy","Dependency Injection"],"requirements":[{"id":"R-turns","text":"Everyone starts on square 0. Player 0 rolls first and the turn passes in index order, wrapping round. takeTurn() rolls the given Dice for the current player, moves the piece forward that many squares and returns a Turn describing it. Pieces may share a square.","phase":"base","hidden":false},{"id":"R-links","text":"A player who stops on the start of a ladder (to > from) or a snake (to < from) is moved to its end, once; the Turn reports the Jump. Passing over the start of a link does nothing, and a link applies only to the player who stopped there.","phase":"base","hidden":true},{"id":"R-finish","text":"The first player to land exactly on the last square wins, including by a ladder that ends there. A roll that would go past the last square is not played: the piece stays, the roll still counts as a turn, and the turn passes.","phase":"base","hidden":true},{"id":"R-over","text":"Once someone has won, takeTurn() does nothing: it returns a Turn with player -1 and roll 0, does not roll the dice and does not count a turn.","phase":"base","hidden":true},{"id":"R-setup","text":"makeGame() returns nullptr unless there are at least 2 players, the board has at least 2 squares, the dice is not null, and the links are valid: all squares on the board, from != to, no two links share a start, no link starts on the last square, and no link ends where another begins. A link may end on the last square.","phase":"base","hidden":true},{"id":"R-bounce","text":"Storm 1: with Rules::bounceBack, a roll past the last square bounces: the piece lands on boardSize - (position + roll - boardSize), and a snake or ladder on that square applies. makeGameWithRules() refuses bounce on boards smaller than 6 squares.","phase":"storm1","hidden":true},{"id":"R-sixes","text":"Storm 1: with Rules::sixRerolls, a six gives the same player another roll (a six that wins ends the game; a six blocked by the end or sent down a snake still gives the bonus roll). A third six in a row by one player is not played: the piece stays, the turn passes, and the count starts again. Any other roll ends the run, and each run belongs to one player.","phase":"storm1","hidden":true},{"id":"R-resign","text":"Storm 2: resign(player) removes a player from the game: the piece stays where it is, the rotation skips them, and if it was their turn (even a bonus roll) the turn passes to the next active player with a fresh run of sixes. When one player is left they win at once. resign() returns false for a finished game, an unknown player or one who already left.","phase":"storm2","hidden":true}],"brief":"# Snake and Ladder\n\nYou are writing the engine of a **snake and ladder** board game. Two or more players share a numbered board. On their turn a player rolls a die and moves that many squares forward. Landing on the foot of a ladder carries you up; landing on a snake's head slides you down. The first to reach the last square wins.\n\nWhat you know so far:\n\n- The board has squares numbered `1..N`, and everyone starts off the board on square 0.\n- The dice is **handed in**, so the tests can script every roll.\n- Players take turns in order, and the game reports who is on which square, whose turn it is and who won.\n\nYour task: design and implement it behind the `snl::Game` interface in `api.h`. The hidden tests call only that interface. Ask the interviewer questions first: the brief is deliberately incomplete, and the rules may not stay this simple.\n","editorial":"$1b","clarify":[{"id":"q-dice","text":"Where do the dice rolls come from? How do we test a game that is random?","answer":"The game never makes its own randomness. A Dice is passed in, and each roll() is a number from 1 to 6. The tests script it.","reveals":["R-turns"],"quality":"essential"},{"id":"q-finish","text":"What happens near the end: do you have to land exactly on the last square, and what if the roll is too big?","answer":"Exactly. A roll that would go past the last square is not played: the player stays put and the turn passes. Landing on the last square wins.","reveals":["R-finish"],"quality":"essential"},{"id":"q-links","text":"How do snakes and ladders work? Can a ladder end on a snake, can two start on one square, can one end on the last square?","answer":"A stop on the start of a link moves the piece to its end, once. A link may not end where another begins, two links may not start on one square, none may start on the last square, and all squares must be on the board. A link may end on the last square, and that wins. Bad setups are refused with nullptr.","reveals":["R-links","R-setup"],"quality":"essential"},{"id":"q-over","text":"What happens after someone wins? Can the game carry on?","answer":"Nothing happens: takeTurn() returns an empty Turn and does not even roll the dice.","reveals":["R-over"],"quality":"essential"},{"id":"q-future","text":"Will the rules always be this simple? Players, house rules, anything people might ask for next?","answer":"Good question. People play it with house rules: bouncing off the end, and extra rolls for sixes. Players also walk away mid-game. Details arrive with the change.","reveals":["R-bounce","R-sixes","R-resign"],"quality":"essential"},{"id":"q-start","text":"Where do pieces start, and can pieces share a square?","answer":"Everyone starts on square 0, off the board. Pieces share squares freely; there are no captures.","reveals":[],"quality":"useful"},{"id":"q-turn","text":"How is the turn order decided, and what does takeTurn() report?","answer":"Player 0 first, then in index order. takeTurn() returns who rolled, the roll, where they were, where they ended, any snake or ladder, and whether they won.","reveals":[],"quality":"useful"},{"id":"q-size","text":"How big is the board, and how many players?","answer":"Any board of at least 2 squares and any number of players from 2 up. The classic 100-square board is just one configuration.","reveals":[],"quality":"useful"},{"id":"q-random","text":"Should the board's snakes and ladders be generated randomly?","answer":"No. The links are passed in. A generator, if wanted, would be a separate tool.","reveals":[],"quality":"useful"},{"id":"q-ui","text":"Is there a board drawing, an animation or a sound to design?","answer":"No UI. Only the interface in api.h is tested.","reveals":[],"quality":"noise"},{"id":"q-net","text":"Is it online, with accounts, rooms and a leaderboard?","answer":"No. In memory, one process, no accounts.","reveals":[],"quality":"noise"}],"rubric":[{"id":"res-board","text":"Knows the squares and the snakes and ladders, and where a stop on a square leads","phase":"base","owners":["Board","BoardLayout","Squares","Grid"]},{"id":"res-turns","text":"Knows whose turn it is and who comes next","phase":"base","owners":["TurnOrder","Players","PlayerQueue","TurnTracker","Rotation"]},{"id":"res-facade","text":"Exposes the public operations and sequences roll, move, jump, win and pass the turn","phase":"base","owners":["GameImpl","SnakeAndLadder","GameEngine","GameSession","Match"]},{"id":"res-overshoot","text":"Decides where a roll past the last square leads, behind a seam the game does not branch on","phase":"storm1","owners":["OvershootPolicy","OvershootRule","FinishRule","EndRule","BouncePolicy"]},{"id":"res-sixes","text":"Owns the run of sixes: the bonus roll and the forfeit of the third six","phase":"storm1","owners":["TurnOrder","SixRule","BonusRollRule","TurnPolicy","RollStreak"]},{"id":"res-resign","text":"Removes a player from the rotation and decides when one is left","phase":"storm2","owners":["TurnOrder","Players","Roster","ActivePlayers","PlayerQueue"]}],"followups":[{"level":"SDE2","question":"Why is the dice passed in instead of created inside the game?","answer":"A game that calls rand() inside cannot be tested: you cannot make it roll a six on demand, and a failing game cannot be replayed. Passing the dice in (dependency injection) makes every test a script, makes a seeded dice trivial for a replay, and lets a real client plug in a cryptographic source if money is ever involved. The cost is one small interface and one constructor argument."},{"level":"SDE2","question":"What is the trick with a snake whose head sits at the end of a ladder?","answer":"That is a chain: one stop causes two jumps, and with enough links it can loop forever (a ladder to a snake that leads back to the ladder's foot). The reference refuses the setup at construction: no link may end where another begins. The alternative is to follow chains with a visited set at build time and reject only cycles. Refusing chains outright is simpler to explain to a board designer; following them is friendlier."},{"level":"Senior","question":"Bounce-back and extra rolls are options. Why is bounce a Strategy and the six-run not?","answer":"Bounce replaces one decision with another (where does an overshoot land), so the game asks a policy and never branches on which rule is on. The six-run is state, not a decision: a counter that must be reset in the right places and shared with the rotation, because who is next depends on it. Putting it in the turn order keeps the counter next to the code that moves the rotation. If a third rule joined (for example, a six that also lets you skip a snake), I would split a TurnPolicy interface out of TurnOrder."},{"level":"Senior","question":"Resigning mid-turn is the interesting case. What did you decide, and what could go wrong?","answer":"When the player to move leaves, the turn passes to the next active player and any run of sixes ends with them. The bugs are the neighbours of that rule: keeping the old counter so the next player starts at two sixes, or leaving the rotation pointing at the departed player until their turn comes round. Both are in the bad designs. The invariant to state is that the current player is always an active player while the game is on."},{"level":"Senior","question":"How would you replay a finished game for a spectator?","answer":"Because the dice is the only source of randomness, a game is a pure function of its setup, the sequence of rolls and the resignations in order. Log those and replay them through a fresh game with a scripted dice. That also gives bug reports for free. The log is much smaller than a stream of board states."},{"level":"Staff","question":"You are asked to run this as a service with millions of tables. What changes?","answer":"The engine stays a deterministic state machine, which is what lets you shard by game id. The service work is elsewhere: one owner per game (an actor or a partition) so two clients cannot both roll for the same turn, a server-side dice (never the client, or players cheat) seeded and logged, sequence numbers on commands so retries are idempotent, and persistence as the roll log rather than board snapshots. Per-game state is a few integers, so cost is connections and fan-out, not computation."}],"apiHeader":"$1c","phaseApis":{"storm1":"$1d","storm2":"$1e"},"phases":["base","storm1","storm2"],"tests":{"base":[{"path":"snl_base.cpp","content":"$1f"}],"storm1":[{"path":"snl_storm1.cpp","content":"$20"}],"storm2":[{"path":"snl_storm2.cpp","content":"$21"}]},"reference":[{"path":"board.h","content":"$22"},{"path":"game.cpp","content":"$23"},{"path":"game_impl.h","content":"$24"},{"path":"overshoot.h","content":"#pragma once\n\n// What happens to a roll that would carry a piece past the last square. Strategy: the game asks for the\n// landing square and never branches on which rule is in force.\nclass OvershootPolicy {\n public:\n  virtual ~OvershootPolicy() = default;\n  // The square the piece lands on (before any snake or ladder applies).\n  virtual int landing(int from, int roll, int boardSize) const = 0;\n};\n\nclass StayPolicy : public OvershootPolicy {\n public:\n  int landing(int from, int roll, int boardSize) const override {\n    const int target = from + roll;\n    return target > boardSize ? from : target;\n  }\n};\n\nclass BouncePolicy : public OvershootPolicy {\n public:\n  int landing(int from, int roll, int boardSize) const override {\n    const int target = from + roll;\n    return target > boardSize ? 2 * boardSize - target : target;\n  }\n};\n"},{"path":"turn_order.h","content":"$25"}],"driver":{"path":"driver.cpp","content":"#define BP_TEST_MAIN\n#include \"bp_test.h\"\n","readOnly":true}}}]

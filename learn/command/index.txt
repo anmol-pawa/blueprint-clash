@@ -1,0 +1,115 @@
+1:"$Sreact.fragment"
+2:"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js"
+3:I[39756,["$2"],"default"]
+4:I[37457,["$2"],"default"]
+5:"/blueprint-clash/_next/static/chunks/2n5qeheznvl4u.js"
+6:I[22016,["$2","$5"],""]
+7:I[64576,["$2"],"PwaRegister"]
+d:I[97367,["$2"],"OutletBoundary"]
+e:"$Sreact.suspense"
+10:"ViewportBoundary"
+11:I[97367,["$2"],"$10"]
+13:"MetadataBoundary"
+14:I[97367,["$2"],"$13"]
+16:I[68027,["$2"],"default",1]
+:HL["/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","style"]
+:HL["/blueprint-clash/_next/static/media/07c7676b89ed2778-s.p.2bn3s6zvc0dyp.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/blueprint-clash/_next/static/media/486a103cae33528f-s.p.309ilb452anpd.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/blueprint-clash/_next/static/media/53897e768d329f66-s.p.3t6q91iet4nsy.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+9:X
+b:[["children",{"s":"__PAGE__","h":512,"d":{"r":["$","$1","c",{"children":["$Lc",[["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/3s1mctvsetnbs.js","async":true,"nonce":"$undefined"}]],["$","$Ld",null,{"children":["$","$e",null,{"name":"Next.MetadataOutlet","children":"$@f"}]}]]}],"p":false,"v":null}}]]
+a:[["children",{"s":{"n":"id","t":"d","k":"command","s":[]},"h":66048,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],"p":false,"v":"$9"},"c":"$Qb"}]]
+8:[["children",{"s":"learn","h":131584,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],"p":false,"v":"$9"},"c":"$Qa"}]]
+0:{"P":null,"c":["","learn","command",""],"q":"","i":false,"t":{"t":{"s":"","h":131600,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}],["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js","async":true,"nonce":"$undefined"}]],["$","html",null,{"lang":"en","className":"r7opxW_variable auY9QW_variable u-EJdW_variable h-full","children":["$","body",null,{"className":"min-h-full","children":[["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","main",null,{"className":"flex min-h-dvh flex-col items-center justify-center gap-4 px-4 text-center","children":[["$","div",null,{"className":"font-display text-5xl text-[var(--accent)]","children":"404"}],["$","p",null,{"className":"text-white/60","children":"This room is not on the blueprint yet."}],["$","$L6",null,{"href":"/","className":"text-sm text-white/80 underline","children":"Back to the title screen"}]]}],[]],"forbidden":"$undefined","unauthorized":"$undefined"}],["$","$L7",null,{}]]}]}]]}],"p":false,"v":null},"c":"$Q8"},"h":{"r":["$","$1","h",{"children":[null,["$","$L11",null,{"children":"$L12"}],["$","$L14",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$e",null,{"name":"Next.Metadata","children":"$L15"}]}],null]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"p":false,"v":null}},"m":"$undefined","G":["$16",[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]]],"S":true,"r":"$undefined","s":"$undefined","a":"$undefined","l":"$undefined","p":"$undefined","d":"$undefined","b":"U2e90Mr6iueJEoRJLmd0s"}
+17:"/blueprint-clash/_next/static/chunks/3s1mctvsetnbs.js"
+18:I[25039,["$2","$17"],"LessonClient"]
+9:C
+19:T90a,#include <cstddef>
+#include <iostream>
+#include <memory>
+#include <string>
+#include <utility>
+#include <vector>
+
+// The receiver.
+class Document {
+public:
+    void append(const std::string& s) { text_ += s; }
+    void truncate(std::size_t n) { text_.resize(n < text_.size() ? text_.size() - n : 0); }
+    const std::string& text() const { return text_; }
+
+private:
+    std::string text_;
+};
+
+class Command {
+public:
+    virtual ~Command() = default;
+    virtual void execute() = 0;
+    virtual void undo() = 0;
+};
+
+// Stores exactly what it needs to reverse itself. The document must outlive the command.
+class AppendCommand : public Command {
+public:
+    AppendCommand(Document& doc, std::string text) : doc_(doc), text_(std::move(text)) {}
+    void execute() override { doc_.append(text_); }
+    void undo() override { doc_.truncate(text_.size()); }
+
+private:
+    Document& doc_;
+    std::string text_;
+};
+
+// The invoker: runs commands and keeps the two stacks.
+class History {
+public:
+    void run(std::unique_ptr<Command> command) {
+        command->execute();
+        undoStack_.push_back(std::move(command));
+        redoStack_.clear();  // a new action invalidates the old future
+    }
+
+    bool undo() {
+        if (undoStack_.empty()) return false;
+        auto command = std::move(undoStack_.back());
+        undoStack_.pop_back();
+        command->undo();
+        redoStack_.push_back(std::move(command));
+        return true;
+    }
+
+    bool redo() {
+        if (redoStack_.empty()) return false;
+        auto command = std::move(redoStack_.back());
+        redoStack_.pop_back();
+        command->execute();
+        undoStack_.push_back(std::move(command));
+        return true;
+    }
+
+private:
+    std::vector<std::unique_ptr<Command>> undoStack_;
+    std::vector<std::unique_ptr<Command>> redoStack_;
+};
+
+int main() {
+    Document doc;
+    History history;
+    history.run(std::make_unique<AppendCommand>(doc, "hello"));
+    history.run(std::make_unique<AppendCommand>(doc, " world"));
+    std::cout << doc.text() << "\n";
+    history.undo();
+    std::cout << doc.text() << "\n";
+    history.redo();
+    std::cout << doc.text() << "\n";
+    history.undo();
+    history.undo();
+    std::cout << "[" << doc.text() << "]\n";
+    std::cout << (history.undo() ? "undone" : "nothing to undo") << "\n";
+}
+c:["$","$L18",null,{"lesson":{"id":"command","level":"L5","title":"Command: turn an action into an object you can store and undo","oneLiner":"Wrap a request as an object with execute and undo so it can be queued, logged, repeated and reversed.","cardTopic":"L5.command","intro":"A Command is **a request packaged as an object**. It knows its receiver, carries the arguments, and exposes `execute()`, usually with `undo()`. Because it is a value you can hold, you can put it in a list: that gives you **history, undo/redo, queues, macros, retry and audit logs**.\n\nUndo has two honest designs. A command can store **what it needs to reverse itself** (an `AppendCommand` remembers the text it added), which is small and fast. Or a command can capture a **snapshot** (Memento) of the state before it runs, which is simpler for complex edits and costs memory. Pick per command and say why.\n\nA new command after an undo must **clear the redo stack**; otherwise redo would replay something that no longer follows from the current state. Invoker, command and receiver are the three roles interviewers expect you to name: the invoker (a `History` or a button) calls the command, which acts on the receiver (the `Document`).","smell":"- UI handlers call the model directly, so there is no single place to record what was done.\n- \"Undo\" is requested but nothing remembers the actions, or each action snapshots the whole state.\n- Retry, queueing or macros would need every caller rewritten.\n- A giant `switch` that interprets action codes.","before":"#include <iostream>\n#include <string>\n\nclass Document {\npublic:\n    void append(const std::string& s) { text_ += s; }\n    const std::string& text() const { return text_; }\n\nprivate:\n    std::string text_;\n};\n\n// Callers mutate the document directly, so nothing records what happened and undo is impossible.\nint main() {\n    Document doc;\n    doc.append(\"hello\");\n    doc.append(\" world\");\n    std::cout << doc.text() << \"\\n\";\n}\n","after":"$19","beforeOutput":"hello world","afterOutput":"hello world\nhello\nhello world\n[]\nnothing to undo","refactorNotes":"Every edit goes through `History::run`, so undo, redo, and (later) logging or macro recording are one place. Adding a `DeleteCommand` touches neither `History` nor the existing commands. Ownership is explicit: the history owns commands through `unique_ptr`; a command only references its receiver.\n\n**Trade-offs:** one object per action means allocation and memory growth, so real editors cap history or coalesce typing into one command. A command that stores a reference to its receiver is only valid while the receiver lives; if commands can outlive it, hold an id or a `weak_ptr`. A command's `undo()` must exactly invert `execute()`; commands that cannot be reversed (sending an email) should say so rather than pretend.","interviewSignal":"Say \"I need to record and reverse actions, so each action becomes an object\". Name the roles (invoker, command, receiver), show two stacks, and volunteer that a fresh command clears redo. Senior signal: you compare storing a delta with a Memento snapshot, mention coalescing and history limits, and connect Command to queues, retries, idempotency keys and event sourcing in system design.","overApplication":"A command class per button press is ceremony when nothing needs undo, queueing or logging; a plain method call or lambda does the job. Commands that duplicate their receiver's whole API turn into a second copy of the model. If a \"command\" is really a long-running workflow with steps that can fail halfway, you want a saga or a transaction, not a bigger Command."},"nextId":"state"}]
+12:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1, viewport-fit=cover"}],["$","meta","2",{"name":"theme-color","content":"#0a1530"}]]
+1a:I[27201,["$2"],"IconMark"]
+f:null
+15:[["$","title","0",{"children":"Command: turn an action into an object you can store and undo: Blueprint Clash"}],["$","meta","1",{"name":"description","content":"A creature-tactics RPG that teaches low-level design in C++ and high-level system design, from fundamentals to big-tech interview level."}],["$","link","2",{"rel":"manifest","href":"/blueprint-clash/manifest.webmanifest","crossOrigin":"$undefined"}],["$","meta","3",{"name":"mobile-web-app-capable","content":"yes"}],["$","meta","4",{"name":"apple-mobile-web-app-title","content":"Blueprint Clash"}],["$","meta","5",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","link","6",{"rel":"icon","href":"/blueprint-clash/icon.png?icon.27re_xscs-jmw.png","sizes":"256x256","type":"image/png"}],["$","link","7",{"rel":"apple-touch-icon","href":"/blueprint-clash/apple-icon.png?apple-icon.2rac1w0yc3rju.png","sizes":"180x180","type":"image/png"}],["$","$L1a","8",{}]]

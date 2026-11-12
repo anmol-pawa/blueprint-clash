@@ -1,0 +1,108 @@
+1:"$Sreact.fragment"
+2:"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js"
+3:I[39756,["$2"],"default"]
+4:I[37457,["$2"],"default"]
+5:"/blueprint-clash/_next/static/chunks/2n5qeheznvl4u.js"
+6:I[22016,["$2","$5"],""]
+7:I[64576,["$2"],"PwaRegister"]
+d:I[97367,["$2"],"OutletBoundary"]
+e:"$Sreact.suspense"
+10:"ViewportBoundary"
+11:I[97367,["$2"],"$10"]
+13:"MetadataBoundary"
+14:I[97367,["$2"],"$13"]
+16:I[68027,["$2"],"default",1]
+:HL["/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","style"]
+:HL["/blueprint-clash/_next/static/media/07c7676b89ed2778-s.p.2bn3s6zvc0dyp.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/blueprint-clash/_next/static/media/486a103cae33528f-s.p.309ilb452anpd.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/blueprint-clash/_next/static/media/53897e768d329f66-s.p.3t6q91iet4nsy.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+9:X
+b:[["children",{"s":"__PAGE__","h":512,"d":{"r":["$","$1","c",{"children":["$Lc",[["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/3s1mctvsetnbs.js","async":true,"nonce":"$undefined"}]],["$","$Ld",null,{"children":["$","$e",null,{"name":"Next.MetadataOutlet","children":"$@f"}]}]]}],"p":false,"v":null}}]]
+a:[["children",{"s":{"n":"id","t":"d","k":"event-driven","s":[]},"h":66048,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],"p":false,"v":"$9"},"c":"$Qb"}]]
+8:[["children",{"s":"learn","h":131584,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],"p":false,"v":"$9"},"c":"$Qa"}]]
+0:{"P":null,"c":["","learn","event-driven",""],"q":"","i":false,"t":{"t":{"s":"","h":131600,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}],["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js","async":true,"nonce":"$undefined"}]],["$","html",null,{"lang":"en","className":"r7opxW_variable auY9QW_variable u-EJdW_variable h-full","children":["$","body",null,{"className":"min-h-full","children":[["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","main",null,{"className":"flex min-h-dvh flex-col items-center justify-center gap-4 px-4 text-center","children":[["$","div",null,{"className":"font-display text-5xl text-[var(--accent)]","children":"404"}],["$","p",null,{"className":"text-white/60","children":"This room is not on the blueprint yet."}],["$","$L6",null,{"href":"/","className":"text-sm text-white/80 underline","children":"Back to the title screen"}]]}],[]],"forbidden":"$undefined","unauthorized":"$undefined"}],["$","$L7",null,{}]]}]}]]}],"p":false,"v":null},"c":"$Q8"},"h":{"r":["$","$1","h",{"children":[null,["$","$L11",null,{"children":"$L12"}],["$","$L14",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$e",null,{"name":"Next.Metadata","children":"$L15"}]}],null]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"p":false,"v":null}},"m":"$undefined","G":["$16",[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]]],"S":true,"r":"$undefined","s":"$undefined","a":"$undefined","l":"$undefined","p":"$undefined","d":"$undefined","b":"U2e90Mr6iueJEoRJLmd0s"}
+17:"/blueprint-clash/_next/static/chunks/3s1mctvsetnbs.js"
+18:I[25039,["$2","$17"],"LessonClient"]
+9:C
+19:T48c,In event-driven design a component **publishes a fact** ("order placed") and does not know who cares. Consumers subscribe and react on their own. Adding an email, an analytics counter or an audit trail then means adding a subscriber, not editing the publisher. It is Observer scaled up from one object to a whole module, and the same idea sits behind message brokers in system design.
+
+Three levels are worth telling apart:
+- **Synchronous observer:** the publisher calls the listeners in its own call stack. Simple, ordered, but a slow or throwing listener slows or breaks the publisher.
+- **Queued event bus:** the publisher enqueues, a dispatcher delivers later. Publisher and consumers are decoupled in time; you now think about ordering, delivery and what happens when a handler fails.
+- **Event sourcing:** the events are the stored truth; current state is a fold over the log. You get history, audit and replay, at the price of schema evolution and rebuilding state.
+
+Events name something that **already happened** (`OrderPlaced`), unlike a Command, which asks for something to happen (`PlaceOrder`). Mixing the two up is the most common design error here.1a:T7e8,#include <deque>
+#include <exception>
+#include <functional>
+#include <iostream>
+#include <stdexcept>
+#include <utility>
+#include <vector>
+
+// A fact in the past tense, immutable once published.
+struct OrderPlaced {
+    int orderId;
+};
+
+// A small in-process bus: publish() enqueues, drain() delivers. Handlers cannot break the publisher or each other.
+class EventBus {
+public:
+    using Handler = std::function<void(const OrderPlaced&)>;
+
+    void subscribe(Handler handler) { handlers_.push_back(std::move(handler)); }
+    void publish(const OrderPlaced& event) { pending_.push_back(event); }
+
+    void drain() {
+        while (!pending_.empty()) {
+            const OrderPlaced event = pending_.front();
+            pending_.pop_front();
+            for (const Handler& handler : handlers_) {
+                try {
+                    handler(event);
+                } catch (const std::exception& error) {
+                    std::cout << "handler failed: " << error.what() << "\n";
+                }
+            }
+        }
+    }
+
+private:
+    std::vector<Handler> handlers_;
+    std::deque<OrderPlaced> pending_;
+};
+
+// The service knows only the bus. New consumers never touch it.
+class OrderService {
+public:
+    explicit OrderService(EventBus& bus) : bus_(bus) {}
+    void placeOrder(int orderId) {
+        std::cout << "order " << orderId << " placed\n";
+        bus_.publish(OrderPlaced{orderId});
+    }
+
+private:
+    EventBus& bus_;
+};
+
+int main() {
+    EventBus bus;
+    bus.subscribe([](const OrderPlaced& event) { std::cout << "inventory reserve " << event.orderId << "\n"; });
+    bus.subscribe([](const OrderPlaced& event) {
+        if (event.orderId == 8) throw std::runtime_error("smtp down");
+        std::cout << "email order " << event.orderId << "\n";
+    });
+    bus.subscribe([](const OrderPlaced& event) { std::cout << "analytics " << event.orderId << "\n"; });
+
+    OrderService service(bus);
+    service.placeOrder(7);
+    service.placeOrder(8);
+    std::cout << "--drain--\n";
+    bus.drain();
+}
+1b:T48d,`OrderService` now depends only on the bus and a small event type; inventory, mail and analytics subscribe from outside. Order 8 shows the isolation: the mail handler throws, the failure is reported, and analytics still runs. Publishing returns immediately and delivery happens at `drain()`, so the producer is decoupled in time as well as in code.
+
+**Trade-offs:** you trade explicit control flow for indirection. "What happens when an order is placed?" is no longer answered by reading one method, so name events well and keep a list of subscribers. Ordering is only guaranteed per bus here; across threads or processes you need partitioning, idempotent handlers (delivery is at-least-once in real brokers) and a plan for poison events (retry, dead-letter queue). A handler that subscribes while the bus is dispatching would invalidate the loop, so a production bus snapshots the handler list or forbids it. Event sourcing goes further: you store the events and rebuild state by replaying them, which gives audit and time travel but forces you to version old events forever. Prefer plain calls when exactly one consumer exists and its result is needed right away.c:["$","$L18",null,{"lesson":{"id":"event-driven","level":"L5","title":"Event-driven design: publish what happened, let others react","oneLiner":"Announce a fact as an event instead of calling every interested party, and choose between direct calls, a queue and a stored log.","cardTopic":"L5.observer","intro":"$19","smell":"- A service constructs and calls every downstream collaborator (inventory, mail, analytics) in one method.\n- Adding a consumer means editing and re-testing the producer.\n- One failing collaborator (mail is down) stops the ones after it from running.\n- The producer cannot be tested without all of its consumers.","before":"#include <iostream>\n\nclass Inventory {\npublic:\n    void reserve(int orderId) const { std::cout << \"inventory reserve \" << orderId << \"\\n\"; }\n};\n\nclass Mailer {\npublic:\n    void send(int orderId) const { std::cout << \"email order \" << orderId << \"\\n\"; }\n};\n\n// The service knows every consumer. A new one (analytics) means editing placeOrder.\nclass OrderService {\npublic:\n    void placeOrder(int orderId) const {\n        std::cout << \"order \" << orderId << \" placed\\n\";\n        inventory_.reserve(orderId);\n        mailer_.send(orderId);\n    }\n\nprivate:\n    Inventory inventory_;\n    Mailer mailer_;\n};\n\nint main() {\n    OrderService service;\n    service.placeOrder(7);\n}\n","after":"$1a","beforeOutput":"order 7 placed\ninventory reserve 7\nemail order 7","afterOutput":"order 7 placed\norder 8 placed\n--drain--\ninventory reserve 7\nemail order 7\nanalytics 7\ninventory reserve 8\nhandler failed: smtp down\nanalytics 8","refactorNotes":"$1b","interviewSignal":"Say \"events are facts in the past tense; commands are requests\". When a round adds \"also send an email, update search, notify the warehouse\", answer with a publisher and subscribers, then immediately raise the hard questions: ordering, duplicates (idempotent handlers), failure of one handler, and whether the delivery must survive a crash (a durable queue or an outbox). Senior and staff signal: you distinguish observer, queue and event sourcing, and pick the lightest one that meets the durability and ordering requirement.","overApplication":"Turning every method call into an event makes the flow impossible to follow and debug. When the caller needs an answer or a transaction across steps, a direct call (or an orchestrating service) is clearer. A bus with one publisher and one subscriber is a function call with extra steps, and an unbounded queue just moves a slow consumer's problem into memory."},"nextId":"entities-from-requirements"}]
+12:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1, viewport-fit=cover"}],["$","meta","2",{"name":"theme-color","content":"#0a1530"}]]
+1c:I[27201,["$2"],"IconMark"]
+f:null
+15:[["$","title","0",{"children":"Event-driven design: publish what happened, let others react: Blueprint Clash"}],["$","meta","1",{"name":"description","content":"A creature-tactics RPG that teaches low-level design in C++ and high-level system design, from fundamentals to big-tech interview level."}],["$","link","2",{"rel":"manifest","href":"/blueprint-clash/manifest.webmanifest","crossOrigin":"$undefined"}],["$","meta","3",{"name":"mobile-web-app-capable","content":"yes"}],["$","meta","4",{"name":"apple-mobile-web-app-title","content":"Blueprint Clash"}],["$","meta","5",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","link","6",{"rel":"icon","href":"/blueprint-clash/icon.png?icon.27re_xscs-jmw.png","sizes":"256x256","type":"image/png"}],["$","link","7",{"rel":"apple-touch-icon","href":"/blueprint-clash/apple-icon.png?apple-icon.2rac1w0yc3rju.png","sizes":"180x180","type":"image/png"}],["$","$L1c","8",{}]]

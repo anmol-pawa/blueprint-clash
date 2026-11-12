@@ -1,0 +1,511 @@
+1:"$Sreact.fragment"
+2:"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js"
+3:I[39756,["$2"],"default"]
+4:I[37457,["$2"],"default"]
+5:"/blueprint-clash/_next/static/chunks/2n5qeheznvl4u.js"
+6:I[22016,["$2","$5"],""]
+7:I[64576,["$2"],"PwaRegister"]
+10:"/blueprint-clash/_next/static/chunks/2uk3wcjwqg0tl.js"
+11:"/blueprint-clash/_next/static/chunks/1zdu7yjl8efu4.js"
+12:I[65612,["$2","$10","$11"],"WorkshopClient"]
+1f:"ViewportBoundary"
+20:I[97367,["$2"],"$1f"]
+21:"MetadataBoundary"
+22:I[97367,["$2"],"$21"]
+23:"$Sreact.suspense"
+24:I[27201,["$2"],"IconMark"]
+:HL["/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","style"]
+9:X
+c:X
+c:C
+13:T1281,# Editorial: Parking lot
+
+## Requirements
+Functional: add spots (with a size), park a vehicle and get a ticket, leave with the ticket and get a receipt with the fee, count free spots per size. Hidden until asked: a fit rule (motorcycle in any spot, car in Medium or Large, truck in Large), best-fit allocation (smallest spot that fits, then lowest id), a plate cannot be inside twice, `LotFull` and `NoSuchTicket` change nothing, and a flat fee of 100 cents per started hour (minimum one hour). Non-goals: payment, floors, reservations, persistence, a real clock.
+
+**Change Storm 1, vehicle pricing:** 50 / 100 / 200 cents per started hour for motorcycle / car / truck, and stays of 15 minutes or less are free. The rate follows the vehicle type, not the spot it landed in. It is revealable by asking whether pricing could differ by vehicle type or time of stay.
+
+## Reference design
+- `SpotInventory` owns the spots and which are taken, and picks the best fit. It is the only place occupancy changes.
+- `TicketBook` owns the open stays (plate, vehicle, spot) and issues ticket ids.
+- `FeePolicy` (abstract) answers "what does this stay cost?"; `HourlyFeePolicy(100)` is the base rule.
+- `ParkingService` implements `park::ParkingLot`. It validates, then mutates: check the plate, find a spot, open the ticket; on leaving, close the ticket, free the spot, ask the policy.
+
+**Storm 1 in the reference:** one new class, `RatedFeePolicy`, with a rate per vehicle and a grace period, selected by a new factory. `leave()`, `SpotInventory` and `TicketBook` are untouched, because the stay already remembers the vehicle type. The honest cost: the factory is new and `FeePolicy` receives the vehicle, which it already did for this reason.
+
+Ownership: the service owns the inventory, the ticket book and a `unique_ptr<FeePolicy>`. No raw `new`, no shared state.
+
+## Alternatives
+- **One `ParkingLot` class with a spot map and a ticket map** passes the base tests in 20 minutes. It is where the bugs in `bad/` come from, and every storm becomes an edit of `leave()`. Good as a first pass you then split.
+- **A `Spot` class hierarchy (`SmallSpot`, `LargeSpot`) with `canFit(Vehicle)`** looks object-oriented and pays off only if spots gain behaviour (EV charging, accessible bays). With only a size and an id, an enum and a comparison are clearer; say so, and name the point at which you would switch.
+- **A `Vehicle` class hierarchy** (`Car : Vehicle`) is the classic over-modelling. The vehicle's behaviour here is two numbers (the smallest spot it needs and its rate), so an enum plus data wins. Subclassing starts to earn its keep when vehicles carry real behaviour.
+- **`SpotAllocator` as a Strategy** (nearest to the entrance, fewest wasted sizes, random) is a legitimate second seam. It is not needed by the requirements as stated, so mention it and do not build it.
+
+## Trade-offs
+Best fit keeps large spots free for trucks, at the cost of a scan per arrival: O(spots) here, O(log n) with one ordered free-set per size. First fit is simpler, and it fails the "truck cannot find a large spot" case the moment cars have filled the large bays.
+
+Pricing as a class costs one interface and one file; it buys the Open/Closed seam where the interviewer is most likely to push. A constant is correct if pricing never varies. Passing `minutesParked` into `leave()` instead of reading a clock keeps tests deterministic; the production version injects a `Clock` into the service and still hands the policy a duration, so pricing never learns about time sources.
+
+Status codes instead of exceptions keep call sites explicit and work in the browser toolchain (no exception runtime). The cost is that a caller can ignore a result, which `[[nodiscard]]` on the status type would catch in a real codebase.
+
+## What breaks at 10x
+At 10x the spots (thousands) the best-fit scan becomes the first thing to index: one ordered set of free spot ids per size. At 10x the callers (several entry gates in parallel) the lack of locking is the issue: one mutex over inventory and tickets together is the correct first answer, with the follow-up on finer locks for after you have measured.
+
+## Level signals
+- **SDE2:** correct behaviour, a clear split between spots, tickets and fees, asks about vehicle fit and duplicate plates, and tests the edges (full lot, reused ticket).
+- **Senior:** names the pricing seam before the storm, chooses best fit deliberately, validates before mutating, resists a vehicle class hierarchy and says why, and discusses concurrency unprompted.
+- **Staff:** separates what will change (pricing, spot features) from what will not, ties allocation to the multi-lot and reservation future, and states what they deliberately did not build.
+14:T6a9,#pragma once
+// Public API for the Parking lot problem. The hidden tests only use what is declared here.
+// You implement park::makeParkingLot() (in any of your .cpp files); everything behind it is your design.
+#include <memory>
+#include <string>
+
+namespace park {
+
+enum class Status { Ok, DuplicateId, NoSuchTicket, AlreadyParked, LotFull };
+
+// Size of a physical spot, smallest first.
+enum class SpotSize { Small, Medium, Large };
+
+// Kind of vehicle, smallest first.
+enum class Vehicle { Motorcycle, Car, Truck };
+
+struct Ticket {
+  Status status;
+  std::string ticketId;  // empty unless status == Ok
+  std::string spotId;    // empty unless status == Ok
+};
+
+struct Receipt {
+  Status status;
+  long long feeCents;  // 0 unless status == Ok (a free exit is also 0, with status Ok)
+  std::string spotId;  // the spot that was freed; empty unless status == Ok
+};
+
+class ParkingLot {
+ public:
+  virtual ~ParkingLot() = default;
+
+  virtual Status addSpot(const std::string& spotId, SpotSize size) = 0;
+
+  // A vehicle arrives. `plate` identifies the vehicle.
+  virtual Ticket park(const std::string& plate, Vehicle vehicle) = 0;
+
+  // The vehicle leaves after `minutesParked` minutes (>= 0). There is no clock in this API on purpose:
+  // the caller says how long the stay was, so tests are deterministic.
+  virtual Receipt leave(const std::string& ticketId, int minutesParked) = 0;
+
+  // Number of unoccupied spots of exactly this size.
+  virtual int freeSpots(SpotSize size) const = 0;
+  // Spot currently occupied by this plate; empty if the plate is not parked.
+  virtual std::string spotOf(const std::string& plate) const = 0;
+};
+
+std::unique_ptr<ParkingLot> makeParkingLot();
+
+}  // namespace park
+15:T11a0,#include "api.h"
+#include "bp_test.h"
+
+using park::SpotSize;
+using park::Status;
+using park::Vehicle;
+
+namespace {
+std::unique_ptr<park::ParkingLot> lot() {
+  auto p = park::makeParkingLot();
+  p->addSpot("s1", SpotSize::Small);
+  p->addSpot("m1", SpotSize::Medium);
+  p->addSpot("m2", SpotSize::Medium);
+  p->addSpot("l1", SpotSize::Large);
+  return p;
+}
+}  // namespace
+
+TEST(Registration, DuplicateSpotIsRefused) {
+  auto p = lot();
+  EXPECT_EQ(p->addSpot("m1", SpotSize::Large), Status::DuplicateId);
+  EXPECT_EQ(p->freeSpots(SpotSize::Medium), 2);
+  EXPECT_EQ(p->freeSpots(SpotSize::Large), 1);
+}
+
+TEST(Parking, ParkReturnsTicketAndSpot) {
+  auto p = lot();
+  auto t = p->park("CAR-1", Vehicle::Car);
+  EXPECT_EQ(t.status, Status::Ok);
+  EXPECT_TRUE(!t.ticketId.empty());
+  EXPECT_EQ(t.spotId, "m1");
+  EXPECT_EQ(p->spotOf("CAR-1"), "m1");
+  EXPECT_EQ(p->freeSpots(SpotSize::Medium), 1);
+  EXPECT_EQ(p->spotOf("nobody"), "");
+}
+
+TEST(Parking, TicketsAreDistinct) {
+  auto p = lot();
+  auto a = p->park("A", Vehicle::Car);
+  auto b = p->park("B", Vehicle::Car);
+  EXPECT_TRUE(a.ticketId != b.ticketId);
+}
+
+TEST(Parking, MotorcycleTakesSmallestFreeSpot) {
+  auto p = lot();
+  EXPECT_EQ(p->park("M1", Vehicle::Motorcycle).spotId, "s1");
+  EXPECT_EQ(p->park("M2", Vehicle::Motorcycle).spotId, "m1");
+}
+
+TEST(Parking, CarPrefersMediumOverLarge) {
+  auto p = lot();
+  EXPECT_EQ(p->park("C1", Vehicle::Car).spotId, "m1");
+  EXPECT_EQ(p->park("C2", Vehicle::Car).spotId, "m2");
+  EXPECT_EQ(p->park("C3", Vehicle::Car).spotId, "l1");
+  EXPECT_EQ(p->park("C4", Vehicle::Car).status, Status::LotFull);
+}
+
+TEST(Parking, TruckOnlyFitsLarge) {
+  auto p = lot();
+  EXPECT_EQ(p->park("T1", Vehicle::Truck).spotId, "l1");
+  auto second = p->park("T2", Vehicle::Truck);
+  EXPECT_EQ(second.status, Status::LotFull);
+  EXPECT_EQ(p->freeSpots(SpotSize::Medium), 2);
+}
+
+TEST(Parking, TruckNeverTakesSmallSpot) {
+  auto p = park::makeParkingLot();
+  p->addSpot("s1", SpotSize::Small);
+  p->addSpot("m1", SpotSize::Medium);
+  EXPECT_EQ(p->park("T1", Vehicle::Truck).status, Status::LotFull);
+  EXPECT_EQ(p->park("C1", Vehicle::Car).spotId, "m1");
+}
+
+TEST(Parking, LotFullChangesNothing) {
+  auto p = lot();
+  p->park("T1", Vehicle::Truck);
+  auto refused = p->park("T2", Vehicle::Truck);
+  EXPECT_EQ(refused.status, Status::LotFull);
+  EXPECT_TRUE(refused.ticketId.empty());
+  EXPECT_EQ(p->spotOf("T2"), "");
+  EXPECT_EQ(p->freeSpots(SpotSize::Large), 0);
+}
+
+TEST(Parking, SamePlateTwiceIsRefused) {
+  auto p = lot();
+  EXPECT_EQ(p->park("C1", Vehicle::Car).status, Status::Ok);
+  EXPECT_EQ(p->park("C1", Vehicle::Car).status, Status::AlreadyParked);
+  EXPECT_EQ(p->freeSpots(SpotSize::Medium), 1);
+  EXPECT_EQ(p->spotOf("C1"), "m1");
+}
+
+TEST(Leaving, SpotIsFreedAfterLeaving) {
+  auto p = lot();
+  auto t = p->park("C1", Vehicle::Car);
+  auto r = p->leave(t.ticketId, 30);
+  EXPECT_EQ(r.status, Status::Ok);
+  EXPECT_EQ(r.spotId, "m1");
+  EXPECT_EQ(p->freeSpots(SpotSize::Medium), 2);
+  EXPECT_EQ(p->spotOf("C1"), "");
+}
+
+TEST(Leaving, UnknownOrUsedTicketIsRefused) {
+  auto p = lot();
+  EXPECT_EQ(p->leave("nope", 10).status, Status::NoSuchTicket);
+  auto t = p->park("C1", Vehicle::Car);
+  EXPECT_EQ(p->leave(t.ticketId, 10).status, Status::Ok);
+  auto again = p->leave(t.ticketId, 10);
+  EXPECT_EQ(again.status, Status::NoSuchTicket);
+  EXPECT_EQ(again.feeCents, 0);
+  EXPECT_EQ(p->freeSpots(SpotSize::Medium), 2);
+}
+
+TEST(Leaving, FreedSpotIsReused) {
+  auto p = lot();
+  auto t = p->park("T1", Vehicle::Truck);
+  EXPECT_EQ(p->park("T2", Vehicle::Truck).status, Status::LotFull);
+  p->leave(t.ticketId, 5);
+  EXPECT_EQ(p->park("T2", Vehicle::Truck).spotId, "l1");
+}
+
+TEST(Leaving, PlateMayReturnAfterLeaving) {
+  auto p = lot();
+  auto t = p->park("C1", Vehicle::Car);
+  p->leave(t.ticketId, 5);
+  EXPECT_EQ(p->park("C1", Vehicle::Car).status, Status::Ok);
+}
+
+TEST(Fees, StartedHoursAreCharged) {
+  auto p = lot();
+  const int minutes[] = {0, 1, 60, 61, 120, 121};
+  const long long expected[] = {100, 100, 100, 200, 200, 300};
+  for (int i = 0; i < 6; ++i) {
+    auto t = p->park("C1", Vehicle::Car);
+    EXPECT_EQ(p->leave(t.ticketId, minutes[i]).feeCents, expected[i]);
+  }
+}
+
+TEST(Fees, SameRateForEveryVehicle) {
+  auto p = lot();
+  auto m = p->park("M1", Vehicle::Motorcycle);
+  auto c = p->park("C1", Vehicle::Car);
+  auto t = p->park("T1", Vehicle::Truck);
+  EXPECT_EQ(p->leave(m.ticketId, 90).feeCents, 200);
+  EXPECT_EQ(p->leave(c.ticketId, 90).feeCents, 200);
+  EXPECT_EQ(p->leave(t.ticketId, 90).feeCents, 200);
+}
+16:T886,#include "api_storm1.h"
+#include "bp_test.h"
+
+using park::SpotSize;
+using park::Status;
+using park::Vehicle;
+
+namespace {
+std::unique_ptr<park::ParkingLot> lot() {
+  auto p = park::makePricedParkingLot();
+  p->addSpot("s1", SpotSize::Small);
+  p->addSpot("m1", SpotSize::Medium);
+  p->addSpot("l1", SpotSize::Large);
+  return p;
+}
+
+long long feeFor(park::ParkingLot& p, Vehicle v, int minutes) {
+  auto t = p.park("PLATE", v);
+  return p.leave(t.ticketId, minutes).feeCents;
+}
+}  // namespace
+
+TEST(Pricing, FirstFifteenMinutesAreFree) {
+  auto p = lot();
+  EXPECT_EQ(feeFor(*p, Vehicle::Car, 0), 0);
+  EXPECT_EQ(feeFor(*p, Vehicle::Car, 15), 0);
+  EXPECT_EQ(feeFor(*p, Vehicle::Car, 16), 100);
+}
+
+TEST(Pricing, CarRateMatchesBase) {
+  auto p = lot();
+  EXPECT_EQ(feeFor(*p, Vehicle::Car, 60), 100);
+  EXPECT_EQ(feeFor(*p, Vehicle::Car, 61), 200);
+}
+
+TEST(Pricing, TruckPaysDouble) {
+  auto p = lot();
+  EXPECT_EQ(feeFor(*p, Vehicle::Truck, 61), 400);
+  EXPECT_EQ(feeFor(*p, Vehicle::Truck, 10), 0);
+}
+
+TEST(Pricing, MotorcycleIsHalf) {
+  auto p = lot();
+  EXPECT_EQ(feeFor(*p, Vehicle::Motorcycle, 61), 100);
+  EXPECT_EQ(feeFor(*p, Vehicle::Motorcycle, 30), 50);
+}
+
+TEST(Pricing, MotorcycleInBiggerSpotStillPaysMotorcycleRate) {
+  auto p = lot();
+  auto first = p->park("M1", Vehicle::Motorcycle);  // takes the Small spot
+  auto second = p->park("M2", Vehicle::Motorcycle);  // overflows into the Medium spot
+  EXPECT_EQ(second.spotId, "m1");
+  EXPECT_EQ(p->leave(second.ticketId, 61).feeCents, 100);
+  EXPECT_EQ(p->leave(first.ticketId, 61).feeCents, 100);
+}
+
+TEST(Pricing, BaseRulesStillHold) {
+  auto p = lot();
+  EXPECT_EQ(p->park("T1", Vehicle::Truck).spotId, "l1");
+  EXPECT_EQ(p->park("T2", Vehicle::Truck).status, Status::LotFull);
+  EXPECT_EQ(p->park("T1", Vehicle::Truck).status, Status::AlreadyParked);
+  EXPECT_EQ(p->leave("missing", 5).status, Status::NoSuchTicket);
+  EXPECT_EQ(p->freeSpots(SpotSize::Large), 0);
+}
+
+TEST(Pricing, FreeStayStillFreesTheSpot) {
+  auto p = lot();
+  auto t = p->park("C1", Vehicle::Car);
+  auto r = p->leave(t.ticketId, 5);
+  EXPECT_EQ(r.status, Status::Ok);
+  EXPECT_EQ(r.feeCents, 0);
+  EXPECT_EQ(p->freeSpots(SpotSize::Medium), 1);
+}
+17:T5b9,#pragma once
+#include <array>
+
+#include "api.h"
+
+// Whole hours charged for a stay: every started hour counts, and a stay is at least one hour.
+inline int startedHours(int minutes) { return minutes <= 60 ? 1 : (minutes + 59) / 60; }
+
+// The rule for "what does this stay cost?". The extension seam for new pricing.
+class FeePolicy {
+ public:
+  virtual ~FeePolicy() = default;
+  virtual long long feeCents(park::Vehicle vehicle, int minutesParked) const = 0;
+};
+
+// Base phase: one flat rate for everybody.
+class HourlyFeePolicy : public FeePolicy {
+ public:
+  explicit HourlyFeePolicy(long long centsPerHour) : centsPerHour_(centsPerHour) {}
+  long long feeCents(park::Vehicle, int minutesParked) const override { return centsPerHour_ * startedHours(minutesParked); }
+
+ private:
+  long long centsPerHour_;
+};
+
+// Storm 1: a rate per vehicle type and a free grace period. A new class; FeePolicy and its callers are untouched.
+class RatedFeePolicy : public FeePolicy {
+ public:
+  RatedFeePolicy(std::array<long long, 3> centsPerHourByVehicle, int graceMinutes)
+      : rates_(centsPerHourByVehicle), graceMinutes_(graceMinutes) {}
+
+  long long feeCents(park::Vehicle vehicle, int minutesParked) const override {
+    if (minutesParked <= graceMinutes_) return 0;
+    return rates_[static_cast<std::size_t>(vehicle)] * startedHours(minutesParked);
+  }
+
+ private:
+  std::array<long long, 3> rates_;  // indexed by Vehicle: motorcycle, car, truck
+  int graceMinutes_;
+};
+18:T4bf,#include "parking_service.h"
+
+using park::Status;
+
+Status ParkingService::addSpot(const std::string& spotId, park::SpotSize size) {
+  return spots_.add(spotId, size) ? Status::Ok : Status::DuplicateId;
+}
+
+park::Ticket ParkingService::park(const std::string& plate, park::Vehicle vehicle) {
+  if (tickets_.isInside(plate)) return {Status::AlreadyParked, "", ""};
+  std::string spotId = spots_.occupyBestFit(vehicle);
+  if (spotId.empty()) return {Status::LotFull, "", ""};
+  std::string ticketId = tickets_.open(Stay{plate, vehicle, spotId});
+  return {Status::Ok, ticketId, spotId};
+}
+
+park::Receipt ParkingService::leave(const std::string& ticketId, int minutesParked) {
+  auto stay = tickets_.close(ticketId);
+  if (!stay) return {Status::NoSuchTicket, 0, ""};
+  spots_.release(stay->spotId);
+  return {Status::Ok, fees_->feeCents(stay->vehicle, minutesParked), stay->spotId};
+}
+
+std::unique_ptr<park::ParkingLot> park::makeParkingLot() {
+  return std::make_unique<ParkingService>(std::make_unique<HourlyFeePolicy>(100));
+}
+
+std::unique_ptr<park::ParkingLot> park::makePricedParkingLot() {
+  return std::make_unique<ParkingService>(std::make_unique<RatedFeePolicy>(std::array<long long, 3>{50, 100, 200}, 15));
+}
+19:T616,#pragma once
+#include <map>
+#include <string>
+
+#include "api.h"
+
+// Owns the spots and which of them are taken. The only place occupancy changes.
+class SpotInventory {
+ public:
+  bool add(const std::string& id, park::SpotSize size) { return spots_.emplace(id, Spot{size, false}).second; }
+
+  // Takes the smallest free spot that fits the vehicle (ties: lowest id). Returns its id, or "" if none fits.
+  std::string occupyBestFit(park::Vehicle vehicle) {
+    Spot* best = nullptr;
+    std::string bestId;
+    for (auto& [id, spot] : spots_) {  // std::map iterates in id order, so ties keep the lowest id
+      if (spot.taken || !fits(vehicle, spot.size)) continue;
+      if (best == nullptr || spot.size < best->size) {
+        best = &spot;
+        bestId = id;
+      }
+    }
+    if (best == nullptr) return "";
+    best->taken = true;
+    return bestId;
+  }
+
+  // Precondition: the spot exists and is taken.
+  void release(const std::string& id) { spots_.at(id).taken = false; }
+
+  int freeCount(park::SpotSize size) const {
+    int n = 0;
+    for (const auto& [id, spot] : spots_) n += (spot.size == size && !spot.taken) ? 1 : 0;
+    return n;
+  }
+
+ private:
+  struct Spot {
+    park::SpotSize size;
+    bool taken;
+  };
+
+  // Both enums are ordered smallest first, so "fits" is a comparison of ranks: a motorcycle needs
+  // at least Small, a car at least Medium, a truck Large.
+  static bool fits(park::Vehicle vehicle, park::SpotSize size) {
+    return static_cast<int>(size) >= static_cast<int>(vehicle);
+  }
+
+  std::map<std::string, Spot> spots_;
+};
+1a:T513,#pragma once
+#include <map>
+#include <optional>
+#include <set>
+#include <string>
+
+#include "api.h"
+
+// One vehicle's stay in the lot.
+struct Stay {
+  std::string plate;
+  park::Vehicle vehicle;
+  std::string spotId;
+};
+
+// Owns the open stays: which plates are inside and which ticket belongs to which stay.
+class TicketBook {
+ public:
+  bool isInside(const std::string& plate) const { return byPlate_.count(plate) != 0; }
+
+  std::string open(const Stay& stay) {
+    std::string ticketId = "T" + std::to_string(++issued_);
+    byPlate_[stay.plate] = ticketId;
+    stays_.emplace(ticketId, stay);
+    return ticketId;
+  }
+
+  // Closes the ticket and returns the stay; empty if the ticket is unknown or already used.
+  std::optional<Stay> close(const std::string& ticketId) {
+    auto it = stays_.find(ticketId);
+    if (it == stays_.end()) return std::nullopt;
+    Stay stay = it->second;
+    byPlate_.erase(stay.plate);
+    stays_.erase(it);
+    return stay;
+  }
+
+  std::string spotOf(const std::string& plate) const {
+    auto it = byPlate_.find(plate);
+    return it == byPlate_.end() ? "" : stays_.at(it->second).spotId;
+  }
+
+ private:
+  int issued_ = 0;
+  std::map<std::string, Stay> stays_;          // ticket id -> stay
+  std::map<std::string, std::string> byPlate_;  // plate -> ticket id
+};
+f:[["children",{"s":"__PAGE__","h":160,"d":{"r":["$","$1","c",{"children":[["$","$L12",null,{"bundle":{"id":"parking-lot","title":"Parking lot","level":"SDE2","parMinutes":50,"patterns":["Strategy (fee policy)"],"requirements":[{"id":"R-add","text":"Spots (with a size) can be added; ids are unique. Parking returns a ticket naming the spot; leaving returns a receipt with a fee.","phase":"base","hidden":false},{"id":"R-fit","text":"A motorcycle fits any spot, a car needs a Medium or Large spot, a truck needs a Large spot.","phase":"base","hidden":true},{"id":"R-best","text":"The vehicle gets the smallest free spot that fits; ties go to the lowest spot id.","phase":"base","hidden":true},{"id":"R-plate","text":"A plate that is already inside is refused (AlreadyParked) and nothing changes.","phase":"base","hidden":true},{"id":"R-full","text":"When no suitable spot is free, the result is LotFull and nothing changes.","phase":"base","hidden":true},{"id":"R-leave","text":"Leaving frees the spot immediately; a used or unknown ticket returns NoSuchTicket; the plate may park again later.","phase":"base","hidden":true},{"id":"R-fee","text":"The fee is 100 cents per started hour, minimum one hour, the same for every vehicle.","phase":"base","hidden":true},{"id":"R-rates","text":"Storm 1: price by vehicle type (motorcycle 50, car 100, truck 200 cents per started hour); stays of 15 minutes or less are free. The vehicle type decides the rate, not the spot it ended up in.","phase":"storm1","hidden":true}],"brief":"# Parking lot\n\nYou are building the core of a multi-storey car park's control system. A vehicle **arrives**, the system finds it a **spot** and hands back a **ticket**; the vehicle **leaves** and the system works out the **fee**.\n\nWhat you know so far:\n\n- The lot has numbered spots; staff add them one by one, each with a size.\n- Vehicles are motorcycles, cars and trucks. A plate identifies a vehicle.\n- Parking returns a ticket that names the spot. Leaving takes the ticket and returns a receipt with the fee.\n- Someone at the gate wants to know how many spots of each size are free.\n\nYour task: design and implement it behind the `park::ParkingLot` interface in `api.h`. The hidden tests call only that interface. Ask the interviewer questions first: the brief is deliberately incomplete.\n","editorial":"$13","clarify":[{"id":"q-fit","text":"Can any vehicle use any spot?","answer":"No. A motorcycle fits any spot, a car needs a Medium or Large spot, a truck needs a Large spot.","reveals":["R-fit"],"quality":"essential"},{"id":"q-choice","text":"When several spots fit, which one should the vehicle get?","answer":"The smallest spot that fits, so large spots stay free for trucks. Among equals, the lowest spot id (alphabetical).","reveals":["R-best"],"quality":"essential"},{"id":"q-dup","text":"Can the same plate be parked twice at once?","answer":"No. A plate already inside is refused with AlreadyParked, and nothing changes.","reveals":["R-plate"],"quality":"essential"},{"id":"q-pricing","text":"How is the fee calculated, and could pricing differ by vehicle type or time of stay?","answer":"Today: 100 cents per started hour, minimum one hour, same for every vehicle. Good question though: management is about to price by vehicle type and give a short free period. Details arrive with the change.","reveals":["R-fee","R-rates"],"quality":"essential"},{"id":"q-full","text":"What happens when no suitable spot is free?","answer":"Return LotFull. Nothing is created or changed.","reveals":["R-full"],"quality":"useful"},{"id":"q-time","text":"Does the system need its own clock for entry and exit times?","answer":"No. The caller passes the number of minutes parked when the vehicle leaves.","reveals":[],"quality":"useful"},{"id":"q-reuse","text":"Once a vehicle leaves, is its spot immediately reusable and may the plate come back later?","answer":"Yes to both. A used ticket is no longer valid: leaving with it again returns NoSuchTicket.","reveals":["R-leave"],"quality":"useful"},{"id":"q-levels","text":"Do I need to model floors and distance from the entrance?","answer":"Not now. Spots are a flat list with ids. Keep it open to levels, but do not build them.","reveals":[],"quality":"useful"},{"id":"q-pay","text":"Should I integrate a payment gateway at the exit?","answer":"No. The receipt only reports the amount.","reveals":[],"quality":"noise"},{"id":"q-ui","text":"Do you want a gate display or a mobile app?","answer":"No UI. Only the interface in api.h is tested.","reveals":[],"quality":"noise"},{"id":"q-db","text":"Which database should tickets persist to?","answer":"None. In memory for this exercise.","reveals":[],"quality":"noise"}],"rubric":[{"id":"res-spots","text":"Knows the spots, which are taken, and picks the best-fitting free one","phase":"base","owners":["SpotInventory","Spots","SpotAllocator","ParkingSpots"]},{"id":"res-tickets","text":"Knows which vehicles are inside and which ticket belongs to which stay","phase":"base","owners":["TicketBook","Tickets","TicketRegistry","StayRegistry"]},{"id":"res-fee","text":"Decides what a stay costs, behind a seam","phase":"base","owners":["FeePolicy","PricingPolicy","HourlyFeePolicy","FeeCalculator"]},{"id":"res-facade","text":"Coordinates arrival and departure across spots, tickets and pricing","phase":"base","owners":["ParkingService","ParkingLotImpl","Lot"]},{"id":"res-rates","text":"Knows the per-vehicle rates and the free period, without touching leave()","phase":"storm1","owners":["RatedFeePolicy","VehicleRateFeePolicy","TypeRateFeePolicy"]}],"followups":[{"level":"SDE2","question":"Why is the fee a separate class and not a line in leave()?","answer":"Pricing is the part management changes most often (per vehicle, per hour of day, weekend rates). A FeePolicy interface lets a new rule arrive as a new class instead of an edit to leave(): the Open/Closed seam. Inline would be fine only if the interviewer promises pricing never varies."},{"level":"SDE2","question":"How do you pick a spot, and what is the complexity?","answer":"Best fit: the smallest free spot that fits, ties by id. A scan is O(spots) per arrival, which is fine for hundreds of spots. At scale keep one ordered set of free ids per size and take the first from the smallest size that fits: O(log n)."},{"level":"Senior","question":"How would you make it thread-safe for several entry gates?","answer":"The invariant is: a spot holds at most one vehicle, and a plate is inside at most once. One mutex in the service guarding spots and tickets together is correct and simple. Finer locks (per size) need a lock order and a story for the case where a car could take a Medium or a Large spot. Measure first."},{"level":"Senior","question":"Pricing becomes 'first hour 200, then 100 per hour, daily cap 1500, weekend surcharge'. What changes?","answer":"Only FeePolicy implementations: compose small policies (a tariff table, a cap decorator, a surcharge decorator) behind the same interface. The receipt, the service and the tests for parking stay untouched. Make the rule data (a tariff) before making it code."},{"level":"Senior","question":"Why does leave() take minutes and not a timestamp or a clock?","answer":"Determinism in tests and a smaller surface. In production you would inject a Clock interface into the service, record the entry time on the ticket, and compute minutes there. The policy would still receive a duration, so pricing never needs to know about clocks."},{"level":"Staff","question":"Ten lots across a city share one app with reservations and EV chargers. What happens to the design?","answer":"Spot features (charger, accessible) become capabilities matched by a SpotFinder strategy instead of a size comparison. Reservations add a time dimension to inventory, so availability becomes a query over intervals, and the single in-memory owner of spot state becomes a service with its own consistency story (a reservation holds a spot for a window). The class boundaries survive; the maps do not."}],"apiHeader":"$14","phaseApis":{"storm1":"#pragma once\n// Change Storm 1 adds vehicle-based pricing. Everything from api.h still holds, and makeParkingLot()\n// keeps its flat pricing. Only the lots made by makePricedParkingLot() use the new rules.\n#include \"api.h\"\n\nnamespace park {\n\nstd::unique_ptr<ParkingLot> makePricedParkingLot();\n\n}  // namespace park\n"},"phases":["base","storm1"],"tests":{"base":[{"path":"parking_base.cpp","content":"$15"}],"storm1":[{"path":"parking_storm1.cpp","content":"$16"}]},"reference":[{"path":"fee_policy.h","content":"$17"},{"path":"parking_service.cpp","content":"$18"},{"path":"parking_service.h","content":"#pragma once\n#include <memory>\n#include <utility>\n\n#include \"api_storm1.h\"\n#include \"fee_policy.h\"\n#include \"spot_inventory.h\"\n#include \"ticket_book.h\"\n\n// Coordinates arrival and departure across spots, tickets and pricing.\n// Every operation validates first and mutates last, so a failed call changes nothing.\nclass ParkingService : public park::ParkingLot {\n public:\n  explicit ParkingService(std::unique_ptr<FeePolicy> fees) : fees_(std::move(fees)) {}\n\n  park::Status addSpot(const std::string& spotId, park::SpotSize size) override;\n  park::Ticket park(const std::string& plate, park::Vehicle vehicle) override;\n  park::Receipt leave(const std::string& ticketId, int minutesParked) override;\n  int freeSpots(park::SpotSize size) const override { return spots_.freeCount(size); }\n  std::string spotOf(const std::string& plate) const override { return tickets_.spotOf(plate); }\n\n private:\n  SpotInventory spots_;\n  TicketBook tickets_;\n  std::unique_ptr<FeePolicy> fees_;\n};\n"},{"path":"spot_inventory.h","content":"$19"},{"path":"ticket_book.h","content":"$1a"}],"driver":{"path":"driver.cpp","content":"#define BP_TEST_MAIN\n#include \"bp_test.h\"\n","readOnly":true}}}],["$L1b","$L1c"],"$L1d"]}],"p":"$@1e","v":null,"s":"$9"}}]]
+d:[["children",{"s":{"n":"id","t":"d","k":"parking-lot","s":[]},"h":65632,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}]}]]}],"p":"$@e","v":"$c","s":"$9"},"c":"$Qf"}]]
+a:[["children",{"s":"workshop","h":131168,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}]}]]}],"p":"$@b","v":"$c","s":"$9"},"c":"$Qd"}]]
+0:{"t":{"t":{"s":"","h":131152,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","precedence":"next"}],["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js","async":true}]],["$","html",null,{"lang":"en","className":"r7opxW_variable auY9QW_variable u-EJdW_variable h-full","children":["$","body",null,{"className":"min-h-full","children":[["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}],"notFound":[["$","main",null,{"className":"flex min-h-dvh flex-col items-center justify-center gap-4 px-4 text-center","children":[["$","div",null,{"className":"font-display text-5xl text-[var(--accent)]","children":"404"}],["$","p",null,{"className":"text-white/60","children":"This room is not on the blueprint yet."}],["$","$L6",null,{"href":"/","className":"text-sm text-white/80 underline","children":"Back to the title screen"}]]}],[]]}],["$","$L7",null,{}]]}]}]]}],"p":"$@8","v":null,"s":"$9"},"c":"$Qa"},"h":{"r":["$","$1","h",{"children":[null,["$","$L20",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1, viewport-fit=cover"}],["$","meta","2",{"name":"theme-color","content":"#0a1530"}]]}],["$","$L22",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$23",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"Parking lot: Blueprint Clash"}],["$","meta","1",{"name":"description","content":"A creature-tactics RPG that teaches low-level design in C++ and high-level system design, from fundamentals to big-tech interview level."}],["$","link","2",{"rel":"manifest","href":"/blueprint-clash/manifest.webmanifest"}],["$","meta","3",{"name":"mobile-web-app-capable","content":"yes"}],["$","meta","4",{"name":"apple-mobile-web-app-title","content":"Blueprint Clash"}],["$","meta","5",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","link","6",{"rel":"icon","href":"/blueprint-clash/icon.png?icon.27re_xscs-jmw.png","sizes":"256x256","type":"image/png"}],["$","link","7",{"rel":"apple-touch-icon","href":"/blueprint-clash/apple-icon.png?apple-icon.2rac1w0yc3rju.png","sizes":"180x180","type":"image/png"}],["$","$L24","8",{}]]}]}],null]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"p":"$@25","v":null,"s":"$9"}},"a":"$@26","u":"$@27","b":"U2e90Mr6iueJEoRJLmd0s"}
+28:I[97367,["$2"],"OutletBoundary"]
+1b:["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/2uk3wcjwqg0tl.js","async":true}]
+1c:["$","script","script-1",{"src":"/blueprint-clash/_next/static/chunks/1zdu7yjl8efu4.js","async":true}]
+1d:["$","$L28",null,{"children":["$","$23",null,{"name":"Next.MetadataOutlet","children":"$@29"}]}]
+9:300
+29:null
+27:true
+9:C
+26:0
+e:"$undefined"
+b:"$undefined"
+8:"$undefined"
+25:"$undefined"
+1e:"$undefined"

@@ -1,0 +1,996 @@
+1:"$Sreact.fragment"
+2:"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js"
+3:I[39756,["$2"],"default"]
+4:I[37457,["$2"],"default"]
+5:"/blueprint-clash/_next/static/chunks/2n5qeheznvl4u.js"
+6:I[22016,["$2","$5"],""]
+7:I[64576,["$2"],"PwaRegister"]
+d:I[97367,["$2"],"OutletBoundary"]
+e:"$Sreact.suspense"
+10:"ViewportBoundary"
+11:I[97367,["$2"],"$10"]
+13:"MetadataBoundary"
+14:I[97367,["$2"],"$13"]
+16:I[68027,["$2"],"default",1]
+:HL["/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","style"]
+:HL["/blueprint-clash/_next/static/media/07c7676b89ed2778-s.p.2bn3s6zvc0dyp.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/blueprint-clash/_next/static/media/486a103cae33528f-s.p.309ilb452anpd.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/blueprint-clash/_next/static/media/53897e768d329f66-s.p.3t6q91iet4nsy.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+9:X
+b:[["children",{"s":"__PAGE__","h":512,"d":{"r":["$","$1","c",{"children":["$Lc",[["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/2uk3wcjwqg0tl.js","async":true,"nonce":"$undefined"}],["$","script","script-1",{"src":"/blueprint-clash/_next/static/chunks/1zdu7yjl8efu4.js","async":true,"nonce":"$undefined"}]],["$","$Ld",null,{"children":["$","$e",null,{"name":"Next.MetadataOutlet","children":"$@f"}]}]]}],"p":false,"v":null}}]]
+a:[["children",{"s":{"n":"id","t":"d","k":"lru-lfu-cache","s":[]},"h":66048,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],"p":false,"v":"$9"},"c":"$Qb"}]]
+8:[["children",{"s":"workshop","h":131584,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],"p":false,"v":"$9"},"c":"$Qa"}]]
+0:{"P":null,"c":["","workshop","lru-lfu-cache",""],"q":"","i":false,"t":{"t":{"s":"","h":131600,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}],["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js","async":true,"nonce":"$undefined"}]],["$","html",null,{"lang":"en","className":"r7opxW_variable auY9QW_variable u-EJdW_variable h-full","children":["$","body",null,{"className":"min-h-full","children":[["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","main",null,{"className":"flex min-h-dvh flex-col items-center justify-center gap-4 px-4 text-center","children":[["$","div",null,{"className":"font-display text-5xl text-[var(--accent)]","children":"404"}],["$","p",null,{"className":"text-white/60","children":"This room is not on the blueprint yet."}],["$","$L6",null,{"href":"/","className":"text-sm text-white/80 underline","children":"Back to the title screen"}]]}],[]],"forbidden":"$undefined","unauthorized":"$undefined"}],["$","$L7",null,{}]]}]}]]}],"p":false,"v":null},"c":"$Q8"},"h":{"r":["$","$1","h",{"children":[null,["$","$L11",null,{"children":"$L12"}],["$","$L14",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$e",null,{"name":"Next.Metadata","children":"$L15"}]}],null]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"p":false,"v":null}},"m":"$undefined","G":["$16",[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]]],"S":true,"r":"$undefined","s":"$undefined","a":"$undefined","l":"$undefined","p":"$undefined","d":"$undefined","b":"U2e90Mr6iueJEoRJLmd0s"}
+9:C
+12:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1, viewport-fit=cover"}],["$","meta","2",{"name":"theme-color","content":"#0a1530"}]]
+17:I[27201,["$2"],"IconMark"]
+f:null
+15:[["$","title","0",{"children":"LRU / LFU Cache: Blueprint Clash"}],["$","meta","1",{"name":"description","content":"A creature-tactics RPG that teaches low-level design in C++ and high-level system design, from fundamentals to big-tech interview level."}],["$","link","2",{"rel":"manifest","href":"/blueprint-clash/manifest.webmanifest","crossOrigin":"$undefined"}],["$","meta","3",{"name":"mobile-web-app-capable","content":"yes"}],["$","meta","4",{"name":"apple-mobile-web-app-title","content":"Blueprint Clash"}],["$","meta","5",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","link","6",{"rel":"icon","href":"/blueprint-clash/icon.png?icon.27re_xscs-jmw.png","sizes":"256x256","type":"image/png"}],["$","link","7",{"rel":"apple-touch-icon","href":"/blueprint-clash/apple-icon.png?apple-icon.2rac1w0yc3rju.png","sizes":"180x180","type":"image/png"}],["$","$L17","8",{}]]
+18:"/blueprint-clash/_next/static/chunks/2uk3wcjwqg0tl.js"
+19:"/blueprint-clash/_next/static/chunks/1zdu7yjl8efu4.js"
+1a:I[65612,["$2","$18","$19"],"WorkshopClient"]
+1b:T1af8,# Editorial: LRU / LFU Cache
+
+## Requirements
+Functional: a fixed-capacity cache of string keys and values with `put`, `get`, `contains`, `erase`, `size`, `capacity` and `stats`. A new key into a full cache evicts the least recently used entry. A `get` hit and a `put` that replaces a value count as a use; a miss and `contains` do not; replacing a value never evicts. `makeCache` refuses a capacity below 1. `stats` counts hits and misses from `get` only, and evictions only for entries pushed out to make room. Hidden until asked: what counts as a use, the erase and capacity rules, and the exact meaning of each counter. Non-goals: thread safety (discussed, not built), TTL (the next problem in the row), byte-based capacity, persistence, distribution.
+
+**Change Storm 1, pluggable eviction:** `makePolicyCache(capacity, policy)` takes an `EvictionPolicy` with four hooks (`onInsert`, `onAccess`, `onErase`, `chooseVictim`). The tests bring FIFO, MRU and LFU policies the cache has never heard of, plus a recording policy that checks exactly which hook is called when. Revealable by asking what teams want next.
+
+**Change Storm 2, removal listener:** an `ObservableCache` tells a `RemovalListener` about every entry that leaves, with its value and a reason (evicted or erased). Replacing a value is not a removal, and when the listener runs the state change is already complete.
+
+## Reference design
+- `EntryStore` holds the entries and the capacity. It does not know who should be evicted.
+- `LruPolicy` keeps the use order (a list ordered by recency plus an index into it, all O(1)) and names the victim. It is told about every entry that arrives or leaves.
+- `StatsCounter` is the one place that counts.
+- `RemovalNotifier` announces removals to the listener, if there is one.
+- `CacheImpl` is the facade. A `put` of a new key is: if full, `evictOne()`, then store, then tell the policy. `evictOne()` asks the policy for a victim, removes it, tells the policy, counts, and only then notifies.
+
+**Storm 1 in the reference:** nothing in `CacheImpl` changes except the constructor taking the policy from outside. The base design already had the policy behind the same four calls, so the storm is an interface that moves into a public header and two more factory functions. A first-draft design with the recency list inside the cache pays for it here: the list has to come out into its own class, which is the storm.
+
+**Storm 2 in the reference:** one new class (`RemovalNotifier`) and two call sites, one in `erase` and one in `evictOne`, both after the entry is gone. `EntryStore`, the policy and the counter are untouched.
+
+## Alternatives
+- **Everything in one class** (a map, a list, three counters and an `evict()` method) is the right answer to the base problem and what an interviewer expects first. It is also what makes the storm hurt: the recency list is wired through `put`, `get` and `erase`, so a second eviction rule means a branch in each, and the listener means another branch in two of them.
+- **An enum `{Lru, Lfu, Fifo}` with a `switch` inside the cache** is the lazy answer to Storm 1. It satisfies the ones named in the enum and fails any rule the caller brings (the test's MRU), and every new policy edits the cache. The Strategy interface is the Open/Closed answer, and the price is four virtual calls per operation, which is small next to a hash lookup.
+- **Policy as a template parameter** (`Cache<EvictionPolicy>`) removes the virtual calls and fixes the policy at compile time. Fine for a library, wrong when the policy is chosen from a config file or by a test at run time.
+- **A single `std::map<Key, Entry>` ordered by timestamp** gives O(log n) for everything and a very short program. It is a good fallback to say out loud when you are running out of time, with the cost stated.
+- **A policy that sees the whole cache** (`chooseVictim(const Cache&)`) lets it read values and sizes, but it can also mutate what it should only observe, and policy and cache then depend on each other. Passing explicit arguments to the hooks keeps the arrow one-way.
+- **Observer with a list of listeners** is the more general form. One listener plus a chain of your own decorators is simpler, and the interviewer's question "what about two listeners?" is a fine place to show a composite listener.
+- **Soft references or weak maps** let the garbage collector decide, which is not available in C++ and not predictable where it is.
+
+## Trade-offs
+Exact LRU needs a write on every read, which is what makes it hard to scale across threads; approximate schemes (CLOCK, sampling) give up exactness for concurrency. LFU keeps popular keys through a burst of one-off keys but pins dead ones; LRU adapts quickly and is flushed by a scan. Neither dominates, which is why the policy is pluggable and why stats exist: pick with the numbers. Strings as keys and values keep the problem small and copy more than a template would; a real library would be generic and often hand out references or shared pointers. Notifying after the state has changed makes listeners safe to reason about, and means a listener can observe that a key it was told about is already being re-inserted by another thread in a concurrent version.
+
+## What breaks at 10x
+At 10x the entries the hash map and list nodes dominate memory (a node per entry is two pointers plus allocator overhead), so you move to an intrusive list or an array-based CLOCK, and the capacity becomes bytes, not entries, with a weight per entry. At 10x the request rate one mutex is the bottleneck: shard by key hash (each shard its own policy, so eviction is only approximately global), batch recency updates, and keep listeners off the hot path. At 10x the keys the working set no longer fits, hit ratio is the metric that matters, and admission control (do not cache what is probably one-off) starts to beat clever eviction. At 10x the services the cache becomes a shared, networked tier, where stampedes, hot keys and invalidation (the caching chapter) are the real problems.
+
+## Level signals
+- **SDE2:** correct LRU behaviour including refresh on replace and no eviction on replace; hash map plus linked list with a clear O(1) argument; handles capacity and erase edge cases; knows `contains` is a peek.
+- **Senior:** asks what counts as a use and what the counters mean before coding; keeps store, order and counter apart; keeps the order structure and the map in step on erase; makes the eviction rule a real Strategy and the listener fire after the state change; explains why get() mutates and what that means for locking.
+- **Staff:** reasons from workload to policy (scan resistance, admission, frequency decay); proposes sharding with approximate global eviction and batched recency updates and states what is lost; handles listener delivery outside the lock, shutdown flush and weighted capacity unprompted; ties the stats to a decision.
+1c:T6cd,#pragma once
+// Public API for the Cache problem. The hidden tests only use what is declared here.
+// You implement cachex::makeCache() (in any of your .cpp files); everything behind it is your design.
+#include <memory>
+#include <optional>
+#include <string>
+
+namespace cachex {
+
+// Counters since the cache was created. Plain data, read through Cache::stats().
+struct Stats {
+  long hits = 0;       // get() calls that found the key
+  long misses = 0;     // get() calls that did not
+  long evictions = 0;  // entries pushed out to make room (not erased, not overwritten)
+};
+
+// A fixed-capacity in-memory cache from string keys to string values.
+class Cache {
+ public:
+  virtual ~Cache() = default;
+
+  // Stores the value. A new key may push the least recently used entry out to make room.
+  // Putting a key that is already present replaces its value, counts as a use of that key, and never evicts.
+  virtual void put(const std::string& key, const std::string& value) = 0;
+
+  // The value, or an empty optional on a miss. A hit counts as a use of the key.
+  virtual std::optional<std::string> get(const std::string& key) = 0;
+
+  // Whether the key is present. This is a peek: it is not a use, and it is not counted in stats().
+  virtual bool contains(const std::string& key) const = 0;
+
+  // Removes the key if present and returns true; returns false when it was absent.
+  virtual bool erase(const std::string& key) = 0;
+
+  virtual int size() const = 0;
+  virtual int capacity() const = 0;
+  virtual Stats stats() const = 0;
+};
+
+// A cache that holds at most `capacity` entries and evicts the least recently used one.
+// Returns nullptr when capacity is less than 1.
+std::unique_ptr<Cache> makeCache(int capacity);
+
+}  // namespace cachex
+1d:T5d9,#pragma once
+// Change Storm 1 makes the eviction rule pluggable. Everything from api.h still holds.
+#include "api.h"
+
+namespace cachex {
+
+// Decides which key to give up when the cache is full. The cache owns its policy and tells it what happens;
+// the policy never touches the cache's data. The calls, and only these, happen:
+//   onInsert(key)  a key that was NOT in the cache has just been stored.
+//   onAccess(key)  a key that IS in the cache was used: a get() hit, or a put() that replaced its value.
+//   onErase(key)   a key has just left the cache, whether through erase() or through eviction.
+//   chooseVictim() a put() of a new key found the cache full. Return a key that is currently in the cache.
+//                  The cache then removes it, calls onErase(victim), stores the new key and calls onInsert(newKey).
+// A get() miss, contains(), and an erase() of an absent key tell the policy nothing.
+class EvictionPolicy {
+ public:
+  virtual ~EvictionPolicy() = default;
+  virtual void onInsert(const std::string& key) = 0;
+  virtual void onAccess(const std::string& key) = 0;
+  virtual void onErase(const std::string& key) = 0;
+  virtual std::string chooseVictim() = 0;
+};
+
+// Like makeCache(), but the given policy chooses the victims. makeCache(n) behaves as a least-recently-used policy.
+// Returns nullptr when capacity is less than 1 or the policy is null.
+std::unique_ptr<Cache> makePolicyCache(int capacity, std::unique_ptr<EvictionPolicy> policy);
+
+}  // namespace cachex
+1e:T55b,#pragma once
+// Change Storm 2 lets the application hear about entries leaving the cache. Everything from api.h and api_storm1.h still holds.
+#include "api_storm1.h"
+
+namespace cachex {
+
+enum class RemovalReason {
+  Evicted,  // pushed out by the eviction policy to make room
+  Erased    // removed by an explicit erase()
+};
+
+// Told about every entry that leaves the cache, with the value it held. Replacing a value is not a removal.
+// By the time onRemoved() runs the entry is already gone: contains(key) is false and size() has already dropped.
+// For an eviction this happens before the new key is stored, so the cache never holds more than its capacity,
+// even for an instant a listener could observe.
+class RemovalListener {
+ public:
+  virtual ~RemovalListener() = default;
+  virtual void onRemoved(const std::string& key, const std::string& value, RemovalReason reason) = 0;
+};
+
+class ObservableCache : public Cache {
+ public:
+  // The listener replaces any earlier one; null removes it. It only hears about removals after it is set.
+  virtual void setListener(std::shared_ptr<RemovalListener> listener) = 0;
+};
+
+// Like makePolicyCache(), plus a listener hook. Returns nullptr when capacity is less than 1 or the policy is null.
+std::unique_ptr<ObservableCache> makeObservableCache(int capacity, std::unique_ptr<EvictionPolicy> policy);
+
+}  // namespace cachex
+1f:T18ea,#include <string>
+
+#include "api.h"
+#include "bp_test.h"
+
+using cachex::makeCache;
+
+namespace {
+// Reads without keeping an optional around, so a test line says what it checks.
+std::string valueOf(cachex::Cache& cache, const std::string& key) {
+  const auto got = cache.get(key);
+  return got.has_value() ? *got : std::string("<miss>");
+}
+}  // namespace
+
+TEST(Basics, APutValueCanBeRead) {
+  auto cache = makeCache(3);
+  cache->put("a", "1");
+  EXPECT_EQ(valueOf(*cache, "a"), "1");
+  EXPECT_EQ(cache->size(), 1);
+}
+
+TEST(Basics, AMissIsAnEmptyOptional) {
+  auto cache = makeCache(3);
+  EXPECT_FALSE(cache->get("nope").has_value());
+  cache->put("a", "1");
+  EXPECT_FALSE(cache->get("b").has_value());
+}
+
+TEST(Basics, PuttingAKeyAgainReplacesItsValue) {
+  auto cache = makeCache(3);
+  cache->put("a", "1");
+  cache->put("a", "2");
+  EXPECT_EQ(valueOf(*cache, "a"), "2");
+  EXPECT_EQ(cache->size(), 1);
+}
+
+TEST(Basics, KeysAndValuesAreOpaqueStringsIncludingEmptyOnes) {
+  auto cache = makeCache(2);
+  cache->put("", "empty key");
+  cache->put("k", "");
+  EXPECT_EQ(valueOf(*cache, ""), "empty key");
+  ASSERT_TRUE(cache->get("k").has_value());
+  EXPECT_EQ(*cache->get("k"), "");
+}
+
+TEST(Basics, TwoCachesShareNothing) {
+  auto first = makeCache(2);
+  auto second = makeCache(2);
+  first->put("a", "1");
+  EXPECT_FALSE(second->contains("a"));
+  EXPECT_EQ(second->size(), 0);
+}
+
+TEST(Capacity, ACapacityBelowOneIsRefused) {
+  EXPECT_TRUE(makeCache(0) == nullptr);
+  EXPECT_TRUE(makeCache(-3) == nullptr);
+  EXPECT_FALSE(makeCache(1) == nullptr);
+}
+
+TEST(Capacity, CapacityIsReportedAndSizeNeverExceedsIt) {
+  auto cache = makeCache(3);
+  EXPECT_EQ(cache->capacity(), 3);
+  for (int i = 0; i < 20; ++i) {
+    cache->put("k" + std::to_string(i), "v");
+    EXPECT_LE(cache->size(), 3);
+  }
+  EXPECT_EQ(cache->size(), 3);
+}
+
+TEST(Capacity, ACapacityOfOneKeepsOnlyTheNewestKey) {
+  auto cache = makeCache(1);
+  cache->put("a", "1");
+  cache->put("b", "2");
+  EXPECT_FALSE(cache->contains("a"));
+  EXPECT_EQ(valueOf(*cache, "b"), "2");
+  EXPECT_EQ(cache->size(), 1);
+}
+
+TEST(Capacity, OverwritingAKeyNeverEvictsAnything) {
+  auto cache = makeCache(2);
+  cache->put("a", "1");
+  cache->put("b", "2");
+  cache->get("a");  // b is now the least recently used
+  cache->put("a", "1b");
+  EXPECT_TRUE(cache->contains("a"));
+  EXPECT_TRUE(cache->contains("b"));
+  EXPECT_EQ(cache->size(), 2);
+  EXPECT_EQ(cache->stats().evictions, 0);
+}
+
+TEST(Recency, TheLeastRecentlyUsedEntryIsEvictedFirst) {
+  auto cache = makeCache(2);
+  cache->put("a", "1");
+  cache->put("b", "2");
+  cache->put("c", "3");
+  EXPECT_FALSE(cache->contains("a"));
+  EXPECT_TRUE(cache->contains("b"));
+  EXPECT_TRUE(cache->contains("c"));
+}
+
+TEST(Recency, AHitMakesTheKeyTheMostRecentlyUsed) {
+  auto cache = makeCache(2);
+  cache->put("a", "1");
+  cache->put("b", "2");
+  cache->get("a");
+  cache->put("c", "3");
+  EXPECT_TRUE(cache->contains("a"));
+  EXPECT_FALSE(cache->contains("b"));
+}
+
+TEST(Recency, ReplacingAValueCountsAsAUse) {
+  auto cache = makeCache(2);
+  cache->put("a", "1");
+  cache->put("b", "2");
+  cache->put("a", "1b");
+  cache->put("c", "3");
+  EXPECT_TRUE(cache->contains("a"));
+  EXPECT_FALSE(cache->contains("b"));
+}
+
+TEST(Recency, AMissChangesNothing) {
+  auto cache = makeCache(2);
+  cache->put("a", "1");
+  cache->put("b", "2");
+  cache->get("zzz");
+  cache->put("c", "3");
+  EXPECT_FALSE(cache->contains("a"));
+  EXPECT_TRUE(cache->contains("b"));
+}
+
+TEST(Recency, ContainsIsAPeekAndDoesNotRefresh) {
+  auto cache = makeCache(2);
+  cache->put("a", "1");
+  cache->put("b", "2");
+  EXPECT_TRUE(cache->contains("a"));
+  cache->put("c", "3");
+  EXPECT_FALSE(cache->contains("a"));
+  EXPECT_TRUE(cache->contains("b"));
+}
+
+TEST(Recency, SeveralUsesLeaveTheRightOrderBehind) {
+  auto cache = makeCache(3);
+  cache->put("a", "1");
+  cache->put("b", "2");
+  cache->put("c", "3");
+  cache->get("a");  // order, oldest first: b c a
+  cache->get("b");  // c a b
+  cache->put("d", "4");  // evicts c
+  EXPECT_FALSE(cache->contains("c"));
+  cache->put("e", "5");  // evicts a
+  EXPECT_FALSE(cache->contains("a"));
+  EXPECT_TRUE(cache->contains("b"));
+  EXPECT_TRUE(cache->contains("d"));
+  EXPECT_TRUE(cache->contains("e"));
+}
+
+TEST(Erase, ErasingReportsWhetherTheKeyWasThere) {
+  auto cache = makeCache(3);
+  cache->put("a", "1");
+  EXPECT_TRUE(cache->erase("a"));
+  EXPECT_FALSE(cache->erase("a"));
+  EXPECT_FALSE(cache->erase("never"));
+  EXPECT_FALSE(cache->contains("a"));
+  EXPECT_EQ(cache->size(), 0);
+}
+
+TEST(Erase, ErasingFreesRoomSoNothingIsEvicted) {
+  auto cache = makeCache(2);
+  cache->put("a", "1");
+  cache->put("b", "2");
+  cache->erase("a");
+  cache->put("c", "3");
+  EXPECT_TRUE(cache->contains("b"));
+  EXPECT_TRUE(cache->contains("c"));
+  EXPECT_EQ(cache->stats().evictions, 0);
+}
+
+TEST(Erase, AnErasedKeyIsNeverChosenAsAVictimLater) {
+  auto cache = makeCache(2);
+  cache->put("a", "1");
+  cache->put("b", "2");
+  cache->erase("a");  // a was the oldest; the order must forget it
+  cache->put("c", "3");
+  cache->put("d", "4");  // full again: b is the real least recently used
+  EXPECT_FALSE(cache->contains("b"));
+  EXPECT_TRUE(cache->contains("c"));
+  EXPECT_TRUE(cache->contains("d"));
+  EXPECT_EQ(cache->size(), 2);
+}
+
+TEST(Erase, APutAfterEraseMakesTheKeyNewestAgain) {
+  auto cache = makeCache(2);
+  cache->put("a", "1");
+  cache->put("b", "2");
+  cache->erase("a");
+  cache->put("a", "again");
+  cache->put("c", "3");  // b is oldest now
+  EXPECT_FALSE(cache->contains("b"));
+  EXPECT_EQ(valueOf(*cache, "a"), "again");
+}
+
+TEST(StatsTest, ACacheStartsWithZeroCounters) {
+  auto cache = makeCache(2);
+  const cachex::Stats s = cache->stats();
+  EXPECT_EQ(s.hits, 0);
+  EXPECT_EQ(s.misses, 0);
+  EXPECT_EQ(s.evictions, 0);
+}
+
+TEST(StatsTest, OnlyGetCountsHitsAndMisses) {
+  auto cache = makeCache(2);
+  cache->put("a", "1");
+  cache->get("a");
+  cache->get("a");
+  cache->get("x");
+  cache->contains("a");
+  cache->contains("x");
+  cache->put("a", "2");
+  const cachex::Stats s = cache->stats();
+  EXPECT_EQ(s.hits, 2);
+  EXPECT_EQ(s.misses, 1);
+}
+
+TEST(StatsTest, EvictionsCountOnlyEntriesPushedOutForRoom) {
+  auto cache = makeCache(2);
+  cache->put("a", "1");
+  cache->put("b", "2");
+  cache->put("c", "3");  // evicts a
+  cache->put("c", "3b");  // replacing
+  cache->erase("b");  // erasing
+  cache->put("d", "4");  // room available
+  EXPECT_EQ(cache->stats().evictions, 1);
+}
+20:T2373,#include <algorithm>
+#include <deque>
+#include <list>
+#include <map>
+#include <string>
+#include <utility>
+#include <vector>
+
+#include "api_storm1.h"
+#include "bp_test.h"
+
+using cachex::EvictionPolicy;
+using cachex::makeCache;
+using cachex::makePolicyCache;
+
+namespace {
+using Log = std::vector<std::string>;
+
+// First in, first out: hits change nothing.
+class FifoPolicy : public EvictionPolicy {
+ public:
+  void onInsert(const std::string& key) override { queue_.push_back(key); }
+  void onAccess(const std::string&) override {}
+  void onErase(const std::string& key) override { queue_.erase(std::remove(queue_.begin(), queue_.end(), key), queue_.end()); }
+  std::string chooseVictim() override { return queue_.front(); }
+
+ private:
+  std::deque<std::string> queue_;
+};
+
+// Most recently used goes first (a sensible policy for a one-pass scan over the data).
+class MruPolicy : public EvictionPolicy {
+ public:
+  void onInsert(const std::string& key) override { touch(key); }
+  void onAccess(const std::string& key) override { touch(key); }
+  void onErase(const std::string& key) override { order_.remove(key); }
+  std::string chooseVictim() override { return order_.back(); }
+
+ private:
+  void touch(const std::string& key) {
+    order_.remove(key);
+    order_.push_back(key);
+  }
+  std::list<std::string> order_;  // back = most recent
+};
+
+// Least frequently used goes first; a tie goes to the key that was used longest ago.
+class LfuPolicy : public EvictionPolicy {
+ public:
+  void onInsert(const std::string& key) override { entries_[key] = {1, ++clock_}; }
+  void onAccess(const std::string& key) override {
+    Entry& e = entries_[key];
+    ++e.uses;
+    e.stamp = ++clock_;
+  }
+  void onErase(const std::string& key) override { entries_.erase(key); }
+  std::string chooseVictim() override {
+    auto best = entries_.begin();
+    for (auto it = entries_.begin(); it != entries_.end(); ++it) {
+      if (it->second.uses < best->second.uses || (it->second.uses == best->second.uses && it->second.stamp < best->second.stamp)) best = it;
+    }
+    return best->first;
+  }
+
+ private:
+  struct Entry {
+    int uses = 0;
+    long stamp = 0;
+  };
+  std::map<std::string, Entry> entries_;
+  long clock_ = 0;
+};
+
+// Least recently used, written down by the test so the default cache can be compared with it.
+class LruTestPolicy : public EvictionPolicy {
+ public:
+  void onInsert(const std::string& key) override { touch(key); }
+  void onAccess(const std::string& key) override { touch(key); }
+  void onErase(const std::string& key) override { order_.remove(key); }
+  std::string chooseVictim() override { return order_.front(); }
+
+ private:
+  void touch(const std::string& key) {
+    order_.remove(key);
+    order_.push_back(key);
+  }
+  std::list<std::string> order_;  // front = least recent
+};
+
+// Writes every call into a shared log and answers like a FIFO policy.
+class RecordingPolicy : public EvictionPolicy {
+ public:
+  explicit RecordingPolicy(Log* log) : log_(log) {}
+  void onInsert(const std::string& key) override {
+    log_->push_back("insert:" + key);
+    inner_.onInsert(key);
+  }
+  void onAccess(const std::string& key) override {
+    log_->push_back("access:" + key);
+    inner_.onAccess(key);
+  }
+  void onErase(const std::string& key) override {
+    log_->push_back("erase:" + key);
+    inner_.onErase(key);
+  }
+  std::string chooseVictim() override {
+    log_->push_back("victim");
+    return inner_.chooseVictim();
+  }
+
+ private:
+  Log* log_;
+  FifoPolicy inner_;
+};
+
+std::unique_ptr<cachex::Cache> fifoCache(int capacity) { return makePolicyCache(capacity, std::make_unique<FifoPolicy>()); }
+}  // namespace
+
+TEST(Policy, FifoEvictsTheOldestInsertEvenAfterAHit) {
+  auto cache = fifoCache(2);
+  cache->put("a", "1");
+  cache->put("b", "2");
+  cache->get("a");  // an LRU cache would now keep a
+  cache->put("c", "3");
+  EXPECT_FALSE(cache->contains("a"));
+  EXPECT_TRUE(cache->contains("b"));
+  EXPECT_TRUE(cache->contains("c"));
+}
+
+TEST(Policy, MruEvictsTheNewestKey) {
+  auto cache = makePolicyCache(2, std::make_unique<MruPolicy>());
+  cache->put("a", "1");
+  cache->put("b", "2");
+  cache->put("c", "3");
+  EXPECT_TRUE(cache->contains("a"));
+  EXPECT_FALSE(cache->contains("b"));
+  EXPECT_TRUE(cache->contains("c"));
+}
+
+TEST(Policy, LfuKeepsTheFrequentlyUsedKey) {
+  auto cache = makePolicyCache(2, std::make_unique<LfuPolicy>());
+  cache->put("a", "1");
+  cache->put("b", "2");
+  cache->get("a");
+  cache->get("a");
+  cache->put("c", "3");  // b has the fewest uses
+  EXPECT_TRUE(cache->contains("a"));
+  EXPECT_FALSE(cache->contains("b"));
+  cache->put("d", "4");  // c (1 use) goes before a (3 uses)
+  EXPECT_TRUE(cache->contains("a"));
+  EXPECT_FALSE(cache->contains("c"));
+  EXPECT_TRUE(cache->contains("d"));
+}
+
+TEST(Policy, LfuBreaksTiesByTheLongestUnusedKey) {
+  auto cache = makePolicyCache(3, std::make_unique<LfuPolicy>());
+  cache->put("a", "1");
+  cache->put("b", "2");
+  cache->put("c", "3");
+  cache->put("d", "4");
+  EXPECT_FALSE(cache->contains("a"));
+  EXPECT_TRUE(cache->contains("b"));
+}
+
+TEST(Policy, ADifferentPolicyMakesTheSameCallsGiveADifferentAnswer) {
+  auto fifo = fifoCache(2);
+  auto mru = makePolicyCache(2, std::make_unique<MruPolicy>());
+  for (cachex::Cache* c : {fifo.get(), mru.get()}) {
+    c->put("a", "1");
+    c->put("b", "2");
+    c->get("b");
+    c->put("c", "3");
+  }
+  EXPECT_FALSE(fifo->contains("a"));  // oldest insert goes
+  EXPECT_TRUE(fifo->contains("b"));
+  EXPECT_FALSE(mru->contains("b"));  // most recently used goes
+  EXPECT_TRUE(mru->contains("a"));
+}
+
+TEST(Policy, ALeastRecentlyUsedPolicyBehavesLikeTheDefaultCache) {
+  auto plain = makeCache(3);
+  auto viaPolicy = makePolicyCache(3, std::make_unique<LruTestPolicy>());
+  const char* const keys[] = {"a", "b", "c", "a", "d", "b", "e", "c", "a", "f"};
+  int step = 0;
+  for (const char* k : keys) {
+    if (step % 3 == 2) {
+      EXPECT_EQ(plain->get(k).has_value(), viaPolicy->get(k).has_value());
+    } else {
+      plain->put(k, "v");
+      viaPolicy->put(k, "v");
+    }
+    ++step;
+    for (const char* probe : {"a", "b", "c", "d", "e", "f"}) EXPECT_EQ(plain->contains(probe), viaPolicy->contains(probe));
+  }
+}
+
+TEST(Policy, BadArgumentsAreRefused) {
+  EXPECT_TRUE(makePolicyCache(0, std::make_unique<FifoPolicy>()) == nullptr);
+  EXPECT_TRUE(makePolicyCache(-1, std::make_unique<FifoPolicy>()) == nullptr);
+  EXPECT_TRUE(makePolicyCache(3, nullptr) == nullptr);
+}
+
+TEST(Policy, OverwritingErasingAndStatsStillWorkWithAnyPolicy) {
+  auto cache = fifoCache(2);
+  cache->put("a", "1");
+  cache->put("b", "2");
+  cache->put("a", "1b");  // replacing never evicts
+  EXPECT_EQ(cache->size(), 2);
+  EXPECT_EQ(*cache->get("a"), "1b");
+  EXPECT_FALSE(cache->get("zzz").has_value());
+  cache->put("c", "3");  // FIFO: a goes although it was just used
+  EXPECT_FALSE(cache->contains("a"));
+  EXPECT_TRUE(cache->erase("b"));
+  EXPECT_EQ(cache->capacity(), 2);
+  const cachex::Stats s = cache->stats();
+  EXPECT_EQ(s.hits, 1);
+  EXPECT_EQ(s.misses, 1);
+  EXPECT_EQ(s.evictions, 1);
+}
+
+TEST(Protocol, ANewKeyIsAnInsertAndAReplacementIsAnAccess) {
+  Log log;
+  auto cache = makePolicyCache(3, std::make_unique<RecordingPolicy>(&log));
+  cache->put("a", "1");
+  cache->put("a", "2");
+  EXPECT_EQ(log, (Log{"insert:a", "access:a"}));
+}
+
+TEST(Protocol, AHitIsAnAccessAndAMissOrAPeekIsNothing) {
+  Log log;
+  auto cache = makePolicyCache(3, std::make_unique<RecordingPolicy>(&log));
+  cache->put("a", "1");
+  log.clear();
+  cache->get("a");
+  EXPECT_EQ(log, (Log{"access:a"}));
+  log.clear();
+  cache->get("missing");
+  cache->contains("a");
+  cache->contains("missing");
+  EXPECT_TRUE(log.empty());
+}
+
+TEST(Protocol, ErasingTellsThePolicyOnlyWhenTheKeyWasThere) {
+  Log log;
+  auto cache = makePolicyCache(3, std::make_unique<RecordingPolicy>(&log));
+  cache->put("a", "1");
+  log.clear();
+  cache->erase("a");
+  EXPECT_EQ(log, (Log{"erase:a"}));
+  log.clear();
+  cache->erase("a");
+  cache->erase("never");
+  EXPECT_TRUE(log.empty());
+}
+
+TEST(Protocol, EvictionAsksThenTellsTheVictimLeftThenInsertsTheNewKey) {
+  Log log;
+  auto cache = makePolicyCache(2, std::make_unique<RecordingPolicy>(&log));
+  cache->put("a", "1");
+  cache->put("b", "2");
+  log.clear();
+  cache->put("c", "3");
+  EXPECT_EQ(log, (Log{"victim", "erase:a", "insert:c"}));
+}
+
+TEST(Protocol, TheVictimIsOnlyRequestedWhenANewKeyFindsTheCacheFull) {
+  Log log;
+  auto cache = makePolicyCache(2, std::make_unique<RecordingPolicy>(&log));
+  cache->put("a", "1");
+  cache->put("b", "2");
+  cache->put("b", "2b");  // full but only a replacement
+  cache->erase("a");
+  cache->put("c", "3");  // room again
+  EXPECT_EQ(std::count(log.begin(), log.end(), std::string("victim")), 0);
+}
+
+TEST(Protocol, AnErasedKeyNeverComesBackAsAVictim) {
+  auto cache = fifoCache(2);
+  cache->put("a", "1");
+  cache->put("b", "2");
+  cache->erase("a");
+  cache->put("c", "3");
+  cache->put("d", "4");  // the policy must name b, the oldest key that is still stored
+  EXPECT_FALSE(cache->contains("b"));
+  EXPECT_TRUE(cache->contains("c"));
+  EXPECT_TRUE(cache->contains("d"));
+  EXPECT_EQ(cache->size(), 2);
+}
+21:T16ed,#include <algorithm>
+#include <deque>
+#include <memory>
+#include <string>
+#include <utility>
+#include <vector>
+
+#include "api_storm2.h"
+#include "bp_test.h"
+
+using cachex::RemovalReason;
+
+namespace {
+using Events = std::vector<std::string>;
+
+class FifoPolicy : public cachex::EvictionPolicy {
+ public:
+  void onInsert(const std::string& key) override { queue_.push_back(key); }
+  void onAccess(const std::string&) override {}
+  void onErase(const std::string& key) override { queue_.erase(std::remove(queue_.begin(), queue_.end(), key), queue_.end()); }
+  std::string chooseVictim() override { return queue_.front(); }
+
+ private:
+  std::deque<std::string> queue_;
+};
+
+const char* nameOf(RemovalReason reason) { return reason == RemovalReason::Evicted ? "evicted" : "erased"; }
+
+// Records "key=value:reason". When given the cache it also looks at it from inside the callback.
+class RecordingListener : public cachex::RemovalListener {
+ public:
+  explicit RecordingListener(Events* events) : events_(events) {}
+  void watch(cachex::Cache* cache) { cache_ = cache; }
+  void onRemoved(const std::string& key, const std::string& value, RemovalReason reason) override {
+    events_->push_back(key + "=" + value + ":" + nameOf(reason));
+    if (cache_ != nullptr) {
+      sizesSeen.push_back(cache_->size());
+      stillContained.push_back(cache_->contains(key));
+    }
+  }
+  std::vector<int> sizesSeen;
+  std::vector<bool> stillContained;
+
+ private:
+  Events* events_;
+  cachex::Cache* cache_ = nullptr;
+};
+
+std::unique_ptr<cachex::ObservableCache> observed(int capacity, Events* events, std::shared_ptr<RecordingListener>* out = nullptr) {
+  auto cache = cachex::makeObservableCache(capacity, std::make_unique<FifoPolicy>());
+  auto listener = std::make_shared<RecordingListener>(events);
+  cache->setListener(listener);
+  if (out != nullptr) *out = listener;
+  return cache;
+}
+}  // namespace
+
+TEST(Listener, AnEvictionReportsTheKeyTheValueAndTheReason) {
+  Events events;
+  auto cache = observed(2, &events);
+  cache->put("a", "1");
+  cache->put("b", "2");
+  cache->put("c", "3");
+  EXPECT_EQ(events, (Events{"a=1:evicted"}));
+}
+
+TEST(Listener, ErasingReportsTheValueItHeld) {
+  Events events;
+  auto cache = observed(3, &events);
+  cache->put("a", "1");
+  cache->erase("a");
+  EXPECT_EQ(events, (Events{"a=1:erased"}));
+}
+
+TEST(Listener, ReplacingAValueIsNotARemoval) {
+  Events events;
+  auto cache = observed(2, &events);
+  cache->put("a", "1");
+  cache->put("a", "2");
+  cache->put("b", "3");
+  cache->put("a", "4");
+  EXPECT_TRUE(events.empty());
+}
+
+TEST(Listener, TheValueReportedIsTheLatestOne) {
+  Events events;
+  auto cache = observed(1, &events);
+  cache->put("a", "old");
+  cache->put("a", "new");
+  cache->put("b", "x");
+  EXPECT_EQ(events, (Events{"a=new:evicted"}));
+}
+
+TEST(Listener, ReadsPeeksAndErasingAnAbsentKeySayNothing) {
+  Events events;
+  auto cache = observed(2, &events);
+  cache->put("a", "1");
+  cache->get("a");
+  cache->get("zzz");
+  cache->contains("a");
+  cache->erase("zzz");
+  EXPECT_TRUE(events.empty());
+}
+
+TEST(Listener, EveryRemovalIsReportedOnceAndInOrder) {
+  Events events;
+  auto cache = observed(1, &events);
+  cache->put("a", "1");
+  cache->put("b", "2");
+  cache->put("c", "3");
+  cache->erase("c");
+  EXPECT_EQ(events, (Events{"a=1:evicted", "b=2:evicted", "c=3:erased"}));
+}
+
+TEST(Listener, TheEntryIsGoneWhenTheListenerRunsForAnEviction) {
+  Events events;
+  std::shared_ptr<RecordingListener> listener;
+  auto cache = observed(2, &events, &listener);
+  listener->watch(cache.get());
+  cache->put("a", "1");
+  cache->put("b", "2");
+  cache->put("c", "3");
+  ASSERT_EQ(listener->sizesSeen.size(), 1u);
+  EXPECT_EQ(listener->sizesSeen[0], 1);  // never above capacity, even for an instant
+  EXPECT_FALSE(listener->stillContained[0]);
+}
+
+TEST(Listener, TheEntryIsGoneWhenTheListenerRunsForAnErase) {
+  Events events;
+  std::shared_ptr<RecordingListener> listener;
+  auto cache = observed(3, &events, &listener);
+  listener->watch(cache.get());
+  cache->put("a", "1");
+  cache->put("b", "2");
+  cache->erase("a");
+  ASSERT_EQ(listener->sizesSeen.size(), 1u);
+  EXPECT_EQ(listener->sizesSeen[0], 1);
+  EXPECT_FALSE(listener->stillContained[0]);
+}
+
+TEST(Listener, ALaterListenerReplacesTheEarlierOneAndSeesOnlyLaterRemovals) {
+  Events first;
+  Events second;
+  auto cache = observed(1, &first);
+  cache->put("a", "1");
+  cache->put("b", "2");  // evicts a, heard by the first listener
+  cache->setListener(std::make_shared<RecordingListener>(&second));
+  cache->put("c", "3");  // evicts b, heard by the second
+  EXPECT_EQ(first, (Events{"a=1:evicted"}));
+  EXPECT_EQ(second, (Events{"b=2:evicted"}));
+}
+
+TEST(Listener, ANullListenerSwitchesNotificationsOffWithoutHarm) {
+  Events events;
+  auto cache = observed(1, &events);
+  cache->setListener(nullptr);
+  cache->put("a", "1");
+  cache->put("b", "2");
+  cache->erase("b");
+  EXPECT_TRUE(events.empty());
+  EXPECT_EQ(cache->size(), 0);
+}
+
+TEST(Listener, ACacheWithoutAListenerWorksAsBefore) {
+  auto cache = cachex::makeObservableCache(1, std::make_unique<FifoPolicy>());
+  cache->put("a", "1");
+  cache->put("b", "2");
+  EXPECT_FALSE(cache->contains("a"));
+  EXPECT_TRUE(cache->contains("b"));
+}
+
+TEST(Listener, ThePolicyStillChoosesWhoIsEvicted) {
+  Events events;
+  auto cache = observed(2, &events);  // FIFO policy
+  cache->put("a", "1");
+  cache->put("b", "2");
+  cache->get("a");
+  cache->put("c", "3");
+  EXPECT_EQ(events, (Events{"a=1:evicted"}));
+}
+
+TEST(Listener, StatsStillCountOnlyEvictions) {
+  Events events;
+  auto cache = observed(1, &events);
+  cache->put("a", "1");
+  cache->put("b", "2");
+  cache->erase("b");
+  EXPECT_EQ(cache->stats().evictions, 1);
+}
+
+TEST(Listener, BadArgumentsAreRefused) {
+  EXPECT_TRUE(cachex::makeObservableCache(0, std::make_unique<FifoPolicy>()) == nullptr);
+  EXPECT_TRUE(cachex::makeObservableCache(2, nullptr) == nullptr);
+}
+22:T91e,#pragma once
+#include <memory>
+#include <optional>
+#include <string>
+#include <utility>
+
+#include "api_storm2.h"
+#include "entry_store.h"
+#include "removal_notifier.h"
+#include "stats_counter.h"
+
+// The public face. It sequences the collaborators and holds no rule of its own about which entry goes:
+// the store holds data, the policy picks victims, the counter counts and the notifier announces.
+class CacheImpl : public cachex::ObservableCache {
+ public:
+  CacheImpl(int capacity, std::unique_ptr<cachex::EvictionPolicy> policy) : store_(capacity), policy_(std::move(policy)) {}
+
+  void put(const std::string& key, const std::string& value) override {
+    if (store_.contains(key)) {
+      store_.store(key, value);
+      policy_->onAccess(key);
+      return;
+    }
+    if (store_.full()) evictOne();
+    store_.store(key, value);
+    policy_->onInsert(key);
+  }
+
+  std::optional<std::string> get(const std::string& key) override {
+    const std::string* found = store_.find(key);
+    if (found == nullptr) {
+      stats_.recordMiss();
+      return std::nullopt;
+    }
+    stats_.recordHit();
+    policy_->onAccess(key);
+    return *found;
+  }
+
+  bool contains(const std::string& key) const override { return store_.contains(key); }
+
+  bool erase(const std::string& key) override {
+    std::optional<std::string> value = store_.remove(key);
+    if (!value.has_value()) return false;
+    policy_->onErase(key);
+    notifier_.removed(key, *value, cachex::RemovalReason::Erased);
+    return true;
+  }
+
+  int size() const override { return store_.size(); }
+  int capacity() const override { return store_.capacity(); }
+  cachex::Stats stats() const override { return stats_.snapshot(); }
+
+  void setListener(std::shared_ptr<cachex::RemovalListener> listener) override { notifier_.setListener(std::move(listener)); }
+
+ private:
+  // Order matters: the entry is gone and the policy informed before anyone is told.
+  void evictOne() {
+    const std::string victim = policy_->chooseVictim();
+    std::optional<std::string> value = store_.remove(victim);
+    policy_->onErase(victim);
+    stats_.recordEviction();
+    if (value.has_value()) notifier_.removed(victim, *value, cachex::RemovalReason::Evicted);
+  }
+
+  EntryStore store_;
+  std::unique_ptr<cachex::EvictionPolicy> policy_;
+  StatsCounter stats_;
+  RemovalNotifier notifier_;
+};
+23:T4bc,#pragma once
+#include <optional>
+#include <string>
+#include <unordered_map>
+#include <utility>
+
+// Holds the entries and knows the capacity. It has no opinion about which entry to drop.
+class EntryStore {
+ public:
+  explicit EntryStore(int capacity) : capacity_(capacity) {}
+
+  int capacity() const { return capacity_; }
+  int size() const { return static_cast<int>(entries_.size()); }
+  bool full() const { return size() >= capacity_; }
+  bool contains(const std::string& key) const { return entries_.count(key) != 0; }
+
+  const std::string* find(const std::string& key) const {
+    const auto found = entries_.find(key);
+    return found == entries_.end() ? nullptr : &found->second;
+  }
+
+  void store(const std::string& key, const std::string& value) { entries_[key] = value; }
+
+  // Removes the key and hands back the value it held, or nothing if it was absent.
+  std::optional<std::string> remove(const std::string& key) {
+    const auto found = entries_.find(key);
+    if (found == entries_.end()) return std::nullopt;
+    std::string value = std::move(found->second);
+    entries_.erase(found);
+    return value;
+  }
+
+ private:
+  int capacity_;
+  std::unordered_map<std::string, std::string> entries_;
+};
+c:["$","$L1a",null,{"bundle":{"id":"lru-lfu-cache","title":"LRU / LFU Cache","level":"Senior","parMinutes":50,"patterns":["Strategy","Observer"],"requirements":[{"id":"R-lru","text":"put() of a new key into a full cache evicts the least recently used entry. A get() hit and a put() that replaces a value both count as a use of the key; a miss and contains() do not. Replacing a value never evicts.","phase":"base","hidden":true},{"id":"R-capacity","text":"makeCache() returns nullptr for a capacity below 1. size() never exceeds the capacity. erase() returns whether the key was present, frees its room, and the evicted order must never name a key that is no longer stored.","phase":"base","hidden":true},{"id":"R-stats","text":"stats() counts hits and misses from get() only (contains() and put() are not lookups), and evictions only for entries pushed out to make room, not for erase() and not for replacement.","phase":"base","hidden":true},{"id":"R-policy","text":"Storm 1: the eviction rule is pluggable. makePolicyCache() takes an EvictionPolicy and calls exactly onInsert (new key stored), onAccess (get hit or replacement), onErase (any key leaving, including the victim) and chooseVictim (only when a new key finds the cache full). A miss, a peek and an erase of an absent key tell the policy nothing. A null policy or capacity below 1 gives nullptr.","phase":"storm1","hidden":true},{"id":"R-listener","text":"Storm 2: an ObservableCache tells its RemovalListener about every entry that leaves (evicted or erased) with the key, the value it held and the reason. Replacing a value is not a removal. When the listener runs the entry is already gone (contains() is false, size() already dropped) and, for an eviction, the new key is not stored yet. A later setListener() replaces the earlier one; null switches notifications off.","phase":"storm2","hidden":true}],"brief":"# Cache\n\nYou are writing the in-memory cache a service puts in front of a slow database. Callers `put` and `get` values by key; the cache keeps a fixed number of entries and, when it is full, must decide what to throw away.\n\nWhat you know so far:\n\n- Keys and values are strings. The capacity is fixed when the cache is created.\n- Reads should usually be fast, so a recently used entry should survive longer than one nobody has asked for.\n- Operations people will want numbers: how often did we find what we were looking for?\n\nYour task: design and implement it behind the `cachex::Cache` interface in `api.h`. The hidden tests call only that interface. Ask the interviewer questions first: the brief is deliberately incomplete, and \"which entry goes?\" is exactly the question an interviewer expects to change under you.\n","editorial":"$1b","clarify":[{"id":"q-evict","text":"Which entry is evicted when the cache is full, and what counts as a 'use'?","answer":"The least recently used one. A get() that finds the key is a use. So is a put() on a key that is already there. A miss is not a use, and neither is contains(), which is a peek. Replacing a value never evicts anything.","reveals":["R-lru"],"quality":"essential"},{"id":"q-capacity","text":"What are the edge cases: a capacity of zero, erase, and what must hold for size()?","answer":"A capacity below 1 is refused with nullptr. size() never goes above the capacity. erase(key) returns true if the key was there and false otherwise, and it frees room. The bookkeeping that decides who is evicted must never name a key that is already gone.","reveals":["R-capacity"],"quality":"essential"},{"id":"q-stats","text":"What do the people running this service want to see?","answer":"Hit and miss counts from get(), and how many entries were evicted to make room. contains() and put() are not lookups. An erase is not an eviction, and neither is replacing a value.","reveals":["R-stats"],"quality":"essential"},{"id":"q-future","text":"Will 'least recently used' stay the rule? What do teams ask for once the cache is in production?","answer":"No. Some workloads want least frequently used, some want first-in first-out, and a team that scans a big table once wants the opposite of LRU. And the application wants to hear when something leaves the cache, for example to write back or to log. Details arrive with the change.","reveals":["R-policy","R-listener"],"quality":"essential"},{"id":"q-thread","text":"Do several threads share one cache? Does it have to be thread-safe?","answer":"Not for the tests, which are single-threaded. Say what you would do (one mutex, then sharding) and note that get() writes the recency order, but do not build it.","reveals":[],"quality":"useful"},{"id":"q-types","text":"Can keys and values be any type? Should the cache be a template?","answer":"Strings for both, so the tests stay simple. A template over key and value is a natural follow-up and does not change the design.","reveals":[],"quality":"useful"},{"id":"q-ttl","text":"Do entries expire after some time?","answer":"Not in this problem; that is the next one in the row (a key-value store with TTL). A time source would be injected, never read from the clock inside the cache.","reveals":[],"quality":"useful"},{"id":"q-size","text":"Is capacity a number of entries or a number of bytes?","answer":"A number of entries. Weighted capacity (each entry has a cost) is a good discussion afterwards.","reveals":[],"quality":"useful"},{"id":"q-persist","text":"Should the cache survive a restart, or be written to disk?","answer":"No. It is an in-memory cache. Persistence would be a layer around it.","reveals":[],"quality":"noise"},{"id":"q-dist","text":"Is it distributed, with consistent hashing across machines?","answer":"No; this is the single-process building block. The distributed version belongs to the system-design half of the game.","reveals":[],"quality":"noise"},{"id":"q-perf","text":"Does every operation need to be O(1)?","answer":"A good design gets there, but the tests only check behaviour. Be able to say why a hash map plus a recency list does it.","reveals":[],"quality":"noise"}],"rubric":[{"id":"res-facade","text":"Exposes the public operations and sequences store, policy, counter and notification in the right order","phase":"base","owners":["CacheImpl","LruCache","CacheCore","CacheFacade"]},{"id":"res-store","text":"Holds the entries and the capacity, with no opinion about who is evicted","phase":"base","owners":["EntryStore","Store","Storage","CacheStore","EntryMap"]},{"id":"res-order","text":"Tracks use order and names the victim; kept in step with every entry that arrives or leaves","phase":"base","owners":["LruPolicy","RecencyList","LruOrder","RecencyTracker","LruTracker"]},{"id":"res-stats","text":"Keeps the hit, miss and eviction totals in one place","phase":"base","owners":["StatsCounter","CacheStats","Counters","StatsRecorder","Metrics"]},{"id":"res-policy","text":"Decides who goes behind a seam the cache does not look through, so a new rule is a new class","phase":"storm1","owners":["LruPolicy","EvictionPolicy","PolicyAdapter","VictimSelector"]},{"id":"res-notify","text":"Announces each removal to the listener after the state has changed","phase":"storm2","owners":["RemovalNotifier","Notifier","ListenerRegistry","RemovalPublisher","EventPublisher"]}],"followups":[{"level":"SDE2","question":"How do you make get, put and erase O(1) for an LRU?","answer":"A hash map from key to value (or to a list node) gives O(1) lookup, and a doubly linked list ordered by recency gives O(1) move-to-front and O(1) removal of the tail, provided the map can reach the list node directly. In C++ that is `std::list` plus an `unordered_map` of iterators; `splice` moves a node without invalidating its iterator, which is what keeps it O(1). A vector or a plain map ordered by timestamp makes one of the operations O(n) or O(log n)."},{"level":"SDE2","question":"Why does get() change the cache, and what does that mean for const and for threads?","answer":"In an LRU, reading is also recording a use, so get() cannot be const and two concurrent readers write the same list. That is why a reader-writer lock does not help an LRU: every read needs the exclusive lock, or the recency order has to be updated lazily. contains() is the const peek for exactly this reason."},{"level":"Senior","question":"Describe an O(1) LFU. What is the tie-break and why does it matter?","answer":"Keep a map from key to (value, use count) and a map from use count to a list of keys with that count, plus the current minimum count. A hit moves the key from bucket n to bucket n+1; an eviction takes from the minimum bucket. Among keys with the same count you must pick one deterministically, usually the least recently used, otherwise tests and production disagree and a newly inserted key (count 1) can be evicted before it gets a chance. The classic weakness of pure LFU is that an old burst of popularity can pin dead keys forever, which is why real caches age the counts or use a frequency sketch with a window."},{"level":"Senior","question":"What does the eviction-policy interface look like if the policy also needs the value's size or the time?","answer":"Pass what the policy needs as arguments to its hooks, for example `onInsert(key, weight)` and `onAccess(key, now)`, with the clock injected into the cache so tests control time. Resist handing the policy the whole cache: then it can mutate what it should only observe, and the Strategy turns into two classes that know each other. A weighted capacity also changes the contract of chooseVictim, because one insert may need several evictions."},{"level":"Senior","question":"The listener is called while the cache is being modified. What can go wrong in a multi-threaded version?","answer":"If the callback runs under the cache lock, a listener that calls back into the cache deadlocks or sees a half-updated state, and a slow listener (disk, network) blocks every caller. The usual fix is to collect removals under the lock and deliver them after releasing it, or to hand them to an executor, and to document that delivery order is not guaranteed across threads. Write-back caches also need a way to flush at shutdown, since a listener that never ran is a lost write."},{"level":"Staff","question":"Our hit ratio dropped after a nightly job scans a large table through the cache. What do you do?","answer":"The scan inserts thousands of keys that are used once, and LRU treats each as the most valuable entry, flushing the real working set. Options: bypass the cache for the scan (the cheapest and the first thing to try), admit entries only after a second touch or when a frequency sketch says they are popular (TinyLFU-style admission), or split the cache into a probation and a protected segment (the idea behind 2Q and segmented LRU). Measure with the stats from this problem before and after, because the right choice depends on the access pattern, and say what each option costs in memory and complexity."},{"level":"Staff","question":"How would this change as a cache shared by 10,000 requests per second across threads?","answer":"One lock around the whole cache becomes the bottleneck, so shard it: hash the key to one of N independent caches, each with its own lock and policy, and accept that the eviction is then approximately global LRU rather than exact. Further, avoid taking the lock on every hit by buffering recency updates and applying them in batches (the approach used by high-performance JVM caches), or by using CLOCK/approximated LRU like Redis's sampling. State the trade: slightly worse eviction decisions for much better scalability."}],"apiHeader":"$1c","phaseApis":{"storm1":"$1d","storm2":"$1e"},"phases":["base","storm1","storm2"],"tests":{"base":[{"path":"cache_base.cpp","content":"$1f"}],"storm1":[{"path":"cache_storm1.cpp","content":"$20"}],"storm2":[{"path":"cache_storm2.cpp","content":"$21"}]},"reference":[{"path":"cache.cpp","content":"#include \"cache_impl.h\"\n#include \"lru_policy.h\"\n\nstd::unique_ptr<cachex::Cache> cachex::makeCache(int capacity) {\n  if (capacity < 1) return nullptr;\n  return std::make_unique<CacheImpl>(capacity, std::make_unique<LruPolicy>());\n}\n\nstd::unique_ptr<cachex::Cache> cachex::makePolicyCache(int capacity, std::unique_ptr<EvictionPolicy> policy) {\n  if (capacity < 1 || policy == nullptr) return nullptr;\n  return std::make_unique<CacheImpl>(capacity, std::move(policy));\n}\n\nstd::unique_ptr<cachex::ObservableCache> cachex::makeObservableCache(int capacity, std::unique_ptr<EvictionPolicy> policy) {\n  if (capacity < 1 || policy == nullptr) return nullptr;\n  return std::make_unique<CacheImpl>(capacity, std::move(policy));\n}\n"},{"path":"cache_impl.h","content":"$22"},{"path":"entry_store.h","content":"$23"},{"path":"lru_policy.h","content":"#pragma once\n#include <list>\n#include <string>\n#include <unordered_map>\n\n#include \"api_storm2.h\"\n\n// Least recently used first: a list ordered by recency plus an index into it, so every call is O(1).\nclass LruPolicy : public cachex::EvictionPolicy {\n public:\n  void onInsert(const std::string& key) override { moveToFront(key); }\n  void onAccess(const std::string& key) override { moveToFront(key); }\n\n  void onErase(const std::string& key) override {\n    const auto found = position_.find(key);\n    if (found == position_.end()) return;\n    order_.erase(found->second);\n    position_.erase(found);\n  }\n\n  std::string chooseVictim() override { return order_.back(); }\n\n private:\n  void moveToFront(const std::string& key) {\n    onErase(key);\n    order_.push_front(key);\n    position_[key] = order_.begin();\n  }\n\n  std::list<std::string> order_;  // front = most recently used\n  std::unordered_map<std::string, std::list<std::string>::iterator> position_;\n};\n"},{"path":"removal_notifier.h","content":"#pragma once\n#include <memory>\n#include <string>\n#include <utility>\n\n#include \"api_storm2.h\"\n\n// Tells the registered listener, if any, that an entry has left the cache.\nclass RemovalNotifier {\n public:\n  void setListener(std::shared_ptr<cachex::RemovalListener> listener) { listener_ = std::move(listener); }\n\n  void removed(const std::string& key, const std::string& value, cachex::RemovalReason reason) const {\n    if (listener_ != nullptr) listener_->onRemoved(key, value, reason);\n  }\n\n private:\n  std::shared_ptr<cachex::RemovalListener> listener_;\n};\n"},{"path":"stats_counter.h","content":"#pragma once\n#include \"api.h\"\n\n// The only place that counts. The cache says what happened; this keeps the totals.\nclass StatsCounter {\n public:\n  void recordHit() { ++totals_.hits; }\n  void recordMiss() { ++totals_.misses; }\n  void recordEviction() { ++totals_.evictions; }\n  cachex::Stats snapshot() const { return totals_; }\n\n private:\n  cachex::Stats totals_;\n};\n"}],"driver":{"path":"driver.cpp","content":"#define BP_TEST_MAIN\n#include \"bp_test.h\"\n","readOnly":true}}}]

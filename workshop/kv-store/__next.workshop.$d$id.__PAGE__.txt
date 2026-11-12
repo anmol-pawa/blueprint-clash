@@ -1,0 +1,878 @@
+1:"$Sreact.fragment"
+2:"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js"
+3:I[39756,["$2"],"default"]
+4:I[37457,["$2"],"default"]
+5:"/blueprint-clash/_next/static/chunks/2n5qeheznvl4u.js"
+6:I[22016,["$2","$5"],""]
+7:I[64576,["$2"],"PwaRegister"]
+10:"/blueprint-clash/_next/static/chunks/2uk3wcjwqg0tl.js"
+11:"/blueprint-clash/_next/static/chunks/1zdu7yjl8efu4.js"
+12:I[65612,["$2","$10","$11"],"WorkshopClient"]
+20:"ViewportBoundary"
+21:I[97367,["$2"],"$20"]
+22:"MetadataBoundary"
+23:I[97367,["$2"],"$22"]
+24:"$Sreact.suspense"
+25:I[27201,["$2"],"IconMark"]
+:HL["/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","style"]
+9:X
+c:X
+c:C
+13:T189b,# Editorial: Key-value store with TTL and transactions
+
+## Requirements
+Functional: an in-memory map from string keys to string values with `set`, `setWithTtl`, `get`, `erase`, `size` and `ttlRemaining`. Time arrives through an injected `Clock` (whole ticks, never backwards). A key set with a ttl of `t` at tick `s` is readable while `now < s + t` and gone from `s + t` on. A ttl of zero or less is refused without any change. Setting a key replaces its value and its expiry. An expired key is absent everywhere: not readable, not counted, `erase` returns false, `ttlRemaining` is empty. Hidden until asked: the exact expiry boundary, the overwrite rule, and what an expired key means for each operation. Non-goals: reclaiming memory promptly (discussed), thread safety, persistence, typed values, isolation between callers.
+
+**Change Storm 1, nested transactions:** `begin`, `commit`, `rollback`, `depth`. Reads see uncommitted writes. Rollback restores values, expiries and the presence of keys. An inner commit hands its writes to the outer transaction; only the outermost commit makes them final. Revealable by asking whether callers need to group writes.
+
+**Change Storm 2, prefix listing:** `keysWithPrefix` returns live keys in ascending order, honouring expiry and uncommitted writes.
+
+## Reference design
+- `Entry` is the plain data for one key: value plus an optional absolute expiry.
+- `EntryTable` holds entries in key order and knows nothing about time.
+- `ExpiryRule` owns the `Clock` and the single definition of "live". Every read, count and listing asks it.
+- `UndoJournal` keeps one frame of undo records per open transaction. A record is the key and the whole entry it held before the write (or nothing).
+- `StoreImpl` is the facade. A write is: record what was there, then store. It has no rule of its own about time or transactions.
+
+**Storm 1 in the reference:** one new class (`UndoJournal`), one call in the write path (`journal_.record`) and four thin methods. The table and the expiry rule are untouched. Rollback needs no case analysis: set, erase and set-with-ttl all undo as "put the recorded entry back, or remove the key if there was none".
+
+**Storm 2 in the reference:** one new method on the facade. The table already keeps keys in order (a `std::map`), so a prefix is `lower_bound` plus a walk, and the liveness filter is the same `ExpiryRule` the other reads use. A first draft built on `unordered_map` pays here: the container changes inside `EntryTable` and nothing else, if the table was a real seam.
+
+## Alternatives
+- **One class with a map, a clock call in each method and a vector of snapshots for transactions** is a fine base answer and what many candidates write first. It makes the storms hurt: "is it live?" is repeated in every read path, and a full-copy snapshot per `begin` costs O(n) and still must cope with nested commit.
+- **Full-copy snapshots (Memento of the whole table)** are the shortest correct transaction code: `begin` copies, `rollback` swaps back. Cost is O(n) memory and time per `begin`; fine for a hundred keys, wrong for a million. Say it, then offer the undo journal.
+- **A copy-on-write overlay per transaction** makes rollback free and reads slower (walk the overlay stack); scans must merge sorted views. It wins when rollbacks are frequent.
+- **Operation log with inverse operations (Command objects with `undo()`)** is the textbook form. Storing the previous entry instead of an inverse operation keeps the journal a single record type and removes per-operation undo code, at the cost of copying the old value.
+- **Active expiry with a timer thread** deletes keys on time but drags in threads, locks and a non-deterministic test. Lazy checks on read plus an amortised sweep keep the store deterministic under a fake clock.
+- **Relative ttl counting down** needs a tick to decrement and drifts; absolute expiry is one comparison and survives rollback unchanged.
+- **Hash map table** gives O(1) point operations but no ordered listing; the ordered map gives O(log n) and a free prefix range. A hash map plus a sorted index is possible when point reads dominate.
+
+## Trade-offs
+Absolute expiry plus lazy checks keeps reads cheap and the store deterministic, and costs memory for expired entries until something touches or sweeps them; `size()` is O(n) here because there is no live counter. The undo journal makes the common path (commit) cheap and rollback proportional to the work done, and gives no isolation between callers. Recording the whole previous entry copies values (strings here) and in return makes undo uniform and future-proof against new fields. An ordered table makes prefix scans natural and every point operation O(log n) instead of O(1); a good answer names this price rather than hiding it.
+
+## What breaks at 10x
+At 10x the keys the expired-but-unreclaimed entries dominate memory, so you add a sweep (expiry heap or timer wheel with stale-entry checks), a live counter for `size()`, and move from `std::map` nodes to a flat or radix structure. At 10x the write rate the journal's record per write becomes allocation traffic: reuse frames, store views, and cap transaction length. At 10x the callers a single transaction scope is no longer enough: you need per-connection transactions, versioned values or locks, and conflict handling, and then you are building a database. At 10x the data one machine is not enough, and the prefix scan stops being free the moment the partitioning is by hash (the sharding chapter).
+
+## Level signals
+- **SDE2:** correct boundary (gone at set + ttl), overwrite replaces the expiry, expired keys behave as absent in every operation, a clear idea of how rollback works even if it is a full copy.
+- **Senior:** asks about boundary, overwrite and expired-key semantics before coding; one place decides liveness; journal records whole previous entries and handles new keys, nested commit and reverse replay; states why `size()` is O(n) and how to fix it; injects the clock.
+- **Staff:** reasons about reclaiming memory (heap or wheel with stale checks), compares undo log, overlay and snapshots by workload, separates atomicity from isolation and durability, and sketches per-connection transactions with optimistic or pessimistic concurrency and the consequences for scans.
+14:T7e7,#pragma once
+// Public API for the Key-value store problem. The hidden tests only use what is declared here.
+// You implement kv::makeStore() (in any of your .cpp files); everything behind it is your design.
+#include <memory>
+#include <optional>
+#include <string>
+
+namespace kv {
+
+// A source of time in whole ticks (think milliseconds). It never goes backwards.
+// The store must read time only through this interface, never from the system clock.
+class Clock {
+ public:
+  virtual ~Clock() = default;
+  virtual long long now() const = 0;
+};
+
+// An in-memory map from string keys to string values, where a key can be given a time to live.
+class Store {
+ public:
+  virtual ~Store() = default;
+
+  // Stores the value with no expiry. If the key was there, its value is replaced and any expiry it had is cleared.
+  virtual void set(const std::string& key, const std::string& value) = 0;
+
+  // Stores the value so that it lives for `ttl` ticks: it is readable while now() < setTime + ttl and gone from
+  // the tick now() == setTime + ttl onwards. Replaces any earlier value and expiry of the key.
+  // A ttl of zero or less is refused: returns false and changes nothing. Returns true when stored.
+  virtual bool setWithTtl(const std::string& key, const std::string& value, long long ttl) = 0;
+
+  // The value, or an empty optional if the key was never set, was erased, or has expired.
+  virtual std::optional<std::string> get(const std::string& key) const = 0;
+
+  // Removes the key and returns true if it was live; returns false if it was absent or had already expired.
+  virtual bool erase(const std::string& key) = 0;
+
+  // The number of live keys (expired ones are not counted).
+  virtual int size() const = 0;
+
+  // Ticks left before the key expires. Empty when the key is absent, expired, or has no expiry.
+  virtual std::optional<long long> ttlRemaining(const std::string& key) const = 0;
+};
+
+// Returns nullptr when the clock is null.
+std::unique_ptr<Store> makeStore(std::shared_ptr<Clock> clock);
+
+}  // namespace kv
+15:T54a,#pragma once
+// Change Storm 1 adds nested transactions. Everything from api.h still holds.
+#include "api.h"
+
+namespace kv {
+
+// begin() opens a transaction; transactions nest. Every write (set, setWithTtl, erase) belongs to the innermost
+// open transaction, and reads always see the latest writes, committed or not.
+//   rollback()  undoes every write of the innermost transaction and closes it: values, expiries and the presence
+//               of keys all return to what they were at its begin(). Time is not rolled back: a key whose expiry
+//               passes while the transaction was open is simply expired afterwards, as it would have been anyway.
+//   commit()    closes the innermost transaction and keeps its writes. They now belong to the transaction around it,
+//               so rolling that one back undoes them too. Only committing the outermost transaction makes them final.
+// commit() and rollback() return false, and change nothing, when no transaction is open.
+class TransactionalStore : public Store {
+ public:
+  virtual void begin() = 0;
+  virtual bool commit() = 0;
+  virtual bool rollback() = 0;
+  // How many transactions are open.
+  virtual int depth() const = 0;
+};
+
+// Returns nullptr when the clock is null.
+std::unique_ptr<TransactionalStore> makeTransactionalStore(std::shared_ptr<Clock> clock);
+
+}  // namespace kv
+16:T15e8,#include <memory>
+#include <string>
+
+#include "api.h"
+#include "bp_test.h"
+
+namespace {
+class FakeClock : public kv::Clock {
+ public:
+  long long now() const override { return now_; }
+  void advance(long long ticks) { now_ += ticks; }
+
+ private:
+  long long now_ = 1000;
+};
+
+struct Fixture {
+  std::shared_ptr<FakeClock> clock = std::make_shared<FakeClock>();
+  std::unique_ptr<kv::Store> store = kv::makeStore(clock);
+};
+
+std::string valueOf(const kv::Store& store, const std::string& key) {
+  const auto got = store.get(key);
+  return got.has_value() ? *got : std::string("<absent>");
+}
+}  // namespace
+
+TEST(Basics, ASetValueCanBeRead) {
+  Fixture f;
+  f.store->set("a", "1");
+  EXPECT_EQ(valueOf(*f.store, "a"), "1");
+  EXPECT_EQ(f.store->size(), 1);
+}
+
+TEST(Basics, AnUnknownKeyIsAnEmptyOptional) {
+  Fixture f;
+  EXPECT_FALSE(f.store->get("nope").has_value());
+  f.store->set("a", "1");
+  EXPECT_FALSE(f.store->get("b").has_value());
+}
+
+TEST(Basics, SettingAKeyAgainReplacesItsValue) {
+  Fixture f;
+  f.store->set("a", "1");
+  f.store->set("a", "2");
+  EXPECT_EQ(valueOf(*f.store, "a"), "2");
+  EXPECT_EQ(f.store->size(), 1);
+}
+
+TEST(Basics, EmptyKeysAndValuesAreOrdinaryStrings) {
+  Fixture f;
+  f.store->set("", "empty key");
+  f.store->set("k", "");
+  EXPECT_EQ(valueOf(*f.store, ""), "empty key");
+  ASSERT_TRUE(f.store->get("k").has_value());
+  EXPECT_EQ(*f.store->get("k"), "");
+}
+
+TEST(Basics, ANullClockIsRefused) {
+  EXPECT_TRUE(kv::makeStore(nullptr) == nullptr);
+}
+
+TEST(Basics, TwoStoresShareNothing) {
+  Fixture first;
+  Fixture second;
+  first.store->set("a", "1");
+  EXPECT_FALSE(second.store->get("a").has_value());
+  EXPECT_EQ(second.store->size(), 0);
+}
+
+TEST(Erase, ErasingALiveKeyReturnsTrueAndRemovesIt) {
+  Fixture f;
+  f.store->set("a", "1");
+  f.store->set("b", "2");
+  EXPECT_TRUE(f.store->erase("a"));
+  EXPECT_FALSE(f.store->get("a").has_value());
+  EXPECT_EQ(f.store->size(), 1);
+}
+
+TEST(Erase, ErasingAnAbsentKeyReturnsFalse) {
+  Fixture f;
+  EXPECT_FALSE(f.store->erase("nope"));
+  f.store->set("a", "1");
+  EXPECT_TRUE(f.store->erase("a"));
+  EXPECT_FALSE(f.store->erase("a"));
+}
+
+TEST(Ttl, AKeyLivesUntilItsLastTickAndIsGoneAtTheExpiryTick) {
+  Fixture f;
+  ASSERT_TRUE(f.store->setWithTtl("a", "1", 10));
+  f.clock->advance(9);
+  EXPECT_EQ(valueOf(*f.store, "a"), "1");
+  f.clock->advance(1);
+  EXPECT_FALSE(f.store->get("a").has_value());
+}
+
+TEST(Ttl, TheTimeToLiveCountsFromTheMomentOfTheSet) {
+  Fixture f;
+  f.clock->advance(500);
+  f.store->setWithTtl("a", "1", 100);
+  f.clock->advance(99);
+  EXPECT_TRUE(f.store->get("a").has_value());
+  f.clock->advance(1);
+  EXPECT_FALSE(f.store->get("a").has_value());
+}
+
+TEST(Ttl, AKeyWithoutATtlNeverExpires) {
+  Fixture f;
+  f.store->set("a", "1");
+  f.clock->advance(1000000);
+  EXPECT_EQ(valueOf(*f.store, "a"), "1");
+}
+
+TEST(Ttl, KeysExpireIndependently) {
+  Fixture f;
+  f.store->setWithTtl("short", "s", 5);
+  f.store->setWithTtl("long", "l", 50);
+  f.store->set("forever", "f");
+  f.clock->advance(5);
+  EXPECT_FALSE(f.store->get("short").has_value());
+  EXPECT_TRUE(f.store->get("long").has_value());
+  EXPECT_TRUE(f.store->get("forever").has_value());
+  EXPECT_EQ(f.store->size(), 2);
+}
+
+TEST(Ttl, ANonPositiveTtlIsRefusedAndChangesNothing) {
+  Fixture f;
+  EXPECT_FALSE(f.store->setWithTtl("a", "1", 0));
+  EXPECT_FALSE(f.store->setWithTtl("a", "1", -5));
+  EXPECT_FALSE(f.store->get("a").has_value());
+  EXPECT_EQ(f.store->size(), 0);
+  f.store->set("b", "old");
+  EXPECT_FALSE(f.store->setWithTtl("b", "new", 0));
+  EXPECT_EQ(valueOf(*f.store, "b"), "old");
+}
+
+TEST(Overwrite, PlainSetClearsAnEarlierExpiry) {
+  Fixture f;
+  f.store->setWithTtl("a", "1", 10);
+  f.store->set("a", "2");
+  f.clock->advance(100);
+  EXPECT_EQ(valueOf(*f.store, "a"), "2");
+  EXPECT_FALSE(f.store->ttlRemaining("a").has_value());
+}
+
+TEST(Overwrite, ANewTtlReplacesTheOldOneInBothDirections) {
+  Fixture f;
+  f.store->setWithTtl("a", "1", 10);
+  f.clock->advance(8);
+  f.store->setWithTtl("a", "2", 10);
+  f.clock->advance(5);
+  EXPECT_EQ(valueOf(*f.store, "a"), "2");
+  f.clock->advance(5);
+  EXPECT_FALSE(f.store->get("a").has_value());
+}
+
+TEST(Overwrite, SettingAnExpiredKeyBringsItBackWithTheNewValue) {
+  Fixture f;
+  f.store->setWithTtl("a", "old", 3);
+  f.clock->advance(10);
+  f.store->set("a", "new");
+  EXPECT_EQ(valueOf(*f.store, "a"), "new");
+  EXPECT_EQ(f.store->size(), 1);
+}
+
+TEST(Size, ExpiredKeysAreNotCounted) {
+  Fixture f;
+  f.store->setWithTtl("a", "1", 5);
+  f.store->setWithTtl("b", "2", 5);
+  f.store->set("c", "3");
+  EXPECT_EQ(f.store->size(), 3);
+  f.clock->advance(5);
+  EXPECT_EQ(f.store->size(), 1);
+}
+
+TEST(Erase, AnExpiredKeyCountsAsAbsent) {
+  Fixture f;
+  f.store->setWithTtl("a", "1", 5);
+  f.clock->advance(5);
+  EXPECT_FALSE(f.store->erase("a"));
+}
+
+TEST(TtlRemaining, CountsDownWithTheClock) {
+  Fixture f;
+  f.store->setWithTtl("a", "1", 10);
+  ASSERT_TRUE(f.store->ttlRemaining("a").has_value());
+  EXPECT_EQ(*f.store->ttlRemaining("a"), 10);
+  f.clock->advance(4);
+  EXPECT_EQ(*f.store->ttlRemaining("a"), 6);
+  f.clock->advance(5);
+  EXPECT_EQ(*f.store->ttlRemaining("a"), 1);
+  f.clock->advance(1);
+  EXPECT_FALSE(f.store->ttlRemaining("a").has_value());
+}
+
+TEST(TtlRemaining, IsEmptyForAbsentAndForPersistentKeys) {
+  Fixture f;
+  EXPECT_FALSE(f.store->ttlRemaining("nope").has_value());
+  f.store->set("a", "1");
+  EXPECT_FALSE(f.store->ttlRemaining("a").has_value());
+}
+
+TEST(TtlRemaining, DoesNotChangeTheTtl) {
+  Fixture f;
+  f.store->setWithTtl("a", "1", 10);
+  f.store->ttlRemaining("a");
+  f.store->get("a");
+  f.clock->advance(10);
+  EXPECT_FALSE(f.store->get("a").has_value());
+}
+17:T17c4,#include <memory>
+#include <string>
+
+#include "api_storm1.h"
+#include "bp_test.h"
+
+namespace {
+class FakeClock : public kv::Clock {
+ public:
+  long long now() const override { return now_; }
+  void advance(long long ticks) { now_ += ticks; }
+
+ private:
+  long long now_ = 1000;
+};
+
+struct Fixture {
+  std::shared_ptr<FakeClock> clock = std::make_shared<FakeClock>();
+  std::unique_ptr<kv::TransactionalStore> store = kv::makeTransactionalStore(clock);
+};
+
+std::string valueOf(const kv::Store& store, const std::string& key) {
+  const auto got = store.get(key);
+  return got.has_value() ? *got : std::string("<absent>");
+}
+}  // namespace
+
+TEST(Txn, ANullClockIsRefused) {
+  EXPECT_TRUE(kv::makeTransactionalStore(nullptr) == nullptr);
+}
+
+TEST(Txn, WithoutATransactionCommitAndRollbackReturnFalse) {
+  Fixture f;
+  f.store->set("a", "1");
+  EXPECT_EQ(f.store->depth(), 0);
+  EXPECT_FALSE(f.store->commit());
+  EXPECT_FALSE(f.store->rollback());
+  EXPECT_EQ(valueOf(*f.store, "a"), "1");
+}
+
+TEST(Txn, DepthFollowsBeginCommitAndRollback) {
+  Fixture f;
+  f.store->begin();
+  f.store->begin();
+  EXPECT_EQ(f.store->depth(), 2);
+  EXPECT_TRUE(f.store->commit());
+  EXPECT_EQ(f.store->depth(), 1);
+  EXPECT_TRUE(f.store->rollback());
+  EXPECT_EQ(f.store->depth(), 0);
+}
+
+TEST(Txn, ReadsSeeUncommittedWrites) {
+  Fixture f;
+  f.store->begin();
+  f.store->set("a", "1");
+  EXPECT_EQ(valueOf(*f.store, "a"), "1");
+  EXPECT_EQ(f.store->size(), 1);
+}
+
+TEST(Txn, CommitKeepsTheWrites) {
+  Fixture f;
+  f.store->begin();
+  f.store->set("a", "1");
+  f.store->erase("a");
+  f.store->set("b", "2");
+  EXPECT_TRUE(f.store->commit());
+  EXPECT_FALSE(f.store->get("a").has_value());
+  EXPECT_EQ(valueOf(*f.store, "b"), "2");
+}
+
+TEST(Rollback, RemovesKeysTheTransactionCreated) {
+  Fixture f;
+  f.store->set("keep", "k");
+  f.store->begin();
+  f.store->set("new", "n");
+  f.store->rollback();
+  EXPECT_FALSE(f.store->get("new").has_value());
+  EXPECT_EQ(f.store->size(), 1);
+}
+
+TEST(Rollback, RestoresOverwrittenValues) {
+  Fixture f;
+  f.store->set("a", "old");
+  f.store->begin();
+  f.store->set("a", "new");
+  f.store->set("a", "newer");
+  f.store->rollback();
+  EXPECT_EQ(valueOf(*f.store, "a"), "old");
+}
+
+TEST(Rollback, BringsBackErasedKeys) {
+  Fixture f;
+  f.store->set("a", "1");
+  f.store->begin();
+  EXPECT_TRUE(f.store->erase("a"));
+  EXPECT_FALSE(f.store->get("a").has_value());
+  f.store->rollback();
+  EXPECT_EQ(valueOf(*f.store, "a"), "1");
+}
+
+TEST(Rollback, RestoresTheExpiryAsWellAsTheValue) {
+  Fixture f;
+  f.store->setWithTtl("a", "1", 10);
+  f.store->begin();
+  f.store->set("a", "2");
+  f.store->rollback();
+  ASSERT_TRUE(f.store->ttlRemaining("a").has_value());
+  EXPECT_EQ(*f.store->ttlRemaining("a"), 10);
+  f.clock->advance(10);
+  EXPECT_FALSE(f.store->get("a").has_value());
+}
+
+TEST(Rollback, ARestoredExpiryDoesNotGetANewLease) {
+  Fixture f;
+  f.store->setWithTtl("a", "1", 10);
+  f.store->begin();
+  f.store->erase("a");
+  f.clock->advance(4);
+  f.store->rollback();
+  EXPECT_EQ(*f.store->ttlRemaining("a"), 6);
+}
+
+TEST(Rollback, AKeyThatExpiredDuringTheTransactionStaysExpired) {
+  Fixture f;
+  f.store->setWithTtl("a", "1", 5);
+  f.store->begin();
+  f.store->erase("a");
+  f.clock->advance(5);
+  f.store->rollback();
+  EXPECT_FALSE(f.store->get("a").has_value());
+  EXPECT_EQ(f.store->size(), 0);
+}
+
+TEST(Rollback, UndoesWritesInReverseSoTheOldestStateWins) {
+  Fixture f;
+  f.store->set("a", "0");
+  f.store->begin();
+  f.store->set("a", "1");
+  f.store->erase("a");
+  f.store->setWithTtl("a", "2", 5);
+  f.store->set("b", "x");
+  f.store->erase("b");
+  f.store->rollback();
+  EXPECT_EQ(valueOf(*f.store, "a"), "0");
+  EXPECT_FALSE(f.store->ttlRemaining("a").has_value());
+  EXPECT_FALSE(f.store->get("b").has_value());
+  EXPECT_EQ(f.store->size(), 1);
+}
+
+TEST(Nested, InnerRollbackLeavesTheOuterWritesAlone) {
+  Fixture f;
+  f.store->begin();
+  f.store->set("a", "outer");
+  f.store->begin();
+  f.store->set("a", "inner");
+  f.store->set("b", "inner");
+  f.store->rollback();
+  EXPECT_EQ(valueOf(*f.store, "a"), "outer");
+  EXPECT_FALSE(f.store->get("b").has_value());
+  EXPECT_EQ(f.store->depth(), 1);
+}
+
+TEST(Nested, AnInnerCommitIsUndoneByTheOuterRollback) {
+  Fixture f;
+  f.store->set("a", "base");
+  f.store->begin();
+  f.store->begin();
+  f.store->set("a", "inner");
+  f.store->set("b", "inner");
+  f.store->commit();
+  EXPECT_EQ(valueOf(*f.store, "a"), "inner");
+  f.store->rollback();
+  EXPECT_EQ(valueOf(*f.store, "a"), "base");
+  EXPECT_FALSE(f.store->get("b").has_value());
+}
+
+TEST(Nested, AnInnerCommitIsFinalOnlyWhenTheOutermostCommits) {
+  Fixture f;
+  f.store->begin();
+  f.store->begin();
+  f.store->set("a", "1");
+  f.store->commit();
+  f.store->commit();
+  EXPECT_EQ(valueOf(*f.store, "a"), "1");
+  EXPECT_FALSE(f.store->rollback());
+  EXPECT_EQ(valueOf(*f.store, "a"), "1");
+}
+
+TEST(Nested, ThreeLevelsUnwindOneAtATime) {
+  Fixture f;
+  f.store->set("n", "0");
+  f.store->begin();
+  f.store->set("n", "1");
+  f.store->begin();
+  f.store->set("n", "2");
+  f.store->begin();
+  f.store->set("n", "3");
+  f.store->rollback();
+  EXPECT_EQ(valueOf(*f.store, "n"), "2");
+  f.store->rollback();
+  EXPECT_EQ(valueOf(*f.store, "n"), "1");
+  f.store->rollback();
+  EXPECT_EQ(valueOf(*f.store, "n"), "0");
+}
+
+TEST(Nested, ARolledBackInnerThenACommittedOuterKeepsOnlyTheOuter) {
+  Fixture f;
+  f.store->begin();
+  f.store->set("a", "outer");
+  f.store->begin();
+  f.store->set("a", "inner");
+  f.store->rollback();
+  f.store->commit();
+  EXPECT_EQ(valueOf(*f.store, "a"), "outer");
+}
+
+TEST(Nested, AStoreIsReusableAfterTheTransactionsClose) {
+  Fixture f;
+  f.store->begin();
+  f.store->set("a", "1");
+  f.store->rollback();
+  f.store->begin();
+  f.store->set("a", "2");
+  f.store->commit();
+  EXPECT_EQ(valueOf(*f.store, "a"), "2");
+  f.store->set("b", "3");
+  EXPECT_FALSE(f.store->rollback());
+  EXPECT_EQ(valueOf(*f.store, "b"), "3");
+}
+
+TEST(Txn, WritesOutsideATransactionAreNeverUndone) {
+  Fixture f;
+  f.store->set("before", "1");
+  f.store->begin();
+  f.store->set("during", "2");
+  f.store->rollback();
+  EXPECT_EQ(valueOf(*f.store, "before"), "1");
+}
+18:Ta6f,#include <memory>
+#include <string>
+#include <vector>
+
+#include "api_storm2.h"
+#include "bp_test.h"
+
+namespace {
+class FakeClock : public kv::Clock {
+ public:
+  long long now() const override { return now_; }
+  void advance(long long ticks) { now_ += ticks; }
+
+ private:
+  long long now_ = 1000;
+};
+
+struct Fixture {
+  std::shared_ptr<FakeClock> clock = std::make_shared<FakeClock>();
+  std::unique_ptr<kv::ScannableStore> store = kv::makeScannableStore(clock);
+};
+
+using Keys = std::vector<std::string>;
+}  // namespace
+
+TEST(Scan, ANullClockIsRefused) {
+  EXPECT_TRUE(kv::makeScannableStore(nullptr) == nullptr);
+}
+
+TEST(Scan, ListsKeysThatStartWithThePrefix) {
+  Fixture f;
+  f.store->set("user:1", "a");
+  f.store->set("user:2", "b");
+  f.store->set("order:1", "c");
+  EXPECT_EQ(f.store->keysWithPrefix("user:"), (Keys{"user:1", "user:2"}));
+}
+
+TEST(Scan, ResultsAreInAscendingOrderWhateverTheInsertionOrder) {
+  Fixture f;
+  for (int i = 30; i >= 1; --i) f.store->set("k" + std::to_string(100 + i), "v");
+  const Keys keys = f.store->keysWithPrefix("k");
+  ASSERT_EQ(keys.size(), 30u);
+  for (std::size_t i = 1; i < keys.size(); ++i) EXPECT_TRUE(keys[i - 1] < keys[i]);
+  EXPECT_EQ(keys.front(), "k101");
+  EXPECT_EQ(keys.back(), "k130");
+}
+
+TEST(Scan, ThePrefixMustBeAtTheStartNotAnywhere) {
+  Fixture f;
+  f.store->set("abc", "1");
+  f.store->set("xabc", "2");
+  f.store->set("ab", "3");
+  EXPECT_EQ(f.store->keysWithPrefix("ab"), (Keys{"ab", "abc"}));
+}
+
+TEST(Scan, TheEmptyPrefixListsEveryLiveKey) {
+  Fixture f;
+  f.store->set("b", "1");
+  f.store->set("", "2");
+  f.store->set("a", "3");
+  EXPECT_EQ(f.store->keysWithPrefix(""), (Keys{"", "a", "b"}));
+}
+
+TEST(Scan, NoMatchGivesAnEmptyList) {
+  Fixture f;
+  f.store->set("a", "1");
+  EXPECT_TRUE(f.store->keysWithPrefix("zzz").empty());
+}
+
+TEST(Scan, ExpiredKeysAreNotListed) {
+  Fixture f;
+  f.store->setWithTtl("s:short", "1", 5);
+  f.store->setWithTtl("s:long", "2", 50);
+  f.store->set("s:forever", "3");
+  f.clock->advance(5);
+  EXPECT_EQ(f.store->keysWithPrefix("s:"), (Keys{"s:forever", "s:long"}));
+}
+
+TEST(Scan, UncommittedWritesAreVisibleAndRollbackHidesThemAgain) {
+  Fixture f;
+  f.store->set("p:keep", "1");
+  f.store->set("p:gone", "2");
+  f.store->begin();
+  f.store->set("p:new", "3");
+  f.store->erase("p:gone");
+  EXPECT_EQ(f.store->keysWithPrefix("p:"), (Keys{"p:keep", "p:new"}));
+  f.store->rollback();
+  EXPECT_EQ(f.store->keysWithPrefix("p:"), (Keys{"p:gone", "p:keep"}));
+}
+
+TEST(Scan, AKeyOverwrittenManyTimesIsListedOnce) {
+  Fixture f;
+  f.store->set("a", "1");
+  f.store->set("a", "2");
+  f.store->setWithTtl("a", "3", 10);
+  EXPECT_EQ(f.store->keysWithPrefix("a"), (Keys{"a"}));
+}
+19:T7a1,#pragma once
+#include <functional>
+#include <map>
+#include <optional>
+#include <string>
+#include <utility>
+#include <vector>
+
+// What the table keeps for one key. `expiresAt` is an absolute tick; empty means the key never expires.
+struct Entry {
+  std::string value;
+  std::optional<long long> expiresAt;
+};
+
+// Holds the entries, ordered by key. It does not know what time it is or which entries are still live.
+class EntryTable {
+ public:
+  const Entry* find(const std::string& key) const {
+    const auto found = entries_.find(key);
+    return found == entries_.end() ? nullptr : &found->second;
+  }
+
+  void put(const std::string& key, Entry entry) { entries_[key] = std::move(entry); }
+
+  // Removes the key and hands back what it held, or nothing if it was absent.
+  std::optional<Entry> remove(const std::string& key) {
+    const auto found = entries_.find(key);
+    if (found == entries_.end()) return std::nullopt;
+    Entry entry = std::move(found->second);
+    entries_.erase(found);
+    return entry;
+  }
+
+  // Puts the key back as it was: the given entry, or no entry at all.
+  void restore(const std::string& key, std::optional<Entry> entry) {
+    if (entry.has_value()) {
+      put(key, std::move(*entry));
+    } else {
+      entries_.erase(key);
+    }
+  }
+
+  // Keys starting with `prefix`, ascending, for which `keep` is true.
+  std::vector<std::string> keysWithPrefix(const std::string& prefix, const std::function<bool(const Entry&)>& keep) const {
+    std::vector<std::string> keys;
+    for (auto it = entries_.lower_bound(prefix); it != entries_.end() && it->first.compare(0, prefix.size(), prefix) == 0; ++it) {
+      if (keep(it->second)) keys.push_back(it->first);
+    }
+    return keys;
+  }
+
+  int count(const std::function<bool(const Entry&)>& keep) const {
+    int total = 0;
+    for (const auto& item : entries_) total += keep(item.second) ? 1 : 0;
+    return total;
+  }
+
+ private:
+  std::map<std::string, Entry> entries_;
+};
+1a:T925,#pragma once
+#include <memory>
+#include <optional>
+#include <string>
+#include <utility>
+#include <vector>
+
+#include "api_storm2.h"
+#include "entry_table.h"
+#include "expiry_rule.h"
+#include "undo_journal.h"
+
+// The public face. It sequences the collaborators: the table holds data, the rule decides liveness from the clock,
+// and the journal remembers how to undo a write. It holds no rule of its own about time or transactions.
+class StoreImpl : public kv::ScannableStore {
+ public:
+  explicit StoreImpl(std::shared_ptr<kv::Clock> clock) : rule_(std::move(clock)) {}
+
+  void set(const std::string& key, const std::string& value) override { write(key, Entry{value, std::nullopt}); }
+
+  bool setWithTtl(const std::string& key, const std::string& value, long long ttl) override {
+    if (ttl <= 0) return false;
+    write(key, Entry{value, rule_.expiryFor(ttl)});
+    return true;
+  }
+
+  std::optional<std::string> get(const std::string& key) const override {
+    const Entry* entry = table_.find(key);
+    if (entry == nullptr || !rule_.isLive(*entry)) return std::nullopt;
+    return entry->value;
+  }
+
+  bool erase(const std::string& key) override {
+    const Entry* entry = table_.find(key);
+    const bool wasLive = entry != nullptr && rule_.isLive(*entry);
+    if (entry != nullptr) {
+      journal_.record(key, entry);
+      table_.remove(key);
+    }
+    return wasLive;
+  }
+
+  int size() const override {
+    return table_.count([this](const Entry& entry) { return rule_.isLive(entry); });
+  }
+
+  std::optional<long long> ttlRemaining(const std::string& key) const override {
+    const Entry* entry = table_.find(key);
+    return entry == nullptr ? std::nullopt : rule_.remaining(*entry);
+  }
+
+  void begin() override { journal_.begin(); }
+  bool commit() override { return journal_.commit(); }
+  bool rollback() override { return journal_.rollbackInto(table_); }
+  int depth() const override { return journal_.depth(); }
+
+  std::vector<std::string> keysWithPrefix(const std::string& prefix) const override {
+    return table_.keysWithPrefix(prefix, [this](const Entry& entry) { return rule_.isLive(entry); });
+  }
+
+ private:
+  void write(const std::string& key, Entry entry) {
+    journal_.record(key, table_.find(key));
+    table_.put(key, std::move(entry));
+  }
+
+  EntryTable table_;
+  ExpiryRule rule_;
+  UndoJournal journal_;
+};
+1b:T6fc,#pragma once
+#include <optional>
+#include <string>
+#include <utility>
+#include <vector>
+
+#include "entry_table.h"
+
+// Remembers how to undo writes, one frame per open transaction. Each record is the key plus what it held before
+// the write, so undoing is "put this back", whatever the write was. This is the Command / Memento idea in its
+// smallest form: the journal stores the inverse, not the operation.
+class UndoJournal {
+ public:
+  int depth() const { return static_cast<int>(frames_.size()); }
+  bool isOpen() const { return !frames_.empty(); }
+
+  void begin() { frames_.emplace_back(); }
+
+  // Called before a write. Outside any transaction there is nothing to undo, so nothing is kept.
+  void record(const std::string& key, const Entry* before) {
+    if (frames_.empty()) return;
+    frames_.back().push_back({key, before == nullptr ? std::nullopt : std::optional<Entry>(*before)});
+  }
+
+  // Closes the innermost frame and keeps its records for the frame around it. False when none is open.
+  bool commit() {
+    if (frames_.empty()) return false;
+    Frame done = std::move(frames_.back());
+    frames_.pop_back();
+    if (!frames_.empty()) {
+      for (auto& record : done) frames_.back().push_back(std::move(record));
+    }
+    return true;
+  }
+
+  // Closes the innermost frame and undoes its records, newest first. False when none is open.
+  bool rollbackInto(EntryTable& table) {
+    if (frames_.empty()) return false;
+    Frame done = std::move(frames_.back());
+    frames_.pop_back();
+    for (auto it = done.rbegin(); it != done.rend(); ++it) table.restore(it->key, std::move(it->before));
+    return true;
+  }
+
+ private:
+  struct Record {
+    std::string key;
+    std::optional<Entry> before;
+  };
+  using Frame = std::vector<Record>;
+  std::vector<Frame> frames_;
+};
+f:[["children",{"s":"__PAGE__","h":160,"d":{"r":["$","$1","c",{"children":[["$","$L12",null,{"bundle":{"id":"kv-store","title":"Key-value store with TTL and transactions","level":"Senior","parMinutes":55,"patterns":["Command","Memento"],"requirements":[{"id":"R-ttl","text":"Time comes from an injected Clock. setWithTtl(key, value, ttl) makes the key readable while now() < setTime + ttl and gone from setTime + ttl onwards. A ttl of zero or less returns false and changes nothing. makeStore() returns nullptr for a null clock.","phase":"base","hidden":true},{"id":"R-live","text":"set() and setWithTtl() replace both the value and the expiry (a plain set clears an earlier expiry). An expired key is absent everywhere: get() is empty, size() does not count it, erase() returns false, ttlRemaining() is empty. ttlRemaining() is empty for absent and non-expiring keys and never changes the expiry.","phase":"base","hidden":true},{"id":"R-txn","text":"Storm 1: begin/commit/rollback nest. Reads see uncommitted writes. rollback() restores values, expiries and the presence of keys, undoing writes in reverse; an expiry that passes during the transaction stays passed. An inner commit hands its writes to the enclosing transaction, so an outer rollback undoes them; only the outermost commit makes them final. commit() and rollback() return false with no open transaction.","phase":"storm1","hidden":true},{"id":"R-scan","text":"Storm 2: keysWithPrefix(prefix) lists live keys that start with the prefix, ascending by std::string order, each once. The empty prefix lists everything live. Expired keys are not listed, uncommitted writes are visible and a rollback hides or restores them.","phase":"storm2","hidden":true}],"brief":"# Key-value store\n\nYou are writing the small in-memory store a service uses for sessions, feature flags and short-lived locks. Callers `set` and `get` string values by key, and some keys should disappear on their own after a while.\n\nWhat you know so far:\n\n- Keys and values are strings.\n- A key can be given a time to live. After that it must behave as if it was never there.\n- The store must not read the system clock itself: time arrives through a `Clock` the caller supplies, so a test (or a replay) controls it.\n\nYour task: design and implement it behind the `kv::Store` interface in `api.h`. The hidden tests call only that interface. Ask the interviewer questions first: the brief is deliberately incomplete, and \"what does expiry mean exactly?\" is where most first drafts go wrong.\n","editorial":"$13","clarify":[{"id":"q-expiry","text":"Exactly when does a key expire, and how does time reach the store?","answer":"Time comes from an injected Clock, in whole ticks, and never goes backwards. A key set with a ttl of 10 at tick 100 is readable at ticks 100 to 109 and gone at tick 110. The ttl counts from the moment of the set. A ttl of zero or less is refused: the call returns false and changes nothing.","reveals":["R-ttl"],"quality":"essential"},{"id":"q-overwrite","text":"What happens to the expiry when a key that already has one is set again? And what do size(), erase() and a remaining-time query say about expired keys?","answer":"Setting a key replaces its value and its expiry: a plain set() clears the old expiry, a set with a ttl replaces it. An expired key is simply absent: size() does not count it, erase() on it returns false, and the remaining-time query gives an empty answer. Asking for the remaining time never changes it.","reveals":["R-live"],"quality":"essential"},{"id":"q-txn","text":"Will callers need to group several writes and undo them together? How should nesting behave?","answer":"Yes, that is what the team wants next: begin(), commit() and rollback(), nested. Reads see uncommitted writes. Rolling back restores values, expiries and the presence of keys. Committing an inner transaction hands its writes to the outer one, which can still undo them. Details arrive with the change.","reveals":["R-txn"],"quality":"essential"},{"id":"q-scan","text":"Besides point lookups, how else will the data be read?","answer":"Operations people will want to list keys by prefix, for example everything under a session or a tenant, in key order. It has to respect expiry and uncommitted writes. Details arrive with the change.","reveals":["R-scan"],"quality":"essential"},{"id":"q-clock-time","text":"What do the clock's ticks mean? Do I need to convert units?","answer":"Whole ticks, no unit. The tests use a fake clock. In production a tick would be a millisecond.","reveals":[],"quality":"useful"},{"id":"q-sweep","text":"Must expired entries be freed from memory promptly, or only be invisible?","answer":"Only invisible, for this problem. In production you also need to reclaim them; say how (lazy deletion on access plus a periodic sweep, or an expiry heap).","reveals":[],"quality":"useful"},{"id":"q-thread","text":"Do several threads share one store? Does it need locking?","answer":"Not for the tests, which are single-threaded. Say what you would do (one mutex; transactions per thread or per connection is a bigger question) but do not build it.","reveals":[],"quality":"useful"},{"id":"q-isolation","text":"Do transactions isolate concurrent readers, as in a database?","answer":"No. There is one caller; a transaction here is an undo scope, not an isolation level. Isolation would need versions or locks and is a discussion for later.","reveals":[],"quality":"useful"},{"id":"q-persist","text":"Should the data survive a restart? Do we need a write-ahead log?","answer":"No. It is in memory. Persistence would be a layer that replays the same writes.","reveals":[],"quality":"noise"},{"id":"q-dist","text":"Is it replicated or sharded across machines?","answer":"No; this is the single-process building block. Distributed key-value stores are a case study in the system-design half of the game.","reveals":[],"quality":"noise"},{"id":"q-types","text":"Should values be typed (lists, counters, hashes) like Redis?","answer":"Strings only. A typed value is a good extension and is a follow-up.","reveals":[],"quality":"noise"}],"rubric":[{"id":"res-facade","text":"Exposes the public operations and sequences table, expiry rule and journal in the right order","phase":"base","owners":["StoreImpl","KvStore","StoreFacade","StoreCore","InMemoryStore"]},{"id":"res-table","text":"Holds the entries (value and absolute expiry) with no idea what time it is","phase":"base","owners":["EntryTable","Table","Storage","EntryMap","KeyValueTable"]},{"id":"res-expiry","text":"Owns the clock and the one definition of 'expired'; every read, count and listing asks it","phase":"base","owners":["ExpiryRule","ExpiryPolicy","TtlPolicy","Expirer","LivenessRule"]},{"id":"res-journal","text":"Remembers how to undo each write, per open transaction, and merges or replays it on commit and rollback","phase":"storm1","owners":["UndoJournal","TransactionLog","TransactionStack","UndoLog","TxnManager"]},{"id":"res-order","text":"Keeps keys in order so that a prefix is a contiguous range and the listing is sorted","phase":"storm2","owners":["EntryTable","KeyIndex","OrderedIndex","SortedIndex","Table"]}],"followups":[{"level":"SDE2","question":"Why inject a Clock instead of calling the system clock inside the store?","answer":"Tests need to control time: with a real clock a TTL test must sleep, which is slow and flaky, and a boundary such as 'gone at exactly setTime + ttl' cannot be hit reliably. Injecting the clock (a Strategy, or simply a dependency) also lets you replay a production incident with recorded timestamps and keeps the store free of platform calls. Use a monotonic clock in production, because wall-clock time can jump backwards and resurrect expired keys."},{"level":"SDE2","question":"How do you decide when a key has expired, and what does the boundary tick mean?","answer":"Store an absolute expiry (set time plus ttl) rather than counting down, then 'live' is now < expiresAt. Absolute expiry means nothing has to tick, reads are a single comparison, and a rollback can restore the same value without recomputing. State the interval explicitly (readable at set+ttl-1, gone at set+ttl) and test the exact tick; the off-by-one is the bug the interviewer is looking for."},{"level":"Senior","question":"Expired entries are only hidden here. How do you reclaim their memory without scanning everything on every write?","answer":"Combine lazy deletion (remove an expired entry when an operation touches it) with a background or amortised sweep. For a bounded sweep keep a min-heap or a timer wheel of (expiry, key), pop the due ones, and check that the entry still has that expiry before deleting, because the key may have been overwritten (the heap entry is stale; do not decrement or search the heap). Redis samples random keys with an expiry and repeats while many are expired, trading exactness of reclamation for bounded CPU. Note that size() here is O(n); the sweep lets you keep a live counter."},{"level":"Senior","question":"Walk through how the undo journal handles set, erase and a key created inside the transaction.","answer":"Before every write the store records the key and what it held: the whole entry (value and expiry) or 'nothing'. Rollback replays the records newest first, putting each key back exactly as recorded, which for 'nothing' means removing it. Because the record is the previous state and not the operation, set, erase and set-with-ttl need no separate undo logic, and a new field on Entry is carried automatically. Commit of an inner transaction appends its records to the parent's, so an outer rollback still reaches them. This is the Memento idea (snapshot of the part that changes) driving a Command-like undo."},{"level":"Senior","question":"Undo log versus a copy-on-write overlay per transaction: when would you choose each?","answer":"An undo log writes through to the table, so reads are one lookup and commit is cheap (merge or drop the records), but rollback costs time proportional to the writes done. An overlay (a map of pending writes consulted before the table) makes rollback free and commit a merge into the parent, but every read of an untouched key walks the stack of overlays, and a scan must merge several sorted views. Pick the undo log when commits are the common case and reads are hot; pick the overlay when rollbacks are common or you need the base to stay unmodified, for example for concurrent readers."},{"level":"Senior","question":"What is wrong with 'a transaction' here compared with a database transaction?","answer":"It is atomic for the single caller (all writes undone together) but gives no isolation and no durability: nothing stops another thread seeing uncommitted writes, and nothing survives a restart. Adding isolation means versions (MVCC: each transaction reads a snapshot and writes are validated at commit) or locks; adding durability means a write-ahead log replayed on start. Say which letters of ACID you are providing, so the interviewer knows you know the rest exist."},{"level":"Staff","question":"You must make this safe for 100 concurrent connections, each with its own transactions. What changes?","answer":"Transactions become per connection, so uncommitted writes must be invisible to the others unless you decide otherwise; that needs versioned values or per-key locks, and the single journal becomes one per connection. Choose optimistic (snapshot, validate read and write sets at commit, retry on conflict) for read-heavy workloads or pessimistic (lock keys as touched, with an ordering rule or timeout to avoid deadlock) when conflicts are common. Shard the table by key hash to cut lock contention; transactions that span shards then need coordination, which is where a single-node store stops and the distributed design begins. Measure the conflict rate before choosing."},{"level":"Staff","question":"How would the prefix listing scale to a billion keys, and what would you give up?","answer":"An ordered in-memory map (red-black tree or skip list) answers a prefix as a range scan in O(log n + k), but pays pointer overhead per key. A trie or radix tree shares prefixes and can be much smaller for structured keys like tenant:session:id. On disk the same idea is an LSM tree or B-tree with a range iterator. Large results need pagination with a cursor (the last key returned), because holding a consistent view for a long scan blocks writers or needs snapshots. Hash-partitioned stores give up prefix scans across shards entirely unless the partition key is a prefix of the scan key, which is a data-modelling decision you take up front."}],"apiHeader":"$14","phaseApis":{"storm1":"$15","storm2":"#pragma once\n// Change Storm 2 adds listing by prefix. Everything from api.h and api_storm1.h still holds.\n#include <vector>\n\n#include \"api_storm1.h\"\n\nnamespace kv {\n\nclass ScannableStore : public TransactionalStore {\n public:\n  // The live keys that start with `prefix`, in ascending byte order (std::string comparison), without duplicates.\n  // The empty prefix matches every live key. Expired keys are not listed. Uncommitted writes are visible, and a key\n  // removed inside a transaction is not listed until that transaction is rolled back.\n  virtual std::vector<std::string> keysWithPrefix(const std::string& prefix) const = 0;\n};\n\n// Returns nullptr when the clock is null.\nstd::unique_ptr<ScannableStore> makeScannableStore(std::shared_ptr<Clock> clock);\n\n}  // namespace kv\n"},"phases":["base","storm1","storm2"],"tests":{"base":[{"path":"kv_base.cpp","content":"$16"}],"storm1":[{"path":"kv_storm1.cpp","content":"$17"}],"storm2":[{"path":"kv_storm2.cpp","content":"$18"}]},"reference":[{"path":"entry_table.h","content":"$19"},{"path":"expiry_rule.h","content":"#pragma once\n#include <memory>\n#include <optional>\n#include <utility>\n\n#include \"api.h\"\n#include \"entry_table.h\"\n\n// The only place that reads the clock and the only place that knows what \"expired\" means.\nclass ExpiryRule {\n public:\n  explicit ExpiryRule(std::shared_ptr<kv::Clock> clock) : clock_(std::move(clock)) {}\n\n  // The absolute tick at which a value stored now with this ttl stops being readable.\n  long long expiryFor(long long ttl) const { return clock_->now() + ttl; }\n\n  bool isLive(const Entry& entry) const { return !entry.expiresAt.has_value() || clock_->now() < *entry.expiresAt; }\n\n  std::optional<long long> remaining(const Entry& entry) const {\n    if (!entry.expiresAt.has_value() || !isLive(entry)) return std::nullopt;\n    return *entry.expiresAt - clock_->now();\n  }\n\n private:\n  std::shared_ptr<kv::Clock> clock_;\n};\n"},{"path":"store.cpp","content":"#include \"store_impl.h\"\n\nstd::unique_ptr<kv::Store> kv::makeStore(std::shared_ptr<Clock> clock) {\n  if (clock == nullptr) return nullptr;\n  return std::make_unique<StoreImpl>(std::move(clock));\n}\n\nstd::unique_ptr<kv::TransactionalStore> kv::makeTransactionalStore(std::shared_ptr<Clock> clock) {\n  if (clock == nullptr) return nullptr;\n  return std::make_unique<StoreImpl>(std::move(clock));\n}\n\nstd::unique_ptr<kv::ScannableStore> kv::makeScannableStore(std::shared_ptr<Clock> clock) {\n  if (clock == nullptr) return nullptr;\n  return std::make_unique<StoreImpl>(std::move(clock));\n}\n"},{"path":"store_impl.h","content":"$1a"},{"path":"undo_journal.h","content":"$1b"}],"driver":{"path":"driver.cpp","content":"#define BP_TEST_MAIN\n#include \"bp_test.h\"\n","readOnly":true}}}],["$L1c","$L1d"],"$L1e"]}],"p":"$@1f","v":null,"s":"$9"}}]]
+d:[["children",{"s":{"n":"id","t":"d","k":"kv-store","s":[]},"h":65632,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}]}]]}],"p":"$@e","v":"$c","s":"$9"},"c":"$Qf"}]]
+a:[["children",{"s":"workshop","h":131168,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}]}]]}],"p":"$@b","v":"$c","s":"$9"},"c":"$Qd"}]]
+0:{"t":{"t":{"s":"","h":131152,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","precedence":"next"}],["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js","async":true}]],["$","html",null,{"lang":"en","className":"r7opxW_variable auY9QW_variable u-EJdW_variable h-full","children":["$","body",null,{"className":"min-h-full","children":[["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}],"notFound":[["$","main",null,{"className":"flex min-h-dvh flex-col items-center justify-center gap-4 px-4 text-center","children":[["$","div",null,{"className":"font-display text-5xl text-[var(--accent)]","children":"404"}],["$","p",null,{"className":"text-white/60","children":"This room is not on the blueprint yet."}],["$","$L6",null,{"href":"/","className":"text-sm text-white/80 underline","children":"Back to the title screen"}]]}],[]]}],["$","$L7",null,{}]]}]}]]}],"p":"$@8","v":null,"s":"$9"},"c":"$Qa"},"h":{"r":["$","$1","h",{"children":[null,["$","$L21",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1, viewport-fit=cover"}],["$","meta","2",{"name":"theme-color","content":"#0a1530"}]]}],["$","$L23",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$24",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"Key-value store with TTL and transactions: Blueprint Clash"}],["$","meta","1",{"name":"description","content":"A creature-tactics RPG that teaches low-level design in C++ and high-level system design, from fundamentals to big-tech interview level."}],["$","link","2",{"rel":"manifest","href":"/blueprint-clash/manifest.webmanifest"}],["$","meta","3",{"name":"mobile-web-app-capable","content":"yes"}],["$","meta","4",{"name":"apple-mobile-web-app-title","content":"Blueprint Clash"}],["$","meta","5",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","link","6",{"rel":"icon","href":"/blueprint-clash/icon.png?icon.27re_xscs-jmw.png","sizes":"256x256","type":"image/png"}],["$","link","7",{"rel":"apple-touch-icon","href":"/blueprint-clash/apple-icon.png?apple-icon.2rac1w0yc3rju.png","sizes":"180x180","type":"image/png"}],["$","$L25","8",{}]]}]}],null]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"p":"$@26","v":null,"s":"$9"}},"a":"$@27","u":"$@28","b":"U2e90Mr6iueJEoRJLmd0s"}
+29:I[97367,["$2"],"OutletBoundary"]
+1c:["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/2uk3wcjwqg0tl.js","async":true}]
+1d:["$","script","script-1",{"src":"/blueprint-clash/_next/static/chunks/1zdu7yjl8efu4.js","async":true}]
+1e:["$","$L29",null,{"children":["$","$24",null,{"name":"Next.MetadataOutlet","children":"$@2a"}]}]
+9:300
+2a:null
+28:true
+9:C
+27:0
+e:"$undefined"
+b:"$undefined"
+8:"$undefined"
+26:"$undefined"
+1f:"$undefined"

@@ -1,0 +1,121 @@
+1:"$Sreact.fragment"
+2:"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js"
+3:I[39756,["$2"],"default"]
+4:I[37457,["$2"],"default"]
+5:"/blueprint-clash/_next/static/chunks/2n5qeheznvl4u.js"
+6:I[22016,["$2","$5"],""]
+7:I[64576,["$2"],"PwaRegister"]
+10:"/blueprint-clash/_next/static/chunks/3s1mctvsetnbs.js"
+11:I[25039,["$2","$10"],"LessonClient"]
+17:"ViewportBoundary"
+18:I[97367,["$2"],"$17"]
+19:"MetadataBoundary"
+1a:I[97367,["$2"],"$19"]
+1b:"$Sreact.suspense"
+1c:I[27201,["$2"],"IconMark"]
+:HL["/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","style"]
+9:X
+c:X
+c:C
+12:T433,A thread per task costs a stack, a kernel object and scheduling work each time, and an unbounded number of threads can exhaust memory or thrash the scheduler. A **thread pool** keeps a fixed set of workers alive and hands them tasks through a **queue**. It is the standard "build me X" in a machine-coding round because it combines everything in this district: a mutex, a condition variable with a predicate, ownership of threads, and a shutdown protocol.
+
+The moving parts: a `std::queue<std::function<void()>>` guarded by a mutex; workers that `wait` on a condition variable with the predicate "stopping or queue not empty"; `submit` that pushes a task and returns a `std::future` (via `std::packaged_task`) so callers get the result or the exception; and a destructor that sets `stopping`, wakes everyone and joins. Workers **drain the queue before exiting**, so accepted work is never silently dropped.
+
+Decide and state the policy: bounded or unbounded queue, what `submit` does when full (block, reject, run in the caller), and what happens to tasks queued at shutdown.13:T9b9,#include <condition_variable>
+#include <cstddef>
+#include <functional>
+#include <future>
+#include <iostream>
+#include <memory>
+#include <mutex>
+#include <queue>
+#include <thread>
+#include <type_traits>
+#include <utility>
+#include <vector>
+
+// A small fixed-size pool. Not copyable or movable: workers hold 'this'.
+class ThreadPool {
+public:
+    explicit ThreadPool(std::size_t workers) {
+        for (std::size_t i = 0; i < workers; ++i) workers_.emplace_back([this] { workLoop(); });
+    }
+
+    ~ThreadPool() {
+        {
+            std::lock_guard<std::mutex> guard(mutex_);
+            stopping_ = true;
+        }
+        wake_.notify_all();
+        // workers_ is declared last, so the jthreads join before the queue, mutex and condition variable are destroyed.
+    }
+
+    ThreadPool(const ThreadPool&) = delete;
+    ThreadPool& operator=(const ThreadPool&) = delete;
+
+    std::size_t size() const { return workers_.size(); }
+
+    template <typename Task>
+    std::future<std::invoke_result_t<Task>> submit(Task task) {
+        using Result = std::invoke_result_t<Task>;
+        auto packaged = std::make_shared<std::packaged_task<Result()>>(std::move(task));
+        std::future<Result> future = packaged->get_future();
+        {
+            std::lock_guard<std::mutex> guard(mutex_);
+            queue_.push([packaged] { (*packaged)(); });
+        }
+        wake_.notify_one();
+        return future;
+    }
+
+private:
+    void workLoop() {
+        for (;;) {
+            std::function<void()> job;
+            {
+                std::unique_lock<std::mutex> lock(mutex_);
+                wake_.wait(lock, [this] { return stopping_ || !queue_.empty(); });
+                if (queue_.empty()) return;  // stopping and drained
+                job = std::move(queue_.front());
+                queue_.pop();
+            }
+            job();  // run outside the lock
+        }
+    }
+
+    std::mutex mutex_;
+    std::condition_variable wake_;
+    std::queue<std::function<void()>> queue_;
+    bool stopping_ = false;
+    std::vector<std::jthread> workers_;
+};
+
+int main() {
+    constexpr int kTasks = 8;
+    ThreadPool pool(3);
+    std::vector<std::future<long long>> futures;
+    for (int i = 1; i <= kTasks; ++i) {
+        futures.push_back(pool.submit([i] { return static_cast<long long>(i) * i; }));
+    }
+    std::cout << "threads created: " << pool.size() << "\n";
+    long long sum = 0;
+    for (auto& f : futures) sum += f.get();
+    std::cout << "sum of squares: " << sum << "\n";
+}
+f:[["children",{"s":"__PAGE__","h":160,"d":{"r":["$","$1","c",{"children":[["$","$L11",null,{"lesson":{"id":"thread-pool","level":"L7","title":"Thread pool: fixed workers, a queue, and a clean shutdown","oneLiner":"Create a few workers once and feed them tasks through a mutex-guarded queue, instead of paying for a thread per task.","cardTopic":"L7.pool","intro":"$12","smell":"- `std::thread` created inside a loop, one per request.\n- Tasks that never report completion or failure.\n- A detached thread that outlives the objects it captured.\n- A destructor that does not join, or a stop flag read without the mutex.","before":"#include <iostream>\n#include <thread>\n#include <vector>\n\n// One thread per task: eight tasks, eight threads. Ten thousand tasks would mean ten thousand threads.\nint main() {\n    constexpr int kTasks = 8;\n    std::vector<long long> results(kTasks, 0);\n    {\n        std::vector<std::jthread> threads;\n        for (int i = 0; i < kTasks; ++i) {\n            threads.emplace_back([&results, i] { results[i] = static_cast<long long>(i + 1) * (i + 1); });\n        }\n        std::cout << \"threads created: \" << threads.size() << \"\\n\";\n    }\n    long long sum = 0;\n    for (const long long r : results) sum += r;\n    std::cout << \"sum of squares: \" << sum << \"\\n\";\n}\n","after":"$13","beforeOutput":"threads created: 8\nsum of squares: 204","afterOutput":"threads created: 3\nsum of squares: 204","refactorNotes":"Three workers serve eight tasks (or eight thousand) with a constant thread count. `submit` returns a `std::future`, so the caller can wait for the value and any exception thrown by the task is rethrown at `get()`. The predicate-based wait covers spurious and lost wake-ups, jobs run outside the lock so a slow task never blocks `submit`, and shutdown is RAII: set the flag under the mutex, wake all workers, let them drain the queue, join.\n\n**Trade-offs:** this queue is unbounded, so a fast producer can exhaust memory; a bounded queue adds a second condition (\"not full\") and a policy (block, reject or caller-runs). One shared queue is a contention point at high task rates (work-stealing queues per worker fix that, with more complexity). Tasks that block on other tasks in the same pool can starve it. `submit` after destruction began is a caller bug here; a production pool would reject it.","interviewSignal":"Draw the four parts (queue, mutex plus condition variable, workers, future) before coding, and state the shutdown policy. Senior signal: predicate wait, run-outside-the-lock, member declaration order for safe destruction, exceptions delivered through the future. Staff signal: bounded queues with back-pressure, work stealing, task priorities, and why you would normally use an existing executor rather than write one.","overApplication":"A pool is not free either: sizing it wrongly (too few for blocking I/O, too many for CPU work) hurts, and one global pool shared by unrelated work lets a slow subsystem starve everyone. For one-off background work, `std::async` or a single dedicated thread is simpler. In real systems prefer a vetted executor library to a hand-rolled one."},"nextId":null}],["$L14"],"$L15"]}],"p":"$@16","v":null,"s":"$9"}}]]
+d:[["children",{"s":{"n":"id","t":"d","k":"thread-pool","s":[]},"h":65632,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}]}]]}],"p":"$@e","v":"$c","s":"$9"},"c":"$Qf"}]]
+a:[["children",{"s":"learn","h":131168,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}]}]]}],"p":"$@b","v":"$c","s":"$9"},"c":"$Qd"}]]
+0:{"t":{"t":{"s":"","h":131152,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","precedence":"next"}],["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js","async":true}]],["$","html",null,{"lang":"en","className":"r7opxW_variable auY9QW_variable u-EJdW_variable h-full","children":["$","body",null,{"className":"min-h-full","children":[["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}],"notFound":[["$","main",null,{"className":"flex min-h-dvh flex-col items-center justify-center gap-4 px-4 text-center","children":[["$","div",null,{"className":"font-display text-5xl text-[var(--accent)]","children":"404"}],["$","p",null,{"className":"text-white/60","children":"This room is not on the blueprint yet."}],["$","$L6",null,{"href":"/","className":"text-sm text-white/80 underline","children":"Back to the title screen"}]]}],[]]}],["$","$L7",null,{}]]}]}]]}],"p":"$@8","v":null,"s":"$9"},"c":"$Qa"},"h":{"r":["$","$1","h",{"children":[null,["$","$L18",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1, viewport-fit=cover"}],["$","meta","2",{"name":"theme-color","content":"#0a1530"}]]}],["$","$L1a",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$1b",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"Thread pool: fixed workers, a queue, and a clean shutdown: Blueprint Clash"}],["$","meta","1",{"name":"description","content":"A creature-tactics RPG that teaches low-level design in C++ and high-level system design, from fundamentals to big-tech interview level."}],["$","link","2",{"rel":"manifest","href":"/blueprint-clash/manifest.webmanifest"}],["$","meta","3",{"name":"mobile-web-app-capable","content":"yes"}],["$","meta","4",{"name":"apple-mobile-web-app-title","content":"Blueprint Clash"}],["$","meta","5",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","link","6",{"rel":"icon","href":"/blueprint-clash/icon.png?icon.27re_xscs-jmw.png","sizes":"256x256","type":"image/png"}],["$","link","7",{"rel":"apple-touch-icon","href":"/blueprint-clash/apple-icon.png?apple-icon.2rac1w0yc3rju.png","sizes":"180x180","type":"image/png"}],["$","$L1c","8",{}]]}]}],null]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"p":"$@1d","v":null,"s":"$9"}},"a":"$@1e","u":"$@1f","b":"U2e90Mr6iueJEoRJLmd0s"}
+20:I[97367,["$2"],"OutletBoundary"]
+14:["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/3s1mctvsetnbs.js","async":true}]
+15:["$","$L20",null,{"children":["$","$1b",null,{"name":"Next.MetadataOutlet","children":"$@21"}]}]
+9:300
+21:null
+1f:true
+9:C
+1e:0
+e:"$undefined"
+b:"$undefined"
+8:"$undefined"
+1d:"$undefined"
+16:"$undefined"

@@ -1,0 +1,699 @@
+1:"$Sreact.fragment"
+2:"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js"
+3:I[39756,["$2"],"default"]
+4:I[37457,["$2"],"default"]
+5:"/blueprint-clash/_next/static/chunks/2n5qeheznvl4u.js"
+6:I[22016,["$2","$5"],""]
+7:I[64576,["$2"],"PwaRegister"]
+d:I[97367,["$2"],"OutletBoundary"]
+e:"$Sreact.suspense"
+10:"ViewportBoundary"
+11:I[97367,["$2"],"$10"]
+13:"MetadataBoundary"
+14:I[97367,["$2"],"$13"]
+16:I[68027,["$2"],"default",1]
+:HL["/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","style"]
+:HL["/blueprint-clash/_next/static/media/07c7676b89ed2778-s.p.2bn3s6zvc0dyp.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/blueprint-clash/_next/static/media/486a103cae33528f-s.p.309ilb452anpd.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/blueprint-clash/_next/static/media/53897e768d329f66-s.p.3t6q91iet4nsy.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+9:X
+b:[["children",{"s":"__PAGE__","h":512,"d":{"r":["$","$1","c",{"children":["$Lc",[["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/2uk3wcjwqg0tl.js","async":true,"nonce":"$undefined"}],["$","script","script-1",{"src":"/blueprint-clash/_next/static/chunks/1zdu7yjl8efu4.js","async":true,"nonce":"$undefined"}]],["$","$Ld",null,{"children":["$","$e",null,{"name":"Next.MetadataOutlet","children":"$@f"}]}]]}],"p":false,"v":null}}]]
+a:[["children",{"s":{"n":"id","t":"d","k":"elevator-system","s":[]},"h":66048,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],"p":false,"v":"$9"},"c":"$Qb"}]]
+8:[["children",{"s":"workshop","h":131584,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],"p":false,"v":"$9"},"c":"$Qa"}]]
+0:{"P":null,"c":["","workshop","elevator-system",""],"q":"","i":false,"t":{"t":{"s":"","h":131600,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}],["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js","async":true,"nonce":"$undefined"}]],["$","html",null,{"lang":"en","className":"r7opxW_variable auY9QW_variable u-EJdW_variable h-full","children":["$","body",null,{"className":"min-h-full","children":[["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","main",null,{"className":"flex min-h-dvh flex-col items-center justify-center gap-4 px-4 text-center","children":[["$","div",null,{"className":"font-display text-5xl text-[var(--accent)]","children":"404"}],["$","p",null,{"className":"text-white/60","children":"This room is not on the blueprint yet."}],["$","$L6",null,{"href":"/","className":"text-sm text-white/80 underline","children":"Back to the title screen"}]]}],[]],"forbidden":"$undefined","unauthorized":"$undefined"}],["$","$L7",null,{}]]}]}]]}],"p":false,"v":null},"c":"$Q8"},"h":{"r":["$","$1","h",{"children":[null,["$","$L11",null,{"children":"$L12"}],["$","$L14",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$e",null,{"name":"Next.Metadata","children":"$L15"}]}],null]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"p":false,"v":null}},"m":"$undefined","G":["$16",[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]]],"S":true,"r":"$undefined","s":"$undefined","a":"$undefined","l":"$undefined","p":"$undefined","d":"$undefined","b":"U2e90Mr6iueJEoRJLmd0s"}
+9:C
+12:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1, viewport-fit=cover"}],["$","meta","2",{"name":"theme-color","content":"#0a1530"}]]
+17:I[27201,["$2"],"IconMark"]
+f:null
+15:[["$","title","0",{"children":"Elevator system: Blueprint Clash"}],["$","meta","1",{"name":"description","content":"A creature-tactics RPG that teaches low-level design in C++ and high-level system design, from fundamentals to big-tech interview level."}],["$","link","2",{"rel":"manifest","href":"/blueprint-clash/manifest.webmanifest","crossOrigin":"$undefined"}],["$","meta","3",{"name":"mobile-web-app-capable","content":"yes"}],["$","meta","4",{"name":"apple-mobile-web-app-title","content":"Blueprint Clash"}],["$","meta","5",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","link","6",{"rel":"icon","href":"/blueprint-clash/icon.png?icon.27re_xscs-jmw.png","sizes":"256x256","type":"image/png"}],["$","link","7",{"rel":"apple-touch-icon","href":"/blueprint-clash/apple-icon.png?apple-icon.2rac1w0yc3rju.png","sizes":"180x180","type":"image/png"}],["$","$L17","8",{}]]
+18:"/blueprint-clash/_next/static/chunks/2uk3wcjwqg0tl.js"
+19:"/blueprint-clash/_next/static/chunks/1zdu7yjl8efu4.js"
+1a:I[65612,["$2","$18","$19"],"WorkshopClient"]
+1b:T189a,# Editorial: Elevator system
+
+## Requirements
+Functional: a bank of cars serving floors `0..F-1`; hall calls (floor and direction) and cabin buttons; time advances only with `step()`. Hidden until asked: a hall call is given to one car immediately, the one with the fewest floors to go from where it is now (ties to the lowest id); a car sweeps, meaning it keeps its heading while anything is ahead and reverses only when nothing is; arriving opens the doors on the same tick, they stay open one tick, and the car does not move on the closing tick; invalid floors, cars and impossible directions are refused without changing anything. Non-goals: weight limits, express cars, honouring the requested direction, a UI, persistence.
+
+**Change Storm 1, cars out of service:** staff take a car out and bring it back. Taking it out stops it, drops its cabin stops, and gives its hall calls to the nearest cars still in service. New hall calls skip it, `selectFloor` on it returns `OutOfService`, the last car in service cannot be removed, and a returned car is idle where it stopped. Revealable by asking whether cars are ever unavailable or the dispatch rules will change.
+
+## Reference design
+- `StopList` holds the floors a car must visit, as cabin stops and hall stops, and answers "is anything ahead of me?".
+- `Car` owns one elevator's floor, heading, stop list and current mode. It sweeps (`moveOneFloor` keeps the heading unless nothing is ahead) but knows nothing about other cars.
+- `CarMode` (abstract) answers one thing: what happens to this car on a tick. `ActiveMode` serves a stop here or moves towards the next one, `DoorsOpenMode` closes the doors and does nothing else. Modes hold no data and are shared; the car holds the data.
+- `Dispatcher` is the scheduling Strategy: given the cars that may take work and a floor, pick one. `NearestCarDispatcher` is the rule above.
+- `Fleet` owns the cars and the dispatcher, hands the dispatcher only the cars in service, and moves hall calls between cars.
+- `ElevatorSystemImpl` validates input and delegates. Keeping it thin avoids the god-class finding Senior Review raises at more than a dozen methods.
+- Cabin stops and hall stops are kept separately in the `StopList` because they have different fates when a car is retired: passengers' choices die with the trip, hall calls must be handed on.
+
+**Storm 1 in the reference:** one new class (`OutOfServiceMode`), two operations on a new `ServiceableElevators` interface, and `Fleet::takeOutOfService`. `ActiveMode`, `DoorsOpenMode` and `NearestCarDispatcher` are untouched, because the fleet only offers the dispatcher cars in service. The honest cost is that `Car::inService()` is derived from the mode pointer, and `takeOutOfService` must retire the car before re-dispatching (a test pins it).
+
+## Alternatives
+- **One class with `int floor`, a `bool doorsOpen` and a loop in `step()`** passes the first tests quickly and is what `bad/` shows. It is fine for a single car. With the storm it grows a second flag checked everywhere, and the dispatch rule is buried in `requestPickup`.
+- **An enum of car states plus a `switch` in `step()`** is smaller than mode objects and reasonable for three states. It starts to hurt when states carry different behaviour for several operations (here only `step`, so be honest about it). Mode objects pay off at the fourth state or if `selectFloor` also differs by state.
+- **Per-stop queue in request order (FIFO)** is the first idea most candidates have. It is simple and fair but makes cars crisscross the building; the sweep is the standard fix. It is also easy to show wrong with a two-line example, so be ready to argue it.
+- **Assigning hall calls lazily** (keep a global pending list, assign when a car becomes free or passes the floor) gives better wait times than assigning at press time, at the price of a central queue and harder reasoning about who is coming. State that as the next step, not as a requirement.
+- **Dispatch as a `std::function` or a template parameter** is lighter than an abstract class. An interface is better here because the policy will gain state (zones, load) and needs to be faked in tests.
+
+## Trade-offs
+Assigning at press time keeps each car's route simple and makes behaviour deterministic and testable, but a decision made on position alone can be poor a few ticks later (a car may be heading the wrong way). Distance-only dispatch is the simplest defensible policy; direction and load awareness are the first improvements, and the Strategy seam is where they would go. Returning a `Status` instead of throwing keeps every refusal visible at the call site and works in the browser toolchain; the cost is that a caller can ignore it. Dropping cabin stops when a car is retired is a simplification: a real car would finish its trip first.
+
+## What breaks at 10x
+At 10x the floors, the sweep gets expensive only if you scan all floors per tick; a sorted set of stops (as here) makes the next-stop lookup logarithmic. At 10x the cars, the dispatcher's linear scan per call is still fine, but the quality of the choice matters: nearest-car makes cars bunch up, so you need zoning or destination dispatch. At 10x the callers, a single mutex around the system is the first correct answer; beyond that an event loop with one writer. Failure handling also changes: a car that stops responding must be retired automatically and its hall calls reassigned, which is exactly the Storm 1 transition driven by a health check instead of a person.
+
+## Level signals
+- **SDE2:** correct movement, doors and validation; separates the car from the building; stops are kept as a set and served in order; tests for the edges (current floor, duplicate requests, top and bottom floors).
+- **Senior:** asks how a car chooses its next stop and who answers a call before coding; sweeps instead of FIFO; models the car's stages explicitly; makes the dispatch rule replaceable; makes the storm additive and hands retired cars' work back; knows when an enum and a switch is enough.
+- **Staff:** separates what changes (dispatch policy, availability, hardware faults) from what is stable (the per-car state machine); raises direction awareness, destination dispatch and fault detection before being asked; states what was deliberately left out.
+1c:T64f,#pragma once
+// Public API for the Elevator system problem. The hidden tests only use what is declared here.
+// You implement elev::makeElevatorSystem() (in any of your .cpp files); everything behind it is your design.
+//
+// Time is discrete: nothing moves until step() is called, and one step() is one tick for every car.
+#include <memory>
+#include <vector>
+
+namespace elev {
+
+enum class Direction { Up, Down };
+
+enum class Status {
+  Ok,
+  InvalidFloor,
+  InvalidDirection,
+  UnknownElevator,
+  OutOfService,
+  CannotRemoveLastCar
+};
+
+// What a car did on the last tick.
+enum class CarState { Idle, MovingUp, MovingDown, DoorsOpen, OutOfService };
+
+class ElevatorSystem {
+ public:
+  virtual ~ElevatorSystem() = default;
+
+  // Someone presses the hall button on `floor` asking to go `direction`.
+  virtual Status requestPickup(int floor, Direction direction) = 0;
+  // Someone inside car `elevator` presses a floor button.
+  virtual Status selectFloor(int elevator, int floor) = 0;
+  // Advance time by one tick.
+  virtual void step() = 0;
+
+  // Cars are numbered 0..elevatorCount()-1 and floors 0..floorCount()-1. Every car starts idle at floor 0.
+  virtual int elevatorCount() const = 0;
+  virtual int floorCount() const = 0;
+  virtual int floorOf(int elevator) const = 0;
+  virtual CarState stateOf(int elevator) const = 0;
+  // Floors this car still has to visit, ascending, without duplicates.
+  virtual std::vector<int> stopsOf(int elevator) const = 0;
+};
+
+// Preconditions: floors >= 2 and elevators >= 1.
+std::unique_ptr<ElevatorSystem> makeElevatorSystem(int floors, int elevators);
+
+}  // namespace elev
+1d:T1d9b,#include <vector>
+
+#include "api.h"
+#include "bp_test.h"
+
+using elev::CarState;
+using elev::Direction;
+using elev::Status;
+using Floors = std::vector<int>;
+
+namespace {
+bool allQuiet(const elev::ElevatorSystem& s) {
+  for (int i = 0; i < s.elevatorCount(); ++i) {
+    if (!s.stopsOf(i).empty() || s.stateOf(i) == CarState::DoorsOpen || s.stateOf(i) == CarState::MovingUp ||
+        s.stateOf(i) == CarState::MovingDown) {
+      return false;
+    }
+  }
+  return true;
+}
+
+// Steps until nothing is pending and every car has stopped moving.
+void settle(elev::ElevatorSystem& s) {
+  for (int i = 0; i < 200 && !allQuiet(s); ++i) s.step();
+}
+
+void stepTimes(elev::ElevatorSystem& s, int n) {
+  for (int i = 0; i < n; ++i) s.step();
+}
+
+// Runs until the car has nothing left to do and returns the floors where its doors opened, in order.
+Floors doorOpenings(elev::ElevatorSystem& s, int car) {
+  Floors opened;
+  for (int i = 0; i < 200; ++i) {
+    s.step();
+    if (s.stateOf(car) == CarState::DoorsOpen) opened.push_back(s.floorOf(car));
+    if (s.stopsOf(car).empty() && s.stateOf(car) == CarState::Idle) break;
+  }
+  return opened;
+}
+
+void sendTo(elev::ElevatorSystem& s, int car, int floor) {
+  s.selectFloor(car, floor);
+  settle(s);
+}
+}  // namespace
+
+TEST(Setup, EveryCarStartsIdleAtTheGroundFloor) {
+  auto s = elev::makeElevatorSystem(10, 3);
+  EXPECT_EQ(s->floorCount(), 10);
+  EXPECT_EQ(s->elevatorCount(), 3);
+  for (int i = 0; i < 3; ++i) {
+    EXPECT_EQ(s->floorOf(i), 0);
+    EXPECT_TRUE(s->stateOf(i) == CarState::Idle);
+    EXPECT_TRUE(s->stopsOf(i).empty());
+  }
+}
+
+TEST(Validation, PickupChecksTheFloor) {
+  auto s = elev::makeElevatorSystem(10, 2);
+  EXPECT_EQ(s->requestPickup(-1, Direction::Up), Status::InvalidFloor);
+  EXPECT_EQ(s->requestPickup(10, Direction::Down), Status::InvalidFloor);
+  EXPECT_TRUE(s->stopsOf(0).empty());
+  EXPECT_TRUE(s->stopsOf(1).empty());
+}
+
+TEST(Validation, PickupChecksTheDirectionAtTheEnds) {
+  auto s = elev::makeElevatorSystem(10, 2);
+  EXPECT_EQ(s->requestPickup(9, Direction::Up), Status::InvalidDirection);
+  EXPECT_EQ(s->requestPickup(0, Direction::Down), Status::InvalidDirection);
+  EXPECT_TRUE(s->stopsOf(0).empty());
+  EXPECT_EQ(s->requestPickup(9, Direction::Down), Status::Ok);
+  EXPECT_EQ(s->requestPickup(0, Direction::Up), Status::Ok);
+}
+
+TEST(Validation, SelectFloorChecksCarAndFloor) {
+  auto s = elev::makeElevatorSystem(10, 2);
+  EXPECT_EQ(s->selectFloor(-1, 3), Status::UnknownElevator);
+  EXPECT_EQ(s->selectFloor(2, 3), Status::UnknownElevator);
+  EXPECT_EQ(s->selectFloor(0, 10), Status::InvalidFloor);
+  EXPECT_EQ(s->selectFloor(1, -1), Status::InvalidFloor);
+  EXPECT_TRUE(s->stopsOf(0).empty());
+  EXPECT_TRUE(s->stopsOf(1).empty());
+  EXPECT_EQ(s->selectFloor(1, 9), Status::Ok);
+  EXPECT_TRUE(s->stopsOf(1) == Floors({9}));
+}
+
+TEST(Dispatch, NearestCarAnswersAHallCall) {
+  auto s = elev::makeElevatorSystem(12, 3);
+  sendTo(*s, 1, 6);
+  sendTo(*s, 2, 9);
+  EXPECT_EQ(s->requestPickup(7, Direction::Down), Status::Ok);
+  EXPECT_TRUE(s->stopsOf(1) == Floors({7}));
+  EXPECT_TRUE(s->stopsOf(0).empty());
+  EXPECT_TRUE(s->stopsOf(2).empty());
+}
+
+TEST(Dispatch, TiesGoToTheLowestId) {
+  auto s = elev::makeElevatorSystem(12, 3);
+  sendTo(*s, 0, 2);
+  sendTo(*s, 1, 6);
+  EXPECT_EQ(s->requestPickup(4, Direction::Up), Status::Ok);
+  EXPECT_TRUE(s->stopsOf(0) == Floors({4}));
+  EXPECT_TRUE(s->stopsOf(1).empty());
+}
+
+TEST(Dispatch, CarsAreRankedByPositionEvenWhenBusy) {
+  auto s = elev::makeElevatorSystem(12, 2);
+  s->requestPickup(3, Direction::Up);
+  s->requestPickup(4, Direction::Up);
+  EXPECT_TRUE(s->stopsOf(0) == Floors({3, 4}));
+  EXPECT_TRUE(s->stopsOf(1).empty());
+}
+
+TEST(Movement, ACarMovesOneFloorPerStep) {
+  auto s = elev::makeElevatorSystem(10, 1);
+  s->selectFloor(0, 3);
+  s->step();
+  EXPECT_EQ(s->floorOf(0), 1);
+  EXPECT_TRUE(s->stateOf(0) == CarState::MovingUp);
+  s->step();
+  EXPECT_EQ(s->floorOf(0), 2);
+  EXPECT_TRUE(s->stopsOf(0) == Floors({3}));
+}
+
+TEST(Movement, AnIdleCarStaysPut) {
+  auto s = elev::makeElevatorSystem(10, 2);
+  stepTimes(*s, 5);
+  EXPECT_EQ(s->floorOf(0), 0);
+  EXPECT_EQ(s->floorOf(1), 0);
+  EXPECT_TRUE(s->stateOf(0) == CarState::Idle);
+}
+
+TEST(Movement, CarsMoveIndependently) {
+  auto s = elev::makeElevatorSystem(10, 2);
+  s->selectFloor(0, 4);
+  s->selectFloor(1, 2);
+  stepTimes(*s, 2);
+  EXPECT_EQ(s->floorOf(0), 2);
+  EXPECT_EQ(s->floorOf(1), 2);
+  EXPECT_TRUE(s->stateOf(1) == CarState::DoorsOpen);
+  EXPECT_TRUE(s->stateOf(0) == CarState::MovingUp);
+}
+
+TEST(Movement, ACarGoesDownToo) {
+  auto s = elev::makeElevatorSystem(10, 1);
+  sendTo(*s, 0, 6);
+  s->selectFloor(0, 2);
+  s->step();
+  EXPECT_EQ(s->floorOf(0), 5);
+  EXPECT_TRUE(s->stateOf(0) == CarState::MovingDown);
+}
+
+TEST(Doors, ArrivalOpensTheDoorsOnTheSameTick) {
+  auto s = elev::makeElevatorSystem(10, 1);
+  s->selectFloor(0, 2);
+  stepTimes(*s, 2);
+  EXPECT_EQ(s->floorOf(0), 2);
+  EXPECT_TRUE(s->stateOf(0) == CarState::DoorsOpen);
+  EXPECT_TRUE(s->stopsOf(0).empty());
+}
+
+TEST(Doors, DoorsStayOpenForOneTickAndTheCarDoesNotMoveWhileClosing) {
+  auto s = elev::makeElevatorSystem(10, 1);
+  s->selectFloor(0, 2);
+  s->selectFloor(0, 5);
+  stepTimes(*s, 2);
+  EXPECT_TRUE(s->stateOf(0) == CarState::DoorsOpen);
+  s->step();
+  EXPECT_EQ(s->floorOf(0), 2);
+  EXPECT_TRUE(s->stateOf(0) == CarState::Idle);
+  s->step();
+  EXPECT_EQ(s->floorOf(0), 3);
+  EXPECT_TRUE(s->stateOf(0) == CarState::MovingUp);
+}
+
+TEST(Doors, SelectingTheCurrentFloorOpensTheDoors) {
+  auto s = elev::makeElevatorSystem(10, 1);
+  EXPECT_EQ(s->selectFloor(0, 0), Status::Ok);
+  s->step();
+  EXPECT_EQ(s->floorOf(0), 0);
+  EXPECT_TRUE(s->stateOf(0) == CarState::DoorsOpen);
+  EXPECT_TRUE(s->stopsOf(0).empty());
+}
+
+TEST(Doors, AHallCallOnTheCarsFloorOpensTheDoors) {
+  auto s = elev::makeElevatorSystem(10, 2);
+  EXPECT_EQ(s->requestPickup(0, Direction::Up), Status::Ok);
+  s->step();
+  EXPECT_TRUE(s->stateOf(0) == CarState::DoorsOpen);
+  EXPECT_TRUE(s->stateOf(1) == CarState::Idle);
+}
+
+TEST(Doors, ASharedFloorIsServedOnce) {
+  auto s = elev::makeElevatorSystem(10, 1);
+  s->requestPickup(3, Direction::Up);
+  s->selectFloor(0, 3);
+  s->selectFloor(0, 3);
+  EXPECT_TRUE(s->stopsOf(0) == Floors({3}));
+  Floors opened = doorOpenings(*s, 0);
+  EXPECT_TRUE(opened == Floors({3}));
+}
+
+TEST(Sweep, StopsOnTheWayAreServedInFloorOrder) {
+  auto s = elev::makeElevatorSystem(10, 1);
+  s->selectFloor(0, 5);
+  s->selectFloor(0, 3);
+  EXPECT_TRUE(doorOpenings(*s, 0) == Floors({3, 5}));
+}
+
+TEST(Sweep, KeepsHeadingBeforeReversing) {
+  auto s = elev::makeElevatorSystem(10, 1);
+  s->selectFloor(0, 6);
+  stepTimes(*s, 4);
+  EXPECT_EQ(s->floorOf(0), 4);
+  s->selectFloor(0, 3);  // behind the car, and nearer than 6
+  s->selectFloor(0, 8);
+  EXPECT_TRUE(doorOpenings(*s, 0) == Floors({6, 8, 3}));
+}
+
+TEST(Sweep, DownwardSweepKeepsHeadingToo) {
+  auto s = elev::makeElevatorSystem(10, 1);
+  sendTo(*s, 0, 8);
+  s->selectFloor(0, 3);
+  stepTimes(*s, 2);
+  EXPECT_EQ(s->floorOf(0), 6);
+  s->selectFloor(0, 7);  // behind, and nearer than 3
+  s->selectFloor(0, 1);
+  EXPECT_TRUE(doorOpenings(*s, 0) == Floors({3, 1, 7}));
+}
+
+TEST(Sweep, ReversesOnlyWhenNothingIsAhead) {
+  auto s = elev::makeElevatorSystem(10, 1);
+  sendTo(*s, 0, 4);
+  s->selectFloor(0, 1);
+  s->step();
+  EXPECT_TRUE(s->stateOf(0) == CarState::MovingDown);
+  EXPECT_EQ(s->floorOf(0), 3);
+}
+
+TEST(Sweep, HallCallsAreSweptLikeCabStops) {
+  auto s = elev::makeElevatorSystem(10, 1);
+  s->selectFloor(0, 7);
+  stepTimes(*s, 2);
+  s->requestPickup(5, Direction::Down);  // on the way up, served in passing
+  EXPECT_TRUE(doorOpenings(*s, 0) == Floors({5, 7}));
+}
+1e:T109b,#include <vector>
+
+#include "api_storm1.h"
+#include "bp_test.h"
+
+using elev::CarState;
+using elev::Direction;
+using elev::Status;
+using Floors = std::vector<int>;
+
+namespace {
+bool allQuiet(const elev::ElevatorSystem& s) {
+  for (int i = 0; i < s.elevatorCount(); ++i) {
+    if (!s.stopsOf(i).empty() || s.stateOf(i) == CarState::DoorsOpen || s.stateOf(i) == CarState::MovingUp ||
+        s.stateOf(i) == CarState::MovingDown) {
+      return false;
+    }
+  }
+  return true;
+}
+
+void settle(elev::ElevatorSystem& s) {
+  for (int i = 0; i < 200 && !allQuiet(s); ++i) s.step();
+}
+
+void stepTimes(elev::ElevatorSystem& s, int n) {
+  for (int i = 0; i < n; ++i) s.step();
+}
+
+void sendTo(elev::ElevatorSystem& s, int car, int floor) {
+  s.selectFloor(car, floor);
+  settle(s);
+}
+}  // namespace
+
+TEST(Service, ACarOutOfServiceStopsWhereItIs) {
+  auto s = elev::makeServiceableElevators(10, 2);
+  s->selectFloor(0, 6);
+  stepTimes(*s, 2);
+  EXPECT_EQ(s->setOutOfService(0), Status::Ok);
+  EXPECT_TRUE(s->stateOf(0) == CarState::OutOfService);
+  EXPECT_TRUE(s->stopsOf(0).empty());
+  stepTimes(*s, 5);
+  EXPECT_EQ(s->floorOf(0), 2);
+  EXPECT_TRUE(s->stateOf(0) == CarState::OutOfService);
+}
+
+TEST(Service, OutOfServiceReassignsHallCalls) {
+  auto s = elev::makeServiceableElevators(10, 2);
+  s->requestPickup(4, Direction::Up);
+  EXPECT_TRUE(s->stopsOf(0) == Floors({4}));
+  EXPECT_EQ(s->setOutOfService(0), Status::Ok);
+  EXPECT_TRUE(s->stopsOf(0).empty());
+  EXPECT_TRUE(s->stopsOf(1) == Floors({4}));
+  stepTimes(*s, 4);
+  EXPECT_EQ(s->floorOf(1), 4);
+  EXPECT_TRUE(s->stateOf(1) == CarState::DoorsOpen);
+}
+
+TEST(Service, ReassignedCallsGoToTheNearestCarInService) {
+  auto s = elev::makeServiceableElevators(12, 3);
+  sendTo(*s, 1, 6);
+  sendTo(*s, 2, 9);
+  s->requestPickup(7, Direction::Down);
+  EXPECT_TRUE(s->stopsOf(1) == Floors({7}));
+  EXPECT_EQ(s->setOutOfService(1), Status::Ok);
+  EXPECT_TRUE(s->stopsOf(2) == Floors({7}));
+  EXPECT_TRUE(s->stopsOf(0).empty());
+}
+
+TEST(Service, NewCallsSkipACarOutOfService) {
+  auto s = elev::makeServiceableElevators(10, 2);
+  s->setOutOfService(0);
+  EXPECT_EQ(s->requestPickup(3, Direction::Up), Status::Ok);
+  EXPECT_TRUE(s->stopsOf(0).empty());
+  EXPECT_TRUE(s->stopsOf(1) == Floors({3}));
+}
+
+TEST(Service, PassengersCannotSelectInACarOutOfService) {
+  auto s = elev::makeServiceableElevators(10, 2);
+  s->setOutOfService(1);
+  EXPECT_EQ(s->selectFloor(1, 4), Status::OutOfService);
+  EXPECT_TRUE(s->stopsOf(1).empty());
+  EXPECT_EQ(s->selectFloor(0, 4), Status::Ok);
+}
+
+TEST(Service, TheLastCarInServiceCannotBeRemoved) {
+  auto s = elev::makeServiceableElevators(10, 2);
+  EXPECT_EQ(s->setOutOfService(0), Status::Ok);
+  EXPECT_EQ(s->setOutOfService(1), Status::CannotRemoveLastCar);
+  EXPECT_FALSE(s->stateOf(1) == CarState::OutOfService);
+  auto single = elev::makeServiceableElevators(10, 1);
+  EXPECT_EQ(single->setOutOfService(0), Status::CannotRemoveLastCar);
+}
+
+TEST(Service, RemovingTheSameCarTwiceIsHarmless) {
+  auto s = elev::makeServiceableElevators(10, 2);
+  EXPECT_EQ(s->setOutOfService(0), Status::Ok);
+  EXPECT_EQ(s->setOutOfService(0), Status::Ok);
+  EXPECT_EQ(s->setOutOfService(1), Status::CannotRemoveLastCar);
+}
+
+TEST(Service, UnknownCarsAreRefused) {
+  auto s = elev::makeServiceableElevators(10, 2);
+  EXPECT_EQ(s->setOutOfService(2), Status::UnknownElevator);
+  EXPECT_EQ(s->returnToService(-1), Status::UnknownElevator);
+}
+
+TEST(Service, ACarReturnsIdleWhereItStopped) {
+  auto s = elev::makeServiceableElevators(10, 2);
+  sendTo(*s, 0, 3);
+  s->setOutOfService(0);
+  EXPECT_EQ(s->returnToService(0), Status::Ok);
+  EXPECT_EQ(s->floorOf(0), 3);
+  EXPECT_TRUE(s->stateOf(0) == CarState::Idle);
+  EXPECT_EQ(s->requestPickup(2, Direction::Up), Status::Ok);
+  EXPECT_TRUE(s->stopsOf(0) == Floors({2}));  // car 0 (at 3) is one floor away; car 1 (at 0) is two
+}
+
+TEST(Service, ReturningACarThatIsInServiceChangesNothing) {
+  auto s = elev::makeServiceableElevators(10, 2);
+  s->selectFloor(0, 5);
+  EXPECT_EQ(s->returnToService(0), Status::Ok);
+  EXPECT_TRUE(s->stopsOf(0) == Floors({5}));
+}
+
+TEST(Service, BaseBehaviourIsUnchanged) {
+  auto s = elev::makeServiceableElevators(10, 1);
+  s->selectFloor(0, 2);
+  stepTimes(*s, 2);
+  EXPECT_TRUE(s->stateOf(0) == CarState::DoorsOpen);
+}
+1f:T5fc,#pragma once
+#include <vector>
+
+#include "car_mode.h"
+#include "stop_list.h"
+
+// One elevator: its position, its stops and its current mode. It knows how to sweep (keep its heading while
+// anything is ahead), but not who answers hall calls (the Dispatcher) or what happens in each stage (the modes).
+class Car {
+ public:
+  explicit Car(int id) : id_(id) {}
+
+  int id() const { return id_; }
+  int floor() const { return floor_; }
+  elev::CarState report() const { return report_; }
+  bool inService() const { return mode_ != &outOfServiceMode(); }
+
+  StopList& stops() { return stops_; }
+  const StopList& stops() const { return stops_; }
+
+  void serveStopHere() {
+    stops_.serve(floor_);
+    report_ = elev::CarState::DoorsOpen;
+    mode_ = &doorsOpenMode();
+  }
+
+  // Keep the heading while any stop is ahead; reverse only when nothing is. Needs a stop that is not here.
+  void moveOneFloor() {
+    if (!stops_.anyBeyond(floor_, heading_)) heading_ = -heading_;
+    floor_ += heading_;
+    report_ = heading_ > 0 ? elev::CarState::MovingUp : elev::CarState::MovingDown;
+  }
+
+  void goIdle() {
+    report_ = elev::CarState::Idle;
+    mode_ = &activeMode();
+  }
+  void goOutOfService() {
+    report_ = elev::CarState::OutOfService;
+    mode_ = &outOfServiceMode();
+  }
+  void step() { mode_->step(*this); }
+
+ private:
+  int id_;
+  int floor_ = 0;
+  int heading_ = 1;  // +1 up, -1 down; the direction of the last move
+  elev::CarState report_ = elev::CarState::Idle;
+  const CarMode* mode_ = &activeMode();
+  StopList stops_;
+};
+20:T938,#pragma once
+#include "api_storm1.h"
+#include "fleet.h"
+#include "modes.h"
+
+// The public face: validates input, then hands the work to the fleet.
+class ElevatorSystemImpl : public elev::ServiceableElevators {
+ public:
+  ElevatorSystemImpl(int floors, int elevators)
+      : floors_(floors), fleet_(elevators, std::make_unique<NearestCarDispatcher>()) {}
+
+  elev::Status requestPickup(int floor, elev::Direction direction) override {
+    if (!validFloor(floor)) return elev::Status::InvalidFloor;
+    if (direction == elev::Direction::Up && floor == floors_ - 1) return elev::Status::InvalidDirection;
+    if (direction == elev::Direction::Down && floor == 0) return elev::Status::InvalidDirection;
+    fleet_.assignHallCall(floor);
+    return elev::Status::Ok;
+  }
+
+  elev::Status selectFloor(int elevator, int floor) override {
+    if (!fleet_.has(elevator)) return elev::Status::UnknownElevator;
+    if (!validFloor(floor)) return elev::Status::InvalidFloor;
+    if (!fleet_.at(elevator).inService()) return elev::Status::OutOfService;
+    fleet_.at(elevator).stops().addCabin(floor);
+    return elev::Status::Ok;
+  }
+
+  void step() override { fleet_.stepAll(); }
+
+  int elevatorCount() const override { return fleet_.size(); }
+  int floorCount() const override { return floors_; }
+  int floorOf(int elevator) const override { return fleet_.has(elevator) ? fleet_.at(elevator).floor() : -1; }
+  elev::CarState stateOf(int elevator) const override {
+    return fleet_.has(elevator) ? fleet_.at(elevator).report() : elev::CarState::Idle;
+  }
+  std::vector<int> stopsOf(int elevator) const override {
+    return fleet_.has(elevator) ? fleet_.at(elevator).stops().all() : std::vector<int>();
+  }
+
+  elev::Status setOutOfService(int elevator) override {
+    if (!fleet_.has(elevator)) return elev::Status::UnknownElevator;
+    if (!fleet_.at(elevator).inService()) return elev::Status::Ok;
+    if (fleet_.inServiceCount() == 1) return elev::Status::CannotRemoveLastCar;
+    fleet_.takeOutOfService(elevator);
+    return elev::Status::Ok;
+  }
+
+  elev::Status returnToService(int elevator) override {
+    if (!fleet_.has(elevator)) return elev::Status::UnknownElevator;
+    fleet_.returnToService(elevator);
+    return elev::Status::Ok;
+  }
+
+ private:
+  bool validFloor(int floor) const { return floor >= 0 && floor < floors_; }
+
+  int floors_;
+  Fleet fleet_;
+};
+21:T5ea,#pragma once
+#include <memory>
+#include <utility>
+#include <vector>
+
+#include "dispatcher.h"
+
+// Owns the cars and the dispatcher. Knows which cars may take work and moves hall calls between them.
+class Fleet {
+ public:
+  Fleet(int cars, std::unique_ptr<Dispatcher> dispatcher) : dispatcher_(std::move(dispatcher)) {
+    for (int i = 0; i < cars; ++i) cars_.push_back(std::make_unique<Car>(i));
+  }
+
+  int size() const { return static_cast<int>(cars_.size()); }
+  bool has(int id) const { return id >= 0 && id < size(); }
+  Car& at(int id) { return *cars_[id]; }
+  const Car& at(int id) const { return *cars_[id]; }
+
+  void assignHallCall(int floor) { dispatcher_->choose(inService(), floor)->stops().addHall(floor); }
+
+  void stepAll() {
+    for (auto& car : cars_) car->step();
+  }
+
+  int inServiceCount() const { return static_cast<int>(inService().size()); }
+
+  // Retire the car first, then re-dispatch its hall calls so it cannot be chosen again.
+  void takeOutOfService(int id) {
+    Car& car = at(id);
+    car.goOutOfService();
+    car.stops().dropCabin();
+    for (int floor : car.stops().takeHall()) assignHallCall(floor);
+  }
+
+  void returnToService(int id) {
+    if (!at(id).inService()) at(id).goIdle();
+  }
+
+ private:
+  std::vector<Car*> inService() const {
+    std::vector<Car*> result;
+    for (const auto& car : cars_) {
+      if (car->inService()) result.push_back(car.get());
+    }
+    return result;
+  }
+
+  std::vector<std::unique_ptr<Car>> cars_;
+  std::unique_ptr<Dispatcher> dispatcher_;
+};
+22:T523,#pragma once
+#include <set>
+#include <vector>
+
+// The floors a car still has to visit, kept in two kinds because they have different fates when a car is
+// retired: passengers' choices (cabin) die with the trip, hall calls must be handed on.
+class StopList {
+ public:
+  void addCabin(int floor) { cabin_.insert(floor); }
+  void addHall(int floor) { hall_.insert(floor); }
+  bool empty() const { return cabin_.empty() && hall_.empty(); }
+  bool has(int floor) const { return cabin_.count(floor) > 0 || hall_.count(floor) > 0; }
+
+  // True if any stop lies strictly beyond `floor` in `direction` (+1 up, -1 down).
+  bool anyBeyond(int floor, int direction) const {
+    for (int f : all()) {
+      if ((f - floor) * direction > 0) return true;
+    }
+    return false;
+  }
+
+  // Serving a floor clears it for both kinds of request.
+  void serve(int floor) {
+    cabin_.erase(floor);
+    hall_.erase(floor);
+  }
+
+  std::vector<int> all() const {
+    std::set<int> merged(cabin_);
+    merged.insert(hall_.begin(), hall_.end());
+    return std::vector<int>(merged.begin(), merged.end());
+  }
+
+  std::vector<int> takeHall() {
+    std::vector<int> taken(hall_.begin(), hall_.end());
+    hall_.clear();
+    return taken;
+  }
+  void dropCabin() { cabin_.clear(); }
+
+ private:
+  std::set<int> cabin_;
+  std::set<int> hall_;
+};
+c:["$","$L1a",null,{"bundle":{"id":"elevator-system","title":"Elevator system","level":"SDE2","parMinutes":60,"patterns":["State","Strategy"],"requirements":[{"id":"R-validate","text":"A hall call needs a real floor (InvalidFloor) and a direction that exists there: Up from the top floor and Down from floor 0 return InvalidDirection. selectFloor returns UnknownElevator for a car that does not exist and InvalidFloor for a floor that does not. A refused request changes nothing.","phase":"base","hidden":true},{"id":"R-start","text":"Floors are numbered from 0 and cars from 0. Every car starts idle at floor 0 with no stops.","phase":"base","hidden":false},{"id":"R-dispatch","text":"A hall call is given to one car at once: the car with the fewest floors between it and the call, measured from where it is now, whether or not it is busy. Ties go to the lowest car id.","phase":"base","hidden":true},{"id":"R-move","text":"On each step() a car with something to do moves exactly one floor. A car with nothing to do stays where it is.","phase":"base","hidden":false},{"id":"R-doors","text":"When a car reaches a floor it must stop at, it serves that stop and its doors open on that same tick (state DoorsOpen). The doors stay open for that one tick; the next step() closes them and the car does not move on that tick. A hall or cabin request for the floor where a car already stands opens its doors on the next step. A floor requested twice is served once.","phase":"base","hidden":true},{"id":"R-sweep","text":"A car keeps the direction of its last move (initially up) while any stop is ahead of it, serving stops in passing in floor order, and reverses only when nothing is left ahead. It never turns back for a nearer stop behind it.","phase":"base","hidden":true},{"id":"R-service","text":"Storm 1: staff can take a car out of service and bring it back. Taking a car out stops it where it is, drops its cabin stops, and gives its hall calls to the nearest cars still in service (same rule as R-dispatch). Hall calls never go to a car out of service, and selectFloor on one returns OutOfService. The last car in service cannot be removed (CannotRemoveLastCar), removing a car already out is Ok, and unknown cars return UnknownElevator. A car returned to service is idle at the floor where it stopped; returning a car that is in service changes nothing.","phase":"storm1","hidden":true}],"brief":"# Elevator system\n\nYou are writing the control software of a bank of elevators in an office building. People press a **hall button** on a floor to call a car, and press **floor buttons** inside a car to say where they are going. The software decides which car answers each call and how every car moves.\n\nWhat you know so far:\n\n- The building has several floors and several cars.\n- A hall call says which floor and which way the person wants to go.\n- Once inside, a rider picks a destination floor.\n- Cars move one floor at a time and open their doors where they stop.\n\nYour task: design and implement it behind the `elev::ElevatorSystem` interface in `api.h`. Time is simulated: nothing moves until `step()` is called. The hidden tests call only that interface. Ask the interviewer questions first: the brief is deliberately incomplete.\n","editorial":"$1b","clarify":[{"id":"q-choose","text":"Which car answers a hall call, and when is that decided?","answer":"Decide immediately, when the button is pressed: the car with the fewest floors between it and the call, measured from where it is right now (busy or not). Ties go to the lowest car id.","reveals":["R-dispatch"],"quality":"essential"},{"id":"q-order","text":"In what order does a car visit its stops?","answer":"Like a real elevator: it keeps going the way it was going while there is anything ahead, serving stops in passing, and turns around only when nothing is left ahead. It starts out heading up.","reveals":["R-sweep"],"quality":"essential"},{"id":"q-doors","text":"What happens when a car arrives? Do the doors take time?","answer":"The doors open on the tick it arrives and stay open for one tick. The next tick they close, and the car does not move on that tick. Pressing a button for the floor where a car already stands opens its doors on the next step.","reveals":["R-doors"],"quality":"essential"},{"id":"q-future","text":"Will cars ever be unavailable, or will the rules for choosing a car change?","answer":"Good question. Maintenance will soon need to take a car out of service, and the dispatch rules will keep changing. Details arrive with the change.","reveals":["R-service"],"quality":"essential"},{"id":"q-invalid","text":"What counts as an invalid request?","answer":"A floor outside the building, a car that does not exist, and a direction that is impossible (up from the top floor, down from the ground floor). Refusals change nothing.","reveals":["R-validate"],"quality":"useful"},{"id":"q-time","text":"Is time real or simulated, and how long does a floor take?","answer":"Simulated. Nothing moves until step() is called, and one step is one tick: a car moves one floor per tick.","reveals":[],"quality":"useful"},{"id":"q-direction","text":"Does a car have to respect the direction a rider asked for?","answer":"Not in this version: a hall call is just a stop on the answering car. (A real controller would; say what you would change.)","reveals":[],"quality":"useful"},{"id":"q-capacity","text":"Do cars have a weight or passenger limit?","answer":"No. Assume a car can always take everyone.","reveals":[],"quality":"useful"},{"id":"q-gui","text":"Is there a floor display or a panel inside the cars to design?","answer":"No UI. Only the interface in api.h is tested.","reveals":[],"quality":"noise"},{"id":"q-express","text":"Should some cars be express cars or serve only some floors?","answer":"Not now. Do not make it painful to add later.","reveals":[],"quality":"noise"},{"id":"q-power","text":"Do requests have to survive a power cut?","answer":"No. In memory for this exercise.","reveals":[],"quality":"noise"}],"rubric":[{"id":"res-car","text":"Knows one car's floor, heading and stops, and how it sweeps","phase":"base","owners":["Car","Elevator","ElevatorCar","Cab"]},{"id":"res-mode","text":"Decides what a car does on a tick at this stage of its life, with one place per stage","phase":"base","owners":["CarMode","CarState","ElevatorState","ActiveMode","DoorsOpenMode"]},{"id":"res-dispatch","text":"Chooses which car answers a hall call, as a replaceable policy","phase":"base","owners":["Dispatcher","DispatchStrategy","NearestCarDispatcher","SchedulingStrategy"]},{"id":"res-fleet","text":"Owns the cars and knows which ones may take work","phase":"base","owners":["Fleet","Bank","ElevatorBank","Controller","CarPool"]},{"id":"res-service","text":"Knows what taking a car out of service changes, without editing the other stages or the policy","phase":"storm1","owners":["OutOfServiceMode","OutOfServiceState","ServiceMode"]}],"followups":[{"level":"SDE2","question":"Why is the dispatch rule a separate class instead of a method on the system?","answer":"Because it is the part that gets tuned: nearest car, zoning by floor range, least-loaded, time-of-day. Behind a small interface it can be swapped, tested alone with fake cars, and replaced without touching movement or doors. For a single fixed rule a private method is honest and smaller; the seam earns its keep once a second rule is likely, which the interviewer has told you it is."},{"level":"SDE2","question":"A car is at floor 5 heading up with stops at 7 and 2. Which does it visit first and why?","answer":"Floor 7, then 2. Heading up with a stop ahead, it keeps going and turns around only when nothing is left ahead. Going to 2 first would drag the rider for 7 back and forth, and a busy building would see cars oscillating. The cost is that the rider for 2 may wait longer; this is the SCAN idea from disk scheduling, and the sweep avoids starving far stops."},{"level":"Senior","question":"Your dispatcher uses distance only. Where does that go wrong, and what would you change?","answer":"It ignores direction and load: a car passing the floor in the wrong direction looks close but will not stop for you for a while, and a full car looks as good as an empty one. A better cost is the estimated time until the car can serve the call (stops before it, direction, door time). That means the Dispatcher interface takes the hall direction and each car exposes its remaining route, which is why I kept cars behind an interface the policy can read."},{"level":"Senior","question":"Walk through taking a car out of service while a rider is inside it.","answer":"In this version the cabin stops are dropped and the car stops where it is; real systems finish the trip to the next floor, open the doors and then retire. The ordering matters either way: mark the car unavailable first so reassignment cannot pick it, then give its hall calls to the others. The tests pin that new calls skip it and old calls move."},{"level":"Senior","question":"How would you make this safe when the buttons and the clock tick run on different threads?","answer":"Put everything behind one mutex or, better, a single-threaded event loop that receives events (HallCall, CabButton, Tick, ServiceChange) from a queue. The invariant spans the stops of several cars, because reassignment moves work between them, so per-car locks invite deadlock. An event queue also gives you replay and deterministic tests."},{"level":"Staff","question":"A 60-floor tower has 12 cars in banks. What changes?","answer":"Dispatch becomes the main problem. Destination dispatch (riders enter the floor at the lobby, the controller groups them) beats nearest-car for throughput, and zoning splits low, mid and high banks. Cars become independently failing hardware with their own controllers, so the central dispatcher needs heartbeats, timeouts and the ability to reassign calls when a car stops responding. The per-car mode machine survives; the policy and the fault handling are what grow."}],"apiHeader":"$1c","phaseApis":{"storm1":"#pragma once\n// Change Storm 1 lets staff take a car out of service. Everything from api.h still holds, and\n// makeElevatorSystem() keeps working as before. Only systems made by makeServiceableElevators() have the new operations.\n#include \"api.h\"\n\nnamespace elev {\n\nclass ServiceableElevators : public ElevatorSystem {\n public:\n  virtual Status setOutOfService(int elevator) = 0;\n  virtual Status returnToService(int elevator) = 0;\n};\n\nstd::unique_ptr<ServiceableElevators> makeServiceableElevators(int floors, int elevators);\n\n}  // namespace elev\n"},"phases":["base","storm1"],"tests":{"base":[{"path":"elevator_base.cpp","content":"$1d"}],"storm1":[{"path":"elevator_storm1.cpp","content":"$1e"}]},"reference":[{"path":"car.h","content":"$1f"},{"path":"car_mode.h","content":"#pragma once\n#include \"api.h\"\n\nclass Car;\n\n// One class per stage of a car's life. A mode decides what the car does on a tick and what it becomes next.\n// Modes hold no data (the car does), so a single shared instance of each is enough.\nclass CarMode {\n public:\n  virtual ~CarMode() = default;\n  virtual void step(Car& car) const = 0;\n};\n\nconst CarMode& activeMode();        // idle or travelling: serve a stop here, or move towards the next one\nconst CarMode& doorsOpenMode();     // doors are open for exactly one tick\nconst CarMode& outOfServiceMode();  // parked; ignores time\n"},{"path":"dispatcher.h","content":"#pragma once\n#include <cstdlib>\n#include <vector>\n\n#include \"car.h\"\n\n// The scheduling policy: which of these cars answers a hall call? Candidates arrive in id order and never\n// include a car that is out of service. A different policy (zoning, load balancing, destination dispatch)\n// is a new subclass.\nclass Dispatcher {\n public:\n  virtual ~Dispatcher() = default;\n  virtual Car* choose(const std::vector<Car*>& candidates, int floor) const = 0;\n};\n\n// The closest car by floors from where it is now; ties go to the lowest id.\nclass NearestCarDispatcher : public Dispatcher {\n public:\n  Car* choose(const std::vector<Car*>& candidates, int floor) const override {\n    Car* best = nullptr;\n    for (Car* car : candidates) {\n      if (best == nullptr || std::abs(car->floor() - floor) < std::abs(best->floor() - floor)) best = car;\n    }\n    return best;\n  }\n};\n"},{"path":"elevator_system.cpp","content":"#include \"elevator_system.h\"\n\nstd::unique_ptr<elev::ElevatorSystem> elev::makeElevatorSystem(int floors, int elevators) {\n  return std::make_unique<ElevatorSystemImpl>(floors, elevators);\n}\n\nstd::unique_ptr<elev::ServiceableElevators> elev::makeServiceableElevators(int floors, int elevators) {\n  return std::make_unique<ElevatorSystemImpl>(floors, elevators);\n}\n"},{"path":"elevator_system.h","content":"$20"},{"path":"fleet.h","content":"$21"},{"path":"modes.h","content":"#pragma once\n#include \"car.h\"\n\nclass ActiveMode : public CarMode {\n public:\n  void step(Car& car) const override {\n    if (car.stops().empty()) {\n      car.goIdle();\n      return;\n    }\n    if (!car.stops().has(car.floor())) car.moveOneFloor();\n    if (car.stops().has(car.floor())) car.serveStopHere();\n  }\n};\n\n// The doors close; no movement happens on the closing tick.\nclass DoorsOpenMode : public CarMode {\n public:\n  void step(Car& car) const override { car.goIdle(); }\n};\n\n// Storm 1: a new class. Active and DoorsOpen are not edited.\nclass OutOfServiceMode : public CarMode {\n public:\n  void step(Car&) const override {}\n};\n\ninline const CarMode& activeMode() {\n  static const ActiveMode mode;\n  return mode;\n}\ninline const CarMode& doorsOpenMode() {\n  static const DoorsOpenMode mode;\n  return mode;\n}\ninline const CarMode& outOfServiceMode() {\n  static const OutOfServiceMode mode;\n  return mode;\n}\n"},{"path":"stop_list.h","content":"$22"}],"driver":{"path":"driver.cpp","content":"#define BP_TEST_MAIN\n#include \"bp_test.h\"\n","readOnly":true}}}]

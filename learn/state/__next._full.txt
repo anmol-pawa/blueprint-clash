@@ -1,0 +1,112 @@
+1:"$Sreact.fragment"
+2:"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js"
+3:I[39756,["$2"],"default"]
+4:I[37457,["$2"],"default"]
+5:"/blueprint-clash/_next/static/chunks/2n5qeheznvl4u.js"
+6:I[22016,["$2","$5"],""]
+7:I[64576,["$2"],"PwaRegister"]
+d:I[97367,["$2"],"OutletBoundary"]
+e:"$Sreact.suspense"
+10:"ViewportBoundary"
+11:I[97367,["$2"],"$10"]
+13:"MetadataBoundary"
+14:I[97367,["$2"],"$13"]
+16:I[68027,["$2"],"default",1]
+:HL["/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","style"]
+:HL["/blueprint-clash/_next/static/media/07c7676b89ed2778-s.p.2bn3s6zvc0dyp.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/blueprint-clash/_next/static/media/486a103cae33528f-s.p.309ilb452anpd.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/blueprint-clash/_next/static/media/53897e768d329f66-s.p.3t6q91iet4nsy.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+9:X
+b:[["children",{"s":"__PAGE__","h":512,"d":{"r":["$","$1","c",{"children":["$Lc",[["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/3s1mctvsetnbs.js","async":true,"nonce":"$undefined"}]],["$","$Ld",null,{"children":["$","$e",null,{"name":"Next.MetadataOutlet","children":"$@f"}]}]]}],"p":false,"v":null}}]]
+a:[["children",{"s":{"n":"id","t":"d","k":"state","s":[]},"h":66048,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],"p":false,"v":"$9"},"c":"$Qb"}]]
+8:[["children",{"s":"learn","h":131584,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],"p":false,"v":"$9"},"c":"$Qa"}]]
+0:{"P":null,"c":["","learn","state",""],"q":"","i":false,"t":{"t":{"s":"","h":131600,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}],["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js","async":true,"nonce":"$undefined"}]],["$","html",null,{"lang":"en","className":"r7opxW_variable auY9QW_variable u-EJdW_variable h-full","children":["$","body",null,{"className":"min-h-full","children":[["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","main",null,{"className":"flex min-h-dvh flex-col items-center justify-center gap-4 px-4 text-center","children":[["$","div",null,{"className":"font-display text-5xl text-[var(--accent)]","children":"404"}],["$","p",null,{"className":"text-white/60","children":"This room is not on the blueprint yet."}],["$","$L6",null,{"href":"/","className":"text-sm text-white/80 underline","children":"Back to the title screen"}]]}],[]],"forbidden":"$undefined","unauthorized":"$undefined"}],["$","$L7",null,{}]]}]}]]}],"p":false,"v":null},"c":"$Q8"},"h":{"r":["$","$1","h",{"children":[null,["$","$L11",null,{"children":"$L12"}],["$","$L14",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$e",null,{"name":"Next.Metadata","children":"$L15"}]}],null]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"p":false,"v":null}},"m":"$undefined","G":["$16",[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]]],"S":true,"r":"$undefined","s":"$undefined","a":"$undefined","l":"$undefined","p":"$undefined","d":"$undefined","b":"U2e90Mr6iueJEoRJLmd0s"}
+17:"/blueprint-clash/_next/static/chunks/3s1mctvsetnbs.js"
+18:I[25039,["$2","$17"],"LessonClient"]
+9:C
+19:T856,#include <iostream>
+#include <memory>
+#include <utility>
+
+// Each handler does its work and returns the next state, or nullptr to stay where it is.
+// Returning the next state (instead of the state replacing itself) means a state is never destroyed mid-call.
+class State {
+public:
+    virtual ~State() = default;
+    virtual std::unique_ptr<State> onPlay() const = 0;
+    virtual std::unique_ptr<State> onPause() const = 0;
+};
+
+class StoppedState : public State {
+public:
+    std::unique_ptr<State> onPlay() const override;
+    std::unique_ptr<State> onPause() const override;
+};
+
+class PlayingState : public State {
+public:
+    std::unique_ptr<State> onPlay() const override;
+    std::unique_ptr<State> onPause() const override;
+};
+
+class PausedState : public State {
+public:
+    std::unique_ptr<State> onPlay() const override;
+    std::unique_ptr<State> onPause() const override;
+};
+
+std::unique_ptr<State> StoppedState::onPlay() const {
+    std::cout << "start\n";
+    return std::make_unique<PlayingState>();
+}
+std::unique_ptr<State> StoppedState::onPause() const {
+    std::cout << "cannot pause\n";
+    return nullptr;
+}
+
+std::unique_ptr<State> PlayingState::onPlay() const {
+    std::cout << "already playing\n";
+    return nullptr;
+}
+std::unique_ptr<State> PlayingState::onPause() const {
+    std::cout << "pause\n";
+    return std::make_unique<PausedState>();
+}
+
+std::unique_ptr<State> PausedState::onPlay() const {
+    std::cout << "resume\n";
+    return std::make_unique<PlayingState>();
+}
+std::unique_ptr<State> PausedState::onPause() const {
+    std::cout << "already paused\n";
+    return nullptr;
+}
+
+// The context only forwards. It has no switch and no mode flag.
+class Player {
+public:
+    Player() : state_(std::make_unique<StoppedState>()) {}
+    void play() { change(state_->onPlay()); }
+    void pause() { change(state_->onPause()); }
+
+private:
+    void change(std::unique_ptr<State> next) {
+        if (next) state_ = std::move(next);
+    }
+
+    std::unique_ptr<State> state_;
+};
+
+int main() {
+    Player player;
+    player.pause();
+    player.play();
+    player.pause();
+    player.play();
+    player.play();
+}
+c:["$","$L18",null,{"lesson":{"id":"state","level":"L5","title":"State: let the current mode decide what a call does","oneLiner":"Replace repeated switches on a mode flag with one object per state, each deciding its own behaviour and next state.","cardTopic":"L5.state","intro":"A State pattern models an object whose **behaviour depends on a mode**, such as a media player that is stopped, playing or paused. Instead of every method switching on an enum, each mode is a class implementing the same interface. The context (`Player`) forwards calls to its current state object, and the state decides what to do and which state comes next.\n\nThe payoff is that **a state's rules live in one place** and an illegal action is handled where the state is defined. Adding a state adds a class; the cost is that the transition graph is now spread across classes, so keep a diagram or table beside it.\n\nCompared with Strategy, the code looks the same; the difference is **who changes it and why**. A Strategy is injected from outside and stays put. A State is replaced by the object itself as events happen. A small machine with two or three states and simple rules is often clearer as an enum and a transition table, and that is a perfectly good answer.","smell":"- The same `switch (mode_)` repeated in every public method.\n- Adding a state means editing every method, and it is easy to forget one.\n- Boolean flags that must be kept consistent (`isPlaying_`, `isPaused_`).\n- Illegal transitions guarded by scattered `if` checks.","before":"#include <iostream>\n\nenum class Mode { Stopped, Playing, Paused };\n\n// Every method repeats the switch. A fourth mode touches both of them (and any we add later).\nclass Player {\npublic:\n    void play() {\n        switch (mode_) {\n            case Mode::Stopped: std::cout << \"start\\n\"; mode_ = Mode::Playing; break;\n            case Mode::Playing: std::cout << \"already playing\\n\"; break;\n            case Mode::Paused: std::cout << \"resume\\n\"; mode_ = Mode::Playing; break;\n        }\n    }\n\n    void pause() {\n        switch (mode_) {\n            case Mode::Stopped: std::cout << \"cannot pause\\n\"; break;\n            case Mode::Playing: std::cout << \"pause\\n\"; mode_ = Mode::Paused; break;\n            case Mode::Paused: std::cout << \"already paused\\n\"; break;\n        }\n    }\n\nprivate:\n    Mode mode_ = Mode::Stopped;\n};\n\nint main() {\n    Player player;\n    player.pause();\n    player.play();\n    player.pause();\n    player.play();\n    player.play();\n}\n","after":"$19","beforeOutput":"cannot pause\nstart\npause\nresume\nalready playing","afterOutput":"cannot pause\nstart\npause\nresume\nalready playing","refactorNotes":"Behaviour is identical (the output is the same, which is the point of a refactor), but each state's rules now sit in one class. A `SeekingState` is a new class plus the transitions that lead to it; `Player` is untouched. The handlers return the next state rather than calling back into the context, so a state is never destroyed while its own method is running, a classic C++ bug when a state does `context.setState(...)` and then touches `this`.\n\n**Trade-offs:** three classes and an allocation per transition replace two switches. For stateless states you can share singletons instead of allocating. The transition graph is no longer visible in one function, so document it (a table or diagram). With only a few states and rare change, the enum plus `switch` is easier to read, and a table-driven machine (`state x event -> next`) scales better when there are many states and few behaviours.","interviewSignal":"Say \"the allowed actions depend on the current mode, and that mode changes as events happen\". Draw the state diagram first, then map each state to a class. Name the object-destroyed-during-its-own-call hazard and how you avoid it. Senior signal: you compare State with Strategy (who triggers the change), with an enum plus table (fewer files, central graph), and note where state machines show up in the problems: vending machine, elevator, parking lot, ATM, circuit breaker.","overApplication":"Two states and a bool rarely deserve a class hierarchy. Splitting a small machine across many files hides the whole picture, and states that share most of their code end up duplicating it or inheriting awkwardly. If transitions are driven by data (a workflow loaded from configuration) a table is more honest than compiled classes. And do not use State to hide a boolean that is really a validation rule on a single field."},"nextId":"template-method"}]
+12:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1, viewport-fit=cover"}],["$","meta","2",{"name":"theme-color","content":"#0a1530"}]]
+1a:I[27201,["$2"],"IconMark"]
+f:null
+15:[["$","title","0",{"children":"State: let the current mode decide what a call does: Blueprint Clash"}],["$","meta","1",{"name":"description","content":"A creature-tactics RPG that teaches low-level design in C++ and high-level system design, from fundamentals to big-tech interview level."}],["$","link","2",{"rel":"manifest","href":"/blueprint-clash/manifest.webmanifest","crossOrigin":"$undefined"}],["$","meta","3",{"name":"mobile-web-app-capable","content":"yes"}],["$","meta","4",{"name":"apple-mobile-web-app-title","content":"Blueprint Clash"}],["$","meta","5",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","link","6",{"rel":"icon","href":"/blueprint-clash/icon.png?icon.27re_xscs-jmw.png","sizes":"256x256","type":"image/png"}],["$","link","7",{"rel":"apple-touch-icon","href":"/blueprint-clash/apple-icon.png?apple-icon.2rac1w0yc3rju.png","sizes":"180x180","type":"image/png"}],["$","$L1a","8",{}]]

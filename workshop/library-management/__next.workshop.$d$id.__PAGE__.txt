@@ -1,0 +1,422 @@
+1:"$Sreact.fragment"
+2:"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js"
+3:I[39756,["$2"],"default"]
+4:I[37457,["$2"],"default"]
+5:"/blueprint-clash/_next/static/chunks/2n5qeheznvl4u.js"
+6:I[22016,["$2","$5"],""]
+7:I[64576,["$2"],"PwaRegister"]
+10:"/blueprint-clash/_next/static/chunks/2uk3wcjwqg0tl.js"
+11:"/blueprint-clash/_next/static/chunks/1zdu7yjl8efu4.js"
+12:I[65612,["$2","$10","$11"],"WorkshopClient"]
+1e:"ViewportBoundary"
+1f:I[97367,["$2"],"$1e"]
+20:"MetadataBoundary"
+21:I[97367,["$2"],"$20"]
+22:"$Sreact.suspense"
+23:I[27201,["$2"],"IconMark"]
+:HL["/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","style"]
+9:X
+c:X
+c:C
+13:Te6b,# Editorial: Library management
+
+## Requirements
+Functional: register books (with copy counts) and members, borrow, return, search by author. Hidden until asked: a three-book limit, one copy of a title per member, and specific statuses for every failure (a failed call changes nothing). Non-goals: persistence, UI, due dates (but keep them cheap to add).
+
+**Change Storm 1, membership tiers:** Premium members may hold 5 books, Basic members 3; staff can change a tier; demoting a member who holds more than the new limit is refused (`LimitReached`, nothing changes). It is revealable by asking whether different kinds of members will ever get different rules.
+
+## Reference design
+- `Catalog` owns books and their shelf counts; it is the only place a count changes.
+- `Member` owns its id, name and the set of book ids it holds.
+- `LoanPolicy` (abstract) answers "may this member borrow one more?"; `FixedLimitPolicy(3)` is the rule here.
+- `LibraryService` implements `lib::Library`. It validates, asks the policy, then mutates: check everything first, change state last.
+
+**Storm 1 in the reference:** a new `TierLimitPolicy` (one class) replaces `FixedLimitPolicy` in the factory; `Member` gains a tier; the service gains `setTier` and `tierOf` via the new `TieredLibrary` interface. `borrow()` is untouched, which is the point: the seam existed before the requirement did. The honest cost: `Member`, `LibraryService` and the factory still change, so the OCP score is high but not 100%.
+
+Ownership: the service owns catalog, members and a `unique_ptr<LoanPolicy>`. No raw `new`, no shared state outside the service.
+
+## Alternatives
+- **One big `Library` class with two maps** is the fastest to type and passes the base tests. It is also where the bugs in `bad/` come from, and it turns every later requirement into an edit of the same method. Fine for a 20-minute warm-up, weak in a 90-minute round.
+- **A `Loan` entity** (member, book, date) instead of a set of ids is better the moment due dates arrive; for the base phase it is one class too many. Say so out loud and move on.
+- **A per-title `Book` object holding its own copy count** is reasonable too; the Catalog-owns-counts version keeps the invariant in one place.
+
+## Trade-offs
+Tiers as an enum on `Member` plus a limit table is the smallest thing that works. If tiers later carry behaviour beyond a number (loan length, fines, reservations), promote the tier to a polymorphic `MembershipPlan` object; do it when the second behaviour appears, not before.
+
+Policy as a class costs one interface and one file; it buys the Open/Closed seam where the interviewer is most likely to push. A constant is cheaper and correct if limits never vary. Status codes instead of exceptions keep call sites explicit and work in the browser toolchain (no exception runtime); the cost is that a caller can ignore a result, which `[[nodiscard]]` on the status type would catch in a real codebase.
+
+## What breaks at 10x
+At 10x the data (tens of thousands of books) the maps are still fine and author search becomes the first scan worth indexing (`unordered_map<author, set<id>>`). At 10x the callers (concurrent staff terminals) the lack of locking becomes the issue: see the follow-up on thread safety.
+
+## Level signals
+- **SDE2:** correct behaviour, clear class split, asks about limits and duplicates, tests its own edge cases.
+- **Senior:** names the extension seam (policy), validates before mutating, discusses concurrency and due dates unprompted, keeps the design small.
+- **Staff:** frames what is likely to change and what is not, ties the in-memory design to the multi-branch future, and states what they deliberately did not build.
+14:T5a0,#pragma once
+// Public API for the Library problem. The hidden tests only use what is declared here.
+// You implement lib::makeLibrary() (in any of your .cpp files); everything behind it is your design.
+#include <memory>
+#include <string>
+#include <vector>
+
+namespace lib {
+
+enum class Status {
+  Ok,
+  DuplicateId,
+  NoSuchBook,
+  NoSuchMember,
+  NoCopiesAvailable,
+  LimitReached,
+  AlreadyBorrowed,
+  NotBorrowed,
+};
+
+class Library {
+ public:
+  virtual ~Library() = default;
+
+  // Adds a title with `copies` physical copies (copies >= 1).
+  virtual Status addBook(const std::string& bookId, const std::string& title, const std::string& author, int copies) = 0;
+  virtual Status addMember(const std::string& memberId, const std::string& name) = 0;
+
+  virtual Status borrow(const std::string& memberId, const std::string& bookId) = 0;
+  virtual Status giveBack(const std::string& memberId, const std::string& bookId) = 0;
+
+  // Copies currently on the shelf; -1 if the book is unknown.
+  virtual int availableCopies(const std::string& bookId) const = 0;
+  // Ids of the books the member holds, sorted ascending. Empty for unknown members.
+  virtual std::vector<std::string> loansOf(const std::string& memberId) const = 0;
+  // Ids of books whose author matches exactly, sorted ascending.
+  virtual std::vector<std::string> findByAuthor(const std::string& author) const = 0;
+};
+
+std::unique_ptr<Library> makeLibrary();
+
+}  // namespace lib
+15:Tccb,#include "api.h"
+#include "bp_test.h"
+
+using lib::Status;
+
+namespace {
+std::unique_ptr<lib::Library> shelf() {
+  auto l = lib::makeLibrary();
+  l->addBook("b1", "Dune", "Herbert", 1);
+  l->addBook("b2", "Emma", "Austen", 2);
+  l->addBook("b3", "Persuasion", "Austen", 1);
+  l->addBook("b4", "Ulysses", "Joyce", 1);
+  l->addMember("m1", "Ann");
+  l->addMember("m2", "Bo");
+  return l;
+}
+}  // namespace
+
+TEST(Registration, DuplicateIdsAreRefused) {
+  auto l = shelf();
+  EXPECT_EQ(l->addBook("b1", "Other", "X", 1), Status::DuplicateId);
+  EXPECT_EQ(l->addMember("m1", "Other"), Status::DuplicateId);
+  EXPECT_EQ(l->availableCopies("b1"), 1);
+}
+
+TEST(Registration, UnknownBookHasNoCopies) {
+  auto l = shelf();
+  EXPECT_EQ(l->availableCopies("nope"), -1);
+}
+
+TEST(Borrowing, BorrowTakesACopy) {
+  auto l = shelf();
+  EXPECT_EQ(l->borrow("m1", "b2"), Status::Ok);
+  EXPECT_EQ(l->availableCopies("b2"), 1);
+  ASSERT_EQ(l->loansOf("m1").size(), 1u);
+  EXPECT_EQ(l->loansOf("m1")[0], "b2");
+}
+
+TEST(Borrowing, ReturnRestoresCopy) {
+  auto l = shelf();
+  l->borrow("m1", "b1");
+  EXPECT_EQ(l->availableCopies("b1"), 0);
+  EXPECT_EQ(l->giveBack("m1", "b1"), Status::Ok);
+  EXPECT_EQ(l->availableCopies("b1"), 1);
+  EXPECT_TRUE(l->loansOf("m1").empty());
+}
+
+TEST(Borrowing, NoCopiesLeft) {
+  auto l = shelf();
+  EXPECT_EQ(l->borrow("m1", "b1"), Status::Ok);
+  EXPECT_EQ(l->borrow("m2", "b1"), Status::NoCopiesAvailable);
+  EXPECT_TRUE(l->loansOf("m2").empty());
+}
+
+TEST(Borrowing, UnknownMemberOrBook) {
+  auto l = shelf();
+  EXPECT_EQ(l->borrow("zz", "b1"), Status::NoSuchMember);
+  EXPECT_EQ(l->borrow("m1", "zz"), Status::NoSuchBook);
+  EXPECT_EQ(l->giveBack("zz", "b1"), Status::NoSuchMember);
+  EXPECT_EQ(l->giveBack("m1", "zz"), Status::NoSuchBook);
+  EXPECT_EQ(l->availableCopies("b1"), 1);
+}
+
+TEST(Borrowing, ReturningWhatYouDoNotHold) {
+  auto l = shelf();
+  EXPECT_EQ(l->giveBack("m1", "b1"), Status::NotBorrowed);
+  EXPECT_EQ(l->availableCopies("b1"), 1);
+}
+
+TEST(Limits, FourthBookIsRefused) {
+  auto l = shelf();
+  EXPECT_EQ(l->borrow("m1", "b1"), Status::Ok);
+  EXPECT_EQ(l->borrow("m1", "b2"), Status::Ok);
+  EXPECT_EQ(l->borrow("m1", "b3"), Status::Ok);
+  EXPECT_EQ(l->borrow("m1", "b4"), Status::LimitReached);
+  EXPECT_EQ(l->availableCopies("b4"), 1);
+  EXPECT_EQ(l->loansOf("m1").size(), 3u);
+}
+
+TEST(Limits, SameBookTwiceIsRefused) {
+  auto l = shelf();
+  EXPECT_EQ(l->borrow("m1", "b2"), Status::Ok);
+  EXPECT_EQ(l->borrow("m1", "b2"), Status::AlreadyBorrowed);
+  EXPECT_EQ(l->availableCopies("b2"), 1);
+}
+
+TEST(Limits, ReturnFreesALoanSlot) {
+  auto l = shelf();
+  l->borrow("m1", "b1");
+  l->borrow("m1", "b2");
+  l->borrow("m1", "b3");
+  EXPECT_EQ(l->giveBack("m1", "b1"), Status::Ok);
+  EXPECT_EQ(l->borrow("m1", "b4"), Status::Ok);
+  EXPECT_EQ(l->borrow("m2", "b1"), Status::Ok);
+}
+
+TEST(Search, ByAuthorIsExactAndSorted) {
+  auto l = shelf();
+  auto austen = l->findByAuthor("Austen");
+  ASSERT_EQ(austen.size(), 2u);
+  EXPECT_EQ(austen[0], "b2");
+  EXPECT_EQ(austen[1], "b3");
+  EXPECT_TRUE(l->findByAuthor("austen").empty());
+}
+
+TEST(Search, LoansAreSorted) {
+  auto l = shelf();
+  l->borrow("m1", "b3");
+  l->borrow("m1", "b1");
+  auto loans = l->loansOf("m1");
+  ASSERT_EQ(loans.size(), 2u);
+  EXPECT_EQ(loans[0], "b1");
+  EXPECT_EQ(loans[1], "b3");
+}
+16:T898,#include "api_storm1.h"
+#include "bp_test.h"
+
+using lib::Status;
+using lib::Tier;
+
+namespace {
+std::unique_ptr<lib::TieredLibrary> shelf() {
+  auto l = lib::makeTieredLibrary();
+  for (int i = 1; i <= 6; ++i) l->addBook("b" + std::to_string(i), "Title" + std::to_string(i), "Author", 1);
+  l->addMember("m1", "Ann");
+  l->addMember("m2", "Bo");
+  return l;
+}
+}  // namespace
+
+TEST(Tiers, NewMembersAreBasic) {
+  auto l = shelf();
+  EXPECT_TRUE(l->tierOf("m1") == Tier::Basic);
+  EXPECT_TRUE(l->tierOf("nobody") == Tier::Basic);
+}
+
+TEST(Tiers, PremiumMayHoldFive) {
+  auto l = shelf();
+  EXPECT_EQ(l->setTier("m1", Tier::Premium), Status::Ok);
+  for (int i = 1; i <= 5; ++i) EXPECT_EQ(l->borrow("m1", "b" + std::to_string(i)), Status::Ok);
+  EXPECT_EQ(l->borrow("m1", "b6"), Status::LimitReached);
+  EXPECT_EQ(l->loansOf("m1").size(), 5u);
+}
+
+TEST(Tiers, BasicStillHoldsThree) {
+  auto l = shelf();
+  l->setTier("m2", Tier::Premium);
+  for (int i = 1; i <= 3; ++i) EXPECT_EQ(l->borrow("m1", "b" + std::to_string(i)), Status::Ok);
+  EXPECT_EQ(l->borrow("m1", "b4"), Status::LimitReached);
+}
+
+TEST(Tiers, UnknownMemberCannotBePromoted) {
+  auto l = shelf();
+  EXPECT_EQ(l->setTier("ghost", Tier::Premium), Status::NoSuchMember);
+}
+
+TEST(Tiers, DemotionBelowCurrentLoansIsRefused) {
+  auto l = shelf();
+  l->setTier("m1", Tier::Premium);
+  for (int i = 1; i <= 4; ++i) l->borrow("m1", "b" + std::to_string(i));
+  EXPECT_EQ(l->setTier("m1", Tier::Basic), Status::LimitReached);
+  EXPECT_TRUE(l->tierOf("m1") == Tier::Premium);
+  EXPECT_EQ(l->loansOf("m1").size(), 4u);
+}
+
+TEST(Tiers, DemotionAfterReturnsWorks) {
+  auto l = shelf();
+  l->setTier("m1", Tier::Premium);
+  for (int i = 1; i <= 4; ++i) l->borrow("m1", "b" + std::to_string(i));
+  l->giveBack("m1", "b1");
+  EXPECT_EQ(l->setTier("m1", Tier::Basic), Status::Ok);
+  EXPECT_TRUE(l->tierOf("m1") == Tier::Basic);
+  EXPECT_EQ(l->borrow("m1", "b5"), Status::LimitReached);
+}
+
+TEST(Tiers, BaseRulesStillApplyToPremium) {
+  auto l = shelf();
+  l->setTier("m1", Tier::Premium);
+  EXPECT_EQ(l->borrow("m1", "b1"), Status::Ok);
+  EXPECT_EQ(l->borrow("m1", "b1"), Status::AlreadyBorrowed);
+  EXPECT_EQ(l->borrow("m2", "b1"), Status::NoCopiesAvailable);
+}
+17:T46d,#pragma once
+#include <map>
+#include <string>
+#include <vector>
+
+// Owns the books and their shelf counts. The only place a count changes.
+class Catalog {
+ public:
+  bool add(const std::string& id, const std::string& title, const std::string& author, int copies) {
+    return books_.emplace(id, Book{title, author, copies}).second;
+  }
+  bool contains(const std::string& id) const { return books_.count(id) != 0; }
+  int available(const std::string& id) const {
+    auto it = books_.find(id);
+    return it == books_.end() ? -1 : it->second.onShelf;
+  }
+  // Precondition: available(id) > 0.
+  void takeCopy(const std::string& id) { --books_.at(id).onShelf; }
+  void returnCopy(const std::string& id) { ++books_.at(id).onShelf; }
+
+  std::vector<std::string> findByAuthor(const std::string& author) const {
+    std::vector<std::string> ids;
+    for (const auto& [id, book] : books_) {
+      if (book.author == author) ids.push_back(id);  // std::map iterates in id order
+    }
+    return ids;
+  }
+
+ private:
+  struct Book {
+    std::string title;
+    std::string author;
+    int onShelf;
+  };
+  std::map<std::string, Book> books_;
+};
+18:T95e,#include "library_service.h"
+
+using lib::Status;
+
+Status LibraryService::addBook(const std::string& bookId, const std::string& title, const std::string& author, int copies) {
+  return catalog_.add(bookId, title, author, copies) ? Status::Ok : Status::DuplicateId;
+}
+
+Status LibraryService::addMember(const std::string& memberId, const std::string& name) {
+  return members_.emplace(memberId, Member(memberId, name)).second ? Status::Ok : Status::DuplicateId;
+}
+
+Status LibraryService::borrow(const std::string& memberId, const std::string& bookId) {
+  auto m = members_.find(memberId);
+  if (m == members_.end()) return Status::NoSuchMember;
+  if (!catalog_.contains(bookId)) return Status::NoSuchBook;
+  Member& member = m->second;
+  if (member.holds(bookId)) return Status::AlreadyBorrowed;
+  if (catalog_.available(bookId) == 0) return Status::NoCopiesAvailable;
+  if (!policy_->mayBorrow(member)) return Status::LimitReached;
+  catalog_.takeCopy(bookId);
+  member.addLoan(bookId);
+  return Status::Ok;
+}
+
+Status LibraryService::giveBack(const std::string& memberId, const std::string& bookId) {
+  auto m = members_.find(memberId);
+  if (m == members_.end()) return Status::NoSuchMember;
+  if (!catalog_.contains(bookId)) return Status::NoSuchBook;
+  if (!m->second.holds(bookId)) return Status::NotBorrowed;
+  m->second.removeLoan(bookId);
+  catalog_.returnCopy(bookId);
+  return Status::Ok;
+}
+
+std::vector<std::string> LibraryService::loansOf(const std::string& memberId) const {
+  auto m = members_.find(memberId);
+  return m == members_.end() ? std::vector<std::string>{} : m->second.loans();
+}
+
+Status LibraryService::setTier(const std::string& memberId, lib::Tier tier) {
+  auto m = members_.find(memberId);
+  if (m == members_.end()) return Status::NoSuchMember;
+  // Demotion must not leave a member holding more than the new tier allows.
+  if (m->second.loanCount() > policy_->limitFor(tier)) return Status::LimitReached;
+  m->second.setTier(tier);
+  return Status::Ok;
+}
+
+lib::Tier LibraryService::tierOf(const std::string& memberId) const {
+  auto m = members_.find(memberId);
+  return m == members_.end() ? lib::Tier::Basic : m->second.tier();
+}
+
+std::unique_ptr<lib::TieredLibrary> lib::makeTieredLibrary() {
+  return std::make_unique<LibraryService>(std::make_unique<TierLimitPolicy>(3, 5));
+}
+
+std::unique_ptr<lib::Library> lib::makeLibrary() { return lib::makeTieredLibrary(); }
+19:T594,#pragma once
+#include <map>
+#include <memory>
+#include <string>
+
+#include "api_storm1.h"
+#include "catalog.h"
+#include "loan_policy.h"
+#include "member.h"
+
+// Coordinates borrow and return across catalog, members and policy.
+// Every operation validates first and mutates last, so a failed call changes nothing.
+class LibraryService : public lib::TieredLibrary {
+ public:
+  explicit LibraryService(std::unique_ptr<TierLimitPolicy> policy) : policy_(std::move(policy)) {}
+
+  lib::Status addBook(const std::string& bookId, const std::string& title, const std::string& author, int copies) override;
+  lib::Status addMember(const std::string& memberId, const std::string& name) override;
+  lib::Status borrow(const std::string& memberId, const std::string& bookId) override;
+  lib::Status giveBack(const std::string& memberId, const std::string& bookId) override;
+  lib::Status setTier(const std::string& memberId, lib::Tier tier) override;
+  lib::Tier tierOf(const std::string& memberId) const override;
+  int availableCopies(const std::string& bookId) const override { return catalog_.available(bookId); }
+  std::vector<std::string> loansOf(const std::string& memberId) const override;
+  std::vector<std::string> findByAuthor(const std::string& author) const override { return catalog_.findByAuthor(author); }
+
+ private:
+  Catalog catalog_;
+  std::map<std::string, Member> members_;
+  std::unique_ptr<TierLimitPolicy> policy_;
+};
+f:[["children",{"s":"__PAGE__","h":160,"d":{"r":["$","$1","c",{"children":[["$","$L12",null,{"bundle":{"id":"library-management","title":"Library management","level":"SDE2","parMinutes":45,"patterns":["Strategy (loan policy)"],"requirements":[{"id":"R-add","text":"Books (with several copies) and members can be registered; ids are unique.","phase":"base","hidden":false},{"id":"R-borrow","text":"Borrowing takes one copy off the shelf; returning puts it back.","phase":"base","hidden":false},{"id":"R-author","text":"Books can be found by author.","phase":"base","hidden":false},{"id":"R-limit","text":"A member may hold at most 3 books at once.","phase":"base","hidden":true},{"id":"R-once","text":"A member cannot hold two copies of the same book at the same time.","phase":"base","hidden":true},{"id":"R-errors","text":"Failures are reported with specific statuses, never by crashing; a failed call changes nothing.","phase":"base","hidden":true},{"id":"R-tier","text":"Storm 1: members have a tier. Premium members may hold 5 books, Basic members 3; staff can change a member's tier; demoting someone who holds more than the new limit is refused.","phase":"storm1","hidden":true}],"brief":"# Library management\n\nYou are building the core of a small public library's lending system. Staff register **books** and **members**; members **borrow** and **return** books; staff and members can look up what is on the shelf.\n\nWhat you know so far:\n\n- A book has an id, a title and an author. The library may own several copies of the same book.\n- A member has an id and a name.\n- A member can borrow a book if a copy is on the shelf, and can give it back later.\n- Anyone can search for books by author.\n\nYour task: design and implement it behind the `lib::Library` interface in `api.h`. The hidden tests call only that interface. Ask the interviewer questions first: the brief is deliberately incomplete.\n","editorial":"$13","clarify":[{"id":"q-limit","text":"Is there a cap on how many books one member can hold?","answer":"Yes: three at a time. A fourth borrow is refused.","reveals":["R-limit"],"quality":"essential"},{"id":"q-same","text":"Can a member borrow two copies of the same book?","answer":"No. One copy of a given title per member.","reveals":["R-once"],"quality":"essential"},{"id":"q-errors","text":"What should happen on invalid operations (unknown member, no copies left)?","answer":"Return a specific status. Nothing is thrown and nothing changes.","reveals":["R-errors"],"quality":"essential"},{"id":"q-copies","text":"Can the library own several copies of one title?","answer":"Yes. Each addBook call carries the copy count.","reveals":["R-add"],"quality":"useful"},{"id":"q-search","text":"Is author search exact or fuzzy?","answer":"Exact match on the author string, results sorted by book id.","reveals":["R-author"],"quality":"useful"},{"id":"q-tiers","text":"Will different kinds of members ever get different rules (for example staff, students, premium)?","answer":"Good question. Yes: membership tiers are coming. Premium members will be allowed more books, and staff will be able to change a member's tier. Details arrive with the change.","reveals":["R-tier"],"quality":"essential"},{"id":"q-due","text":"Do loans have due dates and fines?","answer":"Not now. Keep the design open to it, but do not build it.","reveals":[],"quality":"useful"},{"id":"q-scale","text":"How many books and members do we expect?","answer":"A branch library: thousands of books, hundreds of members. In-memory is fine.","reveals":[],"quality":"useful"},{"id":"q-ui","text":"Should I build a command-line or a web UI?","answer":"No UI. Only the interface in api.h is tested.","reveals":[],"quality":"noise"},{"id":"q-db","text":"Which database should I persist to?","answer":"None. Everything is in memory for this exercise.","reveals":[],"quality":"noise"},{"id":"q-lang","text":"May I use an external library for the data structures?","answer":"Standard library only.","reveals":[],"quality":"noise"}],"rubric":[{"id":"res-catalog","text":"Knows which books exist and how many copies are on the shelf","phase":"base","owners":["Catalog","Inventory","BookCatalog"]},{"id":"res-members","text":"Knows which members exist and which books each holds","phase":"base","owners":["Member","MemberRegistry","Members"]},{"id":"res-policy","text":"Decides whether a member may borrow another book (the limit)","phase":"base","owners":["LoanPolicy","BorrowPolicy","FixedLimitPolicy"]},{"id":"res-facade","text":"Coordinates a borrow or return across catalog, member and policy","phase":"base","owners":["LibraryService","LibraryImpl","Lending"]},{"id":"res-tier","text":"Knows how many books each membership tier may hold, without touching the borrow flow","phase":"storm1","owners":["TierLimitPolicy","TierPolicy","MembershipPolicy"]}],"followups":[{"level":"SDE2","question":"Why is the loan limit its own class and not a constant in the borrow method?","answer":"Because the limit is the most likely thing to change (premium members, children's cards). A LoanPolicy interface lets a new rule arrive as a new class instead of an edit to borrow(): that is the Open/Closed seam. A constant would be fine only if the interviewer says it will never vary."},{"level":"SDE2","question":"How do you keep the shelf count and the member's loan list consistent?","answer":"One method owns the whole transition (check, take the copy, record the loan) and it validates everything before mutating anything, so a failed call changes nothing. Keeping a second count in another structure invites drift."},{"level":"Senior","question":"How would you make this thread-safe?","answer":"Start with the invariant: a copy can be lent once. One mutex in the lending service guarding both catalog and member updates is correct and simple; per-book locks add speed but need a lock ordering when a borrow touches a member and a book. Measure before going finer-grained."},{"level":"Senior","question":"How would you add due dates and fines without touching borrow()?","answer":"Model a Loan value (book, member, borrowedAt) owned by the member or a LoanBook, inject a Clock for testability, and compute fines in a FinePolicy that the return path consults. The existing statuses and tests stay valid."},{"level":"Staff","question":"The library becomes a network of 200 branches sharing one catalog. What changes?","answer":"Copies become per-branch inventory; the member's limit becomes a cross-branch invariant, which needs a single owner of member state (or a reservation protocol). Search moves to an index. The class boundaries (catalog, member, policy) survive; the in-memory maps do not."},{"level":"SDE2","question":"A premium member is demoted while holding four books. What should happen?","answer":"The scenario is a product decision, so ask. The reference refuses the demotion until they return enough books, because silently taking books away or leaving the member over the limit both violate the invariant. The alternative is to allow it and block new borrows until they are under the limit; say which you chose and why."}],"apiHeader":"$14","phaseApis":{"storm1":"#pragma once\n// Change Storm 1 adds membership tiers. Everything from api.h still holds.\n#include \"api.h\"\n\nnamespace lib {\n\nenum class Tier { Basic, Premium };\n\n// A Library whose members have a tier. Basic members may hold 3 books, Premium members 5.\nclass TieredLibrary : public Library {\n public:\n  // New members start as Basic. Changing the tier of an unknown member returns NoSuchMember.\n  // Demoting a member who holds more books than the new tier allows returns LimitReached and changes nothing.\n  virtual Status setTier(const std::string& memberId, Tier tier) = 0;\n  virtual Tier tierOf(const std::string& memberId) const = 0;  // Tier::Basic for unknown members\n};\n\nstd::unique_ptr<TieredLibrary> makeTieredLibrary();\n\n}  // namespace lib\n"},"phases":["base","storm1"],"tests":{"base":[{"path":"library_base.cpp","content":"$15"}],"storm1":[{"path":"library_storm1.cpp","content":"$16"}]},"reference":[{"path":"catalog.h","content":"$17"},{"path":"library_service.cpp","content":"$18"},{"path":"library_service.h","content":"$19"},{"path":"loan_policy.h","content":"#pragma once\n#include \"member.h\"\n\n// The rule for \"may this member borrow one more book?\". The extension seam for new member types.\nclass LoanPolicy {\n public:\n  virtual ~LoanPolicy() = default;\n  virtual bool mayBorrow(const Member& member) const = 0;\n};\n\nclass FixedLimitPolicy : public LoanPolicy {\n public:\n  explicit FixedLimitPolicy(int limit) : limit_(limit) {}\n  bool mayBorrow(const Member& member) const override { return member.loanCount() < limit_; }\n\n private:\n  int limit_;\n};\n\n// Storm 1: the limit depends on the member's tier. A new class, no change to LoanPolicy or its callers.\nclass TierLimitPolicy : public LoanPolicy {\n public:\n  TierLimitPolicy(int basicLimit, int premiumLimit) : basic_(basicLimit), premium_(premiumLimit) {}\n  bool mayBorrow(const Member& member) const override { return member.loanCount() < limitFor(member.tier()); }\n  int limitFor(lib::Tier tier) const { return tier == lib::Tier::Premium ? premium_ : basic_; }\n\n private:\n  int basic_;\n  int premium_;\n};\n"},{"path":"member.h","content":"#pragma once\n#include <set>\n#include <string>\n#include <vector>\n\n#include \"api_storm1.h\"\n\n// A library member and the books they currently hold.\nclass Member {\n public:\n  Member(std::string id, std::string name) : id_(std::move(id)), name_(std::move(name)) {}\n\n  const std::string& id() const { return id_; }\n  const std::string& name() const { return name_; }\n  lib::Tier tier() const { return tier_; }\n  void setTier(lib::Tier tier) { tier_ = tier; }\n  int loanCount() const { return static_cast<int>(loans_.size()); }\n  bool holds(const std::string& bookId) const { return loans_.count(bookId) != 0; }\n\n  void addLoan(const std::string& bookId) { loans_.insert(bookId); }\n  void removeLoan(const std::string& bookId) { loans_.erase(bookId); }\n  std::vector<std::string> loans() const { return {loans_.begin(), loans_.end()}; }\n\n private:\n  std::string id_;\n  std::string name_;\n  lib::Tier tier_ = lib::Tier::Basic;\n  std::set<std::string> loans_;\n};\n"}],"driver":{"path":"driver.cpp","content":"#define BP_TEST_MAIN\n#include \"bp_test.h\"\n","readOnly":true}}}],["$L1a","$L1b"],"$L1c"]}],"p":"$@1d","v":null,"s":"$9"}}]]
+d:[["children",{"s":{"n":"id","t":"d","k":"library-management","s":[]},"h":65632,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}]}]]}],"p":"$@e","v":"$c","s":"$9"},"c":"$Qf"}]]
+a:[["children",{"s":"workshop","h":131168,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}]}]]}],"p":"$@b","v":"$c","s":"$9"},"c":"$Qd"}]]
+0:{"t":{"t":{"s":"","h":131152,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","precedence":"next"}],["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js","async":true}]],["$","html",null,{"lang":"en","className":"r7opxW_variable auY9QW_variable u-EJdW_variable h-full","children":["$","body",null,{"className":"min-h-full","children":[["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}],"notFound":[["$","main",null,{"className":"flex min-h-dvh flex-col items-center justify-center gap-4 px-4 text-center","children":[["$","div",null,{"className":"font-display text-5xl text-[var(--accent)]","children":"404"}],["$","p",null,{"className":"text-white/60","children":"This room is not on the blueprint yet."}],["$","$L6",null,{"href":"/","className":"text-sm text-white/80 underline","children":"Back to the title screen"}]]}],[]]}],["$","$L7",null,{}]]}]}]]}],"p":"$@8","v":null,"s":"$9"},"c":"$Qa"},"h":{"r":["$","$1","h",{"children":[null,["$","$L1f",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1, viewport-fit=cover"}],["$","meta","2",{"name":"theme-color","content":"#0a1530"}]]}],["$","$L21",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$22",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"Library management: Blueprint Clash"}],["$","meta","1",{"name":"description","content":"A creature-tactics RPG that teaches low-level design in C++ and high-level system design, from fundamentals to big-tech interview level."}],["$","link","2",{"rel":"manifest","href":"/blueprint-clash/manifest.webmanifest"}],["$","meta","3",{"name":"mobile-web-app-capable","content":"yes"}],["$","meta","4",{"name":"apple-mobile-web-app-title","content":"Blueprint Clash"}],["$","meta","5",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","link","6",{"rel":"icon","href":"/blueprint-clash/icon.png?icon.27re_xscs-jmw.png","sizes":"256x256","type":"image/png"}],["$","link","7",{"rel":"apple-touch-icon","href":"/blueprint-clash/apple-icon.png?apple-icon.2rac1w0yc3rju.png","sizes":"180x180","type":"image/png"}],["$","$L23","8",{}]]}]}],null]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"p":"$@24","v":null,"s":"$9"}},"a":"$@25","u":"$@26","b":"U2e90Mr6iueJEoRJLmd0s"}
+27:I[97367,["$2"],"OutletBoundary"]
+1a:["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/2uk3wcjwqg0tl.js","async":true}]
+1b:["$","script","script-1",{"src":"/blueprint-clash/_next/static/chunks/1zdu7yjl8efu4.js","async":true}]
+1c:["$","$L27",null,{"children":["$","$22",null,{"name":"Next.MetadataOutlet","children":"$@28"}]}]
+9:300
+28:null
+26:true
+9:C
+25:0
+e:"$undefined"
+b:"$undefined"
+8:"$undefined"
+24:"$undefined"
+1d:"$undefined"

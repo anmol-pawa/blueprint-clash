@@ -1,0 +1,109 @@
+1:"$Sreact.fragment"
+2:"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js"
+3:I[39756,["$2"],"default"]
+4:I[37457,["$2"],"default"]
+5:"/blueprint-clash/_next/static/chunks/2n5qeheznvl4u.js"
+6:I[22016,["$2","$5"],""]
+7:I[64576,["$2"],"PwaRegister"]
+10:"/blueprint-clash/_next/static/chunks/3s1mctvsetnbs.js"
+11:I[25039,["$2","$10"],"LessonClient"]
+17:"ViewportBoundary"
+18:I[97367,["$2"],"$17"]
+19:"MetadataBoundary"
+1a:I[97367,["$2"],"$19"]
+1b:"$Sreact.suspense"
+1c:I[27201,["$2"],"IconMark"]
+:HL["/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","style"]
+9:X
+c:X
+c:C
+12:T5f6,#include <array>
+#include <barrier>
+#include <chrono>
+#include <functional>
+#include <iostream>
+#include <mutex>
+#include <thread>
+
+struct Account {
+    std::timed_mutex mutex;
+    int balance;
+};
+
+// Locks 'from' first, then 'to'. Two opposite transfers hold one lock each and wait for the other (circular wait).
+// The timeout only exists so this demo ends; the production version of this line would hang.
+bool transfer(Account& from, Account& to, int amount, const std::function<void()>& pause) {
+    std::lock_guard<std::timed_mutex> first(from.mutex);
+    pause();  // test seam: both threads now hold their first lock
+    const bool gotSecond = to.mutex.try_lock_for(std::chrono::milliseconds(100));
+    pause();  // test seam: neither thread lets go of its first lock until both have tried
+    if (!gotSecond) return false;
+    std::lock_guard<std::timed_mutex> second(to.mutex, std::adopt_lock);
+    from.balance -= amount;
+    to.balance += amount;
+    return true;
+}
+
+int main() {
+    Account a{{}, 100};
+    Account b{{}, 100};
+    std::barrier<> bothHold(2);
+    const auto pause = [&bothHold] { bothHold.arrive_and_wait(); };
+    std::array<bool, 2> done{false, false};
+    std::thread t1([&] { done[0] = transfer(a, b, 30, pause); });
+    std::thread t2([&] { done[1] = transfer(b, a, 10, pause); });
+    t1.join();
+    t2.join();
+    const int completed = (done[0] ? 1 : 0) + (done[1] ? 1 : 0);
+    std::cout << "transfers completed: " << completed << " of 2 (a=" << a.balance << " b=" << b.balance << ")\n";
+}
+13:T449,#include <array>
+#include <functional>
+#include <iostream>
+#include <mutex>
+#include <thread>
+
+struct Account {
+    std::mutex mutex;
+    int balance;
+};
+
+// scoped_lock acquires both mutexes with a deadlock-avoidance algorithm, so the argument order cannot matter.
+bool transfer(Account& from, Account& to, int amount, const std::function<void()>& pause) {
+    std::scoped_lock both(from.mutex, to.mutex);
+    pause();  // same seam as before; harmless here because we already hold both locks
+    if (from.balance < amount) return false;
+    from.balance -= amount;
+    to.balance += amount;
+    return true;
+}
+
+int main() {
+    Account a{{}, 100};
+    Account b{{}, 100};
+    const auto noPause = [] {};
+    std::array<bool, 2> done{false, false};
+    std::thread t1([&] { done[0] = transfer(a, b, 30, noPause); });
+    std::thread t2([&] { done[1] = transfer(b, a, 10, noPause); });
+    t1.join();
+    t2.join();
+    const int completed = (done[0] ? 1 : 0) + (done[1] ? 1 : 0);
+    std::cout << "transfers completed: " << completed << " of 2 (a=" << a.balance << " b=" << b.balance << ")\n";
+}
+f:[["children",{"s":"__PAGE__","h":160,"d":{"r":["$","$1","c",{"children":[["$","$L11",null,{"lesson":{"id":"deadlock-lock-order","level":"L7","title":"Deadlock: one global lock order, or lock them together","oneLiner":"Deadlock needs four things at once; remove circular wait by taking multiple locks in one agreed order, or all at once with std::scoped_lock.","cardTopic":"L7.deadlock","intro":"Deadlock needs all four **Coffman conditions**: mutual exclusion (a lock is exclusive), hold-and-wait (a thread holds one lock while asking for another), no pre-emption (you cannot take a lock away), and **circular wait** (A waits for B while B waits for A). Break any one and it cannot happen. In practice you break circular wait.\n\nThe classic case is a transfer between two accounts: one thread moves A to B and another moves B to A, each locking \"its own\" account first. Each then waits for the lock the other holds. The fix is one rule everyone follows: lock in a **global order** (by address or id), or acquire both locks as a single operation. C++17's `std::scoped_lock(a, b)` does the second using a deadlock-avoidance algorithm, so you cannot get the order wrong.\n\nOther defences: hold fewer locks (copy data out, release, then act), never call foreign code while locked, and use timeouts (`try_lock_for`) to turn a hang into a reportable error. A timeout detects; it does not fix.","smell":"- Two code paths that take the same two locks in different orders.\n- A function that locks A and then calls something that locks B.\n- \"Works in tests\" but hangs a few times a day under load.\n- Lock order documented only in a comment (or nowhere).","before":"$12","after":"$13","beforeOutput":"transfers completed: 0 of 2 (a=100 b=100)","afterOutput":"transfers completed: 2 of 2 (a=80 b=120)","refactorNotes":"One call acquires both locks together, so there is no moment where a thread holds one and waits for the other: hold-and-wait with a fixed order is gone. The result no longer depends on which thread runs first (a=80, b=120 either way) and an insufficient balance now refuses instead of going negative.\n\n**Trade-offs:** `scoped_lock` handles locks you can name at one site. When locks are taken across many functions, adopt an explicit **lock hierarchy** (acquire in increasing level or id) and assert it in debug builds. Where two accounts can be the same object, lock once (locking the same non-recursive mutex twice is undefined behaviour). Holding two locks serialises both accounts for the duration, so for very hot accounts consider an event-sourced or single-writer design instead.","interviewSignal":"Recite the four conditions and say which one you break. Senior signal: you offer both fixes (global order and `scoped_lock`), notice the self-transfer case, and treat timeouts as detection, not a cure. Staff signal: you move from locks to a single-writer-per-account design when throughput matters, and describe how you would find a deadlock in production (thread dumps, lock-order checkers).","overApplication":"A global lock order across the whole codebase is a heavy rule; apply it where locks genuinely nest. Wrapping everything in one big mutex also removes deadlock, but at the cost of parallelism, which is a fine answer for a first version and a poor one at scale. Do not paper over a design that needs two locks everywhere: if every operation touches both, the data probably belongs behind one lock."},"nextId":"thread-pool"}],["$L14"],"$L15"]}],"p":"$@16","v":null,"s":"$9"}}]]
+d:[["children",{"s":{"n":"id","t":"d","k":"deadlock-lock-order","s":[]},"h":65632,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}]}]]}],"p":"$@e","v":"$c","s":"$9"},"c":"$Qf"}]]
+a:[["children",{"s":"learn","h":131168,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}]}]]}],"p":"$@b","v":"$c","s":"$9"},"c":"$Qd"}]]
+0:{"t":{"t":{"s":"","h":131152,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","precedence":"next"}],["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js","async":true}]],["$","html",null,{"lang":"en","className":"r7opxW_variable auY9QW_variable u-EJdW_variable h-full","children":["$","body",null,{"className":"min-h-full","children":[["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}],"notFound":[["$","main",null,{"className":"flex min-h-dvh flex-col items-center justify-center gap-4 px-4 text-center","children":[["$","div",null,{"className":"font-display text-5xl text-[var(--accent)]","children":"404"}],["$","p",null,{"className":"text-white/60","children":"This room is not on the blueprint yet."}],["$","$L6",null,{"href":"/","className":"text-sm text-white/80 underline","children":"Back to the title screen"}]]}],[]]}],["$","$L7",null,{}]]}]}]]}],"p":"$@8","v":null,"s":"$9"},"c":"$Qa"},"h":{"r":["$","$1","h",{"children":[null,["$","$L18",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1, viewport-fit=cover"}],["$","meta","2",{"name":"theme-color","content":"#0a1530"}]]}],["$","$L1a",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$1b",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"Deadlock: one global lock order, or lock them together: Blueprint Clash"}],["$","meta","1",{"name":"description","content":"A creature-tactics RPG that teaches low-level design in C++ and high-level system design, from fundamentals to big-tech interview level."}],["$","link","2",{"rel":"manifest","href":"/blueprint-clash/manifest.webmanifest"}],["$","meta","3",{"name":"mobile-web-app-capable","content":"yes"}],["$","meta","4",{"name":"apple-mobile-web-app-title","content":"Blueprint Clash"}],["$","meta","5",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","link","6",{"rel":"icon","href":"/blueprint-clash/icon.png?icon.27re_xscs-jmw.png","sizes":"256x256","type":"image/png"}],["$","link","7",{"rel":"apple-touch-icon","href":"/blueprint-clash/apple-icon.png?apple-icon.2rac1w0yc3rju.png","sizes":"180x180","type":"image/png"}],["$","$L1c","8",{}]]}]}],null]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"p":"$@1d","v":null,"s":"$9"}},"a":"$@1e","u":"$@1f","b":"U2e90Mr6iueJEoRJLmd0s"}
+20:I[97367,["$2"],"OutletBoundary"]
+14:["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/3s1mctvsetnbs.js","async":true}]
+15:["$","$L20",null,{"children":["$","$1b",null,{"name":"Next.MetadataOutlet","children":"$@21"}]}]
+9:300
+21:null
+1f:true
+9:C
+1e:0
+e:"$undefined"
+b:"$undefined"
+8:"$undefined"
+1d:"$undefined"
+16:"$undefined"

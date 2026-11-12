@@ -1,0 +1,120 @@
+1:"$Sreact.fragment"
+2:"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js"
+3:I[39756,["$2"],"default"]
+4:I[37457,["$2"],"default"]
+5:"/blueprint-clash/_next/static/chunks/2n5qeheznvl4u.js"
+6:I[22016,["$2","$5"],""]
+7:I[64576,["$2"],"PwaRegister"]
+d:I[97367,["$2"],"OutletBoundary"]
+e:"$Sreact.suspense"
+10:"ViewportBoundary"
+11:I[97367,["$2"],"$10"]
+13:"MetadataBoundary"
+14:I[97367,["$2"],"$13"]
+16:I[68027,["$2"],"default",1]
+:HL["/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","style"]
+:HL["/blueprint-clash/_next/static/media/07c7676b89ed2778-s.p.2bn3s6zvc0dyp.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/blueprint-clash/_next/static/media/486a103cae33528f-s.p.309ilb452anpd.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/blueprint-clash/_next/static/media/53897e768d329f66-s.p.3t6q91iet4nsy.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+9:X
+b:[["children",{"s":"__PAGE__","h":512,"d":{"r":["$","$1","c",{"children":["$Lc",[["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/3s1mctvsetnbs.js","async":true,"nonce":"$undefined"}]],["$","$Ld",null,{"children":["$","$e",null,{"name":"Next.MetadataOutlet","children":"$@f"}]}]]}],"p":false,"v":null}}]]
+a:[["children",{"s":{"n":"id","t":"d","k":"entities-from-requirements","s":[]},"h":66048,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],"p":false,"v":"$9"},"c":"$Qb"}]]
+8:[["children",{"s":"learn","h":131584,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],"p":false,"v":"$9"},"c":"$Qa"}]]
+0:{"P":null,"c":["","learn","entities-from-requirements",""],"q":"","i":false,"t":{"t":{"s":"","h":131600,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}],["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js","async":true,"nonce":"$undefined"}]],["$","html",null,{"lang":"en","className":"r7opxW_variable auY9QW_variable u-EJdW_variable h-full","children":["$","body",null,{"className":"min-h-full","children":[["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","main",null,{"className":"flex min-h-dvh flex-col items-center justify-center gap-4 px-4 text-center","children":[["$","div",null,{"className":"font-display text-5xl text-[var(--accent)]","children":"404"}],["$","p",null,{"className":"text-white/60","children":"This room is not on the blueprint yet."}],["$","$L6",null,{"href":"/","className":"text-sm text-white/80 underline","children":"Back to the title screen"}]]}],[]],"forbidden":"$undefined","unauthorized":"$undefined"}],["$","$L7",null,{}]]}]}]]}],"p":false,"v":null},"c":"$Q8"},"h":{"r":["$","$1","h",{"children":[null,["$","$L11",null,{"children":"$L12"}],["$","$L14",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$e",null,{"name":"Next.Metadata","children":"$L15"}]}],null]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"p":false,"v":null}},"m":"$undefined","G":["$16",[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]]],"S":true,"r":"$undefined","s":"$undefined","a":"$undefined","l":"$undefined","p":"$undefined","d":"$undefined","b":"U2e90Mr6iueJEoRJLmd0s"}
+17:"/blueprint-clash/_next/static/chunks/3s1mctvsetnbs.js"
+18:I[25039,["$2","$17"],"LessonClient"]
+9:C
+19:T994,#include <iostream>
+#include <string>
+#include <utility>
+#include <vector>
+
+// Nouns from the brief became classes; each verb went to the noun that owns the data it needs (CRC).
+class Book {
+public:
+    explicit Book(int id) : id_(id) {}
+    int id() const { return id_; }
+    bool available() const { return available_; }
+    void lend() { available_ = false; }
+    void restore() { available_ = true; }
+
+private:
+    int id_;
+    bool available_ = true;
+};
+
+class Loan {
+public:
+    Loan(std::string member, int bookId, int dueDay) : member_(std::move(member)), bookId_(bookId), dueDay_(dueDay) {}
+    int bookId() const { return bookId_; }
+    int daysLate(int today) const { return today > dueDay_ ? today - dueDay_ : 0; }
+
+private:
+    std::string member_;
+    int bookId_;
+    int dueDay_;
+};
+
+// The fine rule is a policy of its own, because "what do late returns cost" is the likeliest thing to change.
+class FinePolicy {
+public:
+    explicit FinePolicy(int perDay) : perDay_(perDay) {}
+    int fineFor(const Loan& loan, int today) const { return loan.daysLate(today) * perDay_; }
+
+private:
+    int perDay_;
+};
+
+class Library {
+public:
+    explicit Library(FinePolicy policy) : policy_(policy) {}
+    void addBook(int id) { books_.emplace_back(id); }
+
+    void borrow(const std::string& member, int bookId, int day) {
+        Book* book = find(bookId);
+        if (book == nullptr || !book->available()) {
+            std::cout << "book " << bookId << " unavailable\n";
+            return;
+        }
+        book->lend();
+        loans_.emplace_back(member, bookId, day + 14);
+    }
+
+    int giveBack(int bookId, int day) {
+        Book* book = find(bookId);
+        for (auto it = loans_.begin(); it != loans_.end(); ++it) {
+            if (it->bookId() == bookId) {
+                const int fine = policy_.fineFor(*it, day);
+                loans_.erase(it);
+                if (book != nullptr) book->restore();
+                return fine;
+            }
+        }
+        return 0;
+    }
+
+private:
+    Book* find(int id) {
+        for (auto& book : books_) {
+            if (book.id() == id) return &book;
+        }
+        return nullptr;
+    }
+
+    FinePolicy policy_;
+    std::vector<Book> books_;
+    std::vector<Loan> loans_;
+};
+
+int main() {
+    Library library{FinePolicy{10}};
+    library.addBook(1);
+    library.borrow("asha", 1, 0);
+    library.borrow("ben", 1, 2);
+    std::cout << "fine " << library.giveBack(1, 20) << "\n";
+}
+c:["$","$L18",null,{"lesson":{"id":"entities-from-requirements","level":"L6","title":"Requirements to entities: nouns, verbs and CRC cards","oneLiner":"Underline the nouns and verbs in the brief, make the nouns classes, and give each verb to the class that already holds the data it needs.","cardTopic":"L6.entities","intro":"A machine-coding or LLD round starts with a paragraph of requirements, not a class list. The reliable first step is **noun/verb analysis**: underline the nouns (candidate classes or fields) and the verbs (candidate methods), then discard the noise. Nouns that only describe another noun (\"name\", \"title\") are fields; nouns with their own rules and lifecycle (\"loan\", \"fine policy\") are classes.\n\nThen run **CRC cards** (Class, Responsibility, Collaborators) on each candidate: one sentence for what it is responsible for, and which other classes it must ask for help. A class with a long, vague responsibility is two classes. A class with no responsibility was a field. A verb that needs data from three classes belongs to an orchestrating class, not to one of the three.\n\nThe output of this step is the vocabulary of the whole interview: the entities you name now are the ones the interviewer will ask you to extend.","smell":"- One class named after the whole system (`Library`, `Manager`, `Service`) holds every map and every rule.\n- Entities exist only as parallel maps keyed by an id (`dueDay_[bookId]`, `holder_[bookId]`).\n- A business rule (the fine) is buried inside a method, with no name and no place to change it.\n- You cannot say what a class is responsible for in one sentence without the word \"and\".","before":"#include <iostream>\n#include <map>\n#include <string>\n\n// One class does everything the brief mentions: members, books, loans, fines.\nclass Library {\npublic:\n    void addBook(int id) { copies_[id] = true; }\n    void borrow(const std::string& member, int bookId, int day) {\n        if (!copies_[bookId]) { std::cout << \"book \" << bookId << \" unavailable\\n\"; return; }\n        copies_[bookId] = false;\n        dueDay_[bookId] = day + 14;\n        holder_[bookId] = member;\n    }\n    int giveBack(int bookId, int day) {\n        copies_[bookId] = true;\n        int late = day - dueDay_[bookId];\n        return late > 0 ? late * 10 : 0;  // fine policy hidden inside\n    }\n\nprivate:\n    std::map<int, bool> copies_;\n    std::map<int, int> dueDay_;\n    std::map<int, std::string> holder_;\n};\n\nint main() {\n    Library library;\n    library.addBook(1);\n    library.borrow(\"asha\", 1, 0);\n    library.borrow(\"ben\", 1, 2);\n    std::cout << \"fine \" << library.giveBack(1, 20) << \"\\n\";\n}\n","after":"$19","beforeOutput":"book 1 unavailable\nfine 60","afterOutput":"book 1 unavailable\nfine 60","refactorNotes":"The brief's nouns (book, loan, fine policy, library) are now classes, and each verb moved to the noun that owns its data: `Loan::daysLate`, `FinePolicy::fineFor`, `Book::lend`. The parallel maps became one `Loan` object per loan. `Library` is still the coordinator, but now it only coordinates. The fine rule has a name and one place to change, which is exactly the Change Storm an interviewer is likely to throw (\"fines double after 30 days\"). Trade-off: more types and more lines for a small problem; do this when the brief has real rules, not for a three-field record.","interviewSignal":"Say the process aloud: \"nouns to candidate classes, verbs to methods, then I check each class has one responsibility and list its collaborators.\" Draw three or four CRC cards on the board before any code. Level signal: SDE II names sensible entities; Senior also names the policy that is likely to change and keeps it separate; Staff states what is deliberately left out of scope and why.","overApplication":"Turning every noun into a class produces dozens of anaemic wrappers (`MemberName`, `BookTitle`) that hold one field and no behaviour. A noun earns a class only when it has rules, a lifecycle or more than one implementation. In a 45-minute round, five or six well-chosen entities beat fifteen thin ones."},"nextId":"class-diagram-ownership"}]
+12:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1, viewport-fit=cover"}],["$","meta","2",{"name":"theme-color","content":"#0a1530"}]]
+1a:I[27201,["$2"],"IconMark"]
+f:null
+15:[["$","title","0",{"children":"Requirements to entities: nouns, verbs and CRC cards: Blueprint Clash"}],["$","meta","1",{"name":"description","content":"A creature-tactics RPG that teaches low-level design in C++ and high-level system design, from fundamentals to big-tech interview level."}],["$","link","2",{"rel":"manifest","href":"/blueprint-clash/manifest.webmanifest","crossOrigin":"$undefined"}],["$","meta","3",{"name":"mobile-web-app-capable","content":"yes"}],["$","meta","4",{"name":"apple-mobile-web-app-title","content":"Blueprint Clash"}],["$","meta","5",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","link","6",{"rel":"icon","href":"/blueprint-clash/icon.png?icon.27re_xscs-jmw.png","sizes":"256x256","type":"image/png"}],["$","link","7",{"rel":"apple-touch-icon","href":"/blueprint-clash/apple-icon.png?apple-icon.2rac1w0yc3rju.png","sizes":"180x180","type":"image/png"}],["$","$L1a","8",{}]]

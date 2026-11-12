@@ -1,0 +1,131 @@
+1:"$Sreact.fragment"
+2:"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js"
+3:I[39756,["$2"],"default"]
+4:I[37457,["$2"],"default"]
+5:"/blueprint-clash/_next/static/chunks/2n5qeheznvl4u.js"
+6:I[22016,["$2","$5"],""]
+7:I[64576,["$2"],"PwaRegister"]
+d:I[97367,["$2"],"OutletBoundary"]
+e:"$Sreact.suspense"
+10:"ViewportBoundary"
+11:I[97367,["$2"],"$10"]
+13:"MetadataBoundary"
+14:I[97367,["$2"],"$13"]
+16:I[68027,["$2"],"default",1]
+:HL["/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","style"]
+:HL["/blueprint-clash/_next/static/media/07c7676b89ed2778-s.p.2bn3s6zvc0dyp.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/blueprint-clash/_next/static/media/486a103cae33528f-s.p.309ilb452anpd.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/blueprint-clash/_next/static/media/53897e768d329f66-s.p.3t6q91iet4nsy.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+9:X
+b:[["children",{"s":"__PAGE__","h":512,"d":{"r":["$","$1","c",{"children":["$Lc",[["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/3s1mctvsetnbs.js","async":true,"nonce":"$undefined"}]],["$","$Ld",null,{"children":["$","$e",null,{"name":"Next.MetadataOutlet","children":"$@f"}]}]]}],"p":false,"v":null}}]]
+a:[["children",{"s":{"n":"id","t":"d","k":"composite","s":[]},"h":66048,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],"p":false,"v":"$9"},"c":"$Qb"}]]
+8:[["children",{"s":"learn","h":131584,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],"p":false,"v":"$9"},"c":"$Qa"}]]
+0:{"P":null,"c":["","learn","composite",""],"q":"","i":false,"t":{"t":{"s":"","h":131600,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}],["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js","async":true,"nonce":"$undefined"}]],["$","html",null,{"lang":"en","className":"r7opxW_variable auY9QW_variable u-EJdW_variable h-full","children":["$","body",null,{"className":"min-h-full","children":[["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","main",null,{"className":"flex min-h-dvh flex-col items-center justify-center gap-4 px-4 text-center","children":[["$","div",null,{"className":"font-display text-5xl text-[var(--accent)]","children":"404"}],["$","p",null,{"className":"text-white/60","children":"This room is not on the blueprint yet."}],["$","$L6",null,{"href":"/","className":"text-sm text-white/80 underline","children":"Back to the title screen"}]]}],[]],"forbidden":"$undefined","unauthorized":"$undefined"}],["$","$L7",null,{}]]}]}]]}],"p":false,"v":null},"c":"$Q8"},"h":{"r":["$","$1","h",{"children":[null,["$","$L11",null,{"children":"$L12"}],["$","$L14",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$e",null,{"name":"Next.Metadata","children":"$L15"}]}],null]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"p":false,"v":null}},"m":"$undefined","G":["$16",[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]]],"S":true,"r":"$undefined","s":"$undefined","a":"$undefined","l":"$undefined","p":"$undefined","d":"$undefined","b":"U2e90Mr6iueJEoRJLmd0s"}
+17:"/blueprint-clash/_next/static/chunks/3s1mctvsetnbs.js"
+18:I[25039,["$2","$17"],"LessonClient"]
+9:C
+19:T4d6,#include <iostream>
+#include <string>
+#include <vector>
+
+class File {
+public:
+    explicit File(int bytes) : bytes_(bytes) {}
+    int bytes() const { return bytes_; }
+
+private:
+    int bytes_;
+};
+
+// A folder keeps one list per kind of child. Every operation loops over both, and a new
+// kind of child (a shortcut, say) would need a third list and an edit to every operation.
+class Folder {
+public:
+    void addFile(File f) { files_.push_back(f); }
+    void addFolder(Folder f) { folders_.push_back(std::move(f)); }
+    int bytes() const {
+        int total = 0;
+        for (const File& f : files_) total += f.bytes();
+        for (const Folder& f : folders_) total += f.bytes();
+        return total;
+    }
+    int fileCount() const {
+        int count = static_cast<int>(files_.size());
+        for (const Folder& f : folders_) count += f.fileCount();
+        return count;
+    }
+
+private:
+    std::vector<File> files_;
+    std::vector<Folder> folders_;
+};
+
+int main() {
+    Folder docs;
+    docs.addFile(File(10));
+    docs.addFile(File(20));
+    Folder root;
+    root.addFolder(std::move(docs));
+    root.addFile(File(40));
+    std::cout << "bytes=" << root.bytes() << "\n";
+    std::cout << "files=" << root.fileCount() << "\n";
+}
+1a:T5d2,#include <iostream>
+#include <memory>
+#include <string>
+#include <utility>
+#include <vector>
+
+// Component: the one interface that leaves and containers share.
+class Node {
+public:
+    virtual ~Node() = default;
+    virtual int bytes() const = 0;
+    virtual int fileCount() const = 0;
+};
+
+class File : public Node {
+public:
+    explicit File(int bytes) : bytes_(bytes) {}
+    int bytes() const override { return bytes_; }
+    int fileCount() const override { return 1; }
+
+private:
+    int bytes_;
+};
+
+// Composite: owns its children and combines their answers. add() lives here, not on Node,
+// so a File never has to pretend it can hold children.
+class Folder : public Node {
+public:
+    void add(std::unique_ptr<Node> child) { children_.push_back(std::move(child)); }
+    int bytes() const override {
+        int total = 0;
+        for (const auto& child : children_) total += child->bytes();
+        return total;
+    }
+    int fileCount() const override {
+        int count = 0;
+        for (const auto& child : children_) count += child->fileCount();
+        return count;
+    }
+
+private:
+    std::vector<std::unique_ptr<Node>> children_;
+};
+
+int main() {
+    auto docs = std::make_unique<Folder>();
+    docs->add(std::make_unique<File>(10));
+    docs->add(std::make_unique<File>(20));
+    Folder root;
+    root.add(std::move(docs));
+    root.add(std::make_unique<File>(40));
+    std::cout << "bytes=" << root.bytes() << "\n";
+    std::cout << "files=" << root.fileCount() << "\n";
+}
+c:["$","$L18",null,{"lesson":{"id":"composite","level":"L4","title":"Composite: treat one and many the same way","oneLiner":"Give leaves and containers a common interface so recursive structures need no special cases at the call site.","cardTopic":"L4.composite","intro":"Composite models a **tree** where a group can be used anywhere a single item can. Files and folders, shapes and groups, menu items and sub-menus, expressions and sub-expressions, org charts. Both leaf and container implement one `Node` interface; the container forwards each call to its children and combines the answers.\n\nThe payoff is that client code asks `root.bytes()` and never asks \"is this a file or a folder?\". Recursion lives in the container, once per operation, not in every caller.\n\nThe classic design question is **where to put `add()` and `remove()`**. On the base interface (transparency: uniform, but leaves must refuse the call) or only on the container (safety: leaves are honest, but a caller needs the container type to build the tree). In C++ the safer form usually wins, because a leaf with a method that always throws or does nothing violates the Liskov substitution principle.","smell":"- A container class with a separate list per child kind (files and folders) and each operation looping over each.\n- `if (isFolder)` checks scattered through client code.\n- Adding a new leaf kind means a new list and an edit to every recursive function.\n- Depth is limited or special-cased because the code was written for two levels.","before":"$19","after":"$1a","beforeOutput":"bytes=70\nfiles=3","afterOutput":"bytes=70\nfiles=3","refactorNotes":"A Symlink or Archive is now one new `Node` subclass; `Folder` does not change. Each operation is written once per class, with the recursion inside the container. The folder owns its children through `unique_ptr<Node>`, so a whole tree is destroyed correctly through the virtual destructor and cannot be copied by accident.\n\n**Trade-off:** the Component interface must be broad enough for every operation yet stay meaningful for leaves. If you keep adding methods that only containers care about, you have a wide interface in disguise (see Interface Segregation). Also decide up front whether children know their parent: it makes upward queries easy and ownership cycles easy, so use a non-owning raw pointer or a `weak_ptr` for the back link.","interviewSignal":"Spot the tree in the requirements: \"a group of X is itself an X\". Name the transparency-versus-safety trade-off for `add()` and choose one with a reason. Senior signal: you mention traversal cost (a naive `bytes()` is O(n) per call, so cache with invalidation if it is hot), ownership of children, and that a visitor can add operations without growing the Component interface.","overApplication":"If the data is a flat list, or a tree whose depth is fixed at two and never queried recursively, a plain `vector` of structs is simpler and faster. A Composite also pushes virtual calls and pointer chasing into hot loops; for millions of small nodes consider a flat array with indices. Do not build a uniform interface just because a diagram has the word \"group\" in it."},"nextId":"decorator"}]
+12:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1, viewport-fit=cover"}],["$","meta","2",{"name":"theme-color","content":"#0a1530"}]]
+1b:I[27201,["$2"],"IconMark"]
+f:null
+15:[["$","title","0",{"children":"Composite: treat one and many the same way: Blueprint Clash"}],["$","meta","1",{"name":"description","content":"A creature-tactics RPG that teaches low-level design in C++ and high-level system design, from fundamentals to big-tech interview level."}],["$","link","2",{"rel":"manifest","href":"/blueprint-clash/manifest.webmanifest","crossOrigin":"$undefined"}],["$","meta","3",{"name":"mobile-web-app-capable","content":"yes"}],["$","meta","4",{"name":"apple-mobile-web-app-title","content":"Blueprint Clash"}],["$","meta","5",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","link","6",{"rel":"icon","href":"/blueprint-clash/icon.png?icon.27re_xscs-jmw.png","sizes":"256x256","type":"image/png"}],["$","link","7",{"rel":"apple-touch-icon","href":"/blueprint-clash/apple-icon.png?apple-icon.2rac1w0yc3rju.png","sizes":"180x180","type":"image/png"}],["$","$L1b","8",{}]]

@@ -1,0 +1,114 @@
+1:"$Sreact.fragment"
+2:"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js"
+3:I[39756,["$2"],"default"]
+4:I[37457,["$2"],"default"]
+5:"/blueprint-clash/_next/static/chunks/2n5qeheznvl4u.js"
+6:I[22016,["$2","$5"],""]
+7:I[64576,["$2"],"PwaRegister"]
+10:"/blueprint-clash/_next/static/chunks/3s1mctvsetnbs.js"
+11:I[25039,["$2","$10"],"LessonClient"]
+16:"ViewportBoundary"
+17:I[97367,["$2"],"$16"]
+18:"MetadataBoundary"
+19:I[97367,["$2"],"$18"]
+1a:"$Sreact.suspense"
+1b:I[27201,["$2"],"IconMark"]
+:HL["/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","style"]
+9:X
+c:X
+c:C
+12:Ta03,#include <iostream>
+#include <memory>
+#include <utility>
+
+struct Customer {
+    int age;
+    bool verified;
+    int orders;
+};
+
+class Specification {
+public:
+    virtual ~Specification() = default;
+    virtual bool isSatisfiedBy(const Customer& customer) const = 0;
+};
+
+using SpecPtr = std::unique_ptr<Specification>;
+
+class AdultSpec final : public Specification {
+public:
+    bool isSatisfiedBy(const Customer& customer) const override { return customer.age >= 18; }
+};
+
+class VerifiedSpec final : public Specification {
+public:
+    bool isSatisfiedBy(const Customer& customer) const override { return customer.verified; }
+};
+
+class MinOrdersSpec final : public Specification {
+public:
+    explicit MinOrdersSpec(int minimum) : minimum_(minimum) {}
+    bool isSatisfiedBy(const Customer& customer) const override { return customer.orders >= minimum_; }
+
+private:
+    int minimum_;
+};
+
+class AndSpec final : public Specification {
+public:
+    AndSpec(SpecPtr left, SpecPtr right) : left_(std::move(left)), right_(std::move(right)) {}
+    bool isSatisfiedBy(const Customer& customer) const override {
+        return left_->isSatisfiedBy(customer) && right_->isSatisfiedBy(customer);
+    }
+
+private:
+    SpecPtr left_;
+    SpecPtr right_;
+};
+
+class NotSpec final : public Specification {
+public:
+    explicit NotSpec(SpecPtr inner) : inner_(std::move(inner)) {}
+    bool isSatisfiedBy(const Customer& customer) const override { return !inner_->isSatisfiedBy(customer); }
+
+private:
+    SpecPtr inner_;
+};
+
+// One named rule, built once and shared by every caller.
+SpecPtr makeLoyalAdult() {
+    return std::make_unique<AndSpec>(std::make_unique<AdultSpec>(),
+                                     std::make_unique<AndSpec>(std::make_unique<VerifiedSpec>(), std::make_unique<MinOrdersSpec>(3)));
+}
+
+SpecPtr makeNeedsVerification() {
+    return std::make_unique<AndSpec>(std::make_unique<AdultSpec>(), std::make_unique<NotSpec>(std::make_unique<VerifiedSpec>()));
+}
+
+int main() {
+    const SpecPtr loyalAdult = makeLoyalAdult();
+    const SpecPtr needsVerification = makeNeedsVerification();
+    const Customer loyal{18, true, 3};
+    const Customer newcomer{30, false, 0};
+    std::cout << "discount " << (loyalAdult->isSatisfiedBy(loyal) ? "yes" : "no") << "\n";
+    std::cout << "shipping " << (loyalAdult->isSatisfiedBy(loyal) ? "yes" : "no") << "\n";
+    std::cout << "newcomer discount " << (loyalAdult->isSatisfiedBy(newcomer) ? "yes" : "no") << "\n";
+    std::cout << "newcomer nudge " << (needsVerification->isSatisfiedBy(newcomer) ? "yes" : "no") << "\n";
+}
+f:[["children",{"s":"__PAGE__","h":160,"d":{"r":["$","$1","c",{"children":[["$","$L11",null,{"lesson":{"id":"specification","level":"L5","title":"Specification: name a business rule and combine it","oneLiner":"Turn a yes/no business rule into an object, so rules can be named, reused and combined with and, or, not.","cardTopic":"L5.specification","intro":"A Specification is **one business rule as an object** with a single question: `isSatisfiedBy(candidate)`. Small specifications (\"is an adult\", \"is verified\", \"has at least three orders\") are combined with `and`, `or` and `not` into bigger ones, and the combined rule has a name the whole code base can share.\n\nThe roles: an abstract `Specification` with a virtual destructor; leaf specifications that each test one thing; composite specifications (`AndSpec`, `NotSpec`) that own their children through `unique_ptr`. The composite is itself a specification, so rules nest to any depth.\n\nUse it when the same rule is needed in several places (eligibility checks, search filters, validation, queries) and the rules change as the business changes. It is a cousin of Composite and Interpreter, specialised to boolean questions.","smell":"- The same condition is copy-pasted in several places (discount, shipping, marketing mail).\n- The copies have drifted: one says `age >= 18`, another says `age > 18`.\n- Changing a business rule means a search through the code base for every spot that mentions it.\n- A long boolean expression with no name, so nobody can say what it means.","before":"#include <iostream>\n\nstruct Customer {\n    int age;\n    bool verified;\n    int orders;\n};\n\n// The same rule, written twice. One copy has drifted: \">\" instead of \">=\".\nbool getsDiscount(const Customer& c) { return c.age >= 18 && c.verified && c.orders >= 3; }\nbool getsFreeShipping(const Customer& c) { return c.age > 18 && c.verified && c.orders >= 3; }\n\nint main() {\n    Customer loyal{18, true, 3};\n    std::cout << \"discount \" << (getsDiscount(loyal) ? \"yes\" : \"no\") << \"\\n\";\n    std::cout << \"shipping \" << (getsFreeShipping(loyal) ? \"yes\" : \"no\") << \"\\n\";\n}\n","after":"$12","beforeOutput":"discount yes\nshipping no","afterOutput":"discount yes\nshipping yes\nnewcomer discount no\nnewcomer nudge yes","refactorNotes":"The rule now exists once, as `makeLoyalAdult()`. Discount and shipping both ask the same object, so they cannot drift apart: the `>` versus `>=` bug is not fixable by being careful, it is removed by having one copy. Leaves test one thing each, so they are trivial to unit test, and `AndSpec` / `NotSpec` give the combinators. Ownership is explicit: composites own children with `unique_ptr`.\n\n**Trade-offs:** for a rule used in one place, a named function (`isLoyalAdult(c)`) or a lambda is shorter and clearer; Specification pays off when rules are combined at run time (a search filter built from user input), stored, or shared across modules. The class-per-rule style is verbose in C++; a `std::function<bool(const T&)>` with `and_`/`or_` helpers is the lighter alternative when you never need to inspect or print the rule tree. Specifications can also be translated into a database query (the repository pushes the filter down); a plain predicate cannot, and that is a real reason to pick the object form.","interviewSignal":"Say \"a business rule as an object I can combine\". In a design round (eligibility, coupons, access rules, search filters) show the three or four leaves, an `and`, a `not`, and then name the rule once. Senior signal: you weigh it against a plain lambda, say when the object form earns its keep (runtime composition, translation to a query, reuse in validation), and mention testing each leaf alone.","overApplication":"A class hierarchy for a condition used once is ceremony. Dozens of one-line leaf classes can be harder to read than the boolean expression they replaced. If rules never combine and never repeat, a function is the right size. And a specification that reaches into services or the database to decide has stopped being a pure yes/no question."},"nextId":"event-driven"}],["$L13"],"$L14"]}],"p":"$@15","v":null,"s":"$9"}}]]
+d:[["children",{"s":{"n":"id","t":"d","k":"specification","s":[]},"h":65632,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}]}]]}],"p":"$@e","v":"$c","s":"$9"},"c":"$Qf"}]]
+a:[["children",{"s":"learn","h":131168,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}]}]]}],"p":"$@b","v":"$c","s":"$9"},"c":"$Qd"}]]
+0:{"t":{"t":{"s":"","h":131152,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","precedence":"next"}],["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js","async":true}]],["$","html",null,{"lang":"en","className":"r7opxW_variable auY9QW_variable u-EJdW_variable h-full","children":["$","body",null,{"className":"min-h-full","children":[["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}],"notFound":[["$","main",null,{"className":"flex min-h-dvh flex-col items-center justify-center gap-4 px-4 text-center","children":[["$","div",null,{"className":"font-display text-5xl text-[var(--accent)]","children":"404"}],["$","p",null,{"className":"text-white/60","children":"This room is not on the blueprint yet."}],["$","$L6",null,{"href":"/","className":"text-sm text-white/80 underline","children":"Back to the title screen"}]]}],[]]}],["$","$L7",null,{}]]}]}]]}],"p":"$@8","v":null,"s":"$9"},"c":"$Qa"},"h":{"r":["$","$1","h",{"children":[null,["$","$L17",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1, viewport-fit=cover"}],["$","meta","2",{"name":"theme-color","content":"#0a1530"}]]}],["$","$L19",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$1a",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"Specification: name a business rule and combine it: Blueprint Clash"}],["$","meta","1",{"name":"description","content":"A creature-tactics RPG that teaches low-level design in C++ and high-level system design, from fundamentals to big-tech interview level."}],["$","link","2",{"rel":"manifest","href":"/blueprint-clash/manifest.webmanifest"}],["$","meta","3",{"name":"mobile-web-app-capable","content":"yes"}],["$","meta","4",{"name":"apple-mobile-web-app-title","content":"Blueprint Clash"}],["$","meta","5",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","link","6",{"rel":"icon","href":"/blueprint-clash/icon.png?icon.27re_xscs-jmw.png","sizes":"256x256","type":"image/png"}],["$","link","7",{"rel":"apple-touch-icon","href":"/blueprint-clash/apple-icon.png?apple-icon.2rac1w0yc3rju.png","sizes":"180x180","type":"image/png"}],["$","$L1b","8",{}]]}]}],null]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"p":"$@1c","v":null,"s":"$9"}},"a":"$@1d","u":"$@1e","b":"U2e90Mr6iueJEoRJLmd0s"}
+1f:I[97367,["$2"],"OutletBoundary"]
+13:["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/3s1mctvsetnbs.js","async":true}]
+14:["$","$L1f",null,{"children":["$","$1a",null,{"name":"Next.MetadataOutlet","children":"$@20"}]}]
+9:300
+20:null
+1e:true
+9:C
+1d:0
+e:"$undefined"
+b:"$undefined"
+8:"$undefined"
+1c:"$undefined"
+15:"$undefined"

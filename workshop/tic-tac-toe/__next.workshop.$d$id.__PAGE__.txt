@@ -1,0 +1,719 @@
+1:"$Sreact.fragment"
+2:"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js"
+3:I[39756,["$2"],"default"]
+4:I[37457,["$2"],"default"]
+5:"/blueprint-clash/_next/static/chunks/2n5qeheznvl4u.js"
+6:I[22016,["$2","$5"],""]
+7:I[64576,["$2"],"PwaRegister"]
+10:"/blueprint-clash/_next/static/chunks/2uk3wcjwqg0tl.js"
+11:"/blueprint-clash/_next/static/chunks/1zdu7yjl8efu4.js"
+12:I[65612,["$2","$10","$11"],"WorkshopClient"]
+1f:"ViewportBoundary"
+20:I[97367,["$2"],"$1f"]
+21:"MetadataBoundary"
+22:I[97367,["$2"],"$21"]
+23:"$Sreact.suspense"
+24:I[27201,["$2"],"IconMark"]
+:HL["/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","style"]
+9:X
+c:X
+c:C
+13:T1aa7,# Editorial: Tic-tac-toe to Connect-N
+
+## Requirements
+Functional: two players alternate marks on a grid; the game reports whose turn it is, the outcome (in progress, won, drawn), the winner and the contents of every cell. Hidden until asked: all rows, columns and both diagonals count, two in a row does not, a full board with no line is a draw but a last move that completes a line is a win, an illegal move changes nothing and the turn does not pass, and after the end every move returns `GameOver` (which beats the other refusals). Non-goals: a UI, a computer opponent, networking, persistence.
+
+**Change Storm 1, Connect-N:** the board is any `rows x cols`, the winning length is any `winLength` that fits on the longer side, and a run of `winLength` or more counts (including a run formed by joining two shorter ones). It is revealable by asking whether the board or the rules will always be 3x3.
+
+**Change Storm 2, undo:** `undo()` takes back the last successful move, gives the turn back, and reopens a game that had ended. Refused moves are not recorded. It is revealable by the same question: product wants to take moves back.
+
+## Reference design
+- `Board` owns the grid: size, cell contents, bounds and the one index formula. It knows nothing about turns or winning.
+- `LineWinRule` answers one question: does the mark just placed complete a line of `length` or more? It counts outwards from the last move along the four line directions, so only lines through that cell are examined.
+- `Players` knows whose turn it is and can advance and rewind. Marks are a string in play order, so a third player is data, not code.
+- `GameConfig` holds the size and the winning length and is the only place that says which combinations are valid.
+- `MoveHistory` keeps the successful moves in order.
+- `GameImpl` implements the public interface. `play()` validates first (game over, bounds, occupied), then mutates (place, record, judge, advance). It delegates each question to the object that owns the answer; the class stays under the Senior Review method limit because the grid, the rule, the turns and the history are separate classes.
+
+**Storm 1 in the reference:** `Board` and `LineWinRule` were already parameterised by size and length because the base game constructs them from a `GameConfig{3, 3, 3}`. The storm adds the `GameConfig` validation, two factory functions and three read-only accessors. No rule is written against the number three, so no existing class changes. The honest cost: that parameterisation was a small up-front choice the base problem did not demand, and a candidate who hard-coded 3 pays for it here (see Alternatives).
+
+**Storm 2 in the reference:** one new class, `MoveHistory`, and one method on `GameImpl`. The undo is a mirror of `play()`: clear the cell, rewind the turn, reopen the game. It works because the game ends on the first win or draw, so the last move is always the one that ended it and taking it back always reopens the game.
+
+## Alternatives
+- **Hard-coded 3x3** (`char board[3][3]`, a table of the eight winning triples) is what most first attempts look like, and it is the right answer to the base brief in ten minutes. The storm turns it into a rewrite of the board, the win check and the draw check. Say so, and say what you would do when you hear the first hint that the size may change: make the size a constructor argument, not an abstraction.
+- **Scan the whole board after every move** is simpler to explain and perfectly fine at 3x3 or 7x6. It costs O(cells x winLength) per move; checking only the lines through the last move is a small amount of extra code for a large saving on big boards.
+- **An interface `WinRule` with `LineWinRule` as the first implementation** is a reasonable seam if a second win condition is likely (for example "most captures", or misere rules where making the line loses). With one implementation and no sign of a second it is speculation, so the reference keeps a concrete class and the follow-ups discuss when to extract the interface.
+- **A `Player` class hierarchy** (`XPlayer`, `OPlayer`) models a difference that is only data (a mark); a `char` and a turn order are enough. Real player behaviour (human or bot) belongs outside the engine.
+- **Board as `vector<vector<char>>`** works and reads naturally; a flat vector with one index function (as in the reference) has better locality and one place to get the stride right. The `swapped_stride` bad design shows how the flat version goes wrong when the formula is repeated inline.
+- **Undo by snapshot** (copy the board per move, Memento) is simpler when a move can change many cells. For one-cell moves, the move list is smaller and trivial to reverse. Commands with `undo()` pay off once moves have side effects.
+
+## Trade-offs
+Returning a status instead of throwing keeps every outcome visible and works without exceptions, at the price that a caller can ignore it. Keeping the grid, the rule, the turn order and the history in four small classes costs four files for a game that fits in 60 lines; the benefit shows only when something changes, which is what the storms measure. For a one-off script the single class is the better engineering; for a code base that will grow variants (Connect Four with gravity, Gomoku, Reversi) the split is cheap insurance.
+
+The `winLength <= max(rows, cols)` validation is deliberately permissive about shape: a 1x5 board with winLength 5 is a legal, silly game. Rejecting it would be a product decision, not a correctness one.
+
+## What breaks at 10x
+At 10x the board (a 30x30 grid with winLength 10) the per-move cost is still O(winLength) because only lines through the last move are scanned; scanning the whole board would be 900 x 10 reads per move. At 10x the games (a server), the engine stays a pure state machine, so the work is outside it: serialise the moves of one game through a single owner, give each move a sequence number so retries are idempotent, and persist the move list rather than the board. At 10x the rule variety (Connect Four gravity, Gomoku overlines, Reversi flips) the first thing to extract is a placement rule (where may a mark go) and the second a win rule.
+
+## Level signals
+- **SDE2:** correct rules for all lines, draw versus last-move win, refusals that do not pass the turn, and tests for them. Reasonable class split; may hard-code 3 and pay for it in the storm.
+- **Senior:** asks "will the board stay 3x3?" before coding, parameterises size and length without over-building, scans only the lines through the last move, validates before mutating, and makes undo a mirror of play.
+- **Staff:** separates the pure rules engine from the service around it, names the next two seams (placement rule, win rule) and why they are not built yet, and discusses a bot, replay and idempotent retries unprompted.
+14:T449,#pragma once
+// Public API for the Tic-tac-toe problem. The hidden tests only use what is declared here.
+// You implement ttt::makeGame() (in any of your .cpp files); everything behind it is your design.
+#include <memory>
+
+namespace ttt {
+
+enum class Status {
+  Ok,
+  OutOfBounds,
+  CellTaken,
+  GameOver
+};
+
+enum class Outcome {
+  InProgress,
+  Won,
+  Draw
+};
+
+class Game {
+ public:
+  virtual ~Game() = default;
+
+  // The player to move marks the cell at (row, col). Rows and columns start at 0.
+  virtual Status play(int row, int col) = 0;
+
+  // 'X' or 'O'; '\0' once the game is over.
+  virtual char nextPlayer() const = 0;
+  virtual Outcome outcome() const = 0;
+  // The winning mark; '\0' unless outcome() == Outcome::Won.
+  virtual char winner() const = 0;
+  // 'X', 'O' or '.' for an empty cell; '\0' if (row, col) is off the board.
+  virtual char cellAt(int row, int col) const = 0;
+  // Number of successful play() calls so far.
+  virtual int movesPlayed() const = 0;
+};
+
+// A classic 3x3 game, three in a row to win, X moves first.
+std::unique_ptr<Game> makeGame();
+
+}  // namespace ttt
+15:T16c6,#include <initializer_list>
+#include <utility>
+
+#include "api.h"
+#include "bp_test.h"
+
+using ttt::Outcome;
+using ttt::Status;
+
+namespace {
+using Moves = std::initializer_list<std::pair<int, int>>;
+
+void playAll(ttt::Game& g, Moves moves) {
+  for (const auto& m : moves) g.play(m.first, m.second);
+}
+
+// X wins the top row; O has (1,0) and (1,1).
+void xWinsTopRow(ttt::Game& g) { playAll(g, {{0, 0}, {1, 0}, {0, 1}, {1, 1}, {0, 2}}); }
+}  // namespace
+
+TEST(Turns, XStartsAndPlayersAlternate) {
+  auto g = ttt::makeGame();
+  EXPECT_EQ(g->nextPlayer(), 'X');
+  EXPECT_EQ(g->play(0, 0), Status::Ok);
+  EXPECT_EQ(g->nextPlayer(), 'O');
+  EXPECT_EQ(g->play(1, 1), Status::Ok);
+  EXPECT_EQ(g->nextPlayer(), 'X');
+}
+
+TEST(Turns, MarksAreRecordedPerPlayer) {
+  auto g = ttt::makeGame();
+  playAll(*g, {{0, 0}, {1, 1}, {2, 2}});
+  EXPECT_EQ(g->cellAt(0, 0), 'X');
+  EXPECT_EQ(g->cellAt(1, 1), 'O');
+  EXPECT_EQ(g->cellAt(2, 2), 'X');
+  EXPECT_EQ(g->cellAt(0, 1), '.');
+}
+
+TEST(Board, StartsEmptyAndInProgress) {
+  auto g = ttt::makeGame();
+  for (int r = 0; r < 3; ++r)
+    for (int c = 0; c < 3; ++c) EXPECT_EQ(g->cellAt(r, c), '.');
+  EXPECT_TRUE(g->outcome() == Outcome::InProgress);
+  EXPECT_EQ(g->winner(), '\0');
+  EXPECT_EQ(g->movesPlayed(), 0);
+}
+
+TEST(Board, CellAtOffTheBoardIsNul) {
+  auto g = ttt::makeGame();
+  EXPECT_EQ(g->cellAt(-1, 0), '\0');
+  EXPECT_EQ(g->cellAt(0, -1), '\0');
+  EXPECT_EQ(g->cellAt(3, 0), '\0');
+  EXPECT_EQ(g->cellAt(0, 3), '\0');
+}
+
+TEST(Board, GamesAreIndependent) {
+  auto a = ttt::makeGame();
+  auto b = ttt::makeGame();
+  a->play(1, 1);
+  EXPECT_EQ(b->cellAt(1, 1), '.');
+  EXPECT_EQ(b->nextPlayer(), 'X');
+}
+
+TEST(Moves, MovesPlayedCountsSuccessfulMovesOnly) {
+  auto g = ttt::makeGame();
+  g->play(0, 0);
+  g->play(0, 0);
+  g->play(5, 5);
+  g->play(1, 1);
+  EXPECT_EQ(g->movesPlayed(), 2);
+}
+
+TEST(Winning, RowWin) {
+  auto g = ttt::makeGame();
+  xWinsTopRow(*g);
+  EXPECT_TRUE(g->outcome() == Outcome::Won);
+  EXPECT_EQ(g->winner(), 'X');
+}
+
+TEST(Winning, ColumnWin) {
+  auto g = ttt::makeGame();
+  playAll(*g, {{0, 2}, {0, 0}, {1, 2}, {0, 1}, {2, 2}});
+  EXPECT_TRUE(g->outcome() == Outcome::Won);
+  EXPECT_EQ(g->winner(), 'X');
+}
+
+TEST(Winning, MainDiagonalWin) {
+  auto g = ttt::makeGame();
+  playAll(*g, {{0, 0}, {0, 1}, {1, 1}, {0, 2}, {2, 2}});
+  EXPECT_TRUE(g->outcome() == Outcome::Won);
+  EXPECT_EQ(g->winner(), 'X');
+}
+
+TEST(Winning, AntiDiagonalWin) {
+  auto g = ttt::makeGame();
+  playAll(*g, {{0, 2}, {0, 0}, {1, 1}, {0, 1}, {2, 0}});
+  EXPECT_TRUE(g->outcome() == Outcome::Won);
+  EXPECT_EQ(g->winner(), 'X');
+}
+
+TEST(Winning, SecondPlayerCanWin) {
+  auto g = ttt::makeGame();
+  playAll(*g, {{0, 0}, {1, 0}, {0, 1}, {1, 1}, {2, 2}, {1, 2}});
+  EXPECT_TRUE(g->outcome() == Outcome::Won);
+  EXPECT_EQ(g->winner(), 'O');
+}
+
+TEST(Winning, TwoInARowIsNotEnough) {
+  auto g = ttt::makeGame();
+  playAll(*g, {{0, 0}, {1, 0}, {0, 1}});
+  EXPECT_TRUE(g->outcome() == Outcome::InProgress);
+  EXPECT_EQ(g->winner(), '\0');
+}
+
+TEST(Winning, MixedMarksDoNotMakeALine) {
+  auto g = ttt::makeGame();
+  playAll(*g, {{0, 0}, {0, 1}, {0, 2}});
+  EXPECT_TRUE(g->outcome() == Outcome::InProgress);
+}
+
+TEST(Winning, NoNextPlayerAfterAWin) {
+  auto g = ttt::makeGame();
+  xWinsTopRow(*g);
+  EXPECT_EQ(g->nextPlayer(), '\0');
+}
+
+TEST(Draws, FullBoardWithoutALineIsADraw) {
+  auto g = ttt::makeGame();
+  // X O X / X O O / O X X
+  playAll(*g, {{0, 0}, {0, 1}, {0, 2}, {1, 1}, {1, 0}, {1, 2}, {2, 1}, {2, 0}, {2, 2}});
+  EXPECT_EQ(g->movesPlayed(), 9);
+  EXPECT_TRUE(g->outcome() == Outcome::Draw);
+  EXPECT_EQ(g->winner(), '\0');
+  EXPECT_EQ(g->nextPlayer(), '\0');
+}
+
+TEST(Draws, NotADrawBeforeTheBoardIsFull) {
+  auto g = ttt::makeGame();
+  playAll(*g, {{0, 0}, {0, 1}, {0, 2}, {1, 1}, {1, 0}, {1, 2}, {2, 1}, {2, 0}});
+  EXPECT_TRUE(g->outcome() == Outcome::InProgress);
+}
+
+TEST(Draws, WinningOnTheLastCellIsAWinNotADraw) {
+  auto g = ttt::makeGame();
+  // X O X / X O O / X X O: X completes column 0 with the ninth move.
+  playAll(*g, {{0, 0}, {0, 1}, {0, 2}, {1, 1}, {1, 0}, {1, 2}, {2, 1}, {2, 2}, {2, 0}});
+  EXPECT_EQ(g->movesPlayed(), 9);
+  EXPECT_TRUE(g->outcome() == Outcome::Won);
+  EXPECT_EQ(g->winner(), 'X');
+}
+
+TEST(Refusals, OutOfBoundsChangesNothing) {
+  auto g = ttt::makeGame();
+  EXPECT_EQ(g->play(-1, 0), Status::OutOfBounds);
+  EXPECT_EQ(g->nextPlayer(), 'X');
+  EXPECT_EQ(g->play(0, -1), Status::OutOfBounds);
+  EXPECT_EQ(g->nextPlayer(), 'X');
+  EXPECT_EQ(g->play(3, 0), Status::OutOfBounds);
+  EXPECT_EQ(g->nextPlayer(), 'X');
+  EXPECT_EQ(g->play(0, 3), Status::OutOfBounds);
+  EXPECT_EQ(g->nextPlayer(), 'X');
+  EXPECT_EQ(g->movesPlayed(), 0);
+}
+
+TEST(Refusals, TakenCellKeepsTheTurn) {
+  auto g = ttt::makeGame();
+  g->play(1, 1);
+  EXPECT_EQ(g->play(1, 1), Status::CellTaken);
+  EXPECT_EQ(g->nextPlayer(), 'O');
+  EXPECT_EQ(g->cellAt(1, 1), 'X');
+  EXPECT_EQ(g->movesPlayed(), 1);
+  EXPECT_EQ(g->play(0, 0), Status::Ok);
+  EXPECT_EQ(g->cellAt(0, 0), 'O');
+}
+
+TEST(Refusals, PlayingYourOwnCellIsAlsoTaken) {
+  auto g = ttt::makeGame();
+  playAll(*g, {{0, 0}, {1, 1}});
+  EXPECT_EQ(g->play(0, 0), Status::CellTaken);
+  EXPECT_EQ(g->nextPlayer(), 'X');
+}
+
+TEST(GameOver, PlayAfterAWinIsRefused) {
+  auto g = ttt::makeGame();
+  xWinsTopRow(*g);
+  EXPECT_EQ(g->play(2, 2), Status::GameOver);
+  EXPECT_EQ(g->cellAt(2, 2), '.');
+  EXPECT_EQ(g->movesPlayed(), 5);
+  EXPECT_EQ(g->winner(), 'X');
+  EXPECT_TRUE(g->outcome() == Outcome::Won);
+}
+
+TEST(GameOver, GameOverBeatsOtherRefusals) {
+  auto g = ttt::makeGame();
+  xWinsTopRow(*g);
+  EXPECT_EQ(g->play(9, 9), Status::GameOver);
+  EXPECT_EQ(g->play(0, 0), Status::GameOver);
+}
+
+TEST(GameOver, PlayAfterADrawIsRefused) {
+  auto g = ttt::makeGame();
+  playAll(*g, {{0, 0}, {0, 1}, {0, 2}, {1, 1}, {1, 0}, {1, 2}, {2, 1}, {2, 0}, {2, 2}});
+  EXPECT_EQ(g->play(0, 0), Status::GameOver);
+  EXPECT_TRUE(g->outcome() == Outcome::Draw);
+}
+16:T1206,#include <initializer_list>
+#include <utility>
+
+#include "api_storm1.h"
+#include "bp_test.h"
+
+using ttt::Outcome;
+using ttt::Status;
+
+namespace {
+using Moves = std::initializer_list<std::pair<int, int>>;
+
+void playAll(ttt::Game& g, Moves moves) {
+  for (const auto& m : moves) g.play(m.first, m.second);
+}
+}  // namespace
+
+TEST(Config, BadConfigurationsAreRejected) {
+  EXPECT_TRUE(ttt::makeConfigurableGame(0, 3, 3) == nullptr);
+  EXPECT_TRUE(ttt::makeConfigurableGame(3, 0, 3) == nullptr);
+  EXPECT_TRUE(ttt::makeConfigurableGame(3, 3, 0) == nullptr);
+  EXPECT_TRUE(ttt::makeConfigurableGame(-1, 3, 3) == nullptr);
+  EXPECT_TRUE(ttt::makeConfigurableGame(3, 3, 4) == nullptr);
+  EXPECT_TRUE(ttt::makeConfigurableGame(2, 5, 6) == nullptr);
+}
+
+TEST(Config, LineLongerThanOneSideButFittingTheOtherIsAccepted) {
+  auto g = ttt::makeConfigurableGame(1, 5, 5);
+  EXPECT_TRUE(g != nullptr);
+  EXPECT_TRUE(ttt::makeConfigurableGame(2, 5, 5) != nullptr);
+  EXPECT_TRUE(ttt::makeConfigurableGame(4, 4, 1) != nullptr);
+}
+
+TEST(Config, AccessorsReportTheConfiguration) {
+  auto g = ttt::makeConfigurableGame(6, 7, 4);
+  EXPECT_EQ(g->rows(), 6);
+  EXPECT_EQ(g->cols(), 7);
+  EXPECT_EQ(g->winLength(), 4);
+}
+
+TEST(Config, RectangularBoardKeepsCellsApart) {
+  auto g = ttt::makeConfigurableGame(2, 5, 3);
+  EXPECT_EQ(g->play(1, 0), Status::Ok);
+  EXPECT_EQ(g->play(0, 2), Status::Ok);
+  EXPECT_EQ(g->cellAt(1, 0), 'X');
+  EXPECT_EQ(g->cellAt(0, 2), 'O');
+  EXPECT_EQ(g->cellAt(1, 4), '.');
+}
+
+TEST(Config, BoundsFollowTheConfiguredSize) {
+  auto g = ttt::makeConfigurableGame(2, 5, 3);
+  EXPECT_EQ(g->play(2, 0), Status::OutOfBounds);
+  EXPECT_EQ(g->play(0, 5), Status::OutOfBounds);
+  EXPECT_EQ(g->play(1, 4), Status::Ok);
+  EXPECT_EQ(g->cellAt(2, 0), '\0');
+  EXPECT_EQ(g->cellAt(0, 5), '\0');
+}
+
+TEST(Lines, FourInARowOnASevenBySixBoard) {
+  auto g = ttt::makeConfigurableGame(6, 7, 4);
+  playAll(*g, {{0, 0}, {1, 0}, {0, 1}, {1, 1}, {0, 2}, {1, 2}, {0, 3}});
+  EXPECT_TRUE(g->outcome() == Outcome::Won);
+  EXPECT_EQ(g->winner(), 'X');
+  EXPECT_EQ(g->play(5, 5), Status::GameOver);
+}
+
+TEST(Lines, ThreeIsNotEnoughForFour) {
+  auto g = ttt::makeConfigurableGame(6, 7, 4);
+  playAll(*g, {{0, 0}, {1, 0}, {0, 1}, {1, 1}, {0, 2}});
+  EXPECT_TRUE(g->outcome() == Outcome::InProgress);
+}
+
+TEST(Lines, ColumnWinWithLengthFour) {
+  auto g = ttt::makeConfigurableGame(5, 5, 4);
+  playAll(*g, {{0, 0}, {0, 1}, {1, 0}, {1, 1}, {2, 0}, {2, 1}, {3, 0}});
+  EXPECT_TRUE(g->outcome() == Outcome::Won);
+  EXPECT_EQ(g->winner(), 'X');
+}
+
+TEST(Lines, DiagonalOnARectangularBoard) {
+  auto g = ttt::makeConfigurableGame(4, 6, 4);
+  playAll(*g, {{0, 1}, {0, 0}, {1, 2}, {0, 3}, {2, 3}, {1, 0}, {3, 4}});
+  EXPECT_TRUE(g->outcome() == Outcome::Won);
+  EXPECT_EQ(g->winner(), 'X');
+}
+
+TEST(Lines, AntiDiagonalOnARectangularBoard) {
+  auto g = ttt::makeConfigurableGame(4, 6, 4);
+  playAll(*g, {{0, 4}, {0, 0}, {1, 3}, {1, 0}, {2, 2}, {2, 0}, {3, 1}});
+  EXPECT_TRUE(g->outcome() == Outcome::Won);
+  EXPECT_EQ(g->winner(), 'X');
+}
+
+TEST(Lines, JoiningTwoRunsStillWins) {
+  auto g = ttt::makeConfigurableGame(3, 5, 3);
+  // X holds (0,0) (0,1) and (0,3) (0,4); filling (0,2) makes a run of five.
+  playAll(*g, {{0, 0}, {2, 0}, {0, 1}, {2, 2}, {0, 3}, {2, 4}, {0, 4}, {1, 2}, {0, 2}});
+  EXPECT_TRUE(g->outcome() == Outcome::Won);
+  EXPECT_EQ(g->winner(), 'X');
+}
+
+TEST(Lines, LengthOneWinsOnTheFirstMove) {
+  auto g = ttt::makeConfigurableGame(4, 4, 1);
+  EXPECT_EQ(g->play(2, 2), Status::Ok);
+  EXPECT_TRUE(g->outcome() == Outcome::Won);
+  EXPECT_EQ(g->winner(), 'X');
+}
+
+TEST(Lines, SecondPlayerWinsOnABiggerBoard) {
+  auto g = ttt::makeConfigurableGame(4, 4, 4);
+  playAll(*g, {{0, 0}, {3, 0}, {0, 1}, {3, 1}, {1, 3}, {3, 2}, {2, 2}, {3, 3}});
+  EXPECT_TRUE(g->outcome() == Outcome::Won);
+  EXPECT_EQ(g->winner(), 'O');
+}
+
+TEST(Draws, DrawUsesTheConfiguredBoardSize) {
+  auto g = ttt::makeConfigurableGame(1, 2, 2);
+  playAll(*g, {{0, 0}, {0, 1}});
+  EXPECT_TRUE(g->outcome() == Outcome::Draw);
+  EXPECT_EQ(g->movesPlayed(), 2);
+  EXPECT_EQ(g->play(0, 0), Status::GameOver);
+}
+
+TEST(Draws, BoardNotFullIsNotADrawEvenAfterNineMoves) {
+  auto g = ttt::makeConfigurableGame(4, 4, 4);
+  playAll(*g, {{0, 0}, {0, 1}, {0, 2}, {1, 0}, {1, 1}, {1, 2}, {2, 0}, {2, 1}, {2, 2}});
+  EXPECT_EQ(g->movesPlayed(), 9);
+  EXPECT_TRUE(g->outcome() == Outcome::InProgress);
+}
+
+TEST(Classic, ThreeByThreeConfigurationBehavesLikeTheClassicGame) {
+  auto g = ttt::makeConfigurableGame(3, 3, 3);
+  playAll(*g, {{0, 0}, {1, 0}, {0, 1}, {1, 1}, {0, 2}});
+  EXPECT_TRUE(g->outcome() == Outcome::Won);
+  EXPECT_EQ(g->winner(), 'X');
+  EXPECT_EQ(g->nextPlayer(), '\0');
+}
+17:Td52,#include <initializer_list>
+#include <utility>
+
+#include "api_storm2.h"
+#include "bp_test.h"
+
+using ttt::Outcome;
+using ttt::Status;
+
+namespace {
+using Moves = std::initializer_list<std::pair<int, int>>;
+
+void playAll(ttt::Game& g, Moves moves) {
+  for (const auto& m : moves) g.play(m.first, m.second);
+}
+}  // namespace
+
+TEST(Undo, InvalidConfigurationsAreRejected) {
+  EXPECT_TRUE(ttt::makeUndoableGame(3, 3, 4) == nullptr);
+  EXPECT_TRUE(ttt::makeUndoableGame(0, 3, 3) == nullptr);
+}
+
+TEST(Undo, NothingToUndoReturnsFalse) {
+  auto g = ttt::makeUndoableGame(3, 3, 3);
+  EXPECT_FALSE(g->undo());
+  EXPECT_EQ(g->nextPlayer(), 'X');
+  EXPECT_EQ(g->movesPlayed(), 0);
+}
+
+TEST(Undo, TakesBackTheLastMark) {
+  auto g = ttt::makeUndoableGame(3, 3, 3);
+  playAll(*g, {{0, 0}, {1, 1}});
+  EXPECT_TRUE(g->undo());
+  EXPECT_EQ(g->cellAt(1, 1), '.');
+  EXPECT_EQ(g->cellAt(0, 0), 'X');
+  EXPECT_EQ(g->movesPlayed(), 1);
+}
+
+TEST(Undo, GivesTheTurnBack) {
+  auto g = ttt::makeUndoableGame(3, 3, 3);
+  playAll(*g, {{0, 0}, {1, 1}, {2, 2}});
+  EXPECT_EQ(g->nextPlayer(), 'O');
+  EXPECT_TRUE(g->undo());
+  EXPECT_EQ(g->nextPlayer(), 'X');
+  EXPECT_TRUE(g->undo());
+  EXPECT_EQ(g->nextPlayer(), 'O');
+}
+
+TEST(Undo, CanUndoAllTheWayBack) {
+  auto g = ttt::makeUndoableGame(3, 3, 3);
+  playAll(*g, {{0, 0}, {1, 1}, {2, 2}});
+  EXPECT_TRUE(g->undo());
+  EXPECT_TRUE(g->undo());
+  EXPECT_TRUE(g->undo());
+  EXPECT_FALSE(g->undo());
+  EXPECT_EQ(g->movesPlayed(), 0);
+  EXPECT_EQ(g->nextPlayer(), 'X');
+  EXPECT_EQ(g->cellAt(0, 0), '.');
+}
+
+TEST(Undo, ReopensAWonGame) {
+  auto g = ttt::makeUndoableGame(3, 3, 3);
+  playAll(*g, {{0, 0}, {1, 0}, {0, 1}, {1, 1}, {0, 2}});
+  EXPECT_TRUE(g->outcome() == Outcome::Won);
+  EXPECT_TRUE(g->undo());
+  EXPECT_TRUE(g->outcome() == Outcome::InProgress);
+  EXPECT_EQ(g->winner(), '\0');
+  EXPECT_EQ(g->nextPlayer(), 'X');
+  EXPECT_EQ(g->play(2, 2), Status::Ok);
+}
+
+TEST(Undo, TheSameWinningMoveWinsAgain) {
+  auto g = ttt::makeUndoableGame(3, 3, 3);
+  playAll(*g, {{0, 0}, {1, 0}, {0, 1}, {1, 1}, {0, 2}});
+  g->undo();
+  EXPECT_EQ(g->play(0, 2), Status::Ok);
+  EXPECT_TRUE(g->outcome() == Outcome::Won);
+  EXPECT_EQ(g->winner(), 'X');
+}
+
+TEST(Undo, ReopensADrawnGame) {
+  auto g = ttt::makeUndoableGame(1, 2, 2);
+  playAll(*g, {{0, 0}, {0, 1}});
+  EXPECT_TRUE(g->outcome() == Outcome::Draw);
+  EXPECT_TRUE(g->undo());
+  EXPECT_TRUE(g->outcome() == Outcome::InProgress);
+  EXPECT_EQ(g->nextPlayer(), 'O');
+  EXPECT_EQ(g->play(0, 1), Status::Ok);
+}
+
+TEST(Undo, RefusedMovesAreNotRecorded) {
+  auto g = ttt::makeUndoableGame(3, 3, 3);
+  g->play(1, 1);
+  EXPECT_EQ(g->play(1, 1), Status::CellTaken);
+  EXPECT_EQ(g->play(7, 7), Status::OutOfBounds);
+  EXPECT_TRUE(g->undo());
+  EXPECT_EQ(g->cellAt(1, 1), '.');
+  EXPECT_EQ(g->nextPlayer(), 'X');
+  EXPECT_FALSE(g->undo());
+}
+
+TEST(Undo, PlayDifferentlyAfterUndo) {
+  auto g = ttt::makeUndoableGame(3, 3, 3);
+  playAll(*g, {{0, 0}, {0, 1}});
+  g->undo();
+  EXPECT_EQ(g->play(2, 2), Status::Ok);
+  EXPECT_EQ(g->cellAt(2, 2), 'O');
+  EXPECT_EQ(g->cellAt(0, 1), '.');
+  EXPECT_EQ(g->movesPlayed(), 2);
+}
+
+TEST(Undo, WorksOnLargerBoards) {
+  auto g = ttt::makeUndoableGame(6, 7, 4);
+  playAll(*g, {{0, 0}, {1, 0}, {0, 1}, {1, 1}, {0, 2}, {1, 2}, {0, 3}});
+  EXPECT_TRUE(g->outcome() == Outcome::Won);
+  EXPECT_TRUE(g->undo());
+  EXPECT_TRUE(g->outcome() == Outcome::InProgress);
+  EXPECT_EQ(g->cellAt(0, 3), '.');
+  EXPECT_EQ(g->movesPlayed(), 6);
+}
+18:T430,#pragma once
+#include <cstddef>
+#include <vector>
+
+// The grid: size, contents and bounds. It knows nothing about turns or winning.
+class Board {
+ public:
+  static constexpr char kEmpty = '.';
+
+  Board(int rows, int cols) : rows_(rows), cols_(cols), cells_(static_cast<std::size_t>(rows) * cols, kEmpty) {}
+
+  int rows() const { return rows_; }
+  int cols() const { return cols_; }
+  bool inBounds(int row, int col) const { return row >= 0 && row < rows_ && col >= 0 && col < cols_; }
+  char at(int row, int col) const { return cells_[index(row, col)]; }
+  bool isEmpty(int row, int col) const { return at(row, col) == kEmpty; }
+  bool full() const { return filled_ == cells_.size(); }
+
+  void place(int row, int col, char mark) {
+    cells_[index(row, col)] = mark;
+    ++filled_;
+  }
+  void clear(int row, int col) {
+    cells_[index(row, col)] = kEmpty;
+    --filled_;
+  }
+
+ private:
+  std::size_t index(int row, int col) const { return static_cast<std::size_t>(row) * cols_ + col; }
+
+  int rows_;
+  int cols_;
+  std::vector<char> cells_;
+  std::size_t filled_ = 0;
+};
+19:T8fe,#pragma once
+#include "api_storm2.h"
+#include "board.h"
+#include "game_config.h"
+#include "line_rule.h"
+#include "move_history.h"
+#include "players.h"
+
+// The public face. Each play() validates first and mutates last, and delegates every question
+// about the grid, the line rule, the turn and the history to the object that owns it.
+class GameImpl : public ttt::UndoableGame {
+ public:
+  explicit GameImpl(const GameConfig& config) : config_(config), board_(config.rows(), config.cols()), rule_(config.winLength()) {}
+
+  ttt::Status play(int row, int col) override {
+    if (outcome_ != ttt::Outcome::InProgress) return ttt::Status::GameOver;
+    if (!board_.inBounds(row, col)) return ttt::Status::OutOfBounds;
+    if (!board_.isEmpty(row, col)) return ttt::Status::CellTaken;
+
+    const char mark = players_.current();
+    board_.place(row, col, mark);
+    history_.record(row, col);
+    if (rule_.completedBy(board_, row, col)) {
+      outcome_ = ttt::Outcome::Won;
+      winner_ = mark;
+    } else if (board_.full()) {
+      outcome_ = ttt::Outcome::Draw;
+    }
+    players_.advance();
+    return ttt::Status::Ok;
+  }
+
+  char nextPlayer() const override { return outcome_ == ttt::Outcome::InProgress ? players_.current() : '\0'; }
+  ttt::Outcome outcome() const override { return outcome_; }
+  char winner() const override { return winner_; }
+  char cellAt(int row, int col) const override { return board_.inBounds(row, col) ? board_.at(row, col) : '\0'; }
+  int movesPlayed() const override { return history_.size(); }
+
+  int rows() const override { return config_.rows(); }
+  int cols() const override { return config_.cols(); }
+  int winLength() const override { return config_.winLength(); }
+
+  // The game ends on the first win or draw, so the last move is always the one that ended it:
+  // taking it back always reopens the game.
+  bool undo() override {
+    if (history_.empty()) return false;
+    const MoveHistory::Move last = history_.popLast();
+    board_.clear(last.first, last.second);
+    players_.rewind();
+    outcome_ = ttt::Outcome::InProgress;
+    winner_ = '\0';
+    return true;
+  }
+
+ private:
+  GameConfig config_;
+  Board board_;
+  LineWinRule rule_;
+  Players players_;
+  MoveHistory history_;
+  ttt::Outcome outcome_ = ttt::Outcome::InProgress;
+  char winner_ = '\0';
+};
+1a:T4a8,#pragma once
+#include "board.h"
+
+// Does the mark just placed complete a line of `length` or more? Only lines through the last move can be new,
+// so we count outwards from it in the four line directions (row, column, two diagonals).
+class LineWinRule {
+ public:
+  explicit LineWinRule(int length) : length_(length) {}
+
+  int length() const { return length_; }
+
+  bool completedBy(const Board& board, int row, int col) const {
+    for (const auto& dir : kDirections) {
+      int run = 1 + countTowards(board, row, col, dir[0], dir[1]) + countTowards(board, row, col, -dir[0], -dir[1]);
+      if (run >= length_) return true;
+    }
+    return false;
+  }
+
+ private:
+  static constexpr int kDirections[4][2] = {{0, 1}, {1, 0}, {1, 1}, {1, -1}};
+
+  // How many more cells with the same mark lie in this direction, not counting the starting cell.
+  static int countTowards(const Board& board, int row, int col, int dRow, int dCol) {
+    const char mark = board.at(row, col);
+    int count = 0;
+    row += dRow;
+    col += dCol;
+    while (board.inBounds(row, col) && board.at(row, col) == mark) {
+      ++count;
+      row += dRow;
+      col += dCol;
+    }
+    return count;
+  }
+
+  int length_;
+};
+f:[["children",{"s":"__PAGE__","h":160,"d":{"r":["$","$1","c",{"children":[["$","$L12",null,{"bundle":{"id":"tic-tac-toe","title":"Tic-tac-toe to Connect-N","level":"SDE2","parMinutes":45,"patterns":["Strategy","Memento"],"requirements":[{"id":"R-turns","text":"X moves first and players alternate. play(row, col) marks the cell for the player to move; cellAt() reads it ('.' when empty, '\\0' off the board) and movesPlayed() counts successful moves.","phase":"base","hidden":false},{"id":"R-win","text":"Three of the same mark in a row, a column or either diagonal wins. Two in a row, or a line of mixed marks, does not. After a win nextPlayer() is '\\0' and winner() is the winning mark.","phase":"base","hidden":true},{"id":"R-draw","text":"A full board with no winning line is a Draw. If the move that fills the last cell completes a line, it is a Win, not a Draw.","phase":"base","hidden":true},{"id":"R-refusal","text":"A move off the board returns OutOfBounds and a move on an occupied cell returns CellTaken. Neither changes anything: the same player is still to move and movesPlayed() does not change.","phase":"base","hidden":true},{"id":"R-over","text":"Once the game is won or drawn, every play() returns GameOver (checked before OutOfBounds and CellTaken) and changes nothing.","phase":"base","hidden":true},{"id":"R-config","text":"Storm 1: makeConfigurableGame(rows, cols, winLength) builds a Connect-N style game on any board. It returns nullptr unless rows, cols and winLength are at least 1 and winLength fits on the longer side. A line of winLength or more of one mark in a row, column or diagonal wins, on any board shape, including a run formed by joining two shorter ones. A draw is a full board of the configured size.","phase":"storm1","hidden":true},{"id":"R-undo","text":"Storm 2: undo() takes back the most recent successful play() and returns true; with nothing to take back it returns false and changes nothing. The mark is removed, the turn goes back to that player, and a finished game (won or drawn) is reopened. Refused moves are not recorded, so they are never undone.","phase":"storm2","hidden":true}],"brief":"# Tic-tac-toe\n\nYou are writing the rules engine of a two-player board game, starting with **tic-tac-toe**. Two players take turns marking cells on a 3x3 board; the first to get three of their marks in a line wins.\n\nWhat you know so far:\n\n- Players are `X` and `O`, and `X` moves first.\n- A move names a row and a column; rows and columns start at 0.\n- The game reports whose turn it is, how it ended (won, drawn or still going) and what is in each cell.\n\nYour task: design and implement it behind the `ttt::Game` interface in `api.h`. The hidden tests call only that interface. Ask the interviewer questions first: the brief is deliberately incomplete, and the game you are asked to build may not stay a 3x3 game.\n","editorial":"$13","clarify":[{"id":"q-lines","text":"What counts as three in a row: rows, columns, both diagonals?","answer":"All of them: any row, any column and both diagonals. Two in a row is not enough, and the line must be all one player's mark.","reveals":["R-win"],"quality":"essential"},{"id":"q-draw","text":"When is the game a draw, and what if the last cell completes a line?","answer":"A draw is a full board with no winning line. If the move that fills the last cell also completes a line, that player wins; it is not a draw.","reveals":["R-draw"],"quality":"essential"},{"id":"q-refusal","text":"What happens on an illegal move (off the board, or a cell already taken)? Does the turn pass?","answer":"OutOfBounds or CellTaken, nothing changes and the same player is still to move.","reveals":["R-refusal"],"quality":"essential"},{"id":"q-after","text":"What if someone plays after the game has ended?","answer":"GameOver, whatever the cell, even one that is off the board. Nothing changes, and nextPlayer() is '\\0'.","reveals":["R-over"],"quality":"essential"},{"id":"q-future","text":"Will the board always be 3x3 with three in a row? Do the rules or the number of players change?","answer":"Good question. Product wants a Connect-N family (bigger boards, longer lines) soon, and a way to take moves back. Details arrive with the change.","reveals":["R-config","R-undo"],"quality":"essential"},{"id":"q-cell","text":"How does the caller read the board, and what does cellAt() return off the board?","answer":"cellAt() returns 'X', 'O' or '.' for an empty cell, and '\\0' off the board.","reveals":[],"quality":"useful"},{"id":"q-start","text":"Who starts, and can that be chosen?","answer":"X always starts. Not configurable.","reveals":[],"quality":"useful"},{"id":"q-count","text":"Does movesPlayed() count refused moves?","answer":"No, only successful ones.","reveals":[],"quality":"useful"},{"id":"q-ai","text":"Should there be a computer opponent?","answer":"Not now. The engine only validates and records moves. A bot would sit on top of the same interface.","reveals":[],"quality":"useful"},{"id":"q-ui","text":"Is there a screen, animation or sound to design?","answer":"No UI. Only the interface in api.h is tested.","reveals":[],"quality":"noise"},{"id":"q-net","text":"Is it played over a network, and do we need accounts or ratings?","answer":"No. In memory, one process, no accounts.","reveals":[],"quality":"noise"}],"rubric":[{"id":"res-board","text":"Knows the grid: its size, what each cell holds, and which coordinates are on it","phase":"base","owners":["Board","Grid","BoardState"]},{"id":"res-line","text":"Decides whether a move completes a winning line, in one place","phase":"base","owners":["LineWinRule","WinRule","WinChecker","LineChecker","WinDetector"]},{"id":"res-turn","text":"Knows whose turn it is and who moves next","phase":"base","owners":["Players","TurnOrder","PlayerQueue","TurnTracker"]},{"id":"res-facade","text":"Exposes the public operations and sequences validate, place, judge and pass the turn","phase":"base","owners":["GameImpl","TicTacToe","GameEngine","GameSession","MatchImpl"]},{"id":"res-config","text":"Owns the board size and the winning length, and validates them, so no rule is written against 3","phase":"storm1","owners":["GameConfig","GameSettings","Rules","BoardConfig"]},{"id":"res-history","text":"Remembers the successful moves in order so the last one can be taken back","phase":"storm2","owners":["MoveHistory","History","MoveLog","UndoStack"]}],"followups":[{"level":"SDE2","question":"Why check only the lines through the last move instead of scanning the whole board?","answer":"Before a move there was no winning line, so any new line must contain the cell just played. Counting outwards from it in four directions costs O(winLength) per move instead of O(rows x cols x winLength). On 3x3 it makes no visible difference; on a 19x19 board with winLength 5 it is the difference between a few dozen cell reads and a few thousand per move."},{"level":"SDE2","question":"Your play() returns a status instead of throwing. Why?","answer":"An illegal move is an expected outcome of user input, not an exceptional one, and a status code keeps every path visible at the call site. It also works where exceptions are disabled, as in this browser toolchain. The cost is that a caller can ignore the result; [[nodiscard]] on the enum would catch that."},{"level":"Senior","question":"Product now wants three players and a hexagonal board. What gives?","answer":"Players already is a list of marks, so three players is a longer string and nothing else. A hexagonal board changes the direction set and the neighbour function, which today live in LineWinRule and Board. I would extract a small Topology (neighbours and directions) behind Board only when that second board exists; until then the four constants in LineWinRule are the honest design."},{"level":"Senior","question":"Undo is storm 2. Which alternatives did you consider and why this one?","answer":"Store the move list and reverse it (what the reference does): O(1) per undo, tiny memory, and it works because a move is fully described by its cell and the mover is derived from the turn order. Snapshot the whole board per move (Memento): simpler to get right if moves ever change more than one cell, at O(board) memory per move. Command objects with undo(): worth it once moves have side effects such as captures or flips, as in Reversi. Redo is a second stack, and any new move clears it."},{"level":"Senior","question":"How would you add a computer opponent without touching the engine?","answer":"A bot is a client of the interface: it reads cellAt()/nextPlayer(), picks a cell and calls play(). For search (minimax with alpha-beta) it needs cheap copy or undo, which is exactly why undo() is a useful seam: the bot plays a move, recurses and undoes it. A Strategy for move selection lives outside the engine, so the rules class stays free of AI concerns."},{"level":"Staff","question":"You are asked to run this as a service for 10 million concurrent games. What changes?","answer":"The rules engine stays a pure, deterministic state machine; that is what lets you shard by game id and replay it. The service work is elsewhere: a game's moves are serialised through one owner (a partition or an actor per game) so two clients cannot both play the same turn, moves carry a sequence number so retries are idempotent, and the stored state is the move list rather than the board so it is small and auditable. Per-game state is tiny (about 20 bytes for tic-tac-toe), so the cost is connections and fan-out, not the engine."}],"apiHeader":"$14","phaseApis":{"storm1":"#pragma once\n// Change Storm 1 turns the game into Connect-N: any board size, any winning line length.\n// Everything from api.h still holds, and makeGame() keeps working as before.\n// Only games made by makeConfigurableGame() have the new operations.\n#include \"api.h\"\n\nnamespace ttt {\n\nclass ConfigurableGame : public Game {\n public:\n  virtual int rows() const = 0;\n  virtual int cols() const = 0;\n  virtual int winLength() const = 0;\n};\n\n// Returns nullptr if rows, cols or winLength is below 1, or if winLength is larger than both rows and cols\n// (no line could ever fit).\nstd::unique_ptr<ConfigurableGame> makeConfigurableGame(int rows, int cols, int winLength);\n\n}  // namespace ttt\n","storm2":"#pragma once\n// Change Storm 2 adds undo. Everything from api.h and api_storm1.h still holds.\n// Only games made by makeUndoableGame() have the new operation.\n#include \"api_storm1.h\"\n\nnamespace ttt {\n\nclass UndoableGame : public ConfigurableGame {\n public:\n  // Takes back the most recent successful play(). Returns false (and changes nothing) if there is none.\n  virtual bool undo() = 0;\n};\n\n// Same validation as makeConfigurableGame().\nstd::unique_ptr<UndoableGame> makeUndoableGame(int rows, int cols, int winLength);\n\n}  // namespace ttt\n"},"phases":["base","storm1","storm2"],"tests":{"base":[{"path":"ttt_base.cpp","content":"$15"}],"storm1":[{"path":"ttt_storm1.cpp","content":"$16"}],"storm2":[{"path":"ttt_storm2.cpp","content":"$17"}]},"reference":[{"path":"board.h","content":"$18"},{"path":"game.cpp","content":"#include \"game_impl.h\"\n\nstd::unique_ptr<ttt::Game> ttt::makeGame() { return std::make_unique<GameImpl>(GameConfig()); }\n\nstd::unique_ptr<ttt::ConfigurableGame> ttt::makeConfigurableGame(int rows, int cols, int winLength) {\n  const GameConfig config(rows, cols, winLength);\n  if (!config.valid()) return nullptr;\n  return std::make_unique<GameImpl>(config);\n}\n\nstd::unique_ptr<ttt::UndoableGame> ttt::makeUndoableGame(int rows, int cols, int winLength) {\n  const GameConfig config(rows, cols, winLength);\n  if (!config.valid()) return nullptr;\n  return std::make_unique<GameImpl>(config);\n}\n"},{"path":"game_config.h","content":"#pragma once\n#include <algorithm>\n\n// Board size and winning length, and the one place that says which combinations make sense.\nclass GameConfig {\n public:\n  static constexpr int kClassicSize = 3;\n\n  GameConfig() = default;\n  GameConfig(int rows, int cols, int winLength) : rows_(rows), cols_(cols), winLength_(winLength) {}\n\n  int rows() const { return rows_; }\n  int cols() const { return cols_; }\n  int winLength() const { return winLength_; }\n\n  // A line must fit on the board, otherwise nobody could ever win.\n  bool valid() const { return rows_ >= 1 && cols_ >= 1 && winLength_ >= 1 && winLength_ <= std::max(rows_, cols_); }\n\n private:\n  int rows_ = kClassicSize;\n  int cols_ = kClassicSize;\n  int winLength_ = kClassicSize;\n};\n"},{"path":"game_impl.h","content":"$19"},{"path":"line_rule.h","content":"$1a"},{"path":"move_history.h","content":"#pragma once\n#include <utility>\n#include <vector>\n\n// The successful moves in the order they were played. Undo pops from the end.\nclass MoveHistory {\n public:\n  using Move = std::pair<int, int>;\n\n  void record(int row, int col) { moves_.emplace_back(row, col); }\n  bool empty() const { return moves_.empty(); }\n  int size() const { return static_cast<int>(moves_.size()); }\n\n  Move popLast() {\n    Move last = moves_.back();\n    moves_.pop_back();\n    return last;\n  }\n\n private:\n  std::vector<Move> moves_;\n};\n"},{"path":"players.h","content":"#pragma once\n#include <cstddef>\n#include <string>\n\n// Whose turn it is. Marks are listed in play order, so a third player is a longer string.\nclass Players {\n public:\n  char current() const { return marks_[turn_]; }\n  void advance() { turn_ = (turn_ + 1) % marks_.size(); }\n  void rewind() { turn_ = (turn_ + marks_.size() - 1) % marks_.size(); }\n\n private:\n  std::string marks_ = \"XO\";\n  std::size_t turn_ = 0;\n};\n"}],"driver":{"path":"driver.cpp","content":"#define BP_TEST_MAIN\n#include \"bp_test.h\"\n","readOnly":true}}}],["$L1b","$L1c"],"$L1d"]}],"p":"$@1e","v":null,"s":"$9"}}]]
+d:[["children",{"s":{"n":"id","t":"d","k":"tic-tac-toe","s":[]},"h":65632,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}]}]]}],"p":"$@e","v":"$c","s":"$9"},"c":"$Qf"}]]
+a:[["children",{"s":"workshop","h":131168,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}]}]]}],"p":"$@b","v":"$c","s":"$9"},"c":"$Qd"}]]
+0:{"t":{"t":{"s":"","h":131152,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","precedence":"next"}],["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js","async":true}]],["$","html",null,{"lang":"en","className":"r7opxW_variable auY9QW_variable u-EJdW_variable h-full","children":["$","body",null,{"className":"min-h-full","children":[["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}],"notFound":[["$","main",null,{"className":"flex min-h-dvh flex-col items-center justify-center gap-4 px-4 text-center","children":[["$","div",null,{"className":"font-display text-5xl text-[var(--accent)]","children":"404"}],["$","p",null,{"className":"text-white/60","children":"This room is not on the blueprint yet."}],["$","$L6",null,{"href":"/","className":"text-sm text-white/80 underline","children":"Back to the title screen"}]]}],[]]}],["$","$L7",null,{}]]}]}]]}],"p":"$@8","v":null,"s":"$9"},"c":"$Qa"},"h":{"r":["$","$1","h",{"children":[null,["$","$L20",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1, viewport-fit=cover"}],["$","meta","2",{"name":"theme-color","content":"#0a1530"}]]}],["$","$L22",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$23",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"Tic-tac-toe to Connect-N: Blueprint Clash"}],["$","meta","1",{"name":"description","content":"A creature-tactics RPG that teaches low-level design in C++ and high-level system design, from fundamentals to big-tech interview level."}],["$","link","2",{"rel":"manifest","href":"/blueprint-clash/manifest.webmanifest"}],["$","meta","3",{"name":"mobile-web-app-capable","content":"yes"}],["$","meta","4",{"name":"apple-mobile-web-app-title","content":"Blueprint Clash"}],["$","meta","5",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","link","6",{"rel":"icon","href":"/blueprint-clash/icon.png?icon.27re_xscs-jmw.png","sizes":"256x256","type":"image/png"}],["$","link","7",{"rel":"apple-touch-icon","href":"/blueprint-clash/apple-icon.png?apple-icon.2rac1w0yc3rju.png","sizes":"180x180","type":"image/png"}],["$","$L24","8",{}]]}]}],null]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"p":"$@25","v":null,"s":"$9"}},"a":"$@26","u":"$@27","b":"U2e90Mr6iueJEoRJLmd0s"}
+28:I[97367,["$2"],"OutletBoundary"]
+1b:["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/2uk3wcjwqg0tl.js","async":true}]
+1c:["$","script","script-1",{"src":"/blueprint-clash/_next/static/chunks/1zdu7yjl8efu4.js","async":true}]
+1d:["$","$L28",null,{"children":["$","$23",null,{"name":"Next.MetadataOutlet","children":"$@29"}]}]
+9:300
+29:null
+27:true
+9:C
+26:0
+e:"$undefined"
+b:"$undefined"
+8:"$undefined"
+25:"$undefined"
+1e:"$undefined"

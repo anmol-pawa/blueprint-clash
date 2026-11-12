@@ -1,0 +1,81 @@
+1:"$Sreact.fragment"
+2:"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js"
+3:I[39756,["$2"],"default"]
+4:I[37457,["$2"],"default"]
+5:"/blueprint-clash/_next/static/chunks/2n5qeheznvl4u.js"
+6:I[22016,["$2","$5"],""]
+7:I[64576,["$2"],"PwaRegister"]
+10:"/blueprint-clash/_next/static/chunks/3s1mctvsetnbs.js"
+11:I[25039,["$2","$10"],"LessonClient"]
+16:"ViewportBoundary"
+17:I[97367,["$2"],"$16"]
+18:"MetadataBoundary"
+19:I[97367,["$2"],"$18"]
+1a:"$Sreact.suspense"
+1b:I[27201,["$2"],"IconMark"]
+:HL["/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","style"]
+9:X
+c:X
+c:C
+12:T56e,#include <iostream>
+#include <memory>
+#include <utility>
+
+// The strategy interface: one rule, one question.
+class ShippingPolicy {
+public:
+    virtual ~ShippingPolicy() = default;
+    virtual double cost(double kg) const = 0;
+};
+
+class StandardShipping : public ShippingPolicy {
+public:
+    double cost(double kg) const override { return 5.0 + 1.0 * kg; }
+};
+
+class ExpressShipping : public ShippingPolicy {
+public:
+    double cost(double kg) const override { return 12.0 + 2.5 * kg; }
+};
+
+class FreeShipping : public ShippingPolicy {
+public:
+    double cost(double) const override { return 0.0; }
+};
+
+// The client owns a policy and never branches on which one it is.
+class Checkout {
+public:
+    explicit Checkout(std::unique_ptr<ShippingPolicy> policy) : policy_(std::move(policy)) {}
+    void setPolicy(std::unique_ptr<ShippingPolicy> policy) { policy_ = std::move(policy); }
+    double total(double itemsTotal, double kg) const { return itemsTotal + policy_->cost(kg); }
+
+private:
+    std::unique_ptr<ShippingPolicy> policy_;
+};
+
+int main() {
+    Checkout checkout(std::make_unique<StandardShipping>());
+    std::cout << checkout.total(100.0, 2.0) << "\n";
+    checkout.setPolicy(std::make_unique<ExpressShipping>());
+    std::cout << checkout.total(100.0, 2.0) << "\n";
+    checkout.setPolicy(std::make_unique<FreeShipping>());
+    std::cout << checkout.total(100.0, 2.0) << "\n";
+}
+f:[["children",{"s":"__PAGE__","h":160,"d":{"r":["$","$1","c",{"children":[["$","$L11",null,{"lesson":{"id":"strategy","level":"L5","title":"Strategy: swap the rule, keep the caller","oneLiner":"Put each interchangeable rule behind one interface so the caller picks a policy instead of branching on a name.","cardTopic":"L5.strategy","intro":"A Strategy is **one algorithm behind an interface**, handed to the code that needs it. The client (here, `Checkout`) asks `policy.cost(kg)` and neither knows nor cares which rule answers. Adding a rule means adding a class; the client and its tests do not change. That is the Open/Closed Principle with a concrete mechanism.\n\nIn C++ you have a spectrum of ways to pass the rule: a virtual interface (runtime choice, can be swapped on a live object), a template parameter (compile-time choice, zero overhead, but the type is baked in), or a `std::function` / lambda (cheapest to write, fine when the rule is a single function with no extra state or vocabulary). Interviewers like to hear you pick on purpose.\n\nStrategy is chosen by **the caller or configuration**, from outside. If the object changes its own behaviour as it moves through a lifecycle, that is State. If the algorithm's skeleton is fixed and only steps vary, that is Template Method.","smell":"- A `switch` or `if` chain on a string, enum or type tag that selects a calculation.\n- Every new variant means editing the same function again (and its tests).\n- An unknown tag silently falls through to a default such as `0`.\n- Tests have to go through the chooser to reach a single rule.","before":"#include <iostream>\n#include <string>\n\n// One function knows every shipping rule. Adding \"overnight\" means editing it, and a typo silently costs nothing.\ndouble shippingCost(const std::string& method, double kg) {\n    if (method == \"standard\") return 5.0 + 1.0 * kg;\n    if (method == \"express\") return 12.0 + 2.5 * kg;\n    return 0.0;\n}\n\nint main() {\n    std::cout << shippingCost(\"standard\", 2.0) << \"\\n\";\n    std::cout << shippingCost(\"express\", 2.0) << \"\\n\";\n    std::cout << shippingCost(\"drone\", 2.0) << \"\\n\";\n}\n","after":"$12","beforeOutput":"7\n17\n0","afterOutput":"107\n117\n100","refactorNotes":"Each rule is now a small class that can be tested alone, and `Checkout` is closed against new rules: an overnight policy is one new class. The unknown-method case is gone because you cannot name a policy that does not exist; the compiler checks it. The client owns its policy through a `unique_ptr`, so ownership is explicit and swapping at runtime is one call.\n\n**Trade-offs:** a virtual call per use and one heap allocation per policy, which is irrelevant for shipping and relevant in a hot loop (use a template parameter there). If a rule is a single stateless function, a `std::function<double(double)>` or a lambda is lighter than a class hierarchy. Choosing *which* policy to build from user input still needs a place with a `switch` or a registry; Strategy moves that decision to one edge instead of removing it.","interviewSignal":"Say \"this rule varies and the caller should not know how\". Name the three C++ options (virtual interface, template parameter, `std::function`) and give the deciding factor for each: runtime swap, zero overhead, or minimal ceremony. Senior signal: you say who constructs the strategy (a factory or the composition root), keep strategies free of the client's internal state, and contrast Strategy (chosen from outside) with State (the object changes its own behaviour).","overApplication":"Do not make a Strategy for something with one implementation and no foreseeable second one; an interface with a single class is just indirection. A hierarchy of one-method classes where a lambda would do adds files and names without adding flexibility. Watch for strategies that need the client's private data: if every strategy takes a dozen arguments or reaches back into the client, the boundary is in the wrong place."},"nextId":"observer"}],["$L13"],"$L14"]}],"p":"$@15","v":null,"s":"$9"}}]]
+d:[["children",{"s":{"n":"id","t":"d","k":"strategy","s":[]},"h":65632,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}]}]]}],"p":"$@e","v":"$c","s":"$9"},"c":"$Qf"}]]
+a:[["children",{"s":"learn","h":131168,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}]}]]}],"p":"$@b","v":"$c","s":"$9"},"c":"$Qd"}]]
+0:{"t":{"t":{"s":"","h":131152,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","precedence":"next"}],["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js","async":true}]],["$","html",null,{"lang":"en","className":"r7opxW_variable auY9QW_variable u-EJdW_variable h-full","children":["$","body",null,{"className":"min-h-full","children":[["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}],"notFound":[["$","main",null,{"className":"flex min-h-dvh flex-col items-center justify-center gap-4 px-4 text-center","children":[["$","div",null,{"className":"font-display text-5xl text-[var(--accent)]","children":"404"}],["$","p",null,{"className":"text-white/60","children":"This room is not on the blueprint yet."}],["$","$L6",null,{"href":"/","className":"text-sm text-white/80 underline","children":"Back to the title screen"}]]}],[]]}],["$","$L7",null,{}]]}]}]]}],"p":"$@8","v":null,"s":"$9"},"c":"$Qa"},"h":{"r":["$","$1","h",{"children":[null,["$","$L17",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1, viewport-fit=cover"}],["$","meta","2",{"name":"theme-color","content":"#0a1530"}]]}],["$","$L19",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$1a",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"Strategy: swap the rule, keep the caller: Blueprint Clash"}],["$","meta","1",{"name":"description","content":"A creature-tactics RPG that teaches low-level design in C++ and high-level system design, from fundamentals to big-tech interview level."}],["$","link","2",{"rel":"manifest","href":"/blueprint-clash/manifest.webmanifest"}],["$","meta","3",{"name":"mobile-web-app-capable","content":"yes"}],["$","meta","4",{"name":"apple-mobile-web-app-title","content":"Blueprint Clash"}],["$","meta","5",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","link","6",{"rel":"icon","href":"/blueprint-clash/icon.png?icon.27re_xscs-jmw.png","sizes":"256x256","type":"image/png"}],["$","link","7",{"rel":"apple-touch-icon","href":"/blueprint-clash/apple-icon.png?apple-icon.2rac1w0yc3rju.png","sizes":"180x180","type":"image/png"}],["$","$L1b","8",{}]]}]}],null]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"p":"$@1c","v":null,"s":"$9"}},"a":"$@1d","u":"$@1e","b":"U2e90Mr6iueJEoRJLmd0s"}
+1f:I[97367,["$2"],"OutletBoundary"]
+13:["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/3s1mctvsetnbs.js","async":true}]
+14:["$","$L1f",null,{"children":["$","$1a",null,{"name":"Next.MetadataOutlet","children":"$@20"}]}]
+9:300
+20:null
+1e:true
+9:C
+1d:0
+e:"$undefined"
+b:"$undefined"
+8:"$undefined"
+1c:"$undefined"
+15:"$undefined"

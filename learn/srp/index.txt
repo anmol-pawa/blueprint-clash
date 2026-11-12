@@ -1,0 +1,76 @@
+1:"$Sreact.fragment"
+2:"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js"
+3:I[39756,["$2"],"default"]
+4:I[37457,["$2"],"default"]
+5:"/blueprint-clash/_next/static/chunks/2n5qeheznvl4u.js"
+6:I[22016,["$2","$5"],""]
+7:I[64576,["$2"],"PwaRegister"]
+d:I[97367,["$2"],"OutletBoundary"]
+e:"$Sreact.suspense"
+10:"ViewportBoundary"
+11:I[97367,["$2"],"$10"]
+13:"MetadataBoundary"
+14:I[97367,["$2"],"$13"]
+16:I[68027,["$2"],"default",1]
+:HL["/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","style"]
+:HL["/blueprint-clash/_next/static/media/07c7676b89ed2778-s.p.2bn3s6zvc0dyp.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/blueprint-clash/_next/static/media/486a103cae33528f-s.p.309ilb452anpd.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/blueprint-clash/_next/static/media/53897e768d329f66-s.p.3t6q91iet4nsy.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+9:X
+b:[["children",{"s":"__PAGE__","h":512,"d":{"r":["$","$1","c",{"children":["$Lc",[["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/3s1mctvsetnbs.js","async":true,"nonce":"$undefined"}]],["$","$Ld",null,{"children":["$","$e",null,{"name":"Next.MetadataOutlet","children":"$@f"}]}]]}],"p":false,"v":null}}]]
+a:[["children",{"s":{"n":"id","t":"d","k":"srp","s":[]},"h":66048,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],"p":false,"v":"$9"},"c":"$Qb"}]]
+8:[["children",{"s":"learn","h":131584,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],"p":false,"v":"$9"},"c":"$Qa"}]]
+0:{"P":null,"c":["","learn","srp",""],"q":"","i":false,"t":{"t":{"s":"","h":131600,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}],["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js","async":true,"nonce":"$undefined"}]],["$","html",null,{"lang":"en","className":"r7opxW_variable auY9QW_variable u-EJdW_variable h-full","children":["$","body",null,{"className":"min-h-full","children":[["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","main",null,{"className":"flex min-h-dvh flex-col items-center justify-center gap-4 px-4 text-center","children":[["$","div",null,{"className":"font-display text-5xl text-[var(--accent)]","children":"404"}],["$","p",null,{"className":"text-white/60","children":"This room is not on the blueprint yet."}],["$","$L6",null,{"href":"/","className":"text-sm text-white/80 underline","children":"Back to the title screen"}]]}],[]],"forbidden":"$undefined","unauthorized":"$undefined"}],["$","$L7",null,{}]]}]}]]}],"p":false,"v":null},"c":"$Q8"},"h":{"r":["$","$1","h",{"children":[null,["$","$L11",null,{"children":"$L12"}],["$","$L14",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$e",null,{"name":"Next.Metadata","children":"$L15"}]}],null]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"p":false,"v":null}},"m":"$undefined","G":["$16",[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]]],"S":true,"r":"$undefined","s":"$undefined","a":"$undefined","l":"$undefined","p":"$undefined","d":"$undefined","b":"U2e90Mr6iueJEoRJLmd0s"}
+17:"/blueprint-clash/_next/static/chunks/3s1mctvsetnbs.js"
+18:I[25039,["$2","$17"],"LessonClient"]
+9:C
+19:T4d3,#include <iostream>
+#include <sstream>
+#include <string>
+#include <utility>
+#include <vector>
+
+struct Line {
+    std::string name;
+    int cents;
+};
+
+// Reason to change 1: the pricing rules.
+class Invoice {
+public:
+    void addLine(std::string name, int cents) { lines_.push_back({std::move(name), cents}); }
+    int totalCents() const {
+        int sum = 0;
+        for (const Line& l : lines_) sum += l.cents;
+        return sum + sum / 10;
+    }
+    const std::vector<Line>& lines() const { return lines_; }
+private:
+    std::vector<Line> lines_;
+};
+
+// Reason to change 2: the text layout. Pure function of the invoice, no I/O.
+class InvoiceFormatter {
+public:
+    std::string format(const Invoice& inv) const {
+        std::ostringstream out;
+        for (const Line& l : inv.lines()) out << l.name << ": " << l.cents << "\n";
+        out << "total: " << inv.totalCents() << "\n";
+        return out.str();
+    }
+};
+
+// Reason to change 3: where the text goes. The caller chooses; tests can pass a stringstream.
+void write(std::ostream& os, const std::string& text) { os << text; }
+
+int main() {
+    Invoice inv;
+    inv.addLine("pen", 200);
+    inv.addLine("book", 1000);
+    write(std::cout, InvoiceFormatter().format(inv));
+}
+c:["$","$L18",null,{"lesson":{"id":"srp","level":"L2","title":"Single Responsibility: one reason to change","oneLiner":"A class should answer to one actor: if two different teams can force edits to it, split it.","cardTopic":"L2.srp","intro":"SRP is about **axes of change**, not method counts. Ask: who would ask me to edit this class? If finance, the reporting team and the storage team all do, three unrelated reasons share one file, and each team can break the others.\n\nCohesion is the practical test: do the fields and methods change together? If half the fields are used by half the methods, you probably have two classes wearing one coat.","smell":"- A class name ending in `Manager`, `Helper` or `Processor` that does calculation, formatting and I/O.\n- Methods that touch disjoint subsets of the fields.\n- A change to the report layout forces a retest of the tax maths.\n- Unit tests need a database or a console just to check an arithmetic rule.","before":"#include <iostream>\n#include <string>\n#include <vector>\n\n// One class, three reasons to change: pricing rules, text layout, and where output goes.\nclass Invoice {\npublic:\n    void addLine(const std::string& name, int cents) { names_.push_back(name); cents_.push_back(cents); }\n    int totalCents() const {\n        int sum = 0;\n        for (int c : cents_) sum += c;\n        return sum + sum / 10;  // 10% tax baked in\n    }\n    void print() const {\n        for (size_t i = 0; i < names_.size(); ++i) std::cout << names_[i] << \": \" << cents_[i] << \"\\n\";\n        std::cout << \"total: \" << totalCents() << \"\\n\";  // layout and destination fixed here\n    }\nprivate:\n    std::vector<std::string> names_;\n    std::vector<int> cents_;\n};\n\nint main() {\n    Invoice inv;\n    inv.addLine(\"pen\", 200);\n    inv.addLine(\"book\", 1000);\n    inv.print();\n}\n","after":"$19","beforeOutput":"pen: 200\nbook: 1000\ntotal: 1320","afterOutput":"pen: 200\nbook: 1000\ntotal: 1320","refactorNotes":"The arithmetic, the layout and the destination now change independently. The tax rule is testable with no stream at all, and a JSON formatter is a new class instead of an edit to `Invoice`.\n\n**Trade-off:** three small types are more to navigate than one. For a 40-line script that never grows, the original is fine. Split when you can name two different people who would ask for edits.","interviewSignal":"Say the actor out loud: \"this class changes when finance changes tax, and when design changes the receipt, so I'll separate them\". Interviewers at SDE II look for you naming the reason to change, not reciting the acronym. At Senior and above, also say what you did **not** split and why.","overApplication":"Splitting by method count produces dozens of one-method classes that all have to be wired together, which spreads one change across many files (shotgun surgery) and makes the flow hard to read. If two pieces always change together, they are one responsibility; keep them together."},"nextId":"ocp"}]
+12:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1, viewport-fit=cover"}],["$","meta","2",{"name":"theme-color","content":"#0a1530"}]]
+1a:I[27201,["$2"],"IconMark"]
+f:null
+15:[["$","title","0",{"children":"Single Responsibility: one reason to change: Blueprint Clash"}],["$","meta","1",{"name":"description","content":"A creature-tactics RPG that teaches low-level design in C++ and high-level system design, from fundamentals to big-tech interview level."}],["$","link","2",{"rel":"manifest","href":"/blueprint-clash/manifest.webmanifest","crossOrigin":"$undefined"}],["$","meta","3",{"name":"mobile-web-app-capable","content":"yes"}],["$","meta","4",{"name":"apple-mobile-web-app-title","content":"Blueprint Clash"}],["$","meta","5",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","link","6",{"rel":"icon","href":"/blueprint-clash/icon.png?icon.27re_xscs-jmw.png","sizes":"256x256","type":"image/png"}],["$","link","7",{"rel":"apple-touch-icon","href":"/blueprint-clash/apple-icon.png?apple-icon.2rac1w0yc3rju.png","sizes":"180x180","type":"image/png"}],["$","$L1a","8",{}]]

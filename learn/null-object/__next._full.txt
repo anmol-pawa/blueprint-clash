@@ -1,0 +1,73 @@
+1:"$Sreact.fragment"
+2:"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js"
+3:I[39756,["$2"],"default"]
+4:I[37457,["$2"],"default"]
+5:"/blueprint-clash/_next/static/chunks/2n5qeheznvl4u.js"
+6:I[22016,["$2","$5"],""]
+7:I[64576,["$2"],"PwaRegister"]
+d:I[97367,["$2"],"OutletBoundary"]
+e:"$Sreact.suspense"
+10:"ViewportBoundary"
+11:I[97367,["$2"],"$10"]
+13:"MetadataBoundary"
+14:I[97367,["$2"],"$13"]
+16:I[68027,["$2"],"default",1]
+:HL["/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","style"]
+:HL["/blueprint-clash/_next/static/media/07c7676b89ed2778-s.p.2bn3s6zvc0dyp.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/blueprint-clash/_next/static/media/486a103cae33528f-s.p.309ilb452anpd.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/blueprint-clash/_next/static/media/53897e768d329f66-s.p.3t6q91iet4nsy.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+9:X
+b:[["children",{"s":"__PAGE__","h":512,"d":{"r":["$","$1","c",{"children":["$Lc",[["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/3s1mctvsetnbs.js","async":true,"nonce":"$undefined"}]],["$","$Ld",null,{"children":["$","$e",null,{"name":"Next.MetadataOutlet","children":"$@f"}]}]]}],"p":false,"v":null}}]]
+a:[["children",{"s":{"n":"id","t":"d","k":"null-object","s":[]},"h":66048,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],"p":false,"v":"$9"},"c":"$Qb"}]]
+8:[["children",{"s":"learn","h":131584,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],"p":false,"v":"$9"},"c":"$Qa"}]]
+0:{"P":null,"c":["","learn","null-object",""],"q":"","i":false,"t":{"t":{"s":"","h":131600,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}],["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js","async":true,"nonce":"$undefined"}]],["$","html",null,{"lang":"en","className":"r7opxW_variable auY9QW_variable u-EJdW_variable h-full","children":["$","body",null,{"className":"min-h-full","children":[["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","main",null,{"className":"flex min-h-dvh flex-col items-center justify-center gap-4 px-4 text-center","children":[["$","div",null,{"className":"font-display text-5xl text-[var(--accent)]","children":"404"}],["$","p",null,{"className":"text-white/60","children":"This room is not on the blueprint yet."}],["$","$L6",null,{"href":"/","className":"text-sm text-white/80 underline","children":"Back to the title screen"}]]}],[]],"forbidden":"$undefined","unauthorized":"$undefined"}],["$","$L7",null,{}]]}]}]]}],"p":false,"v":null},"c":"$Q8"},"h":{"r":["$","$1","h",{"children":[null,["$","$L11",null,{"children":"$L12"}],["$","$L14",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$e",null,{"name":"Next.Metadata","children":"$L15"}]}],null]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"p":false,"v":null}},"m":"$undefined","G":["$16",[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]]],"S":true,"r":"$undefined","s":"$undefined","a":"$undefined","l":"$undefined","p":"$undefined","d":"$undefined","b":"U2e90Mr6iueJEoRJLmd0s"}
+17:"/blueprint-clash/_next/static/chunks/3s1mctvsetnbs.js"
+18:I[25039,["$2","$17"],"LessonClient"]
+9:C
+19:T442,#include <iostream>
+#include <memory>
+#include <string>
+#include <utility>
+
+class Logger {
+public:
+    virtual ~Logger() = default;
+    virtual void log(const std::string& line) = 0;
+};
+
+class ConsoleLogger final : public Logger {
+public:
+    void log(const std::string& line) override { std::cout << "log: " << line << "\n"; }
+};
+
+// Does nothing, on purpose. It is a real Logger, so callers never ask "is there one?".
+class NullLogger final : public Logger {
+public:
+    void log(const std::string&) override {}
+};
+
+class Service {
+public:
+    explicit Service(std::unique_ptr<Logger> logger = nullptr)
+        : logger_(logger ? std::move(logger) : std::make_unique<NullLogger>()) {}
+    void charge(int amount) {
+        logger_->log("charging " + std::to_string(amount));
+        std::cout << "paid " << amount << "\n";
+        logger_->log("done");
+    }
+
+private:
+    std::unique_ptr<Logger> logger_;  // never null: the constructor guarantees it
+};
+
+int main() {
+    Service quiet;
+    Service chatty(std::make_unique<ConsoleLogger>());
+    quiet.charge(5);
+    chatty.charge(7);
+}
+c:["$","$L18",null,{"lesson":{"id":"null-object","level":"L5","title":"Null Object: a do-nothing collaborator instead of null checks","oneLiner":"Replace an optional dependency's null checks with a real object whose methods deliberately do nothing.","cardTopic":"L5.null-object","intro":"A Null Object is **a real implementation of an interface that does nothing on purpose**. Instead of passing `nullptr` for \"no logger\" and checking `if (logger)` at every use, you pass a `NullLogger`. The caller treats it like any other `Logger`; the conditional disappears, and so does the class of bugs where one check was forgotten.\n\nIn C++ two things make it stronger: own the collaborator with `std::unique_ptr` (or take a reference) and **normalise in the constructor**, so the member can never be null. Then the rest of the class is written as if the collaborator always exists.\n\nThe pattern is only right when \"do nothing\" is a correct answer. A logger, a metrics sink, an audit hook and a default-empty discount strategy qualify. A payment gateway does not: silently doing nothing there turns a missing dependency into lost money.","smell":"- `if (ptr != nullptr)` before almost every call on one dependency.\n- A bug report that is a crash in the one method where someone forgot the check.\n- Tests that pass `nullptr` to avoid constructing a real collaborator.\n- A comment: \"may be null\".","before":"#include <iostream>\n#include <string>\n\nclass Logger {\npublic:\n    virtual ~Logger() = default;\n    virtual void log(const std::string& line) = 0;\n};\n\nclass ConsoleLogger final : public Logger {\npublic:\n    void log(const std::string& line) override { std::cout << \"log: \" << line << \"\\n\"; }\n};\n\n// The logger is optional, so every use needs its own null check. One forgotten check is a crash.\nclass Service {\npublic:\n    explicit Service(Logger* logger) : logger_(logger) {}\n    void charge(int amount) {\n        if (logger_ != nullptr) logger_->log(\"charging \" + std::to_string(amount));\n        std::cout << \"paid \" << amount << \"\\n\";\n        if (logger_ != nullptr) logger_->log(\"done\");\n    }\n\nprivate:\n    Logger* logger_;\n};\n\nint main() {\n    ConsoleLogger console;\n    Service quiet(nullptr);\n    Service chatty(&console);\n    quiet.charge(5);\n    chatty.charge(7);\n}\n","after":"$19","beforeOutput":"paid 5\nlog: charging 7\npaid 7\nlog: done","afterOutput":"paid 5\nlog: charging 7\npaid 7\nlog: done","refactorNotes":"`Service` no longer branches. Its constructor accepts a `std::unique_ptr<Logger>` and swaps a `nullptr` for a `NullLogger`, so `logger_` is never null and every call site is one line. The output is identical in both versions; what changed is that a forgotten check can no longer exist. `NullLogger` is `final` and has no state, so it is also a good test double.\n\n**Trade-offs:** a Null Object can hide a real configuration mistake: if production should always have a real logger, a silent default means you find out during an incident. Make \"no-op by choice\" explicit (the caller asks for `NullLogger`) when absence is a bug, or fail fast instead. For genuinely optional values (not collaborators), `std::optional` makes absence visible in the type and is usually better. A Null Object also needs sensible return values for non-void methods (\"zero discount\", \"empty list\"), which must be the neutral element of the operation.","interviewSignal":"Mention it when you see repeated null checks on a collaborator. Say \"the default is a real object that does nothing\", normalise it in the constructor, and keep the member non-null. Senior signal: you separate \"absence is fine\" (logger, metrics) from \"absence is an error\" (payments, auth), and name `std::optional` and fail-fast as the alternatives. It is a natural fit for a \"no discount\", \"no notification\" or \"no-op cache\" default in machine-coding problems.","overApplication":"Using a Null Object to paper over a dependency that must exist swallows errors. Creating a Null variant of every interface adds classes nobody needed, and null objects with non-neutral return values (\"zero\" for a price that should be an error) corrupt results quietly. If there is exactly one call site, one `if` is clearer than a new class."},"nextId":"specification"}]
+12:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1, viewport-fit=cover"}],["$","meta","2",{"name":"theme-color","content":"#0a1530"}]]
+1a:I[27201,["$2"],"IconMark"]
+f:null
+15:[["$","title","0",{"children":"Null Object: a do-nothing collaborator instead of null checks: Blueprint Clash"}],["$","meta","1",{"name":"description","content":"A creature-tactics RPG that teaches low-level design in C++ and high-level system design, from fundamentals to big-tech interview level."}],["$","link","2",{"rel":"manifest","href":"/blueprint-clash/manifest.webmanifest","crossOrigin":"$undefined"}],["$","meta","3",{"name":"mobile-web-app-capable","content":"yes"}],["$","meta","4",{"name":"apple-mobile-web-app-title","content":"Blueprint Clash"}],["$","meta","5",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","link","6",{"rel":"icon","href":"/blueprint-clash/icon.png?icon.27re_xscs-jmw.png","sizes":"256x256","type":"image/png"}],["$","link","7",{"rel":"apple-touch-icon","href":"/blueprint-clash/apple-icon.png?apple-icon.2rac1w0yc3rju.png","sizes":"180x180","type":"image/png"}],["$","$L1a","8",{}]]

@@ -1,0 +1,93 @@
+1:"$Sreact.fragment"
+2:"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js"
+3:I[39756,["$2"],"default"]
+4:I[37457,["$2"],"default"]
+5:"/blueprint-clash/_next/static/chunks/2n5qeheznvl4u.js"
+6:I[22016,["$2","$5"],""]
+7:I[64576,["$2"],"PwaRegister"]
+10:"/blueprint-clash/_next/static/chunks/3s1mctvsetnbs.js"
+11:I[25039,["$2","$10"],"LessonClient"]
+16:"ViewportBoundary"
+17:I[97367,["$2"],"$16"]
+18:"MetadataBoundary"
+19:I[97367,["$2"],"$18"]
+1a:"$Sreact.suspense"
+1b:I[27201,["$2"],"IconMark"]
+:HL["/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","style"]
+9:X
+c:X
+c:C
+12:T689,#include <algorithm>
+#include <iostream>
+#include <memory>
+#include <vector>
+
+class Listener {
+public:
+    virtual ~Listener() = default;
+    virtual void onReading(double t) = 0;
+};
+
+// The subject holds weak references: it never keeps a listener alive and never calls a dead one.
+class Sensor {
+public:
+    void subscribe(const std::shared_ptr<Listener>& listener) { listeners_.push_back(listener); }
+
+    void set(double t) {
+        pruneExpired();
+        // Iterate over a copy so a listener that subscribes during the callback cannot invalidate the loop.
+        const auto snapshot = listeners_;
+        for (const auto& weak : snapshot) {
+            if (const auto listener = weak.lock()) listener->onReading(t);
+        }
+    }
+
+private:
+    void pruneExpired() {
+        listeners_.erase(std::remove_if(listeners_.begin(), listeners_.end(),
+                                        [](const std::weak_ptr<Listener>& w) { return w.expired(); }),
+                         listeners_.end());
+    }
+
+    std::vector<std::weak_ptr<Listener>> listeners_;
+};
+
+class Display : public Listener {
+public:
+    void onReading(double t) override { std::cout << "display: " << t << "\n"; }
+};
+
+class Logger : public Listener {
+public:
+    void onReading(double t) override { std::cout << "log: " << t << "\n"; }
+};
+
+int main() {
+    Sensor sensor;
+    const auto display = std::make_shared<Display>();
+    sensor.subscribe(display);
+    {
+        const auto logger = std::make_shared<Logger>();
+        sensor.subscribe(logger);
+        sensor.set(21.5);
+    }
+    // The logger is gone; the sensor skips and prunes it instead of calling freed memory.
+    sensor.set(22.0);
+}
+f:[["children",{"s":"__PAGE__","h":160,"d":{"r":["$","$1","c",{"children":[["$","$L11",null,{"lesson":{"id":"observer","level":"L5","title":"Observer: publish a change without knowing who cares","oneLiner":"Let a subject notify a changing set of listeners through one interface, and hold them so a dead listener cannot dangle.","cardTopic":"L5.observer","intro":"An Observer lets a **subject announce a change** to any number of **listeners it does not know by name**. The subject depends only on a tiny `Listener` interface; displays, loggers and alarms subscribe themselves. New reactions need no edit to the subject.\n\nThe hard part in C++ is **lifetime**. If the subject keeps raw pointers, a listener that is destroyed leaves a dangling pointer and the next notification is undefined behaviour. If the subject keeps `shared_ptr`, it keeps listeners alive forever and you get a leak (the classic \"lapsed listener\"). The usual fix is that the subject stores `std::weak_ptr<Listener>`: it can ask \"are you still there?\" before calling, and it prunes expired entries.\n\nAlso decide, and say, what happens when a listener subscribes or unsubscribes **during** a notification, whether delivery is synchronous (simple, but a slow listener blocks the subject) or queued, and whether the order of listeners is part of the contract.","smell":"- The subject's setter calls each reaction by name: `display.show(); logger.log(); alarm.check();`.\n- Adding a new reaction means editing the subject.\n- The subject includes headers for every module that reacts to it.\n- A subscription list of raw pointers, with no unsubscribe or lifetime story.","before":"#include <iostream>\n\nclass Display {\npublic:\n    void show(double t) const { std::cout << \"display: \" << t << \"\\n\"; }\n};\n\nclass Logger {\npublic:\n    void log(double t) const { std::cout << \"log: \" << t << \"\\n\"; }\n};\n\n// The sensor knows and owns every reaction. A new reaction means editing Sensor.\nclass Sensor {\npublic:\n    void set(double t) {\n        display_.show(t);\n        logger_.log(t);\n    }\n\nprivate:\n    Display display_;\n    Logger logger_;\n};\n\nint main() {\n    Sensor sensor;\n    sensor.set(21.5);\n    sensor.set(22.0);\n}\n","after":"$12","beforeOutput":"display: 21.5\nlog: 21.5\ndisplay: 22\nlog: 22","afterOutput":"display: 21.5\nlog: 21.5\ndisplay: 22","refactorNotes":"`Sensor` now depends on one two-line interface. Adding an alarm is a new class plus one `subscribe` call at the composition root; the sensor and its tests do not change. The second reading shows the lifetime story: the logger went out of scope, the weak reference expired, and the sensor skipped and pruned it.\n\n**Trade-offs:** notification is synchronous and single-threaded here. With threads you need a lock around the list (and must not call listeners while holding it, or a listener that calls back deadlocks); with slow listeners you queue events instead, which brings ordering and back-pressure questions. There is also no explicit unsubscribe; with `weak_ptr` expiry is the unsubscribe, which is simple but means listeners must be owned by someone else. If you need deterministic removal, return a subscription handle (RAII) that unsubscribes in its destructor.","interviewSignal":"Say \"the subject should not know its listeners\", then immediately raise the lifetime problem: raw pointers dangle, `shared_ptr` leaks, so `weak_ptr`. Name re-entrancy (subscribe or unsubscribe during notify), threading, and ordering as the follow-up decisions. Senior signal: you distinguish in-process Observer from a pub/sub or message bus (network, durability, at-least-once delivery), and say when you would use a queue instead.","overApplication":"Observers make control flow invisible: a single setter can trigger a cascade you can only find at runtime, and a listener that mutates the subject can cause loops. If there is exactly one reaction and it is part of the same module, call it directly. Avoid a global event bus used as a substitute for passing a dependency; it turns every class into a hidden dependency on every other and makes debugging and ordering guesswork."},"nextId":"command"}],["$L13"],"$L14"]}],"p":"$@15","v":null,"s":"$9"}}]]
+d:[["children",{"s":{"n":"id","t":"d","k":"observer","s":[]},"h":65632,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}]}]]}],"p":"$@e","v":"$c","s":"$9"},"c":"$Qf"}]]
+a:[["children",{"s":"learn","h":131168,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}]}]]}],"p":"$@b","v":"$c","s":"$9"},"c":"$Qd"}]]
+0:{"t":{"t":{"s":"","h":131152,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","precedence":"next"}],["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js","async":true}]],["$","html",null,{"lang":"en","className":"r7opxW_variable auY9QW_variable u-EJdW_variable h-full","children":["$","body",null,{"className":"min-h-full","children":[["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}],"notFound":[["$","main",null,{"className":"flex min-h-dvh flex-col items-center justify-center gap-4 px-4 text-center","children":[["$","div",null,{"className":"font-display text-5xl text-[var(--accent)]","children":"404"}],["$","p",null,{"className":"text-white/60","children":"This room is not on the blueprint yet."}],["$","$L6",null,{"href":"/","className":"text-sm text-white/80 underline","children":"Back to the title screen"}]]}],[]]}],["$","$L7",null,{}]]}]}]]}],"p":"$@8","v":null,"s":"$9"},"c":"$Qa"},"h":{"r":["$","$1","h",{"children":[null,["$","$L17",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1, viewport-fit=cover"}],["$","meta","2",{"name":"theme-color","content":"#0a1530"}]]}],["$","$L19",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$1a",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"Observer: publish a change without knowing who cares: Blueprint Clash"}],["$","meta","1",{"name":"description","content":"A creature-tactics RPG that teaches low-level design in C++ and high-level system design, from fundamentals to big-tech interview level."}],["$","link","2",{"rel":"manifest","href":"/blueprint-clash/manifest.webmanifest"}],["$","meta","3",{"name":"mobile-web-app-capable","content":"yes"}],["$","meta","4",{"name":"apple-mobile-web-app-title","content":"Blueprint Clash"}],["$","meta","5",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","link","6",{"rel":"icon","href":"/blueprint-clash/icon.png?icon.27re_xscs-jmw.png","sizes":"256x256","type":"image/png"}],["$","link","7",{"rel":"apple-touch-icon","href":"/blueprint-clash/apple-icon.png?apple-icon.2rac1w0yc3rju.png","sizes":"180x180","type":"image/png"}],["$","$L1b","8",{}]]}]}],null]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"p":"$@1c","v":null,"s":"$9"}},"a":"$@1d","u":"$@1e","b":"U2e90Mr6iueJEoRJLmd0s"}
+1f:I[97367,["$2"],"OutletBoundary"]
+13:["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/3s1mctvsetnbs.js","async":true}]
+14:["$","$L1f",null,{"children":["$","$1a",null,{"name":"Next.MetadataOutlet","children":"$@20"}]}]
+9:300
+20:null
+1e:true
+9:C
+1d:0
+e:"$undefined"
+b:"$undefined"
+8:"$undefined"
+1c:"$undefined"
+15:"$undefined"

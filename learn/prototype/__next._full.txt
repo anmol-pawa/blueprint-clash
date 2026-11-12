@@ -1,0 +1,78 @@
+1:"$Sreact.fragment"
+2:"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js"
+3:I[39756,["$2"],"default"]
+4:I[37457,["$2"],"default"]
+5:"/blueprint-clash/_next/static/chunks/2n5qeheznvl4u.js"
+6:I[22016,["$2","$5"],""]
+7:I[64576,["$2"],"PwaRegister"]
+d:I[97367,["$2"],"OutletBoundary"]
+e:"$Sreact.suspense"
+10:"ViewportBoundary"
+11:I[97367,["$2"],"$10"]
+13:"MetadataBoundary"
+14:I[97367,["$2"],"$13"]
+16:I[68027,["$2"],"default",1]
+:HL["/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","style"]
+:HL["/blueprint-clash/_next/static/media/07c7676b89ed2778-s.p.2bn3s6zvc0dyp.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/blueprint-clash/_next/static/media/486a103cae33528f-s.p.309ilb452anpd.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/blueprint-clash/_next/static/media/53897e768d329f66-s.p.3t6q91iet4nsy.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+9:X
+b:[["children",{"s":"__PAGE__","h":512,"d":{"r":["$","$1","c",{"children":["$Lc",[["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/3s1mctvsetnbs.js","async":true,"nonce":"$undefined"}]],["$","$Ld",null,{"children":["$","$e",null,{"name":"Next.MetadataOutlet","children":"$@f"}]}]]}],"p":false,"v":null}}]]
+a:[["children",{"s":{"n":"id","t":"d","k":"prototype","s":[]},"h":66048,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],"p":false,"v":"$9"},"c":"$Qb"}]]
+8:[["children",{"s":"learn","h":131584,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],"p":false,"v":"$9"},"c":"$Qa"}]]
+0:{"P":null,"c":["","learn","prototype",""],"q":"","i":false,"t":{"t":{"s":"","h":131600,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}],["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js","async":true,"nonce":"$undefined"}]],["$","html",null,{"lang":"en","className":"r7opxW_variable auY9QW_variable u-EJdW_variable h-full","children":["$","body",null,{"className":"min-h-full","children":[["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","main",null,{"className":"flex min-h-dvh flex-col items-center justify-center gap-4 px-4 text-center","children":[["$","div",null,{"className":"font-display text-5xl text-[var(--accent)]","children":"404"}],["$","p",null,{"className":"text-white/60","children":"This room is not on the blueprint yet."}],["$","$L6",null,{"href":"/","className":"text-sm text-white/80 underline","children":"Back to the title screen"}]]}],[]],"forbidden":"$undefined","unauthorized":"$undefined"}],["$","$L7",null,{}]]}]}]]}],"p":false,"v":null},"c":"$Q8"},"h":{"r":["$","$1","h",{"children":[null,["$","$L11",null,{"children":"$L12"}],["$","$L14",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$e",null,{"name":"Next.Metadata","children":"$L15"}]}],null]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"p":false,"v":null}},"m":"$undefined","G":["$16",[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]]],"S":true,"r":"$undefined","s":"$undefined","a":"$undefined","l":"$undefined","p":"$undefined","d":"$undefined","b":"U2e90Mr6iueJEoRJLmd0s"}
+17:"/blueprint-clash/_next/static/chunks/3s1mctvsetnbs.js"
+18:I[25039,["$2","$17"],"LessonClient"]
+9:C
+19:T65a,#include <iostream>
+#include <memory>
+#include <string>
+#include <utility>
+
+class Shape {
+public:
+    virtual ~Shape() = default;
+    // The object knows how to copy itself, whatever its dynamic type is.
+    virtual std::unique_ptr<Shape> clone() const = 0;
+    virtual std::string describe() const = 0;
+    virtual void grow(int by) = 0;
+};
+
+class Circle : public Shape {
+public:
+    explicit Circle(int radius) : radius_(radius) {}
+    // C++ cannot return unique_ptr<Circle> here (unique_ptr is not covariant),
+    // so every override returns the base smart pointer.
+    std::unique_ptr<Shape> clone() const override { return std::make_unique<Circle>(*this); }
+    std::string describe() const override { return "circle r=" + std::to_string(radius_); }
+    void grow(int by) override { radius_ += by; }
+
+private:
+    int radius_;
+};
+
+class Label : public Shape {
+public:
+    Label(std::string text, int size) : text_(std::move(text)), size_(size) {}
+    std::unique_ptr<Shape> clone() const override { return std::make_unique<Label>(*this); }
+    std::string describe() const override { return "label '" + text_ + "' size=" + std::to_string(size_); }
+    void grow(int by) override { size_ += by; }
+
+private:
+    std::string text_;
+    int size_;
+};
+
+int main() {
+    const std::unique_ptr<Shape> prototype = std::make_unique<Label>("Title", 12);
+    auto copy = prototype->clone();  // a deep, independent copy through the base pointer
+    copy->grow(8);
+    std::cout << prototype->describe() << "\n" << copy->describe() << "\n";
+    const auto circle = Circle(3).clone();
+    std::cout << circle->describe() << "\n";
+}
+c:["$","$L18",null,{"lesson":{"id":"prototype","level":"L3","title":"Prototype: copy through the base pointer","oneLiner":"Give objects a virtual clone() so you can copy them without knowing their concrete type.","cardTopic":"L3.prototype","intro":"Prototype means **the object copies itself**. Holding a `Shape*` you cannot call the copy constructor of the unknown derived class (and copying by value through the base would slice it). A virtual `clone()` solves that: each class returns a copy of its own dynamic type.\n\nIt is also how you create new objects from configured examples: keep a few pre-built \"prototype\" objects and clone them to stamp out new ones, which is handy when construction is expensive or heavily configured.","smell":"- A `switch` on a kind tag that copies each type by hand.\n- A field is added to a class and copies silently lose it.\n- Object slicing: copying a derived object into a base-typed variable.\n- Code that needs a \"copy of whatever this is\" cannot be written against the interface.","before":"#include <iostream>\n#include <memory>\n#include <string>\n\nenum class Kind { Circle, Label };\n\nstruct Shape {\n    Kind kind;\n    int size;\n    std::string text;  // added later, for labels\n};\n\n// The copier switches on the kind. When Label (with its new `text` field) was added, nobody\n// updated this function, so copies silently lose the text. No compiler warning, no failing build.\nstd::unique_ptr<Shape> copyShape(const Shape& s) {\n    switch (s.kind) {\n        case Kind::Circle: return std::make_unique<Shape>(Shape{Kind::Circle, s.size, \"\"});\n        case Kind::Label: return std::make_unique<Shape>(Shape{Kind::Label, s.size, \"\"});  // forgot s.text\n    }\n    return nullptr;\n}\n\nint main() {\n    Shape original{Kind::Label, 12, \"Title\"};\n    auto copy = copyShape(original);\n    std::cout << \"original='\" << original.text << \"' copy='\" << copy->text << \"'\\n\";\n}\n","after":"$19","beforeOutput":"original='Title' copy=''","afterOutput":"label 'Title' size=12\nlabel 'Title' size=20\ncircle r=3","refactorNotes":"Each class copies itself with its own copy constructor, so adding a field cannot be forgotten in a distant switch: the compiler-generated copy constructor handles it. The caller works only with `Shape`.\n\n**C++ catch:** `unique_ptr<Circle>` is not covariant with `unique_ptr<Shape>`, so the override returns the base smart pointer. Another catch: `clone()` must be overridden in every concrete class, and the compiler will not remind you if you forget in a deeper subclass. A CRTP helper can automate it at the cost of more complex code. Clones are **deep** here because the members own their data; with raw pointer members you would need to decide deliberately.","interviewSignal":"Mention slicing and the covariance limitation of smart pointers; that shows real C++ depth. Say whether the copy is deep or shallow and why. Also say when you would not do this: a closed set of types fits `std::variant`, which copies for free.","overApplication":"If the object is a plain value type, just copy it. A clone() on every class in a hierarchy that never needs polymorphic copying is boilerplate that has to be kept in sync with each new subclass."},"nextId":"singleton"}]
+12:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1, viewport-fit=cover"}],["$","meta","2",{"name":"theme-color","content":"#0a1530"}]]
+1a:I[27201,["$2"],"IconMark"]
+f:null
+15:[["$","title","0",{"children":"Prototype: copy through the base pointer: Blueprint Clash"}],["$","meta","1",{"name":"description","content":"A creature-tactics RPG that teaches low-level design in C++ and high-level system design, from fundamentals to big-tech interview level."}],["$","link","2",{"rel":"manifest","href":"/blueprint-clash/manifest.webmanifest","crossOrigin":"$undefined"}],["$","meta","3",{"name":"mobile-web-app-capable","content":"yes"}],["$","meta","4",{"name":"apple-mobile-web-app-title","content":"Blueprint Clash"}],["$","meta","5",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","link","6",{"rel":"icon","href":"/blueprint-clash/icon.png?icon.27re_xscs-jmw.png","sizes":"256x256","type":"image/png"}],["$","link","7",{"rel":"apple-touch-icon","href":"/blueprint-clash/apple-icon.png?apple-icon.2rac1w0yc3rju.png","sizes":"180x180","type":"image/png"}],["$","$L1a","8",{}]]

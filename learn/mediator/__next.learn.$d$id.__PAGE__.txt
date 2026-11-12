@@ -1,0 +1,79 @@
+1:"$Sreact.fragment"
+2:"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js"
+3:I[39756,["$2"],"default"]
+4:I[37457,["$2"],"default"]
+5:"/blueprint-clash/_next/static/chunks/2n5qeheznvl4u.js"
+6:I[22016,["$2","$5"],""]
+7:I[64576,["$2"],"PwaRegister"]
+10:"/blueprint-clash/_next/static/chunks/3s1mctvsetnbs.js"
+11:I[25039,["$2","$10"],"LessonClient"]
+16:"ViewportBoundary"
+17:I[97367,["$2"],"$16"]
+18:"MetadataBoundary"
+19:I[97367,["$2"],"$18"]
+1a:"$Sreact.suspense"
+1b:I[27201,["$2"],"IconMark"]
+:HL["/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","style"]
+9:X
+c:X
+c:C
+12:T406,#include <iostream>
+#include <map>
+#include <string>
+#include <utility>
+
+// The mediator owns the group rule. It stores names, not pointers, so a peer cannot dangle in it.
+class Lobby {
+public:
+    void join(const std::string& name) { ready_[name] = false; }
+
+    void markReady(const std::string& name) {
+        ready_[name] = true;
+        std::cout << name << " ready\n";
+        for (const auto& entry : ready_) {
+            if (!entry.second) return;
+        }
+        std::cout << name << " starts the match\n";
+    }
+
+private:
+    std::map<std::string, bool> ready_;
+};
+
+// A player knows only the lobby (which must outlive it).
+class Player {
+public:
+    Player(std::string name, Lobby& lobby) : name_(std::move(name)), lobby_(lobby) { lobby_.join(name_); }
+    void ready() { lobby_.markReady(name_); }
+
+private:
+    std::string name_;
+    Lobby& lobby_;
+};
+
+int main() {
+    Lobby lobby;
+    Player a("ann", lobby);
+    Player b("ben", lobby);
+    Player c("cy", lobby);
+    a.ready();
+    b.ready();
+    c.ready();
+}
+f:[["children",{"s":"__PAGE__","h":160,"d":{"r":["$","$1","c",{"children":[["$","$L11",null,{"lesson":{"id":"mediator","level":"L5","title":"Mediator: one place where the colleagues meet","oneLiner":"Make peers talk to a coordinator instead of to each other, so the coupling is one-to-one instead of everyone-to-everyone.","cardTopic":"L5.mediator","intro":"A Mediator is **a coordinator that peers talk through**. Without one, each of N objects holds references to the others it interacts with, which can grow toward N x (N-1) links: change one peer and you touch the rest. With one, each peer knows only the mediator, and the rules about who reacts to whom live in a single class.\n\nUse it when **a group of objects has rich, interdependent rules** (a lobby, a chat room, an air-traffic tower, form fields that enable and disable each other). The peers become simple and reusable because they carry no knowledge of the others.\n\nIn C++ be explicit about lifetime. A peer that stores a reference to the mediator needs the mediator to outlive it, and a mediator that stores raw pointers to peers needs a way to hear that a peer is gone. Storing identifiers (names or ids) instead of pointers sidesteps most of that. And watch the failure mode: a mediator that absorbs every rule becomes a **god object**.","smell":"- Every object keeps a list of pointers to its peers, and each wires up all the others.\n- Adding a new participant means editing every existing one.\n- A rule about the whole group (everyone is ready) is checked in each member and is slightly different in each.\n- Peers cannot be reused or tested without the full set around them.","before":"#include <iostream>\n#include <string>\n#include <utility>\n#include <vector>\n\n// Each player knows every other player, and each one re-checks the group rule.\nclass Player {\npublic:\n    explicit Player(std::string name) : name_(std::move(name)) {}\n    void addPeer(const Player* peer) { peers_.push_back(peer); }\n    bool isReady() const { return ready_; }\n\n    void ready() {\n        ready_ = true;\n        std::cout << name_ << \" ready\\n\";\n        for (const Player* peer : peers_) {\n            if (!peer->isReady()) return;\n        }\n        std::cout << name_ << \" starts the match\\n\";\n    }\n\nprivate:\n    std::string name_;\n    bool ready_ = false;\n    std::vector<const Player*> peers_;\n};\n\nint main() {\n    Player a(\"ann\"), b(\"ben\"), c(\"cy\");\n    a.addPeer(&b); a.addPeer(&c);\n    b.addPeer(&a); b.addPeer(&c);\n    c.addPeer(&a); c.addPeer(&b);\n    a.ready();\n    b.ready();\n    c.ready();\n}\n","after":"$12","beforeOutput":"ann ready\nben ready\ncy ready\ncy starts the match","afterOutput":"ann ready\nben ready\ncy ready\ncy starts the match","refactorNotes":"Behaviour is identical. The \"everyone is ready\" rule now exists once, in `Lobby`; a fourth player is one more `Player` and no edit to the other three (before, it meant six extra `addPeer` calls and a risk of forgetting one). `Player` is trivial and can be tested with a stub lobby. The lobby stores names rather than pointers, so a destroyed player cannot leave a dangling entry (a real lobby would also offer `leave`).\n\n**Trade-offs:** the coupling has moved, not vanished: the mediator knows every colleague's protocol and can grow into a god object, so keep rules for *one* interaction group in it and split by group. It is also a single point to test and a potential bottleneck. If peers only broadcast \"something happened\" with no rules, an Observer or an event bus is lighter. Compare with Facade: a Facade simplifies access *to* a subsystem one-way, a Mediator coordinates two-way traffic *among* peers.","interviewSignal":"Say \"these objects have many interdependent interactions, so I'll route them through one coordinator\". Draw N boxes with N^2 lines, then N lines to a hub. Senior signal: you name the god-object risk and how to split it, state lifetimes (reference to the mediator, names instead of pointers), and distinguish Mediator from Observer (rules and two-way versus broadcast) and from Facade (one-way simplification). Typical uses: chat rooms, elevator controllers, auction houses and UI form logic.","overApplication":"Two objects that interact in one simple way do not need a go-between. A mediator that every class in the system funnels through becomes the new tangle, with all the rules in one file and a reason for every change to touch it. If the colleagues are already coupled through a clean interface, adding a mediator just adds a hop."},"nextId":"memento"}],["$L13"],"$L14"]}],"p":"$@15","v":null,"s":"$9"}}]]
+d:[["children",{"s":{"n":"id","t":"d","k":"mediator","s":[]},"h":65632,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}]}]]}],"p":"$@e","v":"$c","s":"$9"},"c":"$Qf"}]]
+a:[["children",{"s":"learn","h":131168,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}]}]]}],"p":"$@b","v":"$c","s":"$9"},"c":"$Qd"}]]
+0:{"t":{"t":{"s":"","h":131152,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","precedence":"next"}],["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js","async":true}]],["$","html",null,{"lang":"en","className":"r7opxW_variable auY9QW_variable u-EJdW_variable h-full","children":["$","body",null,{"className":"min-h-full","children":[["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}],"notFound":[["$","main",null,{"className":"flex min-h-dvh flex-col items-center justify-center gap-4 px-4 text-center","children":[["$","div",null,{"className":"font-display text-5xl text-[var(--accent)]","children":"404"}],["$","p",null,{"className":"text-white/60","children":"This room is not on the blueprint yet."}],["$","$L6",null,{"href":"/","className":"text-sm text-white/80 underline","children":"Back to the title screen"}]]}],[]]}],["$","$L7",null,{}]]}]}]]}],"p":"$@8","v":null,"s":"$9"},"c":"$Qa"},"h":{"r":["$","$1","h",{"children":[null,["$","$L17",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1, viewport-fit=cover"}],["$","meta","2",{"name":"theme-color","content":"#0a1530"}]]}],["$","$L19",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$1a",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"Mediator: one place where the colleagues meet: Blueprint Clash"}],["$","meta","1",{"name":"description","content":"A creature-tactics RPG that teaches low-level design in C++ and high-level system design, from fundamentals to big-tech interview level."}],["$","link","2",{"rel":"manifest","href":"/blueprint-clash/manifest.webmanifest"}],["$","meta","3",{"name":"mobile-web-app-capable","content":"yes"}],["$","meta","4",{"name":"apple-mobile-web-app-title","content":"Blueprint Clash"}],["$","meta","5",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","link","6",{"rel":"icon","href":"/blueprint-clash/icon.png?icon.27re_xscs-jmw.png","sizes":"256x256","type":"image/png"}],["$","link","7",{"rel":"apple-touch-icon","href":"/blueprint-clash/apple-icon.png?apple-icon.2rac1w0yc3rju.png","sizes":"180x180","type":"image/png"}],["$","$L1b","8",{}]]}]}],null]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"p":"$@1c","v":null,"s":"$9"}},"a":"$@1d","u":"$@1e","b":"U2e90Mr6iueJEoRJLmd0s"}
+1f:I[97367,["$2"],"OutletBoundary"]
+13:["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/3s1mctvsetnbs.js","async":true}]
+14:["$","$L1f",null,{"children":["$","$1a",null,{"name":"Next.MetadataOutlet","children":"$@20"}]}]
+9:300
+20:null
+1e:true
+9:C
+1d:0
+e:"$undefined"
+b:"$undefined"
+8:"$undefined"
+1c:"$undefined"
+15:"$undefined"

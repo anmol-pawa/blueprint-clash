@@ -1,0 +1,132 @@
+1:"$Sreact.fragment"
+2:"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js"
+3:I[39756,["$2"],"default"]
+4:I[37457,["$2"],"default"]
+5:"/blueprint-clash/_next/static/chunks/2n5qeheznvl4u.js"
+6:I[22016,["$2","$5"],""]
+7:I[64576,["$2"],"PwaRegister"]
+d:I[97367,["$2"],"OutletBoundary"]
+e:"$Sreact.suspense"
+10:"ViewportBoundary"
+11:I[97367,["$2"],"$10"]
+13:"MetadataBoundary"
+14:I[97367,["$2"],"$13"]
+16:I[68027,["$2"],"default",1]
+:HL["/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","style"]
+:HL["/blueprint-clash/_next/static/media/07c7676b89ed2778-s.p.2bn3s6zvc0dyp.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/blueprint-clash/_next/static/media/486a103cae33528f-s.p.309ilb452anpd.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/blueprint-clash/_next/static/media/53897e768d329f66-s.p.3t6q91iet4nsy.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+9:X
+b:[["children",{"s":"__PAGE__","h":512,"d":{"r":["$","$1","c",{"children":["$Lc",[["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/3s1mctvsetnbs.js","async":true,"nonce":"$undefined"}]],["$","$Ld",null,{"children":["$","$e",null,{"name":"Next.MetadataOutlet","children":"$@f"}]}]]}],"p":false,"v":null}}]]
+a:[["children",{"s":{"n":"id","t":"d","k":"facade","s":[]},"h":66048,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],"p":false,"v":"$9"},"c":"$Qb"}]]
+8:[["children",{"s":"learn","h":131584,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],"p":false,"v":"$9"},"c":"$Qa"}]]
+0:{"P":null,"c":["","learn","facade",""],"q":"","i":false,"t":{"t":{"s":"","h":131600,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}],["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js","async":true,"nonce":"$undefined"}]],["$","html",null,{"lang":"en","className":"r7opxW_variable auY9QW_variable u-EJdW_variable h-full","children":["$","body",null,{"className":"min-h-full","children":[["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","main",null,{"className":"flex min-h-dvh flex-col items-center justify-center gap-4 px-4 text-center","children":[["$","div",null,{"className":"font-display text-5xl text-[var(--accent)]","children":"404"}],["$","p",null,{"className":"text-white/60","children":"This room is not on the blueprint yet."}],["$","$L6",null,{"href":"/","className":"text-sm text-white/80 underline","children":"Back to the title screen"}]]}],[]],"forbidden":"$undefined","unauthorized":"$undefined"}],["$","$L7",null,{}]]}]}]]}],"p":false,"v":null},"c":"$Q8"},"h":{"r":["$","$1","h",{"children":[null,["$","$L11",null,{"children":"$L12"}],["$","$L14",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$e",null,{"name":"Next.Metadata","children":"$L15"}]}],null]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"p":false,"v":null}},"m":"$undefined","G":["$16",[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]]],"S":true,"r":"$undefined","s":"$undefined","a":"$undefined","l":"$undefined","p":"$undefined","d":"$undefined","b":"U2e90Mr6iueJEoRJLmd0s"}
+17:"/blueprint-clash/_next/static/chunks/3s1mctvsetnbs.js"
+18:I[25039,["$2","$17"],"LessonClient"]
+9:C
+19:T4b9,#include <iostream>
+#include <sstream>
+#include <string>
+#include <vector>
+
+class Lexer {
+public:
+    std::vector<std::string> tokenize(const std::string& source) const {
+        std::vector<std::string> tokens;
+        std::istringstream in(source);
+        std::string word;
+        while (in >> word) tokens.push_back(word);
+        return tokens;
+    }
+};
+
+class Parser {
+public:
+    bool valid(const std::vector<std::string>& tokens) const { return !tokens.empty(); }
+};
+
+class Emitter {
+public:
+    std::string emit(const std::vector<std::string>& tokens) const {
+        std::string out;
+        for (std::size_t i = 0; i < tokens.size(); ++i) {
+            if (i > 0) out += ",";
+            out += tokens[i];
+        }
+        return out;
+    }
+};
+
+int main() {
+    // Every caller has to know the order, the validity check and the error text.
+    const Lexer lexer;
+    const Parser parser;
+    const Emitter emitter;
+    for (const std::string source : {"a b c", ""}) {
+        const auto tokens = lexer.tokenize(source);
+        if (!parser.valid(tokens)) {
+            std::cout << "error: empty input\n";
+        } else {
+            std::cout << emitter.emit(tokens) << "\n";
+        }
+    }
+}
+1a:T54a,#include <iostream>
+#include <sstream>
+#include <string>
+#include <vector>
+
+// Subsystem classes, unchanged.
+class Lexer {
+public:
+    std::vector<std::string> tokenize(const std::string& source) const {
+        std::vector<std::string> tokens;
+        std::istringstream in(source);
+        std::string word;
+        while (in >> word) tokens.push_back(word);
+        return tokens;
+    }
+};
+
+class Parser {
+public:
+    bool valid(const std::vector<std::string>& tokens) const { return !tokens.empty(); }
+};
+
+class Emitter {
+public:
+    std::string emit(const std::vector<std::string>& tokens) const {
+        std::string out;
+        for (std::size_t i = 0; i < tokens.size(); ++i) {
+            if (i > 0) out += ",";
+            out += tokens[i];
+        }
+        return out;
+    }
+};
+
+// Facade: the one call most callers need. It owns the sequence and the error text.
+class Translator {
+public:
+    std::string translate(const std::string& source) const {
+        const auto tokens = lexer_.tokenize(source);
+        if (!parser_.valid(tokens)) return "error: empty input";
+        return emitter_.emit(tokens);
+    }
+
+private:
+    Lexer lexer_;
+    Parser parser_;
+    Emitter emitter_;
+};
+
+int main() {
+    const Translator translator;
+    std::cout << translator.translate("a b c") << "\n";
+    std::cout << translator.translate("") << "\n";
+}
+c:["$","$L18",null,{"lesson":{"id":"facade","level":"L4","title":"Facade: one simple door into a messy subsystem","oneLiner":"Provide a small, task-shaped interface over several collaborating classes so callers stop orchestrating them by hand.","cardTopic":"L4.facade","intro":"A Facade is a **class with a few intention-revealing methods that coordinate a subsystem**. Instead of every caller creating a lexer, a parser and an emitter and calling them in the right order with the right checks, one `Translator::translate(text)` does it.\n\nIt reduces coupling (callers depend on one class), centralises the call sequence (so it changes in one place) and gives you a natural seam to fake in tests. It does **not** hide the subsystem: power users can still reach the parts when they need to. That is the difference from an encapsulation boundary you enforce with the module system.\n\nFacade differs from Adapter in intent (simplify many classes versus translate one interface), and from a Mediator (a Facade is one-way: the subsystem does not know about it).","smell":"- The same three-step call sequence copied into several callers.\n- Callers know the subsystem's internal order, invariants and error handling.\n- A change inside the subsystem breaks many unrelated files.\n- Onboarding docs say \"first call A, then B, then check C\".","before":"$19","after":"$1a","beforeOutput":"a,b,c\nerror: empty input","afterOutput":"a,b,c\nerror: empty input","refactorNotes":"The call sequence, the validity check and the error wording now exist once. Changing the subsystem (a new pass, a different order) edits `Translator` and nothing else. The subsystem classes are untouched and still usable directly by the rare caller that needs a single stage.\n\n**Trade-off:** the Facade is a new thing to maintain, and it decides what the \"simple\" cases are. If it grows a method for every caller's need it turns into a god class, the opposite of what you wanted. Keep it task-shaped, keep logic in the subsystem, and let it accept its collaborators through the constructor if you want to fake them in tests.","interviewSignal":"Say \"callers should depend on what they want done, not on how the parts are sequenced\". Senior signal: you mention that a Facade must stay thin (it coordinates, it does not own business rules), that it makes a good test seam and a good place for cross-cutting concerns such as logging, and that you would not use one to paper over a subsystem that is itself badly designed.","overApplication":"A Facade over two collaborators that one caller uses once adds nothing. A Facade that every layer must go through becomes a bottleneck of changes and a god class (see the Senior Review god-class rule). And a Facade that hides too much forces power users to bypass it, leaving two ways of doing everything. Add one when the same orchestration appears in at least two places."},"nextId":"flyweight"}]
+12:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1, viewport-fit=cover"}],["$","meta","2",{"name":"theme-color","content":"#0a1530"}]]
+1b:I[27201,["$2"],"IconMark"]
+f:null
+15:[["$","title","0",{"children":"Facade: one simple door into a messy subsystem: Blueprint Clash"}],["$","meta","1",{"name":"description","content":"A creature-tactics RPG that teaches low-level design in C++ and high-level system design, from fundamentals to big-tech interview level."}],["$","link","2",{"rel":"manifest","href":"/blueprint-clash/manifest.webmanifest","crossOrigin":"$undefined"}],["$","meta","3",{"name":"mobile-web-app-capable","content":"yes"}],["$","meta","4",{"name":"apple-mobile-web-app-title","content":"Blueprint Clash"}],["$","meta","5",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","link","6",{"rel":"icon","href":"/blueprint-clash/icon.png?icon.27re_xscs-jmw.png","sizes":"256x256","type":"image/png"}],["$","link","7",{"rel":"apple-touch-icon","href":"/blueprint-clash/apple-icon.png?apple-icon.2rac1w0yc3rju.png","sizes":"180x180","type":"image/png"}],["$","$L1b","8",{}]]

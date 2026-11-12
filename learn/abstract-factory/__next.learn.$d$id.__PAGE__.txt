@@ -1,0 +1,99 @@
+1:"$Sreact.fragment"
+2:"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js"
+3:I[39756,["$2"],"default"]
+4:I[37457,["$2"],"default"]
+5:"/blueprint-clash/_next/static/chunks/2n5qeheznvl4u.js"
+6:I[22016,["$2","$5"],""]
+7:I[64576,["$2"],"PwaRegister"]
+10:"/blueprint-clash/_next/static/chunks/3s1mctvsetnbs.js"
+11:I[25039,["$2","$10"],"LessonClient"]
+16:"ViewportBoundary"
+17:I[97367,["$2"],"$16"]
+18:"MetadataBoundary"
+19:I[97367,["$2"],"$18"]
+1a:"$Sreact.suspense"
+1b:I[27201,["$2"],"IconMark"]
+:HL["/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","style"]
+9:X
+c:X
+c:C
+12:T786,#include <iostream>
+#include <memory>
+#include <string>
+
+class Button {
+public:
+    virtual ~Button() = default;
+    virtual std::string draw() const = 0;
+};
+
+class Checkbox {
+public:
+    virtual ~Checkbox() = default;
+    virtual std::string draw() const = 0;
+};
+
+// The family interface: one factory creates widgets that are guaranteed to belong together.
+class WidgetFactory {
+public:
+    virtual ~WidgetFactory() = default;
+    virtual std::unique_ptr<Button> createButton() const = 0;
+    virtual std::unique_ptr<Checkbox> createCheckbox() const = 0;
+};
+
+class LightButton : public Button {
+public:
+    std::string draw() const override { return "[light button]"; }
+};
+class LightCheckbox : public Checkbox {
+public:
+    std::string draw() const override { return "[light checkbox]"; }
+};
+class LightFactory : public WidgetFactory {
+public:
+    std::unique_ptr<Button> createButton() const override { return std::make_unique<LightButton>(); }
+    std::unique_ptr<Checkbox> createCheckbox() const override { return std::make_unique<LightCheckbox>(); }
+};
+
+class DarkButton : public Button {
+public:
+    std::string draw() const override { return "[dark button]"; }
+};
+class DarkCheckbox : public Checkbox {
+public:
+    std::string draw() const override { return "[dark checkbox]"; }
+};
+class DarkFactory : public WidgetFactory {
+public:
+    std::unique_ptr<Button> createButton() const override { return std::make_unique<DarkButton>(); }
+    std::unique_ptr<Checkbox> createCheckbox() const override { return std::make_unique<DarkCheckbox>(); }
+};
+
+// Client code never names a concrete widget, so it cannot mix families.
+void buildDialog(const WidgetFactory& factory) {
+    const auto button = factory.createButton();
+    const auto checkbox = factory.createCheckbox();
+    std::cout << button->draw() << " " << checkbox->draw() << "\n";
+}
+
+int main() {
+    buildDialog(LightFactory());
+    buildDialog(DarkFactory());
+}
+f:[["children",{"s":"__PAGE__","h":160,"d":{"r":["$","$1","c",{"children":[["$","$L11",null,{"lesson":{"id":"abstract-factory","level":"L3","title":"Abstract Factory: families that stay consistent","oneLiner":"Create whole families of related objects through one interface, so you can never mix families.","cardTopic":"L3.abstract-factory","intro":"Abstract Factory is an interface with **one creation method per product in a family** (button, checkbox, ...), and one concrete factory per family (light, dark). The client holds only the interface, so it gets a consistent family by construction.\n\nUse it when the consistency between products is the requirement: themes, database drivers (connection, statement, transaction), cross-platform widget sets. If products are independent, plain factories are enough.","smell":"- The same `switch (theme)` appears in several creation functions.\n- A bug where one widget is dark and its neighbour is light.\n- Adding a new family means editing many functions in many files.\n- Client code names concrete classes.","before":"#include <iostream>\n#include <string>\n\nenum class Theme { Light, Dark };\n\n// Every widget function switches on the theme. Mixing a dark button with a light checkbox\n// is one forgotten branch away, and a third theme edits every function.\nstd::string makeButton(Theme t) { return t == Theme::Dark ? \"[dark button]\" : \"[light button]\"; }\nstd::string makeCheckbox(Theme t) { return t == Theme::Dark ? \"[dark checkbox]\" : \"[light checkbox]\"; }\n\nvoid buildDialog(Theme t) {\n    std::cout << makeButton(t) << \" \" << makeCheckbox(t) << \"\\n\";\n}\n\nint main() {\n    buildDialog(Theme::Light);\n    buildDialog(Theme::Dark);\n}\n","after":"$12","beforeOutput":"[light button] [light checkbox]\n[dark button] [dark checkbox]","afterOutput":"[light button] [light checkbox]\n[dark button] [dark checkbox]","refactorNotes":"Adding a third theme is one new factory and its products: no existing function changes (Open/Closed along the family axis). The client cannot create a mixed set because it never names a concrete widget.\n\n**Trade-off, and the deciding factor:** Abstract Factory is closed along the other axis. Adding a new product kind (a slider) means editing the factory interface and every concrete factory. Choose it when families change more often than product kinds; if product kinds change more, prefer a different decomposition.","interviewSignal":"State the axis of change explicitly: \"new themes are likely, new widget kinds are rare, so Abstract Factory fits\". Interviewers probe the downside, so volunteer the rigidity when adding a product kind. Staff-level answers also mention that factories can be passed as constructor dependencies instead of being global.","overApplication":"A factory interface for a single product is just Factory Method with extra steps. Families that never vary (only one theme will ever exist) turn every widget into three classes for no benefit. Count the real families before you build the interface."},"nextId":"builder"}],["$L13"],"$L14"]}],"p":"$@15","v":null,"s":"$9"}}]]
+d:[["children",{"s":{"n":"id","t":"d","k":"abstract-factory","s":[]},"h":65632,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}]}]]}],"p":"$@e","v":"$c","s":"$9"},"c":"$Qf"}]]
+a:[["children",{"s":"learn","h":131168,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}]}]]}],"p":"$@b","v":"$c","s":"$9"},"c":"$Qd"}]]
+0:{"t":{"t":{"s":"","h":131152,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","precedence":"next"}],["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js","async":true}]],["$","html",null,{"lang":"en","className":"r7opxW_variable auY9QW_variable u-EJdW_variable h-full","children":["$","body",null,{"className":"min-h-full","children":[["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}],"notFound":[["$","main",null,{"className":"flex min-h-dvh flex-col items-center justify-center gap-4 px-4 text-center","children":[["$","div",null,{"className":"font-display text-5xl text-[var(--accent)]","children":"404"}],["$","p",null,{"className":"text-white/60","children":"This room is not on the blueprint yet."}],["$","$L6",null,{"href":"/","className":"text-sm text-white/80 underline","children":"Back to the title screen"}]]}],[]]}],["$","$L7",null,{}]]}]}]]}],"p":"$@8","v":null,"s":"$9"},"c":"$Qa"},"h":{"r":["$","$1","h",{"children":[null,["$","$L17",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1, viewport-fit=cover"}],["$","meta","2",{"name":"theme-color","content":"#0a1530"}]]}],["$","$L19",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$1a",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"Abstract Factory: families that stay consistent: Blueprint Clash"}],["$","meta","1",{"name":"description","content":"A creature-tactics RPG that teaches low-level design in C++ and high-level system design, from fundamentals to big-tech interview level."}],["$","link","2",{"rel":"manifest","href":"/blueprint-clash/manifest.webmanifest"}],["$","meta","3",{"name":"mobile-web-app-capable","content":"yes"}],["$","meta","4",{"name":"apple-mobile-web-app-title","content":"Blueprint Clash"}],["$","meta","5",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","link","6",{"rel":"icon","href":"/blueprint-clash/icon.png?icon.27re_xscs-jmw.png","sizes":"256x256","type":"image/png"}],["$","link","7",{"rel":"apple-touch-icon","href":"/blueprint-clash/apple-icon.png?apple-icon.2rac1w0yc3rju.png","sizes":"180x180","type":"image/png"}],["$","$L1b","8",{}]]}]}],null]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"p":"$@1c","v":null,"s":"$9"}},"a":"$@1d","u":"$@1e","b":"U2e90Mr6iueJEoRJLmd0s"}
+1f:I[97367,["$2"],"OutletBoundary"]
+13:["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/3s1mctvsetnbs.js","async":true}]
+14:["$","$L1f",null,{"children":["$","$1a",null,{"name":"Next.MetadataOutlet","children":"$@20"}]}]
+9:300
+20:null
+1e:true
+9:C
+1d:0
+e:"$undefined"
+b:"$undefined"
+8:"$undefined"
+1c:"$undefined"
+15:"$undefined"

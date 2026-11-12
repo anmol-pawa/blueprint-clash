@@ -1,0 +1,100 @@
+1:"$Sreact.fragment"
+2:"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js"
+3:I[39756,["$2"],"default"]
+4:I[37457,["$2"],"default"]
+5:"/blueprint-clash/_next/static/chunks/2n5qeheznvl4u.js"
+6:I[22016,["$2","$5"],""]
+7:I[64576,["$2"],"PwaRegister"]
+10:"/blueprint-clash/_next/static/chunks/3s1mctvsetnbs.js"
+11:I[25039,["$2","$10"],"LessonClient"]
+16:"ViewportBoundary"
+17:I[97367,["$2"],"$16"]
+18:"MetadataBoundary"
+19:I[97367,["$2"],"$18"]
+1a:"$Sreact.suspense"
+1b:I[27201,["$2"],"IconMark"]
+:HL["/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","style"]
+9:X
+c:X
+c:C
+12:T79b,#include <iostream>
+#include <map>
+#include <memory>
+#include <string>
+#include <utility>
+
+using Context = std::map<std::string, int>;
+
+// The grammar is a tree of small classes. Each node knows how to evaluate itself.
+class Expr {
+public:
+    virtual ~Expr() = default;
+    virtual int eval(const Context& context) const = 0;
+};
+
+using ExprPtr = std::unique_ptr<Expr>;
+
+class Number final : public Expr {
+public:
+    explicit Number(int value) : value_(value) {}
+    int eval(const Context&) const override { return value_; }
+
+private:
+    int value_;
+};
+
+class Variable final : public Expr {
+public:
+    explicit Variable(std::string name) : name_(std::move(name)) {}
+    int eval(const Context& context) const override { return context.at(name_); }
+
+private:
+    std::string name_;
+};
+
+class Add final : public Expr {
+public:
+    Add(ExprPtr left, ExprPtr right) : left_(std::move(left)), right_(std::move(right)) {}
+    int eval(const Context& context) const override { return left_->eval(context) + right_->eval(context); }
+
+private:
+    ExprPtr left_;
+    ExprPtr right_;
+};
+
+class Multiply final : public Expr {
+public:
+    Multiply(ExprPtr left, ExprPtr right) : left_(std::move(left)), right_(std::move(right)) {}
+    int eval(const Context& context) const override { return left_->eval(context) * right_->eval(context); }
+
+private:
+    ExprPtr left_;
+    ExprPtr right_;
+};
+
+int main() {
+    const Context context{{"qty", 3}};
+    // The shape of the tree carries precedence: 2 + (3 * 4).
+    const ExprPtr sum = std::make_unique<Add>(std::make_unique<Number>(2),
+                                              std::make_unique<Multiply>(std::make_unique<Number>(3), std::make_unique<Number>(4)));
+    const ExprPtr total = std::make_unique<Multiply>(std::make_unique<Variable>("qty"), std::make_unique<Number>(5));
+    std::cout << "2+3*4 = " << sum->eval(context) << "\n";
+    std::cout << "qty*5 = " << total->eval(context) << "\n";
+}
+f:[["children",{"s":"__PAGE__","h":160,"d":{"r":["$","$1","c",{"children":[["$","$L11",null,{"lesson":{"id":"interpreter","level":"L5","title":"Interpreter: a small grammar as a tree of objects","oneLiner":"Represent each rule of a tiny language as a class, so a sentence becomes a tree that evaluates itself.","cardTopic":"L5.interpreter","intro":"The Interpreter pattern models **a small, stable language** as a class per grammar rule. A sentence is a tree: leaves are terminals (a number, a variable), inner nodes are non-terminals (add, multiply, and, or). Every node has one method, `eval(context)`, which evaluates its children and combines the results. The context carries the variable bindings.\n\nThe shape of the tree carries the meaning, including precedence: `2 + 3 * 4` is `Add(2, Multiply(3, 4))`. Parsing text into that tree is a separate job (a parser, or hand-built trees in tests). The pattern itself is only the tree and the evaluation.\n\nIt is **Composite with a purpose**: same structure, but the leaves and nodes together define a language. Use it for rules a product owner edits (pricing rules, filters, validation expressions) when the grammar is tiny and fixed.","smell":"- An evaluator that scans a list of tokens with ad-hoc rules and gets precedence or nesting wrong.\n- Rules are strings parsed again at every evaluation.\n- Each new operator means another `else if` inside one big function.\n- Behaviour and grammar are tangled, so tests can only exercise whole strings.","before":"#include <iostream>\n#include <string>\n#include <vector>\n\n// Evaluates tokens strictly left to right, so \"2 + 3 * 4\" becomes (2 + 3) * 4.\nint evaluate(const std::vector<std::string>& tokens) {\n    int result = std::stoi(tokens[0]);\n    for (std::size_t i = 1; i + 1 < tokens.size(); i += 2) {\n        const int operand = std::stoi(tokens[i + 1]);\n        if (tokens[i] == \"+\") result += operand;\n        else if (tokens[i] == \"*\") result *= operand;\n    }\n    return result;\n}\n\nint main() {\n    std::cout << \"2+3*4 = \" << evaluate({\"2\", \"+\", \"3\", \"*\", \"4\"}) << \"\\n\";\n}\n","after":"$12","beforeOutput":"2+3*4 = 20","afterOutput":"2+3*4 = 14\nqty*5 = 15","refactorNotes":"The flat loop evaluated `2 + 3 * 4` as `(2 + 3) * 4 = 20`; it had no concept of grouping. The tree makes the structure explicit and gives `14`. Adding a new operator (`Subtract`, `Max`) is a new class, with no change to the existing ones, and each node can be unit-tested alone. Children are owned by `unique_ptr`, so a tree is destroyed by destroying its root, and `eval` is `const`. The variable lookup uses `at()`, which throws for an unbound name rather than inventing a value.\n\n**Trade-offs:** one class per grammar rule does not scale; real languages need a parser generator, a bytecode VM or an existing library. The tree is slow compared to compiled code. And with many operations over the same tree (evaluate, print, simplify, type-check), add a Visitor instead of a growing `eval`-style method on every node. Say plainly that Interpreter is the right size for tens of rules, not hundreds.","interviewSignal":"Use it when the problem says \"rules\", \"expressions\", \"filters\" or \"a mini query language\". Draw the grammar as a few lines, then the tree for one example, and point out that the tree encodes precedence. Senior signal: you separate parsing from evaluation, bound the pattern (\"small, stable grammar\"), name the escape hatches (parser generator, embedded scripting, a lambda in a table), and mention validating the tree before evaluating it.","overApplication":"Writing a class per rule for a two-operator calculator is heavy; a function is enough. Do not invent a language when a configuration table or a lambda would do. A grammar that keeps growing is a sign you needed a real parser and a real VM, and an Interpreter hierarchy will not stay fast or maintainable there."},"nextId":"null-object"}],["$L13"],"$L14"]}],"p":"$@15","v":null,"s":"$9"}}]]
+d:[["children",{"s":{"n":"id","t":"d","k":"interpreter","s":[]},"h":65632,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}]}]]}],"p":"$@e","v":"$c","s":"$9"},"c":"$Qf"}]]
+a:[["children",{"s":"learn","h":131168,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}]}]]}],"p":"$@b","v":"$c","s":"$9"},"c":"$Qd"}]]
+0:{"t":{"t":{"s":"","h":131152,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","precedence":"next"}],["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js","async":true}]],["$","html",null,{"lang":"en","className":"r7opxW_variable auY9QW_variable u-EJdW_variable h-full","children":["$","body",null,{"className":"min-h-full","children":[["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}],"notFound":[["$","main",null,{"className":"flex min-h-dvh flex-col items-center justify-center gap-4 px-4 text-center","children":[["$","div",null,{"className":"font-display text-5xl text-[var(--accent)]","children":"404"}],["$","p",null,{"className":"text-white/60","children":"This room is not on the blueprint yet."}],["$","$L6",null,{"href":"/","className":"text-sm text-white/80 underline","children":"Back to the title screen"}]]}],[]]}],["$","$L7",null,{}]]}]}]]}],"p":"$@8","v":null,"s":"$9"},"c":"$Qa"},"h":{"r":["$","$1","h",{"children":[null,["$","$L17",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1, viewport-fit=cover"}],["$","meta","2",{"name":"theme-color","content":"#0a1530"}]]}],["$","$L19",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$1a",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"Interpreter: a small grammar as a tree of objects: Blueprint Clash"}],["$","meta","1",{"name":"description","content":"A creature-tactics RPG that teaches low-level design in C++ and high-level system design, from fundamentals to big-tech interview level."}],["$","link","2",{"rel":"manifest","href":"/blueprint-clash/manifest.webmanifest"}],["$","meta","3",{"name":"mobile-web-app-capable","content":"yes"}],["$","meta","4",{"name":"apple-mobile-web-app-title","content":"Blueprint Clash"}],["$","meta","5",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","link","6",{"rel":"icon","href":"/blueprint-clash/icon.png?icon.27re_xscs-jmw.png","sizes":"256x256","type":"image/png"}],["$","link","7",{"rel":"apple-touch-icon","href":"/blueprint-clash/apple-icon.png?apple-icon.2rac1w0yc3rju.png","sizes":"180x180","type":"image/png"}],["$","$L1b","8",{}]]}]}],null]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"p":"$@1c","v":null,"s":"$9"}},"a":"$@1d","u":"$@1e","b":"U2e90Mr6iueJEoRJLmd0s"}
+1f:I[97367,["$2"],"OutletBoundary"]
+13:["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/3s1mctvsetnbs.js","async":true}]
+14:["$","$L1f",null,{"children":["$","$1a",null,{"name":"Next.MetadataOutlet","children":"$@20"}]}]
+9:300
+20:null
+1e:true
+9:C
+1d:0
+e:"$undefined"
+b:"$undefined"
+8:"$undefined"
+1c:"$undefined"
+15:"$undefined"

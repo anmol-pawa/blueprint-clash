@@ -1,0 +1,88 @@
+1:"$Sreact.fragment"
+2:"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js"
+3:I[39756,["$2"],"default"]
+4:I[37457,["$2"],"default"]
+5:"/blueprint-clash/_next/static/chunks/2n5qeheznvl4u.js"
+6:I[22016,["$2","$5"],""]
+7:I[64576,["$2"],"PwaRegister"]
+10:"/blueprint-clash/_next/static/chunks/3s1mctvsetnbs.js"
+11:I[25039,["$2","$10"],"LessonClient"]
+16:"ViewportBoundary"
+17:I[97367,["$2"],"$16"]
+18:"MetadataBoundary"
+19:I[97367,["$2"],"$18"]
+1a:"$Sreact.suspense"
+1b:I[27201,["$2"],"IconMark"]
+:HL["/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","style"]
+9:X
+c:X
+c:C
+12:T5bd,#include <iostream>
+#include <memory>
+#include <string>
+#include <utility>
+#include <vector>
+
+struct Engine { int horsepower; };
+struct Wheel { int size; };
+
+// Composition: the car owns its engine and wheels; they live and die with it.
+class Car {
+public:
+    Car(int horsepower, int wheelSize) : engine_{horsepower}, wheels_(4, Wheel{wheelSize}) {}
+    int horsepower() const { return engine_.horsepower; }
+    std::size_t wheelCount() const { return wheels_.size(); }
+
+private:
+    Engine engine_;
+    std::vector<Wheel> wheels_;
+};
+
+class Driver {
+public:
+    explicit Driver(std::string name) : name_(std::move(name)) {}
+    const std::string& name() const { return name_; }
+
+private:
+    std::string name_;
+};
+
+// Aggregation: the team uses drivers that exist independently of it. It does not own them.
+class Team {
+public:
+    void sign(const Driver& driver) { drivers_.push_back(&driver); }
+    std::size_t size() const { return drivers_.size(); }
+
+private:
+    std::vector<const Driver*> drivers_;  // non-owning; drivers must outlive the team
+};
+
+// Dependency: a parameter used for one call, nothing stored.
+void describe(const Car& car, const Driver& driver) {
+    std::cout << driver.name() << " drives a car with " << car.wheelCount() << " wheels, " << car.horsepower() << " hp\n";
+}
+
+int main() {
+    const Driver asha{"asha"};
+    Team team;
+    team.sign(asha);
+    describe(Car{120, 16}, asha);
+    std::cout << "team size " << team.size() << "\n";
+}
+f:[["children",{"s":"__PAGE__","h":160,"d":{"r":["$","$1","c",{"children":[["$","$L11",null,{"lesson":{"id":"class-diagram-ownership","level":"L6","title":"Class diagrams: relationships as C++ ownership","oneLiner":"Composition means I own it, aggregation means I only point at it, dependency means I use it for one call. In C++ each one is a different member type.","cardTopic":"L6.class-diagram","intro":"A class diagram is a statement about **lifetime and ownership**, and C++ makes you answer it in the type. The relationship lines map onto code like this:\n\n- **Inheritance** (\"is a\"): `class Circle : public Shape`. Use it for substitutable behaviour, not for reuse.\n- **Composition** (filled diamond, \"owns, dies with\"): a member by value, or a `unique_ptr` when it must be polymorphic or optional.\n- **Aggregation** (hollow diamond, \"uses, does not own\"): a non-owning reference or pointer, or a `weak_ptr`. The part outlives the whole.\n- **Association** (plain line): one object holds a way to reach another; say the multiplicity (1, 0..1, *).\n- **Dependency** (dashed arrow): a parameter or local, nothing stored.\n\nAggregation versus composition is the line interviewers probe, because in C++ it decides who calls `delete` and who can dangle.","smell":"- Raw owning pointers in a struct, with no `delete` and no hint whether the pointer is owned.\n- A diagram with a diamond on every line because \"it has a\" was the only rule used.\n- A non-owning pointer to something that can die first, so the program dangles.\n- Multiplicities missing, so nobody knows whether a collection can be empty.","before":"#include <iostream>\n#include <string>\n#include <vector>\n\nstruct Engine { int horsepower; };\nstruct Wheel { int size; };\n\n// Who owns what? Nothing in the type says.\nstruct Car {\n    Engine* engine;\n    std::vector<Wheel*> wheels;\n};\n\nint main() {\n    Engine* engine = new Engine{120};\n    Car car{engine, {new Wheel{16}, new Wheel{16}}};\n    std::cout << \"car with \" << car.wheels.size() << \" wheels, \" << car.engine->horsepower << \" hp\\n\";\n    // No delete anywhere: every pointer above leaks.\n}\n","after":"$12","beforeOutput":"car with 2 wheels, 120 hp","afterOutput":"asha drives a car with 4 wheels, 120 hp\nteam size 1","refactorNotes":"`Car` now owns its engine and wheels by value: composition, no heap, nothing to leak. `Team` keeps `const Driver*` and says in a comment that drivers must outlive it: aggregation, and the lifetime assumption is written down. `describe` takes both by const reference: a dependency. The diagram and the code now say the same thing. Trade-off: a non-owning pointer is only safe if the lifetime rule holds; when it cannot be guaranteed, use `shared_ptr` / `weak_ptr` and accept the cost.","interviewSignal":"Say \"composition owns and controls lifetime; aggregation references something that outlives me\". When you draw a diamond, say which member type it will be. Level signal: SDE II draws correct relationship types; Senior adds multiplicities and states who owns what; Staff points out the dangling risk of aggregation and what would change it (shared ownership, ids instead of pointers).","overApplication":"Drawing every dependency makes the diagram unreadable; show the associations that shape the design and the key dependencies, not every parameter type. Heap-allocating everything behind `unique_ptr` \"to be flexible\" gives up value semantics for no benefit when the part is concrete and always present."},"nextId":"state-diagram-vending"}],["$L13"],"$L14"]}],"p":"$@15","v":null,"s":"$9"}}]]
+d:[["children",{"s":{"n":"id","t":"d","k":"class-diagram-ownership","s":[]},"h":65632,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}]}]]}],"p":"$@e","v":"$c","s":"$9"},"c":"$Qf"}]]
+a:[["children",{"s":"learn","h":131168,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}]}]]}],"p":"$@b","v":"$c","s":"$9"},"c":"$Qd"}]]
+0:{"t":{"t":{"s":"","h":131152,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","precedence":"next"}],["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js","async":true}]],["$","html",null,{"lang":"en","className":"r7opxW_variable auY9QW_variable u-EJdW_variable h-full","children":["$","body",null,{"className":"min-h-full","children":[["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}],"notFound":[["$","main",null,{"className":"flex min-h-dvh flex-col items-center justify-center gap-4 px-4 text-center","children":[["$","div",null,{"className":"font-display text-5xl text-[var(--accent)]","children":"404"}],["$","p",null,{"className":"text-white/60","children":"This room is not on the blueprint yet."}],["$","$L6",null,{"href":"/","className":"text-sm text-white/80 underline","children":"Back to the title screen"}]]}],[]]}],["$","$L7",null,{}]]}]}]]}],"p":"$@8","v":null,"s":"$9"},"c":"$Qa"},"h":{"r":["$","$1","h",{"children":[null,["$","$L17",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1, viewport-fit=cover"}],["$","meta","2",{"name":"theme-color","content":"#0a1530"}]]}],["$","$L19",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$1a",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"Class diagrams: relationships as C++ ownership: Blueprint Clash"}],["$","meta","1",{"name":"description","content":"A creature-tactics RPG that teaches low-level design in C++ and high-level system design, from fundamentals to big-tech interview level."}],["$","link","2",{"rel":"manifest","href":"/blueprint-clash/manifest.webmanifest"}],["$","meta","3",{"name":"mobile-web-app-capable","content":"yes"}],["$","meta","4",{"name":"apple-mobile-web-app-title","content":"Blueprint Clash"}],["$","meta","5",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","link","6",{"rel":"icon","href":"/blueprint-clash/icon.png?icon.27re_xscs-jmw.png","sizes":"256x256","type":"image/png"}],["$","link","7",{"rel":"apple-touch-icon","href":"/blueprint-clash/apple-icon.png?apple-icon.2rac1w0yc3rju.png","sizes":"180x180","type":"image/png"}],["$","$L1b","8",{}]]}]}],null]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"p":"$@1c","v":null,"s":"$9"}},"a":"$@1d","u":"$@1e","b":"U2e90Mr6iueJEoRJLmd0s"}
+1f:I[97367,["$2"],"OutletBoundary"]
+13:["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/3s1mctvsetnbs.js","async":true}]
+14:["$","$L1f",null,{"children":["$","$1a",null,{"name":"Next.MetadataOutlet","children":"$@20"}]}]
+9:300
+20:null
+1e:true
+9:C
+1d:0
+e:"$undefined"
+b:"$undefined"
+8:"$undefined"
+1c:"$undefined"
+15:"$undefined"

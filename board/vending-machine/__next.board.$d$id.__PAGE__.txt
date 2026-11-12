@@ -1,0 +1,35 @@
+1:"$Sreact.fragment"
+2:"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js"
+3:I[39756,["$2"],"default"]
+4:I[37457,["$2"],"default"]
+5:"/blueprint-clash/_next/static/chunks/2n5qeheznvl4u.js"
+6:I[22016,["$2","$5"],""]
+7:I[64576,["$2"],"PwaRegister"]
+10:"/blueprint-clash/_next/static/chunks/2hcz6l62tioup.js"
+11:I[32134,["$2","$10"],"DrillClient"]
+14:"ViewportBoundary"
+15:I[97367,["$2"],"$14"]
+16:"MetadataBoundary"
+17:I[97367,["$2"],"$16"]
+18:"$Sreact.suspense"
+19:I[27201,["$2"],"IconMark"]
+:HL["/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","style"]
+9:X
+c:X
+c:C
+f:[["children",{"s":"__PAGE__","h":160,"d":{"r":["$","$1","c",{"children":[["$","$L11",null,{"drill":{"id":"vending-machine","title":"Vending machine","brief":"A machine sells items from slots. A customer inserts coins, picks a slot, receives the item and change. It can run out of stock, refuse to give change, or be refilled by staff. Model the classes.","facade":"VendingMachine","rubric":[{"id":"stock","text":"Knows how many items each slot holds and takes one out","phase":"base","owners":["Inventory","Slot","StockBook"]},{"id":"cash","text":"Holds the coins inserted and works out the change","phase":"base","owners":["CashBox","PaymentSession","ChangeMaker"]},{"id":"state","text":"Decides which actions are legal right now (idle, has money, dispensing)","phase":"base","owners":["VendingMachine","MachineState","State"]},{"id":"price","text":"Knows the price of each slot","phase":"base","owners":["Inventory","Slot","PriceList"]}],"reference":{"classes":[{"id":"vm","name":"VendingMachine","kind":"class","fields":[{"name":"state_","type":"MachineState"}],"methods":[{"name":"insert","returns":"void","params":"Coin c","isConst":false,"isAbstract":false},{"name":"select","returns":"bool","params":"int slot","isConst":false,"isAbstract":false},{"name":"cancel","returns":"Money","params":"","isConst":false,"isAbstract":false}],"responsibilities":["state"]},{"id":"inv","name":"Inventory","kind":"class","fields":[],"methods":[{"name":"take","returns":"bool","params":"int slot","isConst":false,"isAbstract":false},{"name":"priceOf","returns":"Money","params":"int slot","isConst":true,"isAbstract":false}],"responsibilities":["stock","price"]},{"id":"cash","name":"CashBox","kind":"class","fields":[],"methods":[{"name":"insert","returns":"void","params":"Coin c","isConst":false,"isAbstract":false},{"name":"makeChange","returns":"std::optional<std::vector<Coin>>","params":"Money amount","isConst":false,"isAbstract":false}],"responsibilities":["cash"]},{"id":"ms","name":"MachineState","kind":"enum","fields":[],"methods":[],"responsibilities":[]}],"edges":[{"id":"1","from":"vm","to":"inv","kind":"composition","toMult":"1"},{"id":"2","from":"vm","to":"cash","kind":"composition","toMult":"1"},{"id":"3","from":"vm","to":"ms","kind":"association","toMult":"1"}]},"tradeoffs":["Change-making returns std::optional: 'cannot make change' is a normal outcome the machine must handle (refund and refuse), not an exception.","State is an enum inside VendingMachine because transitions are few and all live in two methods. Past about five states, or when each state needs different data, the State pattern earns its extra classes.","Inventory owning price keeps one lookup for 'what is in slot 3 and what does it cost'. Splitting a PriceList out is better only if prices change independently of stock (dynamic pricing)."],"levelSignal":"SDE II: a working three-class model with the state called out. Senior: handles 'cannot make change' and refund paths explicitly. Staff: discusses atomicity of dispense plus payment, and recovery if power fails mid-vend."}}],[["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/2hcz6l62tioup.js","async":true}]],"$L12"]}],"p":"$@13","v":null,"s":"$9"}}]]
+d:[["children",{"s":{"n":"id","t":"d","k":"vending-machine","s":[]},"h":65632,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}]}]]}],"p":"$@e","v":"$c","s":"$9"},"c":"$Qf"}]]
+a:[["children",{"s":"board","h":131168,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}]}]]}],"p":"$@b","v":"$c","s":"$9"},"c":"$Qd"}]]
+0:{"t":{"t":{"s":"","h":131152,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","precedence":"next"}],["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js","async":true}]],["$","html",null,{"lang":"en","className":"r7opxW_variable auY9QW_variable u-EJdW_variable h-full","children":["$","body",null,{"className":"min-h-full","children":[["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}],"notFound":[["$","main",null,{"className":"flex min-h-dvh flex-col items-center justify-center gap-4 px-4 text-center","children":[["$","div",null,{"className":"font-display text-5xl text-[var(--accent)]","children":"404"}],["$","p",null,{"className":"text-white/60","children":"This room is not on the blueprint yet."}],["$","$L6",null,{"href":"/","className":"text-sm text-white/80 underline","children":"Back to the title screen"}]]}],[]]}],["$","$L7",null,{}]]}]}]]}],"p":"$@8","v":null,"s":"$9"},"c":"$Qa"},"h":{"r":["$","$1","h",{"children":[null,["$","$L15",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1, viewport-fit=cover"}],["$","meta","2",{"name":"theme-color","content":"#0a1530"}]]}],["$","$L17",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$18",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"Vending machine: Design Board: Blueprint Clash"}],["$","meta","1",{"name":"description","content":"A creature-tactics RPG that teaches low-level design in C++ and high-level system design, from fundamentals to big-tech interview level."}],["$","link","2",{"rel":"manifest","href":"/blueprint-clash/manifest.webmanifest"}],["$","meta","3",{"name":"mobile-web-app-capable","content":"yes"}],["$","meta","4",{"name":"apple-mobile-web-app-title","content":"Blueprint Clash"}],["$","meta","5",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","link","6",{"rel":"icon","href":"/blueprint-clash/icon.png?icon.27re_xscs-jmw.png","sizes":"256x256","type":"image/png"}],["$","link","7",{"rel":"apple-touch-icon","href":"/blueprint-clash/apple-icon.png?apple-icon.2rac1w0yc3rju.png","sizes":"180x180","type":"image/png"}],["$","$L19","8",{}]]}]}],null]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"p":"$@1a","v":null,"s":"$9"}},"a":"$@1b","u":"$@1c","b":"U2e90Mr6iueJEoRJLmd0s"}
+1d:I[97367,["$2"],"OutletBoundary"]
+12:["$","$L1d",null,{"children":["$","$18",null,{"name":"Next.MetadataOutlet","children":"$@1e"}]}]
+9:300
+1e:null
+1c:true
+9:C
+1b:0
+e:"$undefined"
+b:"$undefined"
+8:"$undefined"
+1a:"$undefined"
+13:"$undefined"

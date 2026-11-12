@@ -1,0 +1,74 @@
+1:"$Sreact.fragment"
+2:"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js"
+3:I[39756,["$2"],"default"]
+4:I[37457,["$2"],"default"]
+5:"/blueprint-clash/_next/static/chunks/2n5qeheznvl4u.js"
+6:I[22016,["$2","$5"],""]
+7:I[64576,["$2"],"PwaRegister"]
+10:"/blueprint-clash/_next/static/chunks/3s1mctvsetnbs.js"
+11:I[25039,["$2","$10"],"LessonClient"]
+16:"ViewportBoundary"
+17:I[97367,["$2"],"$16"]
+18:"MetadataBoundary"
+19:I[97367,["$2"],"$18"]
+1a:"$Sreact.suspense"
+1b:I[27201,["$2"],"IconMark"]
+:HL["/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","style"]
+9:X
+c:X
+c:C
+12:T4d7,#include <iostream>
+
+// The state diagram, written down: a closed set of states and events, and one place that decides each transition.
+enum class State { Idle, HasCoin, Dispensing };
+enum class Event { InsertCoin, Press, Take };
+
+class Vending {
+public:
+    void handle(Event event) {
+        switch (state_) {
+            case State::Idle:
+                if (event == Event::InsertCoin) state_ = State::HasCoin;
+                else std::cout << "nothing happens\n";
+                break;
+            case State::HasCoin:
+                if (event == Event::Press) { state_ = State::Dispensing; std::cout << "dispensing\n"; }
+                else if (event == Event::InsertCoin) std::cout << "ignored coin\n";
+                else std::cout << "nothing happens\n";
+                break;
+            case State::Dispensing:
+                if (event == Event::Take) { state_ = State::Idle; std::cout << "taken\n"; }
+                else std::cout << "nothing happens\n";
+                break;
+        }
+    }
+
+private:
+    State state_ = State::Idle;
+};
+
+int main() {
+    Vending v;
+    v.handle(Event::Press);
+    v.handle(Event::InsertCoin);
+    v.handle(Event::InsertCoin);
+    v.handle(Event::Press);
+    v.handle(Event::Take);
+}
+f:[["children",{"s":"__PAGE__","h":160,"d":{"r":["$","$1","c",{"children":[["$","$L11",null,{"lesson":{"id":"state-diagram-vending","level":"L6","title":"State diagrams: events and states, not boolean flags","oneLiner":"If an object behaves differently over time, draw its states and events first, then make the code a closed set of states with one place that decides each transition.","cardTopic":"L6.state-diagram","intro":"Vending machines, elevators, orders and documents all have a **life cycle**: a handful of states and a set of events that move between them. A **state diagram** shows each state as a box and each legal transition as an arrow labelled `event [guard] / action`.\n\nDraw it before coding. The exercise exposes the cases requirements forgot: \"what if a coin is inserted while dispensing?\" is a missing arrow. In code, represent the states as an `enum class` (a closed set the compiler checks), the events as another, and keep every transition decision in one place. When states grow behaviour of their own, graduate to the State pattern (lesson in the Behavioural Theatre); for a small machine an enum and a switch is the honest, readable choice.","smell":"- Several booleans (`hasCoin_`, `dispensing_`) that together encode the state, with impossible combinations the code never forbids.\n- Each method re-checks the flags in its own way, so a new rule must be added to every method.\n- Nobody can list the legal transitions without reading all of the code.\n- Events that should be rejected are silently ignored or crash.","before":"#include <iostream>\n\n// State is spread over flags; nothing stops impossible combinations.\nclass Vending {\npublic:\n    void insertCoin() {\n        if (!hasCoin_ && !dispensing_) hasCoin_ = true;\n        else std::cout << \"ignored coin\\n\";\n    }\n    void press() {\n        if (hasCoin_ && !dispensing_) { dispensing_ = true; hasCoin_ = false; std::cout << \"dispensing\\n\"; }\n        else std::cout << \"nothing happens\\n\";\n    }\n    void take() {\n        if (dispensing_) { dispensing_ = false; std::cout << \"taken\\n\"; }\n    }\n\nprivate:\n    bool hasCoin_ = false;\n    bool dispensing_ = false;\n};\n\nint main() {\n    Vending v;\n    v.press();\n    v.insertCoin();\n    v.insertCoin();\n    v.press();\n    v.take();\n}\n","after":"$12","beforeOutput":"nothing happens\nignored coin\ndispensing\ntaken","afterOutput":"nothing happens\nignored coin\ndispensing\ntaken","refactorNotes":"The two flags became one `State` enum, so `hasCoin` and `dispensing` can no longer both be true. Every event goes through `handle`, which switches on the state, so the full transition list is readable in one screen and matches the diagram arrow for arrow. The observable behaviour is identical (the output did not change); the structure is what improved. Trade-off: a switch per state still has to be edited for each new state or event; once states carry behaviour of their own, the State pattern removes that.","interviewSignal":"Say \"let me draw the states and events first\". Name the states, list the events, and say what happens for each (state, event) pair, including the rejected ones. Level signal: SDE II gets the happy path; Senior covers the invalid transitions and the guard conditions; Staff discusses persistence of the state and concurrent events.","overApplication":"A full State-pattern class hierarchy for a machine with three states and no state-specific data is ceremony. And a state diagram for something that has no real life cycle (a plain data record) adds nothing; draw one when behaviour depends on history."},"nextId":"sequence-diagram-checkout"}],["$L13"],"$L14"]}],"p":"$@15","v":null,"s":"$9"}}]]
+d:[["children",{"s":{"n":"id","t":"d","k":"state-diagram-vending","s":[]},"h":65632,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}]}]]}],"p":"$@e","v":"$c","s":"$9"},"c":"$Qf"}]]
+a:[["children",{"s":"learn","h":131168,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}]}]]}],"p":"$@b","v":"$c","s":"$9"},"c":"$Qd"}]]
+0:{"t":{"t":{"s":"","h":131152,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/1mn0hz7f-va6m.css","precedence":"next"}],["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js","async":true}]],["$","html",null,{"lang":"en","className":"r7opxW_variable auY9QW_variable u-EJdW_variable h-full","children":["$","body",null,{"className":"min-h-full","children":[["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}],"notFound":[["$","main",null,{"className":"flex min-h-dvh flex-col items-center justify-center gap-4 px-4 text-center","children":[["$","div",null,{"className":"font-display text-5xl text-[var(--accent)]","children":"404"}],["$","p",null,{"className":"text-white/60","children":"This room is not on the blueprint yet."}],["$","$L6",null,{"href":"/","className":"text-sm text-white/80 underline","children":"Back to the title screen"}]]}],[]]}],["$","$L7",null,{}]]}]}]]}],"p":"$@8","v":null,"s":"$9"},"c":"$Qa"},"h":{"r":["$","$1","h",{"children":[null,["$","$L17",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1, viewport-fit=cover"}],["$","meta","2",{"name":"theme-color","content":"#0a1530"}]]}],["$","$L19",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$1a",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"State diagrams: events and states, not boolean flags: Blueprint Clash"}],["$","meta","1",{"name":"description","content":"A creature-tactics RPG that teaches low-level design in C++ and high-level system design, from fundamentals to big-tech interview level."}],["$","link","2",{"rel":"manifest","href":"/blueprint-clash/manifest.webmanifest"}],["$","meta","3",{"name":"mobile-web-app-capable","content":"yes"}],["$","meta","4",{"name":"apple-mobile-web-app-title","content":"Blueprint Clash"}],["$","meta","5",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","link","6",{"rel":"icon","href":"/blueprint-clash/icon.png?icon.27re_xscs-jmw.png","sizes":"256x256","type":"image/png"}],["$","link","7",{"rel":"apple-touch-icon","href":"/blueprint-clash/apple-icon.png?apple-icon.2rac1w0yc3rju.png","sizes":"180x180","type":"image/png"}],["$","$L1b","8",{}]]}]}],null]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"p":"$@1c","v":null,"s":"$9"}},"a":"$@1d","u":"$@1e","b":"U2e90Mr6iueJEoRJLmd0s"}
+1f:I[97367,["$2"],"OutletBoundary"]
+13:["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/3s1mctvsetnbs.js","async":true}]
+14:["$","$L1f",null,{"children":["$","$1a",null,{"name":"Next.MetadataOutlet","children":"$@20"}]}]
+9:300
+20:null
+1e:true
+9:C
+1d:0
+e:"$undefined"
+b:"$undefined"
+8:"$undefined"
+1c:"$undefined"
+15:"$undefined"
