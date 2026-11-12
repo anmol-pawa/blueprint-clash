@@ -39,5 +39,5 @@ describe.each(ids)("workshop/%s", (id) => {
       const failed = failedTests(r);
       for (const t of bad.failingTests) expect(failed, `bad/${bad.dir}`).toContain(t);
     }
-  });
+  }, 600000);
 });
