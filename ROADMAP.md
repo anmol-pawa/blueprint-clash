@@ -168,7 +168,8 @@ Work top to bottom: take the **first unchecked box**, and split big boxes into r
   - [x] C12d. Tic-tac-toe to Connect-N.
   - [x] C12e. Snake and ladder.
   - [x] C12f. Logger framework (Chain of Responsibility; two storms: levels per category, collapsing sinks).
-  - [ ] C12g onward: LRU/LFU cache (next), KV store with TTL and transactions, ... (CUR L8 items 6 to 36, one per box as reached).
+  - [x] C12g. LRU/LFU cache (Strategy; two storms: LFU policy, TTL on an injected clock).
+  - [ ] C12h onward: KV store with TTL and transactions (next), ... (CUR L8 items 7 to 36, one per box as reached).
 - [ ] C13. **Refactor Arena** (L9): the mode, plus 12 legacy modules (split across runs).
 - [ ] C14. **Machine-coding mock** (GDD §5.9) with the review conversation.
 
