@@ -24,6 +24,10 @@ import { clarify as parkingClarify } from "./parking-lot/clarify";
 import { followups as parkingFollowups } from "./parking-lot/followups";
 import { meta as parkingMeta } from "./parking-lot/meta";
 import { rubric as parkingRubric } from "./parking-lot/rubric";
+import { clarify as rlClarify } from "./rate-limiter/clarify";
+import { followups as rlFollowups } from "./rate-limiter/followups";
+import { meta as rlMeta } from "./rate-limiter/meta";
+import { rubric as rlRubric } from "./rate-limiter/rubric";
 import { clarify as snlClarify } from "./snake-and-ladder/clarify";
 import { followups as snlFollowups } from "./snake-and-ladder/followups";
 import { meta as snlMeta } from "./snake-and-ladder/meta";
@@ -45,6 +49,7 @@ export const WORKSHOP_REGISTRY: Record<string, PackageModules> = {
   "logger-framework": { meta: loggerMeta, clarify: loggerClarify, rubric: loggerRubric, followups: loggerFollowups },
   "lru-lfu-cache": { meta: lruMeta, clarify: lruClarify, rubric: lruRubric, followups: lruFollowups },
   "parking-lot": { meta: parkingMeta, clarify: parkingClarify, rubric: parkingRubric, followups: parkingFollowups },
+  "rate-limiter": { meta: rlMeta, clarify: rlClarify, rubric: rlRubric, followups: rlFollowups },
   "snake-and-ladder": { meta: snlMeta, clarify: snlClarify, rubric: snlRubric, followups: snlFollowups },
   "tic-tac-toe": { meta: tttMeta, clarify: tttClarify, rubric: tttRubric, followups: tttFollowups },
   "vending-machine": { meta: vendingMeta, clarify: vendingClarify, rubric: vendingRubric, followups: vendingFollowups },
