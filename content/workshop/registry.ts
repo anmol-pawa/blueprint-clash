@@ -24,6 +24,10 @@ import { clarify as lruClarify } from "./lru-lfu-cache/clarify";
 import { followups as lruFollowups } from "./lru-lfu-cache/followups";
 import { meta as lruMeta } from "./lru-lfu-cache/meta";
 import { rubric as lruRubric } from "./lru-lfu-cache/rubric";
+import { clarify as notifClarify } from "./notification-service/clarify";
+import { followups as notifFollowups } from "./notification-service/followups";
+import { meta as notifMeta } from "./notification-service/meta";
+import { rubric as notifRubric } from "./notification-service/rubric";
 import { clarify as parkingClarify } from "./parking-lot/clarify";
 import { followups as parkingFollowups } from "./parking-lot/followups";
 import { meta as parkingMeta } from "./parking-lot/meta";
@@ -53,6 +57,7 @@ export const WORKSHOP_REGISTRY: Record<string, PackageModules> = {
   "library-management": { meta: libraryMeta, clarify: libraryClarify, rubric: libraryRubric, followups: libraryFollowups },
   "logger-framework": { meta: loggerMeta, clarify: loggerClarify, rubric: loggerRubric, followups: loggerFollowups },
   "lru-lfu-cache": { meta: lruMeta, clarify: lruClarify, rubric: lruRubric, followups: lruFollowups },
+  "notification-service": { meta: notifMeta, clarify: notifClarify, rubric: notifRubric, followups: notifFollowups },
   "parking-lot": { meta: parkingMeta, clarify: parkingClarify, rubric: parkingRubric, followups: parkingFollowups },
   "rate-limiter": { meta: rlMeta, clarify: rlClarify, rubric: rlRubric, followups: rlFollowups },
   "snake-and-ladder": { meta: snlMeta, clarify: snlClarify, rubric: snlRubric, followups: snlFollowups },

@@ -39,6 +39,7 @@ export const PLAYABLE_MODES: readonly PlayableMode[] = [
   { href: "/workshop/lru-lfu-cache", title: "Workshop: LRU / LFU cache", blurb: "Hash map plus recency list, then a pluggable eviction Strategy and a removal listener across two Change Storms." },
   { href: "/workshop/rate-limiter", title: "Workshop: Rate limiter library", blurb: "A token bucket with exact retry hints, then a sliding window and a global limit layered on top across two Change Storms." },
   { href: "/workshop/event-bus", title: "Workshop: Event bus (pub-sub)", blurb: "Observer with topics: what a handler may do mid-delivery, then wildcard topics and per-subscriber filters across two Change Storms." },
+  { href: "/workshop/notification-service", title: "Workshop: Notification service", blurb: "Channels behind a Strategy, templates and exact retry backoff, then a fallback chain and idempotency keys across two Change Storms." },
   { href: "/board", title: "Design Board drills", blurb: "Draw the classes for a short brief, tag who owns each responsibility, then compare with a reference." },
   { href: "/race", title: "Race Hunter", blurb: "Schedule threads step by step to break a program, then let the explorer check every interleaving of the fix." },
   { href: "/learn", title: "Lessons", blurb: "SOLID in C++: smell, before/after code, interview phrasing, and the cost of overdoing it." },

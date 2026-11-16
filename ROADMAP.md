@@ -172,7 +172,8 @@ Work top to bottom: take the **first unchecked box**, and split big boxes into r
   - [x] C12h. KV store with TTL and nested transactions (Command/Memento undo journal; two storms: transactions, ordered prefix scan).
   - [x] C12i. Rate limiter library (Strategy limit policies, check-then-commit; two storms: sliding window, global layer).
   - [x] C12j. Pub-sub / event bus (Observer; Strategy topic matcher; two storms: wildcard topics, per-subscriber filters).
-  - [ ] C12k onward: notification service (next), splitwise, ... (CUR L8 items 11 to 36, one per box as reached).
+  - [x] C12k. Notification service (Strategy channels, template renderer, retry policy with exact backoff; two storms: fallback chain, idempotency keys via Decorator).
+  - [ ] C12l onward: splitwise (next), ... (CUR L8 items 11 to 36, one per box as reached).
 - [ ] C13. **Refactor Arena** (L9): the mode, plus 12 legacy modules (split across runs).
 - [ ] C14. **Machine-coding mock** (GDD §5.9) with the review conversation.
 
