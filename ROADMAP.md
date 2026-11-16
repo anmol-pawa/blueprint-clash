@@ -173,7 +173,8 @@ Work top to bottom: take the **first unchecked box**, and split big boxes into r
   - [x] C12i. Rate limiter library (Strategy limit policies, check-then-commit; two storms: sliding window, global layer).
   - [x] C12j. Pub-sub / event bus (Observer; Strategy topic matcher; two storms: wildcard topics, per-subscriber filters).
   - [x] C12k. Notification service (Strategy channels, template renderer, retry policy with exact backoff; two storms: fallback chain, idempotency keys via Decorator).
-  - [ ] C12l onward: splitwise (next), ... (CUR L8 items 11 to 36, one per box as reached).
+  - [x] C12l. Splitwise / expense sharing (Strategy split rules, single-source pair ledger, largest-remainder rounding; two storms: split kinds, simplified debts).
+  - [ ] C12m onward: ATM (next: State + Chain of Responsibility for note dispensing), ... (CUR L8 items 15 to 36, one per box as reached).
 - [ ] C13. **Refactor Arena** (L9): the mode, plus 12 legacy modules (split across runs).
 - [ ] C14. **Machine-coding mock** (GDD §5.9) with the review conversation.
 
