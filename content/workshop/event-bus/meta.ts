@@ -1,0 +1,127 @@
+import type { WorkshopMeta } from "@/lib/workshop/types";
+
+export const meta: WorkshopMeta = {
+  id: "event-bus",
+  title: "Pub-sub event bus",
+  level: "Senior",
+  parMinutes: 50,
+  patterns: ["Observer", "Strategy"],
+  requirements: [
+    { id: "R-delivery", text: "publish() is synchronous. It runs the subscribers whose topic equals the event's topic exactly (case-sensitive, whole string) in the order they subscribed, and returns how many handlers ran. No subscribers, or an empty topic, returns 0.", phase: "base", hidden: true },
+    { id: "R-reentrancy", text: "Handlers may call the bus. A nested publish() is delivered completely before the outer one continues. The subscriber set is fixed when publish() starts: one added meanwhile misses this event; one removed before its turn is not called and not counted; a handler may unsubscribe itself and still finish.", phase: "base", hidden: true },
+    { id: "R-ids", text: "subscribe() returns 1, 2, 3 ... in order of accepted subscriptions; ids are never reused. An empty topic or an empty handler returns kRefused and registers nothing. The same handler can be subscribed twice. unsubscribe() returns true for a live id and false otherwise; subscriptionCount() counts live subscriptions.", phase: "base", hidden: true },
+    { id: "R-pattern", text: "Storm 1: patterns of dotted segments. * is exactly one segment, # is one or more segments and only last. Malformed patterns (empty or mixed segments, # not last) are refused. A published topic containing wildcards or empty segments reaches nobody. Order stays subscription order whatever the patterns.", phase: "storm1", hidden: true },
+    { id: "R-priority", text: "Storm 2: Options::priority orders delivery, higher first, ties by subscription order; plain subscribe is priority 0 and priorities apply across patterns.", phase: "storm2", hidden: true },
+    { id: "R-once", text: "Storm 2: a once subscription is removed just before its handler runs, so it never runs twice, not even through a publish its own handler makes, and an outer publish skips a once subscription that a nested publish already used.", phase: "storm2", hidden: true },
+  ],
+  bad: [
+    {
+      dir: "unsub_still_delivered",
+      failsPhase: "base",
+      failingTests: ["Reentrancy.AHandlerCanUnsubscribeALaterSubscriberBeforeItsTurn", "Publish.ReturnsHowManyHandlersActuallyRan"],
+      reason: "Publish takes a snapshot (good) but calls everything in it without asking whether it is still subscribed, so a subscriber removed by an earlier handler is called after unsubscribe() returned true. A snapshot protects the loop from the container changing; it does not know the world moved on. Check liveness at the moment of the call.",
+    },
+    {
+      dir: "live_list_iteration",
+      failsPhase: "base",
+      failingTests: ["Reentrancy.AHandlerThatUnsubscribesItselfDoesNotSkipTheNextSubscriber", "Reentrancy.ASubscriberAddedDuringPublishMissesThatEvent"],
+      reason: "Publish walks the live vector by index. A handler that unsubscribes itself shifts the next subscriber into the slot just visited, so it is skipped; a handler that subscribes grows the vector, so the new subscriber receives an event published before it existed. (With iterators the same code is undefined behaviour instead of a wrong answer.) A snapshot, or copy-on-write, is the fix.",
+    },
+    {
+      dir: "newest_first",
+      failsPhase: "base",
+      failingTests: ["Order.HandlersRunInSubscriptionOrder", "Reentrancy.ANestedPublishIsDeliveredBeforeTheOuterContinues"],
+      reason: "Handlers run newest first (a stack instead of a queue). Callers rely on the order they subscribed in, for example the audit logger that subscribed first must see an event first, so the order is part of the contract even if the brief never says it; it is exactly what the clarification menu is for.",
+    },
+    {
+      dir: "id_reused",
+      failsPhase: "base",
+      failingTests: ["Ids.AnIdIsNeverReused"],
+      reason: "The id is derived from the current list size, so after an unsubscribe the next subscription gets a number that an old holder may still use to unsubscribe the wrong subscriber. Ids come from a counter that only goes up and that nothing else touches.",
+    },
+    {
+      dir: "count_matched",
+      failsPhase: "base",
+      failingTests: ["Publish.ReturnsHowManyHandlersActuallyRan"],
+      reason: "publish() returns the number of subscribers that matched when it started instead of the number that ran, so it over-reports when a handler removes a later one. A return value that sounds like a statistic is still part of the contract and callers use it to detect 'nobody was listening'.",
+    },
+    {
+      dir: "empty_handler_accepted",
+      failsPhase: "base",
+      failingTests: ["Subscribe.AnEmptyHandlerIsRefusedAndUsesNoId"],
+      reason: "An empty std::function is registered and numbered. The first publish on that topic would call it and crash (or throw bad_function_call where exceptions exist), far from the code that made the mistake. Validate at the boundary and refuse without side effects.",
+    },
+    {
+      dir: "unsubscribe_unknown_true",
+      failsPhase: "base",
+      failingTests: ["Unsubscribe.UnknownOrRepeatedIdsReturnFalse", "Ids.AnIdIsNeverReused"],
+      reason: "unsubscribe() reports success for ids that were never issued or were already removed. Callers use the result to catch double-unsubscribe bugs; a bus that always says yes hides them.",
+    },
+    {
+      dir: "prefix_match",
+      failsPhase: "base",
+      failingTests: ["Matching.ATopicIsNotAPrefixMatch"],
+      reason: "A subscription to orders also receives orders.created and orders.created.eu, because the comparison only checks that the pattern is a prefix of the topic. A prefix match is a different feature (it is what # is for in Storm 1), and shipping it by accident makes every later wildcard rule ambiguous.",
+    },
+    {
+      dir: "star_matches_many",
+      failsPhase: "storm1",
+      failingTests: ["Wildcards.StarMatchesExactlyOneSegment", "Wildcards.StarInTheMiddleOrAtTheStart"],
+      reason: "A trailing * swallows every remaining segment, so orders.* also receives orders.eu.created. * and # are different operators precisely because one-segment and many-segment matches are both useful; a matcher that blurs them cannot express 'direct children only'.",
+    },
+    {
+      dir: "hash_matches_zero",
+      failsPhase: "storm1",
+      failingTests: ["Wildcards.HashNeedsAtLeastOneSegment", "Wildcards.StarAndHashCombine"],
+      reason: "# matches zero or more segments here, so orders.# also receives the bare topic orders. Some brokers define # that way; this problem says one or more, and the difference is exactly the off-by-one the clarification question 'does a.# match a?' exists to surface. Pick one rule, write it down, and test the boundary.",
+    },
+    {
+      dir: "hash_not_last_accepted",
+      failsPhase: "storm1",
+      failingTests: ["Patterns.HashMustBeTheLastSegment"],
+      reason: "A pattern like a.#.b is accepted although # can only be last. It then silently matches something unintended (here everything under a). Validating the syntax in one place, when the pattern is built, keeps every later matching rule free of 'what if # is in the middle' cases.",
+    },
+    {
+      dir: "empty_segment_accepted",
+      failsPhase: "storm1",
+      failingTests: ["Patterns.EmptySegmentsAreRefused", "Publish.AWildcardTopicOnPublishIsRefused"],
+      reason: "Empty segments (a..b, .a, a.) are accepted in patterns and topics. A typo in a topic name then creates a subscription that can never match anything real, with no error. Refusing malformed input at subscribe time turns a silent dead subscription into an immediate failure.",
+    },
+    {
+      dir: "wildcard_topic_published",
+      failsPhase: "storm1",
+      failingTests: ["Publish.AWildcardTopicOnPublishIsRefused"],
+      reason: "Publishing the topic a.* reaches the subscriber to a.* (and every # subscriber), because the matcher does not check that the thing being published is a plain topic. A pattern describes what a subscriber wants; an event is a fact with a concrete name. Treating one as the other lets a publisher fake a family of topics.",
+    },
+    {
+      dir: "specific_first",
+      failsPhase: "storm1",
+      failingTests: ["Order.DeliveryFollowsSubscriptionOrderNotPatternSpecificity"],
+      reason: "Plain-topic subscribers are called before wildcard subscribers, 'most specific first'. It looks sensible and breaks the one rule callers already rely on, that order is subscription order. Specificity ordering is a feature somebody may ask for; if so it is another policy, not a quiet change to the default.",
+    },
+    {
+      dir: "priority_ascending",
+      failsPhase: "storm2",
+      failingTests: ["Priority.HigherPriorityRunsFirst", "Priority.AppliesAcrossDifferentPatterns"],
+      reason: "The sort comparator is reversed, so a smaller priority number runs first. Whichever direction you choose, the sign convention is part of the API and has to be written next to the option; here it is 'higher runs first' and the test pins it with a negative priority too.",
+    },
+    {
+      dir: "plain_subscribe_lowest",
+      failsPhase: "storm2",
+      failingTests: ["Priority.PlainSubscribeMeansPriorityZero"],
+      reason: "The two-argument subscribe() forwards to the new overload with a made-up default (-1) instead of the documented 0, so every old caller silently runs after the new high-priority ones, and after any explicit priority-0 subscriber. A default is a contract: define it once (in Options) and let the old entry point pass Options{} through.",
+    },
+    {
+      dir: "once_removed_after",
+      failsPhase: "storm2",
+      failingTests: ["Once.IsRemovedBeforeItsHandlerRuns", "Once.DoesNotFireAgainFromANestedPublish"],
+      reason: "A once subscription is removed after its handler returns. Any publish the handler makes (directly or through another handler) still finds it registered and runs it again, and the handler sees itself in subscriptionCount(). 'At most once' means marking it spent before running it, never after.",
+    },
+    {
+      dir: "once_never_removed",
+      failsPhase: "storm2",
+      failingTests: ["Once.FiresExactlyOnce", "Once.WorksWithWildcardPatternsAndPriorities"],
+      reason: "The option is parsed and stored but nothing acts on it, so a once subscription behaves like any other. A new field in a struct of options is cheap to add and easy to forget to honour; a test per option, at the boundary of its meaning, is what catches it.",
+    },
+  ],
+};

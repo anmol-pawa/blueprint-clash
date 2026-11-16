@@ -4,6 +4,10 @@ import { clarify as elevatorClarify } from "./elevator-system/clarify";
 import { followups as elevatorFollowups } from "./elevator-system/followups";
 import { meta as elevatorMeta } from "./elevator-system/meta";
 import { rubric as elevatorRubric } from "./elevator-system/rubric";
+import { clarify as eventBusClarify } from "./event-bus/clarify";
+import { followups as eventBusFollowups } from "./event-bus/followups";
+import { meta as eventBusMeta } from "./event-bus/meta";
+import { rubric as eventBusRubric } from "./event-bus/rubric";
 import { clarify as kvClarify } from "./kv-store/clarify";
 import { followups as kvFollowups } from "./kv-store/followups";
 import { meta as kvMeta } from "./kv-store/meta";
@@ -44,6 +48,7 @@ import type { PackageModules } from "@/lib/workshop/load";
 
 export const WORKSHOP_REGISTRY: Record<string, PackageModules> = {
   "elevator-system": { meta: elevatorMeta, clarify: elevatorClarify, rubric: elevatorRubric, followups: elevatorFollowups },
+  "event-bus": { meta: eventBusMeta, clarify: eventBusClarify, rubric: eventBusRubric, followups: eventBusFollowups },
   "kv-store": { meta: kvMeta, clarify: kvClarify, rubric: kvRubric, followups: kvFollowups },
   "library-management": { meta: libraryMeta, clarify: libraryClarify, rubric: libraryRubric, followups: libraryFollowups },
   "logger-framework": { meta: loggerMeta, clarify: loggerClarify, rubric: loggerRubric, followups: loggerFollowups },
