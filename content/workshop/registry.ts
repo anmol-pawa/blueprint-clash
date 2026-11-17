@@ -40,6 +40,10 @@ import { clarify as notifClarify } from "./notification-service/clarify";
 import { followups as notifFollowups } from "./notification-service/followups";
 import { meta as notifMeta } from "./notification-service/meta";
 import { rubric as notifRubric } from "./notification-service/rubric";
+import { clarify as rideClarify } from "./ride-sharing/clarify";
+import { followups as rideFollowups } from "./ride-sharing/followups";
+import { meta as rideMeta } from "./ride-sharing/meta";
+import { rubric as rideRubric } from "./ride-sharing/rubric";
 import { clarify as parkingClarify } from "./parking-lot/clarify";
 import { followups as parkingFollowups } from "./parking-lot/followups";
 import { meta as parkingMeta } from "./parking-lot/meta";
@@ -72,6 +76,7 @@ import type { PackageModules } from "@/lib/workshop/load";
 
 export const WORKSHOP_REGISTRY: Record<string, PackageModules> = {
   atm: { meta: atmMeta, clarify: atmClarify, rubric: atmRubric, followups: atmFollowups },
+  "ride-sharing": { meta: rideMeta, clarify: rideClarify, rubric: rideRubric, followups: rideFollowups },
   "car-rental": { meta: carMeta, clarify: carClarify, rubric: carRubric, followups: carFollowups },
   "elevator-system": { meta: elevatorMeta, clarify: elevatorClarify, rubric: elevatorRubric, followups: elevatorFollowups },
   "event-bus": { meta: evbMeta, clarify: evbClarify, rubric: evbRubric, followups: evbFollowups },
