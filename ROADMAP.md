@@ -183,7 +183,8 @@ Work top to bottom: take the **first unchecked box**, and split big boxes into r
   - [x] C12s. Shopping cart + inventory + discount engine (all-or-nothing checkout, carts that hold no stock, Decorator/Strategy discounts; two storms: coupons with minimum spend, order-sensitive stacking).
   - [x] C12t. Payment processor with retries and idempotency keys (key book with request shapes, final answers only, retry policy under one key; two storms: refunds on one key namespace, expiring keys through a Lifetime Strategy).
   - [x] C12u. Text editor with undo/redo (Command with exact cursor restore, Composite undo groups, merge Strategy for typing runs; two storms: undo groups, word-sized typing runs).
-  - [ ] C12v onward: next problem in CUR L8 order (item 23, In-memory file system with Composite and path resolution; see CUR L8 items 23 to 36, one per box as reached).
+  - [x] C12v. In-memory file system (Composite tree, one path resolver with textual dot-dot and written error order, move-into-itself guard; two storms: glob find, symbolic links with a hop limit).
+  - [ ] C12w onward: next problem in CUR L8 order (item 24, Spreadsheet with formulas and dependency recalculation: graph + topological order; see CUR L8 items 24 to 36, one per box as reached).
 - [ ] C13. **Refactor Arena** (L9): the mode, plus 12 legacy modules (split across runs).
 - [ ] C14. **Machine-coding mock** (GDD §5.9) with the review conversation.
 

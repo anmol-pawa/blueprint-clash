@@ -88,6 +88,10 @@ import { clarify as editClarify } from "./text-editor/clarify";
 import { followups as editFollowups } from "./text-editor/followups";
 import { meta as editMeta } from "./text-editor/meta";
 import { rubric as editRubric } from "./text-editor/rubric";
+import { clarify as fsClarify } from "./file-system/clarify";
+import { followups as fsFollowups } from "./file-system/followups";
+import { meta as fsMeta } from "./file-system/meta";
+import { rubric as fsRubric } from "./file-system/rubric";
 import type { PackageModules } from "@/lib/workshop/load";
 
 export const WORKSHOP_REGISTRY: Record<string, PackageModules> = {
@@ -99,6 +103,7 @@ export const WORKSHOP_REGISTRY: Record<string, PackageModules> = {
   "event-bus": { meta: evbMeta, clarify: evbClarify, rubric: evbRubric, followups: evbFollowups },
   "shopping-cart": { meta: cartMeta, clarify: cartClarify, rubric: cartRubric, followups: cartFollowups },
   "payment-processor": { meta: payMeta, clarify: payClarify, rubric: payRubric, followups: payFollowups },
+  "file-system": { meta: fsMeta, clarify: fsClarify, rubric: fsRubric, followups: fsFollowups },
   "hotel-booking": { meta: hotelMeta, clarify: hotelClarify, rubric: hotelRubric, followups: hotelFollowups },
   "kv-store": { meta: kvMeta, clarify: kvClarify, rubric: kvRubric, followups: kvFollowups },
   "library-management": { meta: libraryMeta, clarify: libraryClarify, rubric: libraryRubric, followups: libraryFollowups },
