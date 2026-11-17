@@ -16,7 +16,7 @@ struct Candidate {
 class DriverRoster {
  public:
   bool add(const std::string& name, ride::Point at) {
-    if (name.empty() || !onTheMap(at)) return false;
+    if (name.empty() || !Grid::onTheMap(at)) return false;
     return drivers_.emplace(name, Driver{at, false, false}).second;
   }
 

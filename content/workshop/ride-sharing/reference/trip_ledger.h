@@ -58,6 +58,16 @@ class TripLedger {
     return found == trips_.end() ? nullptr : &found->second;
   }
 
+  // One step of the lifecycle, asked for by the trip's own driver.
+  ride::Status advance(ride::TripId id, const std::string& driver, ride::TripState to) {
+    Trip* trip = find(id);
+    if (trip == nullptr) return ride::Status::UnknownTrip;
+    if (trip->driver != driver) return ride::Status::WrongParty;
+    if (!TripLifecycle::allows(trip->state, to)) return ride::Status::InvalidState;
+    trip->state = to;
+    return ride::Status::Ok;
+  }
+
   bool riderIsTravelling(const std::string& rider) const {
     for (const auto& [id, trip] : trips_) {
       if (trip.rider == rider && TripLifecycle::isOpen(trip.state)) return true;

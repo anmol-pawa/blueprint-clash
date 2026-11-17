@@ -10,15 +10,18 @@
 #include "api_storm2.h"
 
 // The map is a grid; driving distance is counted in blocks. Both questions about space live here and nowhere else.
-inline int blocksBetween(ride::Point from, ride::Point to) {
-  return std::abs(from.x - to.x) + std::abs(from.y - to.y);
-}
+class Grid {
+ public:
+  static int blocksBetween(ride::Point from, ride::Point to) {
+    return std::abs(from.x - to.x) + std::abs(from.y - to.y);
+  }
 
-inline bool onTheMap(ride::Point point) {
-  return std::abs(point.x) <= ride::kMaxCoordinate && std::abs(point.y) <= ride::kMaxCoordinate;
-}
+  static bool onTheMap(ride::Point point) {
+    return std::abs(point.x) <= ride::kMaxCoordinate && std::abs(point.y) <= ride::kMaxCoordinate;
+  }
 
-inline bool samePlace(ride::Point first, ride::Point second) { return first.x == second.x && first.y == second.y; }
+  static bool samePlace(ride::Point first, ride::Point second) { return first.x == second.x && first.y == second.y; }
+};
 
 // A driver the matcher may choose from: free, online, and where they are.
 struct Candidate {
@@ -31,7 +34,7 @@ struct Candidate {
 class DriverRoster {
  public:
   bool add(const std::string& name, ride::Point at) {
-    if (name.empty() || !onTheMap(at)) return false;
+    if (name.empty() || !Grid::onTheMap(at)) return false;
     return drivers_.emplace(name, Driver{at, false, false}).second;
   }
 
@@ -87,7 +90,7 @@ class NearestMatcher : public Matcher {
     const Candidate* best = nullptr;
     int bestBlocks = 0;
     for (const Candidate& candidate : candidates) {
-      const int blocks = blocksBetween(candidate.at, pickup);
+      const int blocks = Grid::blocksBetween(candidate.at, pickup);
       
       if (best == nullptr || blocks < bestBlocks || (blocks == bestBlocks && candidate.name < best->name)) {
         best = &candidate;
@@ -98,6 +101,17 @@ class NearestMatcher : public Matcher {
     return best->name;
   }
 };
+
+// The best free driver for a pickup, leaving out the ones who turned this trip down. The roster says who is free and
+// the matcher ranks them; neither knows about the other.
+inline std::optional<std::string> pickFree(const Matcher& matcher, const DriverRoster& roster, ride::Point pickup,
+                                           const std::set<std::string>& declinedBy) {
+  std::vector<Candidate> candidates;
+  for (const Candidate& candidate : roster.idle()) {
+    if (declinedBy.count(candidate.name) == 0) candidates.push_back(candidate);
+  }
+  return matcher.pick(candidates, pickup);
+}
 
 // What the market looks like at the moment a trip is requested.
 struct Demand {
@@ -193,6 +207,16 @@ class TripLedger {
     return found == trips_.end() ? nullptr : &found->second;
   }
 
+  // One step of the lifecycle, asked for by the trip's own driver.
+  ride::Status advance(ride::TripId id, const std::string& driver, ride::TripState to) {
+    Trip* trip = find(id);
+    if (trip == nullptr) return ride::Status::UnknownTrip;
+    if (trip->driver != driver) return ride::Status::WrongParty;
+    if (!TripLifecycle::allows(trip->state, to)) return ride::Status::InvalidState;
+    trip->state = to;
+    return ride::Status::Ok;
+  }
+
   bool riderIsTravelling(const std::string& rider) const {
     for (const auto& [id, trip] : trips_) {
       if (trip.rider == rider && TripLifecycle::isOpen(trip.state)) return true;
@@ -229,35 +253,35 @@ class RidesImpl : public ride::DecliningRides {
 
   ride::Status moveDriver(const std::string& driver, ride::Point to) override {
     if (!roster_.knows(driver)) return ride::Status::UnknownDriver;
-    if (!onTheMap(to)) return ride::Status::InvalidRequest;
+    if (!Grid::onTheMap(to)) return ride::Status::InvalidRequest;
     roster_.moveTo(driver, to);
     return ride::Status::Ok;
   }
 
   ride::RequestResult requestRide(const std::string& rider, ride::Point pickup, ride::Point dropoff) override {
-    if (rider.empty() || !onTheMap(pickup) || !onTheMap(dropoff) || samePlace(pickup, dropoff)) {
+    if (rider.empty() || !Grid::onTheMap(pickup) || !Grid::onTheMap(dropoff) || Grid::samePlace(pickup, dropoff)) {
       return ride::RequestResult{ride::Status::InvalidRequest};
     }
     if (ledger_.riderIsTravelling(rider)) return ride::RequestResult{ride::Status::InvalidState};
-    const std::optional<std::string> driver = matchFor(pickup, {});
+    const std::optional<std::string> driver = pickFree(*matcher_, roster_, pickup, {});
     if (!driver) return ride::RequestResult{ride::Status::NoDriverAvailable};
     // The market is read before this trip takes a driver out of it.
-    const ride::Money fare = fares_->quote(blocksBetween(pickup, dropoff), Demand{roster_.onlineCount(), roster_.busyCount()});
+    const ride::Money fare = fares_->quote(Grid::blocksBetween(pickup, dropoff), Demand{roster_.onlineCount(), roster_.busyCount()});
     roster_.setBusy(*driver, true);
     const ride::TripId id = ledger_.open(Trip{rider, *driver, pickup, dropoff, fare, ride::TripState::Matched, {}});
     return ride::RequestResult{ride::Status::Ok, id, *driver, fare};
   }
 
   ride::Status arrived(ride::TripId id, const std::string& driver) override {
-    return advance(id, driver, ride::TripState::Arrived);
+    return ledger_.advance(id, driver, ride::TripState::Arrived);
   }
 
   ride::Status start(ride::TripId id, const std::string& driver) override {
-    return advance(id, driver, ride::TripState::InProgress);
+    return ledger_.advance(id, driver, ride::TripState::InProgress);
   }
 
   ride::CompleteResult complete(ride::TripId id, const std::string& driver) override {
-    const ride::Status status = advance(id, driver, ride::TripState::Completed);
+    const ride::Status status = ledger_.advance(id, driver, ride::TripState::Completed);
     if (status != ride::Status::Ok) return ride::CompleteResult{status};
     const Trip& trip = *ledger_.find(id);
     roster_.setBusy(driver, false);
@@ -283,7 +307,7 @@ class RidesImpl : public ride::DecliningRides {
     if (!TripLifecycle::canBeDeclined(trip->state)) return ride::DeclineResult{ride::Status::InvalidState};
     trip->declinedBy.insert(driver);
     roster_.setBusy(driver, false);
-    const std::optional<std::string> next = matchFor(trip->pickup, trip->declinedBy);
+    const std::optional<std::string> next = pickFree(*matcher_, roster_, trip->pickup, trip->declinedBy);
     if (!next) {
       trip->state = ride::TripState::Cancelled;
       return ride::DeclineResult{ride::Status::NoDriverAvailable};
@@ -305,25 +329,6 @@ class RidesImpl : public ride::DecliningRides {
   }
 
  private:
-  // The best free driver for a pickup, leaving out the ones who turned this trip down.
-  std::optional<std::string> matchFor(ride::Point pickup, const std::set<std::string>& declinedBy) const {
-    std::vector<Candidate> candidates;
-    for (const Candidate& candidate : roster_.idle()) {
-      if (declinedBy.count(candidate.name) == 0) candidates.push_back(candidate);
-    }
-    return matcher_->pick(candidates, pickup);
-  }
-
-  // One step of the lifecycle, by the trip's own driver.
-  ride::Status advance(ride::TripId id, const std::string& driver, ride::TripState to) {
-    Trip* trip = ledger_.find(id);
-    if (trip == nullptr) return ride::Status::UnknownTrip;
-    if (trip->driver != driver) return ride::Status::WrongParty;
-    if (!TripLifecycle::allows(trip->state, to)) return ride::Status::InvalidState;
-    trip->state = to;
-    return ride::Status::Ok;
-  }
-
   std::unique_ptr<Matcher> matcher_;
   std::unique_ptr<FarePolicy> fares_;
   DriverRoster roster_;
