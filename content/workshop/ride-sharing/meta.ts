@@ -117,7 +117,7 @@ export const meta: WorkshopMeta = {
       dir: "grid_bound_exclusive",
       failsPhase: "base",
       failingTests: ["Match.TheRequestIsCheckedAgainstTheGridAndForAnEmptyTrip", "Setup.GoingOnlineFailsInTheDocumentedOrderAndChangesNothing"],
-      reason: "The grid edge itself (1000) is rejected, so the last row and column of the city cannot be used. The bound is a closed range and lives in one function, `onGrid`, with tests on both sides of each edge.",
+      reason: "The grid edge itself (1000) is rejected, so the last row and column of the city cannot be used. The bound is a closed range and lives in one function, `Grid::contains`, with tests on both sides of each edge.",
     },
     {
       dir: "same_spot_allowed",

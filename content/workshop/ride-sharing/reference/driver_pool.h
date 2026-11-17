@@ -14,7 +14,6 @@ class DriverPool {
     if (id.empty()) return false;
     return drivers_.emplace(id, Driver{}).second;
   }
-  bool exists(const std::string& id) const { return drivers_.count(id) > 0; }
 
   ride::DriverState state(const std::string& id) const {
     const auto it = drivers_.find(id);
@@ -54,7 +53,7 @@ class DriverPool {
     std::vector<Candidate> out;
     for (const auto& [id, d] : drivers_) {
       if (d.state != ride::DriverState::Available) continue;
-      const long long distance = manhattan(from, d.where);
+      const long long distance = Grid::distance(from, d.where);
       if (distance <= reach) out.push_back(asCandidate(id, d, distance));
     }
     return out;

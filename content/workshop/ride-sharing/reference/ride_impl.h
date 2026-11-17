@@ -11,6 +11,18 @@
 #include "trip.h"
 #include "trip_book.h"
 
+// Looks up a trip and checks that the caller is its driver (or its rider). Both answer UnknownTrip, then WrongParty.
+inline ride::Status driversTrip(TripBook& book, ride::TripId id, const std::string& driver, Trip** out) {
+  *out = book.find(id);
+  if (*out == nullptr) return ride::Status::UnknownTrip;
+  return (*out)->driver() == driver ? ride::Status::Ok : ride::Status::WrongParty;
+}
+inline ride::Status ridersTrip(TripBook& book, ride::TripId id, const std::string& rider, Trip** out) {
+  *out = book.find(id);
+  if (*out == nullptr) return ride::Status::UnknownTrip;
+  return (*out)->rider() == rider ? ride::Status::Ok : ride::Status::WrongParty;
+}
+
 // The facade: validates in the documented order and sequences the collaborators. Distance, fares, surge, matching
 // and the legal order of trip states each live in one class of their own.
 class RideImpl : public ride::Dispatch {
@@ -21,15 +33,15 @@ class RideImpl : public ride::Dispatch {
   bool addDriver(const std::string& driver) override { return drivers_.add(driver); }
 
   ride::Status goOnline(const std::string& driver, ride::Location where) override {
-    if (!drivers_.exists(driver)) return ride::Status::UnknownDriver;
-    if (!onGrid(where)) return ride::Status::InvalidRequest;
+    if (drivers_.state(driver) == ride::DriverState::Unknown) return ride::Status::UnknownDriver;
+    if (!Grid::contains(where)) return ride::Status::InvalidRequest;
     if (drivers_.state(driver) == ride::DriverState::OnTrip) return ride::Status::DriverBusy;
     drivers_.setAvailable(driver, where);
     return ride::Status::Ok;
   }
 
   ride::Status goOffline(const std::string& driver) override {
-    if (!drivers_.exists(driver)) return ride::Status::UnknownDriver;
+    if (drivers_.state(driver) == ride::DriverState::Unknown) return ride::Status::UnknownDriver;
     if (drivers_.state(driver) == ride::DriverState::OnTrip) return ride::Status::DriverBusy;
     drivers_.setOffline(driver);
     return ride::Status::Ok;
@@ -39,7 +51,7 @@ class RideImpl : public ride::Dispatch {
 
   ride::RequestResult requestRide(const std::string& rider, ride::Location pickup, ride::Location dropoff) override {
     ride::RequestResult result;
-    if (rider.empty() || !onGrid(pickup) || !onGrid(dropoff) || sameSpot(pickup, dropoff)) {
+    if (rider.empty() || !Grid::contains(pickup) || !Grid::contains(dropoff) || Grid::sameSpot(pickup, dropoff)) {
       result.status = ride::Status::InvalidRequest;
       return result;
     }
@@ -55,7 +67,7 @@ class RideImpl : public ride::Dispatch {
       return result;
     }
     const std::string& driver = candidates[chosen].id;
-    const ride::Money fare = Tariff::fare(manhattan(pickup, dropoff), surgePercent);
+    const ride::Money fare = Tariff::fare(Grid::distance(pickup, dropoff), surgePercent);
     drivers_.setOnTrip(driver);
     result.trip = trips_.open(Trip(rider, driver, pickup, dropoff, fare));
     result.driver = driver;
@@ -65,7 +77,7 @@ class RideImpl : public ride::Dispatch {
 
   ride::Status driverArrived(ride::TripId id, const std::string& driver) override {
     Trip* trip = nullptr;
-    const ride::Status check = driversTrip(id, driver, &trip);
+    const ride::Status check = driversTrip(trips_, id, driver, &trip);
     if (check != ride::Status::Ok) return check;
     if (!trip->arrive()) return ride::Status::BadState;
     drivers_.moveTo(driver, trip->pickup());
@@ -74,7 +86,7 @@ class RideImpl : public ride::Dispatch {
 
   ride::Status startTrip(ride::TripId id, const std::string& driver) override {
     Trip* trip = nullptr;
-    const ride::Status check = driversTrip(id, driver, &trip);
+    const ride::Status check = driversTrip(trips_, id, driver, &trip);
     if (check != ride::Status::Ok) return check;
     return trip->start() ? ride::Status::Ok : ride::Status::BadState;
   }
@@ -82,7 +94,7 @@ class RideImpl : public ride::Dispatch {
   ride::CompleteResult completeTrip(ride::TripId id, const std::string& driver) override {
     ride::CompleteResult result;
     Trip* trip = nullptr;
-    result.status = driversTrip(id, driver, &trip);
+    result.status = driversTrip(trips_, id, driver, &trip);
     if (result.status != ride::Status::Ok) return result;
     if (!trip->complete()) {
       result.status = ride::Status::BadState;
@@ -96,7 +108,7 @@ class RideImpl : public ride::Dispatch {
 
   ride::Status cancel(ride::TripId id, const std::string& rider) override {
     Trip* trip = nullptr;
-    const ride::Status check = ridersTrip(id, rider, &trip);
+    const ride::Status check = ridersTrip(trips_, id, rider, &trip);
     if (check != ride::Status::Ok) return check;
     if (!trip->cancel()) return ride::Status::BadState;
     drivers_.setAvailable(trip->driver(), drivers_.where(trip->driver()));
@@ -106,7 +118,7 @@ class RideImpl : public ride::Dispatch {
 
   ride::Status rate(ride::TripId id, const std::string& rider, int stars) override {
     Trip* trip = nullptr;
-    const ride::Status check = ridersTrip(id, rider, &trip);
+    const ride::Status check = ridersTrip(trips_, id, rider, &trip);
     if (check != ride::Status::Ok) return check;
     if (stars < ride::kMinStars || stars > ride::kMaxStars) return ride::Status::InvalidRequest;
     if (trip->state() != ride::TripState::Completed) return ride::Status::BadState;
@@ -123,17 +135,6 @@ class RideImpl : public ride::Dispatch {
   }
 
  private:
-  ride::Status driversTrip(ride::TripId id, const std::string& driver, Trip** out) {
-    *out = trips_.find(id);
-    if (*out == nullptr) return ride::Status::UnknownTrip;
-    return (*out)->driver() == driver ? ride::Status::Ok : ride::Status::WrongParty;
-  }
-  ride::Status ridersTrip(ride::TripId id, const std::string& rider, Trip** out) {
-    *out = trips_.find(id);
-    if (*out == nullptr) return ride::Status::UnknownTrip;
-    return (*out)->rider() == rider ? ride::Status::Ok : ride::Status::WrongParty;
-  }
-
   DriverPool drivers_;
   TripBook trips_;
   std::unique_ptr<DriverMatcher> matcher_;

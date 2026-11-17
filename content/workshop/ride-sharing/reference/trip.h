@@ -17,8 +17,6 @@ class Trip {
   const ride::Location& dropoff() const { return dropoff_; }
   ride::Money fare() const { return fare_; }
   ride::TripState state() const { return state_; }
-  bool isFinished() const { return state_ == ride::TripState::Completed || state_ == ride::TripState::Cancelled; }
-  bool isRated() const { return rated_; }
 
   bool arrive() { return move(ride::TripState::Matched, ride::TripState::DriverArrived); }
   bool start() { return move(ride::TripState::DriverArrived, ride::TripState::InProgress); }
