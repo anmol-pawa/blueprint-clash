@@ -52,6 +52,10 @@ import { clarify as tttClarify } from "./tic-tac-toe/clarify";
 import { followups as tttFollowups } from "./tic-tac-toe/followups";
 import { meta as tttMeta } from "./tic-tac-toe/meta";
 import { rubric as tttRubric } from "./tic-tac-toe/rubric";
+import { clarify as movieClarify } from "./movie-booking/clarify";
+import { followups as movieFollowups } from "./movie-booking/followups";
+import { meta as movieMeta } from "./movie-booking/meta";
+import { rubric as movieRubric } from "./movie-booking/rubric";
 import { clarify as vendingClarify } from "./vending-machine/clarify";
 import { followups as vendingFollowups } from "./vending-machine/followups";
 import { meta as vendingMeta } from "./vending-machine/meta";
@@ -66,6 +70,7 @@ export const WORKSHOP_REGISTRY: Record<string, PackageModules> = {
   "library-management": { meta: libraryMeta, clarify: libraryClarify, rubric: libraryRubric, followups: libraryFollowups },
   "logger-framework": { meta: loggerMeta, clarify: loggerClarify, rubric: loggerRubric, followups: loggerFollowups },
   "lru-lfu-cache": { meta: lruMeta, clarify: lruClarify, rubric: lruRubric, followups: lruFollowups },
+  "movie-booking": { meta: movieMeta, clarify: movieClarify, rubric: movieRubric, followups: movieFollowups },
   "notification-service": { meta: notifMeta, clarify: notifClarify, rubric: notifRubric, followups: notifFollowups },
   "parking-lot": { meta: parkingMeta, clarify: parkingClarify, rubric: parkingRubric, followups: parkingFollowups },
   "rate-limiter": { meta: rlMeta, clarify: rlClarify, rubric: rlRubric, followups: rlFollowups },
