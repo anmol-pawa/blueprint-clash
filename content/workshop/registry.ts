@@ -16,6 +16,10 @@ import { clarify as elevatorClarify } from "./elevator-system/clarify";
 import { followups as elevatorFollowups } from "./elevator-system/followups";
 import { meta as elevatorMeta } from "./elevator-system/meta";
 import { rubric as elevatorRubric } from "./elevator-system/rubric";
+import { clarify as cartClarify } from "./shopping-cart/clarify";
+import { followups as cartFollowups } from "./shopping-cart/followups";
+import { meta as cartMeta } from "./shopping-cart/meta";
+import { rubric as cartRubric } from "./shopping-cart/rubric";
 import { clarify as hotelClarify } from "./hotel-booking/clarify";
 import { followups as hotelFollowups } from "./hotel-booking/followups";
 import { meta as hotelMeta } from "./hotel-booking/meta";
@@ -85,6 +89,7 @@ export const WORKSHOP_REGISTRY: Record<string, PackageModules> = {
   "car-rental": { meta: carMeta, clarify: carClarify, rubric: carRubric, followups: carFollowups },
   "elevator-system": { meta: elevatorMeta, clarify: elevatorClarify, rubric: elevatorRubric, followups: elevatorFollowups },
   "event-bus": { meta: evbMeta, clarify: evbClarify, rubric: evbRubric, followups: evbFollowups },
+  "shopping-cart": { meta: cartMeta, clarify: cartClarify, rubric: cartRubric, followups: cartFollowups },
   "hotel-booking": { meta: hotelMeta, clarify: hotelClarify, rubric: hotelRubric, followups: hotelFollowups },
   "kv-store": { meta: kvMeta, clarify: kvClarify, rubric: kvRubric, followups: kvFollowups },
   "library-management": { meta: libraryMeta, clarify: libraryClarify, rubric: libraryRubric, followups: libraryFollowups },
