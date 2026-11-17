@@ -4,6 +4,10 @@ import { clarify as evbClarify } from "./event-bus/clarify";
 import { followups as evbFollowups } from "./event-bus/followups";
 import { meta as evbMeta } from "./event-bus/meta";
 import { rubric as evbRubric } from "./event-bus/rubric";
+import { clarify as atmClarify } from "./atm/clarify";
+import { followups as atmFollowups } from "./atm/followups";
+import { meta as atmMeta } from "./atm/meta";
+import { rubric as atmRubric } from "./atm/rubric";
 import { clarify as elevatorClarify } from "./elevator-system/clarify";
 import { followups as elevatorFollowups } from "./elevator-system/followups";
 import { meta as elevatorMeta } from "./elevator-system/meta";
@@ -55,6 +59,7 @@ import { rubric as vendingRubric } from "./vending-machine/rubric";
 import type { PackageModules } from "@/lib/workshop/load";
 
 export const WORKSHOP_REGISTRY: Record<string, PackageModules> = {
+  atm: { meta: atmMeta, clarify: atmClarify, rubric: atmRubric, followups: atmFollowups },
   "elevator-system": { meta: elevatorMeta, clarify: elevatorClarify, rubric: elevatorRubric, followups: elevatorFollowups },
   "event-bus": { meta: evbMeta, clarify: evbClarify, rubric: evbRubric, followups: evbFollowups },
   "kv-store": { meta: kvMeta, clarify: kvClarify, rubric: kvRubric, followups: kvFollowups },

@@ -1,0 +1,12 @@
+import type { Responsibility } from "@/lib/workshop/types";
+
+export const rubric: Responsibility[] = [
+  { id: "res-facade", text: "Forwards each operation to the current state and follows its decision about the next state; no rule of its own about PINs, notes or limits", phase: "base", owners: ["AtmImpl", "AtmMachine", "AtmContext", "AtmController", "Atm", "CashMachine", "AtmService"] },
+  { id: "res-states", text: "Decides which operations are allowed in which situation (Idle, AwaitingPin, Ready, OutOfService) and what each one leads to, one class per state", phase: "base", owners: ["AtmState", "IdleState", "AwaitingPinState", "ReadyState", "OutOfServiceState", "State", "HasCardState", "PinEnteredState", "NoCardState"] },
+  { id: "res-pin", text: "Owns the PIN rules: wrong attempts counted per card across visits, retention after three in a row, and the blocked-card memory", phase: "base", owners: ["PinGuard", "PinValidator", "PinChecker", "PinPolicy", "CardRegistry", "AttemptCounter", "Authenticator", "PinVerifier"] },
+  { id: "res-notes", text: "Owns how an amount becomes notes (largest first, limited by stock), as a replaceable rule", phase: "base", owners: ["NoteDispenser", "NoteHandler", "ChainDispenser", "DispenseHandler", "DispenserChain", "CashDispenser", "NoteStrategy", "DenominationHandler"] },
+  { id: "res-cash", text: "Owns the notes inside the machine: counts per denomination, removal, and whether the machine is empty", phase: "base", owners: ["CashBox", "CashDrawer", "CashStock", "NoteStock", "CashInventory", "CashCassette", "Inventory", "CashVault"] },
+  { id: "res-payout", text: "Sequences one withdrawal so that every check runs before the first side effect and the bank and the stock change together", phase: "base", owners: ["Payout", "Withdrawal", "WithdrawalService", "Teller", "TransactionService", "CashWithdrawal", "WithdrawalProcessor"] },
+  { id: "res-search", text: "Adds the fewest-notes search as a new dispensing rule next to the chain, without editing the chain or the states", phase: "storm1", owners: ["FewestNotesDispenser", "SearchDispenser", "MinNotesDispenser", "OptimalDispenser", "DpDispenser", "FewestNotesStrategy", "KnapsackDispenser"] },
+  { id: "res-limit", text: "Owns the daily total per card as a rule consulted before and recorded after a payout, not as state in the session", phase: "storm2", owners: ["WithdrawalLimit", "DailyLimit", "LimitPolicy", "DailyLimitPolicy", "LimitTracker", "WithdrawalPolicy", "WithdrawalTracker"] },
+];

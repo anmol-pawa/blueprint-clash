@@ -41,6 +41,7 @@ export const PLAYABLE_MODES: readonly PlayableMode[] = [
   { href: "/workshop/event-bus", title: "Workshop: Event bus (pub-sub)", blurb: "Observer with topics: what a handler may do mid-delivery, then wildcard topics and per-subscriber filters across two Change Storms." },
   { href: "/workshop/notification-service", title: "Workshop: Notification service", blurb: "Channels behind a Strategy, templates and exact retry backoff, then a fallback chain and idempotency keys across two Change Storms." },
   { href: "/workshop/splitwise", title: "Workshop: Splitwise (expense sharing)", blurb: "Integer cents and an exact remainder rule, a ledger of directed debts, then exact and percent splits and greedy debt simplification across two Change Storms." },
+  { href: "/workshop/atm", title: "Workshop: ATM (cash machine)", blurb: "A State machine with per-card PIN counters, a chain of note handlers whose order is the algorithm, then an exact fewest-notes search and daily limits across two Change Storms." },
   { href: "/board", title: "Design Board drills", blurb: "Draw the classes for a short brief, tag who owns each responsibility, then compare with a reference." },
   { href: "/race", title: "Race Hunter", blurb: "Schedule threads step by step to break a program, then let the explorer check every interleaving of the fix." },
   { href: "/learn", title: "Lessons", blurb: "SOLID in C++: smell, before/after code, interview phrasing, and the cost of overdoing it." },
