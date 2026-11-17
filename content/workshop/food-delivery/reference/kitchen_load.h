@@ -15,7 +15,8 @@ class KitchenLoad {
 
   bool hasRoom(const std::string& restaurant) const {
     const auto found = cooking_.find(restaurant);
-    return found == cooking_.end() || found->second < slots_;
+    const int cooking = found == cooking_.end() ? 0 : found->second;
+    return cooking < slots_;
   }
 
   void observe(food::OrderId id, food::OrderState from, food::OrderState to) {
