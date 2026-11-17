@@ -4,6 +4,10 @@ import { clarify as evbClarify } from "./event-bus/clarify";
 import { followups as evbFollowups } from "./event-bus/followups";
 import { meta as evbMeta } from "./event-bus/meta";
 import { rubric as evbRubric } from "./event-bus/rubric";
+import { clarify as rideClarify } from "./ride-sharing/clarify";
+import { followups as rideFollowups } from "./ride-sharing/followups";
+import { meta as rideMeta } from "./ride-sharing/meta";
+import { rubric as rideRubric } from "./ride-sharing/rubric";
 import { clarify as carClarify } from "./car-rental/clarify";
 import { followups as carFollowups } from "./car-rental/followups";
 import { meta as carMeta } from "./car-rental/meta";
@@ -85,6 +89,7 @@ export const WORKSHOP_REGISTRY: Record<string, PackageModules> = {
   "rate-limiter": { meta: rlMeta, clarify: rlClarify, rubric: rlRubric, followups: rlFollowups },
   "snake-and-ladder": { meta: snlMeta, clarify: snlClarify, rubric: snlRubric, followups: snlFollowups },
   splitwise: { meta: splitMeta, clarify: splitClarify, rubric: splitRubric, followups: splitFollowups },
+  "ride-sharing": { meta: rideMeta, clarify: rideClarify, rubric: rideRubric, followups: rideFollowups },
   "ticket-booking": { meta: tixMeta, clarify: tixClarify, rubric: tixRubric, followups: tixFollowups },
   "tic-tac-toe": { meta: tttMeta, clarify: tttClarify, rubric: tttRubric, followups: tttFollowups },
   "vending-machine": { meta: vendingMeta, clarify: vendingClarify, rubric: vendingRubric, followups: vendingFollowups },
