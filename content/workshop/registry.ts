@@ -12,6 +12,10 @@ import { clarify as elevatorClarify } from "./elevator-system/clarify";
 import { followups as elevatorFollowups } from "./elevator-system/followups";
 import { meta as elevatorMeta } from "./elevator-system/meta";
 import { rubric as elevatorRubric } from "./elevator-system/rubric";
+import { clarify as hotelClarify } from "./hotel-booking/clarify";
+import { followups as hotelFollowups } from "./hotel-booking/followups";
+import { meta as hotelMeta } from "./hotel-booking/meta";
+import { rubric as hotelRubric } from "./hotel-booking/rubric";
 import { clarify as kvClarify } from "./kv-store/clarify";
 import { followups as kvFollowups } from "./kv-store/followups";
 import { meta as kvMeta } from "./kv-store/meta";
@@ -66,6 +70,7 @@ export const WORKSHOP_REGISTRY: Record<string, PackageModules> = {
   atm: { meta: atmMeta, clarify: atmClarify, rubric: atmRubric, followups: atmFollowups },
   "elevator-system": { meta: elevatorMeta, clarify: elevatorClarify, rubric: elevatorRubric, followups: elevatorFollowups },
   "event-bus": { meta: evbMeta, clarify: evbClarify, rubric: evbRubric, followups: evbFollowups },
+  "hotel-booking": { meta: hotelMeta, clarify: hotelClarify, rubric: hotelRubric, followups: hotelFollowups },
   "kv-store": { meta: kvMeta, clarify: kvClarify, rubric: kvRubric, followups: kvFollowups },
   "library-management": { meta: libraryMeta, clarify: libraryClarify, rubric: libraryRubric, followups: libraryFollowups },
   "logger-framework": { meta: loggerMeta, clarify: loggerClarify, rubric: loggerRubric, followups: loggerFollowups },
