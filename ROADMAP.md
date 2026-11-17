@@ -175,7 +175,8 @@ Work top to bottom: take the **first unchecked box**, and split big boxes into r
   - [x] C12k. Notification service (Strategy channels, template renderer, retry policy with exact backoff; two storms: fallback chain, idempotency keys via Decorator).
   - [x] C12l. Splitwise (Strategy split rules, directed-debt book; two storms: exact and percent splits with largest remainder, greedy debt simplification).
   - [x] C12m. ATM (State per operation, chain of note handlers; two storms: fewest-notes search, daily limits per card).
-  - [ ] C12n onward: Movie ticket booking with seat holds (next), ... (CUR L8 items 15 to 36, one per box as reached).
+  - [x] C12n. Movie ticket booking with seat holds (derived hold expiry, all-or-nothing holds, late-confirm safety; two storms: best-seat Strategy, per-user usage policy).
+  - [ ] C12o onward: next problem in CUR L8 order after movie booking (see CUR L8 items 16 to 36, one per box as reached).
 - [ ] C13. **Refactor Arena** (L9): the mode, plus 12 legacy modules (split across runs).
 - [ ] C14. **Machine-coding mock** (GDD §5.9) with the review conversation.
 

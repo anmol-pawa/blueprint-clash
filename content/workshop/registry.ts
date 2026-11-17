@@ -48,6 +48,10 @@ import { clarify as splitClarify } from "./splitwise/clarify";
 import { followups as splitFollowups } from "./splitwise/followups";
 import { meta as splitMeta } from "./splitwise/meta";
 import { rubric as splitRubric } from "./splitwise/rubric";
+import { clarify as tixClarify } from "./ticket-booking/clarify";
+import { followups as tixFollowups } from "./ticket-booking/followups";
+import { meta as tixMeta } from "./ticket-booking/meta";
+import { rubric as tixRubric } from "./ticket-booking/rubric";
 import { clarify as tttClarify } from "./tic-tac-toe/clarify";
 import { followups as tttFollowups } from "./tic-tac-toe/followups";
 import { meta as tttMeta } from "./tic-tac-toe/meta";
@@ -71,6 +75,7 @@ export const WORKSHOP_REGISTRY: Record<string, PackageModules> = {
   "rate-limiter": { meta: rlMeta, clarify: rlClarify, rubric: rlRubric, followups: rlFollowups },
   "snake-and-ladder": { meta: snlMeta, clarify: snlClarify, rubric: snlRubric, followups: snlFollowups },
   splitwise: { meta: splitMeta, clarify: splitClarify, rubric: splitRubric, followups: splitFollowups },
+  "ticket-booking": { meta: tixMeta, clarify: tixClarify, rubric: tixRubric, followups: tixFollowups },
   "tic-tac-toe": { meta: tttMeta, clarify: tttClarify, rubric: tttRubric, followups: tttFollowups },
   "vending-machine": { meta: vendingMeta, clarify: vendingClarify, rubric: vendingRubric, followups: vendingFollowups },
 };

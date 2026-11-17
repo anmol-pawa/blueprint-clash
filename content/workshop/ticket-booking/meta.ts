@@ -1,0 +1,120 @@
+import type { WorkshopMeta } from "@/lib/workshop/types";
+
+export const meta: WorkshopMeta = {
+  id: "ticket-booking",
+  title: "Movie ticket booking with seat holds",
+  level: "Senior",
+  parMinutes: 60,
+  patterns: ["Strategy", "State"],
+  requirements: [
+    { id: "R-hold", text: "hold(show, user, seats) reserves every listed seat or none. Checks in order: UnknownShow, InvalidRequest (empty user, no seats, a seat twice), UnknownSeat (strict names: row letter then a number without leading zero, inside the hall), SeatUnavailable. A seat is free when it is not booked and not under a live hold. addShow refuses an existing id and out-of-range sizes. makeBooking returns nullptr for a null clock or a non-positive hold duration.", phase: "base", hidden: true },
+    { id: "R-expiry", text: "A hold placed at tick s with duration h is live while now() < s + h and expired from s + h on. An expired hold frees its seats everywhere (seatState, availableSeats, a new hold) without anyone sweeping it, and a new holder gets a full window of their own.", phase: "base", hidden: true },
+    { id: "R-confirm", text: "confirm and release take a hold id and the user. Failures in order: UnknownHold (never issued, or already confirmed or released), WrongUser, HoldExpired (an expired hold stays expired when asked again). A late confirm never touches seats someone else now holds. Confirm books the seats for good; release frees them at once; each spends the id.", phase: "base", hidden: true },
+    { id: "R-best", text: "Storm 1: holdBest(show, user, count) holds count adjacent free seats in one row, chosen by: row closest to the middle of the hall, then run centred nearest the middle of the row, then lower row, then lower first seat. SeatUnavailable when no row has such a run, InvalidRequest for an empty user or a count below one.", phase: "storm1", hidden: true },
+    { id: "R-limit", text: "Storm 2: makeLimitedBooking(clock, holdTicks, maxSeatsPerUser). Seats in use by a user in a show are the seats Booked by them plus the seats under their live holds. hold and holdBest return OverLimit, changing nothing, when in-use plus requested exceeds the limit; the check comes after the seat names and before availability. seatsInUse reports the count.", phase: "storm2", hidden: true },
+  ],
+  bad: [
+    {
+      dir: "expiry_inclusive",
+      failsPhase: "base",
+      failingTests: ["Expiry.AHoldIsLiveUntilItsLastTickAndGoneAtTheExpiryTick", "Confirm.ConfirmingAtTheExpiryTickIsTooLate"],
+      reason: "A hold is treated as live at the tick it expires (<= instead of <), so the seat is blocked, and the confirm accepted, one tick too long. Whether the boundary tick belongs to the hold is the first thing to pin down, and keeping the comparison in one class (HoldWindow) means there is exactly one place to get it wrong.",
+    },
+    {
+      dir: "hold_not_atomic",
+      failsPhase: "base",
+      failingTests: ["Hold.AHoldIsAllOrNothing"],
+      reason: "Seats are taken one at a time as they are checked, so a request for three seats that finds the second taken leaves the first one held by a user who got an error. Check everything, then change anything; a half-applied multi-seat request strands inventory until the hold times out.",
+    },
+    {
+      dir: "expired_hold_confirms",
+      failsPhase: "base",
+      failingTests: ["Confirm.ConfirmingAtTheExpiryTickIsTooLate", "Confirm.ALateConfirmCannotStealASeatSomeoneElseNowHolds", "Confirm.AnExpiredHoldStaysExpiredWhenAskedAgain"],
+      reason: "Confirm does not look at the expiry. A customer who pays after the hold lapsed takes the seat, even when another customer has since held it and is about to pay: the seat is sold twice. The expiry check must sit on the same path as the booking, not only on the read path.",
+    },
+    {
+      dir: "confirm_wrong_user_ok",
+      failsPhase: "base",
+      failingTests: ["Confirm.OnlyTheHolderCanConfirmOrRelease", "Confirm.WrongUserIsReportedBeforeExpiry"],
+      reason: "Anyone who knows (or guesses) a hold id can confirm or release it. Hold ids are small sequential numbers, so a stranger could cancel another customer's seats. Ownership is part of the contract of every operation that takes an id.",
+    },
+    {
+      dir: "confirm_twice",
+      failsPhase: "base",
+      failingTests: ["Confirm.ABookingIsSpentOnce", "Release.AReleasedHoldCannotBeConfirmedEvenIfTheSeatsAreStillFree"],
+      reason: "A confirmed or released hold is still found, so it can be confirmed again, and a hold the customer gave up can be revived into a booking. A hold is a small state machine (active, then confirmed or released, never back); a boolean that is never consulted is the same as no state.",
+    },
+    {
+      dir: "expired_still_blocks",
+      failsPhase: "base",
+      failingTests: ["Expiry.AHoldIsLiveUntilItsLastTickAndGoneAtTheExpiryTick", "Expiry.ExpiredSeatsAreListedAsAvailable", "Expiry.AnExpiredHoldCanBeTakenOverAndTheNewHolderKeepsItsFullWindow"],
+      reason: "The seat stays held until someone confirms or releases, so an abandoned checkout blocks the seat forever (the cleanup job nobody wrote). Deriving seat state from the hold's expiry and the clock makes expiry automatic; a design that needs a sweeper to free seats needs the sweeper to be correct as well.",
+    },
+    {
+      dir: "booked_seat_free",
+      failsPhase: "base",
+      failingTests: ["Confirm.ConfirmingALiveHoldBooksTheSeatsForGood", "Contention.ASeatIsSoldAtMostOnceEvenAcrossManyExpiriesAndRetries"],
+      reason: "The free-seat test only looks at holds, so a booked seat can be held and sold again. 'Free' has one definition: not booked and not under a live hold. Two different checks for the same idea drift apart.",
+    },
+    {
+      dir: "show_dup_overwrites",
+      failsPhase: "base",
+      failingTests: ["Setup.ShowsMustBeNewAndHaveASaneSize"],
+      reason: "Adding a show whose id exists replaces it and reports success, which would wipe every booking made so far if a scheduler job ran twice. Creation must be refused when the id is taken, so that the caller's retry is harmless.",
+    },
+    {
+      dir: "seat_name_lenient",
+      failsPhase: "base",
+      failingTests: ["Setup.SeatNamesAreStrict"],
+      reason: "A01 and A1 name the same seat, so a request can silently list one seat under two spellings. Accepting several spellings of an identifier is a quiet source of duplicates; parse strictly at the edge and everything behind it can compare by index.",
+    },
+    {
+      dir: "best_row_last",
+      failsPhase: "storm1",
+      failingTests: ["Best.TheRowComesBeforeTheSeatPosition"],
+      reason: "The tie-break order is swapped: a seat in the middle of a far row beats a seat near the middle of the best row. The house rule is a lexicographic order; writing it as one small comparison in one Strategy keeps the order visible and testable.",
+    },
+    {
+      dir: "best_ties_right",
+      failsPhase: "storm1",
+      failingTests: ["Best.AnEvenGroupInAnOddRowTiesAndTheLeftmostWins", "Best.RunsNeverCrossAHeldSeat"],
+      reason: "Equally good runs resolve to the higher seat number instead of the lower. The product rule had to name its last tie-break, because without it two correct implementations give different seats and a support agent cannot predict what the customer saw.",
+    },
+    {
+      dir: "centre_rounds_down",
+      failsPhase: "storm1",
+      failingTests: ["Best.AnEvenGroupInAnOddRowTiesAndTheLeftmostWins", "Best.RunsNeverCrossAHeldSeat"],
+      reason: "The distance from the middle is computed in integer halves, so even-sized groups are judged off-centre by the wrong amount. Doubling the distances keeps every case exact in integers; floating point is not needed and integer division quietly changes the ranking.",
+    },
+    {
+      dir: "limit_ignores_confirmed",
+      failsPhase: "storm2",
+      failingTests: ["Limit.ConfirmedSeatsKeepCountingTowardsTheLimit"],
+      reason: "Only live holds count, so a customer can book four seats, then four more, then four more, one hold at a time. The limit exists to stop hoarding of the inventory, and a booked seat is the most permanent hoard of all.",
+    },
+    {
+      dir: "limit_counts_expired",
+      failsPhase: "storm2",
+      failingTests: ["Limit.ExpiredHoldsStopCounting"],
+      reason: "A hold counts until it is confirmed or released, even after it expired, so a customer who abandons a checkout is locked out of the show. The limit must ask the same HoldWindow that frees the seats, not keep a second idea of 'live'.",
+    },
+    {
+      dir: "limit_per_request",
+      failsPhase: "storm2",
+      failingTests: ["Limit.AUserMayHoldUpToTheLimitAndNoMore", "Limit.TheLimitCoversSeveralHoldsAtOnce"],
+      reason: "The cap applies to each request on its own, so a user takes the limit again with every call. A limit is about the total a user holds, which means the policy needs the user's current usage as an input, not just the size of this request.",
+    },
+    {
+      dir: "limit_after_availability",
+      failsPhase: "storm2",
+      failingTests: ["Limit.TheLimitIsCheckedBeforeAvailabilityButAfterTheSeatNames"],
+      reason: "Availability is checked before the limit, so a user over the limit learns which seats of their request are taken by other people. The order of checks is part of the API: it decides what a refusal reveals.",
+    },
+    {
+      dir: "limit_global",
+      failsPhase: "storm2",
+      failingTests: ["Limit.EachShowAndEachUserHasItsOwnAllowance"],
+      reason: "The usage count ignores who holds the seat, so one customer's seats use up everyone's allowance. The limit is per user and per show; the count has to filter on both.",
+    },
+  ],
+};
