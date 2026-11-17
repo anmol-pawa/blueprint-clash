@@ -46,6 +46,7 @@ export const PLAYABLE_MODES: readonly PlayableMode[] = [
   { href: "/workshop/hotel-booking", title: "Workshop: Hotel booking", blurb: "Rooms counted per night over half-open stays so back-to-back guests never clash and a failed booking changes nothing, then seasonal prices and tiered refunds across two Change Storms." },
   { href: "/workshop/car-rental", title: "Workshop: Car rental", blurb: "Promises counted by the busiest hour, physical cars handed over at the counter and brought back early or late, then late fees and a rotating fleet across two Change Storms." },
   { href: "/workshop/ride-sharing", title: "Workshop: Ride sharing", blurb: "Nearest-driver matching and a table-driven trip state machine, then surge pricing and drivers who decline across two Change Storms." },
+  { href: "/workshop/food-delivery", title: "Workshop: Food delivery", blurb: "An order state machine with an Observer feed, a courier queue that serves the oldest order first and cancellation fees by stage, then promo codes and kitchen capacity across two Change Storms." },
   { href: "/board", title: "Design Board drills", blurb: "Draw the classes for a short brief, tag who owns each responsibility, then compare with a reference." },
   { href: "/race", title: "Race Hunter", blurb: "Schedule threads step by step to break a program, then let the explorer check every interleaving of the fix." },
   { href: "/learn", title: "Lessons", blurb: "SOLID in C++: smell, before/after code, interview phrasing, and the cost of overdoing it." },

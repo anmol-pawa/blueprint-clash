@@ -179,7 +179,8 @@ Work top to bottom: take the **first unchecked box**, and split big boxes into r
   - [x] C12o. Hotel booking (half-open nights, per-night room counts, check-then-take; two storms: seasonal prices with newest-wins overlap, tiered refunds on the stored total).
   - [x] C12p. Car rental (busiest-hour availability over half-open hours, promises vs physical cars, early and late returns; two storms: late fees, rotating fleet).
   - [x] C12q. Ride sharing (nearest-driver Strategy, table-driven trip state machine; two storms: surge pricing, driver declines with re-match).
-  - [ ] C12r onward: next problem in CUR L8 order after ride sharing (item 19; see CUR L8 items 19 to 36, one per box as reached).
+  - [x] C12r. Food delivery order lifecycle (table-driven state machine with an Observer feed, courier queue oldest-first, cancellation fee Strategy by stage; two storms: promo codes on the food only, kitchen capacity derived from transitions).
+  - [ ] C12s onward: next problem in CUR L8 order after food delivery (item 20, Shopping cart + inventory + discount engine; see CUR L8 items 20 to 36, one per box as reached).
 - [ ] C13. **Refactor Arena** (L9): the mode, plus 12 legacy modules (split across runs).
 - [ ] C14. **Machine-coding mock** (GDD §5.9) with the review conversation.
 
