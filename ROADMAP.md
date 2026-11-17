@@ -178,7 +178,8 @@ Work top to bottom: take the **first unchecked box**, and split big boxes into r
   - [x] C12n. Movie ticket booking with seat holds (derived hold expiry, all-or-nothing holds, late-confirm safety; two storms: best-seat Strategy, per-user usage policy).
   - [x] C12o. Hotel booking (half-open nights, per-night room counts, check-then-take; two storms: seasonal prices with newest-wins overlap, tiered refunds on the stored total).
   - [x] C12p. Car rental (busiest-hour availability over half-open hours, promises vs physical cars, early and late returns; two storms: late fees, rotating fleet).
-  - [ ] C12q onward: next problem in CUR L8 order after car rental (ride sharing is item 18; see CUR L8 items 18 to 36, one per box as reached).
+  - [x] C12q. Ride sharing (nearest-driver matching Strategy, trip state table beside the driver lifecycle; two storms: ride classes, arrival and cancellation fees).
+  - [ ] C12r onward: next problem in CUR L8 order after ride sharing (food delivery order lifecycle is item 19; see CUR L8 items 19 to 36, one per box as reached).
 - [ ] C13. **Refactor Arena** (L9): the mode, plus 12 legacy modules (split across runs).
 - [ ] C14. **Machine-coding mock** (GDD §5.9) with the review conversation.
 
