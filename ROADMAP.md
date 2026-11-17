@@ -181,7 +181,8 @@ Work top to bottom: take the **first unchecked box**, and split big boxes into r
   - [x] C12q. Ride sharing (nearest-driver Strategy, table-driven trip state machine; two storms: surge pricing, driver declines with re-match).
   - [x] C12r. Food delivery order lifecycle (table-driven state machine with an Observer feed, courier queue oldest-first, cancellation fee Strategy by stage; two storms: promo codes on the food only, kitchen capacity derived from transitions).
   - [x] C12s. Shopping cart + inventory + discount engine (all-or-nothing checkout, carts that hold no stock, Decorator/Strategy discounts; two storms: coupons with minimum spend, order-sensitive stacking).
-  - [ ] C12t onward: next problem in CUR L8 order after the shopping cart (item 21; see CUR L8 items 21 to 36, one per box as reached).
+  - [x] C12t. Payment processor with retries and idempotency keys (key book with request shapes, final answers only, retry policy under one key; two storms: refunds on one key namespace, expiring keys through a Lifetime Strategy).
+  - [ ] C12u onward: next problem in CUR L8 order (item 22, Text editor with undo/redo; see CUR L8 items 22 to 36, one per box as reached).
 - [ ] C13. **Refactor Arena** (L9): the mode, plus 12 legacy modules (split across runs).
 - [ ] C14. **Machine-coding mock** (GDD §5.9) with the review conversation.
 
