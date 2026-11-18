@@ -1,0 +1,12 @@
+import type { Responsibility } from "@/lib/workshop/types";
+
+export const rubric: Responsibility[] = [
+  { id: "res-facade", text: "Exposes the public calls and sequences the collaborators: validate the arguments in the documented order, assign the enqueue rank, record the job, put its first attempt in the run queue, delegate running to the runner", phase: "base", owners: ["QueueImpl", "QueueQueries", "JobQueue", "Queue", "QueueService", "JobService", "QueueFacade"] },
+  { id: "res-clock", text: "Owns the simulated time and keeps it separate from the queue", phase: "base", owners: ["SimClock", "Clock", "SimulatedClock", "ManualClock", "FakeClock", "TimeSource"] },
+  { id: "res-queue", text: "Keeps the due attempts in running order (time, then enqueue order) together with the index by id, and updates both in single operations (insert, remove, pop the next due one)", phase: "base", owners: ["RunQueue", "AttemptQueue", "DueQueue", "Timeline", "ScheduleQueue", "PendingQueue", "DelayQueue"] },
+  { id: "res-book", text: "Remembers every job ever enqueued by id (handler, state, attempts, rank), so ids are never reused and queries work for finished jobs", phase: "base", owners: ["JobBook", "JobStore", "JobRegistry", "JobLedger", "JobTable", "Jobs", "JobRepository"] },
+  { id: "res-runner", text: "Runs what is due in order from the live queue, one attempt at a time, setting the clock for each and marking the job Running, so handlers can enqueue and cancel while running", phase: "base", owners: ["AttemptRunner", "Dispatcher", "Worker", "JobRunner", "Executor", "RunLoop", "Runner"] },
+  { id: "res-dead", text: "Keeps the dead-letter queue: the ids of dead jobs in the order they died", phase: "base", owners: ["DeadLetters", "DeadLetterQueue", "Dlq", "Graveyard", "DeadJobs", "DeadLetterBox"] },
+  { id: "res-backoff", text: "Decides the wait after each failure, per job and as its own Strategy (fixed, linear, exponential, with a cap), so adding a rule touches no existing one", phase: "storm1", owners: ["BackoffRule", "BackoffPolicy", "BackoffStrategy", "RetryPlan", "RetryPolicy", "DelayStrategy", "RetryStrategy"] },
+  { id: "res-outcome", text: "Turns the handler's answer into the job's next state (done, retry, dead) in one place, so a new kind of answer is one new branch there and nothing else changes", phase: "storm2", owners: ["AttemptRunner", "OutcomeHandler", "OutcomePolicy", "Settler", "OutcomeSettler", "Dispatcher", "JobRunner"] },
+];

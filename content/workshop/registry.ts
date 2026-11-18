@@ -92,6 +92,10 @@ import { clarify as fsClarify } from "./file-system/clarify";
 import { followups as fsFollowups } from "./file-system/followups";
 import { meta as fsMeta } from "./file-system/meta";
 import { rubric as fsRubric } from "./file-system/rubric";
+import { clarify as jobqClarify } from "./job-queue/clarify";
+import { followups as jobqFollowups } from "./job-queue/followups";
+import { meta as jobqMeta } from "./job-queue/meta";
+import { rubric as jobqRubric } from "./job-queue/rubric";
 import { clarify as schedClarify } from "./task-scheduler/clarify";
 import { followups as schedFollowups } from "./task-scheduler/followups";
 import { meta as schedMeta } from "./task-scheduler/meta";
@@ -121,6 +125,7 @@ export const WORKSHOP_REGISTRY: Record<string, PackageModules> = {
   "parking-lot": { meta: parkingMeta, clarify: parkingClarify, rubric: parkingRubric, followups: parkingFollowups },
   "rate-limiter": { meta: rlMeta, clarify: rlClarify, rubric: rlRubric, followups: rlFollowups },
   "snake-and-ladder": { meta: snlMeta, clarify: snlClarify, rubric: snlRubric, followups: snlFollowups },
+  "job-queue": { meta: jobqMeta, clarify: jobqClarify, rubric: jobqRubric, followups: jobqFollowups },
   "task-scheduler": { meta: schedMeta, clarify: schedClarify, rubric: schedRubric, followups: schedFollowups },
   spreadsheet: { meta: sheetMeta, clarify: sheetClarify, rubric: sheetRubric, followups: sheetFollowups },
   splitwise: { meta: splitMeta, clarify: splitClarify, rubric: splitRubric, followups: splitFollowups },
