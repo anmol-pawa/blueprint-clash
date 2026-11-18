@@ -185,7 +185,8 @@ Work top to bottom: take the **first unchecked box**, and split big boxes into r
   - [x] C12u. Text editor with undo/redo (Command with exact cursor restore, Composite undo groups, merge Strategy for typing runs; two storms: undo groups, word-sized typing runs).
   - [x] C12v. In-memory file system (Composite tree, one path resolver with textual dot-dot and written error order, move-into-itself guard; two storms: glob find, symbolic links with a hop limit).
   - [x] C12w. Spreadsheet with formulas (Interpreter expression tree, dependency graph with topological recalculation and cycle refusal; two storms: range functions, change listeners).
-  - [ ] C12x onward: next problem in CUR L8 order (item 25, Task scheduler / cron: priority queue, recurring jobs; see CUR L8 items 25 to 36, one per box as reached).
+  - [x] C12x. Task scheduler / cron (simulated clock, ordered queue with an id index, jobs that schedule and cancel while running; two storms: recurring series at a fixed rate, per-series catch-up policies).
+  - [ ] C12y onward: next problem in CUR L8 order (item 26, Job queue with retries, backoff and a dead-letter queue; see CUR L8 items 26 to 36, one per box as reached).
 - [ ] C13. **Refactor Arena** (L9): the mode, plus 12 legacy modules (split across runs).
 - [ ] C14. **Machine-coding mock** (GDD §5.9) with the review conversation.
 
