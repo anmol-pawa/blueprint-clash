@@ -1,0 +1,13 @@
+import type { Responsibility } from "@/lib/workshop/types";
+
+export const rubric: Responsibility[] = [
+  { id: "res-skeleton", text: "Owns the order of a round (deal round the table, let each seat decide while it can, let the dealer play, settle every seat) once, and leaves the parts that differ between games as hooks a subclass fills in (Template Method)", phase: "base", owners: ["RoundGame", "GameTemplate", "CardGame", "AbstractGame", "BaseGame", "Round", "GameEngine"] },
+  { id: "res-scoring", text: "Knows what a hand is worth as its own replaceable piece, so the skeleton never looks at a rank (Ace as 1 or 11, faces as 10, a bust shown as the hard sum)", phase: "base", owners: ["Scorer", "BlackjackScorer", "HandScorer", "HandValue", "ScoringRule", "HandEvaluator", "Evaluator"] },
+  { id: "res-rules", text: "Holds the rules of one game (cards in the deal, who may still decide, when the dealer draws, who wins) in one class that touches no table state directly", phase: "base", owners: ["Blackjack", "BlackjackRules", "BlackjackGame", "TwentyOne", "BlackjackVariant"] },
+  { id: "res-table", text: "Keeps the seats, the dealer's hand and the cards left, with no knowledge of any game, so a new game reuses it unchanged", phase: "base", owners: ["Table", "Seat", "Shoe", "Hand", "Deck", "TableState"] },
+  { id: "res-progress", text: "Tracks the phase and whose turn it is in one place, so a refused call can be told apart from an accepted one without scattered flags", phase: "base", owners: ["Progress", "RoundState", "TurnTracker", "PhaseTracker", "Turn", "GameState"] },
+  { id: "res-queries", text: "Answers the read-only questions (hands, totals, results, the current player) the same way for every game, apart from the rules that change them", phase: "base", owners: ["TableGame", "GameView", "GameQueries", "TableView", "Queries"] },
+  { id: "res-setup", text: "Decides whether a table can be seated at all (player count, names, deck size for the first deal) before any game object exists", phase: "base", owners: ["TableValidator", "Setup", "TableValidator", "SetupValidator", "GameFactory", "Validator"] },
+  { id: "res-house", text: "Carries optional rules (soft 17, five-card Charlie) as data that a hook reads, so switching a rule on edits no existing branch of the skeleton", phase: "storm1", owners: ["HouseRules", "Blackjack", "RuleSet", "Variant", "BlackjackOptions", "Rules"] },
+  { id: "res-newgame", text: "Adds a second game as a new subclass of the skeleton with its own scorer, and nothing in the skeleton, the table or Blackjack changes", phase: "storm2", owners: ["Showdown", "ModTenScorer", "ShowdownGame", "HighHand", "Baccarat"] },
+];
