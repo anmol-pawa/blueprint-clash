@@ -189,7 +189,8 @@ Work top to bottom: take the **first unchecked box**, and split big boxes into r
   - [x] C12y. Job queue with retries, backoff and a dead-letter queue (run queue keyed by time then enqueue order, backoff measured from each failed attempt, one place that settles an attempt; two storms: per-job retry policies with Strategy delays, fatal outcomes with dead-letter reasons and redrive).
   - [x] C12z. Chess (per-kind piece rules as a Strategy table, attack detection separate from move generation, legality tried on a copy of the position, checkmate versus stalemate; two storms: castling and en passant as special-move extensions, undo as a whole-position history).
   - [x] C12aa. Card game framework (Template Method round skeleton with four hooks, Scorer Strategy, plain table state; Twenty-One base; two storms: house rules as data, a second game with no decisions).
-  - [ ] C12ab onward: next problem in CUR L8 order (item 29, Order book / matching engine: price-time priority; see CUR L8 items 29 to 36, one per box as reached).
+  - [x] C12ab. Order book / matching engine (ordered price levels with queues, one matching rule, id ledger plus resting index, Facade; two storms: time in force as small policies with a pure fill-or-kill preview, amends that keep or lose their queue place).
+  - [ ] C12ac onward: next problem in CUR L8 order (item 30, Stock brokerage portfolio; see CUR L8 items 30 to 36, one per box as reached).
 - [ ] C13. **Refactor Arena** (L9): the mode, plus 12 legacy modules (split across runs).
 - [ ] C14. **Machine-coding mock** (GDD §5.9) with the review conversation.
 

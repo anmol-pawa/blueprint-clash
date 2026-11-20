@@ -96,6 +96,10 @@ import { clarify as jobqClarify } from "./job-queue/clarify";
 import { followups as jobqFollowups } from "./job-queue/followups";
 import { meta as jobqMeta } from "./job-queue/meta";
 import { rubric as jobqRubric } from "./job-queue/rubric";
+import { clarify as orderBookClarify } from "./order-book/clarify";
+import { followups as orderBookFollowups } from "./order-book/followups";
+import { meta as orderBookMeta } from "./order-book/meta";
+import { rubric as orderBookRubric } from "./order-book/rubric";
 import { clarify as cardsClarify } from "./card-game/clarify";
 import { followups as cardsFollowups } from "./card-game/followups";
 import { meta as cardsMeta } from "./card-game/meta";
@@ -135,6 +139,7 @@ export const WORKSHOP_REGISTRY: Record<string, PackageModules> = {
   "snake-and-ladder": { meta: snlMeta, clarify: snlClarify, rubric: snlRubric, followups: snlFollowups },
   "job-queue": { meta: jobqMeta, clarify: jobqClarify, rubric: jobqRubric, followups: jobqFollowups },
   "card-game": { meta: cardsMeta, clarify: cardsClarify, rubric: cardsRubric, followups: cardsFollowups },
+  "order-book": { meta: orderBookMeta, clarify: orderBookClarify, rubric: orderBookRubric, followups: orderBookFollowups },
   chess: { meta: chessMeta, clarify: chessClarify, rubric: chessRubric, followups: chessFollowups },
   "task-scheduler": { meta: schedMeta, clarify: schedClarify, rubric: schedRubric, followups: schedFollowups },
   spreadsheet: { meta: sheetMeta, clarify: sheetClarify, rubric: sheetRubric, followups: sheetFollowups },
