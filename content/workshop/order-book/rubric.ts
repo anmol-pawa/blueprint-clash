@@ -1,0 +1,14 @@
+import type { Responsibility } from "@/lib/workshop/types";
+
+export const rubric: Responsibility[] = [
+  { id: "res-side", text: "Keeps the waiting orders of ONE side grouped by price with each price a queue in arrival order, with the best price always first, and knows nothing about how orders trade", phase: "base", owners: ["HalfBook", "BookSide", "OrderSide", "PriceLevels", "Side", "SideBook", "Levels", "PriceLadder"] },
+  { id: "res-matching", text: "Owns the one matching rule (best price first, oldest first, trade at the waiting order's price, stop at the limit) in a single place that the book calls", phase: "base", owners: ["Matcher", "MatchingEngine", "Matching", "Engine", "OrderMatcher", "Crosser"] },
+  { id: "res-order", text: "Is the value that one order is (id, side, price and what is still unfilled) and changes only its unfilled quantity", phase: "base", owners: ["Order", "LimitOrder", "BookOrder", "RestingOrder"] },
+  { id: "res-ids", text: "Remembers every id ever accepted so an id is never reused, separately from the orders that are still waiting", phase: "base", owners: ["IdLedger", "IdRegistry", "UsedIds", "SeenIds", "IdSet", "Ledger"] },
+  { id: "res-index", text: "Finds a waiting order by id in constant time so a cancel, an amend and a remaining() query go straight to it", phase: "base", owners: ["RestingIndex", "OrderIndex", "OrderLookup", "Index", "Registry", "OrderMap"] },
+  { id: "res-validate", text: "Holds the legal ranges of an id, a price and a quantity in one place, so no other class repeats them", phase: "base", owners: ["OrderRules", "OrderValidator", "Validator", "Rules", "Limits", "OrderLimits"] },
+  { id: "res-facade", text: "Is the thin facade behind the interface: checks the call, records the id, hands the order to the matcher and rests the remainder, but contains no matching rule itself", phase: "base", owners: ["BookImpl", "OrderBook", "BookFacade", "Exchange", "MatchingBook", "LimitOrderBook"] },
+  { id: "res-tif", text: "Expresses what an order may do when it meets the book (may it start trading, does the remainder rest) as small replaceable policies, so a new time in force edits no existing branch", phase: "storm1", owners: ["Disposition", "TimeInForce", "TifPolicy", "ExecutionPolicy", "FillOrKill", "ImmediateOrCancel", "Dispositions"] },
+  { id: "res-preview", text: "Answers 'how much could this order trade right now' without changing anything, so fill-or-kill decides before the first trade", phase: "storm1", owners: ["Matcher", "availableFor", "available", "Liquidity", "Preview", "Matching"] },
+  { id: "res-entry", text: "Sends a new order and an amended order down the same entry path, so an amend that crosses trades exactly like a fresh submission", phase: "storm2", owners: ["BookImpl", "enter", "OrderBook", "Entry", "Admission", "OrderFlow"] },
+];
