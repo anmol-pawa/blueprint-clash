@@ -1,0 +1,1013 @@
+1:"$Sreact.fragment"
+2:"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js"
+3:I[39756,["$2"],"default"]
+4:I[37457,["$2"],"default"]
+5:"/blueprint-clash/_next/static/chunks/2n5qeheznvl4u.js"
+6:I[22016,["$2","$5"],""]
+7:I[64576,["$2"],"PwaRegister"]
+10:"/blueprint-clash/_next/static/chunks/2uk3wcjwqg0tl.js"
+11:"/blueprint-clash/_next/static/chunks/1zdu7yjl8efu4.js"
+12:I[65612,["$2","$10","$11"],"WorkshopClient"]
+22:"ViewportBoundary"
+23:I[97367,["$2"],"$22"]
+24:"MetadataBoundary"
+25:I[97367,["$2"],"$24"]
+26:"$Sreact.suspense"
+27:I[27201,["$2"],"IconMark"]
+:HL["/blueprint-clash/_next/static/chunks/1klm1scec-3x5.css","style"]
+9:X
+c:X
+c:C
+13:T21f0,# Editorial: Splitwise (expense sharing)
+
+## Requirements
+Functional: `addMember(name)` builds the group. `addExpense(payer, cents, participants)` says who paid and who shared the bill equally; each participant other than the payer now owes the payer their portion. `balance(member)` and `owed(from, to)` report the position of one person and the net direct debt between two. `settleUp(from, to, cents)` records real money moving. Amounts are whole cents between 1 and `kMaxCents`. Hidden until asked: how the odd cents are handed out (the first `cents % n` participants in the order given pay one more, so portions always add up), that the payer need not take part, the order of the checks (amount, participants, membership, duplicates) and that a refused expense changes nothing, that `owed` cancels the opposite direction, and that paying more than is owed turns the debt around. Non-goals: threads, persistence, editing history, several currencies, a user interface.
+
+**Change Storm 1, unequal splits:** `makeSplitLedger`: `addExpenseWith(payer, cents, spec)` takes a kind: Equal as before, Exact (each share's cents, which must add up to the bill) or Percent (basis points that add up to 10000). The same four checks, then `BadSplit`. A percent portion is `cents * value / 10000` rounded down and the leftover cents go to the largest remainders, ties to the member listed first. Revealable by asking whether people will want to split in other ways than equally.
+
+**Change Storm 2, simplifying debts:** `makeSimplifyingLedger`: `simplify()` returns payments that bring every balance to zero. It works from net balances, never changes the ledger, and is greedy: the largest debtor (ties by name) pays the largest creditor (ties by name) the smaller amount, repeatedly. Revealable by asking whether the app will need a short list of payments.
+
+## Reference design
+- `Members` owns who is in the group: unique, non-empty names and the membership test.
+- `SplitRule` is the Strategy that turns one bill into portions: `apportion(cents, shares, portions)` returns false when the numbers make no sense for that rule and otherwise guarantees the portions add up to the bill. `EqualSplit` is the base rule. `SplitRules` is the small registry that finds a rule by kind.
+- `DebtBook` owns the money. It stores directed debts and never edits them: an expense adds `participant owes payer`, and a payment `from -> to` is recorded as `to owes from` (so a payment is the opposite of an expense and over-payment needs no special case). `owed` cancels the opposite direction and `balance` sums what is owed to a member minus what the member owes.
+- `LedgerImpl` is the facade: it checks a request in the documented order, asks the rule for portions, tells the book who owes whom and answers queries. It has no rule of its own about rounding, netting or planning, and it validates everything before writing anything, which is how a refused expense changes nothing.
+
+**Storm 1 in the reference:** two new classes, `ExactSplit` and `PercentSplit`, registered in `SplitRules`. Neither the equal rule nor `DebtBook` is touched, and the facade only gained `addExpenseWith` (the old `addExpense` now calls it with an equal spec). The honest cost is that the registry is a place that lists every kind, so adding a kind is "one class and one line", not "one class".
+
+**Storm 2 in the reference:** one new class, `DebtSimplifier`, a pure function from balances to a list of `Transfer`. The facade collects the balances and calls it; nothing is mutated, which is why a plan is safe to compute on every screen refresh. The plan needs the sorted member list, which `Members` already offered.
+
+## Alternatives
+- **A single `Expense` record with a `std::vector<double>` of portions** is the first draft most people write. It fails on money (floating point), puts the rounding in whichever line divides, and loses the invariant that the portions add up. Integers plus an explicit remainder rule fix all three.
+- **A graph of balances kept up to date** (`balance[a][b]` mutated on every expense and payment) is a respectable design and what many apps do. It is faster to read and loses the event history; a payment that exceeds the debt needs a sign flip in the middle of the update. Storing directed debts and deriving the net keeps the writes trivial at the cost of an O(entries) read, which a running balance per member can remove when needed.
+- **A `switch` on the split kind inside `addExpense`** is the shortest thing that works for the first two kinds. It is the shape the Change Storm punishes: every new kind (shares, by item, with tax) edits the one function that also does validation and bookkeeping. A strategy interface with a registry confines each rule to its own class, at the price of one more abstraction to explain.
+- **Minimum-transaction settlement** instead of greedy is the textbook answer to the simplification question. It is NP-hard in general (it contains subset-sum); for a group of ten, a search over subsets is cheap, for thousands it is not, and the saving over greedy is usually one payment. The reference takes greedy for its determinism and says so.
+- **Floating-point money with a rounding helper at the end** hides the cent-handling in one place and still accumulates error in the sums. Never an acceptable answer in a ledger.
+- **Editing an expense in place** is simpler to code and impossible to audit. The append-only approach (reverse the old entry, add the new one) is the answer to follow-ups about history.
+
+## Trade-offs
+Integers make every statement testable with equality, at the cost of choosing a currency scale up front and being explicit about rounding. Handing the extra cents to the first listed names is deterministic and easy to explain, and slightly unfair to whoever is always listed first; rotating the favour needs state, and the payer absorbing it hides the problem rather than solving it. Refusing instead of repairing (a duplicate name, a percentage total of 99.99) pushes errors back to the caller where the user can see them, rather than guessing what they meant. Netting pairwise debts is what users expect to see ("I owe Sam 12.50"), while simplifying uses only net positions and so may ask someone to pay a person they never owed; that is a product choice and the app should show the pairwise and simplified views side by side, not silently replace one with the other. Greedy simplification is not minimal but is predictable, which matters when two clients must show the same plan.
+
+## What breaks at 10x
+At 10x the expenses per group, reading a balance by scanning every debt becomes the cost; keep a running net per member, updated with each event and verifiable against the log. At 10x the members, `simplify()` is O(n^2) with the simple scan for the largest party; two heaps make it O(n log n). At 10x the groups, one process per group stops being enough: shard by group id, keep every invariant inside one shard, and persist the event log. At 10x the clients, expenses arrive from several phones and retries: give each expense a client-generated id so a repeated request is idempotent, and decide how concurrent edits merge. At 10x the money, you meet currencies, payment providers and tax rules: each is a new kind of event with its own reconciliation, which is another reason to keep the log of events as the source of truth.
+
+## Level signals
+- **SDE2:** a working ledger with members, an expense that splits equally, and a way to read what someone owes; uses integers or is helped to; handles the odd cent after a prompt; pairwise `owed` may double-count opposite debts until asked; the unequal splits come as a switch or an extra parameter.
+- **Senior:** asks about money representation, rounding, the payer's own share and what a refused expense does; keeps the portions exactly equal to the bill; separates the split rule, the money book and the facade; records a payment as the opposite of an expense; nets pairwise debts in one place; adds exact and percent splits as new classes behind a strategy and explains largest remainder; builds simplification as a pure function from balances and states what greedy does and does not promise.
+- **Staff:** puts the contract first (every balance is derived from an append-only event log, and the invariant is that balances sum to zero); explains why minimum settlement is NP-hard and why that rarely matters; plans the move to a sharded service with idempotent writes, optimistic concurrency and per-currency books; separates the pairwise view from the simplified view as a product decision; considers reconciling with a payment provider and what a failed or duplicated payment does to the book.
+14:Tbdf,#pragma once
+// Public API for the Splitwise problem. The hidden tests only use what is declared here.
+// You implement split::makeLedger() (in any of your .cpp files); everything behind it is your design.
+// Nothing here throws: this code is compiled without exceptions.
+#include <memory>
+#include <string>
+#include <vector>
+
+namespace split {
+
+// Money is a whole number of cents (no floating point). Every amount is in 1 .. kMaxCents.
+constexpr long long kMaxCents = 1000000000000LL;
+
+enum class Status {
+  Ok,
+  InvalidAmount,         // the amount is below 1 or above kMaxCents
+  NoParticipants,        // an expense with nobody to share it
+  UnknownMember,         // the payer, a participant, or a settling party is not a member
+  DuplicateParticipant,  // the same member is listed twice in one expense
+  SameMember,            // settleUp(a, a)
+  BadSplit,              // the listed split values do not describe a valid split (not produced by an equal split)
+};
+
+class Ledger {
+ public:
+  virtual ~Ledger() = default;
+
+  // Adds a person to the group. Returns false (and changes nothing) for an empty name or a name already present.
+  virtual bool addMember(const std::string& name) = 0;
+
+  // `payer` paid `cents` for everyone in `participants`, who share it equally. The payer need not be a participant.
+  // When the cents do not divide evenly, the first (cents % n) participants in the order given pay one cent more.
+  // Checks run in this order and the first failure decides, changing nothing:
+  //   1. cents outside 1 .. kMaxCents      -> InvalidAmount
+  //   2. no participants                   -> NoParticipants
+  //   3. the payer or a participant is not a member -> UnknownMember
+  //   4. a participant listed twice        -> DuplicateParticipant
+  // Participants other than the payer now owe the payer their share. The payer owes nothing to themselves.
+  virtual Status addExpense(const std::string& payer, long long cents, const std::vector<std::string>& participants) = 0;
+
+  // `from` pays `to` `cents` in real money, which reduces what `from` owes `to`. Paying more than is owed is allowed:
+  // the debt turns around and `to` now owes `from` the difference. Checks, in order: cents outside 1 .. kMaxCents ->
+  // InvalidAmount; either name is not a member -> UnknownMember; from == to -> SameMember.
+  virtual Status settleUp(const std::string& from, const std::string& to, long long cents) = 0;
+
+  // What the group owes this member (positive) or what this member owes the group (negative), in cents. The balances of
+  // all members always add up to zero. An unknown name has balance 0.
+  virtual long long balance(const std::string& member) const = 0;
+
+  // What `from` owes `to` directly, after cancelling anything `to` owes `from` the other way round. Never negative; at
+  // most one of owed(a, b) and owed(b, a) is non-zero. Unknown names owe nothing.
+  virtual long long owed(const std::string& from, const std::string& to) const = 0;
+};
+
+std::unique_ptr<Ledger> makeLedger();
+
+}  // namespace split
+15:T700,#pragma once
+// Change Storm 1 adds unequal splits. Everything from api.h still holds for the new ledger.
+#include "api.h"
+
+namespace split {
+
+// "Whole" for a percentage: 10000 basis points = 100.00%.
+constexpr long long kWhole = 10000;
+
+enum class SplitKind {
+  Equal,    // as addExpense: the values in the shares are ignored
+  Exact,    // each share's value is its cents
+  Percent,  // each share's value is its portion in basis points (2500 = 25.00%)
+};
+
+struct Share {
+  std::string member;
+  long long value = 0;
+};
+
+struct SplitSpec {
+  SplitKind kind = SplitKind::Equal;
+  std::vector<Share> shares;  // who takes part, in order, and (for Exact and Percent) how much
+};
+
+// A ledger that can split an expense in more ways than equally.
+//   - addExpenseWith(payer, cents, spec) runs the same four checks as addExpense, in the same order, on the shares'
+//     members, and then one more: BadSplit when
+//       Exact:   any value is negative, or the values do not add up to `cents` exactly;
+//       Percent: any value is negative or above kWhole, or the values do not add up to kWhole exactly.
+//     Equal never gives BadSplit. A refused expense changes nothing.
+//   - Percent: a member's portion is cents * value / kWhole rounded down; the cents left over (always fewer than the
+//     number of shares) go one each to the members with the largest fractional remainder, a tie going to the one listed
+//     first. The portions always add up to `cents`.
+//   - Everything else (who owes whom, balances, settleUp) works as before. addExpense keeps working.
+class SplitLedger : public Ledger {
+ public:
+  virtual Status addExpenseWith(const std::string& payer, long long cents, const SplitSpec& spec) = 0;
+};
+
+std::unique_ptr<SplitLedger> makeSplitLedger();
+
+}  // namespace split
+16:T49d,#pragma once
+// Change Storm 2 adds debt simplification. Everything from api.h and api_storm1.h still holds.
+#include "api_storm1.h"
+
+namespace split {
+
+// "from" should pay "to" this many cents.
+struct Transfer {
+  std::string from;
+  std::string to;
+  long long cents = 0;
+};
+
+// A ledger that can say how the group settles up with few payments.
+//   - simplify() returns payments which, if every one were made with settleUp, would bring every balance to zero. It looks
+//     only at the balances: who originally owed whom does not matter.
+//   - The plan is built greedily: while somebody owes, the member with the largest debt (a tie goes to the name that
+//     sorts first) pays the member with the largest credit (same tie rule) the smaller of the two amounts. Transfers are
+//     returned in that order. Every transfer is for at least 1 cent; members with balance 0 never appear.
+//   - It does not change the ledger. A group whose balances are all zero gets an empty plan.
+class SimplifyingLedger : public SplitLedger {
+ public:
+  virtual std::vector<Transfer> simplify() const = 0;
+};
+
+std::unique_ptr<SimplifyingLedger> makeSimplifyingLedger();
+
+}  // namespace split
+17:T21ac,#include <string>
+#include <vector>
+
+#include "api.h"
+#include "bp_test.h"
+
+namespace {
+using split::Status;
+using Names = std::vector<std::string>;
+
+// A group of four friends: ann, bob, cy and dee.
+struct Group {
+  Group() : ledger(split::makeLedger()) {
+    for (const char* name : {"ann", "bob", "cy", "dee"}) ledger->addMember(name);
+  }
+
+  long long sumOfBalances() const {
+    long long total = 0;
+    for (const char* name : {"ann", "bob", "cy", "dee"}) total += ledger->balance(name);
+    return total;
+  }
+
+  std::unique_ptr<split::Ledger> ledger;
+};
+}  // namespace
+
+TEST(Members, ANameIsNeededAndCannotJoinTwice) {
+  auto ledger = split::makeLedger();
+  EXPECT_FALSE(ledger->addMember(""));
+  EXPECT_TRUE(ledger->addMember("ann"));
+  EXPECT_FALSE(ledger->addMember("ann"));
+  EXPECT_TRUE(ledger->addMember("bob"));
+}
+
+TEST(Validation, TheAmountMustBeBetweenOneCentAndTheLimit) {
+  Group g;
+  EXPECT_TRUE(g.ledger->addExpense("ann", 0, Names{"ann", "bob"}) == Status::InvalidAmount);
+  EXPECT_TRUE(g.ledger->addExpense("ann", -500, Names{"ann", "bob"}) == Status::InvalidAmount);
+  EXPECT_TRUE(g.ledger->addExpense("ann", split::kMaxCents + 1, Names{"ann", "bob"}) == Status::InvalidAmount);
+  EXPECT_TRUE(g.ledger->addExpense("ann", 1, Names{"ann", "bob"}) == Status::Ok);
+  EXPECT_TRUE(g.ledger->addExpense("ann", split::kMaxCents, Names{"ann", "bob"}) == Status::Ok);
+}
+
+TEST(Validation, AnExpenseNeedsSomeoneToShareIt) {
+  Group g;
+  EXPECT_TRUE(g.ledger->addExpense("ann", 1000, Names{}) == Status::NoParticipants);
+}
+
+TEST(Validation, EveryNameMustBeAMember) {
+  Group g;
+  EXPECT_TRUE(g.ledger->addExpense("zed", 1000, Names{"ann", "bob"}) == Status::UnknownMember);
+  EXPECT_TRUE(g.ledger->addExpense("ann", 1000, Names{"ann", "zed"}) == Status::UnknownMember);
+  EXPECT_TRUE(g.ledger->addExpense("ann", 1000, Names{"zed", "ann"}) == Status::UnknownMember);
+}
+
+TEST(Validation, ANameCannotBeListedTwice) {
+  Group g;
+  EXPECT_TRUE(g.ledger->addExpense("ann", 1000, Names{"bob", "cy", "bob"}) == Status::DuplicateParticipant);
+  EXPECT_EQ(g.ledger->owed("bob", "ann"), 0);
+}
+
+TEST(Validation, TheChecksRunInTheDocumentedOrder) {
+  Group g;
+  // amount before participants before names before duplicates
+  EXPECT_TRUE(g.ledger->addExpense("zed", 0, Names{}) == Status::InvalidAmount);
+  EXPECT_TRUE(g.ledger->addExpense("zed", 1000, Names{}) == Status::NoParticipants);
+  EXPECT_TRUE(g.ledger->addExpense("zed", 1000, Names{"bob", "bob"}) == Status::UnknownMember);
+  EXPECT_TRUE(g.ledger->addExpense("ann", 1000, Names{"bob", "bob", "zed"}) == Status::UnknownMember);
+}
+
+TEST(Validation, ARefusedExpenseChangesNothing) {
+  Group g;
+  g.ledger->addExpense("ann", 900, Names{"ann", "bob", "zed"});
+  g.ledger->addExpense("ann", 900, Names{"bob", "cy", "bob"});
+  g.ledger->addExpense("zed", 900, Names{"bob", "cy"});
+  g.ledger->addExpense("ann", 0, Names{"bob", "cy"});
+  for (const char* name : {"ann", "bob", "cy", "dee"}) EXPECT_EQ(g.ledger->balance(name), 0);
+}
+
+TEST(Equal, ThreeFriendsShareAnEvenBill) {
+  Group g;
+  EXPECT_TRUE(g.ledger->addExpense("ann", 3000, Names{"ann", "bob", "cy"}) == Status::Ok);
+  EXPECT_EQ(g.ledger->owed("bob", "ann"), 1000);
+  EXPECT_EQ(g.ledger->owed("cy", "ann"), 1000);
+  EXPECT_EQ(g.ledger->owed("ann", "bob"), 0);
+  EXPECT_EQ(g.ledger->balance("ann"), 2000);
+  EXPECT_EQ(g.ledger->balance("bob"), -1000);
+  EXPECT_EQ(g.ledger->balance("cy"), -1000);
+  EXPECT_EQ(g.ledger->balance("dee"), 0);
+}
+
+TEST(Equal, ThePayerDoesNotHaveToShareTheBill) {
+  Group g;
+  EXPECT_TRUE(g.ledger->addExpense("dee", 1000, Names{"ann", "bob"}) == Status::Ok);
+  EXPECT_EQ(g.ledger->owed("ann", "dee"), 500);
+  EXPECT_EQ(g.ledger->owed("bob", "dee"), 500);
+  EXPECT_EQ(g.ledger->balance("dee"), 1000);
+}
+
+TEST(Equal, APayerWhoSharesTheBillOwesOnlyTheirOwnPortion) {
+  Group g;
+  g.ledger->addExpense("ann", 9000, Names{"ann", "bob", "cy"});
+  EXPECT_EQ(g.ledger->owed("bob", "ann"), 3000);
+  EXPECT_EQ(g.ledger->owed("cy", "ann"), 3000);
+  EXPECT_EQ(g.ledger->owed("ann", "ann"), 0);
+  EXPECT_EQ(g.ledger->balance("ann"), 6000);
+}
+
+TEST(Equal, TheLeftoverCentsGoOneEachToTheFirstNames) {
+  Group g;
+  g.ledger->addExpense("dee", 100, Names{"ann", "bob", "cy"});
+  EXPECT_EQ(g.ledger->owed("ann", "dee"), 34);
+  EXPECT_EQ(g.ledger->owed("bob", "dee"), 33);
+  EXPECT_EQ(g.ledger->owed("cy", "dee"), 33);
+  Group h;
+  h.ledger->addExpense("dee", 101, Names{"ann", "bob", "cy"});
+  EXPECT_EQ(h.ledger->owed("ann", "dee"), 34);
+  EXPECT_EQ(h.ledger->owed("bob", "dee"), 34);
+  EXPECT_EQ(h.ledger->owed("cy", "dee"), 33);
+}
+
+TEST(Equal, TheOrderOfTheListDecidesWhoPaysTheExtraCent) {
+  Group g;
+  g.ledger->addExpense("dee", 100, Names{"cy", "bob", "ann"});
+  EXPECT_EQ(g.ledger->owed("cy", "dee"), 34);
+  EXPECT_EQ(g.ledger->owed("bob", "dee"), 33);
+  EXPECT_EQ(g.ledger->owed("ann", "dee"), 33);
+}
+
+TEST(Equal, NoCentIsEverLostOrInvented) {
+  for (long long cents = 1; cents <= 60; ++cents) {
+    Group g;
+    g.ledger->addExpense("dee", cents, Names{"ann", "bob", "cy"});
+    long long owedToDee = g.ledger->owed("ann", "dee") + g.ledger->owed("bob", "dee") + g.ledger->owed("cy", "dee");
+    EXPECT_EQ(owedToDee, cents);
+    EXPECT_EQ(g.ledger->balance("dee"), cents);
+    EXPECT_EQ(g.sumOfBalances(), 0);
+  }
+}
+
+TEST(Equal, TheLargestBillStillAddsUp) {
+  Group g;
+  EXPECT_TRUE(g.ledger->addExpense("dee", split::kMaxCents, Names{"ann", "bob", "cy"}) == Status::Ok);
+  EXPECT_EQ(g.ledger->owed("ann", "dee"), 333333333334LL);
+  EXPECT_EQ(g.ledger->owed("bob", "dee"), 333333333333LL);
+  EXPECT_EQ(g.ledger->owed("cy", "dee"), 333333333333LL);
+}
+
+TEST(Owed, DebtsInOppositeDirectionsCancel) {
+  Group g;
+  g.ledger->addExpense("ann", 4000, Names{"ann", "bob"});  // bob owes ann 2000
+  g.ledger->addExpense("bob", 3000, Names{"ann", "bob"});  // ann owes bob 1500
+  EXPECT_EQ(g.ledger->owed("bob", "ann"), 500);
+  EXPECT_EQ(g.ledger->owed("ann", "bob"), 0);
+  EXPECT_EQ(g.ledger->balance("ann"), 500);
+  EXPECT_EQ(g.ledger->balance("bob"), -500);
+}
+
+TEST(Owed, DebtsAddUpAcrossExpenses) {
+  Group g;
+  g.ledger->addExpense("ann", 1000, Names{"bob", "cy"});
+  g.ledger->addExpense("ann", 600, Names{"bob"});
+  g.ledger->addExpense("cy", 200, Names{"bob", "ann"});
+  EXPECT_EQ(g.ledger->owed("bob", "ann"), 1100);
+  EXPECT_EQ(g.ledger->owed("cy", "ann"), 400);
+  EXPECT_EQ(g.ledger->owed("bob", "cy"), 100);
+  EXPECT_EQ(g.sumOfBalances(), 0);
+}
+
+TEST(Owed, UnknownNamesOweNothingAndHaveNoBalance) {
+  Group g;
+  g.ledger->addExpense("ann", 1000, Names{"bob"});
+  EXPECT_EQ(g.ledger->owed("zed", "ann"), 0);
+  EXPECT_EQ(g.ledger->owed("bob", "zed"), 0);
+  EXPECT_EQ(g.ledger->balance("zed"), 0);
+}
+
+TEST(Settle, APaymentReducesTheDebt) {
+  Group g;
+  g.ledger->addExpense("ann", 6000, Names{"ann", "bob", "cy"});  // bob and cy owe 2000 each
+  EXPECT_TRUE(g.ledger->settleUp("bob", "ann", 500) == Status::Ok);
+  EXPECT_EQ(g.ledger->owed("bob", "ann"), 1500);
+  EXPECT_EQ(g.ledger->balance("bob"), -1500);
+  EXPECT_EQ(g.ledger->balance("ann"), 3500);
+  EXPECT_TRUE(g.ledger->settleUp("bob", "ann", 1500) == Status::Ok);
+  EXPECT_EQ(g.ledger->owed("bob", "ann"), 0);
+  EXPECT_EQ(g.ledger->balance("bob"), 0);
+}
+
+TEST(Settle, PayingMoreThanOwedTurnsTheDebtAround) {
+  Group g;
+  g.ledger->addExpense("ann", 4000, Names{"ann", "bob"});  // bob owes ann 2000
+  EXPECT_TRUE(g.ledger->settleUp("bob", "ann", 5000) == Status::Ok);
+  EXPECT_EQ(g.ledger->owed("bob", "ann"), 0);
+  EXPECT_EQ(g.ledger->owed("ann", "bob"), 3000);
+  EXPECT_EQ(g.ledger->balance("bob"), 3000);
+  EXPECT_EQ(g.ledger->balance("ann"), -3000);
+  EXPECT_EQ(g.sumOfBalances(), 0);
+}
+
+TEST(Settle, APaymentBetweenStrangersCreatesADebt) {
+  Group g;
+  EXPECT_TRUE(g.ledger->settleUp("cy", "dee", 700) == Status::Ok);
+  EXPECT_EQ(g.ledger->owed("dee", "cy"), 700);
+  EXPECT_EQ(g.ledger->owed("cy", "dee"), 0);
+}
+
+TEST(Settle, APaymentIsChecked) {
+  Group g;
+  EXPECT_TRUE(g.ledger->settleUp("ann", "bob", 0) == Status::InvalidAmount);
+  EXPECT_TRUE(g.ledger->settleUp("ann", "bob", -1) == Status::InvalidAmount);
+  EXPECT_TRUE(g.ledger->settleUp("ann", "bob", split::kMaxCents + 1) == Status::InvalidAmount);
+  EXPECT_TRUE(g.ledger->settleUp("ann", "zed", 100) == Status::UnknownMember);
+  EXPECT_TRUE(g.ledger->settleUp("zed", "ann", 100) == Status::UnknownMember);
+  EXPECT_TRUE(g.ledger->settleUp("ann", "ann", 100) == Status::SameMember);
+  EXPECT_TRUE(g.ledger->settleUp("zed", "zed", 0) == Status::InvalidAmount);
+  EXPECT_TRUE(g.ledger->settleUp("zed", "zed", 100) == Status::UnknownMember);
+  EXPECT_EQ(g.sumOfBalances(), 0);
+  EXPECT_EQ(g.ledger->owed("bob", "ann"), 0);
+  EXPECT_EQ(g.ledger->owed("ann", "bob"), 0);
+}
+18:T19c0,#include <string>
+#include <vector>
+
+#include "api_storm1.h"
+#include "bp_test.h"
+
+namespace {
+using split::Share;
+using split::SplitKind;
+using split::SplitSpec;
+using split::Status;
+
+struct Group {
+  Group() : ledger(split::makeSplitLedger()) {
+    for (const char* name : {"ann", "bob", "cy", "dee"}) ledger->addMember(name);
+  }
+
+  long long sumOfBalances() const {
+    long long total = 0;
+    for (const char* name : {"ann", "bob", "cy", "dee"}) total += ledger->balance(name);
+    return total;
+  }
+
+  std::unique_ptr<split::SplitLedger> ledger;
+};
+
+SplitSpec spec(SplitKind kind, std::vector<Share> shares) {
+  SplitSpec s;
+  s.kind = kind;
+  s.shares = std::move(shares);
+  return s;
+}
+}  // namespace
+
+TEST(Exact, EachMemberOwesTheirOwnAmount) {
+  Group g;
+  EXPECT_TRUE(g.ledger->addExpenseWith("ann", 5000, spec(SplitKind::Exact, {{"ann", 1000}, {"bob", 1500}, {"cy", 2500}})) == Status::Ok);
+  EXPECT_EQ(g.ledger->owed("bob", "ann"), 1500);
+  EXPECT_EQ(g.ledger->owed("cy", "ann"), 2500);
+  EXPECT_EQ(g.ledger->balance("ann"), 4000);
+}
+
+TEST(Exact, ThePayerMayNotShareAtAll) {
+  Group g;
+  EXPECT_TRUE(g.ledger->addExpenseWith("dee", 900, spec(SplitKind::Exact, {{"ann", 400}, {"bob", 500}})) == Status::Ok);
+  EXPECT_EQ(g.ledger->owed("ann", "dee"), 400);
+  EXPECT_EQ(g.ledger->owed("bob", "dee"), 500);
+  EXPECT_EQ(g.ledger->balance("dee"), 900);
+}
+
+TEST(Exact, TheAmountsMustAddUpToTheExpense) {
+  Group g;
+  EXPECT_TRUE(g.ledger->addExpenseWith("ann", 5000, spec(SplitKind::Exact, {{"bob", 1000}, {"cy", 3999}})) == Status::BadSplit);
+  EXPECT_TRUE(g.ledger->addExpenseWith("ann", 5000, spec(SplitKind::Exact, {{"bob", 3000}, {"cy", 2001}})) == Status::BadSplit);
+  EXPECT_TRUE(g.ledger->addExpenseWith("ann", 5000, spec(SplitKind::Exact, {{"bob", 6000}, {"cy", -1000}})) == Status::BadSplit);
+  EXPECT_EQ(g.ledger->balance("ann"), 0);
+  EXPECT_EQ(g.ledger->balance("bob"), 0);
+}
+
+TEST(Exact, AZeroShareIsAllowed) {
+  Group g;
+  EXPECT_TRUE(g.ledger->addExpenseWith("ann", 800, spec(SplitKind::Exact, {{"bob", 800}, {"cy", 0}})) == Status::Ok);
+  EXPECT_EQ(g.ledger->owed("bob", "ann"), 800);
+  EXPECT_EQ(g.ledger->owed("cy", "ann"), 0);
+}
+
+TEST(Percent, SharesFollowTheirPercentages) {
+  Group g;
+  // 50% 30% 20% of 10000
+  EXPECT_TRUE(g.ledger->addExpenseWith("dee", 10000, spec(SplitKind::Percent, {{"ann", 5000}, {"bob", 3000}, {"cy", 2000}})) == Status::Ok);
+  EXPECT_EQ(g.ledger->owed("ann", "dee"), 5000);
+  EXPECT_EQ(g.ledger->owed("bob", "dee"), 3000);
+  EXPECT_EQ(g.ledger->owed("cy", "dee"), 2000);
+}
+
+TEST(Percent, TheLeftoverCentsGoToTheLargestRemainders) {
+  Group g;
+  // 1001 cents at 33.33% 33.33% 33.34%. 1001 * 3333 = 3336333 -> 333 with remainder 6333 (ann and bob);
+  // 1001 * 3334 = 3337334 -> 333 with remainder 7334 (cy). The floors add up to 999, so two cents are left over.
+  EXPECT_TRUE(g.ledger->addExpenseWith("dee", 1001, spec(SplitKind::Percent, {{"ann", 3333}, {"bob", 3333}, {"cy", 3334}})) == Status::Ok);
+  // cy has the largest remainder, then ann (the first of the two with 6333)
+  EXPECT_EQ(g.ledger->owed("cy", "dee"), 334);
+  EXPECT_EQ(g.ledger->owed("ann", "dee"), 334);
+  EXPECT_EQ(g.ledger->owed("bob", "dee"), 333);
+  EXPECT_EQ(g.ledger->balance("dee"), 1001);
+}
+
+TEST(Percent, ATieInTheRemaindersGoesToTheFirstListed) {
+  Group g;
+  // 101 cents at 50% / 50% is 50.5 each: a tie in the remainders, so the first listed gets the extra cent
+  EXPECT_TRUE(g.ledger->addExpenseWith("dee", 101, spec(SplitKind::Percent, {{"bob", 5000}, {"ann", 5000}})) == Status::Ok);
+  EXPECT_EQ(g.ledger->owed("bob", "dee"), 51);
+  EXPECT_EQ(g.ledger->owed("ann", "dee"), 50);
+}
+
+TEST(Percent, EveryCentIsAccountedForWhateverThePercentages) {
+  const long long amounts[] = {1, 7, 99, 100, 101, 12345, 999999, 1000000000000LL};
+  for (long long cents : amounts) {
+    Group g;
+    EXPECT_TRUE(g.ledger->addExpenseWith("dee", cents, spec(SplitKind::Percent, {{"ann", 3333}, {"bob", 3333}, {"cy", 3334}})) == Status::Ok);
+    long long owedToDee = g.ledger->owed("ann", "dee") + g.ledger->owed("bob", "dee") + g.ledger->owed("cy", "dee");
+    EXPECT_EQ(owedToDee, cents);
+    EXPECT_EQ(g.sumOfBalances(), 0);
+  }
+}
+
+TEST(Percent, ThePercentagesMustAddUpToTheWhole) {
+  Group g;
+  EXPECT_TRUE(g.ledger->addExpenseWith("ann", 1000, spec(SplitKind::Percent, {{"bob", 5000}, {"cy", 4999}})) == Status::BadSplit);
+  EXPECT_TRUE(g.ledger->addExpenseWith("ann", 1000, spec(SplitKind::Percent, {{"bob", 5000}, {"cy", 5001}})) == Status::BadSplit);
+  EXPECT_TRUE(g.ledger->addExpenseWith("ann", 1000, spec(SplitKind::Percent, {{"bob", 12000}, {"cy", -2000}})) == Status::BadSplit);
+  EXPECT_EQ(g.ledger->balance("ann"), 0);
+}
+
+TEST(Percent, APayerWhoSharesOwesOnlyTheirPortion) {
+  Group g;
+  g.ledger->addExpenseWith("ann", 2000, spec(SplitKind::Percent, {{"ann", 2500}, {"bob", 7500}}));
+  EXPECT_EQ(g.ledger->owed("bob", "ann"), 1500);
+  EXPECT_EQ(g.ledger->balance("ann"), 1500);
+}
+
+TEST(Split, EqualThroughTheNewDoorBehavesLikeAddExpense) {
+  Group g;
+  g.ledger->addExpenseWith("dee", 100, spec(SplitKind::Equal, {{"ann", 777}, {"bob", -3}, {"cy", 0}}));
+  EXPECT_EQ(g.ledger->owed("ann", "dee"), 34);
+  EXPECT_EQ(g.ledger->owed("bob", "dee"), 33);
+  EXPECT_EQ(g.ledger->owed("cy", "dee"), 33);
+}
+
+TEST(Split, TheSameChecksRunInTheSameOrderForEveryKind) {
+  Group g;
+  const SplitKind kinds[] = {SplitKind::Equal, SplitKind::Exact, SplitKind::Percent};
+  for (SplitKind kind : kinds) {
+    EXPECT_TRUE(g.ledger->addExpenseWith("zed", 0, spec(kind, {})) == Status::InvalidAmount);
+    EXPECT_TRUE(g.ledger->addExpenseWith("zed", 100, spec(kind, {})) == Status::NoParticipants);
+    EXPECT_TRUE(g.ledger->addExpenseWith("zed", 100, spec(kind, {{"bob", 100}, {"bob", 0}})) == Status::UnknownMember);
+    EXPECT_TRUE(g.ledger->addExpenseWith("ann", 100, spec(kind, {{"bob", 100}, {"ghost", 0}})) == Status::UnknownMember);
+    EXPECT_TRUE(g.ledger->addExpenseWith("ann", 100, spec(kind, {{"bob", 100}, {"bob", 0}})) == Status::DuplicateParticipant);
+  }
+  EXPECT_EQ(g.sumOfBalances(), 0);
+  EXPECT_EQ(g.ledger->balance("bob"), 0);
+}
+
+TEST(Split, ABadSplitChangesNothingAndNoSplitMixesWithTheOldCalls) {
+  Group g;
+  g.ledger->addExpense("ann", 3000, std::vector<std::string>{"ann", "bob", "cy"});
+  g.ledger->addExpenseWith("ann", 100, spec(SplitKind::Exact, {{"bob", 1}, {"cy", 1}}));
+  EXPECT_EQ(g.ledger->balance("ann"), 2000);
+  g.ledger->addExpenseWith("bob", 2000, spec(SplitKind::Exact, {{"ann", 500}, {"bob", 1500}}));
+  EXPECT_EQ(g.ledger->owed("bob", "ann"), 500);
+  EXPECT_EQ(g.ledger->owed("ann", "bob"), 0);
+  EXPECT_EQ(g.sumOfBalances(), 0);
+}
+19:T1760,#include <algorithm>
+#include <map>
+#include <string>
+#include <vector>
+
+#include "api_storm2.h"
+#include "bp_test.h"
+
+namespace {
+using split::Status;
+using split::Transfer;
+using Names = std::vector<std::string>;
+
+struct Group {
+  Group() : ledger(split::makeSimplifyingLedger()) {
+    for (const char* name : {"ann", "bob", "cy", "dee", "eve"}) ledger->addMember(name);
+  }
+
+  // Makes every transfer with settleUp, then reports whether everyone is square.
+  bool settleAll(const std::vector<Transfer>& plan) {
+    for (const Transfer& t : plan) {
+      if (ledger->settleUp(t.from, t.to, t.cents) != Status::Ok) return false;
+    }
+    for (const char* name : {"ann", "bob", "cy", "dee", "eve"}) {
+      if (ledger->balance(name) != 0) return false;
+    }
+    return true;
+  }
+
+  std::unique_ptr<split::SimplifyingLedger> ledger;
+};
+
+bool is(const Transfer& t, const std::string& from, const std::string& to, long long cents) {
+  return t.from == from && t.to == to && t.cents == cents;
+}
+}  // namespace
+
+TEST(Simplify, ANewGroupHasNothingToSettle) {
+  Group g;
+  EXPECT_EQ(g.ledger->simplify().size(), 0u);
+}
+
+TEST(Simplify, OneDebtIsOnePayment) {
+  Group g;
+  g.ledger->addExpense("ann", 3000, Names{"ann", "bob"});
+  auto plan = g.ledger->simplify();
+  ASSERT_EQ(plan.size(), 1u);
+  EXPECT_TRUE(is(plan[0], "bob", "ann", 1500));
+}
+
+TEST(Simplify, AChainOfDebtsCollapsesToOnePayment) {
+  Group g;
+  g.ledger->addExpense("bob", 1000, Names{"ann"});  // ann owes bob 1000
+  g.ledger->addExpense("cy", 1000, Names{"bob"});   // bob owes cy 1000
+  auto plan = g.ledger->simplify();
+  ASSERT_EQ(plan.size(), 1u);
+  EXPECT_TRUE(is(plan[0], "ann", "cy", 1000));
+}
+
+TEST(Simplify, ACircleOfDebtsCancelsOut) {
+  Group g;
+  g.ledger->addExpense("bob", 700, Names{"ann"});
+  g.ledger->addExpense("cy", 700, Names{"bob"});
+  g.ledger->addExpense("ann", 700, Names{"cy"});
+  EXPECT_EQ(g.ledger->simplify().size(), 0u);
+}
+
+TEST(Simplify, TheLargestDebtorPaysTheLargestCreditorFirst) {
+  Group g;
+  g.ledger->addExpense("ann", 5000, Names{"bob"});  // bob -5000
+  g.ledger->addExpense("cy", 2000, Names{"dee"});   // dee -2000
+  g.ledger->addExpense("eve", 1000, Names{"bob"});  // bob -6000, eve +1000
+  // balances: ann +5000, bob -6000, cy +2000, dee -2000, eve +1000
+  // bob (6000) pays ann (5000); then dee (2000) beats bob (1000 left) and pays cy (2000); bob's last 1000 goes to eve
+  auto plan = g.ledger->simplify();
+  ASSERT_EQ(plan.size(), 3u);
+  EXPECT_TRUE(is(plan[0], "bob", "ann", 5000));
+  EXPECT_TRUE(is(plan[1], "dee", "cy", 2000));
+  EXPECT_TRUE(is(plan[2], "bob", "eve", 1000));
+}
+
+TEST(Simplify, ATieGoesToTheNameThatSortsFirst) {
+  Group g;
+  g.ledger->addExpense("dee", 600, Names{"cy", "bob"});  // cy -300 bob -300, dee +600
+  g.ledger->addExpense("eve", 600, Names{"ann"});        // ann -600, eve +600
+  // debtors: ann 600, bob 300, cy 300; creditors: dee 600, eve 600 (a tie both sides)
+  auto plan = g.ledger->simplify();
+  ASSERT_EQ(plan.size(), 3u);
+  EXPECT_TRUE(is(plan[0], "ann", "dee", 600));
+  EXPECT_TRUE(is(plan[1], "bob", "eve", 300));
+  EXPECT_TRUE(is(plan[2], "cy", "eve", 300));
+}
+
+TEST(Simplify, MakingEveryPaymentSquaresTheWholeGroup) {
+  Group g;
+  g.ledger->addExpense("ann", 12000, Names{"ann", "bob", "cy", "dee"});
+  g.ledger->addExpense("bob", 4550, Names{"bob", "cy", "eve"});
+  g.ledger->addExpense("cy", 999, Names{"ann", "dee", "eve"});
+  g.ledger->addExpense("dee", 31, Names{"ann", "bob", "cy", "dee", "eve"});
+  auto plan = g.ledger->simplify();
+  EXPECT_TRUE(g.settleAll(plan));
+}
+
+TEST(Simplify, NeverMoreThanOneFewerPaymentsThanPeopleInvolved) {
+  Group g;
+  g.ledger->addExpense("ann", 1000, Names{"bob", "cy", "dee", "eve"});
+  g.ledger->addExpense("bob", 700, Names{"ann", "cy"});
+  g.ledger->addExpense("eve", 2500, Names{"ann", "bob", "cy", "dee"});
+  std::map<std::string, long long> before;
+  for (const char* name : {"ann", "bob", "cy", "dee", "eve"}) before[name] = g.ledger->balance(name);
+  long long involved = 0;
+  for (const auto& entry : before) involved += entry.second != 0 ? 1 : 0;
+  auto plan = g.ledger->simplify();
+  EXPECT_LE(static_cast<long long>(plan.size()), involved - 1);
+  EXPECT_TRUE(g.settleAll(plan));
+}
+
+TEST(Simplify, EveryPaymentIsRealAndEveryoneIsOnOneSideOnly) {
+  Group g;
+  g.ledger->addExpense("ann", 1000, Names{"bob", "cy", "dee", "eve"});
+  g.ledger->addExpense("bob", 700, Names{"ann", "cy"});
+  g.ledger->addExpense("eve", 2500, Names{"ann", "bob", "cy", "dee"});
+  auto plan = g.ledger->simplify();
+  std::vector<std::string> payers;
+  std::vector<std::string> payees;
+  for (const Transfer& t : plan) {
+    EXPECT_GE(t.cents, 1);
+    EXPECT_TRUE(t.from != t.to);
+    payers.push_back(t.from);
+    payees.push_back(t.to);
+  }
+  for (const std::string& payer : payers) EXPECT_TRUE(std::find(payees.begin(), payees.end(), payer) == payees.end());
+}
+
+TEST(Simplify, AMemberWhoIsSquareNeverAppears) {
+  Group g;
+  g.ledger->addExpense("ann", 1000, Names{"bob"});
+  g.ledger->addExpense("bob", 1000, Names{"ann"});  // cancels exactly
+  g.ledger->addExpense("cy", 400, Names{"dee"});
+  auto plan = g.ledger->simplify();
+  ASSERT_EQ(plan.size(), 1u);
+  EXPECT_TRUE(is(plan[0], "dee", "cy", 400));
+}
+
+TEST(Simplify, LookingDoesNotChangeTheLedger) {
+  Group g;
+  g.ledger->addExpense("ann", 3000, Names{"ann", "bob", "cy"});
+  auto first = g.ledger->simplify();
+  EXPECT_EQ(g.ledger->balance("bob"), -1000);
+  EXPECT_EQ(g.ledger->owed("bob", "ann"), 1000);
+  auto second = g.ledger->simplify();
+  ASSERT_EQ(first.size(), second.size());
+  EXPECT_EQ(first.size(), 2u);
+}
+
+TEST(Simplify, ItWorksOnUnequalSplitsAndPaymentsToo) {
+  Group g;
+  g.ledger->addExpenseWith("ann", 10000, split::SplitSpec{split::SplitKind::Percent, {{"bob", 6000}, {"cy", 4000}}});
+  g.ledger->settleUp("cy", "ann", 1000);
+  auto plan = g.ledger->simplify();
+  ASSERT_EQ(plan.size(), 2u);
+  EXPECT_TRUE(is(plan[0], "bob", "ann", 6000));
+  EXPECT_TRUE(is(plan[1], "cy", "ann", 3000));
+  EXPECT_TRUE(g.settleAll(plan));
+}
+1a:T62d,#pragma once
+#include <algorithm>
+#include <map>
+#include <string>
+#include <utility>
+
+// Who owes whom, in cents. Debts are stored per direction and never edited in place: a payment is recorded as a debt the
+// other way round, so the book is a plain sum of events and the net figures are derived.
+class DebtBook {
+ public:
+  // `debtor` owes `creditor` another `cents`.
+  void owe(const std::string& debtor, const std::string& creditor, long long cents) {
+    if (cents > 0) debts_[{debtor, creditor}] += cents;
+  }
+
+  // `from` hands `to` `cents`, which is the same as `to` owing `from` that much more.
+  void pay(const std::string& from, const std::string& to, long long cents) { owe(to, from, cents); }
+
+  // What `from` owes `to` once the opposite direction has been cancelled. Never negative.
+  long long owed(const std::string& from, const std::string& to) const {
+    return std::max(0LL, directed(from, to) - directed(to, from));
+  }
+
+  // Positive when others owe this member overall, negative when this member owes.
+  long long balance(const std::string& member) const {
+    long long total = 0;
+    for (const auto& entry : debts_) {
+      if (entry.first.second == member) total += entry.second;
+      if (entry.first.first == member) total -= entry.second;
+    }
+    return total;
+  }
+
+ private:
+  long long directed(const std::string& debtor, const std::string& creditor) const {
+    const auto found = debts_.find({debtor, creditor});
+    return found == debts_.end() ? 0 : found->second;
+  }
+
+  std::map<std::pair<std::string, std::string>, long long> debts_;
+};
+1b:T922,#pragma once
+#include <algorithm>
+#include <map>
+#include <string>
+#include <vector>
+
+#include "api_storm2.h"
+
+// Turns balances into a short list of payments. It is a pure function of the balances: it knows nothing about expenses.
+// Greedy: the largest debtor pays the largest creditor as much as they can, until nobody owes. That never needs more than
+// (people with a balance) - 1 payments. A minimum is NP-hard (it contains subset-sum), so the greedy plan is not always
+// the smallest, only always small, quick and easy to explain.
+class DebtSimplifier {
+ public:
+  // positive balance = is owed, negative = owes. Zero balances may be present and are ignored.
+  std::vector<split::Transfer> plan(const std::map<std::string, long long>& balances) const {
+    std::vector<Party> debtors = side(balances, -1);
+    std::vector<Party> creditors = side(balances, 1);
+    std::vector<split::Transfer> transfers;
+    while (!debtors.empty() && !creditors.empty()) {
+      Party& debtor = *largest(debtors);
+      Party& creditor = *largest(creditors);
+      const long long amount = std::min(debtor.cents, creditor.cents);
+      transfers.push_back(split::Transfer{debtor.name, creditor.name, amount});
+      debtor.cents -= amount;
+      creditor.cents -= amount;
+      dropSettled(debtors);
+      dropSettled(creditors);
+    }
+    return transfers;
+  }
+
+ private:
+  struct Party {
+    std::string name;
+    long long cents;  // always positive: how much this party still has to pay or to receive
+  };
+
+  static std::vector<Party> side(const std::map<std::string, long long>& balances, int sign) {
+    std::vector<Party> parties;
+    for (const auto& entry : balances) {
+      const long long cents = sign * entry.second;
+      if (cents > 0) parties.push_back(Party{entry.first, cents});
+    }
+    return parties;
+  }
+
+  // The most money, and among equals the name that sorts first.
+  static std::vector<Party>::iterator largest(std::vector<Party>& parties) {
+    return std::max_element(parties.begin(), parties.end(), [](const Party& a, const Party& b) {
+      return a.cents < b.cents || (a.cents == b.cents && a.name > b.name);
+    });
+  }
+
+  static void dropSettled(std::vector<Party>& parties) {
+    parties.erase(std::remove_if(parties.begin(), parties.end(), [](const Party& p) { return p.cents == 0; }), parties.end());
+  }
+};
+1c:Tc45,#pragma once
+#include <cstddef>
+#include <map>
+#include <set>
+#include <string>
+#include <vector>
+
+#include "api_storm2.h"
+#include "debt_book.h"
+#include "debt_simplifier.h"
+#include "members.h"
+#include "split_rules.h"
+
+// The public face: checks a request in the documented order and sequences the collaborators. It has no rule of its own
+// about how a bill is cut, how debts are netted or how a plan is built.
+class LedgerImpl : public split::SimplifyingLedger {
+ public:
+  bool addMember(const std::string& name) override { return members_.add(name); }
+
+  split::Status addExpense(const std::string& payer, long long cents, const std::vector<std::string>& participants) override {
+    split::SplitSpec spec;
+    spec.kind = split::SplitKind::Equal;
+    for (const std::string& name : participants) spec.shares.push_back(split::Share{name, 0});
+    return addExpenseWith(payer, cents, spec);
+  }
+
+  split::Status addExpenseWith(const std::string& payer, long long cents, const split::SplitSpec& spec) override {
+    const split::Status verdict = check(payer, cents, spec.shares);
+    if (verdict != split::Status::Ok) return verdict;
+    const SplitRule* rule = rules_.find(spec.kind);
+    std::vector<long long> portions;
+    if (rule == nullptr || !rule->apportion(cents, spec.shares, portions)) return split::Status::BadSplit;
+    for (std::size_t i = 0; i < spec.shares.size(); ++i) {
+      if (spec.shares[i].member != payer) book_.owe(spec.shares[i].member, payer, portions[i]);
+    }
+    return split::Status::Ok;
+  }
+
+  split::Status settleUp(const std::string& from, const std::string& to, long long cents) override {
+    if (cents < 1 || cents > split::kMaxCents) return split::Status::InvalidAmount;
+    if (!members_.has(from) || !members_.has(to)) return split::Status::UnknownMember;
+    if (from == to) return split::Status::SameMember;
+    book_.pay(from, to, cents);
+    return split::Status::Ok;
+  }
+
+  long long balance(const std::string& member) const override { return book_.balance(member); }
+
+  long long owed(const std::string& from, const std::string& to) const override { return book_.owed(from, to); }
+
+  std::vector<split::Transfer> simplify() const override {
+    std::map<std::string, long long> balances;
+    for (const std::string& name : members_.all()) balances[name] = book_.balance(name);
+    return simplifier_.plan(balances);
+  }
+
+ private:
+  split::Status check(const std::string& payer, long long cents, const std::vector<split::Share>& shares) const {
+    if (cents < 1 || cents > split::kMaxCents) return split::Status::InvalidAmount;
+    if (shares.empty()) return split::Status::NoParticipants;
+    if (!members_.has(payer)) return split::Status::UnknownMember;
+    for (const split::Share& share : shares) {
+      if (!members_.has(share.member)) return split::Status::UnknownMember;
+    }
+    std::set<std::string> seen;
+    for (const split::Share& share : shares) {
+      if (!seen.insert(share.member).second) return split::Status::DuplicateParticipant;
+    }
+    return split::Status::Ok;
+  }
+
+  Members members_;
+  SplitRules rules_;
+  DebtBook book_;
+  DebtSimplifier simplifier_;
+};
+1d:Tf14,#pragma once
+#include <algorithm>
+#include <cstddef>
+#include <map>
+#include <memory>
+#include <numeric>
+#include <vector>
+
+#include "api_storm2.h"
+
+// How one expense is cut into portions: portions[i] is what shares[i].member owes. A rule returns false when the listed
+// values make no sense for it; when it returns true the portions add up to the expense exactly (no cent is lost).
+class SplitRule {
+ public:
+  virtual ~SplitRule() = default;
+  virtual bool apportion(long long cents, const std::vector<split::Share>& shares, std::vector<long long>& portions) const = 0;
+};
+
+// Everyone pays the same; the leftover cents go one each to the first names in the list.
+class EqualSplit : public SplitRule {
+ public:
+  bool apportion(long long cents, const std::vector<split::Share>& shares, std::vector<long long>& portions) const override {
+    const long long count = static_cast<long long>(shares.size());
+    portions.assign(shares.size(), cents / count);
+    const long long leftover = cents % count;
+    for (long long i = 0; i < leftover; ++i) ++portions[static_cast<std::size_t>(i)];
+    return true;
+  }
+};
+
+// Each share names its own cents, which must add up to the expense.
+class ExactSplit : public SplitRule {
+ public:
+  bool apportion(long long cents, const std::vector<split::Share>& shares, std::vector<long long>& portions) const override {
+    long long total = 0;
+    for (const split::Share& share : shares) {
+      if (share.value < 0 || share.value > cents) return false;
+      total += share.value;
+    }
+    if (total != cents) return false;
+    portions.clear();
+    for (const split::Share& share : shares) portions.push_back(share.value);
+    return true;
+  }
+};
+
+// Each share names a portion in basis points, which must add up to the whole. Rounded down, then the leftover cents go
+// to the largest remainders (the "largest remainder" method), so the total is exact and nobody is shorted by more than a cent.
+class PercentSplit : public SplitRule {
+ public:
+  bool apportion(long long cents, const std::vector<split::Share>& shares, std::vector<long long>& portions) const override {
+    long long whole = 0;
+    for (const split::Share& share : shares) {
+      if (share.value < 0 || share.value > split::kWhole) return false;
+      whole += share.value;
+    }
+    if (whole != split::kWhole) return false;
+    portions.assign(shares.size(), 0);
+    std::vector<long long> remainders(shares.size(), 0);
+    long long given = 0;
+    for (std::size_t i = 0; i < shares.size(); ++i) {
+      const long long scaled = cents * shares[i].value;
+      portions[i] = scaled / split::kWhole;
+      remainders[i] = scaled % split::kWhole;
+      given += portions[i];
+    }
+    handOutLeftover(cents - given, remainders, portions);
+    return true;
+  }
+
+ private:
+  static void handOutLeftover(long long leftover, const std::vector<long long>& remainders, std::vector<long long>& portions) {
+    std::vector<std::size_t> order(remainders.size());
+    std::iota(order.begin(), order.end(), static_cast<std::size_t>(0));
+    std::stable_sort(order.begin(), order.end(), [&remainders](std::size_t a, std::size_t b) { return remainders[a] > remainders[b]; });
+    for (long long k = 0; k < leftover; ++k) ++portions[order[static_cast<std::size_t>(k)]];
+  }
+};
+
+// The rules by kind. A new kind of split is a new class registered here.
+class SplitRules {
+ public:
+  SplitRules() {
+    rules_[split::SplitKind::Equal] = std::make_unique<EqualSplit>();
+    rules_[split::SplitKind::Exact] = std::make_unique<ExactSplit>();
+    rules_[split::SplitKind::Percent] = std::make_unique<PercentSplit>();
+  }
+
+  const SplitRule* find(split::SplitKind kind) const {
+    const auto found = rules_.find(kind);
+    return found == rules_.end() ? nullptr : found->second.get();
+  }
+
+ private:
+  std::map<split::SplitKind, std::unique_ptr<SplitRule>> rules_;
+};
+f:[["children",{"s":"__PAGE__","h":160,"d":{"r":["$","$1","c",{"children":[["$","$L12",null,{"bundle":{"id":"splitwise","title":"Splitwise (expense sharing)","level":"Senior","parMinutes":50,"patterns":["Strategy","Ledger of events"],"requirements":[{"id":"R-expense","text":"addMember(name) refuses an empty or repeated name. addExpense(payer, cents, participants) splits cents equally over the participants (the payer need not be one of them). When the cents do not divide, the first (cents % n) participants in the order given pay one cent more, so the portions always add up to the amount. Every participant except the payer now owes the payer their portion; the payer owes nothing to themselves. Amounts are 1 .. kMaxCents. Checks run in this order and the first failure decides: amount (InvalidAmount), no participants, payer or participant not a member (UnknownMember), a name listed twice. A refused expense changes nothing.","phase":"base","hidden":true},{"id":"R-owed","text":"owed(from, to) is what from owes to after cancelling what to owes from; it is never negative and at most one direction is non-zero. balance(m) is what the group owes m (positive) or m owes the group (negative); all balances add up to zero. Unknown names owe nothing and have balance 0.","phase":"base","hidden":true},{"id":"R-settle","text":"settleUp(from, to, cents) is real money moving from from to to: it reduces what from owes to. Paying more than is owed is allowed and turns the debt around. Checks in order: amount (InvalidAmount), unknown member, from == to (SameMember).","phase":"base","hidden":true},{"id":"R-kinds","text":"Storm 1: makeSplitLedger(): addExpenseWith(payer, cents, spec) with SplitKind Equal, Exact (each value is its cents; must add up to the amount exactly) or Percent (values in basis points that add up to 10000). The same four checks in the same order, then BadSplit for negative values or a wrong total. A percent portion is cents * value / 10000 rounded down, and the leftover cents go one each to the largest remainders, a tie to the member listed first; the portions add up exactly. addExpense keeps working.","phase":"storm1","hidden":true},{"id":"R-plan","text":"Storm 2: makeSimplifyingLedger(): simplify() returns payments that bring every balance to zero when made with settleUp, and changes nothing. Greedy: the member with the largest debt (a tie to the name that sorts first) pays the member with the largest credit (same tie rule) the smaller amount, repeatedly. Transfers are returned in that order; each is at least 1 cent; members with balance 0 never appear; a settled group gets an empty plan.","phase":"storm2","hidden":true}],"brief":"# Splitwise: shared expenses\n\nA group of friends shares a flat, a trip, a dinner. One person pays the bill and everyone else owes them a part of it. Nobody wants to keep a spreadsheet of who owes whom. You are writing the small library behind an expense-sharing app.\n\nWhat you know so far:\n\n- A group is a set of named people. An expense says who paid, how much, and who shared it.\n- Money is never a floating-point number: every amount is a whole number of cents.\n- At any moment the app must be able to say what each person owes, or is owed, and settle debts when somebody pays somebody back.\n\nYour task: design and implement it behind the `split::Ledger` interface in `api.h`. The hidden tests call only that interface. Ask the interviewer questions first: \"what happens to the cents that do not divide, who counts as a participant, and what does 'owes' mean when two people have paid for each other?\" is where most first drafts go wrong.\n","editorial":"$13","clarify":[{"id":"q-money","text":"How is money represented, and what happens when a bill does not divide evenly, say 1.00 among three people?","answer":"Whole cents in a long long, never floating point. Every amount is between 1 and kMaxCents (one trillion cents). An equal split gives everyone the rounded-down share, and the leftover cents (fewer than the number of people) go one each to the first participants in the order the caller listed them, so the portions always add up to the bill exactly.","reveals":["R-expense"],"quality":"essential"},{"id":"q-who","text":"Who can appear in an expense? Does the payer have to share it? What if a name is mistyped or listed twice?","answer":"Only members of the group (addMember, non-empty and unique names). The payer may or may not be one of the participants; a payer who shares the bill simply owes nothing to themselves. A payer or participant who is not a member, an empty list, a bad amount and a participant listed twice are all refused, in that order: amount, participants, names, duplicates. A refused expense changes nothing.","reveals":["R-expense"],"quality":"essential"},{"id":"q-owed","text":"What should the app report: who owes whom, or one number per person? What if two people have paid for each other?","answer":"Both. balance(member) is the net position of one person (positive: owed by the group, negative: owes); all balances add up to zero. owed(from, to) is the direct debt between two people after cancelling the opposite direction, never negative, so at most one of owed(a, b) and owed(b, a) is non-zero. Unknown names owe nothing.","reveals":["R-owed"],"quality":"essential"},{"id":"q-settle","text":"How does somebody pay a friend back? Can they pay more than they owe, or someone they owe nothing?","answer":"settleUp(from, to, cents) records real money moving. It reduces what from owes to. Paying more than is owed is allowed and the debt turns around (the difference is now owed the other way); paying someone you owe nothing is the same case. Checks: amount, unknown member, paying yourself.","reveals":["R-settle"],"quality":"essential"},{"id":"q-unequal","text":"Will people want to split things other than equally: an exact amount each, or percentages?","answer":"Yes, the next version needs both. Details arrive with the change.","reveals":["R-kinds"],"quality":"essential"},{"id":"q-simplify","text":"With many expenses the debts form a tangle. Will the app need to suggest a short list of payments that settles everything?","answer":"Yes, a later version will. Details arrive with the change.","reveals":["R-plan"],"quality":"essential"},{"id":"q-currency","text":"Several currencies and exchange rates?","answer":"One currency per ledger. Mixed currencies need rates that change over time, and the honest answer in a real product is a ledger per currency with explicit conversion events; say so, do not build it.","reveals":[],"quality":"useful"},{"id":"q-edit","text":"Can an expense be edited or deleted afterwards?","answer":"Not in this exercise. In a real app you would never edit history: you would add a reversing entry and a new one, so the book stays an append-only list of events that can be audited. Say how, do not build it.","reveals":[],"quality":"useful"},{"id":"q-thread","text":"Is the ledger used from several threads?","answer":"The tests are single-threaded. Say how you would do it (one lock per group, or one writer thread; the invariant that all balances add up to zero must hold at every moment another thread can look) but do not build it.","reveals":[],"quality":"useful"},{"id":"q-groups","text":"Are there many groups, and can a person be in several?","answer":"One ledger is one group. A service would hold many ledgers keyed by group id; people in several groups are just names in several ledgers.","reveals":[],"quality":"useful"},{"id":"q-ui","text":"Do we need the user interface, avatars or receipt photos?","answer":"No. The library is the domain logic behind the screens.","reveals":[],"quality":"noise"},{"id":"q-notify","text":"Should the app send reminders when somebody owes a lot?","answer":"No. Notifications are a separate component (the Notification service problem is one).","reveals":[],"quality":"noise"},{"id":"q-persist","text":"Where is the data stored and how is it backed up?","answer":"Not here: the ledger lives in memory. Storage is a layer under it, covered in the system design part of the game.","reveals":[],"quality":"noise"}],"rubric":[{"id":"res-facade","text":"Checks a request in the documented order and sequences the collaborators; no rule of its own about how a bill is cut, how debts are netted or how a plan is built","phase":"base","owners":["LedgerImpl","SplitwiseImpl","ExpenseManager","GroupLedger","ExpenseService","LedgerService","SplitService"]},{"id":"res-book","text":"Owns the money: who owes whom, the netting of opposite debts, balances, and what a payment does, so no other class does arithmetic on debts","phase":"base","owners":["DebtBook","DebtLedger","BalanceSheet","Balances","BalanceBook","DebtGraph","LedgerBook","BalanceTracker"]},{"id":"res-split","text":"Owns how one bill is cut into portions, including who gets the leftover cents, so that the portions add up to the bill exactly","phase":"base","owners":["SplitRule","SplitStrategy","EqualSplit","SplitPolicy","Splitter","EqualSplitStrategy","SplitCalculator"]},{"id":"res-members","text":"Owns who is in the group: the registration rules and the membership check","phase":"base","owners":["Members","MemberRegistry","MemberDirectory","UserRegistry","Group","MemberSet"]},{"id":"res-kinds","text":"Adds exact and percentage splits as new rules next to the equal one, without editing the equal rule or the way debts are recorded","phase":"storm1","owners":["ExactSplit","PercentSplit","PercentageSplit","ExactSplitStrategy","PercentSplitStrategy","PercentageSplitStrategy","SplitRules"]},{"id":"res-plan","text":"Turns net balances into a short list of payments as a pure computation that does not touch the ledger","phase":"storm2","owners":["DebtSimplifier","Simplifier","SettlementPlanner","DebtOptimizer","SettlementPlan","SettlementSimplifier","DebtResolver"]}],"followups":[{"level":"SDE2","question":"Why store money as integer cents and not as a double?","answer":"Binary floating point cannot represent most decimal fractions (0.1 is a repeating fraction), so sums drift: ten payments of 0.10 do not add up to exactly 1.00. In a ledger the whole point is that totals reconcile to the cent, and that all balances add up to exactly zero; with integers that is a property you can test with equality. Integers also make the rounding rule explicit: dividing 100 by 3 forces you to decide who gets the odd cent, instead of leaving it to the last digit of a float. For currencies with other minor units (yen has none, some have three decimals) store the smallest unit and keep the exponent next to the currency code."},{"level":"SDE2","question":"Three people share 1.00. Walk through what your code does with the extra cent and why that rule.","answer":"100 / 3 is 33 with remainder 1, so the first listed participant pays 34 and the other two 33; the portions add up to 100. The rule needs three properties: nothing is lost or invented, the result is deterministic (the same request always gives the same split, which matters for retries and for two devices computing it independently), and nobody is charged more than one cent above their fair share. 'First listed' is one choice; rotating who pays the extra cent over time, or letting the payer absorb it, are others, and the important thing is that the rule is documented and tested rather than accidental."},{"level":"Senior","question":"Why does a payment get recorded as a debt in the opposite direction instead of editing the existing debt?","answer":"Because then the book is an append-only sum of events and every figure is derived from it. Editing a stored 'bob owes ann 20.00' down to 15.00 loses the history (who paid what and when), needs special handling when a payment exceeds the debt (the sign flips), and invites two writers to overwrite each other. As an opposite debt, a payment is just another entry: netting handles all cases (partial, exact, over-payment) with no branch, and an audit can replay the events. The cost is that reading a number means summing entries, which a running total or snapshot can fix when volume demands it."},{"level":"Senior","question":"Where would you put the split kinds, and what changes when a product manager asks for 'split by shares' (2 shares for the adult, 1 for the child)?","answer":"Each way of cutting a bill is a class behind one narrow interface, apportion(cents, shares) returning portions that add up to the bill, selected by kind from a registry. Shares are a new class: portion i is cents * share_i / total shares, rounded down, with the leftover going to the largest remainders, which is exactly the percent rule with total shares as the denominator, so it can reuse the same remainder code. Nothing that records debts, nets them or plans payments changes. The alternative is a switch on the kind in the facade: it works for two kinds and becomes a function that every new kind edits. I would also push back on the API: a 'kind plus numbers' request is a tagged union, and a real client would more likely be handed a typed object per kind."},{"level":"Senior","question":"Explain the largest-remainder method and why it is a better rounding rule than rounding each portion to the nearest cent.","answer":"Round each portion down, then hand the cents that are left over (always fewer than the number of portions) to the portions with the biggest fractional parts. The total is exact by construction. Rounding each to the nearest cent can overshoot or undershoot the total (three portions of 33.33% of 1.00 each round to 0.33 and total 0.99; two of 50% of 1.01 each round up to 0.51 and total 1.02), and then someone has to be corrected by an arbitrary fudge. Largest remainder also has a fairness property: no portion differs from its exact value by a full cent, and a larger exact share never ends up with a smaller portion than a smaller one. It has a known quirk (raising the total by one cent can lower somebody's portion by a cent, the 'Alabama paradox' of apportionment) which does not matter for a bill but is worth knowing by name."},{"level":"Senior","question":"Your simplify() uses a greedy rule. Is it optimal? What would 'optimal' even cost?","answer":"The greedy plan always settles everyone with at most (people with a non-zero balance) - 1 payments, because each payment zeroes at least one person. It is not always the minimum. The minimum number of payments is the number of non-zero people minus the maximum number of disjoint groups whose balances sum to zero on their own, and finding that partition contains the subset-sum problem, so it is NP-hard in general; for a friend group of ten people, exhaustive search over subsets is fine, for a company-wide ledger it is not. In practice the greedy plan is explainable, deterministic and nearly always as short as the optimum, and a product decision (don't ask people to pay strangers) matters more than one extra payment."},{"level":"Staff","question":"Turn this into a service with millions of groups. What are the consistency and data-model problems?","answer":"A group is a natural partition: one ledger per group id, so sharding by group id keeps every invariant (balances sum to zero) inside a single shard and a single-writer transaction. Store the expenses and payments as an append-only event log per group, with the net balances as a derived, cacheable view that can be rebuilt; this gives audit, idempotent writes (a client-generated expense id makes a retried request harmless) and an easy way to correct mistakes with reversing entries. Concurrent edits by several phones need optimistic versioning or an operation log that merges. Cross-group views ('what do I owe everybody') are fan-out reads, so keep a per-user summary updated asynchronously and be clear that it is eventually consistent. Settling through a payment provider adds a second ledger that must be reconciled, with the usual failure modes (a payment that succeeded but whose acknowledgement was lost)."},{"level":"Staff","question":"Users in two currencies, with exchange rates, join a trip group. How do you keep the books honest?","answer":"Never convert silently. An expense carries its own currency and amount as entered; the balance is kept per currency, and a conversion is an explicit event with the rate used (a transfer out of one currency and into another at a recorded rate), so the history is reproducible and nobody's debt changes because a rate moved overnight. When a single 'owes me 120 EUR-equivalent' number is needed for display, compute it at read time from a stated rate source and label it as an estimate. Settling in one currency is a conversion event plus a payment. The simplification step then runs separately per currency, or after an agreed conversion, because netting across currencies at floating rates is where money is lost or invented."}],"apiHeader":"$14","phaseApis":{"storm1":"$15","storm2":"$16"},"phases":["base","storm1","storm2"],"tests":{"base":[{"path":"split_base.cpp","content":"$17"}],"storm1":[{"path":"split_storm1.cpp","content":"$18"}],"storm2":[{"path":"split_storm2.cpp","content":"$19"}]},"reference":[{"path":"debt_book.h","content":"$1a"},{"path":"debt_simplifier.h","content":"$1b"},{"path":"ledger_impl.h","content":"$1c"},{"path":"members.h","content":"#pragma once\n#include <set>\n#include <string>\n#include <vector>\n\n// The people who may appear in expenses. A name is non-empty and unique.\nclass Members {\n public:\n  bool add(const std::string& name) { return !name.empty() && names_.insert(name).second; }\n\n  bool has(const std::string& name) const { return names_.count(name) > 0; }\n\n  // Every name, sorted.\n  std::vector<std::string> all() const { return std::vector<std::string>(names_.begin(), names_.end()); }\n\n private:\n  std::set<std::string> names_;\n};\n"},{"path":"service.cpp","content":"#include \"ledger_impl.h\"\n\nstd::unique_ptr<split::Ledger> split::makeLedger() { return std::make_unique<LedgerImpl>(); }\n\nstd::unique_ptr<split::SplitLedger> split::makeSplitLedger() { return std::make_unique<LedgerImpl>(); }\n\nstd::unique_ptr<split::SimplifyingLedger> split::makeSimplifyingLedger() { return std::make_unique<LedgerImpl>(); }\n"},{"path":"split_rules.h","content":"$1d"}],"driver":{"path":"driver.cpp","content":"#define BP_TEST_MAIN\n#include \"bp_test.h\"\n","readOnly":true}}}],["$L1e","$L1f"],"$L20"]}],"p":"$@21","v":null,"s":"$9"}}]]
+d:[["children",{"s":{"n":"id","t":"d","k":"splitwise","s":[]},"h":65632,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}]}]]}],"p":"$@e","v":"$c","s":"$9"},"c":"$Qf"}]]
+a:[["children",{"s":"workshop","h":131168,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}]}]]}],"p":"$@b","v":"$c","s":"$9"},"c":"$Qd"}]]
+0:{"t":{"t":{"s":"","h":131152,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/1klm1scec-3x5.css","precedence":"next"}],["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js","async":true}]],["$","html",null,{"lang":"en","className":"r7opxW_variable auY9QW_variable u-EJdW_variable h-full","children":["$","body",null,{"className":"min-h-full","children":[["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}],"notFound":[["$","main",null,{"className":"flex min-h-dvh flex-col items-center justify-center gap-4 px-4 text-center","children":[["$","div",null,{"className":"font-display text-5xl text-[var(--accent)]","children":"404"}],["$","p",null,{"className":"text-white/60","children":"This room is not on the blueprint yet."}],["$","$L6",null,{"href":"/","className":"text-sm text-white/80 underline","children":"Back to the title screen"}]]}],[]]}],["$","$L7",null,{}]]}]}]]}],"p":"$@8","v":null,"s":"$9"},"c":"$Qa"},"h":{"r":["$","$1","h",{"children":[null,["$","$L23",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1, viewport-fit=cover"}],["$","meta","2",{"name":"theme-color","content":"#0a1530"}]]}],["$","$L25",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$26",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"Splitwise (expense sharing): Blueprint Clash"}],["$","meta","1",{"name":"description","content":"A creature-tactics RPG that teaches low-level design in C++ and high-level system design, from fundamentals to big-tech interview level."}],["$","link","2",{"rel":"manifest","href":"/blueprint-clash/manifest.webmanifest"}],["$","meta","3",{"name":"mobile-web-app-capable","content":"yes"}],["$","meta","4",{"name":"apple-mobile-web-app-title","content":"Blueprint Clash"}],["$","meta","5",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","link","6",{"rel":"icon","href":"/blueprint-clash/icon.png?icon.27re_xscs-jmw.png","sizes":"256x256","type":"image/png"}],["$","link","7",{"rel":"apple-touch-icon","href":"/blueprint-clash/apple-icon.png?apple-icon.2rac1w0yc3rju.png","sizes":"180x180","type":"image/png"}],["$","$L27","8",{}]]}]}],null]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"p":"$@28","v":null,"s":"$9"}},"a":"$@29","u":"$@2a","b":"2AOMJw3uqOQQQZHGX3CKn"}
+2b:I[97367,["$2"],"OutletBoundary"]
+1e:["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/2uk3wcjwqg0tl.js","async":true}]
+1f:["$","script","script-1",{"src":"/blueprint-clash/_next/static/chunks/1zdu7yjl8efu4.js","async":true}]
+20:["$","$L2b",null,{"children":["$","$26",null,{"name":"Next.MetadataOutlet","children":"$@2c"}]}]
+9:300
+2c:null
+2a:true
+9:C
+29:0
+e:"$undefined"
+b:"$undefined"
+8:"$undefined"
+28:"$undefined"
+21:"$undefined"

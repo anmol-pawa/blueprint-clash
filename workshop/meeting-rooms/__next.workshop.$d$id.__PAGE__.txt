@@ -1,0 +1,1048 @@
+1:"$Sreact.fragment"
+2:"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js"
+3:I[39756,["$2"],"default"]
+4:I[37457,["$2"],"default"]
+5:"/blueprint-clash/_next/static/chunks/2n5qeheznvl4u.js"
+6:I[22016,["$2","$5"],""]
+7:I[64576,["$2"],"PwaRegister"]
+10:"/blueprint-clash/_next/static/chunks/2uk3wcjwqg0tl.js"
+11:"/blueprint-clash/_next/static/chunks/1zdu7yjl8efu4.js"
+12:I[65612,["$2","$10","$11"],"WorkshopClient"]
+23:"ViewportBoundary"
+24:I[97367,["$2"],"$23"]
+25:"MetadataBoundary"
+26:I[97367,["$2"],"$25"]
+27:"$Sreact.suspense"
+28:I[27201,["$2"],"IconMark"]
+:HL["/blueprint-clash/_next/static/chunks/1klm1scec-3x5.css","style"]
+9:X
+c:X
+c:C
+13:T468,# Meeting room scheduler
+
+You are building the booking core of an office's meeting-room system: the part that answers "is the Atlas room free from 2pm to 3pm?" and "put this meeting in that room". There is no calendar UI and no clock: times are whole minutes counted from a fixed zero, so every test is exact.
+
+What you know so far:
+
+- An office has rooms, each with a name and a number of seats.
+- A meeting has an id, a room, a start, an end and a head count.
+- A room cannot be in two meetings at once.
+- A meeting can be cancelled, and its room is then free again.
+- Someone should be able to ask what a room's day looks like.
+
+Your task: design and implement it behind the `rooms::Scheduler` interface in `api.h`. The hidden tests call only that interface. Ask the interviewer questions first: "do two meetings, one ending at 10:00 and one starting at 10:00, clash?", "what if the group is bigger than the room?" and "which error wins when several things are wrong?" are where first drafts go wrong. Expect two follow-up requests once you are done: letting the system choose the room for a group, and meetings that repeat.
+14:T1b11,# Editorial: Meeting room scheduler
+
+## Requirements
+Functional: add rooms (name, seats); book a meeting in a named room for a half-open span with a head count; cancel it; ask `isFree`, list a room's `bookings` in start order and find a booking's room with `roomOf`. Then let the system choose the room, and then meetings that repeat.
+
+Hidden in the brief and revealed by good questions: half-open spans (back-to-back is fine, one minute of overlap is not); the validation statuses and their order (`InvalidInput`, `UnknownRoom`, `DuplicateBooking`, `TooManyPeople`, `Conflict`) and that a refused call changes nothing; that exactly the capacity fits; that a cancelled id is free again; and that `isFree` is false for a nonsense span or an unknown room.
+
+**Change Storm 1, automatic room choice:** `bookAny` picks the smallest room with enough seats that is free for the whole span, the first added among equals; `TooManyPeople` (nothing is big enough) differs from `NoRoomFree` (big enough rooms are all busy); the output argument is untouched on refusal; the result is an ordinary booking.
+
+**Change Storm 2, repeating bookings:** `bookRepeating` with a step and a count, all or nothing, one booking with one id for the whole series, `cancel` removes what remains, and `cancelOccurrence` removes one with indexes that never shift.
+
+## Reference design
+`SchedulerImpl` is a thin facade: it builds a `BookingRequest`, validates it, finds the `Room`, checks capacity, asks whether every occurrence is free and only then commits. It contains no interval arithmetic. `Span` owns the one overlap test, `a.start < b.end && b.start < a.end`. `Calendar` is an ordered map from start to `Slot`; because slots in a room never overlap, a new span can only clash with its two neighbours, so `isFree` is O(log n). `Room` bundles name, seats and calendar; `RoomDirectory` keeps rooms in the order they were added. `BookingIndex` maps each live id to its room and the number of occurrences left, so `cancel`, `roomOf` and `cancelOccurrence` do not search.
+
+A single booking is a series of one: `book` calls the same path as `bookRepeating` with a step equal to the meeting's length. That is why storm 2 added one class' worth of parameters (`BookingRequest`'s step and count) and one method to the facade, and left `Calendar` and `Span` untouched. `RoomChooser` is a Strategy and `BestFitChooser` its one class; storm 1 added the interface, the class and `bookAny`. Changing the rule to first fit or "prefer the building's rooms" is a new class, not an edit.
+
+## Alternatives
+- **Linear scan of a vector per room.** The simplest thing that is right, and fine for a few dozen meetings. `isFree` is O(n) and a sorted vector needs O(n) insertion; an ordered map is the same code size and scales better.
+- **Sorted vector with binary search.** Better cache behaviour and O(log n) lookup, O(n) insert and erase. A good choice when bookings are read far more often than written.
+- **Interval tree or segment tree.** Answers "any overlap" and "what overlaps" in O(log n) and handles overlapping intervals, which one room never has. Worth it for a global "is any room free" index across thousands of rooms, overkill per room.
+- **Per-minute bitmap or array.** O(span) check, trivial code, and 10^6 minutes is 125 KB per room as bits. Exact and very fast for short spans, wasteful for sparse rooms and awkward if the resolution gets finer.
+- **Series stored as a rule instead of expanded occurrences.** One row for 'every 7 days, 12 times', which scales to unbounded repetition, but every query must expand the rule, and exceptions and overlap checks against rules need their own structure. With a cap of 52 and exact answers expected, expanding on write keeps one calendar and one overlap test.
+- **One class with a `switch` for how to pick the room.** A good first draft for a single rule; the second rule adds a branch to a method that also checks capacity and clashes.
+
+## Trade-offs
+- **Check everything, then write.** A refused call never leaves half a series behind and the commit loop cannot fail. The price is that the checks must be complete and in the documented order.
+- **Series expanded into slots.** Every occurrence is a slot with the series id and an index. Listing, clash checks and cancel-one are the same code as for single meetings; memory grows with the count, capped at 52.
+- **Index of live bookings beside the calendars.** `cancel` and `roomOf` are O(log n) instead of a search over rooms, at the cost of keeping two structures in step. They are updated in one place (`BookingIndex`) with the calendar edit next to it.
+- **Best fit is a greedy online rule.** It protects big rooms but cannot be optimal for a stream of requests; the Strategy makes the rule replaceable, not better.
+- **Minutes as `int`.** Exact and cheap, but a real system stores instants and zones. The core stays valid under that layer.
+
+## What breaks at 10x
+- **Rooms:** `RoomDirectory::find` and `BestFitChooser` scan every room. Index rooms by name (hash map) and keep rooms ordered by capacity; for "any free room" use a per-building index or an interval tree keyed by time.
+- **Series:** with unbounded repetition, expansion is too big; store rule plus exceptions and expand over the query window. All-or-nothing then means checking a rule against existing meetings, not a loop over a fixed list.
+- **Threads:** check-then-book must be atomic. Use a lock per room taken in a fixed order for anything touching several rooms (series in one room are fine, `bookAny` reads many), or a single writer; in a database use an exclusion constraint on (room, time range).
+- **Time:** daylight saving and zones break "every 24 hours" as a meaning of "every day". Keep the minute core as instants and expand local rules above it.
+- **Volume:** shard by building; keep best-fit searches on replicas and commit with an optimistic retry on conflict; publish booking events asynchronously.
+
+## Level signals
+- **SDE II:** half-open spans stated and tested at the edges, the statuses checked in a sensible order with a refused call changing nothing, capacity boundary right, an ordered calendar with a neighbour check (or an honest linear scan with the cost named), and cancel freeing the id.
+- **Senior:** all of the above plus `bookAny` as a Strategy with the TooManyPeople versus NoRoomFree distinction, a series treated as one booking (all or nothing, check first and write after, one id, stable occurrence indexes), and a single booking expressed as a series of one so the new feature added code instead of changing old branches.
+- **Staff:** frames the choices (map versus tree versus bitmap, expanded versus rule-based recurrence, greedy versus optimal allocation), raises concurrency with a lock order or a database constraint, and extends to time zones and RRULE exceptions, sharding by building and event-driven invitations, naming what each choice gives up.
+15:Tcdc,#pragma once
+// Public API for the Meeting Room Scheduler problem. The hidden tests only use what is declared here.
+// You implement rooms::makeScheduler() (in any of your .cpp files); everything behind it is your design.
+#include <memory>
+#include <string>
+#include <vector>
+
+namespace rooms {
+
+enum class Status {
+  Ok,
+  InvalidInput,      // a name, id, time span, head count or repeat rule outside the documented range
+  DuplicateRoom,     // a room with this name already exists
+  UnknownRoom,       // no room with this name
+  DuplicateBooking,  // a live booking already has this id
+  UnknownBooking,    // no live booking (or occurrence) with this id
+  TooManyPeople,     // the room (or every room) is smaller than the group
+  Conflict,          // the room is already taken during part of the span
+  NoRoomFree,        // (storm 1) a big enough room exists, but all of them are taken during the span
+};
+
+constexpr int kMaxTime = 1000000;   // minutes: every time is in 0..kMaxTime
+constexpr int kMaxCapacity = 1000;  // seats per room, 1..kMaxCapacity
+constexpr int kMaxCount = 52;       // (storm 2) occurrences in one repeating booking
+
+struct Booking {
+  std::string id;
+  int start = 0;      // minutes, inclusive
+  int end = 0;        // minutes, exclusive
+  int attendees = 0;
+};
+
+// Meeting rooms booked by the minute. Times are whole minutes since time zero and every span is HALF-OPEN: [start, end).
+// Two spans clash when each starts before the other ends, so a meeting that ends at 60 and one that starts at 60 share
+// the room without a clash. Single-threaded and deterministic.
+//
+// addRoom(name, capacity): the name is 1 to 32 characters and capacity is 1..kMaxCapacity (InvalidInput), then
+// DuplicateRoom. A new room has no bookings. Rooms are kept in the order they were added.
+//
+// book(id, room, start, end, attendees). CHECK ORDER: InvalidInput (id empty or longer than 32 characters, start < 0,
+// end <= start, end > kMaxTime, attendees < 1), UnknownRoom, DuplicateBooking (a LIVE booking has this id; a cancelled
+// booking's id is free again), TooManyPeople (attendees > the room's capacity: exactly the capacity is fine), Conflict.
+// A refused call changes nothing.
+//
+// cancel(id): removes the booking, UnknownBooking when no live booking has the id. The room is free for that span at once.
+// isFree(room, start, end): true when the span is valid (0 <= start < end <= kMaxTime), the room exists and no booking
+// overlaps the span; false otherwise. It never changes anything.
+// bookings(room): the room's bookings ordered by start time, empty for an unknown room.
+// roomOf(id, room): UnknownBooking, or Ok with the name of the room the booking is in.
+class Scheduler {
+ public:
+  virtual ~Scheduler() = default;
+  virtual Status addRoom(const std::string& name, int capacity) = 0;
+  virtual Status book(const std::string& id, const std::string& room, int start, int end, int attendees) = 0;
+  virtual Status cancel(const std::string& id) = 0;
+  virtual bool isFree(const std::string& room, int start, int end) const = 0;
+  virtual std::vector<Booking> bookings(const std::string& room) const = 0;
+  virtual Status roomOf(const std::string& id, std::string& room) const = 0;
+};
+
+std::unique_ptr<Scheduler> makeScheduler();
+
+}  // namespace rooms
+16:T47e,#pragma once
+// Change Storm 1: let the system pick the room.
+#include "api.h"
+
+namespace rooms {
+
+// makeFindingScheduler() has everything makeScheduler() has, plus bookAny: the caller names no room and the scheduler
+// chooses one.
+//
+// bookAny(id, start, end, attendees, room) books the SMALLEST room that is big enough (capacity >= attendees) and free
+// during the span; among equally small rooms the one that was added first. On Ok `room` is the chosen room's name; on any
+// other status `room` is left untouched. CHECK ORDER: InvalidInput (the same rules as book), DuplicateBooking,
+// TooManyPeople (no room at all has the capacity, including when there are no rooms), NoRoomFree (big enough rooms exist
+// but all are taken somewhere in the span). A refused call changes nothing.
+// A booking made by bookAny is an ordinary booking: cancel, roomOf, bookings and isFree treat it like any other.
+class FindingScheduler : public Scheduler {
+ public:
+  virtual Status bookAny(const std::string& id, int start, int end, int attendees, std::string& room) = 0;
+};
+
+std::unique_ptr<FindingScheduler> makeFindingScheduler();
+
+}  // namespace rooms
+17:T75e,#pragma once
+// Change Storm 2: repeating bookings.
+#include "api_storm1.h"
+
+namespace rooms {
+
+// makeSeriesScheduler() has everything makeFindingScheduler() has, plus bookings that repeat.
+//
+// bookRepeating(id, room, start, end, attendees, every, count) books `count` meetings in one room: occurrence k covers
+// [start + k * every, end + k * every) for k = 0 .. count - 1. CHECK ORDER: InvalidInput (the same rules as book, plus
+// count outside 1..kMaxCount, every < end - start (the meetings would overlap each other), or the last occurrence ending
+// after kMaxTime), UnknownRoom, DuplicateBooking, TooManyPeople, Conflict (ANY occurrence overlaps something).
+// It is ALL OR NOTHING: when it is refused no occurrence is booked, and the booking never conflicts with itself.
+//
+// A repeating booking is ONE booking with one id: bookings(room) lists every remaining occurrence (each with that id,
+// that occurrence's own start and end, and the head count) in start order, cancel(id) removes every remaining occurrence
+// at once, roomOf(id) answers while any occurrence remains, and the id is taken until the last one is gone.
+//
+// cancelOccurrence(id, index) removes one occurrence, counted from 0 in the ORIGINAL series (indexes never shift).
+// UnknownBooking when no live booking has the id or that occurrence is out of range or already removed. Removing the last
+// remaining occurrence ends the booking and frees the id. A plain book() is a series of exactly one occurrence, index 0.
+class SeriesScheduler : public FindingScheduler {
+ public:
+  virtual Status bookRepeating(const std::string& id, const std::string& room, int start, int end, int attendees,
+                               int every, int count) = 0;
+  virtual Status cancelOccurrence(const std::string& id, int index) = 0;
+};
+
+std::unique_ptr<SeriesScheduler> makeSeriesScheduler();
+
+}  // namespace rooms
+18:T25bf,#include <algorithm>
+#include <memory>
+#include <string>
+#include <vector>
+
+#include "api.h"
+#include "bp_test.h"
+
+namespace {
+using rooms::Status;
+
+#define IS(call, expected) EXPECT_TRUE((call) == Status::expected)
+
+struct Fixture {
+  std::unique_ptr<rooms::Scheduler> s = rooms::makeScheduler();
+  Fixture() {
+    s->addRoom("Atlas", 4);
+    s->addRoom("Borealis", 10);
+  }
+  std::string spans(const std::string& room) const {
+    std::string out;
+    for (const auto& b : s->bookings(room)) {
+      out += (out.empty() ? "" : " ") + b.id + "@" + std::to_string(b.start) + "-" + std::to_string(b.end);
+    }
+    return out;
+  }
+};
+
+// A plain list of (room, id, start, end): the obvious, slow model.
+struct Model {
+  struct Item {
+    std::string room, id;
+    int start, end;
+  };
+  std::vector<Item> items;
+  bool free(const std::string& room, int start, int end) const {
+    for (const auto& it : items) {
+      if (it.room == room && it.start < end && start < it.end) return false;
+    }
+    return true;
+  }
+};
+}  // namespace
+
+TEST(Rooms, AddRoomChecksItsArgumentsInOrder) {
+  auto s = rooms::makeScheduler();
+  IS(s->addRoom("", 4), InvalidInput);
+  IS(s->addRoom(std::string(33, 'x'), 4), InvalidInput);
+  IS(s->addRoom("Atlas", 0), InvalidInput);
+  IS(s->addRoom("Atlas", rooms::kMaxCapacity + 1), InvalidInput);
+  IS(s->addRoom(std::string(32, 'x'), rooms::kMaxCapacity), Ok);
+  IS(s->addRoom("Atlas", 1), Ok);
+  IS(s->addRoom("Atlas", 9), DuplicateRoom);
+  IS(s->addRoom("Atlas", 0), InvalidInput);
+  EXPECT_TRUE(s->bookings("Atlas").empty());
+}
+
+TEST(Booking, ASimpleBookingIsListedByStartTimeAndFindsItsRoom) {
+  Fixture f;
+  IS(f.s->book("c", "Atlas", 200, 260, 3), Ok);
+  IS(f.s->book("a", "Atlas", 0, 30, 1), Ok);
+  IS(f.s->book("b", "Atlas", 100, 160, 4), Ok);
+  IS(f.s->book("other", "Borealis", 50, 70, 8), Ok);
+  EXPECT_EQ(f.spans("Atlas"), std::string("a@0-30 b@100-160 c@200-260"));
+  EXPECT_EQ(f.spans("Borealis"), std::string("other@50-70"));
+  const auto list = f.s->bookings("Atlas");
+  EXPECT_EQ(list[1].attendees, 4);
+  std::string room;
+  IS(f.s->roomOf("b", room), Ok);
+  EXPECT_EQ(room, std::string("Atlas"));
+  IS(f.s->roomOf("other", room), Ok);
+  EXPECT_EQ(room, std::string("Borealis"));
+  IS(f.s->roomOf("nope", room), UnknownBooking);
+  EXPECT_EQ(room, std::string("Borealis"));
+  EXPECT_TRUE(f.s->bookings("Nowhere").empty());
+}
+
+TEST(Clash, SpansAreHalfOpenSoBackToBackMeetingsShareARoom) {
+  Fixture f;
+  IS(f.s->book("m1", "Atlas", 60, 120, 2), Ok);
+  IS(f.s->book("before", "Atlas", 0, 60, 2), Ok);
+  IS(f.s->book("after", "Atlas", 120, 180, 2), Ok);
+  EXPECT_EQ(f.spans("Atlas"), std::string("before@0-60 m1@60-120 after@120-180"));
+  IS(f.s->book("x", "Atlas", 119, 121, 1), Conflict);
+  IS(f.s->book("y", "Atlas", 59, 61, 1), Conflict);
+  EXPECT_TRUE(f.s->isFree("Atlas", 180, 240));
+  EXPECT_FALSE(f.s->isFree("Atlas", 179, 240));
+}
+
+TEST(Clash, EveryShapeOfOverlapIsRefused) {
+  Fixture f;
+  IS(f.s->book("base", "Atlas", 100, 200, 2), Ok);
+  IS(f.s->book("same", "Atlas", 100, 200, 1), Conflict);
+  IS(f.s->book("inside", "Atlas", 120, 140, 1), Conflict);
+  IS(f.s->book("around", "Atlas", 50, 250, 1), Conflict);
+  IS(f.s->book("left", "Atlas", 50, 101, 1), Conflict);
+  IS(f.s->book("right", "Atlas", 199, 300, 1), Conflict);
+  IS(f.s->book("one-minute", "Atlas", 150, 151, 1), Conflict);
+  IS(f.s->book("elsewhere", "Borealis", 100, 200, 1), Ok);
+  EXPECT_EQ(f.spans("Atlas"), std::string("base@100-200"));
+}
+
+TEST(Clash, AMeetingThatSpansSeveralOthersConflictsWithAnyOfThem) {
+  Fixture f;
+  IS(f.s->book("a", "Atlas", 0, 10, 1), Ok);
+  IS(f.s->book("b", "Atlas", 20, 30, 1), Ok);
+  IS(f.s->book("c", "Atlas", 40, 50, 1), Ok);
+  IS(f.s->book("wide", "Atlas", 5, 45, 1), Conflict);
+  IS(f.s->book("gap", "Atlas", 10, 20, 1), Ok);
+  IS(f.s->book("gap2", "Atlas", 30, 40, 1), Ok);
+  EXPECT_EQ(f.spans("Atlas"), std::string("a@0-10 gap@10-20 b@20-30 gap2@30-40 c@40-50"));
+}
+
+TEST(Validation, BookChecksInTheDocumentedOrderAndARefusedCallChangesNothing) {
+  Fixture f;
+  IS(f.s->book("taken", "Atlas", 100, 200, 2), Ok);
+  IS(f.s->book("", "Atlas", 10, 20, 1), InvalidInput);
+  IS(f.s->book(std::string(33, 'i'), "Atlas", 10, 20, 1), InvalidInput);
+  IS(f.s->book("neg", "Atlas", -1, 20, 1), InvalidInput);
+  IS(f.s->book("empty", "Atlas", 20, 20, 1), InvalidInput);
+  IS(f.s->book("backwards", "Atlas", 30, 20, 1), InvalidInput);
+  IS(f.s->book("late", "Atlas", 10, rooms::kMaxTime + 1, 1), InvalidInput);
+  IS(f.s->book("nobody", "Atlas", 10, 20, 0), InvalidInput);
+  IS(f.s->book("ghost-room-bad-span", "Nowhere", 20, 20, 1), InvalidInput);
+  IS(f.s->book("ghost", "Nowhere", 10, 20, 1), UnknownRoom);
+  IS(f.s->book("taken", "Nowhere", 10, 20, 1), UnknownRoom);
+  IS(f.s->book("taken", "Atlas", 300, 400, 1), DuplicateBooking);
+  IS(f.s->book("taken", "Atlas", 300, 400, 99), DuplicateBooking);
+  IS(f.s->book("big", "Atlas", 100, 200, 5), TooManyPeople);
+  IS(f.s->book("big", "Atlas", 300, 400, 5), TooManyPeople);
+  IS(f.s->book("late-edge", "Atlas", rooms::kMaxTime - 10, rooms::kMaxTime, 4), Ok);
+  IS(f.s->book("zero", "Atlas", 0, 1, 4), Ok);
+  EXPECT_EQ(f.spans("Atlas"), std::string("zero@0-1 taken@100-200 late-edge@999990-1000000"));
+  std::string room;
+  IS(f.s->roomOf("big", room), UnknownBooking);
+  IS(f.s->roomOf("neg", room), UnknownBooking);
+}
+
+TEST(Capacity, ExactlyTheCapacityFitsOneMoreDoesNot) {
+  Fixture f;
+  IS(f.s->book("full", "Atlas", 0, 10, 4), Ok);
+  IS(f.s->book("over", "Atlas", 10, 20, 5), TooManyPeople);
+  IS(f.s->book("ten", "Borealis", 0, 10, 10), Ok);
+  IS(f.s->book("eleven", "Borealis", 10, 20, 11), TooManyPeople);
+}
+
+TEST(Cancel, CancelFreesTheSpanAtOnceAndTheIdCanBeUsedAgain) {
+  Fixture f;
+  IS(f.s->book("m", "Atlas", 100, 200, 2), Ok);
+  IS(f.s->book("n", "Atlas", 150, 250, 2), Conflict);
+  IS(f.s->cancel("m"), Ok);
+  IS(f.s->cancel("m"), UnknownBooking);
+  EXPECT_TRUE(f.s->isFree("Atlas", 100, 200));
+  IS(f.s->book("n", "Atlas", 150, 250, 2), Ok);
+  IS(f.s->book("m", "Borealis", 0, 10, 2), Ok);
+  std::string room;
+  IS(f.s->roomOf("m", room), Ok);
+  EXPECT_EQ(room, std::string("Borealis"));
+  IS(f.s->cancel("never-existed"), UnknownBooking);
+  EXPECT_EQ(f.spans("Atlas"), std::string("n@150-250"));
+}
+
+TEST(Query, IsFreeIsFalseForBadSpansAndUnknownRoomsAndNeverChangesAnything) {
+  Fixture f;
+  IS(f.s->book("m", "Atlas", 100, 200, 2), Ok);
+  EXPECT_TRUE(f.s->isFree("Atlas", 0, 100));
+  EXPECT_TRUE(f.s->isFree("Atlas", 200, 300));
+  EXPECT_FALSE(f.s->isFree("Atlas", 99, 101));
+  EXPECT_FALSE(f.s->isFree("Atlas", 150, 150));
+  EXPECT_FALSE(f.s->isFree("Atlas", 300, 200));
+  EXPECT_FALSE(f.s->isFree("Atlas", -5, 10));
+  EXPECT_FALSE(f.s->isFree("Atlas", 0, rooms::kMaxTime + 1));
+  EXPECT_FALSE(f.s->isFree("Nowhere", 0, 10));
+  EXPECT_TRUE(f.s->isFree("Borealis", 100, 200));
+  EXPECT_EQ(f.spans("Atlas"), std::string("m@100-200"));
+}
+
+TEST(Isolation, EachSchedulerHasItsOwnRooms) {
+  auto a = rooms::makeScheduler();
+  auto b = rooms::makeScheduler();
+  IS(a->addRoom("Atlas", 4), Ok);
+  IS(b->addRoom("Atlas", 4), Ok);
+  IS(a->book("m", "Atlas", 0, 10, 1), Ok);
+  EXPECT_TRUE(b->isFree("Atlas", 0, 10));
+  IS(b->book("m", "Atlas", 0, 10, 1), Ok);
+}
+
+TEST(Model, RandomOperationsAgreeWithAListOfBookings) {
+  unsigned long long seed = 20240601ULL;
+  auto next = [&seed](int bound) {
+    seed = seed * 6364136223846793005ULL + 1442695040888963407ULL;
+    return static_cast<int>((seed >> 33) % static_cast<unsigned long long>(bound));
+  };
+  auto s = rooms::makeScheduler();
+  const std::vector<std::string> names = {"A", "B", "C"};
+  s->addRoom("A", 3);
+  s->addRoom("B", 6);
+  s->addRoom("C", 12);
+  const int caps[] = {3, 6, 12};
+  Model model;
+  for (int step = 0; step < 4000; ++step) {
+    const int op = next(10);
+    if (op < 7) {
+      const int r = next(3);
+      const int start = next(200);
+      const int end = start + 1 + next(25);
+      const int people = 1 + next(13);
+      const std::string id = "b" + std::to_string(next(60));
+      bool live = false;
+      for (const auto& it : model.items) live = live || it.id == id;
+      Status expected = Status::Ok;
+      if (live) expected = Status::DuplicateBooking;
+      else if (people > caps[r]) expected = Status::TooManyPeople;
+      else if (!model.free(names[r], start, end)) expected = Status::Conflict;
+      EXPECT_TRUE(s->book(id, names[r], start, end, people) == expected);
+      if (expected == Status::Ok) model.items.push_back({names[r], id, start, end});
+    } else if (op < 9) {
+      const std::string id = "b" + std::to_string(next(60));
+      bool live = false;
+      for (const auto& it : model.items) live = live || it.id == id;
+      EXPECT_TRUE(s->cancel(id) == (live ? Status::Ok : Status::UnknownBooking));
+      model.items.erase(std::remove_if(model.items.begin(), model.items.end(), [&](const Model::Item& it) { return it.id == id; }),
+                        model.items.end());
+    } else {
+      const int r = next(3);
+      const int start = next(200);
+      const int end = start + 1 + next(40);
+      EXPECT_EQ(s->isFree(names[r], start, end), model.free(names[r], start, end));
+    }
+  }
+  for (int r = 0; r < 3; ++r) {
+    std::vector<Model::Item> mine;
+    for (const auto& it : model.items) {
+      if (it.room == names[r]) mine.push_back(it);
+    }
+    std::sort(mine.begin(), mine.end(), [](const Model::Item& x, const Model::Item& y) { return x.start < y.start; });
+    const auto got = s->bookings(names[r]);
+    ASSERT_EQ(got.size(), mine.size());
+    for (std::size_t i = 0; i < mine.size(); ++i) {
+      EXPECT_EQ(got[i].id, mine[i].id);
+      EXPECT_EQ(got[i].start, mine[i].start);
+      EXPECT_EQ(got[i].end, mine[i].end);
+    }
+  }
+}
+19:T1470,#include <memory>
+#include <string>
+#include <vector>
+
+#include "api_storm1.h"
+#include "bp_test.h"
+
+namespace {
+using rooms::Status;
+
+#define IS(call, expected) EXPECT_TRUE((call) == Status::expected)
+
+struct Fixture {
+  std::unique_ptr<rooms::FindingScheduler> s = rooms::makeFindingScheduler();
+  Fixture() {
+    s->addRoom("Huge", 20);
+    s->addRoom("Small", 4);
+    s->addRoom("Medium", 8);
+    s->addRoom("Small-twin", 4);
+  }
+  std::string any(const std::string& id, int start, int end, int people) {
+    std::string room = "-";
+    const Status st = s->bookAny(id, start, end, people, room);
+    return st == Status::Ok ? room : "refused:" + std::to_string(static_cast<int>(st));
+  }
+};
+}  // namespace
+
+TEST(Finding, PicksTheSmallestRoomThatIsBigEnough) {
+  Fixture f;
+  EXPECT_EQ(f.any("a", 0, 10, 2), std::string("Small"));
+  EXPECT_EQ(f.any("b", 0, 10, 4), std::string("Small-twin"));
+  EXPECT_EQ(f.any("c", 0, 10, 5), std::string("Medium"));
+  EXPECT_EQ(f.any("d", 0, 10, 9), std::string("Huge"));
+  EXPECT_EQ(f.any("e", 20, 30, 8), std::string("Medium"));
+}
+
+TEST(Finding, TiesGoToTheRoomAddedFirstAndBusyRoomsAreSkipped) {
+  Fixture f;
+  EXPECT_EQ(f.any("a", 0, 10, 1), std::string("Small"));
+  EXPECT_EQ(f.any("b", 5, 15, 1), std::string("Small-twin"));
+  EXPECT_EQ(f.any("c", 8, 12, 1), std::string("Medium"));
+  EXPECT_EQ(f.any("d", 9, 11, 1), std::string("Huge"));
+  EXPECT_EQ(f.any("e", 10, 20, 1), std::string("Small"));
+}
+
+TEST(Finding, AChosenBookingIsAnOrdinaryBooking) {
+  Fixture f;
+  EXPECT_EQ(f.any("a", 100, 160, 3), std::string("Small"));
+  std::string room;
+  IS(f.s->roomOf("a", room), Ok);
+  EXPECT_EQ(room, std::string("Small"));
+  IS(f.s->book("b", "Small", 150, 170, 1), Conflict);
+  EXPECT_FALSE(f.s->isFree("Small", 100, 101));
+  IS(f.s->cancel("a"), Ok);
+  EXPECT_TRUE(f.s->isFree("Small", 100, 160));
+  EXPECT_EQ(f.any("a", 100, 160, 3), std::string("Small"));
+  IS(f.s->book("m", "Medium", 0, 10, 8), Ok);
+  EXPECT_EQ(f.any("n", 5, 6, 5), std::string("Huge"));
+}
+
+TEST(Finding, TheRoomOnlyHoldsAsLongAsTheCallerKeepsItFreeOverTheWholeSpan) {
+  Fixture f;
+  IS(f.s->book("late", "Small", 50, 60, 1), Ok);
+  IS(f.s->book("late2", "Small-twin", 50, 60, 1), Ok);
+  EXPECT_EQ(f.any("a", 40, 55, 4), std::string("Medium"));
+  EXPECT_EQ(f.any("b", 40, 50, 4), std::string("Small"));
+}
+
+TEST(Finding, RefusalsFollowTheDocumentedOrderAndLeaveTheRoomUntouched) {
+  Fixture f;
+  std::string room = "untouched";
+  IS(f.s->bookAny("", 0, 10, 2, room), InvalidInput);
+  IS(f.s->bookAny("x", 10, 10, 2, room), InvalidInput);
+  IS(f.s->bookAny("x", 0, 10, 0, room), InvalidInput);
+  IS(f.s->bookAny("x", 0, rooms::kMaxTime + 1, 2, room), InvalidInput);
+  IS(f.s->bookAny("x", 10, 10, 99, room), InvalidInput);
+  IS(f.s->book("taken", "Small", 0, 10, 1), Ok);
+  IS(f.s->bookAny("taken", 0, 10, 99, room), DuplicateBooking);
+  IS(f.s->bookAny("big", 0, 10, 21, room), TooManyPeople);
+  EXPECT_EQ(room, std::string("untouched"));
+  IS(f.s->book("h", "Huge", 0, 10, 20), Ok);
+  IS(f.s->book("m", "Medium", 0, 10, 8), Ok);
+  IS(f.s->book("t", "Small-twin", 0, 10, 4), Ok);
+  IS(f.s->bookAny("none", 5, 6, 1, room), NoRoomFree);
+  EXPECT_EQ(room, std::string("untouched"));
+  IS(f.s->bookAny("ok", 10, 11, 1, room), Ok);
+  EXPECT_EQ(room, std::string("Small"));
+  std::string where;
+  IS(f.s->roomOf("none", where), UnknownBooking);
+}
+
+TEST(Finding, WithNoRoomsAtAllTheAnswerIsTooManyPeople) {
+  auto s = rooms::makeFindingScheduler();
+  std::string room;
+  IS(s->bookAny("a", 0, 10, 1, room), TooManyPeople);
+  IS(s->addRoom("Tiny", 2), Ok);
+  IS(s->bookAny("a", 0, 10, 3, room), TooManyPeople);
+  IS(s->bookAny("a", 0, 10, 2, room), Ok);
+  IS(s->bookAny("b", 0, 10, 2, room), NoRoomFree);
+}
+
+TEST(Finding, RandomRequestsAgreeWithAnIndependentSearch) {
+  unsigned long long seed = 777ULL;
+  auto next = [&seed](int bound) {
+    seed = seed * 6364136223846793005ULL + 1442695040888963407ULL;
+    return static_cast<int>((seed >> 33) % static_cast<unsigned long long>(bound));
+  };
+  auto s = rooms::makeFindingScheduler();
+  struct R {
+    std::string name;
+    int cap;
+    std::vector<std::pair<int, int>> spans;
+  };
+  std::vector<R> model = {{"r0", 6, {}}, {"r1", 3, {}}, {"r2", 10, {}}, {"r3", 3, {}}, {"r4", 6, {}}};
+  for (const auto& r : model) s->addRoom(r.name, r.cap);
+  for (int step = 0; step < 1500; ++step) {
+    const int start = next(100);
+    const int end = start + 1 + next(15);
+    const int people = 1 + next(11);
+    int best = -1;
+    bool anyFit = false;
+    for (int i = 0; i < static_cast<int>(model.size()); ++i) {
+      if (model[i].cap < people) continue;
+      anyFit = true;
+      bool free = true;
+      for (const auto& sp : model[i].spans) free = free && !(sp.first < end && start < sp.second);
+      if (free && (best < 0 || model[i].cap < model[best].cap)) best = i;
+    }
+    std::string room;
+    const Status st = s->bookAny("id" + std::to_string(step), start, end, people, room);
+    if (!anyFit) {
+      EXPECT_TRUE(st == Status::TooManyPeople);
+    } else if (best < 0) {
+      EXPECT_TRUE(st == Status::NoRoomFree);
+    } else {
+      EXPECT_TRUE(st == Status::Ok);
+      EXPECT_EQ(room, model[best].name);
+      model[best].spans.push_back({start, end});
+    }
+  }
+}
+1a:T22f2,#include <memory>
+#include <string>
+#include <vector>
+
+#include "api_storm2.h"
+#include "bp_test.h"
+
+namespace {
+using rooms::Status;
+
+#define IS(call, expected) EXPECT_TRUE((call) == Status::expected)
+
+struct Fixture {
+  std::unique_ptr<rooms::SeriesScheduler> s = rooms::makeSeriesScheduler();
+  Fixture() {
+    s->addRoom("Atlas", 6);
+    s->addRoom("Borealis", 12);
+  }
+  std::string spans(const std::string& room) const {
+    std::string out;
+    for (const auto& b : s->bookings(room)) {
+      out += (out.empty() ? "" : " ") + b.id + "@" + std::to_string(b.start) + "-" + std::to_string(b.end);
+    }
+    return out;
+  }
+};
+}  // namespace
+
+TEST(Series, OccurrencesRepeatAtAFixedStepAndAreListedInStartOrder) {
+  Fixture f;
+  IS(f.s->book("single", "Atlas", 300, 330, 2), Ok);
+  IS(f.s->bookRepeating("standup", "Atlas", 100, 115, 5, 1440, 3), Ok);
+  EXPECT_EQ(f.spans("Atlas"), std::string("standup@100-115 single@300-330 standup@1540-1555 standup@2980-2995"));
+  const auto list = f.s->bookings("Atlas");
+  EXPECT_EQ(list[0].attendees, 5);
+  EXPECT_EQ(list[3].attendees, 5);
+  std::string room;
+  IS(f.s->roomOf("standup", room), Ok);
+  EXPECT_EQ(room, std::string("Atlas"));
+  EXPECT_FALSE(f.s->isFree("Atlas", 1540, 1541));
+  EXPECT_TRUE(f.s->isFree("Atlas", 1555, 2980));
+}
+
+TEST(Series, BackToBackOccurrencesAreAllowedWhenEveryEqualsTheLength) {
+  Fixture f;
+  IS(f.s->bookRepeating("block", "Atlas", 0, 60, 1, 60, 4), Ok);
+  EXPECT_EQ(f.spans("Atlas"), std::string("block@0-60 block@60-120 block@120-180 block@180-240"));
+  IS(f.s->book("x", "Atlas", 240, 250, 1), Ok);
+  IS(f.s->bookRepeating("tight", "Borealis", 0, 60, 1, 59, 2), InvalidInput);
+  EXPECT_TRUE(f.s->bookings("Borealis").empty());
+}
+
+TEST(Series, OneClashingOccurrenceRefusesTheWholeSeriesAndLeavesNothingBehind) {
+  Fixture f;
+  IS(f.s->book("blocker", "Atlas", 3000, 3050, 1), Ok);
+  IS(f.s->bookRepeating("weekly", "Atlas", 100, 160, 2, 1440, 3), Conflict);
+  EXPECT_EQ(f.spans("Atlas"), std::string("blocker@3000-3050"));
+  std::string room;
+  IS(f.s->roomOf("weekly", room), UnknownBooking);
+  IS(f.s->bookRepeating("weekly", "Atlas", 100, 160, 2, 1440, 2), Ok);
+  IS(f.s->bookRepeating("early", "Atlas", 0, 10, 2, 20, 8), Conflict);
+  IS(f.s->bookRepeating("early", "Atlas", 0, 10, 2, 20, 3), Ok);
+  EXPECT_EQ(f.spans("Atlas"), std::string("early@0-10 early@20-30 early@40-50 weekly@100-160 weekly@1540-1600 blocker@3000-3050"));
+}
+
+TEST(Series, CheckOrderIsTheSameAsBookPlusTheRepeatRules) {
+  Fixture f;
+  IS(f.s->book("taken", "Atlas", 0, 10, 1), Ok);
+  IS(f.s->bookRepeating("a", "Atlas", 0, 10, 1, 10, 0), InvalidInput);
+  IS(f.s->bookRepeating("a", "Atlas", 0, 10, 1, 10, rooms::kMaxCount + 1), InvalidInput);
+  IS(f.s->bookRepeating("a", "Atlas", 0, 10, 1, rooms::kMaxTime + 1, 2), InvalidInput);
+  IS(f.s->bookRepeating("a", "Atlas", 0, 10, 1, 9, 2), InvalidInput);
+  IS(f.s->bookRepeating("a", "Atlas", 20, 30, 1, 500000, 3), InvalidInput);
+  IS(f.s->bookRepeating("a", "Atlas", 20, 30, 1, 500000, 2), Ok);
+  IS(f.s->bookRepeating("far", "Atlas", 0, 10, 1, 20000, rooms::kMaxCount), InvalidInput);
+  IS(f.s->bookRepeating("b", "Nowhere", 0, 10, 0, 10, 2), InvalidInput);
+  IS(f.s->bookRepeating("b", "Nowhere", 0, 10, 1, 10, 2), UnknownRoom);
+  IS(f.s->bookRepeating("taken", "Atlas", 100, 110, 99, 10, 2), DuplicateBooking);
+  IS(f.s->bookRepeating("b", "Atlas", 100, 110, 7, 10, 2), TooManyPeople);
+  IS(f.s->bookRepeating("b", "Atlas", 5, 15, 6, 10, 2), Conflict);
+  IS(f.s->bookRepeating("longest", "Borealis", 0, 10, 3, 20000, 52), InvalidInput);
+  IS(f.s->bookRepeating("longest", "Borealis", 0, 10, 3, 19000, 52), Ok);
+  EXPECT_EQ(f.s->bookings("Borealis").size(), std::size_t(52));
+}
+
+TEST(Series, CancelRemovesEveryRemainingOccurrenceAndFreesTheId) {
+  Fixture f;
+  IS(f.s->bookRepeating("s", "Atlas", 0, 10, 1, 100, 4), Ok);
+  IS(f.s->cancelOccurrence("s", 1), Ok);
+  IS(f.s->cancel("s"), Ok);
+  EXPECT_TRUE(f.s->bookings("Atlas").empty());
+  IS(f.s->cancel("s"), UnknownBooking);
+  std::string room;
+  IS(f.s->roomOf("s", room), UnknownBooking);
+  IS(f.s->bookRepeating("s", "Borealis", 0, 10, 1, 100, 2), Ok);
+  EXPECT_EQ(f.spans("Borealis"), std::string("s@0-10 s@100-110"));
+}
+
+TEST(Series, CancellingOneOccurrenceFreesJustThatSlotAndIndexesNeverShift) {
+  Fixture f;
+  IS(f.s->bookRepeating("s", "Atlas", 0, 10, 1, 100, 4), Ok);
+  IS(f.s->cancelOccurrence("s", 1), Ok);
+  EXPECT_EQ(f.spans("Atlas"), std::string("s@0-10 s@200-210 s@300-310"));
+  EXPECT_TRUE(f.s->isFree("Atlas", 100, 110));
+  IS(f.s->cancelOccurrence("s", 1), UnknownBooking);
+  IS(f.s->cancelOccurrence("s", 4), UnknownBooking);
+  IS(f.s->cancelOccurrence("s", -1), UnknownBooking);
+  IS(f.s->cancelOccurrence("nope", 0), UnknownBooking);
+  IS(f.s->cancelOccurrence("s", 3), Ok);
+  EXPECT_EQ(f.spans("Atlas"), std::string("s@0-10 s@200-210"));
+  IS(f.s->book("filler", "Atlas", 100, 110, 1), Ok);
+  IS(f.s->book("late", "Atlas", 300, 310, 1), Ok);
+}
+
+TEST(Series, RemovingTheLastOccurrenceEndsTheBookingAndAPlainBookingIsASeriesOfOne) {
+  Fixture f;
+  IS(f.s->bookRepeating("s", "Atlas", 0, 10, 1, 100, 2), Ok);
+  IS(f.s->cancelOccurrence("s", 0), Ok);
+  std::string room;
+  IS(f.s->roomOf("s", room), Ok);
+  IS(f.s->book("s", "Atlas", 500, 510, 1), DuplicateBooking);
+  IS(f.s->cancelOccurrence("s", 1), Ok);
+  IS(f.s->roomOf("s", room), UnknownBooking);
+  IS(f.s->book("s", "Atlas", 500, 510, 1), Ok);
+  IS(f.s->cancelOccurrence("s", 1), UnknownBooking);
+  IS(f.s->cancelOccurrence("s", 0), Ok);
+  IS(f.s->cancel("s"), UnknownBooking);
+  EXPECT_TRUE(f.s->bookings("Atlas").empty());
+}
+
+TEST(Series, SeriesTakePartInRoomChoiceAndSingleBookingsClashWithEveryOccurrence) {
+  Fixture f;
+  IS(f.s->bookRepeating("s", "Atlas", 0, 60, 4, 1000, 3), Ok);
+  IS(f.s->book("x", "Atlas", 1030, 1040, 1), Conflict);
+  IS(f.s->book("y", "Atlas", 2059, 2100, 1), Conflict);
+  IS(f.s->book("z", "Atlas", 2060, 2100, 1), Ok);
+  std::string room;
+  IS(f.s->bookAny("a", 1000, 1010, 3, room), Ok);
+  EXPECT_EQ(room, std::string("Borealis"));
+  IS(f.s->bookAny("b", 1060, 1070, 3, room), Ok);
+  EXPECT_EQ(room, std::string("Atlas"));
+  IS(f.s->cancelOccurrence("s", 1), Ok);
+  IS(f.s->bookAny("c", 1000, 1010, 3, room), Ok);
+  EXPECT_EQ(room, std::string("Atlas"));
+}
+
+TEST(Series, RandomSeriesAgreeWithAPerMinuteModel) {
+  unsigned long long seed = 424242ULL;
+  auto next = [&seed](int bound) {
+    seed = seed * 6364136223846793005ULL + 1442695040888963407ULL;
+    return static_cast<int>((seed >> 33) % static_cast<unsigned long long>(bound));
+  };
+  auto s = rooms::makeSeriesScheduler();
+  s->addRoom("R", 20);
+  const int horizon = 600;
+  std::vector<std::string> owner(horizon, "");
+  std::vector<std::vector<std::pair<int, int>>> parts(80);  // per id: occurrence spans still live
+  std::vector<bool> live(80, false);
+  for (int step = 0; step < 3000; ++step) {
+    const int id = next(80);
+    const std::string name = "s" + std::to_string(id);
+    const int op = next(6);
+    if (op < 3) {
+      const int start = next(300);
+      const int len = 1 + next(12);
+      const int every = len + next(40);
+      const int count = 1 + next(6);
+      const int lastEnd = start + len + (count - 1) * every;
+      Status expected = Status::Ok;
+      if (lastEnd > horizon) {
+        // The model's horizon is smaller than kMaxTime, so skip requests that would leave it.
+        continue;
+      }
+      if (live[id]) expected = Status::DuplicateBooking;
+      else {
+        for (int k = 0; k < count && expected == Status::Ok; ++k) {
+          for (int t = start + k * every; t < start + k * every + len; ++t) {
+            if (!owner[t].empty()) expected = Status::Conflict;
+          }
+        }
+      }
+      EXPECT_TRUE(s->bookRepeating(name, "R", start, start + len, 1, every, count) == expected);
+      if (expected == Status::Ok) {
+        live[id] = true;
+        parts[id].clear();
+        for (int k = 0; k < count; ++k) {
+          parts[id].push_back({start + k * every, start + k * every + len});
+          for (int t = start + k * every; t < start + k * every + len; ++t) owner[t] = name;
+        }
+      }
+    } else if (op == 3) {
+      EXPECT_TRUE(s->cancel(name) == (live[id] ? Status::Ok : Status::UnknownBooking));
+      if (live[id]) {
+        for (auto& o : owner) {
+          if (o == name) o.clear();
+        }
+        live[id] = false;
+      }
+    } else {
+      const int k = next(7);
+      const bool ok = live[id] && k < static_cast<int>(parts[id].size()) && parts[id][k].first >= 0;
+      EXPECT_TRUE(s->cancelOccurrence(name, k) == (ok ? Status::Ok : Status::UnknownBooking));
+      if (ok) {
+        for (int t = parts[id][k].first; t < parts[id][k].second; ++t) owner[t].clear();
+        parts[id][k] = {-1, -1};
+        bool any = false;
+        for (const auto& p : parts[id]) any = any || p.first >= 0;
+        if (!any) live[id] = false;
+      }
+    }
+  }
+  for (int t = 0; t < horizon; ++t) EXPECT_EQ(s->isFree("R", t, t + 1), owner[t].empty());
+}
+1b:T41c,#pragma once
+#include <map>
+#include <string>
+
+// Which room holds each live booking, and how many of its occurrences are left.
+class BookingIndex {
+ public:
+  bool contains(const std::string& id) const { return placements_.count(id) != 0; }
+
+  void record(const std::string& id, const std::string& room, int occurrences) {
+    placements_[id] = {room, occurrences};
+  }
+
+  bool roomOf(const std::string& id, std::string& room) const {
+    auto it = placements_.find(id);
+    if (it == placements_.end()) return false;
+    room = it->second.room;
+    return true;
+  }
+
+  // Forgets the booking entirely.
+  void forget(const std::string& id) { placements_.erase(id); }
+
+  // One occurrence is gone; the booking is forgotten with its last one.
+  void occurrenceRemoved(const std::string& id) {
+    auto it = placements_.find(id);
+    if (it != placements_.end() && --it->second.remaining == 0) placements_.erase(it);
+  }
+
+ private:
+  struct Placement {
+    std::string room;
+    int remaining = 0;
+  };
+  std::map<std::string, Placement> placements_;
+};
+1c:T6f9,#pragma once
+#include <iterator>
+#include <map>
+#include <string>
+#include <vector>
+
+#include "span.h"
+
+// One occurrence of a booking inside a room's calendar.
+struct Slot {
+  Span span;
+  std::string id;
+  int attendees = 0;
+  int index = 0;  // position in the original series
+};
+
+// The meetings in one room, keyed by start time. Slots never overlap, so the only two that can clash with a new span are
+// its neighbours in start order.
+class Calendar {
+ public:
+  bool isFree(const Span& span) const {
+    auto next = slots_.lower_bound(span.start);
+    if (next != slots_.end() && overlaps(next->second.span, span)) return false;
+    if (next != slots_.begin() && overlaps(std::prev(next)->second.span, span)) return false;
+    return true;
+  }
+
+  bool allFree(const std::vector<Span>& spans) const {
+    for (const Span& s : spans) {
+      if (!isFree(s)) return false;
+    }
+    return true;
+  }
+
+  void add(const Slot& slot) { slots_.emplace(slot.span.start, slot); }
+
+  // Removes every occurrence of a booking; returns how many were removed.
+  int removeAll(const std::string& id) {
+    int removed = 0;
+    for (auto it = slots_.begin(); it != slots_.end();) {
+      if (it->second.id == id) {
+        it = slots_.erase(it);
+        ++removed;
+      } else {
+        ++it;
+      }
+    }
+    return removed;
+  }
+
+  bool removeOccurrence(const std::string& id, int index) {
+    for (auto it = slots_.begin(); it != slots_.end(); ++it) {
+      if (it->second.id == id && it->second.index == index) {
+        slots_.erase(it);
+        return true;
+      }
+    }
+    return false;
+  }
+
+  std::vector<Slot> slots() const {
+    std::vector<Slot> out;
+    for (const auto& entry : slots_) out.push_back(entry.second);
+    return out;
+  }
+
+ private:
+  std::map<int, Slot> slots_;
+};
+1d:T51b,#pragma once
+#include <string>
+#include <utility>
+#include <vector>
+
+#include "api_storm2.h"
+#include "span.h"
+
+// One request to book: a first meeting plus how often it repeats. A single booking is a series of one.
+class BookingRequest {
+ public:
+  BookingRequest(std::string id, Span first, int attendees, int every, int count)
+      : id_(std::move(id)), first_(first), attendees_(attendees), every_(every), count_(count) {}
+
+  const std::string& id() const { return id_; }
+  int attendees() const { return attendees_; }
+
+  bool wellFormed() const {
+    if (id_.empty() || id_.size() > 32 || attendees_ < 1) return false;
+    if (first_.start < 0 || first_.end <= first_.start) return false;
+    if (count_ < 1 || count_ > rooms::kMaxCount) return false;
+    if (every_ < first_.end - first_.start || every_ > rooms::kMaxTime) return false;
+    return lastEnd() <= rooms::kMaxTime;
+  }
+
+  std::vector<Span> occurrences() const {
+    std::vector<Span> spans;
+    for (int k = 0; k < count_; ++k) spans.push_back({first_.start + k * every_, first_.end + k * every_});
+    return spans;
+  }
+
+ private:
+  long long lastEnd() const { return static_cast<long long>(first_.end) + static_cast<long long>(count_ - 1) * every_; }
+
+  std::string id_;
+  Span first_;
+  int attendees_;
+  int every_;
+  int count_;
+};
+1e:Tf4f,#pragma once
+#include <memory>
+#include <string>
+#include <vector>
+
+#include "booking_index.h"
+#include "request.h"
+#include "room_chooser.h"
+#include "room_directory.h"
+
+class SchedulerImpl : public rooms::SeriesScheduler {
+ public:
+  SchedulerImpl() : chooser_(std::make_unique<BestFitChooser>()) {}
+
+  rooms::Status addRoom(const std::string& name, int capacity) override {
+    if (name.empty() || name.size() > 32 || capacity < 1 || capacity > rooms::kMaxCapacity) return rooms::Status::InvalidInput;
+    return directory_.add(name, capacity) ? rooms::Status::Ok : rooms::Status::DuplicateRoom;
+  }
+
+  rooms::Status book(const std::string& id, const std::string& room, int start, int end, int attendees) override {
+    return bookRepeating(id, room, start, end, attendees, end - start, 1);
+  }
+
+  rooms::Status bookRepeating(const std::string& id, const std::string& room, int start, int end, int attendees,
+                              int every, int count) override {
+    BookingRequest request(id, {start, end}, attendees, every, count);
+    if (!request.wellFormed()) return rooms::Status::InvalidInput;
+    Room* target = directory_.find(room);
+    if (target == nullptr) return rooms::Status::UnknownRoom;
+    if (index_.contains(id)) return rooms::Status::DuplicateBooking;
+    if (!target->fits(attendees)) return rooms::Status::TooManyPeople;
+    if (!target->freeFor(request.occurrences())) return rooms::Status::Conflict;
+    place(request, *target);
+    return rooms::Status::Ok;
+  }
+
+  rooms::Status bookAny(const std::string& id, int start, int end, int attendees, std::string& room) override {
+    BookingRequest request(id, {start, end}, attendees, end - start, 1);
+    if (!request.wellFormed()) return rooms::Status::InvalidInput;
+    if (index_.contains(id)) return rooms::Status::DuplicateBooking;
+    if (!directory_.anyFits(attendees)) return rooms::Status::TooManyPeople;
+    Room* chosen = chooser_->choose(directory_, attendees, request.occurrences());
+    if (chosen == nullptr) return rooms::Status::NoRoomFree;
+    place(request, *chosen);
+    room = chosen->name();
+    return rooms::Status::Ok;
+  }
+
+  rooms::Status cancel(const std::string& id) override {
+    std::string name;
+    if (!index_.roomOf(id, name)) return rooms::Status::UnknownBooking;
+    directory_.find(name)->calendar().removeAll(id);
+    index_.forget(id);
+    return rooms::Status::Ok;
+  }
+
+  rooms::Status cancelOccurrence(const std::string& id, int index) override {
+    std::string name;
+    if (!index_.roomOf(id, name)) return rooms::Status::UnknownBooking;
+    if (!directory_.find(name)->calendar().removeOccurrence(id, index)) return rooms::Status::UnknownBooking;
+    index_.occurrenceRemoved(id);
+    return rooms::Status::Ok;
+  }
+
+  bool isFree(const std::string& room, int start, int end) const override {
+    const Room* target = directory_.find(room);
+    if (target == nullptr || start < 0 || end <= start || end > rooms::kMaxTime) return false;
+    return target->calendar().isFree({start, end});
+  }
+
+  std::vector<rooms::Booking> bookings(const std::string& room) const override {
+    std::vector<rooms::Booking> out;
+    const Room* target = directory_.find(room);
+    if (target == nullptr) return out;
+    for (const Slot& slot : target->calendar().slots()) out.push_back({slot.id, slot.span.start, slot.span.end, slot.attendees});
+    return out;
+  }
+
+  rooms::Status roomOf(const std::string& id, std::string& room) const override {
+    return index_.roomOf(id, room) ? rooms::Status::Ok : rooms::Status::UnknownBooking;
+  }
+
+ private:
+  void place(const BookingRequest& request, Room& room) {
+    int index = 0;
+    for (const Span& span : request.occurrences()) room.calendar().add({span, request.id(), request.attendees(), index++});
+    index_.record(request.id(), room.name(), index);
+  }
+
+  RoomDirectory directory_;
+  BookingIndex index_;
+  std::unique_ptr<RoomChooser> chooser_;
+};
+f:[["children",{"s":"__PAGE__","h":160,"d":{"r":["$","$1","c",{"children":[["$","$L12",null,{"bundle":{"id":"meeting-rooms","title":"Meeting room scheduler","level":"SDE2","parMinutes":60,"patterns":["Strategy","Facade"],"requirements":[{"id":"R-halfopen","text":"Times are whole minutes and every span is half-open [start, end): a meeting ending at 60 and one starting at 60 share the room, while any overlap of even one minute (inside, around, either edge, spanning several meetings) is a Conflict. bookings(room) lists the room in start order.","phase":"base","hidden":true},{"id":"R-validate","text":"book checks in this order: InvalidInput (id of 1 to 32 characters, start >= 0, end > start, end <= 10^6, attendees >= 1), UnknownRoom, DuplicateBooking (a live booking has the id), TooManyPeople, Conflict. addRoom: name 1 to 32 characters, capacity 1 to 1000, then DuplicateRoom. A refused call changes nothing.","phase":"base","hidden":true},{"id":"R-capacity","text":"A room holds up to its capacity: exactly the capacity fits, one more is TooManyPeople, and that check comes before the clash check.","phase":"base","hidden":true},{"id":"R-cancel","text":"cancel(id) frees the span at once and the id becomes free again; UnknownBooking for an unknown or already cancelled id. roomOf(id) names the room of a live booking.","phase":"base","hidden":true},{"id":"R-isfree","text":"isFree(room, start, end) is false for an unknown room or an invalid span and never changes anything; otherwise it says whether no booking overlaps the span.","phase":"base","hidden":true},{"id":"R-bestfit","text":"bookAny(id, start, end, attendees, room) books the smallest room with enough seats that is free for the whole span, the one added first among equals. Check order: InvalidInput, DuplicateBooking, TooManyPeople (no room anywhere is big enough, also with no rooms), NoRoomFree. The room argument is left alone on a refusal, and the result is an ordinary booking.","phase":"storm1","hidden":true},{"id":"R-series","text":"bookRepeating(id, room, start, end, attendees, every, count) books occurrence k at [start + k * every, end + k * every): count 1 to 52, every at least the meeting's length (so occurrences never overlap each other) and the last one must end by 10^6. It is all or nothing and checked like book (InvalidInput, UnknownRoom, DuplicateBooking, TooManyPeople, then Conflict on any occurrence). It is ONE booking with one id: cancel(id) removes all remaining occurrences, roomOf answers while one remains, and the id stays taken until the last is gone.","phase":"storm2","hidden":true},{"id":"R-occurrence","text":"cancelOccurrence(id, index) removes one occurrence, counted from 0 in the original series, so indexes never shift; UnknownBooking for an unknown id or an index that is out of range or already removed. A plain booking is a series of one with index 0, and removing the last occurrence frees the id.","phase":"storm2","hidden":true}],"brief":"$13","editorial":"$14","clarify":[{"id":"q-time","text":"What are the times? Whole minutes? And if one meeting ends at 10:00 and another starts at 10:00 in the same room, is that a clash?","answer":"Whole minutes counted from zero, 0 to 10^6. Every span is half-open: start is in, end is out. A meeting that ends at 60 and one that starts at 60 share the room without a clash. Any overlap of even one minute is a Conflict, whether the new meeting sits inside an old one, around it, over either edge, or across several. bookings(room) lists a room's meetings ordered by start.","reveals":["R-halfopen"],"quality":"essential"},{"id":"q-errors","text":"Which errors are there, which wins when several apply, and what does a refused call do to the state?","answer":"book checks in this order: InvalidInput (id of 1 to 32 characters, start at least 0, end after start and at most 10^6, at least one attendee), UnknownRoom, DuplicateBooking (a live booking already has the id), TooManyPeople, Conflict. addRoom: a name of 1 to 32 characters and capacity 1 to 1000 (InvalidInput), then DuplicateRoom. A refused call changes nothing.","reveals":["R-validate"],"quality":"essential"},{"id":"q-capacity","text":"What is the rule for the head count against the room's seats?","answer":"A room holds up to its capacity: a group exactly the size of the room fits, one more person is TooManyPeople. The capacity check comes before the clash check, so a too-big group is told about the room, not about the calendar.","reveals":["R-capacity"],"quality":"essential"},{"id":"q-cancel","text":"What does cancel do? Can the id be used again afterwards? How do I find where a booking is?","answer":"cancel removes the booking and the span is free at once; UnknownBooking for an unknown or already cancelled id. A cancelled booking's id is free to use again, even in another room. roomOf(id, room) gives the name of the room of a live booking, UnknownBooking otherwise.","reveals":["R-cancel"],"quality":"essential"},{"id":"q-isfree","text":"What should isFree say for a room that does not exist or a nonsense span? May it change anything?","answer":"isFree is a pure question. It is false for an unknown room or an invalid span (start below 0, end not after start, end beyond 10^6), and otherwise true exactly when no booking overlaps the span. It never changes anything.","reveals":["R-isfree"],"quality":"useful"},{"id":"q-autoassign","text":"Will callers ever want the system to choose the room instead of naming one? If so, which room?","answer":"Plan for it (a follow-up will ask). The caller gives a span and a head count; the system picks the smallest room that is big enough and free for the whole span, the one added first among equally small rooms. It reports the chosen name and the booking is an ordinary one afterwards.","reveals":["R-bestfit"],"quality":"useful"},{"id":"q-nofit","text":"When an automatic booking fails, how does the caller tell 'no room is big enough' from 'all the big enough rooms are busy'?","answer":"Two statuses: TooManyPeople when no room at all has the seats (also when there are no rooms), NoRoomFree when big enough rooms exist but every one is taken somewhere in the span. The same checks as book come first (InvalidInput, DuplicateBooking), and the caller's room argument is left alone on any refusal.","reveals":["R-bestfit"],"quality":"useful"},{"id":"q-repeat","text":"Will meetings ever repeat, like a weekly stand-up? How are the repeats described, and what if one of them clashes?","answer":"Plan for it. A repeating booking has a start, an end, a step 'every' and a count: occurrence k is shifted by k * every. The count is 1 to 52, the step is at least the meeting's length (so occurrences never overlap each other), and the last one must end by 10^6. It is all or nothing: if any occurrence clashes with anything, nothing is booked and the status is Conflict.","reveals":["R-series"],"quality":"useful"},{"id":"q-series-identity","text":"Is a repeating meeting one booking or many? What do cancel, roomOf and bookings do with it?","answer":"One booking with one id. bookings(room) lists every remaining occurrence, each with that id, its own start and end, in start order. cancel(id) removes every remaining occurrence, roomOf answers while any occurrence remains, and the id stays taken until the last one is gone.","reveals":["R-series"],"quality":"useful"},{"id":"q-occurrence","text":"Can one occurrence of a series be dropped without cancelling the rest? How are they numbered?","answer":"Yes, with cancelOccurrence(id, index). Indexes count from 0 in the original series and never shift when others are removed. An unknown id, an index out of range or an occurrence already removed is UnknownBooking. A plain booking is a series of one, index 0, and removing the last remaining occurrence ends the booking and frees the id.","reveals":["R-occurrence"],"quality":"useful"},{"id":"q-tz","text":"What about time zones, daylight saving, working hours and holidays?","answer":"Out of scope here. Times are plain minutes, so nothing can shift under you. Say how you would handle local time (store UTC instants, expand 'every Monday at 9' in the owner's zone, and decide what a 2:30 meeting does on the night the clocks change), but the tests do none of it.","reveals":[],"quality":"noise"},{"id":"q-threads","text":"Will several people book at once? Do I need locking?","answer":"No threads in the tests: single-threaded and deterministic. Say what you would change (a lock per room, a fixed lock order for multi-room work, or one writer thread) and why check-then-book must be one atomic step.","reveals":[],"quality":"noise"},{"id":"q-persist","text":"Should bookings be stored in a database, and should there be notifications or invitations?","answer":"No. Everything is in memory and the tests call only the Scheduler interface. Invitations, e-mails and calendar sync are other systems that would listen to bookings.","reveals":[],"quality":"noise"},{"id":"q-perf","text":"How many rooms and bookings? Do I need to worry about speed?","answer":"A few dozen rooms and a few thousand bookings per room. Checking a span must not scan a room's whole calendar: an ordered structure that looks at neighbours is expected. Say what you would change for thousands of rooms.","reveals":[],"quality":"noise"}],"rubric":[{"id":"res-facade","text":"Exposes the public calls and sequences the collaborators: validate, find the room, check capacity and clashes, then commit; no interval maths of its own","phase":"base","owners":["SchedulerImpl","SchedulerService","Scheduler","RoomScheduler","BookingService","SchedulerFacade"]},{"id":"res-span","text":"Represents a half-open stretch of minutes and answers whether two of them overlap, in one place","phase":"base","owners":["Span","TimeRange","Interval","TimeSlot","Period","DateRange"]},{"id":"res-calendar","text":"Keeps one room's meetings in start order and answers 'is this span free' by looking only at the neighbours; adds and removes meetings","phase":"base","owners":["Calendar","RoomCalendar","Schedule","Timetable","BookingList","IntervalSet"]},{"id":"res-room","text":"Represents a room: its name, seats and calendar, and whether a group fits","phase":"base","owners":["Room","MeetingRoom","RoomInfo","Space"]},{"id":"res-directory","text":"Owns the rooms in the order they were added and finds one by name","phase":"base","owners":["RoomDirectory","RoomRegistry","RoomRepository","RoomStore","Rooms","Building"]},{"id":"res-index","text":"Knows which room holds each live booking and how many occurrences remain, so cancel and roomOf need no search","phase":"base","owners":["BookingIndex","BookingRegistry","BookingLedger","BookingDirectory","BookingStore"]},{"id":"res-chooser","text":"Decides, as its own Strategy, which free room gets a booking that names none, so a different rule touches no existing class","phase":"storm1","owners":["RoomChooser","RoomSelector","AllocationStrategy","RoomPicker","RoomAllocator","BestFitChooser"]},{"id":"res-request","text":"Describes a booking as a first meeting plus a repeat rule, validates it and expands it into occurrences, so a single booking is a series of one","phase":"storm2","owners":["BookingRequest","Series","Recurrence","BookingSeries","RepeatRule","SeriesRequest"]}],"followups":[{"level":"SDE2","question":"Why are spans half-open, and where does the bug hide if you use closed ones?","answer":"With [start, end) a meeting that ends at 60 and one that starts at 60 do not touch, and the overlap test is one line: a.start < b.end and b.start < a.end. With closed spans you either forbid back-to-back meetings or you write end-1 everywhere and get off-by-one errors at the edges. Half-open spans also compose: the lengths add up, and a day can be cut into pieces with no gaps and no overlaps. Pick one convention, write it in the interface and test the boundary."},{"level":"SDE2","question":"Why an ordered map keyed by start time, and why is checking the two neighbours enough?","answer":"Meetings in one room never overlap, so they are sorted by start and by end in the same order. A new span can only clash with the first meeting that starts at or after its start (if that begins before the new end) or with the meeting just before it (if that ends after the new start). Anything further away is separated from the span by one of those two. That makes the check O(log n) instead of a scan, and the invariant 'no overlaps' is what makes it correct, so a single add path must protect it."},{"level":"SDE2","question":"A refused booking must change nothing. How does the code guarantee it, especially for a series?","answer":"Check everything first, write afterwards. The facade validates, looks up the room, checks capacity and tests every occurrence against the calendar before it adds the first slot. If the writes could fail halfway you would need to undo them, which is a second code path to get wrong; checking first keeps the commit a plain loop that cannot fail. The test for it is a series whose last occurrence clashes and an assertion that the room is exactly as before."},{"level":"Senior","question":"Best fit, first fit and worst fit: which room should an automatic booking get, and what is the trade-off?","answer":"Best fit (the smallest room that is big enough) keeps large rooms free for large groups, which raises the number of requests you can satisfy later; it is what this problem asks for. First fit is simpler and fair to the room order but lets a pair of people take the boardroom. Worst fit leaves the most slack and is almost never right here. Best fit can still fail a later request by fragmenting time: the optimal assignment of all requests is an interval-scheduling problem, and an online greedy rule cannot be optimal. Put the rule behind a Strategy so the office can change it, for example to prefer rooms near the team or with a projector."},{"level":"Senior","question":"Store a repeating meeting as a rule ('every 7 days, 12 times') or as expanded occurrences? What changes either way?","answer":"Expanded occurrences make every query the same as for a single meeting: one calendar, one overlap test, one listing. The cost is memory and the work of editing the whole series (the count is capped at 52 here). A rule stores one row and scales to 'forever', but every read must expand the rule over the window it is asked about, exceptions (one occurrence moved or cancelled) become a second structure, and overlap checks must compare rules with rules and rules with meetings. Real calendars store the rule plus exceptions and expand lazily; with a hard cap and a need for exact answers, expanding on write is the simpler and safer choice."},{"level":"Senior","question":"Two people book the same room at the same time from different threads. What goes wrong and what are your options?","answer":"Check-then-book is a race: both see the room free, both commit, and the no-overlap invariant is gone. Options: one mutex around the whole scheduler (simple, serialises everything), a lock per room (concurrent bookings in different rooms), or a single writer thread fed by a queue. A series or an automatic booking touches several rooms or several slots, so the checks and the commit must happen under one critical section; with several room locks take them in a fixed order (by room name or index) to avoid deadlock. Reads can use a shared lock or a snapshot. In a database the same guarantee is a transaction with a constraint or an exclusion constraint on (room, time range)."},{"level":"Senior","question":"How do you add a 'buffer' of 10 minutes between meetings, and where does the change land?","answer":"A buffer is a rule about clashing, not about storage, so it belongs where the overlap test lives. Either widen the span you test by the buffer on both sides (Span grows a method such as padded(minutes)) or give the room a setting that the calendar uses when it asks 'is this free'. The stored meeting keeps its real times, so listing and cancelling do not change. The tests for half-open back-to-back meetings then change on purpose, which is why the contract has to say which one applies. If the buffer differs per room it is a field on Room, not a constant."},{"level":"Staff","question":"Recurring meetings across time zones and daylight saving: how would you model them?","answer":"Store what the user meant: a start in a named zone, a recurrence rule (an iCalendar-style RRULE such as weekly on Monday) and a list of exceptions (cancelled or moved occurrences). Expand to UTC instants only for the window being queried, using the zone database, because 'every Monday at 9:00' is not a fixed number of minutes apart across a clock change. Decide and document what happens to a time that does not exist (spring forward) or occurs twice (fall back). Keep the minute-based core of this problem as the 'instants' layer underneath and put the rule expansion above it."},{"level":"Staff","question":"The company has 5,000 rooms in 200 buildings and a booking should take milliseconds. What changes?","answer":"Shard by building (most requests name one building or search within it), so a booking touches one shard and one room lock. Per room an ordered map is fine; for 'find any free room' across a building keep an index by time bucket or use an interval tree or segment tree per room so you can skip rooms that are busy at the start of the span. Keep the source of truth in a database with an exclusion constraint on (room, range) so double booking is impossible even if a cache is stale, and put the best-fit search on a read replica followed by an optimistic write that retries on a conflict. Events (booked, cancelled) feed invitations, display panels and analytics asynchronously."}],"apiHeader":"$15","phaseApis":{"storm1":"$16","storm2":"$17"},"phases":["base","storm1","storm2"],"tests":{"base":[{"path":"rooms_base.cpp","content":"$18"}],"storm1":[{"path":"rooms_storm1.cpp","content":"$19"}],"storm2":[{"path":"rooms_storm2.cpp","content":"$1a"}]},"reference":[{"path":"booking_index.h","content":"$1b"},{"path":"calendar.h","content":"$1c"},{"path":"request.h","content":"$1d"},{"path":"room.h","content":"#pragma once\n#include <string>\n#include <utility>\n#include <vector>\n\n#include \"calendar.h\"\n\n// A named room with a number of seats and its own calendar.\nclass Room {\n public:\n  Room(std::string name, int capacity) : name_(std::move(name)), capacity_(capacity) {}\n\n  const std::string& name() const { return name_; }\n  int capacity() const { return capacity_; }\n  Calendar& calendar() { return calendar_; }\n  const Calendar& calendar() const { return calendar_; }\n\n  bool fits(int attendees) const { return attendees <= capacity_; }\n  bool freeFor(const std::vector<Span>& spans) const { return calendar_.allFree(spans); }\n\n private:\n  std::string name_;\n  int capacity_;\n  Calendar calendar_;\n};\n"},{"path":"room_chooser.h","content":"#pragma once\n#include <vector>\n\n#include \"room_directory.h\"\n\n// Strategy: which free room should get a booking that names none?\nclass RoomChooser {\n public:\n  virtual ~RoomChooser() = default;\n  // Returns nullptr when no room fits and is free for every span.\n  virtual Room* choose(const RoomDirectory& rooms, int attendees, const std::vector<Span>& spans) const = 0;\n};\n\n// The smallest room that is big enough; among equals the one added first.\nclass BestFitChooser : public RoomChooser {\n public:\n  Room* choose(const RoomDirectory& rooms, int attendees, const std::vector<Span>& spans) const override {\n    Room* best = nullptr;\n    for (const auto& room : rooms.all()) {\n      if (!room->fits(attendees) || !room->freeFor(spans)) continue;\n      if (best == nullptr || room->capacity() < best->capacity()) best = room.get();\n    }\n    return best;\n  }\n};\n"},{"path":"room_directory.h","content":"#pragma once\n#include <memory>\n#include <utility>\n#include <string>\n#include <vector>\n\n#include \"room.h\"\n\n// All the rooms, in the order they were added, found by name.\nclass RoomDirectory {\n public:\n  bool add(const std::string& name, int capacity) {\n    if (find(name) != nullptr) return false;\n    rooms_.push_back(std::make_unique<Room>(name, capacity));\n    return true;\n  }\n\n  Room* find(const std::string& name) const {\n    for (const auto& room : rooms_) {\n      if (room->name() == name) return room.get();\n    }\n    return nullptr;\n  }\n\n  bool anyFits(int attendees) const {\n    for (const auto& room : rooms_) {\n      if (room->fits(attendees)) return true;\n    }\n    return false;\n  }\n\n  const std::vector<std::unique_ptr<Room>>& all() const { return rooms_; }\n\n private:\n  std::vector<std::unique_ptr<Room>> rooms_;\n};\n"},{"path":"scheduler_impl.h","content":"$1e"},{"path":"service.cpp","content":"#include \"scheduler_impl.h\"\n\nstd::unique_ptr<rooms::Scheduler> rooms::makeScheduler() { return std::make_unique<SchedulerImpl>(); }\n\nstd::unique_ptr<rooms::FindingScheduler> rooms::makeFindingScheduler() { return std::make_unique<SchedulerImpl>(); }\n\nstd::unique_ptr<rooms::SeriesScheduler> rooms::makeSeriesScheduler() { return std::make_unique<SchedulerImpl>(); }\n"},{"path":"span.h","content":"#pragma once\n\n// A half-open stretch of minutes [start, end): plain data.\nstruct Span {\n  int start = 0;\n  int end = 0;\n};\n\n// Two spans clash when each starts before the other ends, so one that ends at 60 and one that starts at 60 do not.\ninline bool overlaps(const Span& a, const Span& b) { return a.start < b.end && b.start < a.end; }\n"}],"driver":{"path":"driver.cpp","content":"#define BP_TEST_MAIN\n#include \"bp_test.h\"\n","readOnly":true}}}],["$L1f","$L20"],"$L21"]}],"p":"$@22","v":null,"s":"$9"}}]]
+d:[["children",{"s":{"n":"id","t":"d","k":"meeting-rooms","s":[]},"h":65632,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}]}]]}],"p":"$@e","v":"$c","s":"$9"},"c":"$Qf"}]]
+a:[["children",{"s":"workshop","h":131168,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}]}]]}],"p":"$@b","v":"$c","s":"$9"},"c":"$Qd"}]]
+0:{"t":{"t":{"s":"","h":131152,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/1klm1scec-3x5.css","precedence":"next"}],["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js","async":true}]],["$","html",null,{"lang":"en","className":"r7opxW_variable auY9QW_variable u-EJdW_variable h-full","children":["$","body",null,{"className":"min-h-full","children":[["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}],"notFound":[["$","main",null,{"className":"flex min-h-dvh flex-col items-center justify-center gap-4 px-4 text-center","children":[["$","div",null,{"className":"font-display text-5xl text-[var(--accent)]","children":"404"}],["$","p",null,{"className":"text-white/60","children":"This room is not on the blueprint yet."}],["$","$L6",null,{"href":"/","className":"text-sm text-white/80 underline","children":"Back to the title screen"}]]}],[]]}],["$","$L7",null,{}]]}]}]]}],"p":"$@8","v":null,"s":"$9"},"c":"$Qa"},"h":{"r":["$","$1","h",{"children":[null,["$","$L24",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1, viewport-fit=cover"}],["$","meta","2",{"name":"theme-color","content":"#0a1530"}]]}],["$","$L26",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$27",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"Meeting room scheduler: Blueprint Clash"}],["$","meta","1",{"name":"description","content":"A creature-tactics RPG that teaches low-level design in C++ and high-level system design, from fundamentals to big-tech interview level."}],["$","link","2",{"rel":"manifest","href":"/blueprint-clash/manifest.webmanifest"}],["$","meta","3",{"name":"mobile-web-app-capable","content":"yes"}],["$","meta","4",{"name":"apple-mobile-web-app-title","content":"Blueprint Clash"}],["$","meta","5",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","link","6",{"rel":"icon","href":"/blueprint-clash/icon.png?icon.27re_xscs-jmw.png","sizes":"256x256","type":"image/png"}],["$","link","7",{"rel":"apple-touch-icon","href":"/blueprint-clash/apple-icon.png?apple-icon.2rac1w0yc3rju.png","sizes":"180x180","type":"image/png"}],["$","$L28","8",{}]]}]}],null]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"p":"$@29","v":null,"s":"$9"}},"a":"$@2a","u":"$@2b","b":"2AOMJw3uqOQQQZHGX3CKn"}
+2c:I[97367,["$2"],"OutletBoundary"]
+1f:["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/2uk3wcjwqg0tl.js","async":true}]
+20:["$","script","script-1",{"src":"/blueprint-clash/_next/static/chunks/1zdu7yjl8efu4.js","async":true}]
+21:["$","$L2c",null,{"children":["$","$27",null,{"name":"Next.MetadataOutlet","children":"$@2d"}]}]
+9:300
+2d:null
+2b:true
+9:C
+2a:0
+e:"$undefined"
+b:"$undefined"
+8:"$undefined"
+29:"$undefined"
+22:"$undefined"

@@ -1,0 +1,1203 @@
+1:"$Sreact.fragment"
+2:"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js"
+3:I[39756,["$2"],"default"]
+4:I[37457,["$2"],"default"]
+5:"/blueprint-clash/_next/static/chunks/2n5qeheznvl4u.js"
+6:I[22016,["$2","$5"],""]
+7:I[64576,["$2"],"PwaRegister"]
+d:I[97367,["$2"],"OutletBoundary"]
+e:"$Sreact.suspense"
+10:"ViewportBoundary"
+11:I[97367,["$2"],"$10"]
+13:"MetadataBoundary"
+14:I[97367,["$2"],"$13"]
+16:I[68027,["$2"],"default",1]
+:HL["/blueprint-clash/_next/static/chunks/1klm1scec-3x5.css","style"]
+:HL["/blueprint-clash/_next/static/media/07c7676b89ed2778-s.p.2bn3s6zvc0dyp.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/blueprint-clash/_next/static/media/486a103cae33528f-s.p.309ilb452anpd.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/blueprint-clash/_next/static/media/53897e768d329f66-s.p.3t6q91iet4nsy.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+9:X
+b:[["children",{"s":"__PAGE__","h":512,"d":{"r":["$","$1","c",{"children":["$Lc",[["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/2uk3wcjwqg0tl.js","async":true,"nonce":"$undefined"}],["$","script","script-1",{"src":"/blueprint-clash/_next/static/chunks/1zdu7yjl8efu4.js","async":true,"nonce":"$undefined"}]],["$","$Ld",null,{"children":["$","$e",null,{"name":"Next.MetadataOutlet","children":"$@f"}]}]]}],"p":false,"v":null}}]]
+a:[["children",{"s":{"n":"id","t":"d","k":"notification-service","s":[]},"h":66048,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],"p":false,"v":"$9"},"c":"$Qb"}]]
+8:[["children",{"s":"workshop","h":131584,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],"p":false,"v":"$9"},"c":"$Qa"}]]
+0:{"P":null,"c":["","workshop","notification-service",""],"q":"","i":false,"t":{"t":{"s":"","h":131600,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/1klm1scec-3x5.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}],["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js","async":true,"nonce":"$undefined"}]],["$","html",null,{"lang":"en","className":"r7opxW_variable auY9QW_variable u-EJdW_variable h-full","children":["$","body",null,{"className":"min-h-full","children":[["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","main",null,{"className":"flex min-h-dvh flex-col items-center justify-center gap-4 px-4 text-center","children":[["$","div",null,{"className":"font-display text-5xl text-[var(--accent)]","children":"404"}],["$","p",null,{"className":"text-white/60","children":"This room is not on the blueprint yet."}],["$","$L6",null,{"href":"/","className":"text-sm text-white/80 underline","children":"Back to the title screen"}]]}],[]],"forbidden":"$undefined","unauthorized":"$undefined"}],["$","$L7",null,{}]]}]}]]}],"p":false,"v":null},"c":"$Q8"},"h":{"r":["$","$1","h",{"children":[null,["$","$L11",null,{"children":"$L12"}],["$","$L14",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$e",null,{"name":"Next.Metadata","children":"$L15"}]}],null]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"p":false,"v":null}},"m":"$undefined","G":["$16",[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/1klm1scec-3x5.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]]],"S":true,"r":"$undefined","s":"$undefined","a":"$undefined","l":"$undefined","p":"$undefined","d":"$undefined","b":"2AOMJw3uqOQQQZHGX3CKn"}
+9:C
+12:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1, viewport-fit=cover"}],["$","meta","2",{"name":"theme-color","content":"#0a1530"}]]
+17:I[27201,["$2"],"IconMark"]
+f:null
+15:[["$","title","0",{"children":"Notification service: Blueprint Clash"}],["$","meta","1",{"name":"description","content":"A creature-tactics RPG that teaches low-level design in C++ and high-level system design, from fundamentals to big-tech interview level."}],["$","link","2",{"rel":"manifest","href":"/blueprint-clash/manifest.webmanifest","crossOrigin":"$undefined"}],["$","meta","3",{"name":"mobile-web-app-capable","content":"yes"}],["$","meta","4",{"name":"apple-mobile-web-app-title","content":"Blueprint Clash"}],["$","meta","5",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","link","6",{"rel":"icon","href":"/blueprint-clash/icon.png?icon.27re_xscs-jmw.png","sizes":"256x256","type":"image/png"}],["$","link","7",{"rel":"apple-touch-icon","href":"/blueprint-clash/apple-icon.png?apple-icon.2rac1w0yc3rju.png","sizes":"180x180","type":"image/png"}],["$","$L17","8",{}]]
+18:"/blueprint-clash/_next/static/chunks/2uk3wcjwqg0tl.js"
+19:"/blueprint-clash/_next/static/chunks/1zdu7yjl8efu4.js"
+1a:I[65612,["$2","$18","$19"],"WorkshopClient"]
+1b:T214f,# Editorial: Notification service
+
+## Requirements
+Functional: `addTemplate(id, text)` stores text with `{name}` placeholders; `addChannel(name, channel)` registers a caller-supplied channel; `send(request)` renders the template for one recipient and delivers it over one named channel. Refusals come first and in a fixed order (empty recipient, unknown template, unknown channel, missing param) and never reach a channel. Delivery calls the channel up to `maxAttempts` times: `Transient` is retried after 100, 200, 400... ms, `Permanent` stops at once, there is no wait after the last attempt, and every send starts its backoff again. The caller gets a `Receipt` with the status, the number of channel calls, the channel that delivered (or was last tried) and the body. Hidden until asked: the placeholder grammar (what is and is not a placeholder, no rescanning of values), the check order, attempts versus retries, and the rule that a registered name is never replaced. Non-goals: threads, exceptions (compiled without them), queues, preferences, provider receipts.
+
+**Change Storm 1, fallback chain:** `makeFallbackService`: `sendVia` takes an ordered list of channels. Unregistered names are skipped, repeats are tried once, nothing registered is `UnknownChannel`; each channel gets a full retry run with its own backoff and a channel that gives up hands over at once; one body for all; the receipt totals the calls and names the channel that delivered or the last one tried. Revealable by asking whether another channel can be tried when one keeps failing.
+
+**Change Storm 2, idempotency keys:** `makeIdempotentService`: `sendOnce(key, request)` delivers at most once per non-empty key and answers a repeat with `duplicate = true` and the original receipt. Only a delivery uses up a key; an empty key opts out. Revealable by asking about accidental repeats.
+
+## Reference design
+- `TemplateRenderer` owns the placeholder grammar. One pass over the template; a value is appended and never looked at again. It can fail (a missing param), which is why the facade checks the result.
+- `TemplateStore` and `ChannelRegistry` own the two named collections and their registration rules. `ChannelRegistry::route` turns a list of names into the channels that exist, in order, without repeats.
+- `RetryPolicy` is the retry rules for **one** channel: what is retried, how many calls, the doubling wait, no wait after the last attempt. The delay is a local of one run, so the policy has no mutable state and can be shared by every send.
+- `Courier` carries one finished text along a route: each hop gets a whole retry run, the first delivery ends the trip, and it totals the attempts into the `Receipt`. A single-channel send is a route of one hop, so there is no second code path.
+- `ServiceImpl` is the facade: validate in the documented order, ask the collaborators, return the receipt. It has no rule of its own.
+
+**Storm 1 in the reference:** the route already existed (the base design is a route of one), so the storm adds `sendVia` as one more way to build the same route. `Courier`, `RetryPolicy`, the renderer and the stores are untouched. Be honest about what a candidate who hard-coded a single channel must change: the facade, the loop and the receipt.
+
+**Storm 2 in the reference:** one new class, `IdempotentServiceImpl`, a Decorator that wraps a `FallbackService`, forwards everything and adds the key check in `sendOnce`. No existing class is edited. The decorator needs the wrapped service's `Receipt` to decide whether to record, which is why `Receipt` carries a status.
+
+## Alternatives
+- **A `switch` on channel type** (email, SMS, push) is the first draft most people write and it is the thing the brief warns about: every new channel edits the central function, providers cannot be faked, and the retry code ends up inside each case.
+- **Retry inside each channel adapter** puts the same loop in every provider class. It does let a provider tune its own retries, but the policy (what counts as transient, how long to wait) is then in N places and the fallback chain cannot see the total effort. A shared policy with per-channel overrides is the compromise; the base answer keeps one.
+- **Retry as a decorator on `Channel`** (`RetryingChannel` wraps any channel) is a respectable alternative: the service sees one `send` that already retries. It composes well, but the backoff waits and the attempt counts must be reported back out for the receipt, which means widening the interface. A policy object that runs a channel keeps `Channel` minimal.
+- **Rendering with regular expressions** (`std::regex` replace over the template) is short and wrong in three ways: it is slow, it makes rescanning of inserted values an easy mistake, and the grammar lives in a pattern string nobody reads. A small hand-written scanner is longer and has a testable grammar.
+- **Idempotency inside the service** (a key parameter on every call and a map in the facade) works and puts a second responsibility in the class that is already coordinating three others. A decorator keeps the base path untouched and lets callers who do not care skip it. The honest cost is one more object and four forwarding methods.
+- **Recording the key before sending** (reserve first) prevents two concurrent calls from both sending, and is what a threaded design needs, but then the failure path must release the key. In a single thread, recording after the delivery is simpler and equivalent; the follow-ups cover the reservation.
+
+## Trade-offs
+Doubling without jitter is the easiest to test and the easiest to get wrong in production: many callers that fail together retry together. Capping and randomising are the first change, and they touch only `RetryPolicy`. Counting attempts per channel gives each fallback a fair chance and makes the worst case predictable (channels times attempts, plus the waits), at the price of a slow total when everything is down; a shared budget or a deadline bounds that, but the tests here deliberately pin the per-channel rule. Treating `Transient` and `Permanent` as a channel's answer pushes error-code knowledge into adapters, where it belongs, and costs one more enum value. Failing a whole send on a missing parameter is strict: a half-filled message is worse than none, but a more forgiving system might default the value; that is a product decision, so state it. The idempotency key being global to the service keeps the contract simple and puts the burden of uniqueness on the caller; scoping it to the recipient would be safer against collisions and is a two-line change in the decorator.
+
+## What breaks at 10x
+At 10x the volume the synchronous loop is the problem: a slow provider holds the caller for the whole retry run (seconds of waits). Accept the request, put it on a durable queue, and run `Courier` in workers; the receipt becomes a status. At 10x the channels, the route needs a circuit breaker per provider so a dead one is skipped immediately rather than burning attempts, plus health-based ordering. At 10x the teams, the template store becomes a managed service (versions, review, localisation) and the placeholder grammar becomes an API that cannot change casually. At 10x the callers, the idempotency table needs a time-to-live, an in-flight marker for concurrent duplicates and a shared store; the in-memory map is the first thing to outgrow.
+
+## Level signals
+- **SDE2:** a working service with channels behind an interface, templates filled from a map, a retry loop with a limit, and a receipt; handles a missing parameter when prompted; the wait and the attempt count are right after a hint; adds the fallback list with a loop.
+- **Senior:** asks which failures are retryable and who decides; separates rendering, the retry rules, the registry and the route into small classes; makes the delay a local of one run and no wait after the last attempt; treats user data as text, never as template; builds the fallback so each channel has its own budget; adds idempotency as a decorator and records only successes; names the thread-safety and jitter questions.
+- **Staff:** states the delivery contract (at-least-once, with deduplication to approximate exactly-once) and what each layer guarantees; designs the move to a queue with priorities, quotas, circuit breakers and a dead-letter store; separates the policy decision (which channels, when) from delivery; considers failure of the idempotency store itself and what the safe default is; talks about observability and cost per channel.
+1c:T1139,#pragma once
+// Public API for the Notification service problem. The hidden tests only use what is declared here.
+// You implement notif::makeService() (in any of your .cpp files); everything behind it is your design.
+// Channels are supplied by the caller (the tests bring fakes), so your code never opens a socket.
+// Nothing here throws: this code is compiled without exceptions.
+#include <functional>
+#include <map>
+#include <memory>
+#include <string>
+
+namespace notif {
+
+// What one attempt on a channel reports.
+enum class SendResult {
+  Delivered,  // the message was accepted
+  Transient,  // it failed, but trying again may work (timeout, 503)
+  Permanent,  // it failed and will keep failing (bad address, blocked recipient)
+};
+
+// A way to reach a person: email, SMS, push... Implemented by the caller. A channel makes exactly one attempt per call.
+class Channel {
+ public:
+  virtual ~Channel() = default;
+  virtual SendResult send(const std::string& recipient, const std::string& body) = 0;
+};
+
+// How the service waits between two attempts. Called with the number of milliseconds to wait; the tests record it
+// instead of sleeping. May be empty (then the service does not wait at all).
+using Pause = std::function<void(long long millis)>;
+
+struct RetryConfig {
+  int maxAttempts = 3;            // attempts per channel, including the first. Must be >= 1.
+  long long firstDelayMs = 100;   // the wait before the second attempt; it doubles before every later one
+  Pause pause;
+};
+
+// One message to send: a stored template filled with `params`, to `recipient`, over the channel registered as `channel`.
+struct Request {
+  std::string recipient;
+  std::string templateId;
+  std::string channel;
+  std::map<std::string, std::string> params;
+};
+
+enum class Status {
+  Delivered,        // a channel accepted the message
+  Failed,           // every attempt failed (a permanent failure, or the attempts ran out)
+  InvalidRequest,   // the recipient is empty
+  UnknownTemplate,  // no template with that id
+  UnknownChannel,   // no channel with that name
+  MissingParam,     // the template needs a parameter the request does not carry
+};
+
+struct Receipt {
+  Status status = Status::Failed;
+  int attempts = 0;      // how many times a channel was asked to send (0 when the request was refused before sending)
+  std::string channel;   // the channel that delivered, or the last one tried when it failed ("" if none was tried)
+  std::string body;      // the rendered text ("" when rendering did not happen or failed)
+};
+
+class NotificationService {
+ public:
+  virtual ~NotificationService() = default;
+
+  // Registers a channel under a name. Returns false (and changes nothing) for an empty name, a null channel or a
+  // name that is already registered.
+  virtual bool addChannel(const std::string& name, std::shared_ptr<Channel> channel) = 0;
+
+  // Stores a template. Returns false (and changes nothing) for an empty id or an id that already exists.
+  // Placeholders: "{name}" where name is one or more letters, digits or underscores is replaced by params["name"].
+  // Everything else is literal text, including "{}", "{ x }", "{a-b}", a lone "{" or "}". A replacement value is
+  // inserted as it is and never scanned again for placeholders.
+  virtual bool addTemplate(const std::string& id, const std::string& text) = 0;
+
+  // Renders the template and delivers it. The checks run in this order and the first failure decides the status:
+  //   1. empty recipient              -> InvalidRequest
+  //   2. unknown template id          -> UnknownTemplate
+  //   3. unknown channel name         -> UnknownChannel
+  //   4. a placeholder with no param  -> MissingParam   (extra params are ignored)
+  // A refused request never reaches a channel (attempts == 0).
+  // Delivery: the channel is asked up to maxAttempts times. Delivered ends it. Permanent ends it at once (no wait, no
+  // retry). Transient is retried after a wait of firstDelayMs, then 2x, 4x, ... (the wait before attempt n+1 is
+  // firstDelayMs * 2^(n-1)); there is no wait after the last attempt. Every send starts again from firstDelayMs.
+  // Receipt.attempts counts the calls made to the channel.
+  virtual Receipt send(const Request& request) = 0;
+};
+
+// Returns nullptr when config.maxAttempts < 1 or config.firstDelayMs < 0.
+std::unique_ptr<NotificationService> makeService(const RetryConfig& config);
+
+}  // namespace notif
+1d:T6af,#pragma once
+// Change Storm 1 adds a fallback chain. Everything from api.h still holds for the new service.
+#include "api.h"
+
+#include <vector>
+
+namespace notif {
+
+// Like Request, but with several channels to try in order instead of one.
+struct ChainRequest {
+  std::string recipient;
+  std::string templateId;
+  std::vector<std::string> channels;  // preferred first
+  std::map<std::string, std::string> params;
+};
+
+// A service that can fall back to the next channel when one gives up.
+//   - Validation as in send(): empty recipient, unknown template, a placeholder with no param, in that order. Channel
+//     names that are not registered are skipped without comment; a chain with no registered channel at all (including an
+//     empty chain) is UnknownChannel, decided after UnknownTemplate and before MissingParam.
+//   - A name that appears more than once is tried only once, at its first position.
+//   - Each channel gets its own full retry budget and its own backoff, starting again from firstDelayMs. A channel that
+//     gives up (Permanent, or its attempts ran out) hands over to the next one at once, with no wait in between.
+//   - The first Delivered ends the chain. The body is rendered once and every channel gets the same text.
+//   - Receipt.attempts is the total number of channel calls over all channels; Receipt.channel is the one that delivered,
+//     or the last one tried when everything failed (status Failed).
+// send() keeps working as in api.h.
+class FallbackService : public NotificationService {
+ public:
+  virtual Receipt sendVia(const ChainRequest& request) = 0;
+};
+
+std::unique_ptr<FallbackService> makeFallbackService(const RetryConfig& config);
+
+}  // namespace notif
+1e:T572,#pragma once
+// Change Storm 2 adds idempotent sends. Everything from api.h and api_storm1.h still holds.
+#include "api_storm1.h"
+
+namespace notif {
+
+struct OnceResult {
+  bool duplicate = false;  // true when the key had already been delivered and nothing was sent this time
+  Receipt receipt;         // the outcome of this call, or (for a duplicate) the receipt of the original delivery
+};
+
+// A fallback service that can promise "at most one delivery per key".
+//   - sendOnce(key, request) behaves like sendVia(request), except that a non-empty key which has already been
+//     delivered is not sent again: the result is duplicate == true, the original receipt, and no channel is called.
+//   - Only a Delivered outcome uses up a key. A failure of any kind (Failed, or a refused request such as
+//     UnknownTemplate) leaves the key free, so the caller may try again with the same key.
+//   - An empty key means "no deduplication": every call sends.
+//   - A key identifies one logical notification for the whole service, whatever recipient or channels the request names.
+//   - send() and sendVia() never read or record keys.
+class IdempotentService : public FallbackService {
+ public:
+  virtual OnceResult sendOnce(const std::string& key, const ChainRequest& request) = 0;
+};
+
+std::unique_ptr<IdempotentService> makeIdempotentService(const RetryConfig& config);
+
+}  // namespace notif
+1f:T2c55,#include <memory>
+#include <string>
+#include <utility>
+#include <vector>
+
+#include "api.h"
+#include "bp_test.h"
+
+namespace {
+using notif::SendResult;
+using notif::Status;
+
+// A channel that answers from a script (then Delivered forever) and remembers every call.
+class FakeChannel : public notif::Channel {
+ public:
+  explicit FakeChannel(std::vector<SendResult> script = {}) : script_(std::move(script)) {}
+
+  SendResult send(const std::string& recipient, const std::string& body) override {
+    recipients.push_back(recipient);
+    bodies.push_back(body);
+    return next_ < script_.size() ? script_[next_++] : SendResult::Delivered;
+  }
+
+  std::vector<std::string> recipients;
+  std::vector<std::string> bodies;
+
+ private:
+  std::vector<SendResult> script_;
+  std::size_t next_ = 0;
+};
+
+// A service plus a record of the waits it asked for.
+struct Rig {
+  explicit Rig(int maxAttempts = 3, long long firstDelayMs = 100) {
+    notif::RetryConfig config;
+    config.maxAttempts = maxAttempts;
+    config.firstDelayMs = firstDelayMs;
+    config.pause = [this](long long ms) { pauses.push_back(ms); };
+    service = notif::makeService(config);
+  }
+
+  std::shared_ptr<FakeChannel> channel(const std::string& name, std::vector<SendResult> script = {}) {
+    auto fake = std::make_shared<FakeChannel>(std::move(script));
+    service->addChannel(name, fake);
+    return fake;
+  }
+
+  notif::Request request(const std::string& channel = "email", const std::string& tmpl = "hello") {
+    notif::Request r;
+    r.recipient = "ann";
+    r.templateId = tmpl;
+    r.channel = channel;
+    r.params = {{"name", "Ann"}};
+    return r;
+  }
+
+  std::unique_ptr<notif::NotificationService> service;
+  std::vector<long long> pauses;
+};
+
+const SendResult T = SendResult::Transient;
+const SendResult P = SendResult::Permanent;
+}  // namespace
+
+TEST(Registration, AChannelNeedsANameAndAnImplementation) {
+  Rig rig;
+  EXPECT_FALSE(rig.service->addChannel("", std::make_shared<FakeChannel>()));
+  EXPECT_FALSE(rig.service->addChannel("email", nullptr));
+  EXPECT_TRUE(rig.service->addChannel("email", std::make_shared<FakeChannel>()));
+}
+
+TEST(Registration, ANameCannotBeRegisteredTwoTimes) {
+  Rig rig;
+  auto first = rig.channel("email");
+  auto second = std::make_shared<FakeChannel>();
+  EXPECT_FALSE(rig.service->addChannel("email", second));
+  rig.service->addTemplate("hello", "Hi {name}");
+  EXPECT_EQ(rig.service->send(rig.request()).status, Status::Delivered);
+  EXPECT_EQ(first->bodies.size(), 1u);
+  EXPECT_EQ(second->bodies.size(), 0u);
+}
+
+TEST(Registration, ATemplateNeedsAnIdAndCannotBeStoredTwice) {
+  Rig rig;
+  EXPECT_FALSE(rig.service->addTemplate("", "text"));
+  EXPECT_TRUE(rig.service->addTemplate("hello", "Hi {name}"));
+  EXPECT_FALSE(rig.service->addTemplate("hello", "Other"));
+  auto email = rig.channel("email");
+  rig.service->send(rig.request());
+  ASSERT_EQ(email->bodies.size(), 1u);
+  EXPECT_EQ(email->bodies[0], "Hi Ann");
+}
+
+TEST(Registration, TheRetryConfigurationIsChecked) {
+  notif::RetryConfig bad;
+  bad.maxAttempts = 0;
+  EXPECT_TRUE(notif::makeService(bad) == nullptr);
+  notif::RetryConfig negative;
+  negative.firstDelayMs = -1;
+  EXPECT_TRUE(notif::makeService(negative) == nullptr);
+  notif::RetryConfig fine;
+  EXPECT_TRUE(notif::makeService(fine) != nullptr);
+}
+
+TEST(Validation, AnEmptyRecipientIsInvalid) {
+  Rig rig;
+  auto email = rig.channel("email");
+  rig.service->addTemplate("hello", "Hi {name}");
+  auto r = rig.request();
+  r.recipient = "";
+  const auto receipt = rig.service->send(r);
+  EXPECT_EQ(receipt.status, Status::InvalidRequest);
+  EXPECT_EQ(receipt.attempts, 0);
+  EXPECT_EQ(email->bodies.size(), 0u);
+}
+
+TEST(Validation, AnUnknownTemplateIsRefused) {
+  Rig rig;
+  auto email = rig.channel("email");
+  const auto receipt = rig.service->send(rig.request("email", "nope"));
+  EXPECT_EQ(receipt.status, Status::UnknownTemplate);
+  EXPECT_EQ(receipt.attempts, 0);
+  EXPECT_EQ(email->bodies.size(), 0u);
+}
+
+TEST(Validation, AnUnknownChannelIsRefused) {
+  Rig rig;
+  rig.service->addTemplate("hello", "Hi {name}");
+  const auto receipt = rig.service->send(rig.request("fax"));
+  EXPECT_EQ(receipt.status, Status::UnknownChannel);
+  EXPECT_EQ(receipt.attempts, 0);
+  EXPECT_EQ(receipt.channel, "");
+}
+
+TEST(Validation, ChecksRunInTheDocumentedOrder) {
+  Rig rig;
+  rig.channel("email");
+  rig.service->addTemplate("hello", "Hi {name}");
+  auto r = rig.request("fax", "nope");
+  r.params.clear();
+  EXPECT_EQ(rig.service->send(r).status, Status::UnknownTemplate);  // template before channel
+  r = rig.request("fax", "hello");
+  r.params.clear();
+  EXPECT_EQ(rig.service->send(r).status, Status::UnknownChannel);  // channel before params
+  r.recipient = "";
+  EXPECT_EQ(rig.service->send(r).status, Status::InvalidRequest);  // recipient before everything
+}
+
+TEST(Rendering, PlaceholdersAreFilledFromTheParams) {
+  Rig rig;
+  auto email = rig.channel("email");
+  rig.service->addTemplate("shipped", "Hi {name}, order {order_id} left on {day2}.");
+  auto r = rig.request("email", "shipped");
+  r.params = {{"name", "Ann"}, {"order_id", "A-17"}, {"day2", "Monday"}};
+  const auto receipt = rig.service->send(r);
+  EXPECT_EQ(receipt.status, Status::Delivered);
+  EXPECT_EQ(receipt.body, "Hi Ann, order A-17 left on Monday.");
+  ASSERT_EQ(email->bodies.size(), 1u);
+  EXPECT_EQ(email->bodies[0], "Hi Ann, order A-17 left on Monday.");
+}
+
+TEST(Rendering, TheSameNameCanAppearTwiceAndExtraParamsAreIgnored) {
+  Rig rig;
+  rig.channel("email");
+  rig.service->addTemplate("twice", "{who}-{who}");
+  auto r = rig.request("email", "twice");
+  r.params = {{"who", "x"}, {"unused", "y"}};
+  EXPECT_EQ(rig.service->send(r).body, "x-x");
+}
+
+TEST(Rendering, AMissingParamStopsTheSendBeforeAnyChannelIsCalled) {
+  Rig rig;
+  auto email = rig.channel("email");
+  rig.service->addTemplate("hello", "Hi {name}, code {code}");
+  const auto receipt = rig.service->send(rig.request());  // carries name only
+  EXPECT_EQ(receipt.status, Status::MissingParam);
+  EXPECT_EQ(receipt.attempts, 0);
+  EXPECT_EQ(email->bodies.size(), 0u);
+}
+
+TEST(Rendering, ValuesAreInsertedAsTheyAreAndNeverExpandedAgain) {
+  Rig rig;
+  rig.channel("email");
+  rig.service->addTemplate("hello", "Hi {name}!");
+  auto r = rig.request();
+  r.params = {{"name", "{secret}"}, {"secret", "hunter2"}};
+  EXPECT_EQ(rig.service->send(r).body, "Hi {secret}!");
+}
+
+TEST(Rendering, ABraceThatIsNotAPlaceholderStaysAsText) {
+  Rig rig;
+  rig.channel("email");
+  rig.service->addTemplate("odd", "a {} b { x } c {a-b} d { e } f{");
+  auto r = rig.request("email", "odd");
+  r.params = {{"x", "X"}, {"a-b", "Y"}};
+  const auto receipt = rig.service->send(r);
+  EXPECT_EQ(receipt.status, Status::Delivered);
+  EXPECT_EQ(receipt.body, "a {} b { x } c {a-b} d { e } f{");
+}
+
+TEST(Rendering, OnlyTheInnerPairOfDoubledBracesIsAPlaceholder) {
+  Rig rig;
+  rig.channel("email");
+  rig.service->addTemplate("braces", "{{x}} and {x}}");
+  auto r = rig.request("email", "braces");
+  r.params = {{"x", "1"}};
+  EXPECT_EQ(rig.service->send(r).body, "{1} and 1}");
+}
+
+TEST(Delivery, AFirstTrySuccessIsReportedOnce) {
+  Rig rig;
+  auto email = rig.channel("email");
+  rig.service->addTemplate("hello", "Hi {name}");
+  const auto receipt = rig.service->send(rig.request());
+  EXPECT_EQ(receipt.status, Status::Delivered);
+  EXPECT_EQ(receipt.attempts, 1);
+  EXPECT_EQ(receipt.channel, "email");
+  ASSERT_EQ(email->recipients.size(), 1u);
+  EXPECT_EQ(email->recipients[0], "ann");
+  EXPECT_TRUE(rig.pauses.empty());
+}
+
+TEST(Delivery, OnlyTheNamedChannelIsUsed) {
+  Rig rig;
+  auto email = rig.channel("email");
+  auto sms = rig.channel("sms");
+  rig.service->addTemplate("hello", "Hi {name}");
+  rig.service->send(rig.request("sms"));
+  EXPECT_EQ(email->bodies.size(), 0u);
+  EXPECT_EQ(sms->bodies.size(), 1u);
+}
+
+TEST(Retry, ATransientFailureIsRetriedWithADoublingWait) {
+  Rig rig;
+  auto email = rig.channel("email", {T, T, SendResult::Delivered});
+  rig.service->addTemplate("hello", "Hi {name}");
+  const auto receipt = rig.service->send(rig.request());
+  EXPECT_EQ(receipt.status, Status::Delivered);
+  EXPECT_EQ(receipt.attempts, 3);
+  EXPECT_EQ(email->bodies.size(), 3u);
+  EXPECT_EQ(rig.pauses, (std::vector<long long>{100, 200}));
+}
+
+TEST(Retry, TheAttemptsRunOutAndThereIsNoWaitAfterTheLastOne) {
+  Rig rig;
+  auto email = rig.channel("email", {T, T, T, T, T});
+  rig.service->addTemplate("hello", "Hi {name}");
+  const auto receipt = rig.service->send(rig.request());
+  EXPECT_EQ(receipt.status, Status::Failed);
+  EXPECT_EQ(receipt.attempts, 3);
+  EXPECT_EQ(receipt.channel, "email");
+  EXPECT_EQ(receipt.body, "Hi Ann");
+  EXPECT_EQ(email->bodies.size(), 3u);
+  EXPECT_EQ(rig.pauses, (std::vector<long long>{100, 200}));
+}
+
+TEST(Retry, APermanentFailureIsNeverRetried) {
+  Rig rig;
+  auto email = rig.channel("email", {P, SendResult::Delivered});
+  rig.service->addTemplate("hello", "Hi {name}");
+  const auto receipt = rig.service->send(rig.request());
+  EXPECT_EQ(receipt.status, Status::Failed);
+  EXPECT_EQ(receipt.attempts, 1);
+  EXPECT_EQ(email->bodies.size(), 1u);
+  EXPECT_TRUE(rig.pauses.empty());
+}
+
+TEST(Retry, APermanentFailureAfterATransientOneStopsThere) {
+  Rig rig;
+  auto email = rig.channel("email", {T, P, SendResult::Delivered});
+  rig.service->addTemplate("hello", "Hi {name}");
+  const auto receipt = rig.service->send(rig.request());
+  EXPECT_EQ(receipt.status, Status::Failed);
+  EXPECT_EQ(receipt.attempts, 2);
+  EXPECT_EQ(rig.pauses, (std::vector<long long>{100}));
+}
+
+TEST(Retry, MaxAttemptsIsTheTotalNumberOfCalls) {
+  Rig rig(1);
+  auto email = rig.channel("email", {T, SendResult::Delivered});
+  rig.service->addTemplate("hello", "Hi {name}");
+  const auto receipt = rig.service->send(rig.request());
+  EXPECT_EQ(receipt.status, Status::Failed);
+  EXPECT_EQ(receipt.attempts, 1);
+  EXPECT_EQ(email->bodies.size(), 1u);
+  EXPECT_TRUE(rig.pauses.empty());
+}
+
+TEST(Retry, TheFirstDelayAndTheAttemptLimitAreConfigurable) {
+  Rig rig(5, 50);
+  rig.channel("email", {T, T, T, T, T});
+  rig.service->addTemplate("hello", "Hi {name}");
+  EXPECT_EQ(rig.service->send(rig.request()).attempts, 5);
+  EXPECT_EQ(rig.pauses, (std::vector<long long>{50, 100, 200, 400}));
+}
+
+TEST(Retry, EverySendStartsItsBackoffAgain) {
+  Rig rig;
+  rig.channel("email", {T, T, T, T, SendResult::Delivered});
+  rig.service->addTemplate("hello", "Hi {name}");
+  EXPECT_EQ(rig.service->send(rig.request()).status, Status::Failed);
+  EXPECT_EQ(rig.service->send(rig.request()).status, Status::Delivered);
+  EXPECT_EQ(rig.pauses, (std::vector<long long>{100, 200, 100}));
+}
+
+TEST(Retry, AServiceWithoutAPauseFunctionStillRetries) {
+  notif::RetryConfig config;
+  auto service = notif::makeService(config);
+  auto email = std::make_shared<FakeChannel>(std::vector<SendResult>{T, T});
+  service->addChannel("email", email);
+  service->addTemplate("hello", "Hi {name}");
+  notif::Request r;
+  r.recipient = "ann";
+  r.templateId = "hello";
+  r.channel = "email";
+  r.params = {{"name", "Ann"}};
+  EXPECT_EQ(service->send(r).status, Status::Delivered);
+  EXPECT_EQ(email->bodies.size(), 3u);
+}
+
+TEST(Retry, AFailureDoesNotSpoilTheNextSend) {
+  Rig rig;
+  rig.channel("email", {P});
+  rig.service->addTemplate("hello", "Hi {name}");
+  EXPECT_EQ(rig.service->send(rig.request()).status, Status::Failed);
+  EXPECT_EQ(rig.service->send(rig.request()).status, Status::Delivered);
+}
+20:T1a63,#include <memory>
+#include <string>
+#include <utility>
+#include <vector>
+
+#include "api_storm1.h"
+#include "bp_test.h"
+
+namespace {
+using notif::SendResult;
+using notif::Status;
+
+class FakeChannel : public notif::Channel {
+ public:
+  explicit FakeChannel(std::vector<SendResult> script = {}) : script_(std::move(script)) {}
+
+  SendResult send(const std::string& recipient, const std::string& body) override {
+    recipients.push_back(recipient);
+    bodies.push_back(body);
+    return next_ < script_.size() ? script_[next_++] : SendResult::Delivered;
+  }
+
+  std::vector<std::string> recipients;
+  std::vector<std::string> bodies;
+
+ private:
+  std::vector<SendResult> script_;
+  std::size_t next_ = 0;
+};
+
+struct Rig {
+  explicit Rig(int maxAttempts = 3, long long firstDelayMs = 100) {
+    notif::RetryConfig config;
+    config.maxAttempts = maxAttempts;
+    config.firstDelayMs = firstDelayMs;
+    config.pause = [this](long long ms) { pauses.push_back(ms); };
+    service = notif::makeFallbackService(config);
+    service->addTemplate("hello", "Hi {name}");
+  }
+
+  std::shared_ptr<FakeChannel> channel(const std::string& name, std::vector<SendResult> script = {}) {
+    auto fake = std::make_shared<FakeChannel>(std::move(script));
+    service->addChannel(name, fake);
+    return fake;
+  }
+
+  notif::ChainRequest chain(std::vector<std::string> channels) {
+    notif::ChainRequest r;
+    r.recipient = "ann";
+    r.templateId = "hello";
+    r.channels = std::move(channels);
+    r.params = {{"name", "Ann"}};
+    return r;
+  }
+
+  std::unique_ptr<notif::FallbackService> service;
+  std::vector<long long> pauses;
+};
+
+const SendResult T = SendResult::Transient;
+const SendResult P = SendResult::Permanent;
+const SendResult D = SendResult::Delivered;
+}  // namespace
+
+TEST(Fallback, TheFirstChannelThatDeliversEndsTheChain) {
+  Rig rig;
+  auto push = rig.channel("push");
+  auto email = rig.channel("email");
+  const auto receipt = rig.service->sendVia(rig.chain({"push", "email"}));
+  EXPECT_EQ(receipt.status, Status::Delivered);
+  EXPECT_EQ(receipt.channel, "push");
+  EXPECT_EQ(receipt.attempts, 1);
+  EXPECT_EQ(push->bodies.size(), 1u);
+  EXPECT_EQ(email->bodies.size(), 0u);
+}
+
+TEST(Fallback, APermanentFailureHandsOverAtOnce) {
+  Rig rig;
+  auto push = rig.channel("push", {P});
+  auto email = rig.channel("email");
+  const auto receipt = rig.service->sendVia(rig.chain({"push", "email"}));
+  EXPECT_EQ(receipt.status, Status::Delivered);
+  EXPECT_EQ(receipt.channel, "email");
+  EXPECT_EQ(receipt.attempts, 2);
+  EXPECT_EQ(push->bodies.size(), 1u);
+  EXPECT_EQ(email->bodies.size(), 1u);
+  EXPECT_TRUE(rig.pauses.empty());
+}
+
+TEST(Fallback, AChannelUsesItsWholeRetryBudgetBeforeTheNextOneIsTried) {
+  Rig rig;
+  auto push = rig.channel("push", {T, T, T, T});
+  auto email = rig.channel("email");
+  const auto receipt = rig.service->sendVia(rig.chain({"push", "email"}));
+  EXPECT_EQ(receipt.status, Status::Delivered);
+  EXPECT_EQ(receipt.channel, "email");
+  EXPECT_EQ(receipt.attempts, 4);
+  EXPECT_EQ(push->bodies.size(), 3u);
+  EXPECT_EQ(email->bodies.size(), 1u);
+  EXPECT_EQ(rig.pauses, (std::vector<long long>{100, 200}));
+}
+
+TEST(Fallback, EveryChannelGetsAFullBudgetAndABackoffThatStartsOver) {
+  Rig rig;
+  auto push = rig.channel("push", {T, T, T});
+  auto email = rig.channel("email", {T, D});
+  const auto receipt = rig.service->sendVia(rig.chain({"push", "email"}));
+  EXPECT_EQ(receipt.status, Status::Delivered);
+  EXPECT_EQ(receipt.attempts, 5);
+  EXPECT_EQ(email->bodies.size(), 2u);
+  EXPECT_EQ(rig.pauses, (std::vector<long long>{100, 200, 100}));
+}
+
+TEST(Fallback, WhenEveryChannelFailsTheReceiptNamesTheLastOneTried) {
+  Rig rig;
+  rig.channel("push", {P});
+  rig.channel("email", {T, T, T});
+  rig.channel("sms", {P});
+  const auto receipt = rig.service->sendVia(rig.chain({"push", "email", "sms"}));
+  EXPECT_EQ(receipt.status, Status::Failed);
+  EXPECT_EQ(receipt.channel, "sms");
+  EXPECT_EQ(receipt.attempts, 5);
+  EXPECT_EQ(receipt.body, "Hi Ann");
+}
+
+TEST(Fallback, EveryChannelReceivesTheSameRenderedText) {
+  Rig rig;
+  auto push = rig.channel("push", {P});
+  auto email = rig.channel("email");
+  rig.service->sendVia(rig.chain({"push", "email"}));
+  ASSERT_EQ(push->bodies.size(), 1u);
+  ASSERT_EQ(email->bodies.size(), 1u);
+  EXPECT_EQ(push->bodies[0], "Hi Ann");
+  EXPECT_EQ(email->bodies[0], "Hi Ann");
+  EXPECT_EQ(email->recipients[0], "ann");
+}
+
+TEST(Fallback, ANameThatIsNotRegisteredIsSkipped) {
+  Rig rig;
+  auto email = rig.channel("email");
+  const auto receipt = rig.service->sendVia(rig.chain({"ghost", "email"}));
+  EXPECT_EQ(receipt.status, Status::Delivered);
+  EXPECT_EQ(receipt.channel, "email");
+  EXPECT_EQ(receipt.attempts, 1);
+  EXPECT_EQ(email->bodies.size(), 1u);
+}
+
+TEST(Fallback, AChainWithNoRegisteredChannelIsUnknownChannel) {
+  Rig rig;
+  rig.channel("email");
+  const auto a = rig.service->sendVia(rig.chain({"ghost", "phantom"}));
+  EXPECT_EQ(a.status, Status::UnknownChannel);
+  EXPECT_EQ(a.attempts, 0);
+  EXPECT_EQ(rig.service->sendVia(rig.chain({})).status, Status::UnknownChannel);
+}
+
+TEST(Fallback, ANameListedTwiceIsTriedOnce) {
+  Rig rig;
+  auto email = rig.channel("email", {P, D});
+  auto sms = rig.channel("sms", {P});
+  const auto receipt = rig.service->sendVia(rig.chain({"email", "sms", "email"}));
+  EXPECT_EQ(receipt.status, Status::Failed);
+  EXPECT_EQ(receipt.channel, "sms");
+  EXPECT_EQ(receipt.attempts, 2);
+  EXPECT_EQ(email->bodies.size(), 1u);
+}
+
+TEST(Fallback, ValidationMatchesTheSingleChannelSend) {
+  Rig rig;
+  auto email = rig.channel("email");
+  auto r = rig.chain({"email"});
+  r.recipient = "";
+  EXPECT_EQ(rig.service->sendVia(r).status, Status::InvalidRequest);
+  r = rig.chain({"ghost"});
+  r.templateId = "nope";
+  EXPECT_EQ(rig.service->sendVia(r).status, Status::UnknownTemplate);  // template before channel
+  rig.service->addTemplate("needs", "Hi {name} {code}");
+  r = rig.chain({"ghost"});
+  r.templateId = "needs";
+  EXPECT_EQ(rig.service->sendVia(r).status, Status::UnknownChannel);  // channel before params
+  r = rig.chain({"email"});
+  r.templateId = "needs";
+  const auto receipt = rig.service->sendVia(r);
+  EXPECT_EQ(receipt.status, Status::MissingParam);
+  EXPECT_EQ(receipt.attempts, 0);
+  EXPECT_EQ(email->bodies.size(), 0u);
+}
+
+TEST(Fallback, TheSingleChannelSendStillWorks) {
+  Rig rig;
+  auto email = rig.channel("email", {T, D});
+  notif::Request r;
+  r.recipient = "ann";
+  r.templateId = "hello";
+  r.channel = "email";
+  r.params = {{"name", "Ann"}};
+  const auto receipt = rig.service->send(r);
+  EXPECT_EQ(receipt.status, Status::Delivered);
+  EXPECT_EQ(receipt.attempts, 2);
+  EXPECT_EQ(rig.pauses, (std::vector<long long>{100}));
+  r.channel = "ghost";
+  EXPECT_EQ(rig.service->send(r).status, Status::UnknownChannel);
+}
+21:T17f2,#include <memory>
+#include <string>
+#include <utility>
+#include <vector>
+
+#include "api_storm2.h"
+#include "bp_test.h"
+
+namespace {
+using notif::SendResult;
+using notif::Status;
+
+class FakeChannel : public notif::Channel {
+ public:
+  explicit FakeChannel(std::vector<SendResult> script = {}) : script_(std::move(script)) {}
+
+  SendResult send(const std::string& recipient, const std::string& body) override {
+    recipients.push_back(recipient);
+    bodies.push_back(body);
+    return next_ < script_.size() ? script_[next_++] : SendResult::Delivered;
+  }
+
+  std::vector<std::string> recipients;
+  std::vector<std::string> bodies;
+
+ private:
+  std::vector<SendResult> script_;
+  std::size_t next_ = 0;
+};
+
+struct Rig {
+  Rig() {
+    notif::RetryConfig config;
+    config.pause = [this](long long ms) { pauses.push_back(ms); };
+    service = notif::makeIdempotentService(config);
+    service->addTemplate("hello", "Hi {name}");
+  }
+
+  std::shared_ptr<FakeChannel> channel(const std::string& name, std::vector<SendResult> script = {}) {
+    auto fake = std::make_shared<FakeChannel>(std::move(script));
+    service->addChannel(name, fake);
+    return fake;
+  }
+
+  notif::ChainRequest chain(std::vector<std::string> channels, const std::string& recipient = "ann") {
+    notif::ChainRequest r;
+    r.recipient = recipient;
+    r.templateId = "hello";
+    r.channels = std::move(channels);
+    r.params = {{"name", "Ann"}};
+    return r;
+  }
+
+  std::unique_ptr<notif::IdempotentService> service;
+  std::vector<long long> pauses;
+};
+
+const SendResult T = SendResult::Transient;
+const SendResult P = SendResult::Permanent;
+}  // namespace
+
+TEST(Once, TheFirstCallWithAKeyIsSentNormally) {
+  Rig rig;
+  auto email = rig.channel("email");
+  const auto result = rig.service->sendOnce("order-17", rig.chain({"email"}));
+  EXPECT_FALSE(result.duplicate);
+  EXPECT_EQ(result.receipt.status, Status::Delivered);
+  EXPECT_EQ(result.receipt.channel, "email");
+  EXPECT_EQ(email->bodies.size(), 1u);
+}
+
+TEST(Once, ASecondCallWithTheSameKeySendsNothing) {
+  Rig rig;
+  auto email = rig.channel("email");
+  rig.service->sendOnce("order-17", rig.chain({"email"}));
+  const auto again = rig.service->sendOnce("order-17", rig.chain({"email"}));
+  EXPECT_TRUE(again.duplicate);
+  EXPECT_EQ(email->bodies.size(), 1u);
+}
+
+TEST(Once, ADuplicateReturnsTheReceiptOfTheOriginalDelivery) {
+  Rig rig;
+  rig.channel("push", {P});
+  rig.channel("email");
+  const auto first = rig.service->sendOnce("k", rig.chain({"push", "email"}));
+  const auto again = rig.service->sendOnce("k", rig.chain({"push", "email"}));
+  ASSERT_TRUE(again.duplicate);
+  EXPECT_EQ(again.receipt.status, Status::Delivered);
+  EXPECT_EQ(again.receipt.channel, "email");
+  EXPECT_EQ(again.receipt.attempts, first.receipt.attempts);
+  EXPECT_EQ(again.receipt.attempts, 2);
+  EXPECT_EQ(again.receipt.body, "Hi Ann");
+}
+
+TEST(Once, DifferentKeysAreIndependent) {
+  Rig rig;
+  auto email = rig.channel("email");
+  EXPECT_FALSE(rig.service->sendOnce("a", rig.chain({"email"})).duplicate);
+  EXPECT_FALSE(rig.service->sendOnce("b", rig.chain({"email"})).duplicate);
+  EXPECT_TRUE(rig.service->sendOnce("a", rig.chain({"email"})).duplicate);
+  EXPECT_EQ(email->bodies.size(), 2u);
+}
+
+TEST(Once, AFailedSendLeavesTheKeyFreeForARetry) {
+  Rig rig;
+  auto email = rig.channel("email", {P});
+  const auto first = rig.service->sendOnce("k", rig.chain({"email"}));
+  EXPECT_FALSE(first.duplicate);
+  EXPECT_EQ(first.receipt.status, Status::Failed);
+  const auto second = rig.service->sendOnce("k", rig.chain({"email"}));
+  EXPECT_FALSE(second.duplicate);
+  EXPECT_EQ(second.receipt.status, Status::Delivered);
+  EXPECT_EQ(email->bodies.size(), 2u);
+  EXPECT_TRUE(rig.service->sendOnce("k", rig.chain({"email"})).duplicate);
+}
+
+TEST(Once, ARefusedRequestLeavesTheKeyFreeToo) {
+  Rig rig;
+  auto email = rig.channel("email");
+  auto r = rig.chain({"email"});
+  r.templateId = "later";
+  EXPECT_EQ(rig.service->sendOnce("k", r).receipt.status, Status::UnknownTemplate);
+  rig.service->addTemplate("later", "Hello {name}");
+  const auto result = rig.service->sendOnce("k", r);
+  EXPECT_FALSE(result.duplicate);
+  EXPECT_EQ(result.receipt.status, Status::Delivered);
+  EXPECT_EQ(email->bodies.size(), 1u);
+}
+
+TEST(Once, AnEmptyKeyNeverDeduplicates) {
+  Rig rig;
+  auto email = rig.channel("email");
+  EXPECT_FALSE(rig.service->sendOnce("", rig.chain({"email"})).duplicate);
+  EXPECT_FALSE(rig.service->sendOnce("", rig.chain({"email"})).duplicate);
+  EXPECT_EQ(email->bodies.size(), 2u);
+}
+
+TEST(Once, AKeyBelongsToTheWholeService) {
+  Rig rig;
+  auto email = rig.channel("email");
+  auto sms = rig.channel("sms");
+  rig.service->sendOnce("k", rig.chain({"email"}, "ann"));
+  const auto other = rig.service->sendOnce("k", rig.chain({"sms"}, "bob"));
+  EXPECT_TRUE(other.duplicate);
+  EXPECT_EQ(sms->bodies.size(), 0u);
+  EXPECT_EQ(email->bodies.size(), 1u);
+}
+
+TEST(Once, PlainSendsNeitherReadNorRecordKeys) {
+  Rig rig;
+  auto email = rig.channel("email");
+  rig.service->sendVia(rig.chain({"email"}));
+  rig.service->sendVia(rig.chain({"email"}));
+  EXPECT_EQ(email->bodies.size(), 2u);
+  EXPECT_FALSE(rig.service->sendOnce("k", rig.chain({"email"})).duplicate);
+  EXPECT_EQ(email->bodies.size(), 3u);
+}
+
+TEST(Once, ADuplicateDoesNotWaitOrRetry) {
+  Rig rig;
+  rig.channel("email", {T, T});
+  const auto first = rig.service->sendOnce("k", rig.chain({"email"}));
+  EXPECT_EQ(first.receipt.attempts, 3);
+  const auto pausesAfterFirst = rig.pauses.size();
+  rig.service->sendOnce("k", rig.chain({"email"}));
+  EXPECT_EQ(rig.pauses.size(), pausesAfterFirst);
+}
+
+TEST(Once, TheEarlierStormsStillHold) {
+  Rig rig;
+  auto push = rig.channel("push", {P});
+  auto email = rig.channel("email");
+  const auto result = rig.service->sendOnce("k", rig.chain({"push", "email"}));
+  EXPECT_EQ(result.receipt.channel, "email");
+  notif::Request single;
+  single.recipient = "ann";
+  single.templateId = "hello";
+  single.channel = "push";
+  single.params = {{"name", "Ann"}};
+  EXPECT_EQ(rig.service->send(single).status, Status::Delivered);
+  EXPECT_EQ(push->bodies.size(), 2u);
+  EXPECT_EQ(email->bodies.size(), 1u);
+}
+22:T4e6,#pragma once
+#include <map>
+#include <memory>
+#include <string>
+#include <utility>
+#include <vector>
+
+#include "api.h"
+
+// One step of a route: a channel and the name it was registered under.
+struct Hop {
+  std::string name;
+  std::shared_ptr<notif::Channel> channel;
+};
+
+// The registered channels, by name.
+class ChannelRegistry {
+ public:
+  bool add(const std::string& name, std::shared_ptr<notif::Channel> channel) {
+    if (name.empty() || channel == nullptr) return false;
+    return channels_.emplace(name, std::move(channel)).second;
+  }
+
+  // The registered channels among `names`, in the order given, each at most once (its first position).
+  std::vector<Hop> route(const std::vector<std::string>& names) const {
+    std::vector<Hop> hops;
+    for (const std::string& name : names) {
+      const auto found = channels_.find(name);
+      if (found == channels_.end() || alreadyIn(hops, name)) continue;
+      hops.push_back(Hop{name, found->second});
+    }
+    return hops;
+  }
+
+ private:
+  static bool alreadyIn(const std::vector<Hop>& hops, const std::string& name) {
+    for (const Hop& hop : hops) {
+      if (hop.name == name) return true;
+    }
+    return false;
+  }
+
+  std::map<std::string, std::shared_ptr<notif::Channel>> channels_;
+};
+23:T423,#pragma once
+#include <string>
+#include <utility>
+#include <vector>
+
+#include "channel_registry.h"
+#include "retry_policy.h"
+
+// Carries one finished text along a route: each hop gets the whole retry policy to itself, the first delivery ends the
+// trip, and a hop that gives up hands over to the next one. A route of one hop is the plain single-channel send.
+class Courier {
+ public:
+  explicit Courier(RetryPolicy policy) : policy_(std::move(policy)) {}
+
+  notif::Receipt deliver(const std::string& recipient, const std::string& body, const std::vector<Hop>& route) const {
+    notif::Receipt receipt;
+    receipt.status = notif::Status::Failed;
+    receipt.body = body;
+    for (const Hop& hop : route) {
+      const Outcome outcome = policy_.run(*hop.channel, recipient, body);
+      receipt.attempts += outcome.attempts;
+      receipt.channel = hop.name;
+      if (outcome.last == notif::SendResult::Delivered) {
+        receipt.status = notif::Status::Delivered;
+        break;
+      }
+    }
+    return receipt;
+  }
+
+ private:
+  RetryPolicy policy_;
+};
+24:T7fc,#pragma once
+#include <map>
+#include <memory>
+#include <string>
+#include <utility>
+
+#include "api_storm2.h"
+
+// The receipts of notifications that have been delivered, by idempotency key.
+class DeliveredLog {
+ public:
+  // The receipt recorded for `key`, or nullptr.
+  const notif::Receipt* find(const std::string& key) const {
+    const auto found = receipts_.find(key);
+    return found == receipts_.end() ? nullptr : &found->second;
+  }
+
+  void record(const std::string& key, const notif::Receipt& receipt) { receipts_.emplace(key, receipt); }
+
+ private:
+  std::map<std::string, notif::Receipt> receipts_;
+};
+
+// A Decorator: everything is forwarded to the wrapped service, and sendOnce() adds "at most one delivery per key" on top.
+// Only a Delivered receipt uses up a key, so a failed attempt can be repeated under the same key.
+class IdempotentServiceImpl : public notif::IdempotentService {
+ public:
+  explicit IdempotentServiceImpl(std::unique_ptr<notif::FallbackService> inner) : inner_(std::move(inner)) {}
+
+  bool addChannel(const std::string& name, std::shared_ptr<notif::Channel> channel) override {
+    return inner_->addChannel(name, std::move(channel));
+  }
+
+  bool addTemplate(const std::string& id, const std::string& text) override { return inner_->addTemplate(id, text); }
+
+  notif::Receipt send(const notif::Request& request) override { return inner_->send(request); }
+
+  notif::Receipt sendVia(const notif::ChainRequest& request) override { return inner_->sendVia(request); }
+
+  notif::OnceResult sendOnce(const std::string& key, const notif::ChainRequest& request) override {
+    const bool keyed = !key.empty();
+    if (keyed) {
+      if (const notif::Receipt* earlier = log_.find(key)) return notif::OnceResult{true, *earlier};
+    }
+    const notif::Receipt receipt = inner_->sendVia(request);
+    if (keyed && receipt.status == notif::Status::Delivered) log_.record(key, receipt);
+    return notif::OnceResult{false, receipt};
+  }
+
+ private:
+  std::unique_ptr<notif::FallbackService> inner_;
+  DeliveredLog log_;
+};
+25:T4df,#pragma once
+#include <string>
+#include <utility>
+
+#include "api.h"
+
+struct Outcome {
+  notif::SendResult last;  // what the final attempt said
+  int attempts;            // how many calls were made
+};
+
+// Runs ONE channel until it delivers, fails for good, or runs out of attempts. It owns the retry rules (what is worth
+// retrying, how many times, how long to wait) and nothing about which channel or what text.
+class RetryPolicy {
+ public:
+  explicit RetryPolicy(notif::RetryConfig config) : config_(std::move(config)) {}
+
+  Outcome run(notif::Channel& channel, const std::string& recipient, const std::string& body) const {
+    long long delay = config_.firstDelayMs;
+    Outcome outcome{notif::SendResult::Transient, 0};
+    for (int attempt = 1; attempt <= config_.maxAttempts; ++attempt) {
+      if (attempt > 1) {  // only ever before another attempt, never after the last one
+        wait(delay);
+        delay *= 2;
+      }
+      outcome.last = channel.send(recipient, body);
+      outcome.attempts = attempt;
+      if (outcome.last != notif::SendResult::Transient) break;
+    }
+    return outcome;
+  }
+
+ private:
+  void wait(long long millis) const {
+    if (config_.pause) config_.pause(millis);
+  }
+
+  notif::RetryConfig config_;
+};
+26:T841,#pragma once
+#include <map>
+#include <memory>
+#include <string>
+#include <utility>
+#include <vector>
+
+#include "api_storm2.h"
+#include "channel_registry.h"
+#include "courier.h"
+#include "template_renderer.h"
+#include "template_store.h"
+
+// The public face: validates a request in the documented order and sequences the collaborators. It has no rule of its
+// own about placeholders, retries or routes.
+class ServiceImpl : public notif::FallbackService {
+ public:
+  explicit ServiceImpl(const notif::RetryConfig& config) : courier_(RetryPolicy(config)) {}
+
+  bool addChannel(const std::string& name, std::shared_ptr<notif::Channel> channel) override {
+    return channels_.add(name, std::move(channel));
+  }
+
+  bool addTemplate(const std::string& id, const std::string& text) override { return templates_.add(id, text); }
+
+  notif::Receipt send(const notif::Request& request) override {
+    return run(request.recipient, request.templateId, {request.channel}, request.params);
+  }
+
+  notif::Receipt sendVia(const notif::ChainRequest& request) override {
+    return run(request.recipient, request.templateId, request.channels, request.params);
+  }
+
+ private:
+  static notif::Receipt refusal(notif::Status status) {
+    notif::Receipt receipt;
+    receipt.status = status;
+    return receipt;
+  }
+
+  notif::Receipt run(const std::string& recipient, const std::string& templateId, const std::vector<std::string>& names,
+                     const std::map<std::string, std::string>& params) const {
+    if (recipient.empty()) return refusal(notif::Status::InvalidRequest);
+    const std::string* text = templates_.find(templateId);
+    if (text == nullptr) return refusal(notif::Status::UnknownTemplate);
+    const std::vector<Hop> route = channels_.route(names);
+    if (route.empty()) return refusal(notif::Status::UnknownChannel);
+    std::string body;
+    if (!renderer_.render(*text, params, body)) return refusal(notif::Status::MissingParam);
+    return courier_.deliver(recipient, body, route);
+  }
+
+  TemplateStore templates_;
+  ChannelRegistry channels_;
+  TemplateRenderer renderer_;
+  Courier courier_;
+};
+27:T622,#pragma once
+#include <cstddef>
+#include <map>
+#include <string>
+
+// Fills "{name}" placeholders from a parameter map. Owns the grammar: a placeholder is '{', one or more letters, digits
+// or underscores, '}'. Everything else is copied as it is, and inserted values are never scanned again.
+class TemplateRenderer {
+ public:
+  // Writes the result to `out`. Returns false (leaving `out` unspecified) when a placeholder has no parameter.
+  bool render(const std::string& text, const std::map<std::string, std::string>& params, std::string& out) const {
+    out.clear();
+    std::size_t at = 0;
+    while (at < text.size()) {
+      const std::size_t close = placeholderEnd(text, at);
+      if (close == std::string::npos) {
+        out += text[at++];
+        continue;
+      }
+      const auto found = params.find(text.substr(at + 1, close - at - 1));
+      if (found == params.end()) return false;
+      out += found->second;
+      at = close + 1;
+    }
+    return true;
+  }
+
+ private:
+  // Index of the '}' closing a placeholder that starts at `open`, or npos if there is no placeholder there.
+  static std::size_t placeholderEnd(const std::string& text, std::size_t open) {
+    if (text[open] != '{') return std::string::npos;
+    std::size_t at = open + 1;
+    while (at < text.size() && isNameChar(text[at])) ++at;
+    if (at == open + 1 || at == text.size() || text[at] != '}') return std::string::npos;
+    return at;
+  }
+
+  static bool isNameChar(char c) {
+    return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9') || c == '_';
+  }
+};
+c:["$","$L1a",null,{"bundle":{"id":"notification-service","title":"Notification service","level":"Senior","parMinutes":50,"patterns":["Strategy","Decorator"],"requirements":[{"id":"R-render","text":"addTemplate(id, text) refuses an empty or already stored id. A placeholder is '{name}' with name made of letters, digits and underscores; params fill it. Anything else with a brace in it ('{}', '{ x }', '{a-b}', a lone '{' or '}') is literal text, and in '{{x}}' only the inner pair is a placeholder. A value is inserted as given and never scanned again. A placeholder with no param makes the request MissingParam and no channel is called; extra params are ignored.","phase":"base","hidden":true},{"id":"R-channel","text":"addChannel(name, channel) refuses an empty name, a null channel and a name already registered (the first registration stays). send() checks in this order and the first failure decides: empty recipient (InvalidRequest), unknown template, unknown channel, missing param. A refused request makes no channel call and reports attempts 0. A Receipt carries the status, the number of channel calls, the channel that delivered or was last tried, and the rendered body.","phase":"base","hidden":true},{"id":"R-retry","text":"Per send: the channel is called up to maxAttempts times in total. Transient is retried, Permanent and Delivered end the send. The wait before the second attempt is firstDelayMs and it doubles before each later one; nothing is waited after the last attempt; every send starts again from firstDelayMs. A null pause function is allowed. makeService returns nullptr for maxAttempts < 1 or a negative first delay.","phase":"base","hidden":true},{"id":"R-chain","text":"Storm 1: makeFallbackService(): sendVia(ChainRequest) tries an ordered list of channels. Unregistered names are skipped, a repeated name is tried once at its first position, no registered name at all is UnknownChannel (after UnknownTemplate, before MissingParam). Each channel gets a full retry run with its backoff starting again; a channel that gives up hands over at once; the first Delivered ends the chain; one body is rendered for all. attempts is the total of channel calls; channel is the one that delivered or the last tried. send() is unchanged.","phase":"storm1","hidden":true},{"id":"R-once","text":"Storm 2: makeIdempotentService(): sendOnce(key, ChainRequest) sends like sendVia, but a non-empty key that was already delivered sends nothing and returns duplicate = true with the original receipt. Only a Delivered outcome uses up a key; failures and refused requests leave it free. An empty key never deduplicates. A key belongs to the whole service, whatever recipient or channels. send() and sendVia() ignore keys.","phase":"storm2","hidden":true}],"brief":"# Notification service\n\nA shop needs to tell customers things: your order shipped, your code is ready, your card was declined. Today every team writes its own email call and its own retry loop. You are writing the one library they will share.\n\nWhat you know so far:\n\n- A message is a piece of text with blanks (a template) filled in for one person.\n- It goes out over a channel: email, SMS, push. Channels are provided by other teams and sometimes fail.\n- A failed delivery should not simply be lost.\n\nYour task: design and implement it behind the `notif::NotificationService` interface in `api.h`. The hidden tests bring their own fake channels and call only that interface. Ask the interviewer questions first: \"which failures are worth retrying, how long do we wait, and what exactly does the caller get back?\" is where most first drafts go wrong.\n","editorial":"$1b","clarify":[{"id":"q-template","text":"What is a template? How are the blanks written, what if the data for one is missing, and can a value itself contain a blank?","answer":"A template is stored text with placeholders written {name}, where name is letters, digits and underscores. Params fill them. Anything else that merely looks like a brace is plain text. A value is inserted exactly as given and never scanned again. A template that needs a param the request lacks is refused with MissingParam before any channel is called; extra params are ignored. Template ids are unique and non-empty.","reveals":["R-render"],"quality":"essential"},{"id":"q-channel","text":"What is a channel and who provides it? What does one send tell us?","answer":"A channel is an object provided by the caller, registered under a name (email, sms...). One call is one attempt and answers Delivered, Transient (worth another try) or Permanent (it will keep failing). Names are unique and non-empty. Your code never opens a connection.","reveals":["R-channel"],"quality":"essential"},{"id":"q-retry","text":"Which failures do we retry, how many times, and how long do we wait between attempts?","answer":"Only Transient is retried. A Permanent result ends the send at once. maxAttempts is the total number of calls including the first (default 3). The wait before the second attempt is firstDelayMs (default 100), doubling before every later one: 100, 200, 400... There is no wait after the last attempt. Each send starts again from the first delay. Waiting goes through an injected pause function so tests do not sleep.","reveals":["R-retry"],"quality":"essential"},{"id":"q-result","text":"What does the caller get back? How do they tell a refused request from a failed delivery?","answer":"A Receipt: a status (Delivered, Failed, or a refusal such as InvalidRequest, UnknownTemplate, UnknownChannel, MissingParam), the number of channel calls, the channel that delivered (or the last one tried), and the rendered body. A refused request makes no channel call. When several things are wrong the checks run in a fixed order: empty recipient, unknown template, unknown channel, missing param.","reveals":["R-channel"],"quality":"essential"},{"id":"q-fallback","text":"If a channel keeps failing, can we try another one, say push and then email and then SMS?","answer":"Yes, the next team needs it: an ordered list of channels, each with its own retry budget. Details arrive with the change.","reveals":["R-chain"],"quality":"essential"},{"id":"q-dupes","text":"Can a caller accidentally ask for the same notification twice (a retried HTTP request, a replayed event)? Must the person get it only once?","answer":"Yes: callers will pass an idempotency key. Details arrive with the change.","reveals":["R-once"],"quality":"essential"},{"id":"q-errors","text":"What if a channel throws?","answer":"Channels must not throw: this library is compiled without exceptions. Say what you would do in production (treat it as Transient or Permanent by exception type, never let it escape into the caller of other recipients) but do not build it.","reveals":[],"quality":"useful"},{"id":"q-thread","text":"Is the service called from several threads?","answer":"The tests are single-threaded. Say how you would do it (the registries are read-mostly; a lock around registration, none around a send; one idempotency table behind a lock with an in-flight marker) but do not build it.","reveals":[],"quality":"useful"},{"id":"q-jitter","text":"Should the wait have jitter or a cap?","answer":"Not here: exactly doubling, so the tests can check the numbers. Jitter and a ceiling are the first production changes; say why (synchronised retries from many clients make a thundering herd).","reveals":[],"quality":"useful"},{"id":"q-prefs","text":"Do users have preferences, quiet hours or opt-outs?","answer":"Not in this exercise. They would sit in front of the service as a policy deciding the channel list, and are good follow-up material.","reveals":[],"quality":"useful"},{"id":"q-async","text":"Should send() return at once and deliver from a queue?","answer":"No. Delivery is synchronous here and the Receipt is the outcome. A queue with workers is a different component, covered in the messaging part of the game.","reveals":[],"quality":"noise"},{"id":"q-i18n","text":"Do templates need translations and rich formatting (HTML, markdown)?","answer":"No. Plain text with placeholders only.","reveals":[],"quality":"noise"},{"id":"q-track","text":"Do we need delivery receipts from providers, opens and click tracking?","answer":"No. Delivered means the channel accepted the message.","reveals":[],"quality":"noise"}],"rubric":[{"id":"res-facade","text":"Validates a request in the documented order and sequences the collaborators; no rule of its own about placeholders, retries or routes","phase":"base","owners":["ServiceImpl","NotificationServiceImpl","NotificationManager","NotificationEngine","Notifier"]},{"id":"res-render","text":"Owns the template grammar: finds placeholders, fills them from the params, reports a missing one, and never rescans inserted values","phase":"base","owners":["TemplateRenderer","Renderer","TemplateEngine","MessageRenderer","TemplateFormatter"]},{"id":"res-retry","text":"Owns the retry rules for one channel: which results are retried, the attempt limit, the doubling wait and the rule of no wait after the last attempt","phase":"base","owners":["RetryPolicy","Retrier","RetryStrategy","BackoffPolicy","RetryHandler","RetryRunner"]},{"id":"res-registry","text":"Owns the named channels: registration rules and lookup, so the facade never touches a map of channels","phase":"base","owners":["ChannelRegistry","ChannelRouter","ChannelManager","Channels","ChannelStore"]},{"id":"res-route","text":"Carries one rendered text along an ordered list of channels, giving each its own retry run and stopping at the first delivery","phase":"storm1","owners":["Courier","Router","Dispatcher","FallbackChain","RouteRunner","Escalation","DeliveryChain"]},{"id":"res-once","text":"Adds 'at most one delivery per key' around the sender without editing it, and records a key only on a delivery","phase":"storm2","owners":["IdempotentServiceImpl","IdempotencyDecorator","IdempotentService","DedupingService","IdempotencyGuard","OnceDecorator"]}],"followups":[{"level":"SDE2","question":"Why is Channel an interface instead of a switch on a channel type?","answer":"Each channel has its own protocol, credentials and failure modes, and the service should not know any of them. With an interface the service depends on one narrow contract (send once, report Delivered, Transient or Permanent) and a new channel is a new class registered by name; the retry, rendering and route code do not change. A switch puts every provider into one function that every new channel has to edit, and it cannot be tested without all the providers present. This is the Strategy pattern: the algorithm for 'how to reach someone' is swapped behind a stable interface."},{"level":"SDE2","question":"Why does the channel report Transient and Permanent instead of just success or failure?","answer":"Because the right reaction differs. A timeout or a 503 is worth another try; a blocked recipient or a malformed address never will be, and retrying wastes time, provider quota and sometimes money. The service cannot guess which it is, only the code that knows the provider's error codes can. A two-valued result forces a choice between retrying everything (waste) and retrying nothing (lost messages). With three values the policy lives in one place (the retry rules) and the knowledge about errors lives in the adapter."},{"level":"Senior","question":"Add jitter and a maximum delay to the backoff. What changes and what stays?","answer":"Only the retry policy changes: the delay for attempt n becomes min(cap, first * 2^(n-1)) with a random fraction applied (full jitter picks uniformly between 0 and that value; equal jitter keeps half and randomises half). Nothing else moves, because rendering, channels and routes only see 'run this channel once under the policy'. Jitter is there so that many clients which failed together do not retry together; the cap bounds how long a single send can hold a worker. For tests the random source is injected (a seeded generator or a function) and you assert ranges, not exact values. Also guard the doubling against overflow."},{"level":"Senior","question":"A user asks for the same notification twice because the caller retried after a timeout. Walk through where duplicates can come from and what the key fixes.","answer":"Duplicates come from the caller (a retried request, a replayed event), from the service itself (a retry after a send that actually succeeded but whose acknowledgement was lost) and from the provider. The idempotency key fixes the first kind: a second call with the same key is recognised and answered with the first result. It cannot fix the second kind, because 'delivered' is only known when the channel says so; a lost acknowledgement means the next attempt may duplicate, which is why channels with an idempotency token of their own should be given the key. Record the key only on success, hold an in-flight marker so two concurrent calls with the same key do not both send, expire keys after a window you can defend, and say that exactly-once is built from at-least-once plus deduplication."},{"level":"Senior","question":"Make the service thread-safe. What do you lock and what must not be locked?","answer":"The template store and the channel registry are written at start-up and read on every send, so a reader-writer lock or an immutable snapshot swapped in atomically gives lock-free reads. The retry policy has no mutable state (the delay is a local), so it needs nothing. Never hold a lock while calling a channel or the pause function: a slow provider would serialise every send. The idempotency table is the hard part: look up and reserve under the lock, release it for the send, then record the result (or release the reservation on failure) under the lock; a second caller that finds a reservation waits for the result or is told it is in flight."},{"level":"Senior","question":"Where would user preferences (opt-outs, quiet hours, 'SMS only for urgent') go?","answer":"In front of the service, as a policy that turns 'tell this person about this event' into a ChainRequest: a PreferenceResolver picks the channels and their order, or decides to send nothing or to delay. The delivery service stays ignorant of why a channel list looks the way it does. Putting preferences inside the retry or route code would make every storm a change to code that already works. Compliance rules (consent, quiet hours by locale, regulatory opt-out) should be checked at that one gate and logged, because they are what an audit asks about."},{"level":"Staff","question":"Turn this into a service shared by fifty teams. What are the new problems?","answer":"Multi-tenancy and isolation first: per-tenant rate limits and quotas so one team's campaign cannot starve a password-reset message, and priority classes (transactional versus bulk) with separate queues and workers. Delivery moves behind a durable queue, so a send is accepted, stored and processed with retries that survive restarts; the Receipt becomes a status the caller can poll or a callback. Provider failure needs a circuit breaker per channel so that a dead provider is skipped quickly instead of consuming every worker's retry budget, which makes the fallback chain real. Add observability (per-channel delivery rate, retry counts, time to deliver), template versioning with review, and a dead-letter store for what could not be sent."},{"level":"Staff","question":"Compare this synchronous library with a queue-based notification platform. When is each right?","answer":"The library gives the caller an immediate, explicit outcome and has nothing to operate, but a slow provider blocks the caller, a crash loses unsent work and retries happen in someone else's request path. A queue-based platform accepts the request in milliseconds, retries independently of the caller, survives restarts, smooths bursts and can prioritise, at the price of at-least-once delivery (so idempotency keys and consumers that tolerate duplicates), eventual outcomes, and a system to run. Use the library inside the platform's workers (it is the delivery step) and for low-volume, in-process needs; use the platform when messages must not be lost, volume is bursty or many teams share the providers."}],"apiHeader":"$1c","phaseApis":{"storm1":"$1d","storm2":"$1e"},"phases":["base","storm1","storm2"],"tests":{"base":[{"path":"notif_base.cpp","content":"$1f"}],"storm1":[{"path":"notif_storm1.cpp","content":"$20"}],"storm2":[{"path":"notif_storm2.cpp","content":"$21"}]},"reference":[{"path":"channel_registry.h","content":"$22"},{"path":"courier.h","content":"$23"},{"path":"idempotent_service.h","content":"$24"},{"path":"retry_policy.h","content":"$25"},{"path":"service.cpp","content":"#include \"idempotent_service.h\"\n#include \"service_impl.h\"\n\nnamespace {\nbool usable(const notif::RetryConfig& config) { return config.maxAttempts >= 1 && config.firstDelayMs >= 0; }\n}  // namespace\n\nstd::unique_ptr<notif::NotificationService> notif::makeService(const RetryConfig& config) {\n  if (!usable(config)) return nullptr;\n  return std::make_unique<ServiceImpl>(config);\n}\n\nstd::unique_ptr<notif::FallbackService> notif::makeFallbackService(const RetryConfig& config) {\n  if (!usable(config)) return nullptr;\n  return std::make_unique<ServiceImpl>(config);\n}\n\nstd::unique_ptr<notif::IdempotentService> notif::makeIdempotentService(const RetryConfig& config) {\n  if (!usable(config)) return nullptr;\n  return std::make_unique<IdempotentServiceImpl>(std::make_unique<ServiceImpl>(config));\n}\n"},{"path":"service_impl.h","content":"$26"},{"path":"template_renderer.h","content":"$27"},{"path":"template_store.h","content":"#pragma once\n#include <map>\n#include <string>\n\n// The stored template texts, by id.\nclass TemplateStore {\n public:\n  bool add(const std::string& id, const std::string& text) {\n    if (id.empty()) return false;\n    return texts_.emplace(id, text).second;\n  }\n\n  // The text, or nullptr when there is no such template.\n  const std::string* find(const std::string& id) const {\n    const auto found = texts_.find(id);\n    return found == texts_.end() ? nullptr : &found->second;\n  }\n\n private:\n  std::map<std::string, std::string> texts_;\n};\n"}],"driver":{"path":"driver.cpp","content":"#define BP_TEST_MAIN\n#include \"bp_test.h\"\n","readOnly":true}}}]

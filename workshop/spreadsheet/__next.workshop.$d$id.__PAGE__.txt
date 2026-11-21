@@ -1,0 +1,1751 @@
+1:"$Sreact.fragment"
+2:"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js"
+3:I[39756,["$2"],"default"]
+4:I[37457,["$2"],"default"]
+5:"/blueprint-clash/_next/static/chunks/2n5qeheznvl4u.js"
+6:I[22016,["$2","$5"],""]
+7:I[64576,["$2"],"PwaRegister"]
+10:"/blueprint-clash/_next/static/chunks/2uk3wcjwqg0tl.js"
+11:"/blueprint-clash/_next/static/chunks/1zdu7yjl8efu4.js"
+12:I[65612,["$2","$10","$11"],"WorkshopClient"]
+26:"ViewportBoundary"
+27:I[97367,["$2"],"$26"]
+28:"MetadataBoundary"
+29:I[97367,["$2"],"$28"]
+2a:"$Sreact.suspense"
+2b:I[27201,["$2"],"IconMark"]
+:HL["/blueprint-clash/_next/static/chunks/1klm1scec-3x5.css","style"]
+9:X
+c:X
+c:C
+13:T579,# Spreadsheet with formulas
+
+You are building the calculation core of a small spreadsheet: a grid of cells where each cell holds a number or a formula that reads other cells, and the numbers on screen must always agree with the formulas behind them. A user types `10` into A1 and `=A1*2` into B1, then changes A1 and expects B1 to follow, immediately and correctly, however tangled the sheet has become.
+
+What you know so far:
+
+- The grid has columns A to Z and rows 1 to 99. Cells are named like "A1" or "C10".
+- A cell holds nothing, an integer, or a formula starting with "=" that can use numbers, other cells, the four arithmetic operators and parentheses.
+- Callers can set a cell's text, read its value, and read back the text they typed.
+- Mistakes are reported, not crashed on: bad cell names, formulas that do not parse, formulas that would make a cell depend on itself.
+
+Your task: design and implement it behind the `sheet::Sheet` interface in `api.h`. The hidden tests call only that interface. Ask the interviewer questions first: the brief is deliberately incomplete, and "what happens when a formula divides by zero, and what do cells that read it show?" and "how much work should one edit cause?" are where first drafts go wrong. Expect a request for range functions such as SUM over a block of cells, and then a request to tell listeners which cells changed, after you have finished.
+14:T223e,# Editorial: Spreadsheet with formulas
+
+## Requirements
+Functional: a grid of 26 x 99 cells; each cell holds nothing, an integer, or a formula over integers, cell references, `+ - * /`, unary minus and parentheses; `set`, `get` and `text`; eager recalculation after every edit; a counter of formula evaluations; range functions (`SUM`, `MIN`, `MAX`, `COUNT`); change notifications.
+
+Hidden in the brief and revealed by good questions: what an untouched cell reads as (0), the exact grammar and the rule for `/` (truncation toward zero), that errors are values that flow downhill (`DivideByZero`, `=0*(1/0)` included), that recalculation is minimal and ordered ("each formula once, after what it reads, only what depends on the edit"), and that a refused edit changes nothing, not even the dependency graph.
+
+**Change Storm 1, ranges:** `NAME(CELL:CELL)` with corners in either order; empty cells read as 0 for `SUM`, `MIN` and `MAX`; `COUNT` counts occupied cells and never errors; a formula depends on every cell of its ranges, so a cycle through the middle of a range is a `Cycle`.
+
+**Change Storm 2, listeners:** one `Change` per cell whose value differs, announced after the recalculation finishes, with precedents before dependents; unsubscribing; listeners in subscription order.
+
+## Reference design
+- `SheetImpl` is the facade. `set` is a short script: parse the name, compile the text, refuse a cycle, take the old values of the affected cells, rewire the graph, store the cell, recalculate, announce. Everything else is a call to one collaborator.
+- `CellRef` is a value that owns the mapping from "C10" to a column, a row and a dense index; `CellRange` is a rectangle named by two corners that lists its cells. Nothing else handles cell-name strings.
+- `FormulaParser` (with `TextCursor`, which knows spaces, digits and letters) is a recursive-descent parser, one function per precedence level, that returns an `Expr` tree or nothing. It is the only class that knows the grammar.
+- `Expr` is the Interpreter: `NumberExpr`, `RefExpr`, `NegateExpr`, `BinaryExpr` and `CallExpr` evaluate themselves from a `CellSource`, pass errors through, and list the cells they read. `BinaryExpr` takes an `Operation` (a function pointer), so `+ - * /` are four small functions rather than a switch.
+- `DependencyGraph` stores who reads whom in both directions. It answers `createsCycle` (a search over the dependents of the edited cell) and `affectedBy` (the cells downstream of the edited one in a topological order, by Kahn's algorithm on just that part of the graph). `replace` rewires one cell in one operation: remove every old edge, add the new ones.
+- `CellStore` holds the occupied cells with their text, tree and current value, and is the `CellSource` that expressions read from.
+
+**Storm 1 in the reference:** `Aggregate` (Strategy; a Template Method `FoldAggregate` shared by `SUM`, `MIN`, `MAX`, and a separate `CountAggregate`), `CallExpr`, one rule in the parser. `CellRange::cells()` feeds both evaluation and dependency collection. The graph, the order and the cycle check do not change.
+
+**Storm 2 in the reference:** `ChangeFeed` (Observer) and one method, `announce`, that compares the values taken before the edit with the values after. The values are collected first and announced last, in recalculation order, which is already a valid order for the announcements.
+
+## Alternatives
+- **Recalculate everything on every edit, in dependency order.** Correct, and 20 lines shorter. The cost is proportional to the sheet, not to the change; the evaluation counter in the contract exists to make the difference visible. A reasonable first version to state, with the graph as the answer to "what next".
+- **Lazy evaluation with dirty flags.** An edit marks the transitive dependents dirty, and a read recomputes what it needs (memoised). Cheaper edits and no wasted work for cells nobody looks at; the cost is that notifications and the evaluation counter become harder to define, and a read can be expensive. Real engines mix both: mark eagerly, compute lazily for off-screen cells.
+- **Evaluate by recursion with memoisation, no graph.** `value(cell)` recurses into the cells it reads and caches the result. It needs a cache invalidation story (which is the dependency graph by another name), and a deep chain recurses deeply.
+- **A depth-first topological sort, reversed.** Equivalent to Kahn's algorithm for ordering; Kahn's version makes the "is any of this a cycle" question and the incremental behaviour easier to see, and avoids recursion depth on a 99-row chain of cells.
+- **Parse on every evaluation.** No tree, no graph, simple; and then you cannot know what a formula reads without parsing it, and parsing is the expensive part.
+- **A virtual `evaluate` per node versus a Visitor.** Evaluation, listing references and (later) printing are three traversals of one tree. Methods on the nodes keep each node's behaviour together and are fine for two traversals; a Visitor wins when traversals keep arriving and node kinds do not.
+- **One edge per cell of a range versus one range node.** The reference stores a SUM over 2574 cells as 2574 edges: simple and wasteful. A range node (a precedent that stands for a rectangle) is the production answer, and complicates the cycle check and the topological order.
+- **Notify as you go versus after.** Notifying inside the recalculation loop saves remembering old values and shows listeners a half-updated sheet.
+
+## Trade-offs
+Eager recalculation makes every edit pay for its dependents and every read free, and it makes "what happened" simple to observe (the counter, the notifications). Lazy evaluation reverses that. For an interactive sheet where most cells are visible, eager is right; for a model with thousands of off-screen cells, lazy or hybrid is.
+
+Storing the dependency graph in two directions costs memory and a rewiring step, and makes both questions that matter cheap: "what must I recalculate?" (follow dependents) and "what did this formula stop reading?" (forget precedents). Storing only one direction makes one of the two a scan of the whole sheet.
+
+Errors as values, not exceptions, keep the engine total: every cell has a value or an error, a recovering edit repairs everything downhill, and compiling without exceptions (as the judge does) is not a limitation. The cost is that every operation has to pass errors on, which is why that rule lives in the one node that combines two values and in the one fold that combines a range.
+
+Reporting a refused edit as a status and leaving everything as it was is what lets the sheet stay usable after a mistake. The price is ordering the steps so that all validation comes before any change; the bad design that rewires the graph first shows how a "refused" edit can still leave damage.
+
+## What breaks at 10x
+- **Sheet size (10x to 1,000x).** Maps of sets per cell are heavy; use dense arrays by cell index, compact edge lists, and range nodes. Evaluating a `SUM` over a big range per edit is linear in the range; keep running totals if it matters.
+- **Deep chains.** A chain of 10,000 cells makes recursive evaluation and depth-first sorting overflow the stack; Kahn's algorithm and an explicit stack do not.
+- **Many edits at once (paste, fill-down).** One batch should rewire all the edits, compute one topological order for the union of the affected cells and announce once, otherwise 10,000 pasted cells cost 10,000 recalculations of a shared tail.
+- **Volatile and external inputs.** Cells that change by themselves (time, a feed) need a "dirty every tick" source in the graph; the graph already supports it if the source is a cell.
+- **Concurrent editors.** One writer thread (or a server) that orders edits, with readers on snapshots; two users creating a cycle with two individually valid edits must be resolved at merge time, with the cells marked as errors.
+
+## Level signals
+- **SDE II:** a working parser with correct precedence, cell values that follow their precedents, a cycle check, and a clear statement of what happens on errors. Recalculates "everything affected" even by repeated passes until nothing changes, and says so.
+- **Senior:** the dependency graph in two directions, a topological recalculation that evaluates each formula once, validation before mutation, errors as values, and a design in which ranges and listeners (the storms) are additions rather than rewrites. States the lazy-versus-eager trade-off unprompted.
+- **Staff:** names the failure modes of the design at scale (range edges, deep chains, batch edits), proposes dirty-flag or hybrid evaluation, explains consistency for concurrent editors, and can say which of these they would build now and which they would leave until a measurement asks.
+15:Te72,#pragma once
+// Public API for the Spreadsheet problem. The hidden tests only use what is declared here.
+// You implement sheet::makeSheet() (in any of your .cpp files); everything behind it is your design.
+#include <cstddef>
+#include <memory>
+#include <string>
+
+namespace sheet {
+
+enum class Status {
+  Ok,
+  InvalidCell,     // the cell name is not one of A1..Z99
+  InvalidFormula,  // the text is not empty, an integer literal, or a well-formed formula
+  Cycle,           // the formula would make a cell depend on itself, directly or through other cells
+};
+
+enum class Error { None, DivideByZero };
+
+// What a cell shows: a number, or an error. `number` is 0 whenever `error` is not None.
+struct Value {
+  Error error = Error::None;
+  long long number = 0;
+};
+inline bool operator==(const Value& a, const Value& b) { return a.error == b.error && a.number == b.number; }
+inline bool operator!=(const Value& a, const Value& b) { return !(a == b); }
+
+// A grid of 26 columns (A..Z) by 99 rows (1..99). Cell names are upper case: "A1", "Z99", "C10". "a1", "A0", "A01",
+// "A100" and "AA1" are InvalidCell. An untouched cell is empty and reads as the number 0.
+//
+// SET TEXT. set(cell, text) stores what the user typed:
+//   ""            clears the cell (it becomes empty again).
+//   an integer    '-'? then 1 to 9 digits, nothing else ("42", "-7", "007" are fine; "+5", "4.5", " 4" are not).
+//   "=" formula   see below.
+//   anything else is InvalidFormula.
+// The cell name is checked first (InvalidCell), then the text (InvalidFormula), then cycles (Cycle).
+//
+// FORMULAS. After '=': integers (up to 9 digits), cell references, + - * /, unary minus and parentheses, with the usual
+// precedence (* and / before + and -, left to right) and spaces allowed between tokens. A reference outside the grid
+// ("=A100"), a lower-case one, or any other character is InvalidFormula, as is "=" alone. Arithmetic is on 64-bit
+// integers and '/' truncates toward zero. Results beyond the 64-bit range are not defined and are not tested.
+//
+// ERRORS. Dividing by zero makes the cell's Value an error (Error::DivideByZero, number 0). Both operands are always
+// evaluated, so "=0*(1/0)" is an error. A formula that reads a cell in error is in error too: errors flow downhill
+// and disappear once the cause is fixed.
+//
+// CYCLES. A set that would make a cell depend on itself ("=A1" in A1, or A1="=B1" then B1="=A1") is refused with
+// Status::Cycle. Every call that does not return Ok leaves the sheet exactly as it was, evaluation count included.
+//
+// RECALCULATION is eager: when set succeeds, every cell that depends on the edited one (directly or through others) is
+// already up to date. See evaluations().
+class Sheet {
+ public:
+  virtual ~Sheet() = default;
+
+  virtual Status set(const std::string& cell, const std::string& text) = 0;
+
+  // The cell's current value. `out` is touched only when the call returns Ok.
+  virtual Status get(const std::string& cell, Value& out) const = 0;
+
+  // Exactly the text last stored by a successful set ("" for an empty cell). `out` is touched only on Ok.
+  virtual Status text(const std::string& cell, std::string& out) const = 0;
+
+  // How many times a FORMULA has been evaluated since the sheet was made. A successful set evaluates the edited cell
+  // once if its new text is a formula, and then every formula cell that depends on it directly or through other cells
+  // exactly once, however many paths lead to it. Literals, clears and failed calls evaluate nothing, and formulas that
+  // do not depend on the edited cell are not evaluated.
+  virtual std::size_t evaluations() const = 0;
+};
+
+std::unique_ptr<Sheet> makeSheet();
+
+}  // namespace sheet
+16:T4d1,#pragma once
+// Change Storm 1: ranges and functions.
+#include <memory>
+
+#include "api.h"
+
+namespace sheet {
+
+// makeFunctionSheet() is a Sheet whose formulas also accept range functions (the plain makeSheet() keeps refusing
+// them with InvalidFormula). The grammar gains one more kind of operand:
+//   NAME '(' CELL ':' CELL ')'     where NAME is SUM, MIN, MAX or COUNT (upper case)
+// A function can appear anywhere a number can: "=SUM(A1:A3)*2+MAX(B1:B2)". The two cells name opposite corners of a
+// rectangle in either order ("B3:A1" is "A1:B3"); "A1:A1" is one cell; spaces are allowed between tokens.
+//   SUM, MIN, MAX  combine the VALUES of every cell in the rectangle; an empty cell counts as 0. If any cell in the
+//                  rectangle is in error, the function is in error too.
+//   COUNT          is the number of cells in the rectangle that are not empty (a literal 0 and a formula both count,
+//                  even one in error). It is never in error.
+// A formula depends on every cell in its ranges, empty ones included, so a cycle through the middle of a range is a
+// Cycle, and editing any cell of the range recalculates the formula.
+std::unique_ptr<Sheet> makeFunctionSheet();
+
+}  // namespace sheet
+17:T5b3,#pragma once
+// Change Storm 2: change notifications.
+#include <functional>
+#include <memory>
+#include <string>
+
+#include "api_storm1.h"
+
+namespace sheet {
+
+// One cell whose value changed: `before` and `after` are what get() returned before and after the edit (an empty cell
+// is the number 0).
+struct Change {
+  std::string cell;
+  Value before;
+  Value after;
+};
+
+using Listener = std::function<void(const Change&)>;
+
+// makeWatchedSheet() has everything makeFunctionSheet() has, plus listeners.
+//
+// After every SUCCESSFUL set, once the whole recalculation is finished, each subscribed listener is called once for
+// every cell whose Value is different from before (the edited cell included; cells that were recomputed to the same
+// value, and failed sets, report nothing). A listener may call get() and text() and sees the finished sheet; calling
+// set() from inside a listener is not allowed. Changes are reported so that a cell comes after every changed cell it
+// depends on; the order of unrelated cells is not specified. For each change, listeners are called in the order they
+// subscribed.
+class WatchedSheet : public Sheet {
+ public:
+  // Returns an id for unsubscribe(). Ids are never reused.
+  virtual int subscribe(Listener listener) = 0;
+
+  // The listener hears nothing from the next set on. An unknown id does nothing.
+  virtual void unsubscribe(int id) = 0;
+};
+
+std::unique_ptr<WatchedSheet> makeWatchedSheet();
+
+}  // namespace sheet
+18:T36db,#include <map>
+#include <memory>
+#include <random>
+#include <string>
+#include <vector>
+
+#include "api.h"
+#include "bp_test.h"
+
+namespace {
+using sheet::Error;
+using sheet::Status;
+using sheet::Value;
+
+#define IS(call, expected) EXPECT_TRUE((call) == Status::expected)
+
+// "7" for a number, "#DIV/0" for the error.
+std::string show(const Value& v) { return v.error == Error::DivideByZero ? "#DIV/0" : std::to_string(v.number); }
+
+struct Fixture {
+  std::unique_ptr<sheet::Sheet> s = sheet::makeSheet();
+  Status set(const std::string& cell, const std::string& text) { return s->set(cell, text); }
+  std::string at(const std::string& cell) {
+    Value v;
+    v.number = -999;
+    return s->get(cell, v) == Status::Ok ? show(v) : "<invalid>";
+  }
+  std::string text(const std::string& cell) {
+    std::string t = "<unset>";
+    return s->text(cell, t) == Status::Ok ? t : "<invalid>";
+  }
+  // Sets a formula and returns how many evaluations it caused.
+  std::size_t cost(const std::string& cell, const std::string& text) {
+    const std::size_t before = s->evaluations();
+    s->set(cell, text);
+    return s->evaluations() - before;
+  }
+};
+}  // namespace
+
+TEST(Cells, EmptyCellsReadAsZeroAndCellNamesAreChecked) {
+  Fixture f;
+  EXPECT_EQ(f.at("A1"), std::string("0"));
+  EXPECT_EQ(f.at("Z99"), std::string("0"));
+  EXPECT_EQ(f.text("C10"), std::string(""));
+  for (const char* bad : {"", "a1", "A0", "A01", "A100", "AA1", "1A", "A", "A1 ", " A1", "[1", "A-1"}) {
+    Value v;
+    v.number = 5;
+    EXPECT_TRUE(f.s->get(bad, v) == Status::InvalidCell);
+    EXPECT_EQ(v.number, 5LL);
+    IS(f.set(bad, "1"), InvalidCell);
+    std::string t = "keep";
+    IS(f.s->text(bad, t), InvalidCell);
+    EXPECT_EQ(t, std::string("keep"));
+  }
+  EXPECT_EQ(f.s->evaluations(), 0u);
+}
+
+TEST(Cells, LiteralsAreStoredAndReadBackExactlyAndAnEmptyTextClears) {
+  Fixture f;
+  IS(f.set("A1", "42"), Ok);
+  IS(f.set("B2", "-7"), Ok);
+  IS(f.set("C3", "007"), Ok);
+  IS(f.set("D4", "999999999"), Ok);
+  IS(f.set("E5", "-0"), Ok);
+  EXPECT_EQ(f.at("A1"), std::string("42"));
+  EXPECT_EQ(f.at("B2"), std::string("-7"));
+  EXPECT_EQ(f.at("C3"), std::string("7"));
+  EXPECT_EQ(f.at("D4"), std::string("999999999"));
+  EXPECT_EQ(f.at("E5"), std::string("0"));
+  EXPECT_EQ(f.text("C3"), std::string("007"));
+  EXPECT_EQ(f.text("B2"), std::string("-7"));
+  IS(f.set("A1", ""), Ok);
+  EXPECT_EQ(f.at("A1"), std::string("0"));
+  EXPECT_EQ(f.text("A1"), std::string(""));
+  IS(f.set("A1", "5"), Ok);
+  IS(f.set("A1", "6"), Ok);
+  EXPECT_EQ(f.at("A1"), std::string("6"));
+  EXPECT_EQ(f.s->evaluations(), 0u);
+}
+
+TEST(Cells, BadInputIsRejectedAndChangesNothing) {
+  Fixture f;
+  IS(f.set("A1", "5"), Ok);
+  IS(f.set("B1", "=A1+1"), Ok);
+  const std::size_t evals = f.s->evaluations();
+  for (const char* bad : {"+5", "4.5", " 4", "4 ", "1000000000", "-1000000000", "-", "hello", "=", "= ", "=1+", "=*2", "=(1", "=1)", "=1 2",
+                          "=A", "=A0", "=A100", "=a1", "=AA1", "=A1A", "=A01", "=1+*2", "=()", "=--", "=1/", "=SUM(A1:A2)", "=1.5", "=1000000000",
+                          "=B1 B1", "=A1:A2", "=#", "=\"x\""}) {
+    IS(f.set("A1", bad), InvalidFormula);
+    IS(f.set("C1", bad), InvalidFormula);
+  }
+  EXPECT_EQ(f.at("A1"), std::string("5"));
+  EXPECT_EQ(f.text("A1"), std::string("5"));
+  EXPECT_EQ(f.at("B1"), std::string("6"));
+  EXPECT_EQ(f.text("C1"), std::string(""));
+  EXPECT_EQ(f.s->evaluations(), evals);
+  // The cell name is checked before the text.
+  IS(f.set("a1", "=1+"), InvalidCell);
+}
+
+TEST(Formula, PrecedenceAssociativityAndParentheses) {
+  Fixture f;
+  struct Case { const char* formula; const char* expected; };
+  const Case cases[] = {
+      {"=2+3*4", "14"},        {"=(2+3)*4", "20"},     {"=10-2-3", "5"},       {"=100/10/5", "2"},    {"=2*3+4*5", "26"},
+      {"=8/2*3", "12"},        {"=-5+2", "-3"},        {"=-(2+3)", "-5"},      {"=--3", "3"},         {"=2*-3", "-6"},
+      {"=7/2", "3"},           {"=-7/2", "-3"},        {"=7/-2", "-3"},        {"=1-(2-3)", "2"},     {"= 1 +  2 * 3 ", "7"},
+      {"=((((4))))", "4"},     {"=999999999*999999999", "999999998000000001"},   {"=20/3/2", "3"},      {"=3-4*2/2+1", "0"},
+  };
+  for (const Case& c : cases) {
+    IS(f.set("A1", c.formula), Ok);
+    EXPECT_EQ(f.at("A1"), std::string(c.expected));
+  }
+}
+
+TEST(Formula, ReferencesReadOtherCellsAndEmptyOnesAreZero) {
+  Fixture f;
+  f.set("A1", "10");
+  f.set("B1", "=A1*2");
+  f.set("C1", "=A1+B1+D9");
+  f.set("D1", "=-C1");
+  f.set("E1", "=(A1+B1)*(C1-B1)");
+  EXPECT_EQ(f.at("B1"), std::string("20"));
+  EXPECT_EQ(f.at("C1"), std::string("30"));
+  EXPECT_EQ(f.at("D1"), std::string("-30"));
+  EXPECT_EQ(f.at("E1"), std::string("300"));
+  EXPECT_EQ(f.text("E1"), std::string("=(A1+B1)*(C1-B1)"));
+  IS(f.set("Z99", "=A1 + Z98"), Ok);
+  EXPECT_EQ(f.at("Z99"), std::string("10"));
+}
+
+TEST(Formula, DivisionByZeroIsAnErrorThatFlowsDownhillAndClears) {
+  Fixture f;
+  f.set("A1", "0");
+  f.set("B1", "=10/A1");
+  EXPECT_EQ(f.at("B1"), std::string("#DIV/0"));
+  f.set("C1", "=B1+1");
+  f.set("D1", "=2*C1");
+  f.set("E1", "=-D1");
+  EXPECT_EQ(f.at("C1"), std::string("#DIV/0"));
+  EXPECT_EQ(f.at("E1"), std::string("#DIV/0"));
+  f.set("F1", "=0*(1/0)");
+  EXPECT_EQ(f.at("F1"), std::string("#DIV/0"));
+  f.set("G1", "=(1/0)-(1/0)");
+  EXPECT_EQ(f.at("G1"), std::string("#DIV/0"));
+  Value v;
+  EXPECT_TRUE(f.s->get("B1", v) == Status::Ok);
+  EXPECT_EQ(v.number, 0LL);
+  f.set("A1", "5");
+  EXPECT_EQ(f.at("B1"), std::string("2"));
+  EXPECT_EQ(f.at("C1"), std::string("3"));
+  EXPECT_EQ(f.at("D1"), std::string("6"));
+  EXPECT_EQ(f.at("E1"), std::string("-6"));
+  f.set("A1", "0");
+  EXPECT_EQ(f.at("E1"), std::string("#DIV/0"));
+  f.set("A1", "");
+  EXPECT_EQ(f.at("E1"), std::string("#DIV/0"));
+}
+
+TEST(Recalc, ChangesReachEveryDependentThroughChains) {
+  Fixture f;
+  f.set("A1", "1");
+  f.set("B1", "=A1+1");
+  f.set("C1", "=B1+1");
+  f.set("D1", "=C1+1");
+  EXPECT_EQ(f.at("D1"), std::string("4"));
+  f.set("A1", "10");
+  EXPECT_EQ(f.at("B1"), std::string("11"));
+  EXPECT_EQ(f.at("C1"), std::string("12"));
+  EXPECT_EQ(f.at("D1"), std::string("13"));
+  f.set("A1", "");
+  EXPECT_EQ(f.at("D1"), std::string("3"));
+  f.set("B1", "100");
+  EXPECT_EQ(f.at("C1"), std::string("101"));
+  EXPECT_EQ(f.at("D1"), std::string("102"));
+}
+
+TEST(Recalc, AFormulaMayReadACellThatIsFilledInLater) {
+  Fixture f;
+  f.set("A1", "=B1*2");
+  f.set("C1", "=A1+B1");
+  EXPECT_EQ(f.at("C1"), std::string("0"));
+  f.set("B1", "7");
+  EXPECT_EQ(f.at("A1"), std::string("14"));
+  EXPECT_EQ(f.at("C1"), std::string("21"));
+}
+
+TEST(Recalc, AChainBuiltBackwardsIsEvaluatedInDependencyOrder) {
+  Fixture f;
+  // Cell index order (row by row, then column) is the OPPOSITE of dependency order here.
+  f.set("A1", "1");
+  f.set("D1", "=A1+1");
+  f.set("C1", "=D1+1");
+  f.set("B1", "=C1+1");
+  EXPECT_EQ(f.at("B1"), std::string("4"));
+  const std::size_t before = f.s->evaluations();
+  f.set("A1", "100");
+  EXPECT_EQ(f.at("D1"), std::string("101"));
+  EXPECT_EQ(f.at("C1"), std::string("102"));
+  EXPECT_EQ(f.at("B1"), std::string("103"));
+  EXPECT_EQ(f.s->evaluations() - before, 3u);
+  // Lower rows read higher rows too.
+  f.set("A5", "1");
+  f.set("A3", "=A5*2");
+  f.set("A2", "=A3*2");
+  f.set("A1", "=A2*2");
+  f.set("A5", "3");
+  EXPECT_EQ(f.at("A1"), std::string("24"));
+}
+
+TEST(Recalc, ADiamondEvaluatesEachDependentExactlyOnce) {
+  Fixture f;
+  f.set("A1", "1");
+  f.set("B1", "=A1+1");
+  f.set("C1", "=A1*2");
+  f.set("D1", "=B1+C1");
+  f.set("E1", "=D1+B1");
+  const std::size_t before = f.s->evaluations();
+  IS(f.set("A1", "5"), Ok);
+  EXPECT_EQ(f.at("B1"), std::string("6"));
+  EXPECT_EQ(f.at("C1"), std::string("10"));
+  EXPECT_EQ(f.at("D1"), std::string("16"));
+  EXPECT_EQ(f.at("E1"), std::string("22"));
+  EXPECT_EQ(f.s->evaluations() - before, 4u);
+  // A tall ladder of diamonds would take 2^n evaluations if each path were followed separately.
+  Fixture g;
+  g.set("A1", "1");
+  for (int row = 2; row <= 20; ++row) {
+    const std::string up = "A" + std::to_string(row - 1);
+    g.set("A" + std::to_string(row), "=" + up + "+" + up);
+  }
+  const std::size_t base = g.s->evaluations();
+  g.set("A1", "2");
+  EXPECT_EQ(g.at("A20"), std::string("1048576"));
+  EXPECT_EQ(g.s->evaluations() - base, 19u);
+}
+
+TEST(Recalc, OnlyTheDependentsOfTheEditedCellAreEvaluated) {
+  Fixture f;
+  f.set("A1", "1");
+  f.set("B1", "=A1+1");
+  f.set("A2", "1");
+  f.set("B2", "=A2+1");
+  f.set("C2", "=B2+B1");
+  EXPECT_EQ(f.cost("A1", "2"), 2u);  // B1 and C1... C2 reads B1, so B1 and C2
+  EXPECT_EQ(f.cost("A2", "2"), 2u);  // B2 and C2
+  EXPECT_EQ(f.cost("C2", "=A1+A2"), 1u);
+  EXPECT_EQ(f.cost("C2", "7"), 0u);
+  EXPECT_EQ(f.cost("D9", "=A1"), 1u);
+  EXPECT_EQ(f.cost("D9", ""), 0u);
+  EXPECT_EQ(f.cost("Z9", "5"), 0u);
+}
+
+TEST(Recalc, ReplacingAFormulaForgetsItsOldDependencies) {
+  Fixture f;
+  f.set("A1", "1");
+  f.set("A2", "2");
+  f.set("B1", "=A1+1");
+  EXPECT_EQ(f.cost("A1", "5"), 1u);
+  f.set("B1", "=A2+1");
+  EXPECT_EQ(f.at("B1"), std::string("3"));
+  EXPECT_EQ(f.cost("A1", "9"), 0u);  // B1 no longer reads A1
+  EXPECT_EQ(f.cost("A2", "9"), 1u);
+  EXPECT_EQ(f.at("B1"), std::string("10"));
+  f.set("B1", "42");  // a literal reads nothing
+  EXPECT_EQ(f.cost("A2", "1"), 0u);
+  EXPECT_EQ(f.at("B1"), std::string("42"));
+  f.set("B1", "=A1+A2");
+  f.set("B1", "");
+  EXPECT_EQ(f.cost("A1", "3"), 0u);
+  EXPECT_EQ(f.at("B1"), std::string("0"));
+}
+
+TEST(Cycle, SelfAndIndirectCyclesAreRefused) {
+  Fixture f;
+  IS(f.set("A1", "=A1"), Cycle);
+  IS(f.set("A1", "=1+A1*2"), Cycle);
+  f.set("A1", "=B1");
+  f.set("B1", "=C1");
+  IS(f.set("C1", "=A1"), Cycle);
+  IS(f.set("C1", "=1+(B1)"), Cycle);
+  IS(f.set("B1", "=A1+1"), Cycle);
+  IS(f.set("C1", "=D1+A1"), Cycle);
+  IS(f.set("C1", "=5"), Ok);
+  f.set("D1", "=A1");
+  IS(f.set("C1", "=D1"), Cycle);
+  IS(f.set("C1", "=Z1+D1"), Cycle);
+}
+
+TEST(Cycle, ARefusedSetChangesNothingNotEvenTheEvaluationCount) {
+  Fixture f;
+  f.set("A1", "=B1+1");
+  f.set("B1", "=C1+1");
+  f.set("C1", "5");
+  f.set("D1", "=A1*2");
+  EXPECT_EQ(f.at("D1"), std::string("14"));
+  const std::size_t evals = f.s->evaluations();
+  IS(f.set("C1", "=D1"), Cycle);
+  EXPECT_EQ(f.text("C1"), std::string("5"));
+  EXPECT_EQ(f.at("C1"), std::string("5"));
+  EXPECT_EQ(f.at("D1"), std::string("14"));
+  EXPECT_EQ(f.s->evaluations(), evals);
+  // The old dependencies are still wired: a later edit still flows through.
+  f.set("C1", "6");
+  EXPECT_EQ(f.at("D1"), std::string("16"));
+  // A refused edit also does not disturb the cell's own earlier precedents.
+  f.set("B1", "=C1+1");
+  IS(f.set("B1", "=D1+1"), Cycle);
+  EXPECT_EQ(f.text("B1"), std::string("=C1+1"));
+  f.set("C1", "10");
+  EXPECT_EQ(f.at("B1"), std::string("11"));
+}
+
+TEST(Cycle, ReplacingAFormulaCanBreakACycleThatWouldHaveFormed) {
+  Fixture f;
+  f.set("A1", "=B1");
+  IS(f.set("B1", "=A1"), Cycle);
+  IS(f.set("A1", "7"), Ok);
+  IS(f.set("B1", "=A1"), Ok);
+  EXPECT_EQ(f.at("B1"), std::string("7"));
+  IS(f.set("A1", "=B1"), Cycle);
+  IS(f.set("A1", ""), Ok);
+  IS(f.set("A1", "=B1+1"), Cycle);
+}
+
+namespace {
+// An independent model: it keeps the typed formulas as little trees and evaluates by plain recursion.
+struct ModelCell {
+  int kind = 0;  // 0 empty, 1 literal, 2 binary of two refs/literals
+  long long literal = 0;
+  int left = -1, right = -1;  // cell numbers
+  char op = '+';
+};
+
+struct Model {
+  std::map<int, ModelCell> cells;
+  static const int kCols = 4;
+
+  bool reaches(int from, int target) const {
+    if (from == target) return true;
+    const auto it = cells.find(from);
+    if (it == cells.end() || it->second.kind != 2) return false;
+    return reaches(it->second.left, target) || reaches(it->second.right, target);
+  }
+
+  Value eval(int cell) const {
+    Value v;
+    const auto it = cells.find(cell);
+    if (it == cells.end()) return v;
+    const ModelCell& c = it->second;
+    if (c.kind == 1) {
+      v.number = c.literal;
+      return v;
+    }
+    const Value l = eval(c.left);
+    const Value r = eval(c.right);
+    if (l.error != Error::None) return l;
+    if (r.error != Error::None) return r;
+    if (c.op == '+') v.number = l.number + r.number;
+    if (c.op == '-') v.number = l.number - r.number;
+    if (c.op == '*') v.number = l.number * r.number;
+    if (c.op == '/') {
+      if (r.number == 0) v.error = Error::DivideByZero;
+      else v.number = l.number / r.number;
+    }
+    return v;
+  }
+};
+
+std::string name(int cell) { return std::string(1, static_cast<char>('A' + cell % Model::kCols)) + std::to_string(cell / Model::kCols + 1); }
+}  // namespace
+
+TEST(Model, RandomEditsAgreeWithAnIndependentRecursiveModel) {
+  for (unsigned seed = 1; seed <= 25; ++seed) {
+    std::mt19937 rng(seed);
+    Fixture f;
+    Model model;
+    const int total = Model::kCols * 3;
+    for (int step = 0; step < 120; ++step) {
+      const int cell = static_cast<int>(rng() % total);
+      const int choice = static_cast<int>(rng() % 10);
+      std::string text;
+      ModelCell next;
+      if (choice == 0) {
+        next.kind = 0;
+      } else if (choice < 4) {
+        next.kind = 1;
+        next.literal = static_cast<long long>(rng() % 5) - 1;
+        text = std::to_string(next.literal);
+      } else {
+        next.kind = 2;
+        next.left = static_cast<int>(rng() % total);
+        next.right = static_cast<int>(rng() % total);
+        next.op = "+-/"[rng() % 3];  // no "*": chains of products would overflow
+        text = "=" + name(next.left) + std::string(1, next.op) + name(next.right);
+      }
+      const bool cyclic = next.kind == 2 && (model.reaches(next.left, cell) || model.reaches(next.right, cell));
+      const Status got = f.set(name(cell), text);
+      if (cyclic) {
+        EXPECT_TRUE(got == Status::Cycle);
+      } else {
+        EXPECT_TRUE(got == Status::Ok);
+        if (next.kind == 0) model.cells.erase(cell);
+        else model.cells[cell] = next;
+      }
+      for (int c = 0; c < total; ++c) {
+        const std::string expected = show(model.eval(c));
+        if (f.at(name(c)) != expected) {
+          EXPECT_EQ(f.at(name(c)), expected);
+          return;
+        }
+      }
+    }
+  }
+}
+19:T20ed,#include <memory>
+#include <random>
+#include <string>
+
+#include "api_storm1.h"
+#include "bp_test.h"
+
+namespace {
+using sheet::Error;
+using sheet::Status;
+using sheet::Value;
+
+#define IS(call, expected) EXPECT_TRUE((call) == Status::expected)
+
+std::string show(const Value& v) { return v.error == Error::DivideByZero ? "#DIV/0" : std::to_string(v.number); }
+
+struct Fixture {
+  std::unique_ptr<sheet::Sheet> s = sheet::makeFunctionSheet();
+  Status set(const std::string& cell, const std::string& text) { return s->set(cell, text); }
+  std::string at(const std::string& cell) {
+    Value v;
+    return s->get(cell, v) == Status::Ok ? show(v) : "<invalid>";
+  }
+  std::size_t cost(const std::string& cell, const std::string& text) {
+    const std::size_t before = s->evaluations();
+    s->set(cell, text);
+    return s->evaluations() - before;
+  }
+  // Fills A1..A5 with 4, -2, 9, (empty), 1.
+  void column() {
+    set("A1", "4");
+    set("A2", "-2");
+    set("A3", "9");
+    set("A5", "1");
+  }
+};
+}  // namespace
+
+TEST(Range, SumMinMaxAndCountOverAColumn) {
+  Fixture f;
+  f.column();
+  f.set("C1", "=SUM(A1:A5)");
+  f.set("C2", "=MIN(A1:A5)");
+  f.set("C3", "=MAX(A1:A5)");
+  f.set("C4", "=COUNT(A1:A5)");
+  EXPECT_EQ(f.at("C1"), std::string("12"));
+  EXPECT_EQ(f.at("C2"), std::string("-2"));
+  EXPECT_EQ(f.at("C3"), std::string("9"));
+  EXPECT_EQ(f.at("C4"), std::string("4"));
+  f.set("A4", "100");
+  EXPECT_EQ(f.at("C1"), std::string("112"));
+  EXPECT_EQ(f.at("C3"), std::string("100"));
+  EXPECT_EQ(f.at("C4"), std::string("5"));
+}
+
+TEST(Range, EmptyCellsCountAsZeroInSumMinAndMaxButNotInCount) {
+  Fixture f;
+  f.set("A1", "5");
+  f.set("A3", "7");
+  f.set("B1", "=MIN(A1:A3)");
+  f.set("B2", "=MAX(A1:A3)");
+  f.set("B3", "=SUM(A1:A3)");
+  f.set("B4", "=COUNT(A1:A3)");
+  EXPECT_EQ(f.at("B1"), std::string("0"));
+  EXPECT_EQ(f.at("B2"), std::string("7"));
+  EXPECT_EQ(f.at("B3"), std::string("12"));
+  EXPECT_EQ(f.at("B4"), std::string("2"));
+  f.set("D1", "=MAX(C1:C3)");
+  f.set("C2", "-4");
+  EXPECT_EQ(f.at("D1"), std::string("0"));
+  f.set("D2", "=MIN(F5:F6)");
+  EXPECT_EQ(f.at("D2"), std::string("0"));
+  EXPECT_EQ(f.at("D1"), std::string("0"));
+  f.set("A2", "0");  // a literal zero is not empty
+  EXPECT_EQ(f.at("B4"), std::string("3"));
+  f.set("A2", "");
+  EXPECT_EQ(f.at("B4"), std::string("2"));
+}
+
+TEST(Range, RectanglesInAnyCornerOrderAndSingleCells) {
+  Fixture f;
+  f.set("A1", "1");
+  f.set("B1", "2");
+  f.set("A2", "3");
+  f.set("B2", "4");
+  f.set("C1", "100");
+  f.set("D1", "=SUM(A1:B2)");
+  f.set("D2", "=SUM(B2:A1)");
+  f.set("D3", "=SUM(A2:B1)");
+  f.set("D4", "=SUM(B1:A2)");
+  f.set("D5", "=SUM(B2:B2)");
+  f.set("D6", "=SUM(A1:B1)");
+  f.set("D7", "=COUNT(A1:C2)");
+  for (const char* c : {"D1", "D2", "D3", "D4"}) EXPECT_EQ(f.at(c), std::string("10"));
+  EXPECT_EQ(f.at("D5"), std::string("4"));
+  EXPECT_EQ(f.at("D6"), std::string("3"));
+  EXPECT_EQ(f.at("D7"), std::string("5"));
+}
+
+TEST(Range, FunctionsMixWithArithmeticAndSpaces) {
+  Fixture f;
+  f.column();
+  IS(f.set("B1", "=SUM(A1:A5)*2+MAX(A1:A2)"), Ok);
+  EXPECT_EQ(f.at("B1"), std::string("28"));
+  IS(f.set("B2", "= - SUM ( A1 : A3 ) / ( 1 + COUNT(A1:A5) ) "), Ok);
+  EXPECT_EQ(f.at("B2"), std::string("-2"));
+  IS(f.set("B3", "=B1-SUM(A1:A1)"), Ok);
+  EXPECT_EQ(f.at("B3"), std::string("24"));
+  IS(f.set("B4", "=SUM(A1:A3)+SUM(A1:A3)"), Ok);
+  EXPECT_EQ(f.at("B4"), std::string("22"));
+}
+
+TEST(Range, EveryCellInTheRangeIsADependencyNotJustTheCorners) {
+  Fixture f;
+  f.column();
+  f.set("C1", "=SUM(A1:A5)");
+  EXPECT_EQ(f.cost("A3", "10"), 1u);
+  EXPECT_EQ(f.at("C1"), std::string("13"));
+  EXPECT_EQ(f.cost("A4", "5"), 1u);  // an empty cell in the middle too
+  EXPECT_EQ(f.at("C1"), std::string("18"));
+  EXPECT_EQ(f.cost("B3", "5"), 0u);
+  EXPECT_EQ(f.cost("A6", "5"), 0u);
+  f.set("C2", "=COUNT(A1:B5)");
+  EXPECT_EQ(f.cost("B2", "1"), 1u);
+  EXPECT_EQ(f.at("C2"), std::string("7"));
+  f.set("D1", "=C1+C2");
+  EXPECT_EQ(f.cost("A2", "0"), 3u);  // C1, C2 and D1, once each
+}
+
+TEST(Range, ErrorsInsideARangeBreakSumMinAndMaxButNotCount) {
+  Fixture f;
+  f.column();
+  f.set("A4", "=1/0");
+  f.set("C1", "=SUM(A1:A5)");
+  f.set("C2", "=MIN(A1:A5)");
+  f.set("C3", "=MAX(A1:A5)");
+  f.set("C4", "=COUNT(A1:A5)");
+  f.set("C5", "=SUM(A1:A3)");
+  EXPECT_EQ(f.at("C1"), std::string("#DIV/0"));
+  EXPECT_EQ(f.at("C2"), std::string("#DIV/0"));
+  EXPECT_EQ(f.at("C3"), std::string("#DIV/0"));
+  EXPECT_EQ(f.at("C4"), std::string("5"));
+  EXPECT_EQ(f.at("C5"), std::string("11"));
+  f.set("A4", "6");
+  EXPECT_EQ(f.at("C1"), std::string("18"));
+  EXPECT_EQ(f.at("C4"), std::string("5"));
+}
+
+TEST(Range, ACycleThroughTheMiddleOfARangeIsRefused) {
+  Fixture f;
+  f.set("B1", "=SUM(A1:A5)");
+  IS(f.set("A3", "=B1"), Cycle);
+  IS(f.set("A3", "=B1+1"), Cycle);
+  IS(f.set("A3", "=C1"), Ok);
+  IS(f.set("C1", "=B1"), Cycle);
+  IS(f.set("B1", "=SUM(A3:A3)"), Ok);   // a range that includes A3 only, which reads C1, which is empty
+  IS(f.set("A3", "=SUM(A1:C3)"), Cycle);  // A3 inside its own range
+  IS(f.set("A3", "=SUM(A1:A2)"), Ok);
+  IS(f.set("A2", "=COUNT(A1:C1)"), Cycle);  // A2 reads B1, which reads A3, which reads A2
+  IS(f.set("A2", "=COUNT(C1:C5)"), Ok);
+  IS(f.set("B1", "=COUNT(A1:A9)"), Ok);
+  EXPECT_EQ(f.at("B1"), std::string("2"));
+  IS(f.set("A9", "=B1"), Cycle);
+}
+
+TEST(Range, BadFunctionTextIsRefusedAndChangesNothing) {
+  Fixture f;
+  f.set("A1", "3");
+  f.set("B1", "=SUM(A1:A2)");
+  for (const char* bad : {"=SUM(A1)", "=SUM(A1:)", "=SUM(:A2)", "=SUM(A1:A2", "=SUM A1:A2", "=SUM(A1:A2:A3)", "=SUM(A1:A100)", "=sum(A1:A2)",
+                          "=AVG(A1:A2)", "=SUM(1:2)", "=SUM(A1:A2,B1:B2)", "=SUM()", "=SUM(A1:A2)SUM(A1:A2)", "=SUM(A1:A2)+", "=SUM(A1 A2)", "=SUM(a1:A2)",
+                          "=SUMS(A1:A2)", "=SUM1(A1:A2)", "=SUM(A1:A2)(", "=COUNT(A1:2)"}) {
+    IS(f.set("C1", bad), InvalidFormula);
+  }
+  EXPECT_EQ(f.at("C1"), std::string("0"));
+  EXPECT_EQ(f.at("B1"), std::string("3"));
+  IS(f.set("C1", "=SUM(A1:A2)"), Ok);
+  EXPECT_EQ(f.at("C1"), std::string("3"));
+}
+
+TEST(Range, ThePlainSheetStillRefusesFunctions) {
+  auto plain = sheet::makeSheet();
+  IS(plain->set("A1", "=SUM(B1:B2)"), InvalidFormula);
+  IS(plain->set("A1", "=1+2"), Ok);
+}
+
+TEST(Range, RandomRangesAgreeWithASimpleModel) {
+  for (unsigned seed = 1; seed <= 20; ++seed) {
+    std::mt19937 rng(seed);
+    Fixture f;
+    long long grid[4][6] = {};
+    bool filled[4][6] = {};
+    for (int step = 0; step < 60; ++step) {
+      const int c = static_cast<int>(rng() % 4);
+      const int r = static_cast<int>(rng() % 6);
+      const std::string cell = std::string(1, static_cast<char>('A' + c)) + std::to_string(r + 1);
+      if (rng() % 5 == 0) {
+        f.set(cell, "");
+        grid[c][r] = 0;
+        filled[c][r] = false;
+      } else {
+        grid[c][r] = static_cast<long long>(rng() % 9) - 3;
+        filled[c][r] = true;
+        f.set(cell, std::to_string(grid[c][r]));
+      }
+      const int c1 = static_cast<int>(rng() % 4), c2 = static_cast<int>(rng() % 4);
+      const int r1 = static_cast<int>(rng() % 6), r2 = static_cast<int>(rng() % 6);
+      auto name = [](int col, int row) { return std::string(1, static_cast<char>('A' + col)) + std::to_string(row + 1); };
+      // Output cells live in columns H..K so they never overlap the data.
+      f.set("H" + std::to_string(step % 50 + 1), "=SUM(" + name(c1, r1) + ":" + name(c2, r2) + ")");
+      f.set("I1", "=MIN(" + name(c1, r1) + ":" + name(c2, r2) + ")");
+      f.set("J1", "=MAX(" + name(c1, r1) + ":" + name(c2, r2) + ")");
+      f.set("K1", "=COUNT(" + name(c1, r1) + ":" + name(c2, r2) + ")");
+      long long sum = 0, mn = 1000, mx = -1000, count = 0;
+      for (int cc = std::min(c1, c2); cc <= std::max(c1, c2); ++cc) {
+        for (int rr = std::min(r1, r2); rr <= std::max(r1, r2); ++rr) {
+          sum += grid[cc][rr];
+          mn = std::min(mn, grid[cc][rr]);
+          mx = std::max(mx, grid[cc][rr]);
+          count += filled[cc][rr] ? 1 : 0;
+        }
+      }
+      if (f.at("H" + std::to_string(step % 50 + 1)) != std::to_string(sum) || f.at("I1") != std::to_string(mn) ||
+          f.at("J1") != std::to_string(mx) || f.at("K1") != std::to_string(count)) {
+        EXPECT_EQ(f.at("I1"), std::to_string(mn));
+        EXPECT_EQ(f.at("K1"), std::to_string(count));
+        EXPECT_EQ(f.at("J1"), std::to_string(mx));
+        EXPECT_EQ(f.at("H" + std::to_string(step % 50 + 1)), std::to_string(sum));
+        return;
+      }
+    }
+  }
+}
+1a:T1768,#include <algorithm>
+#include <memory>
+#include <string>
+#include <vector>
+
+#include "api_storm2.h"
+#include "bp_test.h"
+
+namespace {
+using sheet::Change;
+using sheet::Error;
+using sheet::Status;
+using sheet::Value;
+
+#define IS(call, expected) EXPECT_TRUE((call) == Status::expected)
+
+std::string show(const Value& v) { return v.error == Error::DivideByZero ? "#DIV/0" : std::to_string(v.number); }
+
+struct Fixture {
+  std::unique_ptr<sheet::WatchedSheet> s = sheet::makeWatchedSheet();
+  std::vector<Change> heard;
+  int id = 0;
+
+  Fixture() {
+    id = s->subscribe([this](const Change& c) { heard.push_back(c); });
+  }
+  Status set(const std::string& cell, const std::string& text) {
+    heard.clear();
+    return s->set(cell, text);
+  }
+  // "B1:2>3, C1:3>4" in the order they were heard.
+  std::string log() const {
+    std::string out;
+    for (const Change& c : heard) out += (out.empty() ? "" : ", ") + c.cell + ":" + show(c.before) + ">" + show(c.after);
+    return out;
+  }
+  std::string sortedCells() const {
+    std::vector<std::string> cells;
+    for (const Change& c : heard) cells.push_back(c.cell);
+    std::sort(cells.begin(), cells.end());
+    std::string out;
+    for (const auto& c : cells) out += (out.empty() ? "" : ",") + c;
+    return out;
+  }
+  long position(const std::string& cell) const {
+    for (std::size_t i = 0; i < heard.size(); ++i) if (heard[i].cell == cell) return static_cast<long>(i);
+    return -1;
+  }
+};
+}  // namespace
+
+TEST(Watch, TheEditedCellAndEveryChangedDependentAreReportedWithBeforeAndAfter) {
+  Fixture f;
+  f.set("A1", "1");
+  EXPECT_EQ(f.log(), std::string("A1:0>1"));
+  f.set("B1", "=A1+1");
+  EXPECT_EQ(f.log(), std::string("B1:0>2"));
+  f.set("A1", "10");
+  EXPECT_EQ(f.log(), std::string("A1:1>10, B1:2>11"));
+  f.set("A1", "");
+  EXPECT_EQ(f.log(), std::string("A1:10>0, B1:11>1"));
+  f.set("B1", "=1/0");
+  EXPECT_EQ(f.log(), std::string("B1:1>#DIV/0"));
+  f.set("B1", "=A1+1");
+  EXPECT_EQ(f.log(), std::string("B1:#DIV/0>1"));
+}
+
+TEST(Watch, CellsThatWereRecomputedToTheSameValueAreNotReported) {
+  Fixture f;
+  f.set("A1", "5");
+  f.set("B1", "=A1*0");
+  f.set("C1", "=B1+3");
+  f.set("D1", "=A1-A1");
+  f.set("A1", "6");
+  EXPECT_EQ(f.log(), std::string("A1:5>6"));
+  f.set("E1", "0");  // empty to a literal zero: same value, nothing to say
+  EXPECT_EQ(f.log(), std::string(""));
+  f.set("E1", "");
+  EXPECT_EQ(f.log(), std::string(""));
+  f.set("A1", "6");
+  EXPECT_EQ(f.log(), std::string(""));
+}
+
+TEST(Watch, PrecedentsAreReportedBeforeTheirDependents) {
+  Fixture f;
+  // Backwards on purpose: the dependency order is not the cell order.
+  f.set("A1", "1");
+  f.set("D1", "=A1+1");
+  f.set("C1", "=D1+1");
+  f.set("B1", "=C1+1");
+  f.set("E1", "=A1+B1+D1");
+  f.set("A1", "50");
+  EXPECT_EQ(f.sortedCells(), std::string("A1,B1,C1,D1,E1"));
+  EXPECT_EQ(f.heard.size(), 5u);
+  EXPECT_TRUE(f.position("A1") < f.position("D1"));
+  EXPECT_TRUE(f.position("D1") < f.position("C1"));
+  EXPECT_TRUE(f.position("C1") < f.position("B1"));
+  EXPECT_TRUE(f.position("B1") < f.position("E1"));
+  EXPECT_TRUE(f.position("D1") < f.position("E1"));
+}
+
+TEST(Watch, ADiamondReportsEachChangedCellOnce) {
+  Fixture f;
+  f.set("A1", "1");
+  f.set("B1", "=A1+1");
+  f.set("C1", "=A1*2");
+  f.set("D1", "=B1+C1");
+  f.set("A1", "4");
+  EXPECT_EQ(f.heard.size(), 4u);
+  EXPECT_EQ(f.sortedCells(), std::string("A1,B1,C1,D1"));
+  EXPECT_EQ(f.heard.back().cell, std::string("D1"));
+  EXPECT_EQ(f.heard.back().before.number, 4LL);
+  EXPECT_EQ(f.heard.back().after.number, 13LL);
+}
+
+TEST(Watch, ListenersSeeTheFinishedSheet) {
+  Fixture f;
+  f.set("A1", "1");
+  f.set("D1", "=A1+1");
+  f.set("C1", "=D1+1");
+  f.set("B1", "=C1+1");
+  std::vector<std::string> seen;
+  f.s->subscribe([&](const Change& c) {
+    if (c.cell != "A1") return;
+    Value v;
+    for (const char* cell : {"D1", "C1", "B1"}) {
+      f.s->get(cell, v);
+      seen.push_back(show(v));
+    }
+    std::string t;
+    f.s->text("A1", t);
+    seen.push_back(t);
+  });
+  f.set("A1", "20");
+  EXPECT_EQ(seen.size(), 4u);
+  if (seen.size() == 4) {
+    EXPECT_EQ(seen[0], std::string("21"));
+    EXPECT_EQ(seen[1], std::string("22"));
+    EXPECT_EQ(seen[2], std::string("23"));
+    EXPECT_EQ(seen[3], std::string("20"));
+  }
+}
+
+TEST(Watch, RefusedAndInvalidSetsSayNothing) {
+  Fixture f;
+  f.set("A1", "=B1");
+  IS(f.set("B1", "=A1"), Cycle);
+  EXPECT_EQ(f.log(), std::string(""));
+  IS(f.set("B1", "=1+"), InvalidFormula);
+  EXPECT_EQ(f.log(), std::string(""));
+  IS(f.set("b1", "1"), InvalidCell);
+  EXPECT_EQ(f.log(), std::string(""));
+}
+
+TEST(Watch, SeveralListenersAndUnsubscribe) {
+  Fixture f;
+  std::vector<std::string> order;
+  const int second = f.s->subscribe([&](const Change& c) { order.push_back("2:" + c.cell); });
+  f.s->subscribe([&](const Change& c) { order.push_back("3:" + c.cell); });
+  EXPECT_TRUE(second > f.id);
+  f.set("A1", "1");
+  f.set("B1", "=A1");
+  order.clear();
+  f.set("A1", "2");
+  EXPECT_EQ(order.size(), 4u);
+  if (order.size() == 4) {
+    EXPECT_EQ(order[0], std::string("2:A1"));
+    EXPECT_EQ(order[1], std::string("3:A1"));
+    EXPECT_EQ(order[2], std::string("2:B1"));
+    EXPECT_EQ(order[3], std::string("3:B1"));
+  }
+  f.s->unsubscribe(second);
+  f.s->unsubscribe(second);
+  f.s->unsubscribe(12345);
+  order.clear();
+  f.set("A1", "3");
+  EXPECT_EQ(order.size(), 2u);
+  f.s->unsubscribe(f.id);
+  f.set("A1", "4");
+  EXPECT_EQ(f.heard.size(), 0u);
+  EXPECT_EQ(order.size(), 4u);
+  const int third = f.s->subscribe([](const Change&) {});
+  EXPECT_TRUE(third > second);
+}
+
+TEST(Watch, FunctionsAndErrorsReportToo) {
+  Fixture f;
+  f.set("A1", "1");
+  f.set("A2", "2");
+  f.set("B1", "=SUM(A1:A3)");
+  f.set("B2", "=COUNT(A1:A3)");
+  f.set("A3", "5");
+  EXPECT_EQ(f.sortedCells(), std::string("A3,B1,B2"));
+  f.set("A3", "5");
+  EXPECT_EQ(f.log(), std::string(""));
+  f.set("A3", "=1/0");
+  EXPECT_EQ(f.sortedCells(), std::string("A3,B1"));
+  f.set("A3", "");
+  EXPECT_EQ(f.sortedCells(), std::string("A3,B1,B2"));
+  EXPECT_EQ(f.heard.size(), 3u);
+}
+1b:Ta3e,#pragma once
+#include <memory>
+#include <string>
+#include <vector>
+
+#include "expr.h"
+
+// A function over a range of cells (Strategy): SUM, MIN, MAX and COUNT are four of these.
+class Aggregate {
+ public:
+  virtual ~Aggregate() = default;
+  virtual sheet::Value over(const CellRange& range, const CellSource& cells) const = 0;
+};
+
+// Shared shape of SUM, MIN and MAX: read every value, stop at the first error, fold the numbers (Template Method).
+class FoldAggregate : public Aggregate {
+ public:
+  sheet::Value over(const CellRange& range, const CellSource& cells) const override {
+    long long folded = 0;
+    bool first = true;
+    for (const CellRef& cell : range.cells()) {
+      const sheet::Value v = cells.valueOf(cell);
+      if (v.error != sheet::Error::None) return v;
+      folded = first ? v.number : combine(folded, v.number);
+      first = false;
+    }
+    return numberValue(folded);
+  }
+
+ protected:
+  virtual long long combine(long long folded, long long next) const = 0;
+};
+
+class SumAggregate : public FoldAggregate {
+ protected:
+  long long combine(long long folded, long long next) const override { return folded + next; }
+};
+
+class MinAggregate : public FoldAggregate {
+ protected:
+  long long combine(long long folded, long long next) const override { return next < folded ? next : folded; }
+};
+
+class MaxAggregate : public FoldAggregate {
+ protected:
+  long long combine(long long folded, long long next) const override { return next > folded ? next : folded; }
+};
+
+class CountAggregate : public Aggregate {
+ public:
+  sheet::Value over(const CellRange& range, const CellSource& cells) const override {
+    long long count = 0;
+    for (const CellRef& cell : range.cells()) count += cells.occupied(cell) ? 1 : 0;
+    return numberValue(count);
+  }
+};
+
+// The function named `name`, or null.
+inline const Aggregate* findAggregate(const std::string& name) {
+  static const SumAggregate sum;
+  static const MinAggregate min;
+  static const MaxAggregate max;
+  static const CountAggregate count;
+  if (name == "SUM") return &sum;
+  if (name == "MIN") return &min;
+  if (name == "MAX") return &max;
+  if (name == "COUNT") return &count;
+  return nullptr;
+}
+
+class CallExpr : public Expr {
+ public:
+  CallExpr(const Aggregate& function, const CellRange& range) : function_(function), range_(range) {}
+  sheet::Value eval(const CellSource& cells) const override { return function_.over(range_, cells); }
+  void collectRefs(std::vector<CellRef>& out) const override {
+    for (const CellRef& cell : range_.cells()) out.push_back(cell);
+  }
+
+ private:
+  const Aggregate& function_;
+  CellRange range_;
+};
+1c:T7f7,#pragma once
+#include <cstddef>
+#include <string>
+#include <vector>
+
+constexpr int kColumns = 26;
+constexpr int kRows = 99;
+
+// One cell address. The only code that knows how "C10" maps to a column, a row and a dense index.
+class CellRef {
+ public:
+  CellRef() = default;
+  CellRef(int column, int row) : column_(column), row_(row) {}
+
+  // "A1".."Z99". Lower case, leading zeros and anything outside the grid are refused.
+  static bool parse(const std::string& text, CellRef& out) {
+    if (text.size() < 2 || text.size() > 3) return false;
+    if (text[0] < 'A' || text[0] > 'Z') return false;
+    if (text[1] < '1' || text[1] > '9') return false;
+    int row = 0;
+    for (std::size_t i = 1; i < text.size(); ++i) {
+      if (text[i] < '0' || text[i] > '9') return false;
+      row = row * 10 + (text[i] - '0');
+    }
+    if (row > kRows) return false;
+    out = CellRef(text[0] - 'A', row - 1);
+    return true;
+  }
+
+  static CellRef fromIndex(int index) { return CellRef(index % kColumns, index / kColumns); }
+
+  int column() const { return column_; }
+  int row() const { return row_; }
+  int index() const { return row_ * kColumns + column_; }
+  std::string name() const { return std::string(1, static_cast<char>('A' + column_)) + std::to_string(row_ + 1); }
+
+ private:
+  int column_ = 0;
+  int row_ = 0;
+};
+
+// A rectangle of cells, named by two opposite corners in any order.
+class CellRange {
+ public:
+  CellRange(const CellRef& a, const CellRef& b)
+      : left_(a.column() < b.column() ? a.column() : b.column()),
+        right_(a.column() < b.column() ? b.column() : a.column()),
+        top_(a.row() < b.row() ? a.row() : b.row()),
+        bottom_(a.row() < b.row() ? b.row() : a.row()) {}
+
+  // Row by row, left to right.
+  std::vector<CellRef> cells() const {
+    std::vector<CellRef> out;
+    for (int row = top_; row <= bottom_; ++row) {
+      for (int column = left_; column <= right_; ++column) out.emplace_back(column, row);
+    }
+    return out;
+  }
+
+ private:
+  int left_;
+  int right_;
+  int top_;
+  int bottom_;
+};
+1d:Td63,#pragma once
+#include <memory>
+#include <utility>
+#include <vector>
+
+#include "api.h"
+#include "cellref.h"
+
+// What an expression may ask of the sheet while it is evaluated.
+class CellSource {
+ public:
+  virtual ~CellSource() = default;
+  virtual sheet::Value valueOf(const CellRef& cell) const = 0;
+  virtual bool occupied(const CellRef& cell) const = 0;
+};
+
+inline sheet::Value numberValue(long long number) {
+  sheet::Value v;
+  v.number = number;
+  return v;
+}
+
+inline sheet::Value errorValue(sheet::Error error) {
+  sheet::Value v;
+  v.error = error;
+  return v;
+}
+
+// A parsed formula is a tree of these (the Interpreter pattern): each node evaluates itself from its children.
+class Expr {
+ public:
+  virtual ~Expr() = default;
+  virtual sheet::Value eval(const CellSource& cells) const = 0;
+  // Adds every cell this expression reads (ranges expanded, duplicates allowed).
+  virtual void collectRefs(std::vector<CellRef>& out) const = 0;
+};
+
+class NumberExpr : public Expr {
+ public:
+  explicit NumberExpr(long long number) : number_(number) {}
+  sheet::Value eval(const CellSource&) const override { return numberValue(number_); }
+  void collectRefs(std::vector<CellRef>&) const override {}
+
+ private:
+  long long number_;
+};
+
+class RefExpr : public Expr {
+ public:
+  explicit RefExpr(const CellRef& cell) : cell_(cell) {}
+  sheet::Value eval(const CellSource& cells) const override { return cells.valueOf(cell_); }
+  void collectRefs(std::vector<CellRef>& out) const override { out.push_back(cell_); }
+
+ private:
+  CellRef cell_;
+};
+
+class NegateExpr : public Expr {
+ public:
+  explicit NegateExpr(std::unique_ptr<Expr> inner) : inner_(std::move(inner)) {}
+  sheet::Value eval(const CellSource& cells) const override {
+    const sheet::Value v = inner_->eval(cells);
+    return v.error != sheet::Error::None ? v : numberValue(-v.number);
+  }
+  void collectRefs(std::vector<CellRef>& out) const override { inner_->collectRefs(out); }
+
+ private:
+  std::unique_ptr<Expr> inner_;
+};
+
+// One arithmetic operation on two numbers; false when it cannot be done (division by zero).
+using Operation = bool (*)(long long left, long long right, long long& result);
+
+inline bool addOp(long long l, long long r, long long& out) { out = l + r; return true; }
+inline bool subtractOp(long long l, long long r, long long& out) { out = l - r; return true; }
+inline bool multiplyOp(long long l, long long r, long long& out) { out = l * r; return true; }
+inline bool divideOp(long long l, long long r, long long& out) {
+  if (r == 0) return false;
+  out = l / r;
+  return true;
+}
+
+class BinaryExpr : public Expr {
+ public:
+  BinaryExpr(Operation operation, std::unique_ptr<Expr> left, std::unique_ptr<Expr> right)
+      : operation_(operation), left_(std::move(left)), right_(std::move(right)) {}
+
+  sheet::Value eval(const CellSource& cells) const override {
+    const sheet::Value l = left_->eval(cells);
+    const sheet::Value r = right_->eval(cells);
+    if (l.error != sheet::Error::None) return l;
+    if (r.error != sheet::Error::None) return r;
+    long long result = 0;
+    if (!operation_(l.number, r.number, result)) return errorValue(sheet::Error::DivideByZero);
+    return numberValue(result);
+  }
+
+  void collectRefs(std::vector<CellRef>& out) const override {
+    left_->collectRefs(out);
+    right_->collectRefs(out);
+  }
+
+ private:
+  Operation operation_;
+  std::unique_ptr<Expr> left_;
+  std::unique_ptr<Expr> right_;
+};
+1e:Taf8,#pragma once
+#include <deque>
+#include <map>
+#include <set>
+#include <vector>
+
+// Who reads whom, as dense cell indexes. Answers two questions: would this edge set make a cycle, and in what order
+// must the cells that depend on an edited cell be recalculated.
+class DependencyGraph {
+ public:
+  // Makes `precedents` the complete list of cells that `cell` reads, forgetting what it read before.
+  void replace(int cell, const std::vector<int>& precedents) {
+    for (int old : precedents_[cell]) dependents_[old].erase(cell);
+    precedents_[cell].clear();
+    for (int p : precedents) {
+      precedents_[cell].insert(p);
+      dependents_[p].insert(cell);
+    }
+  }
+
+  // True when `cell` reading `precedents` would close a loop: it reads itself, or something that depends on it.
+  bool createsCycle(int cell, const std::vector<int>& precedents) const {
+    const std::set<int> downstream = reachableFrom(cell);
+    for (int p : precedents) {
+      if (p == cell || downstream.count(p) > 0) return true;
+    }
+    return false;
+  }
+
+  // Every cell that depends on `cell`, directly or not, each once, with every cell after the cells it reads.
+  // (Kahn's algorithm on the affected part of the graph.)
+  std::vector<int> affectedBy(int cell) const {
+    const std::set<int> affected = reachableFrom(cell);
+    std::map<int, int> waiting;  // affected cell -> how many affected cells it still waits for
+    std::deque<int> ready;
+    for (int a : affected) {
+      int count = 0;
+      const auto found = precedents_.find(a);
+      if (found != precedents_.end()) {
+        for (int p : found->second) count += affected.count(p) > 0 ? 1 : 0;
+      }
+      waiting[a] = count;
+      if (count == 0) ready.push_back(a);
+    }
+    std::vector<int> order;
+    while (!ready.empty()) {
+      const int next = ready.front();
+      ready.pop_front();
+      order.push_back(next);
+      for (int d : dependentsOf(next)) {
+        if (--waiting[d] == 0) ready.push_back(d);
+      }
+    }
+    return order;
+  }
+
+ private:
+  const std::set<int>& dependentsOf(int cell) const {
+    static const std::set<int> none;
+    const auto found = dependents_.find(cell);
+    return found == dependents_.end() ? none : found->second;
+  }
+
+  // Cells reachable by following "is read by" edges from `cell` (not including `cell` itself, unless it is in a loop).
+  std::set<int> reachableFrom(int cell) const {
+    std::set<int> seen;
+    std::vector<int> stack(dependentsOf(cell).begin(), dependentsOf(cell).end());
+    while (!stack.empty()) {
+      const int next = stack.back();
+      stack.pop_back();
+      if (!seen.insert(next).second) continue;
+      for (int d : dependentsOf(next)) stack.push_back(d);
+    }
+    return seen;
+  }
+
+  std::map<int, std::set<int>> precedents_;
+  std::map<int, std::set<int>> dependents_;
+};
+1f:T17ec,#pragma once
+#include <cstddef>
+#include <memory>
+#include <string>
+#include <utility>
+
+#include "aggregate.h"
+
+constexpr std::size_t kMaxLiteralDigits = 9;
+
+// A position in the text being parsed: the only code that knows about spaces, digits and letters.
+class TextCursor {
+ public:
+  explicit TextCursor(const std::string& text) : text_(text) {}
+
+  // The next character that is not a space, or '\0' at the end.
+  char peek() {
+    skipSpaces();
+    return pos_ < text_.size() ? text_[pos_] : '\0';
+  }
+
+  void advance() { ++pos_; }
+
+  static bool isDigit(char c) { return c >= '0' && c <= '9'; }
+  static bool isLetter(char c) { return c >= 'A' && c <= 'Z'; }
+
+  bool nextIsDigit() const { return pos_ < text_.size() && isDigit(text_[pos_]); }
+
+  // Up to kMaxLiteralDigits digits; false when there are more (or none).
+  bool readNumber(long long& out) {
+    out = 0;
+    std::size_t digits = 0;
+    while (nextIsDigit()) {
+      out = out * 10 + (text_[pos_++] - '0');
+      if (++digits > kMaxLiteralDigits) return false;
+    }
+    return digits > 0;
+  }
+
+  // A run of upper-case letters, with no space skipping inside it.
+  std::string readLetters() {
+    std::string letters;
+    while (pos_ < text_.size() && isLetter(text_[pos_])) letters += text_[pos_++];
+    return letters;
+  }
+
+  // Digits straight after letters already read, then the whole name is checked against the grid.
+  bool readCellAfter(const std::string& letters, CellRef& out) {
+    if (letters.size() != 1) return false;
+    std::string name = letters;
+    while (nextIsDigit()) name += text_[pos_++];
+    return CellRef::parse(name, out);
+  }
+
+ private:
+  void skipSpaces() {
+    while (pos_ < text_.size() && text_[pos_] == ' ') ++pos_;
+  }
+
+  const std::string& text_;
+  std::size_t pos_ = 0;
+};
+
+// Turns the text after '=' into an Expr tree by recursive descent: expression -> term -> unary -> primary.
+// Returns null when the text is not a formula. Range functions are only accepted when `functions` is true.
+class FormulaParser {
+ public:
+  FormulaParser(const std::string& text, bool functions) : in_(text), functions_(functions) {}
+
+  std::unique_ptr<Expr> parse() {
+    std::unique_ptr<Expr> tree = expression();
+    if (failed_ || in_.peek() != '\0') return nullptr;
+    return tree;
+  }
+
+ private:
+  std::unique_ptr<Expr> expression() {
+    std::unique_ptr<Expr> left = term();
+    while (!failed_ && (in_.peek() == '+' || in_.peek() == '-')) {
+      const Operation op = in_.peek() == '+' ? addOp : subtractOp;
+      in_.advance();
+      left = join(op, std::move(left), term());
+    }
+    return left;
+  }
+
+  std::unique_ptr<Expr> term() {
+    std::unique_ptr<Expr> left = unary();
+    while (!failed_ && (in_.peek() == '*' || in_.peek() == '/')) {
+      const Operation op = in_.peek() == '*' ? multiplyOp : divideOp;
+      in_.advance();
+      left = join(op, std::move(left), unary());
+    }
+    return left;
+  }
+
+  std::unique_ptr<Expr> unary() {
+    if (in_.peek() == '-') {
+      in_.advance();
+      std::unique_ptr<Expr> inner = unary();
+      return failed_ ? nullptr : std::make_unique<NegateExpr>(std::move(inner));
+    }
+    return primary();
+  }
+
+  std::unique_ptr<Expr> primary() {
+    const char c = in_.peek();
+    if (c == '(') {
+      in_.advance();
+      std::unique_ptr<Expr> inner = expression();
+      if (!failed_ && in_.peek() == ')') {
+        in_.advance();
+        return inner;
+      }
+      return fail();
+    }
+    long long value = 0;
+    if (TextCursor::isDigit(c)) return in_.readNumber(value) ? std::make_unique<NumberExpr>(value) : fail();
+    if (TextCursor::isLetter(c)) return reference();
+    return fail();
+  }
+
+  // A cell ("B7") or, when functions are on, a call ("SUM(A1:B3)").
+  std::unique_ptr<Expr> reference() {
+    const std::string letters = in_.readLetters();
+    if (in_.nextIsDigit()) {
+      CellRef cell;
+      return in_.readCellAfter(letters, cell) ? std::make_unique<RefExpr>(cell) : fail();
+    }
+    return functions_ ? call(letters) : fail();
+  }
+
+  std::unique_ptr<Expr> call(const std::string& name) {
+    const Aggregate* function = findAggregate(name);
+    if (function == nullptr || in_.peek() != '(') return fail();
+    in_.advance();
+    CellRef first;
+    CellRef last;
+    if (!cell(first) || in_.peek() != ':') return fail();
+    in_.advance();
+    if (!cell(last) || in_.peek() != ')') return fail();
+    in_.advance();
+    return std::make_unique<CallExpr>(*function, CellRange(first, last));
+  }
+
+  bool cell(CellRef& out) {
+    in_.peek();  // skip spaces before the cell name
+    return in_.readCellAfter(in_.readLetters(), out);
+  }
+
+  std::unique_ptr<Expr> join(Operation op, std::unique_ptr<Expr> left, std::unique_ptr<Expr> right) {
+    if (failed_ || left == nullptr || right == nullptr) return fail();
+    return std::make_unique<BinaryExpr>(op, std::move(left), std::move(right));
+  }
+
+  std::unique_ptr<Expr> fail() {
+    failed_ = true;
+    return nullptr;
+  }
+
+  TextCursor in_;
+  bool functions_;
+  bool failed_ = false;
+};
+
+// What the user typed into a cell: an integer literal, a formula, or nothing.
+// Returns InvalidFormula when it is none of them. `isFormula` is false for literals; `expr` is null for "".
+inline sheet::Status compileInput(const std::string& text, bool functions, std::unique_ptr<Expr>& expr, bool& isFormula) {
+  expr = nullptr;
+  isFormula = false;
+  if (text.empty()) return sheet::Status::Ok;
+  if (text[0] == '=') {
+    const std::string body = text.substr(1);
+    expr = FormulaParser(body, functions).parse();
+    isFormula = true;
+    return expr == nullptr ? sheet::Status::InvalidFormula : sheet::Status::Ok;
+  }
+  const bool negative = text[0] == '-';
+  const std::size_t digits = text.size() - (negative ? 1 : 0);
+  if (digits == 0 || digits > kMaxLiteralDigits) return sheet::Status::InvalidFormula;
+  long long value = 0;
+  for (std::size_t i = negative ? 1 : 0; i < text.size(); ++i) {
+    if (text[i] < '0' || text[i] > '9') return sheet::Status::InvalidFormula;
+    value = value * 10 + (text[i] - '0');
+  }
+  expr = std::make_unique<NumberExpr>(negative ? -value : value);
+  return sheet::Status::Ok;
+}
+20:Tdb8,#pragma once
+#include <algorithm>
+#include <memory>
+#include <string>
+#include <utility>
+#include <vector>
+
+#include "feed.h"
+#include "graph.h"
+#include "parser.h"
+#include "store.h"
+
+// The facade: parse the name and the text, refuse cycles, store the cell, recalculate what depends on it in
+// dependency order, and tell the subscribers what changed. Each step lives in one collaborator.
+class SheetImpl : public sheet::WatchedSheet {
+ public:
+  explicit SheetImpl(bool functions) : functions_(functions) {}
+
+  sheet::Status set(const std::string& name, const std::string& text) override {
+    CellRef ref;
+    if (!CellRef::parse(name, ref)) return sheet::Status::InvalidCell;
+    Cell cell;
+    cell.text = text;
+    const sheet::Status compiled = compileInput(text, functions_, cell.expr, cell.isFormula);
+    if (compiled != sheet::Status::Ok) return compiled;
+    const std::vector<int> precedents = precedentsOf(cell.expr.get());
+    const int index = ref.index();
+    if (graph_.createsCycle(index, precedents)) return sheet::Status::Cycle;
+
+    std::vector<int> order = graph_.affectedBy(index);
+    order.insert(order.begin(), index);
+    std::vector<sheet::Value> before;
+    for (int i : order) before.push_back(valueAt(i));
+
+    graph_.replace(index, precedents);
+    if (cell.expr == nullptr) {
+      store_.erase(index);
+    } else {
+      store_.put(index, std::move(cell));
+    }
+    recalculate(order);
+    announce(order, before);
+    return sheet::Status::Ok;
+  }
+
+  sheet::Status get(const std::string& name, sheet::Value& out) const override {
+    CellRef ref;
+    if (!CellRef::parse(name, ref)) return sheet::Status::InvalidCell;
+    out = valueAt(ref.index());
+    return sheet::Status::Ok;
+  }
+
+  sheet::Status text(const std::string& name, std::string& out) const override {
+    CellRef ref;
+    if (!CellRef::parse(name, ref)) return sheet::Status::InvalidCell;
+    const Cell* cell = store_.find(ref.index());
+    out = cell == nullptr ? std::string() : cell->text;
+    return sheet::Status::Ok;
+  }
+
+  std::size_t evaluations() const override { return evaluations_; }
+
+  int subscribe(sheet::Listener listener) override { return feed_.add(std::move(listener)); }
+  void unsubscribe(int id) override { feed_.remove(id); }
+
+ private:
+  static std::vector<int> precedentsOf(const Expr* expr) {
+    std::vector<int> out;
+    if (expr == nullptr) return out;
+    std::vector<CellRef> refs;
+    expr->collectRefs(refs);
+    for (const CellRef& r : refs) out.push_back(r.index());
+    std::sort(out.begin(), out.end());
+    out.erase(std::unique(out.begin(), out.end()), out.end());
+    return out;
+  }
+
+  sheet::Value valueAt(int index) const { return store_.valueOf(CellRef::fromIndex(index)); }
+
+  // `order` starts with the edited cell, then everything that depends on it, precedents first.
+  void recalculate(const std::vector<int>& order) {
+    for (int index : order) {
+      Cell* cell = store_.find(index);
+      if (cell == nullptr) continue;
+      cell->value = cell->expr->eval(store_);
+      if (cell->isFormula) ++evaluations_;
+    }
+  }
+
+  void announce(const std::vector<int>& order, const std::vector<sheet::Value>& before) const {
+    for (std::size_t i = 0; i < order.size(); ++i) {
+      const sheet::Value after = valueAt(order[i]);
+      if (after != before[i]) feed_.publish({CellRef::fromIndex(order[i]).name(), before[i], after});
+    }
+  }
+
+  bool functions_;
+  CellStore store_;
+  DependencyGraph graph_;
+  ChangeFeed feed_;
+  std::size_t evaluations_ = 0;
+};
+21:T456,#pragma once
+#include <map>
+#include <memory>
+#include <string>
+
+#include "expr.h"
+
+// One stored cell: what was typed, its parsed form, and the value it currently shows.
+struct Cell {
+  std::string text;
+  std::unique_ptr<Expr> expr;
+  bool isFormula = false;
+  sheet::Value value;
+};
+
+// The cells that are not empty, and the answers an expression may ask about them.
+class CellStore : public CellSource {
+ public:
+  sheet::Value valueOf(const CellRef& cell) const override {
+    const Cell* found = find(cell.index());
+    return found == nullptr ? numberValue(0) : found->value;
+  }
+
+  bool occupied(const CellRef& cell) const override { return find(cell.index()) != nullptr; }
+
+  const Cell* find(int index) const {
+    const auto it = cells_.find(index);
+    return it == cells_.end() ? nullptr : &it->second;
+  }
+
+  Cell* find(int index) {
+    const auto it = cells_.find(index);
+    return it == cells_.end() ? nullptr : &it->second;
+  }
+
+  void put(int index, Cell cell) { cells_[index] = std::move(cell); }
+  void erase(int index) { cells_.erase(index); }
+
+ private:
+  std::map<int, Cell> cells_;
+};
+f:[["children",{"s":"__PAGE__","h":160,"d":{"r":["$","$1","c",{"children":[["$","$L12",null,{"bundle":{"id":"spreadsheet","title":"Spreadsheet with formulas","level":"Senior","parMinutes":80,"patterns":["Interpreter","Observer","Strategy"],"requirements":[{"id":"R-cells","text":"The grid is columns A..Z by rows 1..99; names are upper case and exact (\"a1\", \"A0\", \"A01\", \"A100\", \"AA1\" are InvalidCell). An empty cell reads as the number 0. set(cell, text) stores the text exactly as typed: \"\" clears the cell, an integer is '-'? then 1 to 9 digits, a formula starts with '='; anything else is InvalidFormula. The cell name is checked first, then the text, then cycles. get and text touch their output only on Ok.","phase":"base","hidden":true},{"id":"R-formula","text":"A formula has integers (up to 9 digits), cell references, + - * /, unary minus and parentheses, with * and / binding tighter than + and -, everything left to right, spaces allowed between tokens. '/' truncates toward zero. A reference outside the grid, a lower-case one, a trailing operator or any other character is InvalidFormula. A failed set changes nothing.","phase":"base","hidden":true},{"id":"R-errors","text":"Dividing by zero makes the cell's value an error (DivideByZero, number 0). Both operands are always evaluated, so \"=0*(1/0)\" is an error. A formula that reads a cell in error is in error too; the error disappears when the cause is fixed.","phase":"base","hidden":true},{"id":"R-recalc","text":"Recalculation is eager and minimal: after a successful set every cell that depends on the edited one, directly or through others, is up to date, each formula evaluated exactly once however many paths lead to it, after the cells it reads. Formulas that do not depend on the edited cell are not evaluated. A formula is evaluated by evaluations() once per evaluation; literals, clears and failed calls evaluate nothing. Replacing a formula forgets what the old one read.","phase":"base","hidden":true},{"id":"R-cycle","text":"A set that would make a cell depend on itself, directly or through other cells, is refused with Cycle and changes nothing: not the text, not the values, not what the cell reads, not the evaluation count. Replacing or clearing a formula can make a previously refused set legal.","phase":"base","hidden":true},{"id":"R-range","text":"Storm 1: makeFunctionSheet accepts SUM, MIN, MAX and COUNT over a rectangle NAME(CELL:CELL), corners in either order. SUM, MIN and MAX use the values of every cell, an empty one counting as 0, and are in error if any cell in the rectangle is in error. COUNT is the number of non-empty cells (a literal 0 and a formula in error both count) and is never in error. A formula depends on every cell in its ranges, empty ones included, so a cycle through the middle of a range is a Cycle. The plain makeSheet still refuses functions.","phase":"storm1","hidden":true},{"id":"R-watch","text":"Storm 2: makeWatchedSheet adds subscribe(listener) and unsubscribe(id). After every successful set, once the whole recalculation is done, each listener hears one Change (cell, before, after) for every cell whose value differs from before, the edited cell included; cells recomputed to the same value and failed sets report nothing. Changes come so that a cell follows every changed cell it reads (unrelated cells in no particular order), and for one change the listeners are called in subscription order. A listener sees the finished sheet. Ids are never reused.","phase":"storm2","hidden":true}],"brief":"$13","editorial":"$14","clarify":[{"id":"q-grid","text":"How big is the grid, how are cells named, and what does a cell hold? What do I get back for a cell nobody has touched?","answer":"Columns A to Z and rows 1 to 99, upper case only: \"A1\", \"Z99\". \"a1\", \"A0\", \"A01\", \"A100\" and \"AA1\" are InvalidCell. A cell holds nothing, an integer (an optional '-' and 1 to 9 digits), or a formula starting with '='. set(cell, text) stores the text as typed and \"\" clears the cell. An untouched cell reads as the number 0. The cell name is checked first, then the text.","reveals":["R-cells"],"quality":"essential"},{"id":"q-formula","text":"What can a formula contain? Precedence, associativity, negative numbers, division of integers, spaces?","answer":"Integers, cell references, + - * /, unary minus and parentheses. * and / bind tighter than + and -, equal levels group left to right, and spaces are allowed between tokens. Everything is 64-bit integer arithmetic and '/' truncates toward zero, so -7/2 is -3. A formula that does not parse (a trailing operator, a reference outside the grid, a lower-case cell, any other character) is InvalidFormula and the sheet is left untouched.","reveals":["R-formula","R-cells"],"quality":"essential"},{"id":"q-errors","text":"What should happen on division by zero? And what do the cells that read that cell show?","answer":"The cell's value becomes an error (DivideByZero, with number 0). Both sides of an operator are always evaluated, so \"=0*(1/0)\" is an error too. A formula that reads a cell in error is in error as well, all the way down the chain, and it recovers by itself when the cause is fixed. Nothing throws.","reveals":["R-errors"],"quality":"essential"},{"id":"q-recalc","text":"When a cell changes, how much should be recalculated, and when: right away, or when someone reads it? Do I need to count anything?","answer":"Eagerly: when set returns, every dependent is up to date. Only cells that depend on the edited one are touched, each formula evaluated exactly once, after the cells it reads, even when there are several paths (a diamond). There is a counter, evaluations(), that counts formula evaluations so that the amount of work is observable: literals, clears and failed calls add nothing. Replacing a formula must forget what the old one read.","reveals":["R-recalc"],"quality":"essential"},{"id":"q-cycle","text":"What if a formula makes a cell depend on itself, even through several other cells?","answer":"set returns Status::Cycle and nothing changes: not the text, not the values, not the dependencies, not the evaluation count. Self-reference and longer loops (A1 reads B1 reads C1 reads A1) are both cycles. Replacing or clearing a formula can make an earlier refused edit legal.","reveals":["R-cycle"],"quality":"essential"},{"id":"q-order","text":"Does order matter: can a formula read a cell below or to the right of it, or one that is still empty?","answer":"Yes to all three. A formula may read any cell, including empty ones (they read as 0) and ones that are filled in later; when they are, the formula updates. Nothing about the layout of the grid says which cell is calculated first.","reveals":["R-recalc"],"quality":"useful"},{"id":"q-ranges-later","text":"Will there be functions over ranges, like SUM(A1:A9)? If so, do empty cells in a range count as zero?","answer":"Plan for them (a follow-up will ask), but the base interface has none. When they come: SUM, MIN, MAX and COUNT over a rectangle named by two corners in either order. SUM, MIN and MAX use every cell's value with an empty cell counting as 0 and are in error if any cell is; COUNT counts non-empty cells and is never in error. A formula depends on every cell of its ranges, even empty ones.","reveals":["R-range"],"quality":"useful"},{"id":"q-listeners","text":"Will anyone need to be told when values change, for example a screen that redraws?","answer":"Yes, later. A listener hears one Change (cell, before, after) for every cell whose value is different after a successful edit, including the edited cell, after the whole recalculation, with precedents before dependents and listeners in subscription order. Cells recomputed to the same value say nothing.","reveals":["R-watch"],"quality":"useful"},{"id":"q-limits","text":"How big can a sheet get? Do I need to worry about performance or threads?","answer":"At most 26 x 99 cells; the tests do a few hundred edits and a ladder of twenty diamonds, so exponential recalculation is visible and anything linear in the affected cells is fine. No threads. Say what you would change for a million cells and for concurrent editors.","reveals":[],"quality":"useful"},{"id":"q-strings","text":"Should cells be able to hold text, dates or booleans, and should the formula language have IF or string functions?","answer":"No: integers and arithmetic only. A text cell would need a value type with several kinds and coercion rules, which is a different (and larger) problem.","reveals":[],"quality":"noise"},{"id":"q-ui","text":"What does the screen look like: fonts, column widths, a toolbar, copy and paste?","answer":"Out of scope. The tests call the Sheet interface, nothing else.","reveals":[],"quality":"noise"},{"id":"q-persist","text":"Should the sheet be saved to a file and loaded again, or exported to CSV?","answer":"Not now. The text each cell stores (text()) is enough to rebuild a sheet by replaying set, which would be the way to do it.","reveals":[],"quality":"noise"},{"id":"q-undo","text":"Is there undo, or a way to insert and delete rows and columns with references that shift?","answer":"No undo and no structural edits in this problem. They are good follow-ups, and the answers mention what they would change in your design.","reveals":[],"quality":"noise"}],"rubric":[{"id":"res-facade","text":"Exposes the public calls and sequences the collaborators: check the name and text, refuse cycles, store the cell, recalculate what depends on it, announce changes","phase":"base","owners":["SheetImpl","SheetService","SpreadsheetImpl","Spreadsheet","SheetFacade","Sheet"]},{"id":"res-address","text":"Parses and owns cell names (column, row, the grid limits) so no other class handles raw strings like \"C10\"","phase":"base","owners":["CellRef","CellAddress","Address","CellId","CellName","Coordinate"]},{"id":"res-parse","text":"Turns formula text into a structure that can be evaluated, reporting InvalidFormula for anything else, without touching the sheet","phase":"base","owners":["FormulaParser","Parser","ExpressionParser","FormulaCompiler","Tokenizer","Lexer"]},{"id":"res-expr","text":"Represents a formula as an expression tree whose nodes evaluate themselves from their children, pass errors on and report which cells they read","phase":"base","owners":["Expr","Expression","Node","AstNode","FormulaNode","Formula"]},{"id":"res-graph","text":"Keeps who-reads-whom, answers whether a new formula would close a cycle, and produces the order in which dependents must be recalculated (a topological order of the affected cells)","phase":"base","owners":["DependencyGraph","Graph","DependencyTracker","Dependencies","DepGraph","CellGraph"]},{"id":"res-store","text":"Holds the cells that are not empty with their text and current value, and answers 'what does this cell show' for expressions","phase":"base","owners":["CellStore","Cells","Grid","CellGrid","Storage","CellMap"]},{"id":"res-fn","text":"Implements each range function as its own piece (SUM, MIN, MAX, COUNT) so adding one touches no existing function","phase":"storm1","owners":["Aggregate","RangeFunction","Function","Fn","SumFunction","FoldAggregate","CellFunction"]},{"id":"res-range","text":"Represents a rectangle of cells named by two opposite corners and lists its cells, so the parser, the functions and the dependency list agree on what a range means","phase":"storm1","owners":["CellRange","Range","RangeRef","CellBlock","Rect","Rectangle"]},{"id":"res-notify","text":"Keeps the subscribers and calls them with the changes, separate from the calculation","phase":"storm2","owners":["ChangeFeed","Notifier","Publisher","Subject","ListenerList","EventBus","Observers"]}],"followups":[{"level":"SDE2","question":"Why not recompute every formula on every edit? The sheet is tiny.","answer":"It is correct, and it is the baseline to say out loud: one pass over all formulas in dependency order is a perfectly good first version for 2574 cells. The reason to track dependencies is the cost model: work proportional to the cells that actually change rather than to the size of the sheet, which matters when one cell feeds three formulas on a sheet of a million. The evaluation counter in the contract makes the difference testable, and the dependency graph is also what gives you cycle detection, so you want it anyway."},{"level":"SDE2","question":"Why can't you recalculate dependents in the order they are discovered, or in cell order?","answer":"Because a cell must be evaluated after every cell it reads. Discovery order (breadth first or depth first from the edited cell) evaluates D = A + C before C = B + 1 whenever D is found first; cell order fails whenever a formula reads a cell that comes later in the grid. The correct order is a topological order of the affected cells: repeatedly take a cell none of whose precedents is still waiting. A depth-first walk that appends a cell after its dependents have been visited and then reverses the list works too."},{"level":"SDE2","question":"How does your design detect a cycle, and why before changing anything?","answer":"A new formula for cell X reading precedents P closes a loop exactly when X is one of P or some p in P can be reached from X by following 'is read by' edges. One depth-first search over the dependents of X answers it. It is done first because every later step (store the text, rewire the graph, recalculate) is hard to undo; a refused set that has already rewired the graph leaves a loop behind that breaks every later edit through it."},{"level":"Senior","question":"How would you design the formula parser, and why an expression tree rather than evaluating while parsing?","answer":"Recursive descent with one function per precedence level (expression, term, unary, primary), producing nodes that know how to evaluate themselves and how to list the cells they read. Evaluate-while-parsing would work once, but a formula is evaluated many times (every time a precedent changes) and its references are needed up front to build the dependency graph, so you parse once, keep the tree, and evaluate it repeatedly. The tree is the Interpreter pattern; the parser is the only class that knows the grammar, and adding a function (storm 1) is one new node plus one line in the primary rule."},{"level":"Senior","question":"Range functions arrived. What changed, and what is the cost of SUM(A1:Z99)?","answer":"One new node type (a call with a range), a small family of aggregate strategies (SUM, MIN, MAX, COUNT with a shared fold), one new primary rule in the parser, and the range's cells in the node's dependency list. Nothing else changed: the graph, the order and the cycle check already work on sets of cells. The cost is the size of the range, three ways: evaluation reads every cell, the graph stores up to 2574 edges for the formula, and each edit inside the range re-evaluates it. Real spreadsheets store a range as one edge (a range node) and keep running totals for SUM, trading simplicity for speed; say so and keep the simple version until a measurement asks."},{"level":"Senior","question":"Is the listener's 'finished sheet' rule free? What would you do if a listener must edit the sheet?","answer":"It costs a little memory: you remember the old values of the affected cells before recalculation and compare after. Calling listeners mid-way (as each cell is recomputed) is simpler and wrong, because a listener that reads a second cell sees a mix of old and new values. A listener that calls set() re-enters the engine while it is in the middle of notifying, so the contract forbids it. The usual answers are to queue the edit and run it after the current one finishes, or to give the engine one editing entry point that processes edits from a queue one at a time."},{"level":"Senior","question":"Why does COUNT ignore errors when SUM does not?","answer":"Because they answer different questions: SUM combines values, and a value that does not exist poisons the combination; COUNT only asks whether a cell is occupied, and an occupied cell in error is still occupied. Choosing, writing down and testing such rules is the point of the clarifying questions. Real products differ here (some functions skip empty cells, some skip errors on request), so the honest answer is 'this is the contract I agreed with you', not 'this is the right one'."},{"level":"Staff","question":"Take this to a million cells, with several people editing at once. What breaks first?","answer":"Memory and the dependency graph first: a map of sets per cell is far too heavy, so you move to dense arrays and compact ranges (a range is one node, not one edge per cell) and recalculate in batches. Then the recalculation: topological order over the affected cells is linear, but a single edit near the top of a deep chain affects everything, so you compute dirty flags immediately and values lazily for cells that are not on screen, and run the heavy part off the editing thread. For concurrent editors you need a decision about consistency: a single server that orders edits (simple and the usual choice), or operational transforms or CRDTs on the cell contents with the dependency graph rebuilt from them. A cycle created by two users editing at once is the interesting case: each edit is valid alone, so the server must re-check on merge and mark the cells as errors rather than reject an edit that was already acknowledged."}],"apiHeader":"$15","phaseApis":{"storm1":"$16","storm2":"$17"},"phases":["base","storm1","storm2"],"tests":{"base":[{"path":"sheet_base.cpp","content":"$18"}],"storm1":[{"path":"sheet_storm1.cpp","content":"$19"}],"storm2":[{"path":"sheet_storm2.cpp","content":"$1a"}]},"reference":[{"path":"aggregate.h","content":"$1b"},{"path":"cellref.h","content":"$1c"},{"path":"expr.h","content":"$1d"},{"path":"feed.h","content":"#pragma once\n#include <map>\n#include <vector>\n\n#include \"api_storm2.h\"\n\n// The subscribers of a sheet (Observer). Ids count up and are never reused, so \"subscribe order\" is id order.\nclass ChangeFeed {\n public:\n  int add(sheet::Listener listener) {\n    listeners_[nextId_] = std::move(listener);\n    return nextId_++;\n  }\n\n  void remove(int id) { listeners_.erase(id); }\n\n  void publish(const sheet::Change& change) const {\n    std::vector<int> ids;\n    for (const auto& entry : listeners_) ids.push_back(entry.first);\n    for (int id : ids) {\n      const auto it = listeners_.find(id);\n      if (it != listeners_.end()) it->second(change);\n    }\n  }\n\n private:\n  std::map<int, sheet::Listener> listeners_;\n  int nextId_ = 1;\n};\n"},{"path":"graph.h","content":"$1e"},{"path":"parser.h","content":"$1f"},{"path":"service.cpp","content":"#include \"sheet_impl.h\"\n\nstd::unique_ptr<sheet::Sheet> sheet::makeSheet() { return std::make_unique<SheetImpl>(false); }\n\nstd::unique_ptr<sheet::Sheet> sheet::makeFunctionSheet() { return std::make_unique<SheetImpl>(true); }\n\nstd::unique_ptr<sheet::WatchedSheet> sheet::makeWatchedSheet() { return std::make_unique<SheetImpl>(true); }\n"},{"path":"sheet_impl.h","content":"$20"},{"path":"store.h","content":"$21"}],"driver":{"path":"driver.cpp","content":"#define BP_TEST_MAIN\n#include \"bp_test.h\"\n","readOnly":true}}}],["$L22","$L23"],"$L24"]}],"p":"$@25","v":null,"s":"$9"}}]]
+d:[["children",{"s":{"n":"id","t":"d","k":"spreadsheet","s":[]},"h":65632,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}]}]]}],"p":"$@e","v":"$c","s":"$9"},"c":"$Qf"}]]
+a:[["children",{"s":"workshop","h":131168,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}]}]]}],"p":"$@b","v":"$c","s":"$9"},"c":"$Qd"}]]
+0:{"t":{"t":{"s":"","h":131152,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/1klm1scec-3x5.css","precedence":"next"}],["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js","async":true}]],["$","html",null,{"lang":"en","className":"r7opxW_variable auY9QW_variable u-EJdW_variable h-full","children":["$","body",null,{"className":"min-h-full","children":[["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}],"notFound":[["$","main",null,{"className":"flex min-h-dvh flex-col items-center justify-center gap-4 px-4 text-center","children":[["$","div",null,{"className":"font-display text-5xl text-[var(--accent)]","children":"404"}],["$","p",null,{"className":"text-white/60","children":"This room is not on the blueprint yet."}],["$","$L6",null,{"href":"/","className":"text-sm text-white/80 underline","children":"Back to the title screen"}]]}],[]]}],["$","$L7",null,{}]]}]}]]}],"p":"$@8","v":null,"s":"$9"},"c":"$Qa"},"h":{"r":["$","$1","h",{"children":[null,["$","$L27",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1, viewport-fit=cover"}],["$","meta","2",{"name":"theme-color","content":"#0a1530"}]]}],["$","$L29",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$2a",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"Spreadsheet with formulas: Blueprint Clash"}],["$","meta","1",{"name":"description","content":"A creature-tactics RPG that teaches low-level design in C++ and high-level system design, from fundamentals to big-tech interview level."}],["$","link","2",{"rel":"manifest","href":"/blueprint-clash/manifest.webmanifest"}],["$","meta","3",{"name":"mobile-web-app-capable","content":"yes"}],["$","meta","4",{"name":"apple-mobile-web-app-title","content":"Blueprint Clash"}],["$","meta","5",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","link","6",{"rel":"icon","href":"/blueprint-clash/icon.png?icon.27re_xscs-jmw.png","sizes":"256x256","type":"image/png"}],["$","link","7",{"rel":"apple-touch-icon","href":"/blueprint-clash/apple-icon.png?apple-icon.2rac1w0yc3rju.png","sizes":"180x180","type":"image/png"}],["$","$L2b","8",{}]]}]}],null]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"p":"$@2c","v":null,"s":"$9"}},"a":"$@2d","u":"$@2e","b":"2AOMJw3uqOQQQZHGX3CKn"}
+2f:I[97367,["$2"],"OutletBoundary"]
+22:["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/2uk3wcjwqg0tl.js","async":true}]
+23:["$","script","script-1",{"src":"/blueprint-clash/_next/static/chunks/1zdu7yjl8efu4.js","async":true}]
+24:["$","$L2f",null,{"children":["$","$2a",null,{"name":"Next.MetadataOutlet","children":"$@30"}]}]
+9:300
+30:null
+2e:true
+9:C
+2d:0
+e:"$undefined"
+b:"$undefined"
+8:"$undefined"
+2c:"$undefined"
+25:"$undefined"

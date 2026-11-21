@@ -1,0 +1,1376 @@
+1:"$Sreact.fragment"
+2:"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js"
+3:I[39756,["$2"],"default"]
+4:I[37457,["$2"],"default"]
+5:"/blueprint-clash/_next/static/chunks/2n5qeheznvl4u.js"
+6:I[22016,["$2","$5"],""]
+7:I[64576,["$2"],"PwaRegister"]
+10:"/blueprint-clash/_next/static/chunks/2uk3wcjwqg0tl.js"
+11:"/blueprint-clash/_next/static/chunks/1zdu7yjl8efu4.js"
+12:I[65612,["$2","$10","$11"],"WorkshopClient"]
+25:"ViewportBoundary"
+26:I[97367,["$2"],"$25"]
+27:"MetadataBoundary"
+28:I[97367,["$2"],"$27"]
+29:"$Sreact.suspense"
+2a:I[27201,["$2"],"IconMark"]
+:HL["/blueprint-clash/_next/static/chunks/1klm1scec-3x5.css","style"]
+9:X
+c:X
+c:C
+13:T411,# Food delivery
+
+You are writing the order core for a food-delivery startup in one city. Customers order from a restaurant's menu, the kitchen cooks, a courier brings it, and the order moves through a handful of stages until it arrives or somebody calls it off.
+
+What you know so far:
+
+- Restaurants have menus with prices. A customer orders a few items from one restaurant and is told the total up front.
+- A restaurant accepts or turns down an order, cooks it and says when it is ready. A courier then collects it and hands it over.
+- Customers change their minds. What that costs depends on how far the kitchen has got.
+- Other parts of the product (notifications, analytics) want to know whenever an order changes stage.
+
+Your task: design and implement it behind the `food::Food` interface in `api.h`. The hidden tests call only that interface. Ask the interviewer first: the brief is deliberately incomplete, and "who gets a ready order when no courier is free, and when does a cancel cost money?" is where most first drafts go wrong.
+14:T197b,# Editorial: Food delivery
+
+## Requirements
+Functional: restaurants with menus; a customer orders items and is quoted the total (food plus a flat 299 delivery fee) up front; an **order state machine**, Placed, Accepted, Ready, PickedUp, Delivered, with Rejected and Cancelled as the other ends; the restaurant answers and finishes the food, the assigned courier collects and hands over, and every call checks UnknownOrder, then WrongParty, then InvalidState. A ready order goes to the **free courier with the lowest name**, or waits and is given to the next courier who becomes free, oldest order first. The customer can cancel until a courier has the food: free while Placed, 25 percent of the food while Accepted, the whole food once Ready, never the delivery fee. Anyone can **subscribe** to see every change of state. Hidden until asked: the dispatch and tie-break rules, the queue order, what cancelling costs and when, what exactly is announced. Non-goals: payment, geography, ETAs, ratings, persistence, thread safety (discussed).
+
+**Change Storm 1, promo codes:** `makePromoFood(codes)` and `placeWithCode`. A percentage or a fixed amount comes off the food only, with a minimum order; the code's checks have their own order; the cancellation fee is charged on the discounted food. Revealable by asking whether customers will be able to use discount codes.
+
+**Change Storm 2, kitchen capacity:** `makeBusyKitchens(codes, slots)`. An order holds one of a kitchen's cooking places from Accepted until it leaves Accepted, and `accept` on a full kitchen is `KitchenFull`. Revealable by asking whether a kitchen can take unlimited orders.
+
+## Reference design
+- `Menu` is what each restaurant sells; it knows nothing about orders.
+- `OrderDesk` validates a request in the documented order, prices it (applying a code when there is one) and records the order.
+- `OrderBook` keeps every order, owns the **table of legal moves** (`OrderLifecycle`) and is the one place a state changes (`move`), where it tells the listeners: the Observer subject.
+- `CourierPool` knows who is free and holds the queue of ready orders without a courier. It records an assignment on the order but never changes its state.
+- `CancellationFee` is a Strategy (`StageFee`) from the stage and the food to what the customer owes.
+- `FoodImpl` is a thin facade: ask the book whether the move is legal, make it, tell the collaborator that cares.
+
+The central decision is that **each thing that changes for a business reason has its own home**: what a cancellation costs (`CancellationFee`), which moves are legal (`OrderLifecycle`), who gets a ready order (`CourierPool`), and who needs to hear about it (listeners on `OrderBook`). The two storms then land in one place each.
+
+**Storm 1 in the reference:** `PromoBook` and `Discount` (`PercentOff`, `AmountOff`) are new classes; `OrderDesk` applies the discount to the food before adding the delivery fee and stores the discounted food on the order, so the existing fee strategy needs no change at all. **Storm 2 in the reference:** `KitchenLoad` is a new class that subscribes to the book and counts orders entering and leaving Accepted; `accept` gains one line asking it for room, after the shared checks. The honest cost is that the load has to see every event: it is correct only because `OrderBook::move` is the only way a state changes.
+
+## Alternatives
+- **An `if` chain on the state in each operation.** Quicker for the base game, and every new operation then has its own idea of what is legal. A table in one place makes a wrong move a one-row diff.
+- **A State class per stage.** The textbook shape, and worth it when each stage has behaviour of its own (a timer, a message, a different fee). Here the stages differ in which moves are allowed and in one fee, so the table plus a fee Strategy is smaller and as clear; this editorial would choose State objects the day Ready orders need a no-courier timer.
+- **Courier assignment as a field scan:** loop over all orders to find the oldest unassigned one whenever a courier frees up. Correct and quadratic; the queue costs a `set`. It also hides the rule: the queue shows in one place that 'oldest' means lowest id.
+- **Notifications called directly from each operation** (`notifier.send(...)` after each move). Three call sites become eight, and cancel is the one that gets forgotten. The Observer funnel is the same code written once.
+- **A counter for kitchen load updated in `accept` and `ready`.** Passes Storm 2's happy path and fails the first time an order leaves Accepted another way (cancel). Deriving the count from the transitions is what makes the exits impossible to miss.
+
+## Trade-offs
+- **Table of moves versus State objects:** small and testable versus room to grow behaviour per stage.
+- **Observer versus direct calls:** a callback is easy to add and easy to make slow; synchronous listeners run inside the transition, so a throwing or blocking listener hurts the order flow. Production moves to an event log (see follow-ups).
+- **Fee on discounted food:** the customer never pays more in fees than the food cost; the cost is that the order must remember the discounted food, not just the total.
+- **Lowest-name courier:** deterministic and testable, but not fair or smart. It is a placeholder for the real rule (distance, ETA, load), which is one class.
+
+## What breaks at 10x
+At ten times the volume the scans hurt first: `CourierPool::orderReady` walks every courier, and `OrderBook::find` is fine but the courier queue is global. Split dispatch per city, keep free couriers in an ordered set, and keep the waiting orders in a heap by id. The single-threaded listeners would be the next thing to fail: publish events after the transition, to a queue.
+
+## Level signals
+- **SDE II:** a correct state machine with the party and state checks in the right order, the courier queue working in the happy path, fees by stage, and the observer feed. Storm 1 done by adding a parameter.
+- **Senior:** the table of moves and the single funnel for state changes, couriers and their queue behind their own class, the fee as a Strategy, the discount applied before the delivery fee, kitchen load derived from transitions. Both storms land in one class each.
+- **Staff:** names the invariants (one courier one order, every exit from Accepted frees a place), says which need a lock or a conditional write, and sketches the move to an event log with consumers, a dispatch service and idempotent transitions, with the saga costs stated.
+15:T168d,#pragma once
+// Public API for the Food delivery problem. The hidden tests only use what is declared here.
+// You implement food::makeFood() (in any of your .cpp files); everything behind it is your design.
+#include <functional>
+#include <memory>
+#include <string>
+#include <vector>
+
+namespace food {
+
+using OrderId = long long;
+constexpr OrderId kNoOrder = 0;  // ids that are issued are always positive and never reused
+using Money = long long;         // whole cents
+
+constexpr Money kDeliveryFee = 299;      // added to every order, never discounted
+constexpr int kMaxQuantity = 20;         // per line
+constexpr int kCookingFeePercent = 25;   // of the food, when the customer cancels an Accepted order
+
+enum class Status {
+  Ok,
+  InvalidRequest,     // empty name, no lines, a quantity outside 1..kMaxQuantity
+  UnknownRestaurant,
+  UnknownItem,        // a line names something that is not on that restaurant's menu
+  UnknownOrder,
+  WrongParty,         // the restaurant, courier or customer is not the one on this order
+  InvalidState,       // the order is not in a state where this is allowed
+  UnknownPromo,       // used from Change Storm 1
+  PromoNotApplicable, // used from Change Storm 1
+  KitchenFull,        // used from Change Storm 2
+};
+
+enum class OrderState { Placed, Accepted, Ready, PickedUp, Delivered, Rejected, Cancelled };
+
+struct MenuItem {
+  std::string name;
+  Money price = 0;  // cents, at least 1
+};
+
+struct Line {
+  std::string item;
+  int quantity = 1;
+};
+
+struct PlaceResult {
+  Status status = Status::Ok;
+  OrderId order = kNoOrder;  // kNoOrder unless status is Ok
+  Money total = 0;           // 0 unless status is Ok; food plus kDeliveryFee, fixed from now on
+};
+
+struct CancelResult {
+  Status status = Status::Ok;
+  Money fee = 0;  // what the customer is charged for cancelling; 0 unless status is Ok
+};
+
+struct OrderInfo {
+  Status status = Status::Ok;  // UnknownOrder when no such order was ever issued
+  OrderState state = OrderState::Placed;
+  std::string customer;
+  std::string restaurant;
+  std::string courier;  // empty until a courier has been assigned; kept after delivery
+  Money total = 0;
+};
+
+// Called once for every change of state of every order, in the order the changes happen. It is NOT called when a
+// courier is assigned (that is not a change of state).
+using Listener = std::function<void(OrderId, OrderState from, OrderState to)>;
+
+class Food {
+ public:
+  virtual ~Food() = default;
+
+  // Registers a restaurant and its menu. Returns false, changing nothing, for an empty name, a name already
+  // registered, an empty menu, or a menu item with an empty name, a price below 1 or the same name as another item.
+  virtual bool addRestaurant(const std::string& restaurant, const std::vector<MenuItem>& menu) = 0;
+
+  // Registers a courier, who is free at once. Returns false for an empty or an already registered name. If an order
+  // is waiting for a courier (see ready), the oldest one is given to the new courier.
+  virtual bool registerCourier(const std::string& courier) = 0;
+
+  // Adds a listener. Listeners are called in the order they were added.
+  virtual void subscribe(Listener listener) = 0;
+
+  // Places an order: food = sum of price * quantity over the lines (the same item may appear in several lines);
+  // total = food + kDeliveryFee, fixed now. Checks in order: InvalidRequest, UnknownRestaurant, UnknownItem.
+  // A failed call changes nothing. The order starts Placed.
+  virtual PlaceResult place(const std::string& customer, const std::string& restaurant, const std::vector<Line>& lines) = 0;
+
+  // Order lifecycle: Placed -> Accepted -> Ready -> PickedUp -> Delivered, or Rejected / Cancelled. Every call checks,
+  // in this order: UnknownOrder, WrongParty (the caller is not this order's restaurant / courier / customer),
+  // InvalidState. A failed call changes nothing.
+  //
+  // accept / reject: the RESTAURANT answers a Placed order. Placed -> Accepted, or Placed -> Rejected.
+  // ready:           the RESTAURANT finishes cooking. Accepted -> Ready. The order is then given to the free courier
+  //                  with the LOWEST NAME; with nobody free it waits, unassigned, and is given to the next courier
+  //                  who becomes free (oldest waiting order first, by order id).
+  // pickUp:          the order's ASSIGNED courier collects it. Ready -> PickedUp. (An unassigned order has no
+  //                  assigned courier, so every courier gets WrongParty.)
+  // deliver:         the same courier hands it over. PickedUp -> Delivered. The courier is free again and takes the
+  //                  oldest waiting order, if any.
+  virtual Status accept(OrderId order, const std::string& restaurant) = 0;
+  virtual Status reject(OrderId order, const std::string& restaurant) = 0;
+  virtual Status ready(OrderId order, const std::string& restaurant) = 0;
+  virtual Status pickUp(OrderId order, const std::string& courier) = 0;
+  virtual Status deliver(OrderId order, const std::string& courier) = 0;
+
+  // The CUSTOMER cancels. Allowed from Placed (fee 0), Accepted (fee = food * kCookingFeePercent / 100, rounded down)
+  // and Ready (fee = the whole food, the delivery fee is never charged). From PickedUp, Delivered, Rejected or
+  // Cancelled it is InvalidState. Checks: UnknownOrder, WrongParty, InvalidState. A courier assigned to the order is
+  // free again at once and takes the oldest waiting order; a waiting order is simply removed from the queue.
+  virtual CancelResult cancel(OrderId order, const std::string& customer) = 0;
+
+  // Orders are never forgotten, so finished orders can be inspected.
+  virtual OrderInfo order(OrderId order) const = 0;
+};
+
+// Always returns a working system.
+std::unique_ptr<Food> makeFood();
+
+}  // namespace food
+16:T5e4,#pragma once
+// Change Storm 1 adds promo codes. Everything from api.h still holds.
+#include "api.h"
+
+namespace food {
+
+enum class PromoKind { PercentOff, AmountOff };
+
+struct Promo {
+  std::string code;
+  PromoKind kind = PromoKind::PercentOff;
+  int value = 0;           // PercentOff: 1..100. AmountOff: cents, at least 1.
+  Money minimumFood = 0;   // the code only applies when the food (before the discount) is at least this much
+};
+
+class PromoFood : public Food {
+ public:
+  // Like place(), with a code. Checks in order: InvalidRequest (as for place, or an empty code), UnknownRestaurant,
+  // UnknownItem, UnknownPromo, PromoNotApplicable (food below the code's minimum). The discount comes off the FOOD
+  // only, never off kDeliveryFee: PercentOff takes food * value / 100 rounded down, AmountOff takes
+  // min(value, food). total = food - discount + kDeliveryFee, fixed now. From then on, "the food" for the
+  // cancellation fee is the DISCOUNTED food: what the customer would actually have paid the restaurant.
+  virtual PlaceResult placeWithCode(const std::string& customer, const std::string& restaurant,
+                                    const std::vector<Line>& lines, const std::string& code) = 0;
+};
+
+// Promo codes are fixed when the system is built. Invalid or repeated codes in the list are ignored (the first
+// valid one wins). makeFood() has no codes and place() never discounts.
+std::unique_ptr<PromoFood> makePromoFood(const std::vector<Promo>& promos);
+
+}  // namespace food
+17:T47c3,#include <memory>
+#include <string>
+#include <utility>
+#include <vector>
+
+#include "api.h"
+#include "bp_test.h"
+
+using food::Line;
+using food::MenuItem;
+using food::OrderState;
+using food::Status;
+
+namespace {
+// Two kitchens. noodle: ramen 1200, gyoza 600, tea 250. pizza: margherita 1000, cola 300.
+// Couriers are registered in an order that is not alphabetical, so "first registered" is never right by accident.
+// Two ramen and a tea cost 2650 of food, so the total is 2650 + 299 = 2949.
+struct Fixture {
+  std::unique_ptr<food::Food> shop = food::makeFood();
+  Fixture(bool couriers = true) {
+    shop->addRestaurant("noodle", {{"ramen", 1200}, {"gyoza", 600}, {"tea", 250}});
+    shop->addRestaurant("pizza", {{"margherita", 1000}, {"cola", 300}});
+    if (couriers) {
+      for (const char* name : {"zed", "amy", "kit"}) shop->registerCourier(name);
+    }
+  }
+  food::OrderId order(const std::string& customer = "ann", const std::string& restaurant = "noodle") {
+    return shop->place(customer, restaurant, {{"ramen", 2}, {"tea", 1}}).order;
+  }
+  // Takes an order to Ready (so a courier is assigned if one is free).
+  food::OrderId readyOrder(const std::string& customer = "ann", const std::string& restaurant = "noodle") {
+    const food::OrderId id = order(customer, restaurant);
+    shop->accept(id, restaurant);
+    shop->ready(id, restaurant);
+    return id;
+  }
+  OrderState stateOf(food::OrderId id) { return shop->order(id).state; }
+  std::string courierOf(food::OrderId id) { return shop->order(id).courier; }
+};
+}  // namespace
+
+TEST(Setup, AFactoryAlwaysReturnsASystem) { EXPECT_TRUE(food::makeFood() != nullptr); }
+
+TEST(Setup, RestaurantsNeedANewNameAndAUsableMenu) {
+  auto shop = food::makeFood();
+  EXPECT_TRUE(shop->addRestaurant("noodle", {{"ramen", 1200}}));
+  EXPECT_FALSE(shop->addRestaurant("noodle", {{"tea", 250}}));
+  EXPECT_FALSE(shop->addRestaurant("", {{"tea", 250}}));
+  EXPECT_FALSE(shop->addRestaurant("empty", {}));
+  EXPECT_FALSE(shop->addRestaurant("nameless", {{"", 250}}));
+  EXPECT_FALSE(shop->addRestaurant("free", {{"tea", 0}}));
+  EXPECT_FALSE(shop->addRestaurant("twice", {{"tea", 250}, {"tea", 300}}));
+  EXPECT_TRUE(shop->place("ann", "twice", {{"tea", 1}}).status == Status::UnknownRestaurant);  // a refused menu adds nothing
+  EXPECT_TRUE(shop->place("ann", "noodle", {{"tea", 1}}).status == Status::UnknownItem);       // the duplicate did not replace it
+}
+
+TEST(Setup, CouriersNeedANewName) {
+  auto shop = food::makeFood();
+  EXPECT_TRUE(shop->registerCourier("amy"));
+  EXPECT_FALSE(shop->registerCourier("amy"));
+  EXPECT_FALSE(shop->registerCourier(""));
+}
+
+TEST(Place, TheTotalIsTheFoodPlusTheDeliveryFee) {
+  Fixture f;
+  const auto r = f.shop->place("ann", "noodle", {{"ramen", 2}, {"tea", 1}});
+  EXPECT_TRUE(r.status == Status::Ok);
+  EXPECT_TRUE(r.order > 0);
+  EXPECT_EQ(r.total, 2949);
+  const auto info = f.shop->order(r.order);
+  EXPECT_TRUE(info.status == Status::Ok);
+  EXPECT_TRUE(info.state == OrderState::Placed);
+  EXPECT_EQ(info.customer, std::string("ann"));
+  EXPECT_EQ(info.restaurant, std::string("noodle"));
+  EXPECT_EQ(info.courier, std::string(""));
+  EXPECT_EQ(info.total, 2949);
+}
+
+TEST(Place, TheSameItemInSeveralLinesAddsUp) {
+  Fixture f;
+  const auto r = f.shop->place("ann", "noodle", {{"ramen", 1}, {"gyoza", 1}, {"ramen", 2}});
+  EXPECT_EQ(r.total, 3600 + 600 + 299);
+}
+
+TEST(Place, EveryOrderGetsItsOwnId) {
+  Fixture f;
+  const food::OrderId a = f.order("ann");
+  const food::OrderId b = f.order("ann");
+  EXPECT_TRUE(a > 0);
+  EXPECT_TRUE(b > 0);
+  EXPECT_NE(a, b);
+}
+
+TEST(Place, QuantitiesMustBeBetweenOneAndTheMaximum) {
+  Fixture f;
+  EXPECT_TRUE(f.shop->place("ann", "noodle", {{"tea", 0}}).status == Status::InvalidRequest);
+  EXPECT_TRUE(f.shop->place("ann", "noodle", {{"tea", -1}}).status == Status::InvalidRequest);
+  EXPECT_TRUE(f.shop->place("ann", "noodle", {{"tea", food::kMaxQuantity + 1}}).status == Status::InvalidRequest);
+  EXPECT_TRUE(f.shop->place("ann", "noodle", {{"tea", 1}, {"gyoza", 0}}).status == Status::InvalidRequest);
+  EXPECT_TRUE(f.shop->place("ann", "noodle", {{"tea", 1}}).status == Status::Ok);
+  const auto most = f.shop->place("ann", "noodle", {{"tea", food::kMaxQuantity}});
+  EXPECT_TRUE(most.status == Status::Ok);
+  EXPECT_EQ(most.total, 250 * 20 + 299);
+}
+
+TEST(Place, RequestsAreCheckedInTheDocumentedOrder) {
+  Fixture f;
+  EXPECT_TRUE(f.shop->place("", "noodle", {{"tea", 1}}).status == Status::InvalidRequest);
+  EXPECT_TRUE(f.shop->place("ann", "noodle", {}).status == Status::InvalidRequest);
+  EXPECT_TRUE(f.shop->place("ann", "nowhere", {{"tea", 0}}).status == Status::InvalidRequest);   // invalid before unknown
+  EXPECT_TRUE(f.shop->place("ann", "nowhere", {{"sushi", 1}}).status == Status::UnknownRestaurant);
+  EXPECT_TRUE(f.shop->place("ann", "noodle", {{"tea", 1}, {"sushi", 1}}).status == Status::UnknownItem);
+  EXPECT_TRUE(f.shop->place("ann", "noodle", {{"margherita", 1}}).status == Status::UnknownItem);  // another kitchen's item
+  const auto failed = f.shop->place("ann", "noodle", {{"sushi", 1}});
+  EXPECT_EQ(failed.order, 0);
+  EXPECT_EQ(failed.total, 0);
+}
+
+TEST(Lifecycle, AnOrderWalksTheWholeWay) {
+  Fixture f;
+  const food::OrderId id = f.order();
+  EXPECT_TRUE(f.shop->accept(id, "noodle") == Status::Ok);
+  EXPECT_TRUE(f.stateOf(id) == OrderState::Accepted);
+  EXPECT_TRUE(f.shop->ready(id, "noodle") == Status::Ok);
+  EXPECT_TRUE(f.stateOf(id) == OrderState::Ready);
+  EXPECT_EQ(f.courierOf(id), std::string("amy"));
+  EXPECT_TRUE(f.shop->pickUp(id, "amy") == Status::Ok);
+  EXPECT_TRUE(f.stateOf(id) == OrderState::PickedUp);
+  EXPECT_TRUE(f.shop->deliver(id, "amy") == Status::Ok);
+  EXPECT_TRUE(f.stateOf(id) == OrderState::Delivered);
+  EXPECT_EQ(f.courierOf(id), std::string("amy"));  // kept for the record
+  EXPECT_EQ(f.shop->order(id).total, 2949);
+}
+
+TEST(Lifecycle, EachStepNeedsTheStepBefore) {
+  Fixture f;
+  const food::OrderId id = f.order();
+  EXPECT_TRUE(f.shop->ready(id, "noodle") == Status::InvalidState);   // not accepted yet
+  EXPECT_TRUE(f.stateOf(id) == OrderState::Placed);
+  EXPECT_TRUE(f.shop->accept(id, "noodle") == Status::Ok);
+  EXPECT_TRUE(f.shop->accept(id, "noodle") == Status::InvalidState);  // twice
+  EXPECT_TRUE(f.shop->reject(id, "noodle") == Status::InvalidState);  // too late to reject
+  EXPECT_TRUE(f.shop->ready(id, "noodle") == Status::Ok);
+  EXPECT_TRUE(f.shop->ready(id, "noodle") == Status::InvalidState);
+  EXPECT_TRUE(f.shop->deliver(id, "amy") == Status::InvalidState);    // not picked up yet
+  EXPECT_TRUE(f.shop->pickUp(id, "amy") == Status::Ok);
+  EXPECT_TRUE(f.shop->pickUp(id, "amy") == Status::InvalidState);
+  EXPECT_TRUE(f.stateOf(id) == OrderState::PickedUp);
+  EXPECT_TRUE(f.shop->deliver(id, "amy") == Status::Ok);
+  EXPECT_TRUE(f.shop->deliver(id, "amy") == Status::InvalidState);
+}
+
+TEST(Lifecycle, OnlyTheOrdersOwnRestaurantAnswersIt) {
+  Fixture f;
+  const food::OrderId id = f.order();
+  EXPECT_TRUE(f.shop->accept(id, "pizza") == Status::WrongParty);
+  EXPECT_TRUE(f.shop->reject(id, "pizza") == Status::WrongParty);
+  EXPECT_TRUE(f.shop->ready(id, "pizza") == Status::WrongParty);  // the party is checked before the state
+  EXPECT_TRUE(f.shop->accept(999, "noodle") == Status::UnknownOrder);
+  EXPECT_TRUE(f.shop->accept(0, "noodle") == Status::UnknownOrder);
+  EXPECT_TRUE(f.stateOf(id) == OrderState::Placed);
+}
+
+TEST(Lifecycle, OnlyTheAssignedCourierMovesTheOrder) {
+  Fixture f;
+  const food::OrderId id = f.readyOrder();  // amy
+  EXPECT_TRUE(f.shop->pickUp(id, "kit") == Status::WrongParty);
+  EXPECT_TRUE(f.shop->pickUp(id, "nobody") == Status::WrongParty);
+  EXPECT_TRUE(f.shop->deliver(id, "kit") == Status::WrongParty);  // wrong courier is reported before the wrong state
+  EXPECT_TRUE(f.stateOf(id) == OrderState::Ready);
+  EXPECT_TRUE(f.shop->pickUp(id, "amy") == Status::Ok);
+  EXPECT_TRUE(f.shop->deliver(id, "kit") == Status::WrongParty);
+  EXPECT_TRUE(f.shop->deliver(id, "amy") == Status::Ok);
+  EXPECT_TRUE(f.shop->pickUp(404, "amy") == Status::UnknownOrder);
+}
+
+TEST(Lifecycle, NoCourierIsTheAssignedCourierOfAnUnassignedOrder) {
+  Fixture f(false);
+  const food::OrderId id = f.readyOrder();  // nobody to give it to
+  EXPECT_EQ(f.courierOf(id), std::string(""));
+  EXPECT_TRUE(f.shop->pickUp(id, "") == Status::WrongParty);
+  EXPECT_TRUE(f.shop->pickUp(id, "amy") == Status::WrongParty);
+  EXPECT_TRUE(f.stateOf(id) == OrderState::Ready);
+}
+
+TEST(Lifecycle, ARejectedOrderIsOverForGood) {
+  Fixture f;
+  const food::OrderId id = f.order();
+  EXPECT_TRUE(f.shop->reject(id, "noodle") == Status::Ok);
+  EXPECT_TRUE(f.stateOf(id) == OrderState::Rejected);
+  EXPECT_TRUE(f.shop->accept(id, "noodle") == Status::InvalidState);
+  EXPECT_TRUE(f.shop->ready(id, "noodle") == Status::InvalidState);
+  EXPECT_TRUE(f.shop->cancel(id, "ann").status == Status::InvalidState);
+  EXPECT_TRUE(f.stateOf(id) == OrderState::Rejected);
+}
+
+TEST(Lifecycle, OrdersAreKeptAndUnknownOnesReported) {
+  Fixture f;
+  const food::OrderId id = f.readyOrder();
+  f.shop->pickUp(id, "amy");
+  f.shop->deliver(id, "amy");
+  EXPECT_TRUE(f.shop->order(id).status == Status::Ok);
+  EXPECT_TRUE(f.shop->order(id + 1000).status == Status::UnknownOrder);
+  EXPECT_TRUE(f.shop->order(0).status == Status::UnknownOrder);
+}
+
+TEST(Listeners, EveryChangeOfStateIsAnnouncedInOrder) {
+  Fixture f;
+  std::vector<std::string> log;
+  auto name = [](OrderState s) { return std::to_string(static_cast<int>(s)); };
+  f.shop->subscribe([&](food::OrderId id, OrderState from, OrderState to) {
+    log.push_back("a" + std::to_string(id) + ":" + name(from) + ">" + name(to));
+  });
+  f.shop->subscribe([&](food::OrderId id, OrderState, OrderState) { log.push_back("b" + std::to_string(id)); });
+  const food::OrderId id = f.order();  // placing is not a change of state
+  EXPECT_EQ(log.size(), 0u);
+  f.shop->accept(id, "noodle");
+  f.shop->ready(id, "noodle");  // assigning a courier is not a change of state either
+  f.shop->pickUp(id, "amy");
+  f.shop->deliver(id, "amy");
+  const std::string i = std::to_string(id);
+  std::vector<std::string> expected;
+  const std::pair<OrderState, OrderState> steps[] = {{OrderState::Placed, OrderState::Accepted},
+                                                      {OrderState::Accepted, OrderState::Ready},
+                                                      {OrderState::Ready, OrderState::PickedUp},
+                                                      {OrderState::PickedUp, OrderState::Delivered}};
+  for (const auto& step : steps) {
+    expected.push_back("a" + i + ":" + name(step.first) + ">" + name(step.second));
+    expected.push_back("b" + i);
+  }
+  EXPECT_TRUE(log == expected);
+}
+
+TEST(Listeners, RejectionsAndCancellationsAreAnnouncedAndFailuresAreNot) {
+  Fixture f;
+  std::vector<std::pair<OrderState, OrderState>> seen;
+  f.shop->subscribe([&](food::OrderId, OrderState from, OrderState to) { seen.emplace_back(from, to); });
+  const food::OrderId a = f.order();
+  const food::OrderId b = f.order();
+  const food::OrderId c = f.readyOrder();
+  f.shop->reject(a, "noodle");
+  f.shop->cancel(b, "ann");
+  f.shop->cancel(c, "ann");
+  const size_t before = seen.size();
+  f.shop->cancel(c, "ann");          // already cancelled
+  f.shop->accept(a, "pizza");        // wrong party
+  f.shop->pickUp(404, "amy");        // unknown order
+  EXPECT_EQ(seen.size(), before);
+  EXPECT_EQ(seen.size(), 5u);  // c: accept, ready; a: reject; b: cancel; c: cancel
+  EXPECT_TRUE(seen[seen.size() - 1] == std::make_pair(OrderState::Ready, OrderState::Cancelled));
+  EXPECT_TRUE(seen[seen.size() - 2] == std::make_pair(OrderState::Placed, OrderState::Cancelled));
+  EXPECT_TRUE(seen[seen.size() - 3] == std::make_pair(OrderState::Placed, OrderState::Rejected));
+}
+
+TEST(Dispatch, TheFreeCourierWithTheLowestNameGetsTheOrder) {
+  Fixture f;
+  EXPECT_EQ(f.courierOf(f.readyOrder("a1")), std::string("amy"));
+  EXPECT_EQ(f.courierOf(f.readyOrder("a2")), std::string("kit"));
+  EXPECT_EQ(f.courierOf(f.readyOrder("a3")), std::string("zed"));
+}
+
+TEST(Dispatch, CookingDoesNotTakeACourier) {
+  Fixture f;
+  const food::OrderId cooking = f.order("a1");
+  f.shop->accept(cooking, "noodle");
+  EXPECT_EQ(f.courierOf(cooking), std::string(""));
+  EXPECT_EQ(f.courierOf(f.readyOrder("a2")), std::string("amy"));  // amy was not held by the order that is still cooking
+}
+
+TEST(Dispatch, WithNobodyFreeTheOrderWaitsAndTheNextFreeCourierTakesIt) {
+  Fixture f;
+  const food::OrderId first = f.readyOrder("a1");  // amy
+  f.readyOrder("a2");                              // kit
+  f.readyOrder("a3");                              // zed
+  const food::OrderId waiting = f.readyOrder("a4");
+  EXPECT_TRUE(f.stateOf(waiting) == OrderState::Ready);
+  EXPECT_EQ(f.courierOf(waiting), std::string(""));
+  f.shop->pickUp(first, "amy");
+  EXPECT_EQ(f.courierOf(waiting), std::string(""));  // picking up does not free a courier
+  f.shop->deliver(first, "amy");
+  EXPECT_EQ(f.courierOf(waiting), std::string("amy"));
+  EXPECT_TRUE(f.shop->pickUp(waiting, "amy") == Status::Ok);
+}
+
+TEST(Dispatch, WaitingOrdersAreServedOldestFirstByOrderId) {
+  Fixture f(false);
+  f.shop->registerCourier("amy");
+  const food::OrderId o1 = f.order("a");
+  const food::OrderId o2 = f.order("b");
+  const food::OrderId o3 = f.order("c");
+  for (const food::OrderId id : {o1, o2, o3}) f.shop->accept(id, "noodle");
+  f.shop->ready(o1, "noodle");  // amy
+  f.shop->ready(o3, "noodle");  // waits first...
+  f.shop->ready(o2, "noodle");  // ...but o2 is the older order
+  f.shop->pickUp(o1, "amy");
+  f.shop->deliver(o1, "amy");
+  EXPECT_EQ(f.courierOf(o2), std::string("amy"));
+  EXPECT_EQ(f.courierOf(o3), std::string(""));
+}
+
+TEST(Dispatch, ANewCourierTakesTheOldestWaitingOrder) {
+  Fixture f(false);
+  const food::OrderId o1 = f.readyOrder("a");
+  const food::OrderId o2 = f.readyOrder("b");
+  EXPECT_TRUE(f.shop->registerCourier("kit"));
+  EXPECT_EQ(f.courierOf(o1), std::string("kit"));
+  EXPECT_EQ(f.courierOf(o2), std::string(""));
+  EXPECT_TRUE(f.shop->registerCourier("amy"));
+  EXPECT_EQ(f.courierOf(o2), std::string("amy"));
+  EXPECT_FALSE(f.shop->registerCourier("amy"));  // a refused name takes nothing
+}
+
+TEST(Dispatch, ACourierWhoDeliveredIsFreeForTheNextOrder) {
+  Fixture f;
+  const food::OrderId first = f.readyOrder("a1");  // amy
+  f.shop->pickUp(first, "amy");
+  f.shop->deliver(first, "amy");
+  EXPECT_EQ(f.courierOf(f.readyOrder("a2")), std::string("amy"));
+}
+
+TEST(Cancel, BeforeTheKitchenAnswersItIsFree) {
+  Fixture f;
+  const food::OrderId id = f.order();
+  const auto r = f.shop->cancel(id, "ann");
+  EXPECT_TRUE(r.status == Status::Ok);
+  EXPECT_EQ(r.fee, 0);
+  EXPECT_TRUE(f.stateOf(id) == OrderState::Cancelled);
+}
+
+TEST(Cancel, WhileTheKitchenCooksItCostsAQuarterOfTheFoodRoundedDown) {
+  Fixture f;
+  const food::OrderId id = f.order();
+  f.shop->accept(id, "noodle");
+  const auto r = f.shop->cancel(id, "ann");
+  EXPECT_TRUE(r.status == Status::Ok);
+  EXPECT_EQ(r.fee, 662);  // 2650 * 25 / 100 = 662.5, and the delivery fee is not part of it
+  EXPECT_TRUE(f.stateOf(id) == OrderState::Cancelled);
+}
+
+TEST(Cancel, OnceTheFoodIsReadyTheWholeFoodIsCharged) {
+  Fixture f;
+  const food::OrderId id = f.readyOrder();
+  const auto r = f.shop->cancel(id, "ann");
+  EXPECT_TRUE(r.status == Status::Ok);
+  EXPECT_EQ(r.fee, 2650);
+}
+
+TEST(Cancel, OnlyTheCustomerCanCancelAndTheChecksRunInOrder) {
+  Fixture f;
+  const food::OrderId id = f.order();
+  EXPECT_TRUE(f.shop->cancel(id, "bob").status == Status::WrongParty);
+  EXPECT_TRUE(f.shop->cancel(id, "noodle").status == Status::WrongParty);
+  EXPECT_TRUE(f.shop->cancel(404, "ann").status == Status::UnknownOrder);
+  EXPECT_TRUE(f.stateOf(id) == OrderState::Placed);
+  const auto r = f.shop->cancel(id, "bob");
+  EXPECT_EQ(r.fee, 0);
+  f.shop->cancel(id, "ann");
+  EXPECT_TRUE(f.shop->cancel(id, "bob").status == Status::WrongParty);  // the caller is checked before the state
+}
+
+TEST(Cancel, OnceTheCourierHasTheFoodItIsTooLate) {
+  Fixture f;
+  const food::OrderId id = f.readyOrder();
+  f.shop->pickUp(id, "amy");
+  const auto late = f.shop->cancel(id, "ann");
+  EXPECT_TRUE(late.status == Status::InvalidState);
+  EXPECT_EQ(late.fee, 0);
+  f.shop->deliver(id, "amy");
+  EXPECT_TRUE(f.shop->cancel(id, "ann").status == Status::InvalidState);
+  EXPECT_TRUE(f.stateOf(id) == OrderState::Delivered);
+  const food::OrderId other = f.order("bob");
+  f.shop->cancel(other, "bob");
+  EXPECT_TRUE(f.shop->cancel(other, "bob").status == Status::InvalidState);  // not twice
+}
+
+TEST(Cancel, CancellingAReadyOrderFreesItsCourierForTheWaitingOrder) {
+  Fixture f;
+  const food::OrderId o1 = f.readyOrder("a1");  // amy
+  f.readyOrder("a2");                           // kit
+  f.readyOrder("a3");                           // zed
+  const food::OrderId waiting = f.readyOrder("a4");
+  EXPECT_EQ(f.courierOf(waiting), std::string(""));
+  f.shop->cancel(o1, "a1");
+  EXPECT_EQ(f.courierOf(waiting), std::string("amy"));
+}
+
+TEST(Cancel, ACancelledOrdersCourierIsFreeForTheNextOrder) {
+  Fixture f;
+  const food::OrderId o1 = f.readyOrder("a1");  // amy
+  f.shop->cancel(o1, "a1");
+  EXPECT_EQ(f.courierOf(f.readyOrder("a2")), std::string("amy"));
+}
+
+TEST(Cancel, ACancelledWaitingOrderLeavesTheQueue) {
+  Fixture f(false);
+  f.shop->registerCourier("amy");
+  const food::OrderId o1 = f.readyOrder("a");  // amy
+  const food::OrderId o2 = f.readyOrder("b");  // waits
+  const food::OrderId o3 = f.readyOrder("c");  // waits
+  f.shop->cancel(o2, "b");
+  f.shop->pickUp(o1, "amy");
+  f.shop->deliver(o1, "amy");
+  EXPECT_EQ(f.courierOf(o3), std::string("amy"));
+  EXPECT_EQ(f.courierOf(o2), std::string(""));
+}
+
+TEST(Cancel, CancellingBeforeReadyNeverTouchesTheCouriers) {
+  Fixture f(false);
+  f.shop->registerCourier("amy");
+  const food::OrderId o1 = f.readyOrder("a");   // amy
+  const food::OrderId cooking = f.order("b");
+  f.shop->accept(cooking, "noodle");
+  f.shop->cancel(cooking, "b");                 // amy still has o1
+  const food::OrderId o3 = f.readyOrder("c");   // must wait: amy is busy
+  EXPECT_EQ(f.courierOf(o3), std::string(""));
+  EXPECT_EQ(f.courierOf(o1), std::string("amy"));
+}
+
+TEST(Kitchens, TheOriginalGameHasNoLimitOnWhatAKitchenCooks) {
+  Fixture f;
+  std::vector<food::OrderId> ids;
+  for (int i = 0; i < 6; ++i) ids.push_back(f.order("c" + std::to_string(i)));
+  for (const food::OrderId id : ids) EXPECT_TRUE(f.shop->accept(id, "noodle") == Status::Ok);
+}
+18:T159e,#include <memory>
+#include <string>
+#include <vector>
+
+#include "api_storm1.h"
+#include "bp_test.h"
+
+using food::OrderState;
+using food::Promo;
+using food::PromoKind;
+using food::Status;
+
+namespace {
+// noodle: ramen 1200, gyoza 600, tea 250. pizza: margherita 1000, cola 300.
+std::unique_ptr<food::PromoFood> shopWith(std::vector<Promo> promos) {
+  auto shop = food::makePromoFood(promos);
+  shop->addRestaurant("noodle", {{"ramen", 1200}, {"gyoza", 600}, {"tea", 250}});
+  shop->addRestaurant("pizza", {{"margherita", 1000}, {"cola", 300}});
+  shop->registerCourier("amy");
+  return shop;
+}
+
+std::vector<Promo> usualCodes() {
+  return {
+      {"TEN", PromoKind::PercentOff, 10, 0},
+      {"THIRD", PromoKind::PercentOff, 33, 0},
+      {"FIVE", PromoKind::AmountOff, 500, 2000},
+      {"HUGE", PromoKind::AmountOff, 99999, 0},
+      {"FREE", PromoKind::PercentOff, 100, 0},
+  };
+}
+}  // namespace
+
+TEST(Promo, APercentageComesOffTheFoodAndNotOffTheDeliveryFee) {
+  auto shop = shopWith(usualCodes());
+  const auto r = shop->placeWithCode("ann", "noodle", {{"ramen", 2}}, "TEN");
+  EXPECT_TRUE(r.status == Status::Ok);
+  EXPECT_EQ(r.total, 2400 - 240 + 299);
+  EXPECT_EQ(shop->order(r.order).total, 2459);
+}
+
+TEST(Promo, ThePercentageDiscountIsRoundedDownSoTheCustomerPaysTheRest) {
+  auto shop = shopWith(usualCodes());
+  EXPECT_EQ(shop->placeWithCode("ann", "noodle", {{"tea", 1}}, "THIRD").total, 250 - 82 + 299);  // 250 * 33 / 100 = 82.5
+}
+
+TEST(Promo, AFixedAmountComesOffAndNeverBelowZero) {
+  auto shop = shopWith(usualCodes());
+  EXPECT_EQ(shop->placeWithCode("ann", "pizza", {{"margherita", 2}}, "FIVE").total, 2000 - 500 + 299);
+  EXPECT_EQ(shop->placeWithCode("ann", "noodle", {{"tea", 1}}, "HUGE").total, 299);  // free food, the delivery is still paid
+}
+
+TEST(Promo, ACodeThatTakesEverythingOffStillPaysTheDelivery) {
+  auto shop = shopWith(usualCodes());
+  EXPECT_EQ(shop->placeWithCode("ann", "noodle", {{"ramen", 3}}, "FREE").total, 299);
+}
+
+TEST(Promo, TheMinimumIsMeasuredOnTheFoodBeforeTheDiscountAndIsInclusive) {
+  auto shop = shopWith(usualCodes());
+  const auto low = shop->placeWithCode("ann", "noodle", {{"ramen", 1}, {"gyoza", 1}}, "FIVE");  // 1800
+  EXPECT_TRUE(low.status == Status::PromoNotApplicable);
+  EXPECT_EQ(low.order, 0);
+  EXPECT_EQ(low.total, 0);
+  EXPECT_TRUE(shop->placeWithCode("ann", "noodle", {{"ramen", 1}, {"gyoza", 1}, {"tea", 1}}, "FIVE").status == Status::Ok);  // 2050
+  EXPECT_TRUE(shop->placeWithCode("ann", "pizza", {{"margherita", 2}}, "FIVE").status == Status::Ok);  // exactly 2000
+}
+
+TEST(Promo, ChecksRunInTheDocumentedOrder) {
+  auto shop = shopWith(usualCodes());
+  EXPECT_TRUE(shop->placeWithCode("ann", "noodle", {{"tea", 1}}, "").status == Status::InvalidRequest);
+  EXPECT_TRUE(shop->placeWithCode("ann", "nowhere", {{"tea", 1}}, "NOPE").status == Status::UnknownRestaurant);
+  EXPECT_TRUE(shop->placeWithCode("ann", "noodle", {{"sushi", 1}}, "NOPE").status == Status::UnknownItem);
+  EXPECT_TRUE(shop->placeWithCode("ann", "noodle", {{"tea", 1}}, "NOPE").status == Status::UnknownPromo);
+  EXPECT_TRUE(shop->placeWithCode("ann", "noodle", {{"tea", 0}}, "TEN").status == Status::InvalidRequest);
+  EXPECT_TRUE(shop->placeWithCode("", "noodle", {{"tea", 1}}, "TEN").status == Status::InvalidRequest);
+  EXPECT_TRUE(shop->placeWithCode("ann", "noodle", {{"tea", 1}}, "ten").status == Status::UnknownPromo);  // codes are exact
+}
+
+TEST(Promo, OrdinaryOrdersOnThisSystemAreNeverDiscounted) {
+  auto shop = shopWith(usualCodes());
+  EXPECT_EQ(shop->place("ann", "noodle", {{"ramen", 2}}).total, 2400 + 299);
+}
+
+TEST(Promo, TheCancellationFeeIsChargedOnTheDiscountedFood) {
+  auto shop = shopWith(usualCodes());
+  const food::OrderId cooking = shop->placeWithCode("ann", "noodle", {{"ramen", 2}}, "TEN").order;  // food 2160
+  shop->accept(cooking, "noodle");
+  EXPECT_EQ(shop->cancel(cooking, "ann").fee, 540);
+  const food::OrderId ready = shop->placeWithCode("bob", "noodle", {{"ramen", 2}}, "TEN").order;
+  shop->accept(ready, "noodle");
+  shop->ready(ready, "noodle");
+  EXPECT_EQ(shop->cancel(ready, "bob").fee, 2160);
+  const food::OrderId free = shop->placeWithCode("cy", "noodle", {{"tea", 1}}, "HUGE").order;  // free food
+  shop->accept(free, "noodle");
+  shop->ready(free, "noodle");
+  EXPECT_EQ(shop->cancel(free, "cy").fee, 0);
+}
+
+TEST(Promo, InvalidOrRepeatedCodesAreLeftOut) {
+  auto shop = shopWith({
+      {"", PromoKind::AmountOff, 100, 0},
+      {"ZERO", PromoKind::PercentOff, 0, 0},
+      {"OVER", PromoKind::PercentOff, 101, 0},
+      {"NONE", PromoKind::AmountOff, 0, 0},
+      {"NEGATIVE", PromoKind::AmountOff, 100, -1},
+      {"DUP", PromoKind::AmountOff, 100, 0},
+      {"DUP", PromoKind::PercentOff, 50, 0},
+  });
+  for (const char* code : {"ZERO", "OVER", "NONE", "NEGATIVE"}) {
+    EXPECT_TRUE(shop->placeWithCode("ann", "noodle", {{"tea", 1}}, code).status == Status::UnknownPromo);
+  }
+  EXPECT_EQ(shop->placeWithCode("ann", "noodle", {{"tea", 1}}, "DUP").total, 250 - 100 + 299);  // the first one wins
+}
+
+TEST(Promo, DiscountedOrdersGoThroughTheSameLifecycle) {
+  auto shop = shopWith(usualCodes());
+  const food::OrderId id = shop->placeWithCode("ann", "noodle", {{"ramen", 1}}, "TEN").order;
+  EXPECT_TRUE(shop->accept(id, "noodle") == Status::Ok);
+  EXPECT_TRUE(shop->ready(id, "noodle") == Status::Ok);
+  EXPECT_EQ(shop->order(id).courier, std::string("amy"));
+  EXPECT_TRUE(shop->pickUp(id, "amy") == Status::Ok);
+  EXPECT_TRUE(shop->deliver(id, "amy") == Status::Ok);
+  EXPECT_TRUE(shop->order(id).state == OrderState::Delivered);
+}
+19:T180b,#include <memory>
+#include <string>
+#include <vector>
+
+#include "api_storm2.h"
+#include "bp_test.h"
+
+using food::OrderState;
+using food::Promo;
+using food::PromoKind;
+using food::Status;
+
+namespace {
+// Two cooking places per kitchen. noodle: ramen 1200, tea 250. pizza: margherita 1000.
+struct Fixture {
+  std::unique_ptr<food::PromoFood> shop;
+  explicit Fixture(int slots = 2) : shop(food::makeBusyKitchens({{"TEN", PromoKind::PercentOff, 10, 0}}, slots)) {
+    shop->addRestaurant("noodle", {{"ramen", 1200}, {"tea", 250}});
+    shop->addRestaurant("pizza", {{"margherita", 1000}});
+    shop->registerCourier("amy");
+    shop->registerCourier("kit");
+  }
+  food::OrderId order(const std::string& customer, const std::string& restaurant = "noodle") {
+    const std::string item = restaurant == "noodle" ? "ramen" : "margherita";
+    return shop->place(customer, restaurant, {{item, 1}}).order;
+  }
+};
+}  // namespace
+
+TEST(Kitchen, ItCooksOnlyAsManyOrdersAsItHasPlaces) {
+  Fixture f;
+  int announced = 0;
+  f.shop->subscribe([&](food::OrderId, OrderState, OrderState) { ++announced; });
+  const food::OrderId a = f.order("a");
+  const food::OrderId b = f.order("b");
+  const food::OrderId c = f.order("c");
+  EXPECT_TRUE(f.shop->accept(a, "noodle") == Status::Ok);
+  EXPECT_TRUE(f.shop->accept(b, "noodle") == Status::Ok);
+  EXPECT_EQ(announced, 2);
+  EXPECT_TRUE(f.shop->accept(c, "noodle") == Status::KitchenFull);
+  EXPECT_TRUE(f.shop->order(c).state == OrderState::Placed);  // still waiting, not refused
+  EXPECT_EQ(announced, 2);                                    // a refusal is not a change of state
+}
+
+TEST(Kitchen, APlaceIsFreeAgainWhenTheFoodIsReady) {
+  Fixture f;
+  const food::OrderId a = f.order("a");
+  const food::OrderId b = f.order("b");
+  const food::OrderId c = f.order("c");
+  f.shop->accept(a, "noodle");
+  f.shop->accept(b, "noodle");
+  EXPECT_TRUE(f.shop->ready(a, "noodle") == Status::Ok);
+  EXPECT_TRUE(f.shop->accept(c, "noodle") == Status::Ok);
+  const food::OrderId d = f.order("d");
+  EXPECT_TRUE(f.shop->accept(d, "noodle") == Status::KitchenFull);  // b and c are cooking; a is not
+}
+
+TEST(Kitchen, APlaceIsFreeAgainWhenTheCustomerCancelsWhileItCooks) {
+  Fixture f;
+  const food::OrderId a = f.order("a");
+  const food::OrderId b = f.order("b");
+  const food::OrderId c = f.order("c");
+  f.shop->accept(a, "noodle");
+  f.shop->accept(b, "noodle");
+  EXPECT_TRUE(f.shop->cancel(a, "a").status == Status::Ok);
+  EXPECT_TRUE(f.shop->accept(c, "noodle") == Status::Ok);
+}
+
+TEST(Kitchen, OrdersThatNeverCookedNeverFreeAPlace) {
+  Fixture f;
+  const food::OrderId a = f.order("a");
+  const food::OrderId b = f.order("b");
+  f.shop->accept(a, "noodle");
+  f.shop->accept(b, "noodle");
+  const food::OrderId c = f.order("c");
+  const food::OrderId d = f.order("d");
+  EXPECT_TRUE(f.shop->cancel(c, "c").status == Status::Ok);   // was only Placed
+  EXPECT_TRUE(f.shop->reject(d, "noodle") == Status::Ok);     // was only Placed
+  const food::OrderId e = f.order("e");
+  EXPECT_TRUE(f.shop->accept(e, "noodle") == Status::KitchenFull);
+}
+
+TEST(Kitchen, AnOrderThatIsOnItsWayHoldsNoPlace) {
+  Fixture f(1);
+  const food::OrderId a = f.order("a");
+  f.shop->accept(a, "noodle");
+  f.shop->ready(a, "noodle");
+  f.shop->pickUp(a, "amy");
+  f.shop->deliver(a, "amy");
+  const food::OrderId b = f.order("b");
+  EXPECT_TRUE(f.shop->accept(b, "noodle") == Status::Ok);
+  EXPECT_TRUE(f.shop->cancel(b, "b").status == Status::Ok);
+  f.shop->cancel(b, "b");  // a second, refused cancel frees nothing more
+  const food::OrderId c = f.order("c");
+  const food::OrderId d = f.order("d");
+  EXPECT_TRUE(f.shop->accept(c, "noodle") == Status::Ok);
+  EXPECT_TRUE(f.shop->accept(d, "noodle") == Status::KitchenFull);
+}
+
+TEST(Kitchen, EveryKitchenCountsItsOwnPlaces) {
+  Fixture f(1);
+  f.shop->accept(f.order("a"), "noodle");
+  EXPECT_TRUE(f.shop->accept(f.order("b", "pizza"), "pizza") == Status::Ok);
+  EXPECT_TRUE(f.shop->accept(f.order("c"), "noodle") == Status::KitchenFull);
+  EXPECT_TRUE(f.shop->accept(f.order("d", "pizza"), "pizza") == Status::KitchenFull);
+}
+
+TEST(Kitchen, KitchenFullIsTheLastCheckOfAccept) {
+  Fixture f(1);
+  const food::OrderId a = f.order("a");
+  f.shop->accept(a, "noodle");
+  const food::OrderId b = f.order("b");
+  EXPECT_TRUE(f.shop->accept(b, "pizza") == Status::WrongParty);    // the wrong restaurant, even though noodle is full
+  EXPECT_TRUE(f.shop->accept(a, "noodle") == Status::InvalidState); // already cooking: not "full"
+  EXPECT_TRUE(f.shop->accept(404, "noodle") == Status::UnknownOrder);
+  EXPECT_TRUE(f.shop->accept(b, "noodle") == Status::KitchenFull);
+}
+
+TEST(Kitchen, AnOrderRefusedForRoomCanBeAcceptedLater) {
+  Fixture f(1);
+  const food::OrderId a = f.order("a");
+  const food::OrderId b = f.order("b");
+  f.shop->accept(a, "noodle");
+  EXPECT_TRUE(f.shop->accept(b, "noodle") == Status::KitchenFull);
+  f.shop->ready(a, "noodle");
+  EXPECT_TRUE(f.shop->accept(b, "noodle") == Status::Ok);  // the same order, accepted later
+  EXPECT_TRUE(f.shop->order(b).state == OrderState::Accepted);
+}
+
+TEST(Kitchen, ACountBelowOneMeansOnePlace) {
+  Fixture f(0);
+  EXPECT_TRUE(f.shop->accept(f.order("a"), "noodle") == Status::Ok);
+  EXPECT_TRUE(f.shop->accept(f.order("b"), "noodle") == Status::KitchenFull);
+  Fixture g(-5);
+  EXPECT_TRUE(g.shop->accept(g.order("a"), "noodle") == Status::Ok);
+  EXPECT_TRUE(g.shop->accept(g.order("b"), "noodle") == Status::KitchenFull);
+}
+
+TEST(Kitchen, PromoCodesStillWorkOnThisSystem) {
+  Fixture f;
+  const auto r = f.shop->placeWithCode("ann", "noodle", {{"ramen", 1}}, "TEN");
+  EXPECT_TRUE(r.status == Status::Ok);
+  EXPECT_EQ(r.total, 1200 - 120 + 299);
+  f.shop->accept(r.order, "noodle");
+  EXPECT_EQ(f.shop->cancel(r.order, "ann").fee, 270);  // 1080 * 25 / 100
+}
+
+TEST(Kitchen, CouriersAreUnaffectedByTheLimit) {
+  Fixture f;
+  const food::OrderId a = f.order("a");
+  const food::OrderId b = f.order("b");
+  f.shop->accept(a, "noodle");
+  f.shop->ready(a, "noodle");
+  f.shop->accept(b, "noodle");
+  f.shop->ready(b, "noodle");
+  EXPECT_EQ(f.shop->order(a).courier, std::string("amy"));
+  EXPECT_EQ(f.shop->order(b).courier, std::string("kit"));
+}
+1a:T607,#pragma once
+#include <map>
+#include <set>
+#include <string>
+
+#include "order_book.h"
+
+// Couriers and the queue of ready orders that have none. Free couriers are found by lowest name; waiting orders go
+// out oldest first. It records an assignment on the order, but never changes an order's state.
+class CourierPool {
+ public:
+  explicit CourierPool(OrderBook& book) : book_(book) {}
+
+  bool enroll(const std::string& courier) {
+    if (courier.empty() || !holding_.emplace(courier, food::kNoOrder).second) return false;
+    handOver(courier);
+    return true;
+  }
+
+  void orderReady(food::OrderId id) {
+    for (auto& [name, held] : holding_) {
+      if (held != food::kNoOrder) continue;
+      held = id;
+      book_.assign(id, name);
+      return;
+    }
+    waiting_.insert(id);
+  }
+
+  void orderDelivered(food::OrderId id) { handOver(book_.find(id)->courier); }
+
+  void orderCancelled(food::OrderId id) {
+    const std::string& courier = book_.find(id)->courier;
+    if (courier.empty()) {
+      waiting_.erase(id);
+    } else {
+      handOver(courier);
+    }
+  }
+
+ private:
+  // The courier is free; give them the oldest waiting order, if there is one.
+  void handOver(const std::string& courier) {
+    holding_[courier] = food::kNoOrder;
+    if (waiting_.empty()) return;
+    const food::OrderId next = *waiting_.begin();
+    waiting_.erase(waiting_.begin());
+    holding_[courier] = next;
+    book_.assign(next, courier);
+  }
+
+  OrderBook& book_;
+  std::map<std::string, food::OrderId> holding_;
+  std::set<food::OrderId> waiting_;
+};
+1b:T1007,#pragma once
+#include <memory>
+#include <string>
+#include <utility>
+#include <vector>
+
+#include "courier_pool.h"
+#include "fees.h"
+#include "kitchen_load.h"
+#include "menu.h"
+#include "order_book.h"
+#include "order_desk.h"
+#include "promos.h"
+
+// The public face. Each call is a few lines: ask the order book whether the move is legal, make it, and tell the
+// collaborator that cares (couriers, kitchen load). Prices, fees, legal moves and who is free are decided elsewhere.
+class FoodImpl : public food::PromoFood {
+ public:
+  FoodImpl(PromoBook promos, int kitchenSlots, std::unique_ptr<CancellationFee> fee)
+      : promos_(std::move(promos)), fee_(std::move(fee)), couriers_(book_), kitchens_(book_, kitchenSlots), desk_(menu_, promos_, book_) {
+    // The kitchen listens first, so it is up to date before any listener added by the caller runs.
+    book_.subscribe([this](food::OrderId id, food::OrderState from, food::OrderState to) { kitchens_.observe(id, from, to); });
+  }
+
+  bool addRestaurant(const std::string& restaurant, const std::vector<food::MenuItem>& menu) override {
+    return menu_.add(restaurant, menu);
+  }
+
+  bool registerCourier(const std::string& courier) override { return couriers_.enroll(courier); }
+
+  void subscribe(food::Listener listener) override { book_.subscribe(std::move(listener)); }
+
+  food::PlaceResult place(const std::string& customer, const std::string& restaurant,
+                          const std::vector<food::Line>& lines) override {
+    return desk_.place(customer, restaurant, lines, nullptr);
+  }
+
+  food::PlaceResult placeWithCode(const std::string& customer, const std::string& restaurant,
+                                  const std::vector<food::Line>& lines, const std::string& code) override {
+    return desk_.place(customer, restaurant, lines, &code);
+  }
+
+  food::Status accept(food::OrderId id, const std::string& restaurant) override {
+    const food::Status status = book_.check(id, Role::Restaurant, restaurant, food::OrderState::Accepted);
+    if (status != food::Status::Ok) return status;
+    if (!kitchens_.hasRoom(restaurant)) return food::Status::KitchenFull;
+    book_.move(id, food::OrderState::Accepted);
+    return food::Status::Ok;
+  }
+
+  food::Status reject(food::OrderId id, const std::string& restaurant) override {
+    return book_.advance(id, Role::Restaurant, restaurant, food::OrderState::Rejected);
+  }
+
+  food::Status ready(food::OrderId id, const std::string& restaurant) override {
+    const food::Status status = book_.advance(id, Role::Restaurant, restaurant, food::OrderState::Ready);
+    if (status == food::Status::Ok) couriers_.orderReady(id);
+    return status;
+  }
+
+  food::Status pickUp(food::OrderId id, const std::string& courier) override {
+    return book_.advance(id, Role::Courier, courier, food::OrderState::PickedUp);
+  }
+
+  food::Status deliver(food::OrderId id, const std::string& courier) override {
+    const food::Status status = book_.advance(id, Role::Courier, courier, food::OrderState::Delivered);
+    if (status == food::Status::Ok) couriers_.orderDelivered(id);
+    return status;
+  }
+
+  food::CancelResult cancel(food::OrderId id, const std::string& customer) override {
+    const food::Status status = book_.check(id, Role::Customer, customer, food::OrderState::Cancelled);
+    if (status != food::Status::Ok) return food::CancelResult{status};
+    const Order& order = *book_.find(id);
+    const food::Money fee = fee_->feeFor(order.state, order.food);
+    book_.move(id, food::OrderState::Cancelled);
+    couriers_.orderCancelled(id);
+    return food::CancelResult{food::Status::Ok, fee};
+  }
+
+  food::OrderInfo order(food::OrderId id) const override {
+    const Order* found = book_.find(id);
+    if (found == nullptr) return food::OrderInfo{food::Status::UnknownOrder};
+    return food::OrderInfo{food::Status::Ok, found->state, found->customer, found->restaurant, found->courier, found->total};
+  }
+
+ private:
+  Menu menu_;
+  PromoBook promos_;
+  std::unique_ptr<CancellationFee> fee_;
+  OrderBook book_;
+  CourierPool couriers_;
+  KitchenLoad kitchens_;
+  OrderDesk desk_;
+};
+1c:T40d,#pragma once
+#include <climits>
+#include <map>
+#include <string>
+
+#include "order_book.h"
+
+// How many orders each kitchen is cooking right now, and whether it has a place free. It learns about the load by
+// listening to the order book (Observer), so no lifecycle code has to remember to adjust it.
+class KitchenLoad {
+ public:
+  static constexpr int kUnlimited = INT_MAX;
+
+  KitchenLoad(const OrderBook& book, int slots) : book_(book), slots_(slots) {}
+
+  bool hasRoom(const std::string& restaurant) const {
+    const auto found = cooking_.find(restaurant);
+    const int cooking = found == cooking_.end() ? 0 : found->second;
+    return cooking < slots_;
+  }
+
+  void observe(food::OrderId id, food::OrderState from, food::OrderState to) {
+    const std::string& restaurant = book_.find(id)->restaurant;
+    if (to == food::OrderState::Accepted) ++cooking_[restaurant];
+    if (from == food::OrderState::Accepted) --cooking_[restaurant];
+  }
+
+ private:
+  const OrderBook& book_;
+  int slots_;
+  std::map<std::string, int> cooking_;
+};
+1d:T4fe,#pragma once
+#include <map>
+#include <optional>
+#include <string>
+#include <vector>
+
+#include "api_storm2.h"
+
+// What each restaurant sells and for how much. It knows nothing about orders, couriers or discounts.
+class Menu {
+ public:
+  bool add(const std::string& restaurant, const std::vector<food::MenuItem>& items) {
+    if (restaurant.empty() || items.empty() || menus_.count(restaurant) > 0) return false;
+    std::map<std::string, food::Money> prices;
+    for (const food::MenuItem& item : items) {
+      if (item.name.empty() || item.price < 1 || !prices.emplace(item.name, item.price).second) return false;
+    }
+    menus_.emplace(restaurant, std::move(prices));
+    return true;
+  }
+
+  bool knows(const std::string& restaurant) const { return menus_.count(restaurant) > 0; }
+
+  // The price of one item, or nothing when the restaurant does not sell it. The restaurant must be known.
+  std::optional<food::Money> priceOf(const std::string& restaurant, const std::string& item) const {
+    const std::map<std::string, food::Money>& prices = menus_.at(restaurant);
+    const auto found = prices.find(item);
+    if (found == prices.end()) return std::nullopt;
+    return found->second;
+  }
+
+ private:
+  std::map<std::string, std::map<std::string, food::Money>> menus_;
+};
+1e:Td39,#pragma once
+#include <map>
+#include <set>
+#include <string>
+#include <utility>
+#include <vector>
+
+#include "api_storm2.h"
+
+// One order, as a record. It has no behaviour: which moves are legal is OrderLifecycle's decision.
+struct Order {
+  std::string customer;
+  std::string restaurant;
+  std::string courier;  // empty until assigned
+  food::Money food;     // what the food costs after any discount; the base of the cancellation fee
+  food::Money total;
+  food::OrderState state;
+};
+
+// Who is asking for a move.
+enum class Role { Restaurant, Courier, Customer };
+
+// The state machine, written once as a table of legal moves.
+class OrderLifecycle {
+ public:
+  static bool allows(food::OrderState from, food::OrderState to) {
+    using food::OrderState;
+    static const std::set<std::pair<OrderState, OrderState>> moves = {
+        {OrderState::Placed, OrderState::Accepted},    {OrderState::Placed, OrderState::Rejected},
+        {OrderState::Placed, OrderState::Cancelled},   {OrderState::Accepted, OrderState::Ready},
+        {OrderState::Accepted, OrderState::Cancelled}, {OrderState::Ready, OrderState::PickedUp},
+        {OrderState::Ready, OrderState::Cancelled},    {OrderState::PickedUp, OrderState::Delivered},
+    };
+    return moves.count({from, to}) > 0;
+  }
+};
+
+// Keeps every order for good, issues ids, and is the ONE place where an order changes state: every change goes
+// through move(), which tells the listeners (the Observer subject of the design).
+class OrderBook {
+ public:
+  food::OrderId open(Order order) {
+    const food::OrderId id = nextId_++;
+    orders_.emplace(id, std::move(order));
+    return id;
+  }
+
+  const Order* find(food::OrderId id) const {
+    const auto found = orders_.find(id);
+    return found == orders_.end() ? nullptr : &found->second;
+  }
+
+  void subscribe(food::Listener listener) { listeners_.push_back(std::move(listener)); }
+
+  // The checks every lifecycle call shares, in the documented order. Changes nothing.
+  food::Status check(food::OrderId id, Role role, const std::string& who, food::OrderState to) const {
+    const Order* order = find(id);
+    if (order == nullptr) return food::Status::UnknownOrder;
+    if (!isParty(*order, role, who)) return food::Status::WrongParty;
+    if (!OrderLifecycle::allows(order->state, to)) return food::Status::InvalidState;
+    return food::Status::Ok;
+  }
+
+  void move(food::OrderId id, food::OrderState to) {
+    Order& order = orders_.at(id);
+    const food::OrderState from = order.state;
+    order.state = to;
+    for (const food::Listener& listener : listeners_) listener(id, from, to);
+  }
+
+  food::Status advance(food::OrderId id, Role role, const std::string& who, food::OrderState to) {
+    const food::Status status = check(id, role, who, to);
+    if (status == food::Status::Ok) move(id, to);
+    return status;
+  }
+
+  void assign(food::OrderId id, const std::string& courier) { orders_.at(id).courier = courier; }
+
+ private:
+  static bool isParty(const Order& order, Role role, const std::string& who) {
+    switch (role) {
+      case Role::Restaurant: return order.restaurant == who;
+      case Role::Customer: return order.customer == who;
+      case Role::Courier: return !order.courier.empty() && order.courier == who;
+    }
+    return false;
+  }
+
+  food::OrderId nextId_ = 1;
+  std::map<food::OrderId, Order> orders_;
+  std::vector<food::Listener> listeners_;
+};
+1f:T80f,#pragma once
+#include <string>
+#include <vector>
+
+#include "menu.h"
+#include "order_book.h"
+#include "promos.h"
+
+// Turns a request into an order: validates it in the documented order, prices it from the menu, applies a promo code
+// if one is given, and records it. A failed request leaves nothing behind.
+class OrderDesk {
+ public:
+  OrderDesk(const Menu& menu, const PromoBook& promos, OrderBook& book) : menu_(menu), promos_(promos), book_(book) {}
+
+  food::PlaceResult place(const std::string& customer, const std::string& restaurant,
+                          const std::vector<food::Line>& lines, const std::string* code) {
+    if (!wellFormed(customer, lines) || (code != nullptr && code->empty())) {
+      return food::PlaceResult{food::Status::InvalidRequest};
+    }
+    if (!menu_.knows(restaurant)) return food::PlaceResult{food::Status::UnknownRestaurant};
+    food::Money cost = 0;
+    for (const food::Line& line : lines) {
+      const std::optional<food::Money> price = menu_.priceOf(restaurant, line.item);
+      if (!price) return food::PlaceResult{food::Status::UnknownItem};
+      cost += *price * line.quantity;
+    }
+    if (code != nullptr) {
+      const PromoRule* rule = promos_.find(*code);
+      if (rule == nullptr) return food::PlaceResult{food::Status::UnknownPromo};
+      if (cost < rule->minimumFood) return food::PlaceResult{food::Status::PromoNotApplicable};
+      cost -= rule->discount->amount(cost);
+    }
+    const food::Money total = cost + food::kDeliveryFee;
+    const food::OrderId id = book_.open(Order{customer, restaurant, "", cost, total, food::OrderState::Placed});
+    return food::PlaceResult{food::Status::Ok, id, total};
+  }
+
+ private:
+  static bool wellFormed(const std::string& customer, const std::vector<food::Line>& lines) {
+    if (customer.empty() || lines.empty()) return false;
+    for (const food::Line& line : lines) {
+      if (line.quantity < 1 || line.quantity > food::kMaxQuantity) return false;
+    }
+    return true;
+  }
+
+  const Menu& menu_;
+  const PromoBook& promos_;
+  OrderBook& book_;
+};
+20:T823,#pragma once
+#include <algorithm>
+#include <map>
+#include <memory>
+#include <string>
+#include <vector>
+
+#include "fees.h"
+
+// A way of taking money off the food. The delivery fee is never part of it.
+class Discount {
+ public:
+  virtual ~Discount() = default;
+  virtual food::Money amount(food::Money food) const = 0;
+};
+
+class PercentOff : public Discount {
+ public:
+  explicit PercentOff(int percent) : percent_(percent) {}
+  food::Money amount(food::Money food) const override { return food * percent_ / kPercentDenominator; }
+
+ private:
+  int percent_;
+};
+
+class AmountOff : public Discount {
+ public:
+  explicit AmountOff(food::Money cents) : cents_(cents) {}
+  food::Money amount(food::Money food) const override { return std::min(cents_, food); }
+
+ private:
+  food::Money cents_;
+};
+
+// One code: what it takes off, and the smallest food total it applies to.
+struct PromoRule {
+  std::unique_ptr<Discount> discount;
+  food::Money minimumFood;
+};
+
+// The codes the system was built with. Invalid or repeated entries are skipped, so a bad configuration never
+// produces a half-working code.
+class PromoBook {
+ public:
+  PromoBook() = default;
+
+  explicit PromoBook(const std::vector<food::Promo>& promos) {
+    for (const food::Promo& promo : promos) {
+      std::unique_ptr<Discount> discount = build(promo);
+      if (discount == nullptr || promo.code.empty() || promo.minimumFood < 0) continue;
+      rules_.emplace(promo.code, PromoRule{std::move(discount), promo.minimumFood});
+    }
+  }
+
+  const PromoRule* find(const std::string& code) const {
+    const auto found = rules_.find(code);
+    return found == rules_.end() ? nullptr : &found->second;
+  }
+
+ private:
+  static std::unique_ptr<Discount> build(const food::Promo& promo) {
+    if (promo.kind == food::PromoKind::PercentOff) {
+      if (promo.value < 1 || promo.value > kPercentDenominator) return nullptr;
+      return std::make_unique<PercentOff>(promo.value);
+    }
+    if (promo.value < 1) return nullptr;
+    return std::make_unique<AmountOff>(promo.value);
+  }
+
+  std::map<std::string, PromoRule> rules_;
+};
+f:[["children",{"s":"__PAGE__","h":160,"d":{"r":["$","$1","c",{"children":[["$","$L12",null,{"bundle":{"id":"food-delivery","title":"Food delivery","level":"Senior","parMinutes":75,"patterns":["State","Observer","Strategy"],"requirements":[{"id":"R-place","text":"addRestaurant refuses an empty name, an existing name, an empty menu, an item with an empty name or a price below 1, and a repeated item name. place: food = sum of price * quantity over the lines (the same item may repeat), total = food + kDeliveryFee (299), fixed at placement. Quantities run 1..kMaxQuantity (20). Checks in order: InvalidRequest (empty customer, no lines, a quantity out of range), UnknownRestaurant, UnknownItem (an item that is not on THAT restaurant's menu). A failed call changes nothing.","phase":"base","hidden":true},{"id":"R-states","text":"An order moves Placed -> Accepted -> Ready -> PickedUp -> Delivered, or Placed -> Rejected, or is Cancelled. The restaurant accepts, rejects and marks ready; the assigned courier picks up and delivers. Every call checks UnknownOrder, then WrongParty, then InvalidState, and a failed call changes nothing. Orders are kept for good.","phase":"base","hidden":true},{"id":"R-dispatch","text":"When an order becomes Ready it goes to the free courier with the LOWEST NAME; with nobody free it waits unassigned. A courier who becomes free (delivers, has their ready order cancelled, or registers) takes the OLDEST waiting order by order id. A cooking order holds no courier. Nobody is the assigned courier of an unassigned order, including the empty name.","phase":"base","hidden":true},{"id":"R-cancel","text":"Only the customer can cancel, from Placed (fee 0), Accepted (food * 25 / 100, rounded down) or Ready (the whole food); the delivery fee is never charged. From PickedUp, Delivered, Rejected and Cancelled it is InvalidState. Checks: UnknownOrder, WrongParty, InvalidState. The assigned courier of a cancelled Ready order is free at once; a cancelled waiting order leaves the queue.","phase":"base","hidden":true},{"id":"R-observe","text":"subscribe(listener): every change of state of every order calls every listener with (order, from, to), in the order the changes happen and the listeners were added. Placing an order and assigning a courier are not changes of state, and a failed call announces nothing.","phase":"base","hidden":true},{"id":"R-promo","text":"Storm 1: makePromoFood(promos) and placeWithCode. Checks in order: InvalidRequest (as place, or an empty code), UnknownRestaurant, UnknownItem, UnknownPromo, PromoNotApplicable (food before discount below the minimum; equal is fine). PercentOff takes food * value / 100 rounded down; AmountOff takes min(value, food); the delivery fee is not discounted. The cancellation fee is computed on the discounted food. Invalid or repeated codes in the configuration are ignored (the first valid one wins); place() never discounts.","phase":"storm1","hidden":true},{"id":"R-kitchen","text":"Storm 2: makeBusyKitchens(promos, slots), slots below 1 count as 1. An order occupies a place of its restaurant from the moment it is Accepted until it leaves Accepted (Ready or Cancelled). accept() on a kitchen with no place free is KitchenFull and changes nothing; its checks are UnknownOrder, WrongParty, InvalidState, then KitchenFull. Kitchens count separately, and orders that never cooked (Placed then rejected or cancelled) never change the count.","phase":"storm2","hidden":true}],"brief":"$13","editorial":"$14","clarify":[{"id":"q-price","text":"How is an order priced, and can a customer put the same item in twice?","answer":"Food is the sum of price times quantity over the lines (the same item in several lines just adds up), plus a flat delivery fee of 299 cents. Quantities run from 1 to 20 per line. The total is returned when the order is placed and fixed from then on. Checks in order: a malformed request, an unknown restaurant, an item that is not on that restaurant's menu.","reveals":["R-place"],"quality":"essential"},{"id":"q-stages","text":"What stages does an order have, and who moves it from one to the next?","answer":"Placed, Accepted, Ready, PickedUp, Delivered; or Rejected or Cancelled. The restaurant accepts or rejects a Placed order and says when it is Ready. The assigned courier picks up and delivers. Every call checks UnknownOrder, then WrongParty, then InvalidState, and a failed call changes nothing. Orders are kept forever.","reveals":["R-states"],"quality":"essential"},{"id":"q-courier","text":"When a courier is needed, who gets the order, and what if nobody is free?","answer":"When the kitchen says Ready, the free courier with the lowest name gets the order. If nobody is free the order waits, unassigned, and goes to the next courier who becomes free (by delivering, by a cancelled order, or by being registered), oldest order first by order id. Cooking an order does not hold a courier. Think about which class owns that queue.","reveals":["R-dispatch"],"quality":"essential"},{"id":"q-cancel","text":"Can the customer cancel? What does it cost?","answer":"Only the customer, until a courier has the food. Placed: free. Accepted (the kitchen has started): 25 percent of the food, rounded down. Ready: the whole food. The delivery fee is never part of a cancellation fee. From PickedUp on it is too late. A courier assigned to a cancelled order is free again at once. Think about where the fee rule lives: product changes it often.","reveals":["R-cancel"],"quality":"essential"},{"id":"q-observe","text":"Who needs to know when an order changes stage?","answer":"Several other teams: notifications, analytics, a live map. They subscribe with a callback that receives the order, the old state and the new one, for every change, in order, in the order they subscribed. Assigning a courier and placing an order are not changes of state. Failed calls announce nothing.","reveals":["R-observe"],"quality":"essential"},{"id":"q-promo","text":"Will customers be able to use discount codes?","answer":"Yes, soon: percentage and fixed-amount codes with a minimum order, taken off the food only. The exact rules arrive with the change. Think about which class knows how a price is made, and what a discount does to a later cancellation fee.","reveals":["R-promo"],"quality":"essential"},{"id":"q-capacity","text":"Can a kitchen take unlimited orders at once?","answer":"Today yes. Product wants a limit on how many orders a restaurant is cooking at the same time. Think about what counts as cooking, and every way an order can stop cooking.","reveals":["R-kitchen"],"quality":"essential"},{"id":"q-reject","text":"What happens to a rejected order, and can a customer reorder?","answer":"Rejected is final and free. The customer simply places a new order, which gets a new id.","reveals":[],"quality":"useful"},{"id":"q-thread","text":"Does it need to be thread safe?","answer":"Not for the tests, which are single-threaded. Say what you would do: every transition is a read-check-write on one order, so lock per order for the lifecycle and one lock for the courier queue (or a single dispatcher thread for assignment).","reveals":[],"quality":"useful"},{"id":"q-eta","text":"Should assignment consider distance, ETA or courier ratings?","answer":"Not now. Say how it would plug in: the rule that picks a courier from the free ones is the part that changes, and it should be replaceable without touching the order lifecycle.","reveals":[],"quality":"useful"},{"id":"q-pay","text":"Do I model payment, refunds, tips or ratings?","answer":"No. The cancellation fee is a number the order system reports; charging it is another system's job.","reveals":[],"quality":"noise"},{"id":"q-db","text":"Which database should I use?","answer":"None here: it is an in-memory component and the tests build it from scratch. How you would persist it is a good discussion for the end.","reveals":[],"quality":"noise"},{"id":"q-map","text":"Do I need a map, addresses or delivery zones?","answer":"No. Geography is another component; this one decides what an order costs and who may move it.","reveals":[],"quality":"noise"}],"rubric":[{"id":"res-facade","text":"Exposes the public operations and sequences the collaborators; it holds no rule about prices, fees or legal moves","phase":"base","owners":["FoodImpl","FoodService","FoodSystem","OrderService","FoodFacade"]},{"id":"res-menu","text":"Knows what each restaurant sells and for how much","phase":"base","owners":["Menu","MenuBook","Catalog","Restaurants","RestaurantCatalog"]},{"id":"res-desk","text":"Validates a request in the documented order, prices it and records the new order","phase":"base","owners":["OrderDesk","Checkout","OrderFactory","OrderPlacer","OrderService"]},{"id":"res-lifecycle","text":"Owns the order state machine: which moves are legal, written once, and the single place where a state changes","phase":"base","owners":["OrderBook","OrderLifecycle","OrderStateMachine","OrderRepository","Orders"]},{"id":"res-observer","text":"Announces every change of state to subscribed listeners (Observer), in subscription order","phase":"base","owners":["OrderBook","TransitionFeed","EventPublisher","OrderEvents","Notifier"]},{"id":"res-couriers","text":"Knows which couriers are free and queues ready orders that have none, oldest first","phase":"base","owners":["CourierPool","Dispatcher","CourierDispatcher","Couriers","DispatchQueue"]},{"id":"res-fee","text":"Decides what a cancellation costs for the stage the order has reached, behind an interface","phase":"base","owners":["CancellationFee","CancelPolicy","FeePolicy","CancellationPolicy","StageFee"]},{"id":"res-promo","text":"Decides what a code takes off the food and whether it applies","phase":"storm1","owners":["PromoBook","Discount","PromoRule","PromoCatalog","Promotions"]},{"id":"res-kitchen","text":"Counts what each kitchen is cooking and says whether it has a place free","phase":"storm2","owners":["KitchenLoad","KitchenCapacity","Kitchens","KitchenTracker","Capacity"]}],"followups":[{"level":"SDE2","question":"Draw the order's state machine. Where in your code is it written down, and what would adding a Preparing stage touch?","answer":"Placed to Accepted, Rejected or Cancelled; Accepted to Ready or Cancelled; Ready to PickedUp or Cancelled; PickedUp to Delivered. In the reference it is one table, `OrderLifecycle::allows`, and every operation asks it through `OrderBook::check`. A new stage is one table edit, one enum value and the tests that walk every illegal step. The weak shape is an `if` chain in each operation: each then has its own idea of what is legal, and the ideas drift."},{"level":"SDE2","question":"Why does `OrderBook::move` exist as the only place that changes a state?","answer":"Because the listeners are called there. If any operation assigned `order.state = ...` itself, one path (usually cancel or reject, which are written last) would forget to notify, and the live map would show an order that is gone. A single funnel makes 'every change is announced' true by construction, and it is also where a later audit log or metric would go."},{"level":"Senior","question":"Cancellation costs depend on the stage today. Product wants the fee to depend on how long the courier waited. What changes?","answer":"One class: another `CancellationFee`. The strategy is asked with the state and the food today; the honest change is that it also needs the time (an injected clock or the timestamps on the order), which widens one signature. Nothing in the lifecycle, the courier pool or the observer moves. The weak design has the percentages inside `cancel`, and then the rule is also copied wherever a refund is shown to the customer."},{"level":"Senior","question":"A ready order waits for a courier. Why oldest by order id, and why is that a queue owned by the courier pool and not a flag on the order?","answer":"The order id is a stable, unique age; 'first to become ready' is a different order, and the tests pin which one the contract means. The queue belongs to the pool because the questions it answers are about couriers (who is free, who takes the next one) and they are asked from three places: registration, delivery and cancellation. If the order held a 'waiting' flag, each of those paths would have to scan every order. The pool records the assignment on the order but never changes its state, so the lifecycle stays ignorant of dispatch."},{"level":"Senior","question":"Promo codes arrive. Where does the discount live, and what does it do to the cancellation fee?","answer":"In a `Discount` Strategy behind a `PromoBook`; the order desk applies it to the food before the delivery fee is added, and stores the DISCOUNTED food on the order. The fee strategy then charges on what the customer would actually have paid the restaurant: charging 25 percent of the undiscounted price would make a customer pay more than the food cost them. The decision to keep both numbers on the order (food, total) is what makes that a non-event."},{"level":"Senior","question":"Kitchen capacity: why is it an Observer of the order book and not a counter incremented in `accept` and decremented in `ready`?","answer":"Because an order stops cooking in more than one way: ready, and a cancel while it is Accepted. A counter maintained by the operations is right until somebody adds a new exit (a timeout, a restaurant-side cancel) and forgets it, and then the kitchen shows full forever. Listening to transitions means the count is a function of the state changes, so every exit is counted once, including exits written later. The cost is a listener that must see events in order, which the book guarantees."},{"level":"Senior","question":"Many requests arrive at once. What breaks and what would you lock?","answer":"Every transition is a read-check-write on one order, so lock per order. The courier pool has cross-order invariants (one courier, one order; the queue), so it needs its own lock, always taken after an order's lock, never the other way round. The kitchen count is read in `accept` and updated by the transition: check and move must be one critical section per restaurant, or two accepts both see one place left. Listeners must not run while holding those locks (queue the events and publish after), or a slow subscriber stalls the kitchen."},{"level":"Staff","question":"Design this for ten million orders a day across many cities, with notifications, analytics and a live map as subscribers.","answer":"Shard the order lifecycle by order id (or city), single writer per order, every transition an idempotent, versioned compare-and-set write that appends an event to a durable log. The listeners become consumers of that log: the map, notifications and analytics read at their own pace, and a slow one never blocks the kitchen. Dispatch is its own service with a per-city queue and a matching rule that can use distance and ETA; it proposes an assignment and the order service accepts it with a conditional write, so a courier cannot be given two orders. Kitchen capacity becomes a counter in the restaurant's shard, updated in the same transaction as the accept. The price of the split is that 'accepted' and 'courier assigned' are now eventually consistent, so the UI shows what the log says and the saga needs compensations (release the courier, refund the fee)."},{"level":"Staff","question":"Which parts of this component would you split into separate services first, and which must stay together?","answer":"Pricing and promos first: a pure function of menu, lines and rules, changed weekly for business reasons, and called by a quote screen without creating an order. Dispatch next: different scale and failure profile, and it benefits from geo indexes the order service has no business knowing. The order lifecycle and kitchen capacity stay together as one strongly consistent unit per restaurant or order, because 'accept only if a place is free' is an invariant that crosses both. Splitting that pair would turn a local check into a distributed one for no gain."}],"apiHeader":"$15","phaseApis":{"storm1":"$16","storm2":"#pragma once\n// Change Storm 2 limits what a kitchen can cook at once. Everything from api.h and api_storm1.h still holds.\n#include \"api_storm1.h\"\n\nnamespace food {\n\n// Every restaurant has `slots` cooking places (a value below 1 counts as 1). An order occupies one from the moment it is Accepted\n// until it leaves Accepted (it becomes Ready, or the customer cancels it). accept() on a restaurant whose places are\n// all taken is KitchenFull and changes nothing: the order stays Placed and can be accepted later. The checks of\n// accept() are UnknownOrder, WrongParty, InvalidState, then KitchenFull. Promo codes work as in Storm 1.\nstd::unique_ptr<PromoFood> makeBusyKitchens(const std::vector<Promo>& promos, int slots);\n\n}  // namespace food\n"},"phases":["base","storm1","storm2"],"tests":{"base":[{"path":"food_base.cpp","content":"$17"}],"storm1":[{"path":"food_storm1.cpp","content":"$18"}],"storm2":[{"path":"food_storm2.cpp","content":"$19"}]},"reference":[{"path":"courier_pool.h","content":"$1a"},{"path":"fees.h","content":"#pragma once\n#include \"order_book.h\"\n\nconstexpr int kPercentDenominator = 100;\n\n// What a customer owes for cancelling, by the stage the order has reached. A Strategy: the rule is the part that\n// changes with the business, and the lifecycle never looks inside it.\nclass CancellationFee {\n public:\n  virtual ~CancellationFee() = default;\n  virtual food::Money feeFor(food::OrderState state, food::Money cost) const = 0;\n};\n\nclass StageFee : public CancellationFee {\n public:\n  food::Money feeFor(food::OrderState state, food::Money cost) const override {\n    switch (state) {\n      case food::OrderState::Accepted: return cost * food::kCookingFeePercent / kPercentDenominator;\n      case food::OrderState::Ready: return cost;\n      default: return 0;\n    }\n  }\n};\n"},{"path":"food_impl.h","content":"$1b"},{"path":"kitchen_load.h","content":"$1c"},{"path":"menu.h","content":"$1d"},{"path":"order_book.h","content":"$1e"},{"path":"order_desk.h","content":"$1f"},{"path":"promos.h","content":"$20"},{"path":"service.cpp","content":"#include \"food_impl.h\"\n\nstd::unique_ptr<food::Food> food::makeFood() {\n  return std::make_unique<FoodImpl>(PromoBook(), KitchenLoad::kUnlimited, std::make_unique<StageFee>());\n}\n\nstd::unique_ptr<food::PromoFood> food::makePromoFood(const std::vector<food::Promo>& promos) {\n  return std::make_unique<FoodImpl>(PromoBook(promos), KitchenLoad::kUnlimited, std::make_unique<StageFee>());\n}\n\nstd::unique_ptr<food::PromoFood> food::makeBusyKitchens(const std::vector<food::Promo>& promos, int slots) {\n  return std::make_unique<FoodImpl>(PromoBook(promos), slots < 1 ? 1 : slots, std::make_unique<StageFee>());\n}\n"}],"driver":{"path":"driver.cpp","content":"#define BP_TEST_MAIN\n#include \"bp_test.h\"\n","readOnly":true}}}],["$L21","$L22"],"$L23"]}],"p":"$@24","v":null,"s":"$9"}}]]
+d:[["children",{"s":{"n":"id","t":"d","k":"food-delivery","s":[]},"h":65632,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}]}]]}],"p":"$@e","v":"$c","s":"$9"},"c":"$Qf"}]]
+a:[["children",{"s":"workshop","h":131168,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}]}]]}],"p":"$@b","v":"$c","s":"$9"},"c":"$Qd"}]]
+0:{"t":{"t":{"s":"","h":131152,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/1klm1scec-3x5.css","precedence":"next"}],["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js","async":true}]],["$","html",null,{"lang":"en","className":"r7opxW_variable auY9QW_variable u-EJdW_variable h-full","children":["$","body",null,{"className":"min-h-full","children":[["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}],"notFound":[["$","main",null,{"className":"flex min-h-dvh flex-col items-center justify-center gap-4 px-4 text-center","children":[["$","div",null,{"className":"font-display text-5xl text-[var(--accent)]","children":"404"}],["$","p",null,{"className":"text-white/60","children":"This room is not on the blueprint yet."}],["$","$L6",null,{"href":"/","className":"text-sm text-white/80 underline","children":"Back to the title screen"}]]}],[]]}],["$","$L7",null,{}]]}]}]]}],"p":"$@8","v":null,"s":"$9"},"c":"$Qa"},"h":{"r":["$","$1","h",{"children":[null,["$","$L26",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1, viewport-fit=cover"}],["$","meta","2",{"name":"theme-color","content":"#0a1530"}]]}],["$","$L28",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$29",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"Food delivery: Blueprint Clash"}],["$","meta","1",{"name":"description","content":"A creature-tactics RPG that teaches low-level design in C++ and high-level system design, from fundamentals to big-tech interview level."}],["$","link","2",{"rel":"manifest","href":"/blueprint-clash/manifest.webmanifest"}],["$","meta","3",{"name":"mobile-web-app-capable","content":"yes"}],["$","meta","4",{"name":"apple-mobile-web-app-title","content":"Blueprint Clash"}],["$","meta","5",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","link","6",{"rel":"icon","href":"/blueprint-clash/icon.png?icon.27re_xscs-jmw.png","sizes":"256x256","type":"image/png"}],["$","link","7",{"rel":"apple-touch-icon","href":"/blueprint-clash/apple-icon.png?apple-icon.2rac1w0yc3rju.png","sizes":"180x180","type":"image/png"}],["$","$L2a","8",{}]]}]}],null]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"p":"$@2b","v":null,"s":"$9"}},"a":"$@2c","u":"$@2d","b":"2AOMJw3uqOQQQZHGX3CKn"}
+2e:I[97367,["$2"],"OutletBoundary"]
+21:["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/2uk3wcjwqg0tl.js","async":true}]
+22:["$","script","script-1",{"src":"/blueprint-clash/_next/static/chunks/1zdu7yjl8efu4.js","async":true}]
+23:["$","$L2e",null,{"children":["$","$29",null,{"name":"Next.MetadataOutlet","children":"$@2f"}]}]
+9:300
+2f:null
+2d:true
+9:C
+2c:0
+e:"$undefined"
+b:"$undefined"
+8:"$undefined"
+2b:"$undefined"
+24:"$undefined"

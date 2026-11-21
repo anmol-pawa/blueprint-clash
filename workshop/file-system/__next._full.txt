@@ -1,0 +1,1484 @@
+1:"$Sreact.fragment"
+2:"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js"
+3:I[39756,["$2"],"default"]
+4:I[37457,["$2"],"default"]
+5:"/blueprint-clash/_next/static/chunks/2n5qeheznvl4u.js"
+6:I[22016,["$2","$5"],""]
+7:I[64576,["$2"],"PwaRegister"]
+d:I[97367,["$2"],"OutletBoundary"]
+e:"$Sreact.suspense"
+10:"ViewportBoundary"
+11:I[97367,["$2"],"$10"]
+13:"MetadataBoundary"
+14:I[97367,["$2"],"$13"]
+16:I[68027,["$2"],"default",1]
+:HL["/blueprint-clash/_next/static/chunks/1klm1scec-3x5.css","style"]
+:HL["/blueprint-clash/_next/static/media/07c7676b89ed2778-s.p.2bn3s6zvc0dyp.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/blueprint-clash/_next/static/media/486a103cae33528f-s.p.309ilb452anpd.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/blueprint-clash/_next/static/media/53897e768d329f66-s.p.3t6q91iet4nsy.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+9:X
+b:[["children",{"s":"__PAGE__","h":512,"d":{"r":["$","$1","c",{"children":["$Lc",[["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/2uk3wcjwqg0tl.js","async":true,"nonce":"$undefined"}],["$","script","script-1",{"src":"/blueprint-clash/_next/static/chunks/1zdu7yjl8efu4.js","async":true,"nonce":"$undefined"}]],["$","$Ld",null,{"children":["$","$e",null,{"name":"Next.MetadataOutlet","children":"$@f"}]}]]}],"p":false,"v":null}}]]
+a:[["children",{"s":{"n":"id","t":"d","k":"file-system","s":[]},"h":66048,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],"p":false,"v":"$9"},"c":"$Qb"}]]
+8:[["children",{"s":"workshop","h":131584,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],"p":false,"v":"$9"},"c":"$Qa"}]]
+0:{"P":null,"c":["","workshop","file-system",""],"q":"","i":false,"t":{"t":{"s":"","h":131600,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/1klm1scec-3x5.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}],["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js","async":true,"nonce":"$undefined"}]],["$","html",null,{"lang":"en","className":"r7opxW_variable auY9QW_variable u-EJdW_variable h-full","children":["$","body",null,{"className":"min-h-full","children":[["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","main",null,{"className":"flex min-h-dvh flex-col items-center justify-center gap-4 px-4 text-center","children":[["$","div",null,{"className":"font-display text-5xl text-[var(--accent)]","children":"404"}],["$","p",null,{"className":"text-white/60","children":"This room is not on the blueprint yet."}],["$","$L6",null,{"href":"/","className":"text-sm text-white/80 underline","children":"Back to the title screen"}]]}],[]],"forbidden":"$undefined","unauthorized":"$undefined"}],["$","$L7",null,{}]]}]}]]}],"p":false,"v":null},"c":"$Q8"},"h":{"r":["$","$1","h",{"children":[null,["$","$L11",null,{"children":"$L12"}],["$","$L14",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$e",null,{"name":"Next.Metadata","children":"$L15"}]}],null]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"p":false,"v":null}},"m":"$undefined","G":["$16",[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/1klm1scec-3x5.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]]],"S":true,"r":"$undefined","s":"$undefined","a":"$undefined","l":"$undefined","p":"$undefined","d":"$undefined","b":"2AOMJw3uqOQQQZHGX3CKn"}
+9:C
+12:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1, viewport-fit=cover"}],["$","meta","2",{"name":"theme-color","content":"#0a1530"}]]
+17:I[27201,["$2"],"IconMark"]
+f:null
+15:[["$","title","0",{"children":"In-memory file system: Blueprint Clash"}],["$","meta","1",{"name":"description","content":"A creature-tactics RPG that teaches low-level design in C++ and high-level system design, from fundamentals to big-tech interview level."}],["$","link","2",{"rel":"manifest","href":"/blueprint-clash/manifest.webmanifest","crossOrigin":"$undefined"}],["$","meta","3",{"name":"mobile-web-app-capable","content":"yes"}],["$","meta","4",{"name":"apple-mobile-web-app-title","content":"Blueprint Clash"}],["$","meta","5",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","link","6",{"rel":"icon","href":"/blueprint-clash/icon.png?icon.27re_xscs-jmw.png","sizes":"256x256","type":"image/png"}],["$","link","7",{"rel":"apple-touch-icon","href":"/blueprint-clash/apple-icon.png?apple-icon.2rac1w0yc3rju.png","sizes":"180x180","type":"image/png"}],["$","$L17","8",{}]]
+18:"/blueprint-clash/_next/static/chunks/2uk3wcjwqg0tl.js"
+19:"/blueprint-clash/_next/static/chunks/1zdu7yjl8efu4.js"
+1a:I[65612,["$2","$18","$19"],"WorkshopClient"]
+1b:T4b4,# In-memory file system
+
+You are building the storage core of a small operating-system simulator: a tree of directories and files held entirely in memory. Programs create directories, write and read files, list a directory, delete things and move them around, and they give you paths as strings. They are not careful with those strings, and they are not forgiving when a "simple" call corrupts the tree.
+
+What you know so far:
+
+- There is one root directory, "/". Everything lives below it.
+- A directory holds named entries; each entry is a file with content or another directory.
+- Callers refer to entries by absolute path: "/home/ada/notes.txt".
+- Calls report what went wrong instead of crashing: a missing parent, a name that is already taken, a file where a directory was expected.
+
+Your task: design and implement it behind the `fs::FileSystem` interface in `api.h`. The hidden tests call only that interface. Ask the interviewer questions first: the brief is deliberately incomplete, and "what exactly is a path, and which error wins when several apply?" is where first drafts go wrong. Expect a request to search by name pattern, and then a request for symbolic links, after you have finished.
+1c:T1ef9,# Editorial: In-memory file system
+
+## Requirements
+Functional: one tree under the root "/"; mkdir, write, read, remove, list, size, kind and move on absolute paths; every call reports a status instead of crashing; searching by name pattern; symbolic links.
+
+Hidden in the brief and revealed by good questions: paths are textual (`.`, `..`, repeated and trailing slashes, a 32-character name limit that applies even to parts `..` removes, and `..` at the root staying at the root); invalid paths are reported before any lookup; a lookup goes from the root down, so a missing directory is NotFound and a file on the way is NotADirectory; mkdir needs its parent; write replaces the whole content; remove takes a file or an empty directory; list replaces the caller's vector with sorted direct children; the size of a directory is everything below it; move never overwrites, carries a whole subtree, refuses to move into itself and has a written check order; failed calls change nothing and leave outputs alone.
+
+**Change Storm 1, search:** `find(dir, pattern)` matches names (not paths) with `*` and `?`, over every level, directories included, results depth-first with a directory before its content.
+
+**Change Storm 2, symbolic links:** a link is an entry that holds a path. Links in the middle of a path are always followed; a final link is followed by read, write, list, size and find and not by kind, readLink, remove, move, mkdir and symlink. Writing through a dangling link creates its target, `..` is applied to the text before links, eight hops are allowed and the ninth is LinkLoop, directory sizes skip links, find does not descend through them, and a move into itself through a link is refused.
+
+## Reference design
+- `FileSystemImpl` is the facade. Each call is a few lines: ask the resolver where the path leads, check the kind, change the tree, return a status. It parses no strings itself.
+- `Path` is a value: the normalised names from the root. It is the only code that knows about slashes, dots and the name limit, so every other class works with names.
+- `Node` is the Composite: `File`, `Directory` and `Link` answer `kind()` and `bytes()`, and a directory's `bytes()` is the sum of its children's. Safe downcast methods (`asDirectory`, `asFile`, `asLink`) replace `dynamic_cast` and type tags.
+- `Resolver` is the one place that walks a path. It returns a `Located` result: the directory that holds the entry, the name, and the entry (null when it is not there yet), or a status. A `Follow` flag says whether a link in the last part is followed. Everything that makes a failed lookup NotFound or NotADirectory lives here.
+- `Glob` matches one name against a pattern in linear time (remember the last star, retry with one more character swallowed). `Finder` walks the tree depth-first over sorted children and collects matches.
+- `Link` is a node that holds a `Path`. It counts as 0 bytes. The resolver replaces a followed link by its target and counts hops.
+
+**Storm 1 in the reference:** `Glob`, `Finder` and one method on the facade. No node class changes: the walker uses the directory's children and the safe downcast.
+
+**Storm 2 in the reference:** `Link` (a new node), a branch and a counter in `Resolver::locate`, two facade methods (`symlink`, `readLink`), and `Directory::holds` for the move check. File and Directory are untouched because lookups already went through one class. The other calls pick `Follow::Last` or `Follow::NotLast` and nothing more.
+
+## Alternatives
+- **Visitor over the node family.** `accept(Visitor&)` on every node and one visitor per walk (size, find, du). Clean when walks multiply and node kinds are stable, and each new node kind means touching every visitor. Safe downcasts in a walker are lighter for two walks; at five or six, a Visitor wins.
+- **Virtual `find` and `size` on `Node`.** Each node recurses itself. Natural for `size` (the reference does it), and a poor fit for every new traversal because File, Directory and Link all change.
+- **A flat map from path string to entry.** Trivial lookup (this is also the test's model) and wrong for `list`, `move` of a directory (every key below it is rewritten) and `size` (a scan). Fine for a key-value store, not for a tree.
+- **Parent pointers in every node.** Makes `..` physical and the `holds` check trivial, at the cost of keeping two links in sync on every move. The reference keeps ownership one-directional (unique_ptr down) and walks from the root.
+- **One lookup written into each call.** Eleven copies of the path walk; when links arrive each must learn the link rule and the hop count, and they will not agree. A single `Resolver` is the whole change.
+- **Lazy path strings: store each node's full path.** Every move rewrites a subtree's paths. Avoid.
+- **A cached size on every directory.** O(1) `size`, but every write, remove and move must update all ancestors, and links make the cache wrong. Recompute until measurements say otherwise.
+
+## Trade-offs
+Reporting a status for every case, rather than throwing, makes callers deal with failure at each call, and it makes the interface testable down to the order of checks. The cost is a long contract: which error wins when several apply is part of the interface and is written down.
+
+Applying `..` to the text is simple, needs no parent pointers and is easy to test. A real kernel applies `..` to the directory it has actually reached, which differs after a link; the simplification is deliberate and stated, and the follow-up on it is a standard senior question.
+
+Following links in the resolver makes every operation correct by construction, and it puts a rule (hops, last-part following) in a place that every call depends on. The alternative, a flag per call, is what the code does: the call states whether the last part is followed and the resolver does the rest.
+
+`map<string, unique_ptr<Node>>` gives sorted `list` and `find` for free and costs O(log n) per lookup and a node-per-entry memory layout. A `vector` of sorted pairs is smaller and slower to insert; a hash map is faster and then sorts on `list`.
+
+## What breaks at 10x
+A directory with a million entries makes `list` copy a million names and `find` walk everything. Page `list` with a cursor, index names (a trie or a sorted structure) and give `find` a way to stop early; memory per entry (a map node, a node object, a string) becomes the cost to measure. Deep trees make the recursive `bytes()` and `find` a stack hazard at depth in the tens of thousands: iterate with an explicit stack. Concurrent callers need a lock: one reader-writer lock first, then a lock per directory taken hand over hand, where `move` needs a global lock order and a descendant check under the lock, otherwise two moves can make a cycle. Large files want chunked storage and copy-on-write snapshots; links across mounts and relative links add path rules the hop counter does not cover. Crash safety needs a journal of the mutations, which is a Command log like the text editor's history.
+
+## Level signals
+- **SDE2:** a directory tree that works for the common calls; normalises paths, returns the right error for a missing parent and a taken name, sorts `list`, refuses a non-empty `remove`, never overwrites in `move`.
+- **Senior:** separates path text from the tree (a `Path`), uses a Composite so `size` is a recursion over objects, centralises the walk in one resolver, states and tests the order of checks, refuses a move into itself, adds the search as a walker without editing the nodes, and adds links as a new node plus one rule in the resolver; compares with a flat-map model in a randomised test.
+- **Staff:** talks about physical versus textual `..`, hop limits and loop detection, locking order for moves, cached sizes and when they pay, journals and snapshots, per-mount trees, and what to measure (entries per directory, depth, memory per entry, lookup latency) before changing the layout.
+1d:Tf12,#pragma once
+// Public API for the In-memory file system problem. The hidden tests only use what is declared here.
+// You implement fs::makeFileSystem() (in any of your .cpp files); everything behind it is your design.
+#include <cstddef>
+#include <memory>
+#include <string>
+#include <vector>
+
+namespace fs {
+
+constexpr std::size_t kMaxNameLength = 32;  // longest allowed name, in characters
+
+enum class Status {
+  Ok,
+  NotFound,       // the entry, or a directory on the way to it, does not exist
+  AlreadyExists,  // the name is taken (by a file, a directory, or later a link)
+  NotADirectory,  // a name on the way, or the one being listed, is not a directory
+  IsADirectory,   // a file operation was aimed at a directory
+  InvalidPath,    // malformed path, over-long name, or an operation that makes no sense (see each call)
+  NotEmpty,       // remove() of a directory that still has entries
+  LinkLoop,       // returned only by file systems with links (api_storm2.h); the base file system never does
+  NotALink,       // returned only by file systems with links (api_storm2.h); the base file system never does
+};
+
+enum class Kind { File, Directory, Link };  // Link appears only in file systems with links (api_storm2.h)
+
+// One tree of directories and files, starting from the root directory "/". Paths are absolute strings.
+//
+// PATHS. A path must start with '/'. It is split on '/'; empty parts and "." are ignored; ".." removes the part before
+// it, and at the root it does nothing ("/.." is "/"). This is purely textual. A trailing '/' is fine. Every part, even
+// one that ".." later removes, must be at most kMaxNameLength characters. Anything else wrong (empty string, no leading
+// '/', over-long part) is InvalidPath, and that is checked before anything is looked up.
+//
+// Every call that returns Status leaves its output arguments and the file system unchanged unless it returns Ok.
+// Looking an entry up is checked from the root down: a missing directory on the way is NotFound, a file on the way is
+// NotADirectory; the entry itself is then looked at.
+class FileSystem {
+ public:
+  virtual ~FileSystem() = default;
+
+  // Creates one directory; its parent must exist. Taken name (including "/") is AlreadyExists.
+  virtual Status mkdir(const std::string& path) = 0;
+
+  // Creates the file or replaces the whole content of the existing one. The parent must exist. A directory at `path`
+  // (including "/") is IsADirectory.
+  virtual Status write(const std::string& path, const std::string& content) = 0;
+
+  // Copies a file's content into `out`. A directory is IsADirectory.
+  virtual Status read(const std::string& path, std::string& out) const = 0;
+
+  // Removes a file or an EMPTY directory (NotEmpty otherwise). "/" is InvalidPath.
+  virtual Status remove(const std::string& path) = 0;
+
+  // Replaces `names` with the names (not paths) of the entries directly inside a directory, sorted ascending.
+  virtual Status list(const std::string& path, std::vector<std::string>& names) const = 0;
+
+  // A file's length in bytes; a directory's is the total length of every file anywhere below it (0 when empty).
+  virtual Status size(const std::string& path, std::size_t& bytes) const = 0;
+
+  // What the entry is.
+  virtual Status kind(const std::string& path, Kind& out) const = 0;
+
+  // Moves a file or a whole directory (with everything below it) to a new path, which is also its new name.
+  // Checked in this order: both paths valid; `from` is "/" or `to` lies strictly inside `from` (InvalidPath: a
+  // directory cannot move into itself); `from` exists; `to`'s parent exists and is a directory; `to` is free
+  // (AlreadyExists, even for "to the same path"). Nothing is overwritten.
+  virtual Status move(const std::string& from, const std::string& to) = 0;
+};
+
+std::unique_ptr<FileSystem> makeFileSystem();
+
+}  // namespace fs
+1e:T4f9,#pragma once
+// Change Storm 1 adds searching by name pattern. Everything from api.h still holds.
+#include "api.h"
+
+namespace fs {
+
+class SearchableFileSystem : public FileSystem {
+ public:
+  // Finds entries below the directory `dir` whose NAME (the last part, not the whole path) matches `pattern`.
+  // The pattern is matched against the whole name, case-sensitively: '*' matches any run of characters (including
+  // none), '?' matches exactly one character, every other character matches itself.
+  // Every level below `dir` is searched, and directories can match as well as files; `dir` itself is never a result.
+  // Results are full paths (`dir` normalised, then '/', then the names down to the match), in depth-first order: a
+  // directory is listed before what is inside it, and the entries of one directory come in ascending name order.
+  // An empty pattern or one containing '/' is InvalidPath (checked after `dir` is parsed). Then like any lookup.
+  // `found` is replaced when the call returns Ok. A search with no match is Ok with an empty result.
+  virtual Status find(const std::string& dir, const std::string& pattern, std::vector<std::string>& found) const = 0;
+};
+
+std::unique_ptr<SearchableFileSystem> makeSearchableFileSystem();
+
+}  // namespace fs
+1f:T8bf,#pragma once
+// Change Storm 2 adds symbolic links. Everything from api.h and api_storm1.h still holds.
+#include "api_storm1.h"
+
+namespace fs {
+
+constexpr int kMaxLinkHops = 8;  // most links one path lookup may follow
+
+// A symbolic link is an entry (Kind::Link) that holds an absolute path, its target, and stands in for it.
+// The target may not exist (a "dangling" link).
+class LinkingFileSystem : public SearchableFileSystem {
+ public:
+  // Creates a link at `linkPath` to `target`. Both are parsed first (InvalidPath); the target is stored normalised.
+  // Then like mkdir: the parent of `linkPath` must exist; a taken name, even one that is itself a link, is AlreadyExists.
+  virtual Status symlink(const std::string& target, const std::string& linkPath) = 0;
+
+  // Copies the stored (normalised) target of the link at `path` into `target`. Not a link: NotALink.
+  virtual Status readLink(const std::string& path, std::string& target) const = 0;
+};
+
+// FOLLOWING. A path is first normalised as in api.h (so ".." is applied to the text, before any link is looked at).
+// While looking an entry up:
+//  - a link met in the MIDDLE of the path (not its last part) is always followed: its target replaces the parts so
+//    far, the remaining parts are appended, and the walk continues from the root;
+//  - a link that is the LAST part is followed by read, write, list, size and find (the directory to search), and is
+//    NOT followed by kind, readLink, remove, move (either path), mkdir and symlink: these act on the link itself.
+//  - write() through a link whose target does not exist creates a file there, if the target's parent directory exists.
+//    read(), list(), size() and find() through a dangling link are NotFound.
+// Every link followed during one lookup counts as a hop; the (kMaxLinkHops + 1)th is LinkLoop. A chain of exactly
+// kMaxLinkHops links still resolves.
+// size() of a directory does not follow links inside it (a link counts as 0 bytes); find() reports links by name but
+// never descends through them. move() refuses (InvalidPath) a destination that lies inside the moved directory even
+// when it gets there through a link.
+std::unique_ptr<LinkingFileSystem> makeLinkingFileSystem();
+
+}  // namespace fs
+20:T3dff,#include <map>
+#include <memory>
+#include <set>
+#include <string>
+#include <vector>
+
+#include "api.h"
+#include "bp_test.h"
+
+namespace {
+using fs::Kind;
+using fs::Status;
+using Sz = std::size_t;
+
+#define IS(call, expected) EXPECT_TRUE((call) == Status::expected)
+
+std::string join(const std::vector<std::string>& v) {
+  std::string out;
+  for (const auto& s : v) out += (out.empty() ? "" : ",") + s;
+  return out;
+}
+
+struct Fixture {
+  std::unique_ptr<fs::FileSystem> fs = fs::makeFileSystem();
+  std::string read(const std::string& path) {
+    std::string out = "<unread>";
+    fs->read(path, out);
+    return out;
+  }
+  std::string ls(const std::string& path) {
+    std::vector<std::string> names{"<unlisted>"};
+    if (fs->list(path, names) != Status::Ok) return "<error>";
+    return join(names);
+  }
+  Sz size(const std::string& path) {
+    Sz n = 999999;
+    fs->size(path, n);
+    return n;
+  }
+  bool isDir(const std::string& path) {
+    Kind k = Kind::File;
+    return fs->kind(path, k) == Status::Ok && k == Kind::Directory;
+  }
+  bool isFile(const std::string& path) {
+    Kind k = Kind::Directory;
+    return fs->kind(path, k) == Status::Ok && k == Kind::File;
+  }
+  bool missing(const std::string& path) {
+    Kind k;
+    return fs->kind(path, k) == Status::NotFound;
+  }
+};
+}  // namespace
+
+TEST(Path, MustBeAbsoluteAndNonEmpty) {
+  Fixture f;
+  IS(f.fs->mkdir("a"), InvalidPath);
+  IS(f.fs->mkdir(""), InvalidPath);
+  IS(f.fs->write("a.txt", "x"), InvalidPath);
+  std::string out = "keep";
+  IS(f.fs->read("", out), InvalidPath);
+  EXPECT_EQ(out, std::string("keep"));
+  IS(f.fs->remove("a"), InvalidPath);
+  IS(f.fs->move("/", "x"), InvalidPath);
+  EXPECT_EQ(f.ls("/"), std::string(""));
+}
+
+TEST(Path, RepeatedSlashesDotsAndTrailingSlashAreIgnored) {
+  Fixture f;
+  IS(f.fs->mkdir("//a/"), Ok);
+  IS(f.fs->mkdir("/a/./b/"), Ok);
+  IS(f.fs->write("/a//b/./f.txt", "hi"), Ok);
+  EXPECT_EQ(f.read("/a/b/f.txt"), std::string("hi"));
+  EXPECT_EQ(f.read("/a/b/f.txt/"), std::string("hi"));
+  EXPECT_TRUE(f.isDir("/a/b/."));
+  EXPECT_EQ(f.ls("/"), std::string("a"));
+}
+
+TEST(Path, DotDotGoesUpAndStopsAtTheRoot) {
+  Fixture f;
+  IS(f.fs->mkdir("/a"), Ok);
+  IS(f.fs->mkdir("/a/b"), Ok);
+  IS(f.fs->write("/a/b/../f.txt", "up"), Ok);
+  EXPECT_EQ(f.read("/a/f.txt"), std::string("up"));
+  IS(f.fs->mkdir("/../../c"), Ok);
+  EXPECT_TRUE(f.isDir("/c"));
+  EXPECT_TRUE(f.isDir("/.."));
+  EXPECT_TRUE(f.isDir("/a/b/../.."));
+  IS(f.fs->mkdir("/a/gone/../d"), Ok);  // textual: "gone" never has to exist
+  EXPECT_TRUE(f.isDir("/a/d"));
+}
+
+TEST(Path, NamesAreLimitedInLengthEvenWhenDotDotRemovesThem) {
+  Fixture f;
+  const std::string ok(fs::kMaxNameLength, 'n');
+  const std::string tooLong(fs::kMaxNameLength + 1, 'n');
+  IS(f.fs->mkdir("/" + ok), Ok);
+  IS(f.fs->mkdir("/" + tooLong), InvalidPath);
+  IS(f.fs->mkdir("/" + tooLong + "/../fine"), InvalidPath);
+  EXPECT_TRUE(f.missing("/fine"));
+  IS(f.fs->write("/" + ok + "/" + tooLong, "x"), InvalidPath);
+  EXPECT_EQ(f.ls("/"), ok);
+}
+
+TEST(Dirs, MkdirNeedsAnExistingDirectoryParentAndAFreeName) {
+  Fixture f;
+  IS(f.fs->mkdir("/a/b"), NotFound);
+  IS(f.fs->mkdir("/a"), Ok);
+  IS(f.fs->mkdir("/a/b"), Ok);
+  IS(f.fs->mkdir("/a"), AlreadyExists);
+  IS(f.fs->mkdir("/"), AlreadyExists);
+  IS(f.fs->write("/f", "x"), Ok);
+  IS(f.fs->mkdir("/f"), AlreadyExists);
+  IS(f.fs->mkdir("/f/x"), NotADirectory);
+  IS(f.fs->mkdir("/nope/deeper/x"), NotFound);
+  EXPECT_EQ(f.ls("/"), std::string("a,f"));
+}
+
+TEST(Files, WriteCreatesThenReplacesTheWholeContent) {
+  Fixture f;
+  IS(f.fs->write("/f", "one"), Ok);
+  EXPECT_EQ(f.read("/f"), std::string("one"));
+  IS(f.fs->write("/f", "2"), Ok);
+  EXPECT_EQ(f.read("/f"), std::string("2"));
+  IS(f.fs->write("/f", ""), Ok);
+  EXPECT_EQ(f.read("/f"), std::string(""));
+  EXPECT_EQ(f.size("/f"), static_cast<Sz>(0));
+  EXPECT_EQ(f.ls("/"), std::string("f"));
+  IS(f.fs->write("/bin", std::string("a\0b", 3)), Ok);
+  EXPECT_EQ(f.size("/bin"), static_cast<Sz>(3));
+}
+
+TEST(Files, WriteErrors) {
+  Fixture f;
+  IS(f.fs->write("/x/f", "1"), NotFound);
+  IS(f.fs->mkdir("/d"), Ok);
+  IS(f.fs->write("/d", "1"), IsADirectory);
+  IS(f.fs->write("/", "1"), IsADirectory);
+  IS(f.fs->write("/f", "1"), Ok);
+  IS(f.fs->write("/f/g", "1"), NotADirectory);
+  EXPECT_TRUE(f.isDir("/d"));
+  EXPECT_EQ(f.read("/f"), std::string("1"));
+}
+
+TEST(Files, ReadErrorsLeaveTheOutputAlone) {
+  Fixture f;
+  std::string out = "keep";
+  IS(f.fs->read("/missing", out), NotFound);
+  IS(f.fs->mkdir("/d"), Ok);
+  IS(f.fs->read("/d", out), IsADirectory);
+  IS(f.fs->read("/", out), IsADirectory);
+  IS(f.fs->write("/f", "x"), Ok);
+  IS(f.fs->read("/f/inside", out), NotADirectory);
+  IS(f.fs->read("/nowhere/f", out), NotFound);
+  EXPECT_EQ(out, std::string("keep"));
+}
+
+TEST(List, GivesSortedNamesOfTheDirectChildrenOnly) {
+  Fixture f;
+  f.fs->mkdir("/b");
+  f.fs->mkdir("/a");
+  f.fs->write("/c", "x");
+  f.fs->write("/a/x", "y");
+  f.fs->mkdir("/a/sub");
+  f.fs->write("/Z", "caps sort first");
+  EXPECT_EQ(f.ls("/"), std::string("Z,a,b,c"));
+  EXPECT_EQ(f.ls("/a"), std::string("sub,x"));
+  EXPECT_EQ(f.ls("/b"), std::string(""));
+  EXPECT_EQ(f.ls("/a/sub/.."), std::string("sub,x"));
+}
+
+TEST(List, ReplacesTheCallersVectorAndFailsCleanly) {
+  Fixture f;
+  f.fs->write("/f", "x");
+  f.fs->mkdir("/d");
+  std::vector<std::string> names{"old1", "old2"};
+  IS(f.fs->list("/d", names), Ok);
+  EXPECT_TRUE(names.empty());
+  names = {"keep"};
+  IS(f.fs->list("/f", names), NotADirectory);
+  IS(f.fs->list("/nope", names), NotFound);
+  EXPECT_EQ(join(names), std::string("keep"));
+}
+
+TEST(Remove, FilesAndEmptyDirectoriesGoAndFullOnesStay) {
+  Fixture f;
+  f.fs->mkdir("/d");
+  f.fs->write("/d/f", "x");
+  IS(f.fs->remove("/d"), NotEmpty);
+  EXPECT_EQ(f.read("/d/f"), std::string("x"));
+  IS(f.fs->remove("/d/f"), Ok);
+  EXPECT_TRUE(f.missing("/d/f"));
+  IS(f.fs->remove("/d"), Ok);
+  EXPECT_TRUE(f.missing("/d"));
+  IS(f.fs->remove("/d"), NotFound);
+  IS(f.fs->remove("/"), InvalidPath);
+  IS(f.fs->remove("/gone/x"), NotFound);
+  f.fs->write("/g", "x");
+  IS(f.fs->remove("/g/x"), NotADirectory);
+}
+
+TEST(Size, FileIsItsLengthAndDirectoryIsEverythingBelow) {
+  Fixture f;
+  f.fs->mkdir("/a");
+  f.fs->mkdir("/a/b");
+  f.fs->mkdir("/empty");
+  f.fs->write("/a/one", "12345");
+  f.fs->write("/a/b/two", "123");
+  f.fs->write("/top", "12");
+  EXPECT_EQ(f.size("/a/one"), static_cast<Sz>(5));
+  EXPECT_EQ(f.size("/a/b"), static_cast<Sz>(3));
+  EXPECT_EQ(f.size("/a"), static_cast<Sz>(8));
+  EXPECT_EQ(f.size("/empty"), static_cast<Sz>(0));
+  EXPECT_EQ(f.size("/"), static_cast<Sz>(10));
+  f.fs->write("/a/b/two", "1");
+  EXPECT_EQ(f.size("/"), static_cast<Sz>(8));
+  f.fs->remove("/a/one");
+  EXPECT_EQ(f.size("/a"), static_cast<Sz>(1));
+  Sz n = 7;
+  IS(f.fs->size("/missing", n), NotFound);
+  EXPECT_EQ(n, static_cast<Sz>(7));
+}
+
+TEST(Kind, SeparatesFilesFromDirectories) {
+  Fixture f;
+  f.fs->mkdir("/d");
+  f.fs->write("/f", "x");
+  EXPECT_TRUE(f.isDir("/"));
+  EXPECT_TRUE(f.isDir("/d"));
+  EXPECT_TRUE(f.isFile("/f"));
+  Kind k = Kind::Link;
+  IS(f.fs->kind("/f/x", k), NotADirectory);
+  IS(f.fs->kind("/nope", k), NotFound);
+  EXPECT_TRUE(k == Kind::Link);
+}
+
+TEST(Move, RenamesAFileKeepingItsContent) {
+  Fixture f;
+  f.fs->write("/a.txt", "data");
+  f.fs->mkdir("/d");
+  IS(f.fs->move("/a.txt", "/d/b.txt"), Ok);
+  EXPECT_TRUE(f.missing("/a.txt"));
+  EXPECT_EQ(f.read("/d/b.txt"), std::string("data"));
+  IS(f.fs->move("/d/b.txt", "/c.txt"), Ok);
+  EXPECT_EQ(f.ls("/"), std::string("c.txt,d"));
+  EXPECT_EQ(f.ls("/d"), std::string(""));
+}
+
+TEST(Move, CarriesAWholeDirectoryAndEverythingBelowIt) {
+  Fixture f;
+  f.fs->mkdir("/src");
+  f.fs->mkdir("/src/lib");
+  f.fs->write("/src/lib/a", "aaa");
+  f.fs->write("/src/b", "bb");
+  f.fs->mkdir("/dst");
+  IS(f.fs->move("/src", "/dst/code"), Ok);
+  EXPECT_TRUE(f.missing("/src"));
+  EXPECT_EQ(f.read("/dst/code/lib/a"), std::string("aaa"));
+  EXPECT_EQ(f.read("/dst/code/b"), std::string("bb"));
+  EXPECT_EQ(f.size("/dst"), static_cast<Sz>(5));
+  IS(f.fs->move("/dst/code/lib", "/lib2"), Ok);
+  EXPECT_EQ(f.ls("/"), std::string("dst,lib2"));
+  EXPECT_EQ(f.size("/"), static_cast<Sz>(5));
+}
+
+TEST(Move, NeverOverwritesAndAFailedMoveChangesNothing) {
+  Fixture f;
+  f.fs->write("/a", "A");
+  f.fs->write("/b", "B");
+  f.fs->mkdir("/d");
+  IS(f.fs->move("/a", "/b"), AlreadyExists);
+  IS(f.fs->move("/a", "/d"), AlreadyExists);
+  IS(f.fs->move("/d", "/a"), AlreadyExists);
+  IS(f.fs->move("/a", "/a"), AlreadyExists);
+  IS(f.fs->move("/a", "/"), AlreadyExists);
+  EXPECT_EQ(f.read("/a"), std::string("A"));
+  EXPECT_EQ(f.read("/b"), std::string("B"));
+  EXPECT_EQ(f.ls("/"), std::string("a,b,d"));
+}
+
+TEST(Move, ADirectoryCannotMoveIntoItselfOrTheRoot) {
+  Fixture f;
+  f.fs->mkdir("/a");
+  f.fs->mkdir("/a/b");
+  f.fs->write("/a/b/f", "x");
+  IS(f.fs->move("/a", "/a/x"), InvalidPath);
+  IS(f.fs->move("/a", "/a/b/c"), InvalidPath);
+  IS(f.fs->move("/a", "/a/nope/deeper/c"), InvalidPath);
+  IS(f.fs->move("/a/b", "/a/b/./c"), InvalidPath);
+  IS(f.fs->move("/", "/x"), InvalidPath);
+  IS(f.fs->move("/a", "/a/b/../b/q"), InvalidPath);
+  EXPECT_EQ(f.read("/a/b/f"), std::string("x"));
+  EXPECT_EQ(f.ls("/a"), std::string("b"));
+}
+
+TEST(Move, ChecksTheSourceBeforeTheDestination) {
+  Fixture f;
+  f.fs->write("/f", "x");
+  IS(f.fs->move("/missing", "/f"), NotFound);
+  IS(f.fs->move("/missing", "/nodir/x"), NotFound);
+  IS(f.fs->move("/f", "/nodir/x"), NotFound);
+  IS(f.fs->move("/f", "/f/x"), InvalidPath);
+  f.fs->write("/g", "y");
+  IS(f.fs->move("/f", "/g/x"), NotADirectory);
+  IS(f.fs->move("/f/x", "/y"), NotADirectory);
+  IS(f.fs->move("relative", "/y"), InvalidPath);
+  IS(f.fs->move("/f", "relative"), InvalidPath);
+  EXPECT_EQ(f.read("/f"), std::string("x"));
+}
+
+// ---- A model-based test: a flat map of full paths is the reference the real tree must agree with. ----
+namespace {
+struct Model {
+  struct Entry {
+    bool dir = true;
+    std::string content;
+  };
+  std::map<std::string, Entry> entries{{"/", Entry{}}};
+
+  static std::string parentOf(const std::string& p) { return p.rfind('/') == 0 ? "/" : p.substr(0, p.rfind('/')); }
+  static std::string nameOf(const std::string& p) { return p.substr(p.rfind('/') + 1); }
+  bool hasBelow(const std::string& p) const {
+    for (const auto& e : entries) if (e.first.size() > p.size() + 1 && e.first.compare(0, p.size() + 1, p + "/") == 0) return true;
+    return false;
+  }
+  // Status of looking the ancestors of p up from the root down; Ok when p's parent is a directory.
+  Status ancestors(const std::string& p) const {
+    std::string at;
+    std::vector<std::string> chain;
+    for (std::size_t i = 1; i < p.size(); ++i) if (p[i] == '/') chain.push_back(p.substr(0, i));
+    for (const auto& a : chain) {
+      auto it = entries.find(a);
+      if (it == entries.end()) return Status::NotFound;
+      if (!it->second.dir) return Status::NotADirectory;
+    }
+    return Status::Ok;
+  }
+  Status mkdir(const std::string& p) {
+    Status s = ancestors(p);
+    if (s != Status::Ok) return s;
+    if (entries.count(p)) return Status::AlreadyExists;
+    entries[p] = Entry{};
+    return Status::Ok;
+  }
+  Status write(const std::string& p, const std::string& c) {
+    Status s = ancestors(p);
+    if (s != Status::Ok) return s;
+    auto it = entries.find(p);
+    if (it != entries.end() && it->second.dir) return Status::IsADirectory;
+    entries[p] = Entry{false, c};
+    return Status::Ok;
+  }
+  Status read(const std::string& p, std::string& out) const {
+    Status s = ancestors(p);
+    if (s != Status::Ok) return s;
+    auto it = entries.find(p);
+    if (it == entries.end()) return Status::NotFound;
+    if (it->second.dir) return Status::IsADirectory;
+    out = it->second.content;
+    return Status::Ok;
+  }
+  Status remove(const std::string& p) {
+    Status s = ancestors(p);
+    if (s != Status::Ok) return s;
+    auto it = entries.find(p);
+    if (it == entries.end()) return Status::NotFound;
+    if (it->second.dir && hasBelow(p)) return Status::NotEmpty;
+    entries.erase(it);
+    return Status::Ok;
+  }
+  Status list(const std::string& p, std::string& out) const {
+    Status s = ancestors(p);
+    if (s != Status::Ok) return s;
+    auto it = entries.find(p);
+    if (it == entries.end()) return Status::NotFound;
+    if (!it->second.dir) return Status::NotADirectory;
+    std::set<std::string> names;
+    for (const auto& e : entries) if (e.first != "/" && parentOf(e.first) == p) names.insert(nameOf(e.first));
+    out.clear();
+    for (const auto& n : names) out += (out.empty() ? "" : ",") + n;
+    return Status::Ok;
+  }
+  Status size(const std::string& p, Sz& out) const {
+    Status s = ancestors(p);
+    if (s != Status::Ok) return s;
+    auto it = entries.find(p);
+    if (it == entries.end()) return Status::NotFound;
+    out = 0;
+    for (const auto& e : entries) {
+      const bool below = p == "/" || e.first == p || (e.first.size() > p.size() + 1 && e.first.compare(0, p.size() + 1, p + "/") == 0);
+      if (below && !e.second.dir) out += e.second.content.size();
+    }
+    return Status::Ok;
+  }
+  Status move(const std::string& a, const std::string& b) {
+    if (b.size() > a.size() + 1 && b.compare(0, a.size() + 1, a + "/") == 0) return Status::InvalidPath;
+    Status s = ancestors(a);
+    if (s != Status::Ok) return s;
+    if (!entries.count(a)) return Status::NotFound;
+    s = ancestors(b);
+    if (s != Status::Ok) return s;
+    if (entries.count(b)) return Status::AlreadyExists;
+    std::map<std::string, Entry> moved;
+    for (auto it = entries.begin(); it != entries.end();) {
+      if (it->first == a || (it->first.size() > a.size() + 1 && it->first.compare(0, a.size() + 1, a + "/") == 0)) {
+        moved[b + it->first.substr(a.size())] = it->second;
+        it = entries.erase(it);
+      } else {
+        ++it;
+      }
+    }
+    for (auto& m : moved) entries[m.first] = m.second;
+    return Status::Ok;
+  }
+};
+}  // namespace
+
+TEST(Model, RandomOperationsAgreeWithAFlatMapModel) {
+  Fixture f;
+  Model model;
+  unsigned long long state = 20240607ULL;
+  auto next = [&](unsigned n) {
+    state = state * 6364136223846793005ULL + 1442695040888963407ULL;
+    return static_cast<unsigned>((state >> 33) % n);
+  };
+  const char* names[] = {"a", "b", "c"};
+  auto randomPath = [&]() {
+    std::string p;
+    const unsigned depth = 1 + next(3);
+    for (unsigned i = 0; i < depth; ++i) p += std::string("/") + names[next(3)];
+    return p;
+  };
+  for (int step = 0; step < 6000; ++step) {
+    const std::string p = randomPath();
+    const unsigned op = next(8);
+    const std::string where = " (step " + std::to_string(step) + ", op " + std::to_string(op) + ", " + p + ")";
+    if (op <= 1) {
+      EXPECT_TRUE(f.fs->mkdir(p) == model.mkdir(p));
+    } else if (op == 2 || op == 3) {
+      const std::string c(next(5), 'x');
+      EXPECT_TRUE(f.fs->write(p, c) == model.write(p, c));
+    } else if (op == 4) {
+      std::string got = "g";
+      std::string want = "w";
+      const Status a = f.fs->read(p, got);
+      const Status b = model.read(p, want);
+      EXPECT_TRUE(a == b);
+      if (a == Status::Ok && b == Status::Ok) EXPECT_EQ(got, want);
+    } else if (op == 5) {
+      EXPECT_TRUE(f.fs->remove(p) == model.remove(p));
+    } else if (op == 6) {
+      const std::string q = randomPath();
+      EXPECT_TRUE(f.fs->move(p, q) == model.move(p, q));
+    } else {
+      std::vector<std::string> names;
+      std::string want;
+      const Status a = f.fs->list(p, names);
+      const Status b = model.list(p, want);
+      EXPECT_TRUE(a == b);
+      if (a == Status::Ok && b == Status::Ok) EXPECT_EQ(join(names), want);
+      Sz sg = 1, sw = 2;
+      const Status c = f.fs->size(p, sg);
+      const Status d = model.size(p, sw);
+      EXPECT_TRUE(c == d);
+      if (c == Status::Ok && d == Status::Ok) EXPECT_EQ(sg, sw);
+    }
+    (void)where;
+  }
+  Sz total = 0, want = 0;
+  f.fs->size("/", total);
+  model.size("/", want);
+  EXPECT_EQ(total, want);
+}
+21:T1328,#include <memory>
+#include <string>
+#include <vector>
+
+#include "api_storm1.h"
+#include "bp_test.h"
+
+namespace {
+using fs::Status;
+
+#define IS(call, expected) EXPECT_TRUE((call) == Status::expected)
+
+std::string join(const std::vector<std::string>& v) {
+  std::string out;
+  for (const auto& s : v) out += (out.empty() ? "" : ",") + s;
+  return out;
+}
+
+struct Fixture {
+  std::unique_ptr<fs::SearchableFileSystem> fs = fs::makeSearchableFileSystem();
+  void file(const std::string& path) { fs->write(path, "x"); }
+  void dir(const std::string& path) { fs->mkdir(path); }
+  std::string find(const std::string& where, const std::string& pattern) {
+    std::vector<std::string> found{"<unset>"};
+    const Status s = fs->find(where, pattern, found);
+    return s == Status::Ok ? join(found) : "<error>";
+  }
+};
+}  // namespace
+
+TEST(Find, StarMatchesAnyRunOfCharactersIncludingNone) {
+  Fixture f;
+  f.file("/a");
+  f.file("/a.txt");
+  f.file("/ab.txt");
+  f.file("/.txt");
+  f.file("/b.md");
+  EXPECT_EQ(f.find("/", "*.txt"), std::string("/.txt,/a.txt,/ab.txt"));
+  EXPECT_EQ(f.find("/", "a*"), std::string("/a,/a.txt,/ab.txt"));
+  EXPECT_EQ(f.find("/", "*"), std::string("/.txt,/a,/a.txt,/ab.txt,/b.md"));
+  EXPECT_EQ(f.find("/", "a*.txt"), std::string("/a.txt,/ab.txt"));
+}
+
+TEST(Find, QuestionMarkIsExactlyOneCharacter) {
+  Fixture f;
+  f.file("/a1");
+  f.file("/a22");
+  f.file("/a");
+  f.file("/b1");
+  EXPECT_EQ(f.find("/", "a?"), std::string("/a1"));
+  EXPECT_EQ(f.find("/", "?1"), std::string("/a1,/b1"));
+  EXPECT_EQ(f.find("/", "a??"), std::string("/a22"));
+  EXPECT_EQ(f.find("/", "?"), std::string("/a"));
+}
+
+TEST(Find, TheWholeNameMustMatchAndCaseMatters) {
+  Fixture f;
+  f.file("/log");
+  f.file("/logs");
+  f.file("/Log");
+  EXPECT_EQ(f.find("/", "log"), std::string("/log"));
+  EXPECT_EQ(f.find("/", "Log"), std::string("/Log"));
+  EXPECT_EQ(f.find("/", "lo"), std::string(""));
+  EXPECT_EQ(f.find("/", "L*"), std::string("/Log"));
+}
+
+TEST(Find, StarBacktracksAndManyStarsStayFast) {
+  Fixture f;
+  f.file("/aab");
+  f.file("/aaab");
+  f.file("/abab");
+  f.file("/" + std::string(30, 'a') + "c");
+  EXPECT_EQ(f.find("/", "*ab"), std::string("/aaab,/aab,/abab"));
+  EXPECT_EQ(f.find("/", "a*ab"), std::string("/aaab,/aab,/abab"));
+  EXPECT_EQ(f.find("/", "a*b*b"), std::string("/abab"));
+  EXPECT_EQ(f.find("/", "*a*a*a*a*a*a*a*a*a*a*b"), std::string(""));
+}
+
+TEST(Find, PatternsMatchTheNameAndNotThePath) {
+  Fixture f;
+  f.dir("/docs");
+  f.file("/docs/x.txt");
+  f.file("/docs/d.txt");
+  EXPECT_EQ(f.find("/", "x*"), std::string("/docs/x.txt"));
+  EXPECT_EQ(f.find("/", "d*"), std::string("/docs,/docs/d.txt"));
+  EXPECT_EQ(f.find("/", "docs"), std::string("/docs"));
+}
+
+TEST(Find, SearchesEveryLevelDepthFirstWithDirectoriesBeforeTheirContents) {
+  Fixture f;
+  f.dir("/a");
+  f.file("/a/m.log");
+  f.dir("/a/b");
+  f.file("/a/b/n.log");
+  f.file("/a-b.log");
+  f.file("/z.log");
+  EXPECT_EQ(f.find("/", "*"), std::string("/a,/a/b,/a/b/n.log,/a/m.log,/a-b.log,/z.log"));
+  EXPECT_EQ(f.find("/", "*.log"), std::string("/a/b/n.log,/a/m.log,/a-b.log,/z.log"));
+}
+
+TEST(Find, DirectoriesMatchToo) {
+  Fixture f;
+  f.dir("/build");
+  f.dir("/build/build-x");
+  f.file("/build/build-x/f");
+  f.file("/builder");
+  EXPECT_EQ(f.find("/", "build*"), std::string("/build,/build/build-x,/builder"));
+}
+
+TEST(Find, StartsBelowTheGivenDirectoryAndNeverReportsItself) {
+  Fixture f;
+  f.dir("/a");
+  f.dir("/a/b");
+  f.file("/a/b/f");
+  f.file("/g");
+  EXPECT_EQ(f.find("/a", "*"), std::string("/a/b,/a/b/f"));
+  EXPECT_EQ(f.find("/a/", "b"), std::string("/a/b"));
+  EXPECT_EQ(f.find("/a/b/../b/.", "*"), std::string("/a/b/f"));
+  EXPECT_EQ(f.find("/a/b", "b"), std::string(""));
+  EXPECT_EQ(f.find("/", "a"), std::string("/a"));
+}
+
+TEST(Find, NoMatchIsOkAndReplacesTheResult) {
+  Fixture f;
+  f.file("/a");
+  std::vector<std::string> found{"old1", "old2"};
+  IS(f.fs->find("/", "zzz", found), Ok);
+  EXPECT_TRUE(found.empty());
+  IS(f.fs->find("/", "a", found), Ok);
+  IS(f.fs->find("/", "a", found), Ok);
+  EXPECT_EQ(join(found), std::string("/a"));
+}
+
+TEST(Find, ErrorsLeaveTheResultAlone) {
+  Fixture f;
+  f.file("/file");
+  f.dir("/d");
+  std::vector<std::string> found{"keep"};
+  IS(f.fs->find("/nope", "*", found), NotFound);
+  IS(f.fs->find("/file", "*", found), NotADirectory);
+  IS(f.fs->find("/d", "", found), InvalidPath);
+  IS(f.fs->find("/d", "a/b", found), InvalidPath);
+  IS(f.fs->find("d", "*", found), InvalidPath);
+  IS(f.fs->find("/" + std::string(fs::kMaxNameLength + 1, 'x'), "*", found), InvalidPath);
+  IS(f.fs->find("relative", "", found), InvalidPath);
+  EXPECT_EQ(join(found), std::string("keep"));
+}
+
+TEST(Find, TheSameTreeStillBehavesLikeTheBaseFileSystem) {
+  Fixture f;
+  IS(f.fs->mkdir("/a"), Ok);
+  IS(f.fs->write("/a/f", "12"), Ok);
+  IS(f.fs->move("/a", "/b"), Ok);
+  std::size_t n = 0;
+  IS(f.fs->size("/b", n), Ok);
+  EXPECT_EQ(n, static_cast<std::size_t>(2));
+}
+22:T2481,#include <memory>
+#include <string>
+#include <vector>
+
+#include "api_storm2.h"
+#include "bp_test.h"
+
+namespace {
+using fs::Kind;
+using fs::Status;
+using Sz = std::size_t;
+
+#define IS(call, expected) EXPECT_TRUE((call) == Status::expected)
+
+std::string join(const std::vector<std::string>& v) {
+  std::string out;
+  for (const auto& s : v) out += (out.empty() ? "" : ",") + s;
+  return out;
+}
+
+struct Fixture {
+  std::unique_ptr<fs::LinkingFileSystem> fs = fs::makeLinkingFileSystem();
+  std::string read(const std::string& path) {
+    std::string out = "<unread>";
+    fs->read(path, out);
+    return out;
+  }
+  std::string ls(const std::string& path) {
+    std::vector<std::string> names{"<unlisted>"};
+    if (fs->list(path, names) != Status::Ok) return "<error>";
+    return join(names);
+  }
+  std::string find(const std::string& where, const std::string& pattern) {
+    std::vector<std::string> found{"<unset>"};
+    return fs->find(where, pattern, found) == Status::Ok ? join(found) : "<error>";
+  }
+  std::string target(const std::string& path) {
+    std::string out = "<none>";
+    fs->readLink(path, out);
+    return out;
+  }
+  bool isLink(const std::string& path) {
+    Kind k = Kind::File;
+    return fs->kind(path, k) == Status::Ok && k == Kind::Link;
+  }
+  // Builds /l1 -> /l2 -> ... -> /l<n> -> /end, with /end a file.
+  void chain(int n) {
+    fs->write("/end", "payload");
+    for (int i = 1; i <= n; ++i) fs->symlink(i == n ? "/end" : "/l" + std::to_string(i + 1), "/l" + std::to_string(i));
+  }
+};
+}  // namespace
+
+TEST(Link, ALinkToAFileIsReadWrittenAndSizedThroughButIsStillALink) {
+  Fixture f;
+  f.fs->mkdir("/data");
+  f.fs->write("/data/f", "hello");
+  IS(f.fs->symlink("/data/f", "/l"), Ok);
+  EXPECT_EQ(f.read("/l"), std::string("hello"));
+  Sz n = 0;
+  IS(f.fs->size("/l", n), Ok);
+  EXPECT_EQ(n, static_cast<Sz>(5));
+  EXPECT_TRUE(f.isLink("/l"));
+  EXPECT_EQ(f.target("/l"), std::string("/data/f"));
+  IS(f.fs->write("/l", "changed"), Ok);
+  EXPECT_EQ(f.read("/data/f"), std::string("changed"));
+  EXPECT_TRUE(f.isLink("/l"));
+}
+
+TEST(Link, ALinkInTheMiddleOfAPathIsAlwaysFollowed) {
+  Fixture f;
+  f.fs->mkdir("/real");
+  IS(f.fs->symlink("/real", "/alias"), Ok);
+  IS(f.fs->write("/alias/f", "x"), Ok);
+  IS(f.fs->mkdir("/alias/sub"), Ok);
+  EXPECT_EQ(f.read("/real/f"), std::string("x"));
+  EXPECT_EQ(f.ls("/alias"), std::string("f,sub"));
+  EXPECT_EQ(f.ls("/real"), std::string("f,sub"));
+  EXPECT_EQ(f.ls("/"), std::string("alias,real"));
+  IS(f.fs->write("/alias/sub/g", "deep"), Ok);
+  EXPECT_EQ(f.read("/real/sub/g"), std::string("deep"));
+}
+
+TEST(Link, LinksToLinksAreFollowedInTurn) {
+  Fixture f;
+  f.fs->mkdir("/real");
+  f.fs->write("/real/f", "x");
+  f.fs->symlink("/real", "/one");
+  f.fs->symlink("/one", "/two");
+  EXPECT_EQ(f.read("/two/f"), std::string("x"));
+  EXPECT_EQ(f.ls("/two"), std::string("f"));
+}
+
+TEST(Link, DanglingLinksResolveWhenTheTargetAppears) {
+  Fixture f;
+  IS(f.fs->symlink("/later", "/l"), Ok);
+  std::string out = "keep";
+  IS(f.fs->read("/l", out), NotFound);
+  std::vector<std::string> names{"keep"};
+  IS(f.fs->list("/l", names), NotFound);
+  Sz n = 1;
+  IS(f.fs->size("/l", n), NotFound);
+  EXPECT_TRUE(f.isLink("/l"));
+  f.fs->write("/later", "now");
+  EXPECT_EQ(f.read("/l"), std::string("now"));
+  IS(f.fs->symlink("/ghost/deeper", "/m"), Ok);
+  IS(f.fs->read("/m/x", out), NotFound);
+}
+
+TEST(Link, WritingThroughADanglingLinkCreatesTheTargetIfItsDirectoryExists) {
+  Fixture f;
+  f.fs->mkdir("/d");
+  f.fs->symlink("/d/new.txt", "/l");
+  IS(f.fs->write("/l", "created"), Ok);
+  EXPECT_EQ(f.read("/d/new.txt"), std::string("created"));
+  EXPECT_TRUE(f.isLink("/l"));
+  f.fs->symlink("/nodir/f", "/bad");
+  IS(f.fs->write("/bad", "x"), NotFound);
+  EXPECT_EQ(f.ls("/"), std::string("bad,d,l"));
+}
+
+TEST(Link, RemoveMoveAndKindActOnTheLinkNotItsTarget) {
+  Fixture f;
+  f.fs->mkdir("/dir");
+  f.fs->write("/dir/f", "x");
+  f.fs->symlink("/dir", "/l");
+  IS(f.fs->move("/l", "/m"), Ok);
+  EXPECT_TRUE(f.isLink("/m"));
+  EXPECT_EQ(f.target("/m"), std::string("/dir"));
+  EXPECT_EQ(f.read("/m/f"), std::string("x"));
+  IS(f.fs->remove("/m"), Ok);
+  EXPECT_EQ(f.read("/dir/f"), std::string("x"));
+  EXPECT_EQ(f.ls("/"), std::string("dir"));
+  f.fs->symlink("/dir/f", "/n");
+  IS(f.fs->move("/dir/f", "/moved"), Ok);
+  std::string out;
+  IS(f.fs->read("/n", out), NotFound);
+  EXPECT_TRUE(f.isLink("/n"));
+}
+
+TEST(Link, CreatingALinkNeedsAFreeNameAnExistingParentAndTwoValidPaths) {
+  Fixture f;
+  f.fs->mkdir("/d");
+  f.fs->write("/f", "x");
+  f.fs->symlink("/d", "/l");
+  IS(f.fs->symlink("/d", "/l"), AlreadyExists);
+  IS(f.fs->symlink("/x", "/d"), AlreadyExists);
+  IS(f.fs->symlink("/x", "/f"), AlreadyExists);
+  IS(f.fs->symlink("/x", "/"), AlreadyExists);
+  IS(f.fs->symlink("/x", "/nodir/l2"), NotFound);
+  IS(f.fs->symlink("/x", "/f/l2"), NotADirectory);
+  IS(f.fs->symlink("relative", "/l3"), InvalidPath);
+  IS(f.fs->symlink("/x", "relative"), InvalidPath);
+  IS(f.fs->mkdir("/l"), AlreadyExists);
+  EXPECT_EQ(f.ls("/"), std::string("d,f,l"));
+  EXPECT_EQ(f.ls("/d"), std::string(""));
+}
+
+TEST(Link, CreatingOverADanglingLinkIsStillAlreadyExists) {
+  Fixture f;
+  f.fs->symlink("/target", "/l");
+  IS(f.fs->symlink("/other", "/l"), AlreadyExists);
+  IS(f.fs->mkdir("/l"), AlreadyExists);
+  std::string out;
+  IS(f.fs->read("/target", out), NotFound);
+  EXPECT_EQ(f.target("/l"), std::string("/target"));
+}
+
+TEST(Link, TargetsAreStoredNormalisedAndOnlyLinksHaveOne) {
+  Fixture f;
+  f.fs->write("/f", "x");
+  f.fs->symlink("/a/./b/../c//", "/l");
+  EXPECT_EQ(f.target("/l"), std::string("/a/c"));
+  f.fs->symlink("/..", "/root");
+  EXPECT_EQ(f.target("/root"), std::string("/"));
+  std::string out = "keep";
+  IS(f.fs->readLink("/f", out), NotALink);
+  IS(f.fs->readLink("/", out), NotALink);
+  IS(f.fs->readLink("/nope", out), NotFound);
+  IS(f.fs->readLink("/f/x", out), NotADirectory);
+  IS(f.fs->readLink("x", out), InvalidPath);
+  EXPECT_EQ(out, std::string("keep"));
+}
+
+TEST(Link, AChainOfEightLinksResolvesAndNineIsALoop) {
+  Fixture f;
+  f.chain(fs::kMaxLinkHops);
+  EXPECT_EQ(f.read("/l1"), std::string("payload"));
+  Fixture g;
+  g.chain(fs::kMaxLinkHops + 1);
+  std::string out = "keep";
+  IS(g.fs->read("/l1", out), LinkLoop);
+  EXPECT_EQ(out, std::string("keep"));
+  EXPECT_EQ(g.read("/l2"), std::string("payload"));
+  EXPECT_TRUE(g.isLink("/l1"));
+}
+
+TEST(Link, TheHopLimitCountsLinksInTheMiddleOfAPathToo) {
+  Fixture f;
+  f.fs->mkdir("/real");
+  f.fs->write("/real/f", "x");
+  for (int i = fs::kMaxLinkHops; i >= 1; --i) f.fs->symlink(i == fs::kMaxLinkHops ? "/real" : "/d" + std::to_string(i + 1), "/d" + std::to_string(i));
+  EXPECT_EQ(f.read("/d1/f"), std::string("x"));
+  f.fs->mkdir("/other");
+  f.fs->symlink("/d1", "/e");
+  std::string out;
+  IS(f.fs->read("/e/f", out), LinkLoop);
+}
+
+TEST(Link, LinksThatPointAtThemselvesOrEachOtherAreALoopNotAHang) {
+  Fixture f;
+  IS(f.fs->symlink("/self", "/self"), Ok);
+  IS(f.fs->symlink("/b", "/a"), Ok);
+  IS(f.fs->symlink("/a", "/b"), Ok);
+  std::string out = "keep";
+  std::vector<std::string> names;
+  Sz n = 0;
+  IS(f.fs->read("/self", out), LinkLoop);
+  IS(f.fs->read("/a", out), LinkLoop);
+  IS(f.fs->list("/b", names), LinkLoop);
+  IS(f.fs->size("/a/x", n), LinkLoop);
+  IS(f.fs->write("/a", "x"), LinkLoop);
+  IS(f.fs->find("/b", "*", names), LinkLoop);
+  EXPECT_TRUE(f.isLink("/a"));
+  IS(f.fs->remove("/a"), Ok);
+  IS(f.fs->remove("/b"), Ok);
+}
+
+TEST(Link, DotDotIsAppliedToTheTextBeforeAnyLinkIsFollowed) {
+  Fixture f;
+  f.fs->mkdir("/x");
+  f.fs->mkdir("/x/y");
+  f.fs->mkdir("/other");
+  f.fs->write("/other/f", "textual");
+  f.fs->symlink("/x/y", "/l");
+  EXPECT_EQ(f.read("/l/../other/f"), std::string("textual"));
+}
+
+TEST(Link, DirectorySizeSkipsLinksSoACycleCannotInflateIt) {
+  Fixture f;
+  f.fs->mkdir("/d");
+  f.fs->write("/d/f", "1234");
+  f.fs->symlink("/d/f", "/d/copy");
+  f.fs->symlink("/", "/d/up");
+  Sz n = 0;
+  IS(f.fs->size("/d", n), Ok);
+  EXPECT_EQ(n, static_cast<Sz>(4));
+  IS(f.fs->size("/", n), Ok);
+  EXPECT_EQ(n, static_cast<Sz>(4));
+  IS(f.fs->size("/d/copy", n), Ok);
+  EXPECT_EQ(n, static_cast<Sz>(4));
+}
+
+TEST(Link, FindReportsLinksByNameButNeverDescendsThroughThem) {
+  Fixture f;
+  f.fs->mkdir("/d");
+  f.fs->write("/d/f", "x");
+  f.fs->symlink("/", "/d/up");
+  f.fs->symlink("/d", "/alias");
+  EXPECT_EQ(f.find("/", "*"), std::string("/alias,/d,/d/f,/d/up"));
+  EXPECT_EQ(f.find("/", "up"), std::string("/d/up"));
+  EXPECT_EQ(f.find("/alias", "*"), std::string("/alias/f,/alias/up"));
+  EXPECT_EQ(f.find("/alias/", "f"), std::string("/alias/f"));
+}
+
+TEST(Link, AMoveIntoItselfThroughALinkIsRefusedAndChangesNothing) {
+  Fixture f;
+  f.fs->mkdir("/d");
+  f.fs->write("/d/f", "keep me");
+  f.fs->symlink("/d", "/l");
+  IS(f.fs->move("/d", "/l/x"), InvalidPath);
+  IS(f.fs->move("/d", "/l/x/y"), NotFound);
+  EXPECT_EQ(f.read("/d/f"), std::string("keep me"));
+  EXPECT_EQ(f.ls("/"), std::string("d,l"));
+  IS(f.fs->move("/d", "/e"), Ok);
+  EXPECT_EQ(f.read("/e/f"), std::string("keep me"));
+}
+
+TEST(Link, TheBaseAndSearchRulesStillHoldWithLinksPresent) {
+  Fixture f;
+  f.fs->mkdir("/a");
+  f.fs->symlink("/a", "/l");
+  IS(f.fs->remove("/a"), Ok);
+  EXPECT_TRUE(f.isLink("/l"));
+  IS(f.fs->mkdir("/l/x"), NotFound);
+  IS(f.fs->write("/a", "now a file"), Ok);
+  IS(f.fs->mkdir("/l/x"), NotADirectory);
+  EXPECT_EQ(f.read("/l"), std::string("now a file"));
+}
+23:T162f,#pragma once
+#include <memory>
+#include <string>
+#include <vector>
+
+#include "finder.h"
+#include "resolver.h"
+
+// The facade: one short method per call, each parsing nothing itself; the Resolver answers "what is there".
+class FileSystemImpl : public fs::LinkingFileSystem {
+ public:
+  fs::Status mkdir(const std::string& path) override {
+    const Located at = resolver_.locate(path, Follow::NotLast);
+    if (at.status != fs::Status::Ok) return at.status;
+    if (at.node != nullptr) return fs::Status::AlreadyExists;
+    at.parent->put(at.name, std::make_unique<Directory>());
+    return fs::Status::Ok;
+  }
+
+  fs::Status write(const std::string& path, const std::string& content) override {
+    const Located at = resolver_.locate(path, Follow::Last);
+    if (at.status != fs::Status::Ok) return at.status;
+    if (at.node == nullptr) {
+      at.parent->put(at.name, std::make_unique<File>(content));
+      return fs::Status::Ok;
+    }
+    File* file = at.node->asFile();
+    if (file == nullptr) return fs::Status::IsADirectory;
+    file->assign(content);
+    return fs::Status::Ok;
+  }
+
+  fs::Status read(const std::string& path, std::string& out) const override {
+    const Located at = resolver_.locate(path, Follow::Last);
+    if (at.status != fs::Status::Ok) return at.status;
+    if (at.node == nullptr) return fs::Status::NotFound;
+    const File* file = at.node->asFile();
+    if (file == nullptr) return fs::Status::IsADirectory;
+    out = file->content();
+    return fs::Status::Ok;
+  }
+
+  fs::Status remove(const std::string& path) override {
+    const Located at = resolver_.locate(path, Follow::NotLast);
+    if (at.status != fs::Status::Ok) return at.status;
+    if (at.node == nullptr) return fs::Status::NotFound;
+    if (at.parent == nullptr) return fs::Status::InvalidPath;
+    const Directory* dir = at.node->asDirectory();
+    if (dir != nullptr && !dir->empty()) return fs::Status::NotEmpty;
+    at.parent->take(at.name);
+    return fs::Status::Ok;
+  }
+
+  fs::Status list(const std::string& path, std::vector<std::string>& names) const override {
+    const Located at = resolver_.locate(path, Follow::Last);
+    if (at.status != fs::Status::Ok) return at.status;
+    if (at.node == nullptr) return fs::Status::NotFound;
+    const Directory* dir = at.node->asDirectory();
+    if (dir == nullptr) return fs::Status::NotADirectory;
+    names.clear();
+    for (const auto& entry : dir->children()) names.push_back(entry.first);
+    return fs::Status::Ok;
+  }
+
+  fs::Status size(const std::string& path, std::size_t& bytes) const override {
+    const Located at = resolver_.locate(path, Follow::Last);
+    if (at.status != fs::Status::Ok) return at.status;
+    if (at.node == nullptr) return fs::Status::NotFound;
+    bytes = at.node->bytes();
+    return fs::Status::Ok;
+  }
+
+  fs::Status kind(const std::string& path, fs::Kind& out) const override {
+    const Located at = resolver_.locate(path, Follow::NotLast);
+    if (at.status != fs::Status::Ok) return at.status;
+    if (at.node == nullptr) return fs::Status::NotFound;
+    out = at.node->kind();
+    return fs::Status::Ok;
+  }
+
+  fs::Status move(const std::string& from, const std::string& to) override {
+    Path source;
+    Path target;
+    if (!Path::parse(from, source) || !Path::parse(to, target)) return fs::Status::InvalidPath;
+    if (source.isRoot() || target.isInside(source)) return fs::Status::InvalidPath;
+    const Located src = resolver_.locate(source, Follow::NotLast);
+    if (src.status != fs::Status::Ok) return src.status;
+    if (src.node == nullptr) return fs::Status::NotFound;
+    const Located dst = resolver_.locate(target, Follow::NotLast);
+    if (dst.status != fs::Status::Ok) return dst.status;
+    if (dst.node != nullptr) return fs::Status::AlreadyExists;
+    const Directory* moved = src.node->asDirectory();
+    if (moved != nullptr && moved->holds(dst.parent)) return fs::Status::InvalidPath;
+    dst.parent->put(dst.name, src.parent->take(src.name));
+    return fs::Status::Ok;
+  }
+
+  fs::Status find(const std::string& dir, const std::string& pattern, std::vector<std::string>& found) const override {
+    Path base;
+    if (!Path::parse(dir, base)) return fs::Status::InvalidPath;
+    if (pattern.empty() || pattern.find('/') != std::string::npos) return fs::Status::InvalidPath;
+    const Located at = resolver_.locate(base, Follow::Last);
+    if (at.status != fs::Status::Ok) return at.status;
+    if (at.node == nullptr) return fs::Status::NotFound;
+    const Directory* start = at.node->asDirectory();
+    if (start == nullptr) return fs::Status::NotADirectory;
+    found.clear();
+    Finder(Glob(pattern)).collect(*start, base.str(), found);
+    return fs::Status::Ok;
+  }
+
+  fs::Status symlink(const std::string& target, const std::string& linkPath) override {
+    Path stored;
+    Path where;
+    if (!Path::parse(linkPath, where) || !Path::parse(target, stored)) return fs::Status::InvalidPath;
+    const Located at = resolver_.locate(where, Follow::NotLast);
+    if (at.status != fs::Status::Ok) return at.status;
+    if (at.node != nullptr) return fs::Status::AlreadyExists;
+    at.parent->put(at.name, std::make_unique<Link>(stored));
+    return fs::Status::Ok;
+  }
+
+  fs::Status readLink(const std::string& path, std::string& target) const override {
+    const Located at = resolver_.locate(path, Follow::NotLast);
+    if (at.status != fs::Status::Ok) return at.status;
+    if (at.node == nullptr) return fs::Status::NotFound;
+    const Link* link = at.node->asLink();
+    if (link == nullptr) return fs::Status::NotALink;
+    target = link->target().str();
+    return fs::Status::Ok;
+  }
+
+ private:
+  Directory root_;
+  Resolver resolver_{root_};
+};
+24:Tace,#pragma once
+#include <map>
+#include <memory>
+#include <string>
+#include <utility>
+
+#include "path.h"
+
+class Directory;
+class File;
+class Link;
+
+// One entry in the tree (Composite). A node does not know its own name: its directory holds it under one.
+class Node {
+ public:
+  virtual ~Node() = default;
+  virtual fs::Kind kind() const = 0;
+  virtual std::size_t bytes() const = 0;
+  // Safe downcasts: null unless this node is that kind.
+  virtual Directory* asDirectory() { return nullptr; }
+  virtual File* asFile() { return nullptr; }
+  virtual Link* asLink() { return nullptr; }
+};
+
+class File : public Node {
+ public:
+  explicit File(std::string content) : content_(std::move(content)) {}
+  fs::Kind kind() const override { return fs::Kind::File; }
+  std::size_t bytes() const override { return content_.size(); }
+  File* asFile() override { return this; }
+  const std::string& content() const { return content_; }
+  void assign(std::string content) { content_ = std::move(content); }
+
+ private:
+  std::string content_;
+};
+
+// A symbolic link holds the path it stands for. It owns no content, so it counts as zero bytes.
+class Link : public Node {
+ public:
+  explicit Link(Path target) : target_(std::move(target)) {}
+  fs::Kind kind() const override { return fs::Kind::Link; }
+  std::size_t bytes() const override { return 0; }
+  Link* asLink() override { return this; }
+  const Path& target() const { return target_; }
+
+ private:
+  Path target_;
+};
+
+class Directory : public Node {
+ public:
+  using Children = std::map<std::string, std::unique_ptr<Node>>;
+
+  fs::Kind kind() const override { return fs::Kind::Directory; }
+  std::size_t bytes() const override {
+    std::size_t total = 0;
+    for (const auto& entry : children_) total += entry.second->bytes();
+    return total;
+  }
+  Directory* asDirectory() override { return this; }
+
+  const Children& children() const { return children_; }
+  bool empty() const { return children_.empty(); }
+  Node* find(const std::string& name) const {
+    const auto it = children_.find(name);
+    return it == children_.end() ? nullptr : it->second.get();
+  }
+  void put(const std::string& name, std::unique_ptr<Node> node) { children_[name] = std::move(node); }
+  std::unique_ptr<Node> take(const std::string& name) {
+    std::unique_ptr<Node> node = std::move(children_[name]);
+    children_.erase(name);
+    return node;
+  }
+
+  // True when `wanted` is this directory or anywhere below it (links are not entered).
+  bool holds(const Node* wanted) const {
+    if (wanted == this) return true;
+    for (const auto& entry : children_) {
+      const Directory* sub = entry.second->asDirectory();
+      if (sub != nullptr && sub->holds(wanted)) return true;
+    }
+    return false;
+  }
+
+ private:
+  Children children_;
+};
+25:T6af,#pragma once
+#include <algorithm>
+#include <string>
+#include <utility>
+#include <vector>
+
+#include "api_storm2.h"
+
+// A normalised absolute path: the names from the root down, with "", "." and ".." already applied.
+class Path {
+ public:
+  // Splits and normalises `text`. False when it is not absolute or a part is too long.
+  static bool parse(const std::string& text, Path& out) {
+    if (text.empty() || text[0] != '/') return false;
+    std::vector<std::string> parts;
+    std::size_t start = 1;
+    while (start <= text.size()) {
+      std::size_t end = text.find('/', start);
+      if (end == std::string::npos) end = text.size();
+      const std::string part = text.substr(start, end - start);
+      if (part.size() > fs::kMaxNameLength) return false;
+      if (part == "..") {
+        if (!parts.empty()) parts.pop_back();
+      } else if (!part.empty() && part != ".") {
+        parts.push_back(part);
+      }
+      start = end + 1;
+    }
+    out = Path(std::move(parts));
+    return true;
+  }
+
+  Path() = default;
+
+  const std::vector<std::string>& parts() const { return parts_; }
+  bool isRoot() const { return parts_.empty(); }
+
+  // True when this path is below `ancestor` (never when they are equal).
+  bool isInside(const Path& ancestor) const {
+    if (parts_.size() <= ancestor.parts_.size()) return false;
+    return std::equal(ancestor.parts_.begin(), ancestor.parts_.end(), parts_.begin());
+  }
+
+  std::string str() const {
+    if (parts_.empty()) return "/";
+    std::string out;
+    for (const std::string& part : parts_) out += "/" + part;
+    return out;
+  }
+
+ private:
+  explicit Path(std::vector<std::string> parts) : parts_(std::move(parts)) {}
+  std::vector<std::string> parts_;
+};
+26:T80f,#pragma once
+#include <deque>
+#include <string>
+
+#include "node.h"
+
+// Whether a link in the LAST part of a path is followed (links in the middle always are).
+enum class Follow { Last, NotLast };
+
+// Where a path leads: the directory holding the entry, its name there, and the entry (null when it is not there yet).
+struct Located {
+  fs::Status status = fs::Status::Ok;
+  Directory* parent = nullptr;  // null only for the root
+  std::string name;
+  Node* node = nullptr;
+};
+
+// Walks a path from the root and owns the link rules: which links are followed and how many.
+class Resolver {
+ public:
+  explicit Resolver(Directory& root) : root_(root) {}
+
+  Located locate(const std::string& text, Follow last) const {
+    Path path;
+    if (!Path::parse(text, path)) return failure(fs::Status::InvalidPath);
+    return locate(path, last);
+  }
+
+  Located locate(const Path& path, Follow last) const {
+    std::deque<std::string> todo(path.parts().begin(), path.parts().end());
+    Directory* dir = &root_;
+    Located here;
+    here.node = &root_;
+    int hops = 0;
+    while (!todo.empty()) {
+      const std::string name = todo.front();
+      todo.pop_front();
+      const bool isLast = todo.empty();
+      Node* child = dir->find(name);
+      here = Located{fs::Status::Ok, dir, name, child};
+      if (child == nullptr) return isLast ? here : failure(fs::Status::NotFound);
+      Link* link = child->asLink();
+      if (link != nullptr && (!isLast || last == Follow::Last)) {
+        if (++hops > fs::kMaxLinkHops) return failure(fs::Status::LinkLoop);
+        todo.insert(todo.begin(), link->target().parts().begin(), link->target().parts().end());
+        dir = &root_;
+        here = Located{fs::Status::Ok, nullptr, "", &root_};
+        continue;
+      }
+      if (isLast) return here;
+      dir = child->asDirectory();
+      if (dir == nullptr) return failure(fs::Status::NotADirectory);
+    }
+    return here;
+  }
+
+ private:
+  static Located failure(fs::Status status) {
+    Located bad;
+    bad.status = status;
+    return bad;
+  }
+
+  Directory& root_;
+};
+c:["$","$L1a",null,{"bundle":{"id":"file-system","title":"In-memory file system","level":"Senior","parMinutes":75,"patterns":["Composite","Facade"],"requirements":[{"id":"R-path","text":"Paths are absolute strings starting with '/'. Parts are split on '/'; empty parts and \".\" are ignored; \"..\" removes the part before it and at the root does nothing; a trailing '/' is fine. All of this is textual (the removed part need not exist). Every part is at most kMaxNameLength (32) characters, even a part that \"..\" later removes. Anything else wrong (empty, relative, over-long part) is InvalidPath, reported before any lookup.","phase":"base","hidden":true},{"id":"R-ops","text":"One tree under the root \"/\". mkdir makes one directory (parent must exist, a taken name or \"/\" is AlreadyExists). write creates a file or replaces the whole content (a directory there, or \"/\", is IsADirectory). read copies a file's content (a directory is IsADirectory). remove deletes a file or an EMPTY directory (NotEmpty otherwise; \"/\" is InvalidPath). list replaces the caller's vector with the sorted names of the direct children. size is a file's length or the total length of every file below a directory. kind says File or Directory. Lookups go from the root down: a missing directory on the way is NotFound, a file on the way is NotADirectory. Outputs are touched only when the call returns Ok, and a failed call changes nothing.","phase":"base","hidden":true},{"id":"R-move","text":"move(from, to) moves a file or a directory with everything below it, and the last part of `to` is the new name. Checked in order: both paths valid; `from` is \"/\" or `to` lies strictly inside `from` (InvalidPath); `from` exists; `to`'s parent exists and is a directory; `to` is free (AlreadyExists, even for the same path). Nothing is overwritten, and a failed move leaves the tree exactly as it was.","phase":"base","hidden":true},{"id":"R-find","text":"Storm 1: makeSearchableFileSystem adds find(dir, pattern, found). The pattern is matched against each entry's NAME (not its path), whole name, case-sensitively: '*' is any run of characters including none, '?' is exactly one, other characters match themselves. Every level below `dir` is searched, directories can match as well as files, and `dir` itself is never a result. Results are full paths in depth-first order: a directory before its content, the entries of one directory in ascending name order. An empty pattern or one containing '/' is InvalidPath (after the path is parsed); `found` is replaced on Ok and untouched otherwise.","phase":"storm1","hidden":true},{"id":"R-links","text":"Storm 2: makeLinkingFileSystem adds symlink(target, linkPath) and readLink, and Kind::Link. A link holds an absolute target (stored normalised, may dangle). A link in the middle of a path is always followed; a link as the last part is followed by read, write, list, size and find and is NOT followed by kind, readLink, remove, move, mkdir and symlink. Write through a dangling link creates the target if its directory exists; read, list, size and find through one are NotFound. '..' is applied to the text before links are looked at. At most kMaxLinkHops (8) links may be followed in one lookup; the ninth is LinkLoop. size of a directory counts links as 0 bytes; find lists links but never descends through them; move refuses a destination inside the moved directory even when reached through a link.","phase":"storm2","hidden":true}],"brief":"$1b","editorial":"$1c","clarify":[{"id":"q-path","text":"What exactly is a path? Can I get '..', '.', double slashes, a trailing slash, a relative path?","answer":"Absolute only: it must start with '/', otherwise InvalidPath. Empty parts and '.' are ignored, '..' removes the part before it and at the root does nothing, and a trailing '/' is fine. This is textual, so '/a/gone/../d' is '/a/d' even if 'gone' does not exist. Each part is at most 32 characters, checked even for parts that '..' later removes, and an invalid path is reported before anything is looked up.","reveals":["R-path"],"quality":"essential"},{"id":"q-ops","text":"Which operations are there, and what do they return?","answer":"mkdir (one directory, the parent must exist), write (create or replace the whole content), read, remove (a file or an empty directory), list (sorted names, direct children only), size, kind and move. Each returns a Status; outputs go in reference parameters and are touched only when the call returns Ok.","reveals":["R-ops"],"quality":"essential"},{"id":"q-errors","text":"When several things are wrong at once, which error do I report?","answer":"The lookup goes from the root down: a missing directory on the way is NotFound, a file on the way is NotADirectory, then the entry itself is examined (taken name, wrong kind, not empty). Invalid paths come before all of that. For move the order is written down in api.h: valid paths, then the 'into itself' check, then the source, then the destination parent, then the destination name.","reveals":["R-ops","R-move"],"quality":"essential"},{"id":"q-size","text":"What is the size of a directory?","answer":"The total length in bytes of every file anywhere below it, so it is a recursion over the tree; an empty directory is 0 and the root is the whole file system. Think about which object should know how to answer that.","reveals":["R-ops"],"quality":"essential"},{"id":"q-move","text":"Can I overwrite on move? Can a directory move into itself? Does a move keep the contents?","answer":"Nothing is overwritten: if the destination name is taken it is AlreadyExists, even when it is the same path. A directory moves with everything below it, and moving it into itself or anything below itself is InvalidPath and must leave the tree unchanged (a directory that contained itself would be unreachable and could never be freed).","reveals":["R-move"],"quality":"essential"},{"id":"q-remove","text":"Does remove delete a whole directory tree?","answer":"No. remove takes a file or an empty directory; a directory with entries is NotEmpty, and the root cannot be removed (InvalidPath). A recursive delete would be another call, and you would want to say whether it is all or nothing.","reveals":["R-ops"],"quality":"useful"},{"id":"q-search","text":"Will callers ever need to look things up by name?","answer":"Yes, after this. A later change adds find(dir, pattern) with '*' and '?' wildcards over every level below a directory. Think about how a walk over the tree should be written so that a new kind of walk is an addition and not an edit to every node class.","reveals":["R-find"],"quality":"essential"},{"id":"q-links","text":"Will the tree always be a tree? Could one entry stand in for another?","answer":"Soon not: a later change adds symbolic links, entries that hold a path and are followed when a lookup passes through them, with a limit of eight hops so a cycle is an error and not a hang. Think about where path lookup lives, because every call depends on it.","reveals":["R-links"],"quality":"essential"},{"id":"q-perms","text":"Do I need permissions, owners, timestamps or file modes?","answer":"No. Entries have a name and either content or children. Say where a timestamp would go if it were added.","reveals":[],"quality":"noise"},{"id":"q-thread","text":"Is the file system used from several threads?","answer":"No: one caller at a time. Say what you would change otherwise (one lock per tree is the simple answer, and the cost is that readers wait).","reveals":[],"quality":"useful"},{"id":"q-disk","text":"Do I persist to disk, enforce a capacity, or handle huge files?","answer":"No. Content is a std::string in memory with no quota. A capacity limit is a good follow-up: where would the running total live?","reveals":[],"quality":"noise"},{"id":"q-unicode","text":"Do I handle Unicode names, case folding or reserved names?","answer":"No. Names are byte strings, compared exactly and sorted by byte value ('Z' comes before 'a').","reveals":[],"quality":"noise"}],"rubric":[{"id":"res-facade","text":"Exposes the public calls and sequences the collaborators: look up, check the kind, change the tree, return a status","phase":"base","owners":["FileSystemImpl","FileSystemService","FileSystemFacade","InMemoryFileSystem","FileSystem"]},{"id":"res-path","text":"Parses and normalises path text into names (separators, '.', '..', name limits) so no other class handles raw strings","phase":"base","owners":["Path","PathParser","PathNormalizer","PathUtil","PathResolver"]},{"id":"res-nodes","text":"Represents entries as one family (Composite) so a file, a directory and later a link answer the same questions, and the directory knows how to total its content","phase":"base","owners":["Node","Entry","FileNode","FsNode","Inode"]},{"id":"res-resolve","text":"Walks a path from the root to the entry it names (or to the directory that would hold it) and reports the right status when it cannot","phase":"base","owners":["Resolver","PathResolver","Walker","Lookup","Navigator"]},{"id":"res-search","text":"Walks the tree collecting the entries whose name matches a pattern, separate from the nodes themselves","phase":"storm1","owners":["Finder","Searcher","TreeWalker","Visitor","NodeVisitor"]},{"id":"res-glob","text":"Decides whether one name matches a pattern with '*' and '?', in linear time","phase":"storm1","owners":["Glob","Matcher","GlobMatcher","Pattern","NameMatcher"]},{"id":"res-links","text":"Represents a link as another kind of node and keeps the rule for following links and counting hops inside the one place that walks paths","phase":"storm2","owners":["Link","SymLink","Symlink","SymbolicLink","LinkNode"]}],"followups":[{"level":"SDE2","question":"Why is mkdir('/a/b/c') an error when /a/b does not exist? Wouldn't creating the parents be friendlier?","answer":"It is a different call, not a better version of this one. A caller who mistypes '/hmoe/ada' wants an error, not a stray directory tree, and a call that sometimes creates and sometimes does not is hard to reason about. Shells offer both (mkdir and mkdir -p) for that reason: add a separate mkdirs if callers need it, and say what it does when a file is in the way."},{"level":"SDE2","question":"How do you make the size of a directory the sum of everything below it without a loop over every file in the facade?","answer":"Each node answers for itself: a file returns its length, a directory returns the sum of its children's answers (a recursion through the same virtual call), and a link would return 0. That is the Composite pattern, and the facade asks any node the same question. The cost is a full walk per call, which is fine here; a cached total updated on every write and remove makes size O(1) and puts bookkeeping on every parent when a file changes."},{"level":"SDE2","question":"What goes wrong if move() simply puts the node under the new parent and then removes it from the old one?","answer":"If the destination is inside the thing being moved, the directory ends up inside itself: it is no longer reachable from the root and, with owning pointers, never freed; every file in it is gone. The destination name may also be taken, and overwriting would silently destroy data. So check the textual rule first, check the destination is free, take the node out of the old parent and put it in the new one, and never leave the tree half-changed."},{"level":"Senior","question":"Where did the search go in your design, and why not a virtual find() on Node?","answer":"A virtual find on every node class makes each new traversal (find, grep, du, export) an edit to File, Directory and later Link. A separate walker that asks the directory for its children and each child what it is keeps the nodes small and puts one traversal in one class. The cost is that the walker needs to tell node kinds apart: a classic Visitor with double dispatch, or a few safe downcast methods, which is what the reference does. The choice flips when kinds change more often than traversals."},{"level":"Senior","question":"Walk through how symbolic links changed your design.","answer":"The new thing is a Link node (one more subclass, nothing in File or Directory changes) and one rule in the Resolver: a link met anywhere but the end of the path is always followed, a final link is followed or not depending on the call, and a counter of followed links trips LinkLoop. That is why path lookup must live in one class: if each of the eleven calls walked the path itself, every call would need the link rule and the hop count, and the eleven copies would drift. Operations that act on the link itself (remove, move, kind, symlink, mkdir) choose 'do not follow the last part' and the rest choose 'follow'."},{"level":"Senior","question":"Why does a dotted '..' after a link give a different answer here than in a real operating system?","answer":"Here '..' is removed from the text before any link is looked at, so '/link/..' is '/', whatever the link points to. A real kernel resolves '..' against the directory it has actually reached, so '/link/..' is the PARENT OF THE LINK TARGET. The textual rule is simpler, needs no parent pointers and is easy to test, and it is a deliberate simplification: an honest design says which one it chose. To do it properly, resolve one component at a time and keep a stack of the directories visited."},{"level":"Senior","question":"Your move() refuses to move a directory into itself. Is the textual check enough once links exist?","answer":"No. '/d' moved to '/link/x' where '/link' points at '/d' looks fine textually, but the destination's real parent is the directory being moved. Resolve the destination first and then ask whether the moved directory contains that parent (a walk below the directory that does not enter links); refuse if so. The textual check stays because it gives the documented InvalidPath for destinations that do not exist yet."},{"level":"Staff","question":"Make this safe for many threads, then make reads scale. Where do the locks go?","answer":"Start with one reader-writer lock around the tree: reads in parallel, every mutation exclusive. Its limit is a long find or size blocking writers. The next step is a lock per directory taken hand over hand while walking down, and then moves are the hard case: they need two directories locked in a global order (for example by node address) or a rename lock for the whole tree, and a move into a descendant must be checked under that lock or two concurrent moves can build a cycle. Links add a second hazard, because a lookup can cross subtrees. Production systems add per-file open handles, versioned snapshots for readers, and a journal for crash safety; say which of those you would need and which you would not."}],"apiHeader":"$1d","phaseApis":{"storm1":"$1e","storm2":"$1f"},"phases":["base","storm1","storm2"],"tests":{"base":[{"path":"fs_base.cpp","content":"$20"}],"storm1":[{"path":"fs_storm1.cpp","content":"$21"}],"storm2":[{"path":"fs_storm2.cpp","content":"$22"}]},"reference":[{"path":"finder.h","content":"#pragma once\n#include <string>\n#include <vector>\n\n#include \"glob.h\"\n#include \"node.h\"\n\n// Depth-first walk of a directory tree collecting the entries whose name matches. Links are listed, never entered.\nclass Finder {\n public:\n  explicit Finder(Glob glob) : glob_(std::move(glob)) {}\n\n  void collect(const Directory& dir, const std::string& base, std::vector<std::string>& found) const {\n    for (const auto& entry : dir.children()) {\n      const std::string path = (base == \"/\" ? \"\" : base) + \"/\" + entry.first;\n      if (glob_.matches(entry.first)) found.push_back(path);\n      const Directory* sub = entry.second->asDirectory();\n      if (sub != nullptr) collect(*sub, path, found);\n    }\n  }\n\n private:\n  Glob glob_;\n};\n"},{"path":"fs_impl.h","content":"$23"},{"path":"glob.h","content":"#pragma once\n#include <string>\n\n// A name pattern: '*' is any run of characters (including none), '?' is exactly one, anything else is itself.\nclass Glob {\n public:\n  explicit Glob(std::string pattern) : pattern_(std::move(pattern)) {}\n\n  // Linear-time matching: remember the last '*' and, on a mismatch, let it swallow one more character.\n  bool matches(const std::string& name) const {\n    std::size_t p = 0;\n    std::size_t i = 0;\n    std::size_t star = std::string::npos;\n    std::size_t mark = 0;\n    while (i < name.size()) {\n      if (p < pattern_.size() && pattern_[p] == '*') {\n        star = p++;\n        mark = i;\n      } else if (p < pattern_.size() && (pattern_[p] == '?' || pattern_[p] == name[i])) {\n        ++p;\n        ++i;\n      } else if (star != std::string::npos) {\n        p = star + 1;\n        i = ++mark;\n      } else {\n        return false;\n      }\n    }\n    while (p < pattern_.size() && pattern_[p] == '*') ++p;\n    return p == pattern_.size();\n  }\n\n private:\n  std::string pattern_;\n};\n"},{"path":"node.h","content":"$24"},{"path":"path.h","content":"$25"},{"path":"resolver.h","content":"$26"},{"path":"service.cpp","content":"#include \"fs_impl.h\"\n\nstd::unique_ptr<fs::FileSystem> fs::makeFileSystem() { return std::make_unique<FileSystemImpl>(); }\n\nstd::unique_ptr<fs::SearchableFileSystem> fs::makeSearchableFileSystem() { return std::make_unique<FileSystemImpl>(); }\n\nstd::unique_ptr<fs::LinkingFileSystem> fs::makeLinkingFileSystem() { return std::make_unique<FileSystemImpl>(); }\n"}],"driver":{"path":"driver.cpp","content":"#define BP_TEST_MAIN\n#include \"bp_test.h\"\n","readOnly":true}}}]

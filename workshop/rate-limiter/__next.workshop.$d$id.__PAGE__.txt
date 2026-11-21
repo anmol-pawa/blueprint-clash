@@ -1,0 +1,789 @@
+1:"$Sreact.fragment"
+2:"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js"
+3:I[39756,["$2"],"default"]
+4:I[37457,["$2"],"default"]
+5:"/blueprint-clash/_next/static/chunks/2n5qeheznvl4u.js"
+6:I[22016,["$2","$5"],""]
+7:I[64576,["$2"],"PwaRegister"]
+10:"/blueprint-clash/_next/static/chunks/2uk3wcjwqg0tl.js"
+11:"/blueprint-clash/_next/static/chunks/1zdu7yjl8efu4.js"
+12:I[65612,["$2","$10","$11"],"WorkshopClient"]
+22:"ViewportBoundary"
+23:I[97367,["$2"],"$22"]
+24:"MetadataBoundary"
+25:I[97367,["$2"],"$24"]
+26:"$Sreact.suspense"
+27:I[27201,["$2"],"IconMark"]
+:HL["/blueprint-clash/_next/static/chunks/1klm1scec-3x5.css","style"]
+9:X
+c:X
+c:C
+13:T1adb,# Editorial: Rate limiter library
+
+## Requirements
+Functional: `tryAcquire(client, permits)` answers a `Decision` (`allowed`, `retryAfter`). Each client string has its own token bucket: at most `capacity` tokens, full at first sight, one token added every `refillEvery` ticks while the bucket is not full. Time comes from an injected `Clock` (whole ticks, never backwards). Progress towards the next token is kept across refused requests, a full bucket stores no progress, and idle time is never banked beyond the capacity. A request is all or nothing: refused means nothing changed. `permits <= 0` is refused, more permits than the capacity is refused with `kNever`. `retryAfter` is exact: waiting one tick less is still refused. Hidden until asked: the partial-interval rule, the exact retry contract, and what a refusal costs. Non-goals: thread safety, memory reclamation of idle clients, distribution (all discussed), HTTP integration, configuration reload.
+
+**Change Storm 1, a sliding window:** `makeWindowLimiter`: at most `maxPermits` permits in any span of `windowTicks` ticks, exact (no boundary burst), refused requests not remembered, `retryAfter` is when enough old grants have left. Revealable by asking whether other algorithms will be needed.
+
+**Change Storm 2, a global limit:** `makeLayeredLimiter`: a per-client bucket and one shared bucket; a request needs both and charges both, or neither. Revealable by asking about a limit on the service as a whole.
+
+## Reference design
+- `LimitPolicy` is the Strategy: `check(permits, now)` looks and never changes anything, `commit(permits, now)` pays. Splitting the two is what makes "refused means unchanged" cheap to guarantee.
+- `TokenBucket` owns the integer token arithmetic (`project(now)` computes what the bucket would hold, without mutating).
+- `ClientPolicies` keeps one policy per client and creates it from a factory on first sight. It does not know which algorithm it holds.
+- `Admission` decides a request against a list of policies: check all, merge the verdicts (the slowest wait wins, `kNever` dominates), and only if everything said yes commit all.
+- `LimiterImpl` is the facade: validate permits, read the clock once, gather the applicable policies, ask `Admission`.
+
+**Storm 1 in the reference:** one new class, `SlidingWindowLog`, implementing `LimitPolicy`, and one new factory function. The facade, `Admission` and `ClientPolicies` are untouched, because the client map only ever sees the interface.
+
+**Storm 2 in the reference:** one extra policy (a second `TokenBucket`) in the list the facade hands to `Admission`, and one factory. `Admission` already checks everything before it charges anything, so the all-or-nothing rule and the "longest wait" rule were already there. The first draft of `Admission` that charges as it goes is the one the storm breaks.
+
+## Alternatives
+- **One class with a map of (tokens, timestamp) and an if for each algorithm** is the usual first answer. It passes the base phase and then the first storm adds an `if`, the second adds another, and each branch duplicates the refusal and retry logic.
+- **Floating-point tokens** (`tokens += elapsed * rate`) is shorter and wrong at the edges: rounding makes `retryAfter` off by one and lets a request slip through a tick early. Whole tokens plus an integer anchor make the boundary testable. The cost is that the rate must be expressed as "one token per N ticks", so rates above one per tick need a scaled unit.
+- **Leaky bucket as a meter** is the same arithmetic with different words; as a queue it smooths output but adds delay and memory.
+- **Fixed window counter** is one integer and one timestamp per client and the cheapest of all. It lets a client double its limit across a boundary, which is the reason Storm 1 exists. Use it when that error is acceptable.
+- **Sliding window counter** (current and previous window, weighted) approximates the log in O(1) memory with a small bounded error. It is the usual production choice for big fleets and slots in as another `LimitPolicy`.
+- **Charge first, refund on failure** for the layers: shorter, but a window exists where the client's bucket is too empty, concurrent requests are wrongly refused, and a crash loses the refund. Check-then-commit does not have that window.
+- **Timer thread that adds tokens every interval** looks natural and does not scale: one wake-up per client per interval. Lazy refill on access needs no thread and is deterministic under a fake clock.
+
+## Trade-offs
+Lazy refill makes every operation O(1) and the limiter deterministic, at the price of a map that never shrinks unless you add a sweep. Two-step check and commit costs an extra virtual call but makes refusals free of side effects and gives a natural place for a lock. The window log is exact and costs O(limit) memory per client; the token bucket is O(1) and lets clients burst up to the capacity, which is a feature for bursty clients and a defect when the downstream cannot take bursts. Integer ticks rule out floating-point surprises at the cost of an awkward unit for very high rates. `retryAfter` makes the library more useful and harder to build: it must be exact for every algorithm and every layer.
+
+## What breaks at 10x
+At 10x the clients the map is the problem: millions of mostly full buckets. A full bucket equals a new one, so drop it (lazily or by sweep), shard the map, and cap it with a stated failure mode (fail open or closed). At 10x the request rate the lock on the global bucket becomes the hottest line in the process: shard it into per-core batches of tokens that refill from the shared one. At 10x the servers the local state is wrong, since the same client is counted separately by each server: divide the limit, centralise it in a fast store with an atomic script, or sync counters and accept bounded overshoot (see the distributed rate limiter case study). At 10x the algorithms, the policy abstraction pays for itself: a new algorithm is a new class and a factory line.
+
+## Level signals
+- **SDE2:** a working token bucket with a per-client map; correct refill from elapsed time and a cap; asks what refusal returns; injects the clock; copes with the second algorithm by adding a branch or a class.
+- **Senior:** asks the partial-interval and retry questions before coding; integer arithmetic and an exact retry hint; all-or-nothing requests; an algorithm abstraction so the window slots in; layers charged only when all agree; names the memory growth and the race on a shared bucket.
+- **Staff:** compares algorithms by burst, boundary error and memory and picks per use case; designs idle-client eviction and sharded global tokens; reasons about the distributed version (local share, central store, token batching, gossip) with failure modes, clock skew and fail-open or fail-closed; connects retry hints to client back-off and retry storms.
+14:T9c5,#pragma once
+// Public API for the Rate limiter library problem. The hidden tests only use what is declared here.
+// You implement rl::makeLimiter() (in any of your .cpp files); everything behind it is your design.
+#include <memory>
+#include <string>
+
+namespace rl {
+
+// A source of time in whole ticks (think milliseconds). It never goes backwards.
+// The limiter must read time only through this interface, never from the system clock.
+class Clock {
+ public:
+  virtual ~Clock() = default;
+  virtual long long now() const = 0;
+};
+
+// The answer to one request.
+//   allowed     true when the request may go ahead (and has used up its permits).
+//   retryAfter  0 when allowed. When refused: the smallest number of ticks to wait, with no other request in
+//               between, after which the same request would be allowed; kNever if it can never be allowed.
+struct Decision {
+  static constexpr long long kNever = -1;
+  bool allowed = false;
+  long long retryAfter = 0;
+};
+
+// A token bucket: it holds at most `capacity` tokens, and one token is added every `refillEvery` ticks.
+struct Limit {
+  long long capacity = 0;
+  long long refillEvery = 0;
+};
+
+// Decides whether a client may do something right now. Every client (any string, the empty one included) has its own
+// allowance; clients never affect one another.
+class RateLimiter {
+ public:
+  virtual ~RateLimiter() = default;
+
+  // Asks to use `permits` tokens for `client`. Either all the permits are granted or none are: a refused
+  // request changes nothing. permits <= 0 is refused with retryAfter 0 and changes nothing. A request for more
+  // permits than the limit can ever hold is refused with retryAfter == Decision::kNever.
+  virtual Decision tryAcquire(const std::string& client, long long permits = 1) = 0;
+};
+
+// Token bucket per client. A client seen for the first time has a full bucket. Tokens come back one per
+// `refillEvery` ticks while the bucket is not full: the time since the last token is remembered, so waiting 7
+// ticks and then 3 more earns a token, and 25 idle ticks with refillEvery 10 earn two tokens and keep 5 ticks
+// of progress towards the third. A full bucket stores no progress: the clock for the next token starts when
+// tokens are first taken out of a full bucket. The bucket never holds more than `capacity`.
+// Returns nullptr when the clock is null or capacity <= 0 or refillEvery <= 0.
+std::unique_ptr<RateLimiter> makeLimiter(std::shared_ptr<Clock> clock, Limit limit);
+
+}  // namespace rl
+15:T431,#pragma once
+// Change Storm 1 adds a second algorithm. Everything from api.h still holds.
+#include "api.h"
+
+namespace rl {
+
+// A sliding window: at most `maxPermits` permits may be granted to one client in any span of `windowTicks`
+// consecutive ticks. A request granted at tick t counts against the client at ticks t .. t + windowTicks - 1 and is
+// forgotten from tick t + windowTicks on. A refused request is not remembered and does not count.
+// retryAfter is the smallest wait after which the same request would be granted, given the permits still inside the
+// window: for a request that must wait for several earlier grants to expire it is when enough of them have.
+struct WindowLimit {
+  long long maxPermits = 0;
+  long long windowTicks = 0;
+};
+
+// Returns nullptr when the clock is null or maxPermits <= 0 or windowTicks <= 0.
+// The rules of api.h about permits <= 0, permits that can never fit, all-or-nothing and per-client allowances hold.
+std::unique_ptr<RateLimiter> makeWindowLimiter(std::shared_ptr<Clock> clock, WindowLimit limit);
+
+}  // namespace rl
+16:T1321,#include <memory>
+#include <string>
+
+#include "api.h"
+#include "bp_test.h"
+
+namespace {
+class FakeClock : public rl::Clock {
+ public:
+  long long now() const override { return now_; }
+  void advance(long long ticks) { now_ += ticks; }
+
+ private:
+  long long now_ = 1000;
+};
+
+struct Fixture {
+  explicit Fixture(rl::Limit limit) : limiter(rl::makeLimiter(clock, limit)) {}
+  std::shared_ptr<FakeClock> clock = std::make_shared<FakeClock>();
+  std::unique_ptr<rl::RateLimiter> limiter;
+
+  bool ok(const std::string& client = "a", long long permits = 1) { return limiter->tryAcquire(client, permits).allowed; }
+  long long wait(const std::string& client = "a", long long permits = 1) { return limiter->tryAcquire(client, permits).retryAfter; }
+};
+}  // namespace
+
+TEST(Bucket, AClientStartsWithAFullBucket) {
+  Fixture f({5, 10});
+  for (int i = 0; i < 5; ++i) EXPECT_TRUE(f.ok());
+  EXPECT_FALSE(f.ok());
+}
+
+TEST(Bucket, AGrantedRequestHasNothingToWaitFor) {
+  Fixture f({2, 10});
+  const rl::Decision d = f.limiter->tryAcquire("a");
+  EXPECT_TRUE(d.allowed);
+  EXPECT_EQ(d.retryAfter, 0);
+}
+
+TEST(Bucket, ARefusalSaysHowLongToWait) {
+  Fixture f({2, 10});
+  EXPECT_TRUE(f.ok());
+  EXPECT_TRUE(f.ok());
+  EXPECT_EQ(f.wait(), 10);
+  f.clock->advance(4);
+  EXPECT_EQ(f.wait(), 6);
+  f.clock->advance(6);
+  EXPECT_TRUE(f.ok());
+}
+
+TEST(Bucket, TheAdvertisedWaitIsExactlyRight) {
+  Fixture f({3, 7});
+  for (int i = 0; i < 3; ++i) EXPECT_TRUE(f.ok());
+  const long long wait = f.wait();
+  EXPECT_EQ(wait, 7);
+  f.clock->advance(wait - 1);
+  EXPECT_FALSE(f.ok());
+  f.clock->advance(1);
+  EXPECT_TRUE(f.ok());
+  EXPECT_FALSE(f.ok());
+}
+
+TEST(Bucket, OneTokenComesBackPerInterval) {
+  Fixture f({3, 10});
+  for (int i = 0; i < 3; ++i) EXPECT_TRUE(f.ok());
+  f.clock->advance(10);
+  EXPECT_TRUE(f.ok());
+  EXPECT_FALSE(f.ok());
+  f.clock->advance(20);
+  EXPECT_TRUE(f.ok());
+  EXPECT_TRUE(f.ok());
+  EXPECT_FALSE(f.ok());
+}
+
+TEST(Bucket, ARefusedRequestDoesNotRestartTheCountdown) {
+  Fixture f({1, 10});
+  EXPECT_TRUE(f.ok());
+  f.clock->advance(7);
+  EXPECT_FALSE(f.ok());
+  f.clock->advance(3);
+  EXPECT_TRUE(f.ok());
+}
+
+TEST(Bucket, PartOfAnIntervalIsNotLostWhenTokensAreEarned) {
+  Fixture f({3, 10});
+  for (int i = 0; i < 3; ++i) EXPECT_TRUE(f.ok());
+  f.clock->advance(25);
+  EXPECT_TRUE(f.ok());
+  EXPECT_TRUE(f.ok());
+  EXPECT_EQ(f.wait(), 5);
+  f.clock->advance(5);
+  EXPECT_TRUE(f.ok());
+  EXPECT_FALSE(f.ok());
+}
+
+TEST(Bucket, IdleTimeIsNeverBankedBeyondTheCapacity) {
+  Fixture f({3, 10});
+  EXPECT_TRUE(f.ok());
+  f.clock->advance(100000);
+  for (int i = 0; i < 3; ++i) EXPECT_TRUE(f.ok());
+  EXPECT_FALSE(f.ok());
+}
+
+TEST(Bucket, TheCountdownStartsWhenATokenIsFirstTakenFromAFullBucket) {
+  Fixture f({2, 10});
+  f.clock->advance(500);
+  EXPECT_TRUE(f.ok());
+  EXPECT_TRUE(f.ok());
+  const rl::Decision d = f.limiter->tryAcquire("a");
+  EXPECT_FALSE(d.allowed);
+  EXPECT_EQ(d.retryAfter, 10);
+}
+
+TEST(Bucket, ARefusalWaitsOnlyForTheTimeStillOwed) {
+  Fixture f({1, 10});
+  EXPECT_TRUE(f.ok());
+  f.clock->advance(3);
+  EXPECT_EQ(f.wait(), 7);
+}
+
+TEST(Clients, EachClientHasItsOwnBucket) {
+  Fixture f({2, 10});
+  EXPECT_TRUE(f.ok("alice"));
+  EXPECT_TRUE(f.ok("alice"));
+  EXPECT_FALSE(f.ok("alice"));
+  EXPECT_TRUE(f.ok("bob"));
+  EXPECT_TRUE(f.ok("bob"));
+  EXPECT_FALSE(f.ok("bob"));
+}
+
+TEST(Clients, TheEmptyStringIsAnOrdinaryClient) {
+  Fixture f({1, 10});
+  EXPECT_TRUE(f.ok(""));
+  EXPECT_FALSE(f.ok(""));
+  EXPECT_TRUE(f.ok("a"));
+}
+
+TEST(Permits, SeveralPermitsAreTakenTogether) {
+  Fixture f({5, 10});
+  EXPECT_TRUE(f.ok("a", 3));
+  EXPECT_TRUE(f.ok("a", 2));
+  EXPECT_FALSE(f.ok("a", 1));
+}
+
+TEST(Permits, ARefusedRequestTakesNothing) {
+  Fixture f({5, 100});
+  EXPECT_TRUE(f.ok("a", 3));
+  EXPECT_FALSE(f.ok("a", 3));
+  EXPECT_TRUE(f.ok("a", 2));
+}
+
+TEST(Permits, TheWaitCoversAllTheMissingTokens) {
+  Fixture f({5, 10});
+  EXPECT_TRUE(f.ok("a", 5));
+  EXPECT_EQ(f.wait("a", 3), 30);
+  f.clock->advance(12);
+  EXPECT_EQ(f.wait("a", 3), 18);
+  f.clock->advance(18);
+  EXPECT_TRUE(f.ok("a", 3));
+}
+
+TEST(Permits, MoreThanTheCapacityCanNeverBeGranted) {
+  Fixture f({5, 10});
+  const rl::Decision d = f.limiter->tryAcquire("a", 6);
+  EXPECT_FALSE(d.allowed);
+  EXPECT_EQ(d.retryAfter, rl::Decision::kNever);
+  EXPECT_TRUE(f.ok("a", 5));
+}
+
+TEST(Permits, ZeroOrNegativePermitsAreRefusedAndChangeNothing) {
+  Fixture f({2, 10});
+  EXPECT_FALSE(f.ok("a", 0));
+  EXPECT_FALSE(f.ok("a", -3));
+  EXPECT_EQ(f.wait("a", 0), 0);
+  EXPECT_TRUE(f.ok());
+  EXPECT_TRUE(f.ok());
+  EXPECT_FALSE(f.ok());
+}
+
+TEST(Factory, InvalidArgumentsGiveNoLimiter) {
+  auto clock = std::make_shared<FakeClock>();
+  EXPECT_TRUE(rl::makeLimiter(nullptr, {1, 1}) == nullptr);
+  EXPECT_TRUE(rl::makeLimiter(clock, {0, 1}) == nullptr);
+  EXPECT_TRUE(rl::makeLimiter(clock, {1, 0}) == nullptr);
+  EXPECT_TRUE(rl::makeLimiter(clock, {-1, 5}) == nullptr);
+  EXPECT_TRUE(rl::makeLimiter(clock, {1, 1}) != nullptr);
+}
+17:T10db,#include <memory>
+#include <string>
+
+#include "api_storm1.h"
+#include "bp_test.h"
+
+namespace {
+class FakeClock : public rl::Clock {
+ public:
+  long long now() const override { return now_; }
+  void advance(long long ticks) { now_ += ticks; }
+
+ private:
+  long long now_ = 1000;
+};
+
+struct Fixture {
+  explicit Fixture(rl::WindowLimit limit) : limiter(rl::makeWindowLimiter(clock, limit)) {}
+  std::shared_ptr<FakeClock> clock = std::make_shared<FakeClock>();
+  std::unique_ptr<rl::RateLimiter> limiter;
+
+  bool ok(const std::string& client = "a", long long permits = 1) { return limiter->tryAcquire(client, permits).allowed; }
+  long long wait(const std::string& client = "a", long long permits = 1) { return limiter->tryAcquire(client, permits).retryAfter; }
+};
+}  // namespace
+
+TEST(Window, TheFactoryRefusesInvalidArguments) {
+  auto clock = std::make_shared<FakeClock>();
+  EXPECT_TRUE(rl::makeWindowLimiter(nullptr, {1, 1}) == nullptr);
+  EXPECT_TRUE(rl::makeWindowLimiter(clock, {0, 1}) == nullptr);
+  EXPECT_TRUE(rl::makeWindowLimiter(clock, {1, 0}) == nullptr);
+  EXPECT_TRUE(rl::makeWindowLimiter(clock, {2, 5}) != nullptr);
+}
+
+TEST(Window, GrantsUpToTheMaximumInsideTheWindow) {
+  Fixture f({3, 10});
+  EXPECT_TRUE(f.ok());
+  EXPECT_TRUE(f.ok());
+  EXPECT_TRUE(f.ok());
+  const rl::Decision d = f.limiter->tryAcquire("a");
+  EXPECT_FALSE(d.allowed);
+  EXPECT_EQ(d.retryAfter, 10);
+}
+
+TEST(Window, AGrantIsForgottenExactlyOneWindowLater) {
+  Fixture f({1, 10});
+  EXPECT_TRUE(f.ok());
+  f.clock->advance(9);
+  EXPECT_FALSE(f.ok());
+  f.clock->advance(1);
+  EXPECT_TRUE(f.ok());
+}
+
+TEST(Window, NoBurstAcrossAWindowBoundary) {
+  // Ticks 1009 and 1010 straddle the edge of a clock-aligned window of 10, but they are one tick apart.
+  Fixture f({3, 10});
+  f.clock->advance(9);
+  EXPECT_TRUE(f.ok("a", 3));
+  f.clock->advance(1);
+  EXPECT_FALSE(f.ok());
+  EXPECT_EQ(f.wait(), 9);
+}
+
+TEST(Window, GrantsLeaveTheWindowOneByOne) {
+  Fixture f({3, 10});
+  EXPECT_TRUE(f.ok());   // 1000
+  f.clock->advance(3);
+  EXPECT_TRUE(f.ok());   // 1003
+  f.clock->advance(3);
+  EXPECT_TRUE(f.ok());   // 1006
+  f.clock->advance(1);   // 1007
+  EXPECT_EQ(f.wait(), 3);
+  f.clock->advance(3);   // 1010: the grant of 1000 is gone
+  EXPECT_TRUE(f.ok());
+  EXPECT_EQ(f.wait(), 3);  // the next to leave is the grant of 1003
+}
+
+TEST(Window, RefusedRequestsAreNotRemembered) {
+  Fixture f({2, 10});
+  EXPECT_TRUE(f.ok());
+  EXPECT_TRUE(f.ok());
+  f.clock->advance(5);
+  EXPECT_FALSE(f.ok());
+  EXPECT_FALSE(f.ok());
+  f.clock->advance(5);
+  EXPECT_TRUE(f.ok("a", 2));
+}
+
+TEST(Window, TheWaitCoversEveryGrantThatMustLeave) {
+  Fixture f({4, 10});
+  EXPECT_TRUE(f.ok("a", 1));  // 1000
+  f.clock->advance(2);
+  EXPECT_TRUE(f.ok("a", 1));  // 1002
+  f.clock->advance(2);
+  EXPECT_TRUE(f.ok("a", 2));  // 1004
+  f.clock->advance(1);        // 1005: 4 permits inside
+  EXPECT_EQ(f.wait("a", 2), 7);  // needs the grants of 1000 and 1002 gone: 1002 + 10 - 1005
+  f.clock->advance(6);
+  EXPECT_FALSE(f.ok("a", 2));
+  f.clock->advance(1);
+  EXPECT_TRUE(f.ok("a", 2));
+}
+
+TEST(Window, ARequestIsAllOrNothing) {
+  Fixture f({4, 10});
+  EXPECT_TRUE(f.ok("a", 3));
+  EXPECT_FALSE(f.ok("a", 2));
+  EXPECT_TRUE(f.ok("a", 1));
+}
+
+TEST(Window, MoreThanTheMaximumCanNeverBeGranted) {
+  Fixture f({4, 10});
+  const rl::Decision d = f.limiter->tryAcquire("a", 5);
+  EXPECT_FALSE(d.allowed);
+  EXPECT_EQ(d.retryAfter, rl::Decision::kNever);
+  EXPECT_FALSE(f.ok("a", 0));
+  EXPECT_FALSE(f.ok("a", -1));
+  EXPECT_TRUE(f.ok("a", 4));
+}
+
+TEST(Window, ClientsHaveSeparateWindows) {
+  Fixture f({1, 10});
+  EXPECT_TRUE(f.ok("alice"));
+  EXPECT_FALSE(f.ok("alice"));
+  EXPECT_TRUE(f.ok("bob"));
+}
+
+TEST(Window, TheAdvertisedWaitIsHonest) {
+  Fixture f({2, 6});
+  EXPECT_TRUE(f.ok());
+  f.clock->advance(1);
+  EXPECT_TRUE(f.ok());
+  const long long wait = f.wait();
+  EXPECT_EQ(wait, 5);
+  f.clock->advance(wait - 1);
+  EXPECT_FALSE(f.ok());
+  f.clock->advance(1);
+  EXPECT_TRUE(f.ok());
+}
+
+TEST(Window, TheTokenBucketLimiterStillWorks) {
+  auto clock = std::make_shared<FakeClock>();
+  auto limiter = rl::makeLimiter(clock, {2, 10});
+  EXPECT_TRUE(limiter->tryAcquire("a").allowed);
+  EXPECT_TRUE(limiter->tryAcquire("a").allowed);
+  EXPECT_FALSE(limiter->tryAcquire("a").allowed);
+  clock->advance(10);
+  EXPECT_TRUE(limiter->tryAcquire("a").allowed);
+}
+18:Tfb9,#include <memory>
+#include <string>
+
+#include "api_storm2.h"
+#include "bp_test.h"
+
+namespace {
+class FakeClock : public rl::Clock {
+ public:
+  long long now() const override { return now_; }
+  void advance(long long ticks) { now_ += ticks; }
+
+ private:
+  long long now_ = 1000;
+};
+
+struct Fixture {
+  Fixture(rl::Limit perClient, rl::Limit global) : limiter(rl::makeLayeredLimiter(clock, perClient, global)) {}
+  std::shared_ptr<FakeClock> clock = std::make_shared<FakeClock>();
+  std::unique_ptr<rl::RateLimiter> limiter;
+
+  bool ok(const std::string& client, long long permits = 1) { return limiter->tryAcquire(client, permits).allowed; }
+  rl::Decision ask(const std::string& client, long long permits = 1) { return limiter->tryAcquire(client, permits); }
+};
+}  // namespace
+
+TEST(Layered, TheFactoryRefusesInvalidArguments) {
+  auto clock = std::make_shared<FakeClock>();
+  EXPECT_TRUE(rl::makeLayeredLimiter(nullptr, {1, 1}, {1, 1}) == nullptr);
+  EXPECT_TRUE(rl::makeLayeredLimiter(clock, {0, 1}, {1, 1}) == nullptr);
+  EXPECT_TRUE(rl::makeLayeredLimiter(clock, {1, 1}, {1, 0}) == nullptr);
+  EXPECT_TRUE(rl::makeLayeredLimiter(clock, {1, 1}, {1, 1}) != nullptr);
+}
+
+TEST(Layered, ClientsShareTheGlobalBucket) {
+  Fixture f({5, 100}, {3, 10});
+  EXPECT_TRUE(f.ok("a"));
+  EXPECT_TRUE(f.ok("a"));
+  EXPECT_TRUE(f.ok("b"));
+  const rl::Decision d = f.ask("c");
+  EXPECT_FALSE(d.allowed);
+  EXPECT_EQ(d.retryAfter, 10);
+}
+
+TEST(Layered, TheClientBucketStillLimitsEachClient) {
+  Fixture f({1, 100}, {10, 10});
+  EXPECT_TRUE(f.ok("a"));
+  const rl::Decision d = f.ask("a");
+  EXPECT_FALSE(d.allowed);
+  EXPECT_EQ(d.retryAfter, 100);
+  EXPECT_TRUE(f.ok("b"));
+}
+
+TEST(Layered, ARefusalByTheClientBucketDoesNotChargeTheGlobalOne) {
+  Fixture f({1, 100}, {3, 1000});
+  EXPECT_TRUE(f.ok("a"));
+  for (int i = 0; i < 5; ++i) EXPECT_FALSE(f.ok("a"));
+  EXPECT_TRUE(f.ok("b"));
+  EXPECT_TRUE(f.ok("c"));
+}
+
+TEST(Layered, ARefusalByTheGlobalBucketDoesNotChargeTheClientOne) {
+  Fixture f({2, 1000}, {1, 10});
+  EXPECT_TRUE(f.ok("a"));
+  EXPECT_FALSE(f.ok("a"));
+  f.clock->advance(10);
+  EXPECT_TRUE(f.ok("a"));
+  f.clock->advance(10);
+  EXPECT_FALSE(f.ok("a"));
+}
+
+TEST(Layered, WhenBothRefuseTheWaitIsTheLongerOne) {
+  Fixture clientSlower({1, 50}, {1, 30});
+  EXPECT_TRUE(clientSlower.ok("a"));
+  const rl::Decision first = clientSlower.ask("a");
+  EXPECT_FALSE(first.allowed);
+  EXPECT_EQ(first.retryAfter, 50);
+
+  Fixture globalSlower({1, 30}, {1, 50});
+  EXPECT_TRUE(globalSlower.ok("a"));
+  const rl::Decision second = globalSlower.ask("a");
+  EXPECT_FALSE(second.allowed);
+  EXPECT_EQ(second.retryAfter, 50);
+}
+
+TEST(Layered, WhenOnlyTheSlowerOneRefusesItsWaitIsReported) {
+  Fixture f({1, 20}, {4, 60});
+  EXPECT_TRUE(f.ok("a"));
+  EXPECT_TRUE(f.ok("b"));
+  EXPECT_TRUE(f.ok("c"));
+  EXPECT_TRUE(f.ok("d"));
+  f.clock->advance(5);
+  const rl::Decision d = f.ask("a");
+  EXPECT_FALSE(d.allowed);
+  EXPECT_EQ(d.retryAfter, 55);
+}
+
+TEST(Layered, AWaitThatIsHonestForBothLayers) {
+  Fixture f({1, 20}, {2, 30});
+  EXPECT_TRUE(f.ok("a"));
+  EXPECT_TRUE(f.ok("b"));
+  const long long wait = f.ask("a").retryAfter;
+  EXPECT_EQ(wait, 30);
+  f.clock->advance(wait - 1);
+  EXPECT_FALSE(f.ok("a"));
+  f.clock->advance(1);
+  EXPECT_TRUE(f.ok("a"));
+}
+
+TEST(Layered, AskingForMoreThanEitherBucketCanHoldIsNeverGranted) {
+  Fixture f({5, 10}, {3, 10});
+  const rl::Decision d = f.ask("a", 4);
+  EXPECT_FALSE(d.allowed);
+  EXPECT_EQ(d.retryAfter, rl::Decision::kNever);
+  EXPECT_TRUE(f.ok("a", 3));
+}
+
+TEST(Layered, ZeroPermitsAreRefusedWithoutCharging) {
+  Fixture f({1, 100}, {1, 100});
+  EXPECT_FALSE(f.ok("a", 0));
+  EXPECT_TRUE(f.ok("a"));
+}
+
+TEST(Layered, TheOlderLimitersStillWork) {
+  auto clock = std::make_shared<FakeClock>();
+  auto bucket = rl::makeLimiter(clock, {1, 10});
+  auto window = rl::makeWindowLimiter(clock, {1, 10});
+  EXPECT_TRUE(bucket->tryAcquire("a").allowed);
+  EXPECT_FALSE(bucket->tryAcquire("a").allowed);
+  EXPECT_TRUE(window->tryAcquire("a").allowed);
+  EXPECT_FALSE(window->tryAcquire("a").allowed);
+}
+19:T4a2,#pragma once
+#include <algorithm>
+#include <vector>
+
+#include "limit_policy.h"
+
+// Decides a request against several policies at once: all of them are asked first, and only if every one says yes
+// is any of them charged. That is what makes "refused means nothing changed" true however many layers there are.
+class Admission {
+ public:
+  static rl::Decision decide(const std::vector<LimitPolicy*>& policies, long long permits, long long now) {
+    rl::Decision verdict{true, 0};
+    for (const LimitPolicy* policy : policies) verdict = merge(verdict, policy->check(permits, now));
+    if (verdict.allowed) {
+      for (LimitPolicy* policy : policies) policy->commit(permits, now);
+    }
+    return verdict;
+  }
+
+ private:
+  // The request needs every policy to say yes, so it has to wait for the slowest one.
+  static rl::Decision merge(const rl::Decision& so_far, const rl::Decision& next) {
+    if (so_far.allowed) return next;
+    if (next.allowed) return so_far;
+    if (so_far.retryAfter == rl::Decision::kNever || next.retryAfter == rl::Decision::kNever) {
+      return {false, rl::Decision::kNever};
+    }
+    return {false, std::max(so_far.retryAfter, next.retryAfter)};
+  }
+};
+1a:T48e,#include "limiter_impl.h"
+#include "sliding_window_log.h"
+#include "token_bucket.h"
+
+namespace {
+bool valid(const rl::Limit& limit) { return limit.capacity > 0 && limit.refillEvery > 0; }
+}  // namespace
+
+std::unique_ptr<rl::RateLimiter> rl::makeLimiter(std::shared_ptr<Clock> clock, Limit limit) {
+  if (clock == nullptr || !valid(limit)) return nullptr;
+  return std::make_unique<LimiterImpl>(std::move(clock), [limit] { return std::make_unique<TokenBucket>(limit); });
+}
+
+std::unique_ptr<rl::RateLimiter> rl::makeWindowLimiter(std::shared_ptr<Clock> clock, WindowLimit limit) {
+  if (clock == nullptr || limit.maxPermits <= 0 || limit.windowTicks <= 0) return nullptr;
+  return std::make_unique<LimiterImpl>(std::move(clock), [limit] { return std::make_unique<SlidingWindowLog>(limit); });
+}
+
+std::unique_ptr<rl::RateLimiter> rl::makeLayeredLimiter(std::shared_ptr<Clock> clock, Limit perClient, Limit global) {
+  if (clock == nullptr || !valid(perClient) || !valid(global)) return nullptr;
+  return std::make_unique<LimiterImpl>(
+      std::move(clock), [perClient] { return std::make_unique<TokenBucket>(perClient); }, std::make_unique<TokenBucket>(global));
+}
+1b:T423,#pragma once
+#include <memory>
+#include <string>
+#include <utility>
+#include <vector>
+
+#include "admission.h"
+#include "client_policies.h"
+
+// The public face. It validates the request, reads the clock once, gathers the policies that apply and lets
+// Admission decide. It has no rule of its own about buckets, windows or layers.
+class LimiterImpl : public rl::RateLimiter {
+ public:
+  LimiterImpl(std::shared_ptr<rl::Clock> clock, ClientPolicies::Factory perClient, std::unique_ptr<LimitPolicy> global = nullptr)
+      : clock_(std::move(clock)), clients_(std::move(perClient)), global_(std::move(global)) {}
+
+  rl::Decision tryAcquire(const std::string& client, long long permits) override {
+    if (permits <= 0) return {false, 0};
+    std::vector<LimitPolicy*> applicable{&clients_.forClient(client)};
+    if (global_ != nullptr) applicable.push_back(global_.get());
+    return Admission::decide(applicable, permits, clock_->now());
+  }
+
+ private:
+  std::shared_ptr<rl::Clock> clock_;
+  ClientPolicies clients_;
+  std::unique_ptr<LimitPolicy> global_;
+};
+1c:T64f,#pragma once
+#include <deque>
+
+#include "limit_policy.h"
+
+// Sliding window kept as a log of grants. A grant made at tick t is inside the window for ticks t .. t + window - 1.
+// Exact (no boundary bursts) and O(grants in the window) memory; the editorial compares the cheaper counters.
+class SlidingWindowLog : public LimitPolicy {
+ public:
+  explicit SlidingWindowLog(rl::WindowLimit limit) : limit_(limit) {}
+
+  rl::Decision check(long long permits, long long now) const override {
+    if (permits > limit_.maxPermits) return {false, rl::Decision::kNever};
+    long long used = 0;
+    for (const Grant& grant : grants_) {
+      if (isInside(grant, now)) used += grant.permits;
+    }
+    const long long excess = used + permits - limit_.maxPermits;
+    if (excess <= 0) return {true, 0};
+    // Wait until enough of the oldest grants have left the window to make room.
+    long long freed = 0;
+    for (const Grant& grant : grants_) {
+      if (!isInside(grant, now)) continue;
+      freed += grant.permits;
+      if (freed >= excess) return {false, grant.at + limit_.windowTicks - now};
+    }
+    return {false, rl::Decision::kNever};  // unreachable: used + permits - max <= used
+  }
+
+  void commit(long long permits, long long now) override {
+    while (!grants_.empty() && !isInside(grants_.front(), now)) grants_.pop_front();
+    grants_.push_back({now, permits});
+  }
+
+ private:
+  struct Grant {
+    long long at;
+    long long permits;
+  };
+
+  bool isInside(const Grant& grant, long long now) const { return grant.at + limit_.windowTicks > now; }
+
+  rl::WindowLimit limit_;
+  std::deque<Grant> grants_;
+};
+1d:T686,#pragma once
+#include <algorithm>
+
+#include "limit_policy.h"
+
+// Token bucket with whole tokens and integer time, so there is no floating-point drift. The state is the number of
+// tokens and `anchor`, the tick from which the time to the next token is counted. A full bucket has no progress to
+// remember, so its anchor follows the clock; the first token taken out of a full bucket starts the countdown.
+class TokenBucket : public LimitPolicy {
+ public:
+  explicit TokenBucket(rl::Limit limit) : limit_(limit), tokens_(limit.capacity) {}
+
+  rl::Decision check(long long permits, long long now) const override {
+    if (permits > limit_.capacity) return {false, rl::Decision::kNever};
+    const State state = project(now);
+    if (state.tokens >= permits) return {true, 0};
+    const long long missing = permits - state.tokens;
+    return {false, missing * limit_.refillEvery - (now - state.anchor)};
+  }
+
+  void commit(long long permits, long long now) override {
+    const State state = project(now);
+    tokens_ = state.tokens - permits;
+    anchor_ = state.anchor;
+  }
+
+ private:
+  struct State {
+    long long tokens;
+    long long anchor;
+  };
+
+  // What the bucket would hold at `now`: whole tokens earned since the anchor, capped at the capacity.
+  State project(long long now) const {
+    if (tokens_ >= limit_.capacity) return {limit_.capacity, now};
+    const long long earned = (now - anchor_) / limit_.refillEvery;
+    const long long tokens = std::min(limit_.capacity, tokens_ + earned);
+    return {tokens, tokens >= limit_.capacity ? now : anchor_ + earned * limit_.refillEvery};
+  }
+
+  rl::Limit limit_;
+  long long tokens_;
+  long long anchor_ = 0;
+};
+f:[["children",{"s":"__PAGE__","h":160,"d":{"r":["$","$1","c",{"children":[["$","$L12",null,{"bundle":{"id":"rate-limiter","title":"Rate limiter library","level":"Senior","parMinutes":50,"patterns":["Strategy","Composite"],"requirements":[{"id":"R-bucket","text":"A token bucket per client: at most `capacity` tokens, full at first sight, one token added every `refillEvery` ticks while not full. Progress towards the next token is kept (a refused request does not restart it, 25 idle ticks with an interval of 10 earn two tokens and keep 5 ticks), a full bucket stores no progress, and idle time is never banked beyond the capacity. Time comes from an injected Clock. makeLimiter() returns nullptr for a null clock or a non-positive capacity or interval.","phase":"base","hidden":true},{"id":"R-retry","text":"tryAcquire() returns a Decision. allowed with retryAfter 0 when granted; when refused, retryAfter is the exact smallest wait in ticks after which the same request would be granted (one tick less is still refused), counting only the time still owed.","phase":"base","hidden":true},{"id":"R-permits","text":"A request carries a number of permits (default 1) and is all or nothing: a refused request changes nothing. permits <= 0 is refused with retryAfter 0 and changes nothing; more permits than the capacity is refused with retryAfter == kNever. Every client string (the empty one too) has its own allowance.","phase":"base","hidden":true},{"id":"R-window","text":"Storm 1: makeWindowLimiter(): at most maxPermits permits per client in any span of windowTicks ticks. A grant at tick t counts for ticks t .. t+windowTicks-1 and is forgotten from t+windowTicks. No burst across a clock-aligned boundary. Refused requests are not remembered. retryAfter is when enough old grants have left to make room for this request. All rules about permits, kNever and clients still hold; the token bucket limiter is unchanged.","phase":"storm1","hidden":true},{"id":"R-layered","text":"Storm 2: makeLayeredLimiter(): each client has its own token bucket and all clients share one global bucket (full at the start). A request is granted only if both can pay, and then both pay; if either refuses, neither is charged. When both refuse retryAfter is the longer wait, and kNever if either can never pay.","phase":"storm2","hidden":true}],"brief":"# Rate limiter library\n\nYour team's services all need to protect themselves from clients that send too many requests. You are writing the small in-process library they will share: given a client id, say yes or no, and when to come back.\n\nWhat you know so far:\n\n- Clients are identified by a string (an API key, a user id, an IP address).\n- The answer is a yes or no, and for a no, how long the caller should wait.\n- The library must not read the system clock itself: time arrives through a `Clock` the caller supplies, so a test (or a replay of an incident) controls it.\n\nYour task: design and implement it behind the `rl::RateLimiter` interface in `api.h`. The hidden tests call only that interface. Ask the interviewer questions first: \"limit what, exactly, and what happens at the edges?\" is where most first drafts go wrong.\n","editorial":"$13","clarify":[{"id":"q-algo","text":"What does 'too many requests' mean exactly? Is there a burst allowance, and how fast does a client earn capacity back?","answer":"A token bucket per client: it holds at most `capacity` tokens, starts full, and one token is added every `refillEvery` ticks while it is not full. A request spends tokens. Time comes from an injected Clock in whole ticks, never going backwards. Idle time is never banked beyond the capacity.","reveals":["R-bucket"],"quality":"essential"},{"id":"q-refill","text":"How do partial intervals count? If a client waits 7 ticks, asks (refused) and waits 3 more, has a token been earned? What if 25 ticks pass with an interval of 10?","answer":"Progress towards the next token is kept: 7 and then 3 more earns one token, and a refused request does not restart the countdown. 25 idle ticks earn two tokens and keep 5 ticks of progress. A full bucket stores no progress, so the countdown starts when tokens are first taken from it. Use whole tokens and integer ticks.","reveals":["R-bucket"],"quality":"essential"},{"id":"q-answer","text":"What should a refused caller get back? Is yes/no enough?","answer":"A decision with `allowed` and `retryAfter`: 0 when allowed; when refused, the smallest wait in ticks after which the same request would be allowed (with nobody else asking in between). If it can never be allowed (more permits than the capacity), retryAfter is Decision::kNever. The caller turns this into a Retry-After header or a sleep.","reveals":["R-retry"],"quality":"essential"},{"id":"q-permits","text":"Does one call always cost one token? What about batches, a zero, or more than the bucket can ever hold? And does a refused request use anything up?","answer":"A request carries a number of permits, default 1. It is all or nothing: a refused request changes nothing. permits <= 0 is refused with retryAfter 0 and changes nothing. More permits than the capacity is refused with kNever. A client is any string, the empty one included, and clients never affect each other.","reveals":["R-permits"],"quality":"essential"},{"id":"q-window","text":"Will we need other algorithms later, for example 'at most N requests in any 60 seconds'?","answer":"Yes, the team has a service that needs a strict sliding window next, because the token bucket lets a client burst. Details arrive with the change.","reveals":["R-window"],"quality":"essential"},{"id":"q-global","text":"Besides per-client limits, will anyone need a limit on the service as a whole?","answer":"Yes: a protective ceiling across all clients, in addition to each client's own limit. A request must satisfy both. Details arrive with the change.","reveals":["R-layered"],"quality":"essential"},{"id":"q-units","text":"What unit is a tick, and what is a realistic capacity?","answer":"No unit; the tests use a fake clock. In production a tick would be a millisecond. Capacities from 1 to a few thousand.","reveals":[],"quality":"useful"},{"id":"q-memory","text":"Millions of clients will pass through. Must idle clients' state be released?","answer":"Say how, do not build it: a client whose bucket is full is indistinguishable from a new one, so its entry can be dropped; run it lazily or on a timer. The tests do not check memory.","reveals":[],"quality":"useful"},{"id":"q-thread","text":"Is the limiter called from many threads? Does it need locking?","answer":"The tests are single-threaded. Say what you would do (a mutex per shard of the client map, or atomics for one bucket) but do not build it.","reveals":[],"quality":"useful"},{"id":"q-clockskew","text":"What if the clock jumps backwards or different servers disagree?","answer":"The Clock never goes backwards here. In production use a monotonic clock; across servers see the distributed rate limiter case study.","reveals":[],"quality":"useful"},{"id":"q-dist","text":"Is the limit shared by several servers, backed by Redis?","answer":"No; this is the in-process building block. The distributed rate limiter is a case study in the system-design half of the game.","reveals":[],"quality":"noise"},{"id":"q-http","text":"Should it plug into an HTTP framework and send 429 responses?","answer":"No. The library only answers allowed or not; the integration is the caller's job.","reveals":[],"quality":"noise"},{"id":"q-config","text":"Should limits be loaded from a config file and reloaded at runtime?","answer":"No. Limits are passed to the factory. Hot reload is a good extension, not a requirement.","reveals":[],"quality":"noise"}],"rubric":[{"id":"res-facade","text":"Validates the request, reads the clock once and sequences the collaborators; no rule of its own about buckets or windows","phase":"base","owners":["LimiterImpl","RateLimiterImpl","LimiterFacade","Limiter"]},{"id":"res-bucket","text":"Owns the token arithmetic: refill, cap, partial progress and the wait for a given number of permits","phase":"base","owners":["TokenBucket","Bucket","TokenBucketPolicy","TokenBucketLimit"]},{"id":"res-clients","text":"Keeps one allowance per client and creates it on first sight","phase":"base","owners":["ClientPolicies","ClientRegistry","ClientTable","BucketRegistry","PolicyRegistry"]},{"id":"res-strategy","text":"A common abstraction for 'how much can this allowance pay for' that bucket and window both implement","phase":"storm1","owners":["LimitPolicy","RateLimitPolicy","LimitStrategy","LimitAlgorithm","Policy"]},{"id":"res-window","text":"Owns the sliding-window arithmetic: the log of grants, what has left the window and the wait for room","phase":"storm1","owners":["SlidingWindowLog","SlidingWindow","WindowPolicy","WindowLog"]},{"id":"res-layers","text":"Decides one request against several allowances: ask all first, charge all only if every one says yes, and merge the waits","phase":"storm2","owners":["Admission","AllOf","PolicyChain","LayeredPolicy","CompositePolicy","LimitChain"]}],"followups":[{"level":"SDE2","question":"Token bucket, leaky bucket, fixed window, sliding window log and sliding window counter: when would you pick each?","answer":"Token bucket allows bursts up to the capacity and then a steady rate, with O(1) state per client: the default for APIs where short bursts are fine. Leaky bucket smooths output to a fixed rate (a queue), good when the downstream cannot take bursts. Fixed window is the cheapest (one counter) but lets a client double the limit across a boundary. Sliding window log is exact but stores every grant, O(limit) memory per client. Sliding window counter keeps two counters and weights the previous window, a cheap approximation that is usually within a few percent. Say which error you accept: bursts, boundary doubling, or memory."},{"level":"SDE2","question":"Why does the decision carry retryAfter instead of just a boolean?","answer":"A boolean makes the caller guess, so clients retry immediately and hammer the limiter (a retry storm). A precise wait lets the caller sleep or set an HTTP Retry-After header, which also makes the limiter cheaper to run because refused requests become rarer. It is part of the contract, so it is tested at the exact tick: one tick early must still be refused."},{"level":"Senior","question":"How do you handle two threads asking for the same client at the same moment?","answer":"check-then-commit is a race: both see one token and both commit. Make the pair atomic per client. Options: a mutex per client entry (or per shard of the map), or for a single bucket a compare-and-swap loop on a packed (tokens, anchor) word. Keep the critical section tiny: compute from the clock reading taken before the lock. The layered limiter needs both locks, so take them in a fixed order (client, then global) or the global becomes a hot lock you shard into per-thread token batches."},{"level":"Senior","question":"Millions of clients, most seen once. How do you stop the client map growing without bound?","answer":"A bucket that is full carries no information: it equals a new client's bucket, so it can be dropped. Evict lazily (when a request finds the bucket full again) or with a sweep that removes entries whose projected tokens equal the capacity, using an expiry heap or a timer wheel keyed by the time the bucket becomes full again. The same idea works for the window log: an entry whose newest grant has left the window is empty. Cap the map as well and decide the failure mode (fail open or closed) when it is full."},{"level":"Senior","question":"The layered limiter checks both and charges both. Why not charge the client first, and refund if the global refuses?","answer":"A refund is a second write that can race with other requests and can be lost if the process fails between the two steps; in the meantime the client's bucket looks emptier than it is, so a concurrent request is wrongly refused. Checking first and committing second keeps refused requests free of side effects, and the check-then-commit structure is also what a lock needs to cover. The price is that the policies expose two operations instead of one, which is a small interface cost for a large correctness gain."},{"level":"Senior","question":"Sliding window log memory is O(limit) per client. How would you cut it?","answer":"Use the sliding window counter: keep the count of the current and previous fixed windows and estimate the sliding count as current + previous * (fraction of the previous window still inside). It is O(1) per client and its error is bounded by how uneven the previous window was; measure it against the log on real traffic before accepting it. Or keep the log but coalesce grants that share a tick, which helps bursty clients. Either replaces SlidingWindowLog behind LimitPolicy and nothing else changes."},{"level":"Staff","question":"Design the same limiter for a fleet of 200 servers behind a load balancer. What are the options and trade-offs?","answer":"Option 1, divide the limit: each server enforces limit/200 locally. No coordination and no added latency, but it is wrong when the load balancer is uneven and wastes quota for clients that hit few servers. Option 2, a central store such as Redis with an atomic script per request: exact, but adds a network hop to every request and makes the store a dependency (decide fail open or fail closed). Option 3, local buckets that borrow tokens in batches from a central allowance: bounded error, one round trip per batch. Option 4, gossip or sync of counters: eventually consistent, can overshoot by (servers x sync interval x rate). Pick by how costly an overshoot is and how much added latency and dependency you can tolerate. The case study in the system-design half of this game works through the numbers."},{"level":"Staff","question":"Per-client limits are not enough: some clients are paying customers with 100x the quota, and one expensive endpoint should cost 20 permits. What changes in the design?","answer":"Nothing structural, which is the point of the seams. Permits already express cost, so the endpoint passes 20. Different quotas mean the ClientPolicies factory takes the client and returns a policy built from that client's plan, looked up in a plan table (cache it; plans change rarely). Plans changing at runtime need a policy that can be reconfigured without losing state, so TokenBucket gets a setLimit that clamps tokens to the new capacity. Quotas for whole tenants, endpoints and users compose through the same all-of rule as the layered limiter: more LimitPolicy instances in the list, still checked first and charged together."}],"apiHeader":"$14","phaseApis":{"storm1":"$15","storm2":"#pragma once\n// Change Storm 2 adds a limit on the whole service. Everything from api.h and api_storm1.h still holds.\n#include \"api_storm1.h\"\n\nnamespace rl {\n\n// Two token buckets at once. Each client has its own bucket (`perClient`), and all clients together share one bucket\n// (`global`, full at the start). A request is granted only if BOTH buckets can pay for it, and then both pay.\n// If either refuses, neither is charged. When both refuse, retryAfter is the longer of the two waits (the request\n// needs both); if either can never pay, retryAfter is Decision::kNever.\n// Returns nullptr when the clock is null or either limit has capacity <= 0 or refillEvery <= 0.\nstd::unique_ptr<RateLimiter> makeLayeredLimiter(std::shared_ptr<Clock> clock, Limit perClient, Limit global);\n\n}  // namespace rl\n"},"phases":["base","storm1","storm2"],"tests":{"base":[{"path":"rl_base.cpp","content":"$16"}],"storm1":[{"path":"rl_storm1.cpp","content":"$17"}],"storm2":[{"path":"rl_storm2.cpp","content":"$18"}]},"reference":[{"path":"admission.h","content":"$19"},{"path":"client_policies.h","content":"#pragma once\n#include <functional>\n#include <map>\n#include <memory>\n#include <string>\n#include <utility>\n\n#include \"limit_policy.h\"\n\n// One policy per client, created the first time the client is seen. The factory is how an algorithm is chosen:\n// this class knows nothing about token buckets or windows.\nclass ClientPolicies {\n public:\n  using Factory = std::function<std::unique_ptr<LimitPolicy>()>;\n\n  explicit ClientPolicies(Factory factory) : factory_(std::move(factory)) {}\n\n  LimitPolicy& forClient(const std::string& client) {\n    auto found = policies_.find(client);\n    if (found == policies_.end()) found = policies_.emplace(client, factory_()).first;\n    return *found->second;\n  }\n\n private:\n  Factory factory_;\n  std::map<std::string, std::unique_ptr<LimitPolicy>> policies_;\n};\n"},{"path":"limit_policy.h","content":"#pragma once\n#include \"api_storm2.h\"\n\n// One rule about how much a single allowance can pay for. The two-step shape is the point: check() looks and never\n// changes anything, commit() pays. Callers that combine several policies can look at all of them before paying any.\nclass LimitPolicy {\n public:\n  virtual ~LimitPolicy() = default;\n\n  // Would `permits` (> 0) be granted at `now`? If not, how long until they would be? Does not change the policy.\n  virtual rl::Decision check(long long permits, long long now) const = 0;\n\n  // Pays for `permits`. Only called after check() said yes at the same `now`.\n  virtual void commit(long long permits, long long now) = 0;\n};\n"},{"path":"limiter.cpp","content":"$1a"},{"path":"limiter_impl.h","content":"$1b"},{"path":"sliding_window_log.h","content":"$1c"},{"path":"token_bucket.h","content":"$1d"}],"driver":{"path":"driver.cpp","content":"#define BP_TEST_MAIN\n#include \"bp_test.h\"\n","readOnly":true}}}],["$L1e","$L1f"],"$L20"]}],"p":"$@21","v":null,"s":"$9"}}]]
+d:[["children",{"s":{"n":"id","t":"d","k":"rate-limiter","s":[]},"h":65632,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}]}]]}],"p":"$@e","v":"$c","s":"$9"},"c":"$Qf"}]]
+a:[["children",{"s":"workshop","h":131168,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}]}]]}],"p":"$@b","v":"$c","s":"$9"},"c":"$Qd"}]]
+0:{"t":{"t":{"s":"","h":131152,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/1klm1scec-3x5.css","precedence":"next"}],["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js","async":true}]],["$","html",null,{"lang":"en","className":"r7opxW_variable auY9QW_variable u-EJdW_variable h-full","children":["$","body",null,{"className":"min-h-full","children":[["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}],"notFound":[["$","main",null,{"className":"flex min-h-dvh flex-col items-center justify-center gap-4 px-4 text-center","children":[["$","div",null,{"className":"font-display text-5xl text-[var(--accent)]","children":"404"}],["$","p",null,{"className":"text-white/60","children":"This room is not on the blueprint yet."}],["$","$L6",null,{"href":"/","className":"text-sm text-white/80 underline","children":"Back to the title screen"}]]}],[]]}],["$","$L7",null,{}]]}]}]]}],"p":"$@8","v":null,"s":"$9"},"c":"$Qa"},"h":{"r":["$","$1","h",{"children":[null,["$","$L23",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1, viewport-fit=cover"}],["$","meta","2",{"name":"theme-color","content":"#0a1530"}]]}],["$","$L25",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$26",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"Rate limiter library: Blueprint Clash"}],["$","meta","1",{"name":"description","content":"A creature-tactics RPG that teaches low-level design in C++ and high-level system design, from fundamentals to big-tech interview level."}],["$","link","2",{"rel":"manifest","href":"/blueprint-clash/manifest.webmanifest"}],["$","meta","3",{"name":"mobile-web-app-capable","content":"yes"}],["$","meta","4",{"name":"apple-mobile-web-app-title","content":"Blueprint Clash"}],["$","meta","5",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","link","6",{"rel":"icon","href":"/blueprint-clash/icon.png?icon.27re_xscs-jmw.png","sizes":"256x256","type":"image/png"}],["$","link","7",{"rel":"apple-touch-icon","href":"/blueprint-clash/apple-icon.png?apple-icon.2rac1w0yc3rju.png","sizes":"180x180","type":"image/png"}],["$","$L27","8",{}]]}]}],null]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"p":"$@28","v":null,"s":"$9"}},"a":"$@29","u":"$@2a","b":"2AOMJw3uqOQQQZHGX3CKn"}
+2b:I[97367,["$2"],"OutletBoundary"]
+1e:["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/2uk3wcjwqg0tl.js","async":true}]
+1f:["$","script","script-1",{"src":"/blueprint-clash/_next/static/chunks/1zdu7yjl8efu4.js","async":true}]
+20:["$","$L2b",null,{"children":["$","$26",null,{"name":"Next.MetadataOutlet","children":"$@2c"}]}]
+9:300
+2c:null
+2a:true
+9:C
+29:0
+e:"$undefined"
+b:"$undefined"
+8:"$undefined"
+28:"$undefined"
+21:"$undefined"

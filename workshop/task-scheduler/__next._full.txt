@@ -1,0 +1,1155 @@
+1:"$Sreact.fragment"
+2:"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js"
+3:I[39756,["$2"],"default"]
+4:I[37457,["$2"],"default"]
+5:"/blueprint-clash/_next/static/chunks/2n5qeheznvl4u.js"
+6:I[22016,["$2","$5"],""]
+7:I[64576,["$2"],"PwaRegister"]
+d:I[97367,["$2"],"OutletBoundary"]
+e:"$Sreact.suspense"
+10:"ViewportBoundary"
+11:I[97367,["$2"],"$10"]
+13:"MetadataBoundary"
+14:I[97367,["$2"],"$13"]
+16:I[68027,["$2"],"default",1]
+:HL["/blueprint-clash/_next/static/chunks/1klm1scec-3x5.css","style"]
+:HL["/blueprint-clash/_next/static/media/07c7676b89ed2778-s.p.2bn3s6zvc0dyp.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/blueprint-clash/_next/static/media/486a103cae33528f-s.p.309ilb452anpd.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/blueprint-clash/_next/static/media/53897e768d329f66-s.p.3t6q91iet4nsy.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+9:X
+b:[["children",{"s":"__PAGE__","h":512,"d":{"r":["$","$1","c",{"children":["$Lc",[["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/2uk3wcjwqg0tl.js","async":true,"nonce":"$undefined"}],["$","script","script-1",{"src":"/blueprint-clash/_next/static/chunks/1zdu7yjl8efu4.js","async":true,"nonce":"$undefined"}]],["$","$Ld",null,{"children":["$","$e",null,{"name":"Next.MetadataOutlet","children":"$@f"}]}]]}],"p":false,"v":null}}]]
+a:[["children",{"s":{"n":"id","t":"d","k":"task-scheduler","s":[]},"h":66048,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],"p":false,"v":"$9"},"c":"$Qb"}]]
+8:[["children",{"s":"workshop","h":131584,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],"p":false,"v":"$9"},"c":"$Qa"}]]
+0:{"P":null,"c":["","workshop","task-scheduler",""],"q":"","i":false,"t":{"t":{"s":"","h":131600,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/1klm1scec-3x5.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}],["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js","async":true,"nonce":"$undefined"}]],["$","html",null,{"lang":"en","className":"r7opxW_variable auY9QW_variable u-EJdW_variable h-full","children":["$","body",null,{"className":"min-h-full","children":[["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","main",null,{"className":"flex min-h-dvh flex-col items-center justify-center gap-4 px-4 text-center","children":[["$","div",null,{"className":"font-display text-5xl text-[var(--accent)]","children":"404"}],["$","p",null,{"className":"text-white/60","children":"This room is not on the blueprint yet."}],["$","$L6",null,{"href":"/","className":"text-sm text-white/80 underline","children":"Back to the title screen"}]]}],[]],"forbidden":"$undefined","unauthorized":"$undefined"}],["$","$L7",null,{}]]}]}]]}],"p":false,"v":null},"c":"$Q8"},"h":{"r":["$","$1","h",{"children":[null,["$","$L11",null,{"children":"$L12"}],["$","$L14",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$e",null,{"name":"Next.Metadata","children":"$L15"}]}],null]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"p":false,"v":null}},"m":"$undefined","G":["$16",[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/1klm1scec-3x5.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]]],"S":true,"r":"$undefined","s":"$undefined","a":"$undefined","l":"$undefined","p":"$undefined","d":"$undefined","b":"2AOMJw3uqOQQQZHGX3CKn"}
+9:C
+12:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1, viewport-fit=cover"}],["$","meta","2",{"name":"theme-color","content":"#0a1530"}]]
+17:I[27201,["$2"],"IconMark"]
+f:null
+15:[["$","title","0",{"children":"Task scheduler (cron): Blueprint Clash"}],["$","meta","1",{"name":"description","content":"A creature-tactics RPG that teaches low-level design in C++ and high-level system design, from fundamentals to big-tech interview level."}],["$","link","2",{"rel":"manifest","href":"/blueprint-clash/manifest.webmanifest","crossOrigin":"$undefined"}],["$","meta","3",{"name":"mobile-web-app-capable","content":"yes"}],["$","meta","4",{"name":"apple-mobile-web-app-title","content":"Blueprint Clash"}],["$","meta","5",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","link","6",{"rel":"icon","href":"/blueprint-clash/icon.png?icon.27re_xscs-jmw.png","sizes":"256x256","type":"image/png"}],["$","link","7",{"rel":"apple-touch-icon","href":"/blueprint-clash/apple-icon.png?apple-icon.2rac1w0yc3rju.png","sizes":"180x180","type":"image/png"}],["$","$L17","8",{}]]
+18:"/blueprint-clash/_next/static/chunks/2uk3wcjwqg0tl.js"
+19:"/blueprint-clash/_next/static/chunks/1zdu7yjl8efu4.js"
+1a:I[65612,["$2","$18","$19"],"WorkshopClient"]
+1b:T4ef,# Task scheduler (cron)
+
+You are building the core of an in-process job scheduler, the kind that sits behind "send the report at 9", "expire this hold in 10 minutes" and "refresh the cache every minute". Callers register jobs to run at a time, and the scheduler runs them in the right order when time moves forward. To keep it testable, time is simulated: nothing reads a real clock, and a caller moves time forward with one call.
+
+What you know so far:
+
+- A job has an id, a time, a priority and a function to run.
+- Jobs can be cancelled before they run.
+- When several jobs are due, the more urgent one should win.
+- Jobs run on the caller's thread, inside the call that moves time forward.
+
+Your task: design and implement it behind the `sched::Scheduler` interface in `api.h`. The hidden tests call only that interface. Ask the interviewer questions first: "what happens when two jobs are due at the same tick with the same priority?", "may a job schedule more jobs while it runs, and do they run in the same call?" and "what is 'now' inside a job?" are where first drafts go wrong. Expect a request for recurring jobs, and then a request about what a recurring job should do when time jumps over several of its occurrences at once, after you have finished.
+1c:T1cad,# Editorial: Task scheduler (cron)
+
+## Requirements
+Functional: schedule a one-shot job (id, tick, priority, callable); cancel it; move simulated time with `advanceTo(t)`, which runs everything due; ask `now()`, `pending()` and `nextRun(id)`. Then recurring series and per-series catch-up policies.
+
+Hidden in the brief and revealed by good questions: the exact running order (time, then higher priority, then first scheduled, never by name); that "due" means at most `t` and that `now()` inside a job is the job's own tick; that the clock never goes backwards; the validation statuses and their order, with `InThePast` strict and a time equal to now allowed; that a job leaves the pending set when it starts, so its id is free and it may reschedule itself; and that jobs may schedule and cancel while running, with new due work joining the same advance in its proper place.
+
+**Change Storm 1, recurring jobs:** `scheduleEvery` at a fixed rate from the first time, one pending job per series, cancel ends the series (also from inside it), every due occurrence runs, the series keeps its place in the FIFO order, and one callable with its own state runs every time.
+
+**Change Storm 2, missed occurrences:** `All`, `Latest` and `OnTimeOnly` per series; skipped occurrences are neither run nor counted; the series carries on; one-shots always run.
+
+## Reference design
+`SchedulerImpl` validates, hands out a scheduling rank and delegates; it contains no ordering logic. `SimClock` is the only owner of "now". `Entry` is the pending job as a plain value (id, tick, priority, rank, `Cadence`, `CatchUpPolicy`, shared callable). `RunQueue` keeps an ordered map keyed by (tick, negated priority, rank) and an index by id, and updates both inside `insert`, `remove` and `popDue`, so they cannot disagree. `Dispatcher::runDue` is the loop: pop the next due entry from the live queue, put the successor of a recurring entry back, set the clock to the entry's tick, ask the policy whether this occurrence should run, call the job, count it. The loop never holds an iterator across user code, so a job can do anything to the scheduler.
+
+`Cadence` answers "does it repeat, and when is the occurrence after this one" and the successor keeps the rank. `CatchUpPolicy` is a Strategy with three one-line classes (`RunAll`, `RunLatest`, `RunOnTime`) chosen from a table by the public enum, and one-shots use `RunAll`. Adding a policy is a class and a table entry; the dispatcher is untouched. Storm 1 changed `Entry`, `Dispatcher` and added `Cadence`; storm 2 added the policy classes and one argument. That is the Open/Closed score of the design.
+
+## Alternatives
+- **Binary heap plus lazy deletion.** `std::priority_queue` is smaller and just as fast for insert and pop, but it cannot remove by id, so cancel marks the entry dead and the pop loop skips dead ones. `pending()` then needs a separate counter and `nextRun(id)` a side table. Fine, and more state to keep consistent; the ordered map answers every query exactly.
+- **Timing wheel.** Constant-time insert for timers within a window, popular in kernels and network stacks that hold millions of short timers. It trades exact ordering inside a slot for speed, and needs a hierarchy for long delays. Wrong for a few thousand jobs where order is part of the contract; the right answer at 10x.
+- **A virtual `Job` base class instead of `std::function`.** More ceremony, but a job can have a name, a description and a `cancelled()` hook. Reasonable if jobs need identity beyond an id; a callable keeps the interface small.
+- **Recurring jobs as "reschedule yourself".** A recurring job is a one-shot that schedules its successor. It works (the tests show a job can do it) and then pending(), cancel and the fixed rate are the caller's problem: a series has no stable identity, a cancel can miss the gap, and the rate drifts as soon as the body is slow. A series is a first-class thing owned by the scheduler.
+- **An enum plus a `switch` for the catch-up policy.** One method, no classes. It is a perfectly good first draft; the loop is also where the next policy would add a branch and the next off-by-one. The Strategy keeps the loop stable.
+
+## Trade-offs
+- **Pop before run, queue the successor before running.** The queue is in its final state whenever user code runs. The cost is that a recurring job's id is "taken" and a one-shot's is "free" while they run, which is the behaviour the contract documents.
+- **Shared callable.** Copies of an entry share one callable so that a job's captured state survives from occurrence to occurrence; the price is that the job must not assume that every call sees a fresh copy.
+- **Rank on the entry.** One counter gives deterministic FIFO among equals and a series keeps its place; a 64-bit counter is enough for ever. The alternative, a timestamp, ties and can go backwards.
+- **Strict history in the interface.** A refused call changes nothing, statuses have an order, and time cannot go back. These are the contract that makes a scheduler something other code can build on.
+- **Single thread.** Everything runs on the caller's thread, so a slow job delays the rest and there is no locking. That is the contract of this problem, not the right answer for a production scheduler.
+
+## What breaks at 10x
+- **Timers**: a million pending jobs makes node-per-entry maps heavy (cache misses, allocation per insert). Move to a heap in a vector with an index, or a hierarchical timing wheel; ordering within a slot needs a rule.
+- **A long catch-up** over a short period (advance a year over a 1-tick period) is billions of runs for `All`. The policy decision has to be made before the loop (`Latest` can jump straight to the last occurrence by arithmetic instead of walking), and `All` needs a cap or a back-pressure story.
+- **Threads**: the queue needs a mutex held only while popping and inserting, never while a job runs; run jobs on a pool and the guarantee becomes "start order". Same-series occurrences must not overlap, which is a rule, not an accident.
+- **Time**: wall clocks step (NTP, suspend, daylight saving). Use a monotonic source for intervals and calendars only for "9am local" rules.
+- **Durability**: restart loses everything. A persistent scheduler keeps rows with a due time, claims them with a lease and runs them at least once, so jobs need an idempotency key (id plus occurrence time).
+
+## Level signals
+- **SDE II:** one-shot jobs correct: ordered container with an id index, running order including FIFO ties, `now()` rules, cancel and duplicate handling, and the loop taking the next due job from the live queue so a job can add work. Names the boundary cases (`<=`, equal to now) before being asked.
+- **Senior:** all of the above plus recurring jobs as a first-class series with a fixed rate, correct self-cancel, no state lost between occurrences, and the catch-up storm absorbed by a Strategy with no change to the loop. Explains why the successor goes in first, and that skipped occurrences are not counted.
+- **Staff:** frames the design choices (heap vs map vs wheel, exact order vs throughput, per-series serialisation), talks about the single-thread contract and its change for a pool, and extends to a durable, partitioned scheduler with leases, idempotency and clock skew, naming what is given up (global order, exactly-once).
+1d:Tc2f,#pragma once
+// Public API for the Task Scheduler problem. The hidden tests only use what is declared here.
+// You implement sched::makeScheduler() (in any of your .cpp files); everything behind it is your design.
+#include <cstddef>
+#include <functional>
+#include <memory>
+#include <string>
+
+namespace sched {
+
+enum class Status {
+  Ok,
+  InvalidId,      // the id is empty or longer than 32 characters
+  InvalidJob,     // the job is an empty std::function
+  InvalidTime,    // the time is beyond kMaxTime
+  InThePast,      // the time is before now()
+  DuplicateId,    // a pending job already has this id
+  NotFound,       // no pending job has this id
+  InvalidPeriod,  // reserved for recurring jobs (a later interface); schedule() never returns it
+};
+
+constexpr long long kMaxTime = 1000000000000LL;  // 10^12 ticks
+
+using Job = std::function<void()>;
+
+// A scheduler over SIMULATED time: nothing here reads a real clock. Time is a whole number of ticks that starts at 0 and
+// moves only when the caller calls advanceTo(). Jobs run on the caller's thread, inside advanceTo().
+//
+// ORDER. Jobs run in this order: earlier time first; at the same time the higher priority number first (priority is any
+// int, bigger means more urgent); at the same time and priority the job that was scheduled first runs first (FIFO).
+//
+// RUNNING. advanceTo(t) with t >= now() runs every pending job whose time is <= t, one at a time in the order above, and
+// then sets now() to t. While a job runs, now() is the time that job was scheduled for (not t). A job may call schedule()
+// and cancel() on the same scheduler: a job it schedules for a time <= t runs in this same advanceTo(), in its place in the
+// order; a job it cancels does not run. Calling advanceTo() from inside a job is not allowed. The result is the number of
+// jobs that ran. advanceTo(t) with t < now() does nothing and returns 0; time never goes backwards.
+//
+// A one-shot job is gone as soon as it starts running: its id is free again (a job may schedule itself again) and
+// cancel() of it from inside itself is NotFound.
+//
+// CHECK ORDER for schedule(): InvalidId, InvalidJob, InvalidTime, InThePast, DuplicateId. A call that does not return Ok
+// changes nothing. A time equal to now() is allowed and runs in the next advanceTo(), even advanceTo(now()).
+class Scheduler {
+ public:
+  virtual ~Scheduler() = default;
+
+  // Runs `job` once at tick `at`. An id is 1 to 32 characters, unique among pending jobs.
+  virtual Status schedule(const std::string& id, long long at, int priority, Job job) = 0;
+
+  // Removes a pending job so it never runs. NotFound if there is no such pending job.
+  virtual Status cancel(const std::string& id) = 0;
+
+  virtual std::size_t advanceTo(long long time) = 0;
+
+  virtual long long now() const = 0;
+
+  // The number of pending jobs.
+  virtual std::size_t pending() const = 0;
+
+  // The tick of the next run of a pending job. `at` is touched only on Ok; NotFound otherwise.
+  virtual Status nextRun(const std::string& id, long long& at) const = 0;
+};
+
+std::unique_ptr<Scheduler> makeScheduler();
+
+}  // namespace sched
+1e:T5ee,#pragma once
+// Change Storm 1: recurring jobs.
+#include "api.h"
+
+namespace sched {
+
+constexpr long long kMaxPeriod = 1000000000LL;  // 10^9 ticks
+
+// makeRecurringScheduler() has everything makeScheduler() has, plus jobs that repeat.
+//
+// scheduleEvery(id, first, period, priority, job) runs the job at `first`, `first + period`, `first + 2 * period`, ...
+// until it is cancelled: a fixed rate measured from `first`, never from when a run happened. A period is 1 to
+// kMaxPeriod ticks. CHECK ORDER: InvalidId, InvalidJob, InvalidPeriod, InvalidTime, InThePast, DuplicateId.
+//
+// A recurring job is ONE pending job whatever happens: pending() counts it once, its id stays taken, nextRun() is the
+// time of its next occurrence, and cancel() ends the whole series (also from inside the job's own run, when no later
+// occurrence runs). Every occurrence due in an advanceTo() runs, in the usual order against everything else
+// (advanceTo(100) over a period of 10 starting at 0 runs eleven times, with now() at 0, 10, ..., 100). A recurring job
+// keeps the place in the FIFO order it got when it was scheduled: at the same time and priority it runs before a job
+// that was scheduled after it, and after one that was scheduled before it, in every round.
+class RecurringScheduler : public Scheduler {
+ public:
+  virtual Status scheduleEvery(const std::string& id, long long first, long long period, int priority, Job job) = 0;
+};
+
+std::unique_ptr<RecurringScheduler> makeRecurringScheduler();
+
+}  // namespace sched
+1f:T58e,#pragma once
+// Change Storm 2: what to do about missed occurrences.
+#include "api_storm1.h"
+
+namespace sched {
+
+// When one advanceTo(t) finds several occurrences of a recurring job due (the process "slept" through them), the job's
+// catch-up policy decides which of them run:
+//   All         every occurrence runs, oldest first (what scheduleEvery() does).
+//   Latest      only the latest occurrence that is <= t runs; the earlier ones are skipped.
+//   OnTimeOnly  only an occurrence exactly at t runs; every occurrence before t counts as missed and is skipped.
+// A skipped occurrence does not run and is not counted in the result of advanceTo(); the series carries on as if it
+// had run, so after advanceTo(t) the job's nextRun() is its first occurrence after t. One-shot jobs always run, however
+// late. now() while an occurrence runs is that occurrence's own time.
+enum class CatchUp { All, Latest, OnTimeOnly };
+
+// makeCatchUpScheduler() has everything makeRecurringScheduler() has, plus a policy per recurring job.
+// Same checks as scheduleEvery(). The policy belongs to that job alone.
+class CatchUpScheduler : public RecurringScheduler {
+ public:
+  virtual Status scheduleEveryWith(const std::string& id, long long first, long long period, int priority, CatchUp policy,
+                                   Job job) = 0;
+};
+
+std::unique_ptr<CatchUpScheduler> makeCatchUpScheduler();
+
+}  // namespace sched
+20:T2e6d,#include <cstdint>
+#include <memory>
+#include <string>
+#include <vector>
+
+#include "api.h"
+#include "bp_test.h"
+
+namespace {
+using sched::Status;
+
+#define IS(call, expected) EXPECT_TRUE((call) == Status::expected)
+
+// Records the tag of every job that runs, in order.
+struct Fixture {
+  std::unique_ptr<sched::Scheduler> s = sched::makeScheduler();
+  std::vector<std::string> ran;
+
+  sched::Job job(const std::string& tag) {
+    return [this, tag] { ran.push_back(tag); };
+  }
+  Status add(const std::string& id, long long at, int priority = 0) { return s->schedule(id, at, priority, job(id)); }
+  std::string order() const {
+    std::string out;
+    for (const auto& r : ran) out += (out.empty() ? "" : " ") + r;
+    return out;
+  }
+  void clear() { ran.clear(); }
+};
+}  // namespace
+
+TEST(Order, EarlierTimeFirstThenHigherPriorityThenFirstScheduled) {
+  Fixture f;
+  f.add("late", 30);
+  f.add("early-low", 10, 1);
+  f.add("early-high", 10, 5);
+  f.add("early-high-2", 10, 5);
+  f.add("mid", 20, 100);
+  EXPECT_EQ(f.s->advanceTo(100), std::size_t(5));
+  EXPECT_EQ(f.order(), std::string("early-high early-high-2 early-low mid late"));
+}
+
+TEST(Order, TimeBeatsPriorityAndNegativePrioritiesAreJustSmaller) {
+  Fixture f;
+  f.add("urgent-but-later", 11, 1000000);
+  f.add("sooner", 10, -5);
+  f.add("neg-less", 12, -9);
+  f.add("neg-more", 12, -2);
+  f.add("zero", 12, 0);
+  f.s->advanceTo(12);
+  EXPECT_EQ(f.order(), std::string("sooner urgent-but-later zero neg-more neg-less"));
+}
+
+TEST(Order, JobsOfEqualTimeAndPriorityRunInTheOrderTheyWereScheduledNotByName) {
+  Fixture f;
+  const std::vector<std::string> ids = {"zulu", "mike", "alpha", "yankee", "bravo", "xray", "charlie"};
+  for (const auto& id : ids) f.add(id, 5, 3);
+  f.s->advanceTo(5);
+  EXPECT_EQ(f.order(), std::string("zulu mike alpha yankee bravo xray charlie"));
+}
+
+TEST(Time, AJobIsDueWhenItsTimeIsAtMostTheTargetAndNowMovesToTheTarget) {
+  Fixture f;
+  f.add("a", 10);
+  f.add("b", 20);
+  EXPECT_EQ(f.s->advanceTo(9), std::size_t(0));
+  EXPECT_EQ(f.s->now(), 9LL);
+  EXPECT_EQ(f.s->advanceTo(10), std::size_t(1));
+  EXPECT_EQ(f.order(), std::string("a"));
+  EXPECT_EQ(f.s->advanceTo(19), std::size_t(0));
+  EXPECT_EQ(f.s->advanceTo(25), std::size_t(1));
+  EXPECT_EQ(f.s->now(), 25LL);
+  EXPECT_EQ(f.order(), std::string("a b"));
+}
+
+TEST(Time, InsideAJobNowIsTheTimeThatJobWasScheduledFor) {
+  auto s = sched::makeScheduler();
+  std::vector<long long> seen;
+  for (long long t : {30LL, 10LL, 20LL}) s->schedule("j" + std::to_string(t), t, 0, [&s, &seen] { seen.push_back(s->now()); });
+  s->advanceTo(100);
+  EXPECT_EQ(seen.size(), std::size_t(3));
+  EXPECT_EQ(seen[0], 10LL);
+  EXPECT_EQ(seen[1], 20LL);
+  EXPECT_EQ(seen[2], 30LL);
+  EXPECT_EQ(s->now(), 100LL);
+}
+
+TEST(Time, TimeNeverGoesBackwards) {
+  Fixture f;
+  f.s->advanceTo(50);
+  EXPECT_EQ(f.s->advanceTo(20), std::size_t(0));
+  EXPECT_EQ(f.s->now(), 50LL);
+  f.add("a", 50);
+  EXPECT_EQ(f.s->advanceTo(10), std::size_t(0));
+  EXPECT_EQ(f.s->now(), 50LL);
+  EXPECT_EQ(f.s->pending(), std::size_t(1));
+  EXPECT_EQ(f.s->advanceTo(50), std::size_t(1));
+}
+
+TEST(Schedule, ARefusedCallChangesNothingAndTheChecksComeInTheDocumentedOrder) {
+  Fixture f;
+  f.s->advanceTo(100);
+  IS(f.add("keep", 150), Ok);
+  const std::string tooLong(33, 'x');
+  const std::string longest(32, 'y');
+  IS(f.s->schedule("", 200, 0, f.job("x")), InvalidId);
+  IS(f.s->schedule(tooLong, 200, 0, f.job("x")), InvalidId);
+  IS(f.s->schedule(longest, 200, 0, f.job("x")), Ok);
+  IS(f.s->schedule("nojob", 200, 0, sched::Job()), InvalidJob);
+  IS(f.s->schedule("far", sched::kMaxTime + 1, 0, f.job("x")), InvalidTime);
+  IS(f.s->schedule("edge", sched::kMaxTime, 0, f.job("x")), Ok);
+  IS(f.s->schedule("old", 99, 0, f.job("x")), InThePast);
+  IS(f.s->schedule("keep", 300, 0, f.job("x")), DuplicateId);
+  // Order: id, job, time (too far, then past), duplicate.
+  IS(f.s->schedule("", 99, 0, sched::Job()), InvalidId);
+  IS(f.s->schedule("keep", 99, 0, sched::Job()), InvalidJob);
+  IS(f.s->schedule("keep", sched::kMaxTime + 1, 0, f.job("x")), InvalidTime);
+  IS(f.s->schedule("keep", 99, 0, f.job("x")), InThePast);
+  EXPECT_EQ(f.s->pending(), std::size_t(3));
+  long long at = 0;
+  IS(f.s->nextRun("keep", at), Ok);
+  EXPECT_EQ(at, 150LL);
+  IS(f.s->nextRun("old", at), NotFound);
+  EXPECT_EQ(at, 150LL);  // untouched on failure
+}
+
+TEST(Schedule, ATimeEqualToNowIsAllowedAndRunsOnTheNextAdvanceEvenToTheSameTime) {
+  Fixture f;
+  f.s->advanceTo(40);
+  IS(f.add("now", 40), Ok);
+  EXPECT_EQ(f.s->pending(), std::size_t(1));
+  EXPECT_EQ(f.s->advanceTo(40), std::size_t(1));
+  EXPECT_EQ(f.order(), std::string("now"));
+  EXPECT_EQ(f.s->pending(), std::size_t(0));
+}
+
+TEST(Cancel, RemovesAPendingJobAndFreesItsId) {
+  Fixture f;
+  f.add("a", 10);
+  f.add("b", 10);
+  f.add("c", 10);
+  IS(f.s->cancel("b"), Ok);
+  EXPECT_EQ(f.s->pending(), std::size_t(2));
+  long long at = 0;
+  IS(f.s->nextRun("b", at), NotFound);
+  IS(f.add("b", 20), Ok);
+  EXPECT_EQ(f.s->advanceTo(30), std::size_t(3));
+  EXPECT_EQ(f.order(), std::string("a c b"));
+}
+
+TEST(Cancel, UnknownAlreadyCancelledAndAlreadyRunJobsAreNotFound) {
+  Fixture f;
+  IS(f.s->cancel("ghost"), NotFound);
+  IS(f.s->cancel(""), NotFound);
+  f.add("a", 5);
+  f.add("b", 6);
+  IS(f.s->cancel("a"), Ok);
+  IS(f.s->cancel("a"), NotFound);
+  f.s->advanceTo(10);
+  IS(f.s->cancel("b"), NotFound);
+  EXPECT_EQ(f.order(), std::string("b"));
+}
+
+TEST(Ids, AnIdCanBeUsedAgainOnceItsJobHasRun) {
+  Fixture f;
+  f.add("daily", 10);
+  IS(f.add("daily", 11), DuplicateId);
+  f.s->advanceTo(10);
+  IS(f.add("daily", 20), Ok);
+  f.s->advanceTo(20);
+  IS(f.add("daily", 30), Ok);
+  f.s->advanceTo(30);
+  EXPECT_EQ(f.order(), std::string("daily daily daily"));
+}
+
+TEST(Query, PendingAndNextRunFollowTheJobsThroughSchedulingCancelAndRunning) {
+  Fixture f;
+  EXPECT_EQ(f.s->pending(), std::size_t(0));
+  f.add("a", 10);
+  f.add("b", 30);
+  f.add("c", 20);
+  EXPECT_EQ(f.s->pending(), std::size_t(3));
+  long long at = 0;
+  IS(f.s->nextRun("c", at), Ok);
+  EXPECT_EQ(at, 20LL);
+  f.s->advanceTo(20);
+  EXPECT_EQ(f.s->pending(), std::size_t(1));
+  IS(f.s->nextRun("a", at), NotFound);
+  IS(f.s->nextRun("b", at), Ok);
+  EXPECT_EQ(at, 30LL);
+}
+
+TEST(Reentrancy, AJobMayScheduleMoreWorkThatIsDueInTheSameAdvanceAndItRunsInOrder) {
+  auto s = sched::makeScheduler();
+  std::vector<std::string> ran;
+  auto note = [&ran](const std::string& tag) { return [&ran, tag] { ran.push_back(tag); }; };
+  s->schedule("first", 10, 0, [&] {
+    ran.push_back("first");
+    s->schedule("child-same-time", 10, 0, note("child-same-time"));
+    s->schedule("child-later", 25, 0, note("child-later"));
+    s->schedule("child-beyond", 90, 0, note("child-beyond"));
+  });
+  s->schedule("second", 10, 0, note("second"));
+  s->schedule("middle", 20, 0, note("middle"));
+  EXPECT_EQ(s->advanceTo(30), std::size_t(5));
+  std::string out;
+  for (const auto& r : ran) out += (out.empty() ? "" : " ") + r;
+  EXPECT_EQ(out, std::string("first second child-same-time middle child-later"));
+  EXPECT_EQ(s->pending(), std::size_t(1));
+}
+
+TEST(Reentrancy, ANewJobAtTheSameTimeWithHigherPriorityRunsBeforeTheOnesAlreadyWaiting) {
+  auto s = sched::makeScheduler();
+  std::vector<std::string> ran;
+  auto note = [&ran](const std::string& tag) { return [&ran, tag] { ran.push_back(tag); }; };
+  s->schedule("a", 10, 5, [&] {
+    ran.push_back("a");
+    s->schedule("urgent", 10, 9, note("urgent"));
+    s->schedule("lazy", 10, 1, note("lazy"));
+  });
+  s->schedule("b", 10, 5, note("b"));
+  s->schedule("c", 10, 2, note("c"));
+  s->advanceTo(10);
+  std::string out;
+  for (const auto& r : ran) out += (out.empty() ? "" : " ") + r;
+  EXPECT_EQ(out, std::string("a urgent b c lazy"));
+}
+
+TEST(Reentrancy, AJobThatCancelsAnotherPendingJobPreventsItsRunInTheSameAdvance) {
+  auto s = sched::makeScheduler();
+  std::vector<std::string> ran;
+  auto note = [&ran](const std::string& tag) { return [&ran, tag] { ran.push_back(tag); }; };
+  s->schedule("killer", 10, 9, [&] {
+    ran.push_back("killer");
+    EXPECT_TRUE(s->cancel("victim") == Status::Ok);
+    EXPECT_TRUE(s->cancel("victim") == Status::NotFound);
+  });
+  s->schedule("victim", 10, 1, note("victim"));
+  s->schedule("bystander", 12, 1, note("bystander"));
+  EXPECT_EQ(s->advanceTo(20), std::size_t(2));
+  std::string out;
+  for (const auto& r : ran) out += (out.empty() ? "" : " ") + r;
+  EXPECT_EQ(out, std::string("killer bystander"));
+}
+
+TEST(Reentrancy, AJobMayScheduleItselfAgainBecauseItsIdIsAlreadyFree) {
+  auto s = sched::makeScheduler();
+  int runs = 0;
+  std::function<void()> tick = [&] {
+    ++runs;
+    if (runs < 4) EXPECT_TRUE(s->schedule("tick", s->now() + 10, 0, tick) == Status::Ok);
+  };
+  s->schedule("tick", 0, 0, tick);
+  EXPECT_EQ(s->advanceTo(25), std::size_t(3));  // at 0, 10, 20
+  EXPECT_EQ(s->pending(), std::size_t(1));
+  long long at = 0;
+  EXPECT_TRUE(s->nextRun("tick", at) == Status::Ok);
+  EXPECT_EQ(at, 30LL);
+  EXPECT_EQ(s->advanceTo(1000), std::size_t(1));
+  EXPECT_EQ(runs, 4);
+}
+
+TEST(Reentrancy, InsideAJobThePastIsRelativeToThatJobsTimeAndItsOwnIdCannotBeCancelled) {
+  auto s = sched::makeScheduler();
+  std::vector<Status> got;
+  s->schedule("probe", 20, 0, [&] {
+    got.push_back(s->schedule("older", 19, 0, [] {}));
+    got.push_back(s->schedule("same", 20, 0, [] {}));
+    got.push_back(s->cancel("probe"));
+  });
+  s->advanceTo(50);
+  EXPECT_EQ(got.size(), std::size_t(3));
+  EXPECT_TRUE(got[0] == Status::InThePast);
+  EXPECT_TRUE(got[1] == Status::Ok);
+  EXPECT_TRUE(got[2] == Status::NotFound);
+}
+
+TEST(Model, RandomOperationsAgreeWithASimpleModel) {
+  struct ModelJob {
+    std::string id;
+    long long at;
+    int priority;
+    int seq;
+  };
+  std::uint32_t rng = 12345;
+  auto next = [&rng](std::uint32_t n) {
+    rng = rng * 1664525u + 1013904223u;
+    return (rng >> 8) % n;
+  };
+  Fixture f;
+  std::vector<ModelJob> model;
+  std::vector<std::string> expected;
+  long long now = 0;
+  int seq = 0;
+  for (int step = 0; step < 4000; ++step) {
+    const std::uint32_t op = next(10);
+    if (op < 5) {
+      const std::string id = "j" + std::to_string(next(12));
+      const long long at = now + static_cast<long long>(next(15)) - 2;
+      const int priority = static_cast<int>(next(4)) - 1;
+      bool dup = false;
+      for (const auto& m : model) dup = dup || m.id == id;
+      const Status want = at < now ? Status::InThePast : dup ? Status::DuplicateId : Status::Ok;
+      EXPECT_TRUE(f.add(id, at, priority) == want);
+      if (want == Status::Ok) model.push_back({id, at, priority, seq++});
+    } else if (op < 7) {
+      const std::string id = "j" + std::to_string(next(12));
+      bool found = false;
+      for (std::size_t i = 0; i < model.size(); ++i) {
+        if (model[i].id == id) {
+          model.erase(model.begin() + static_cast<long>(i));
+          found = true;
+          break;
+        }
+      }
+      EXPECT_TRUE(f.s->cancel(id) == (found ? Status::Ok : Status::NotFound));
+    } else {
+      const long long target = now + static_cast<long long>(next(12)) - 3;
+      f.clear();
+      expected.clear();
+      for (;;) {
+        int best = -1;
+        for (std::size_t i = 0; i < model.size(); ++i) {
+          if (model[i].at > target) continue;
+          if (best < 0) { best = static_cast<int>(i); continue; }
+          const ModelJob& a = model[i];
+          const ModelJob& b = model[static_cast<std::size_t>(best)];
+          if (a.at != b.at ? a.at < b.at : a.priority != b.priority ? a.priority > b.priority : a.seq < b.seq) best = static_cast<int>(i);
+        }
+        if (best < 0 || target < now) break;
+        expected.push_back(model[static_cast<std::size_t>(best)].id);
+        model.erase(model.begin() + best);
+      }
+      if (target >= now) now = target;
+      EXPECT_EQ(f.s->advanceTo(target), expected.size());
+      EXPECT_EQ(f.ran, expected);
+      EXPECT_EQ(f.s->now(), now);
+    }
+    EXPECT_EQ(f.s->pending(), model.size());
+  }
+}
+21:T20a6,#include <cstdint>
+#include <functional>
+#include <memory>
+#include <string>
+#include <vector>
+
+#include "api_storm1.h"
+#include "bp_test.h"
+
+namespace {
+using sched::Status;
+
+#define IS(call, expected) EXPECT_TRUE((call) == Status::expected)
+
+struct Fixture {
+  std::unique_ptr<sched::RecurringScheduler> s = sched::makeRecurringScheduler();
+  std::vector<std::string> ran;
+
+  // Logs "tag@time" so both the order and the clock are checked.
+  sched::Job job(const std::string& tag) {
+    return [this, tag] { ran.push_back(tag + "@" + std::to_string(s->now())); };
+  }
+  Status every(const std::string& id, long long first, long long period, int priority = 0) {
+    return s->scheduleEvery(id, first, period, priority, job(id));
+  }
+  Status once(const std::string& id, long long at, int priority = 0) { return s->schedule(id, at, priority, job(id)); }
+  std::string order() const {
+    std::string out;
+    for (const auto& r : ran) out += (out.empty() ? "" : " ") + r;
+    return out;
+  }
+  void clear() { ran.clear(); }
+};
+}  // namespace
+
+TEST(Every, RunsAtFirstAndThenAtAFixedRate) {
+  Fixture f;
+  IS(f.every("tick", 5, 10), Ok);
+  EXPECT_EQ(f.s->advanceTo(4), std::size_t(0));
+  EXPECT_EQ(f.s->advanceTo(5), std::size_t(1));
+  EXPECT_EQ(f.s->advanceTo(14), std::size_t(0));
+  EXPECT_EQ(f.s->advanceTo(15), std::size_t(1));
+  EXPECT_EQ(f.s->advanceTo(40), std::size_t(2));
+  EXPECT_EQ(f.order(), std::string("tick@5 tick@15 tick@25 tick@35"));
+}
+
+TEST(Every, AFirstTimeEqualToNowIsAllowed) {
+  Fixture f;
+  f.s->advanceTo(7);
+  IS(f.every("now", 7, 3), Ok);
+  EXPECT_EQ(f.s->advanceTo(7), std::size_t(1));
+  EXPECT_EQ(f.s->advanceTo(13), std::size_t(2));
+  EXPECT_EQ(f.order(), std::string("now@7 now@10 now@13"));
+}
+
+TEST(Every, OneBigAdvanceRunsEveryDueOccurrenceInOrderAgainstOtherJobs) {
+  Fixture f;
+  f.every("r", 0, 10);
+  f.once("single", 35);
+  f.once("single-high", 20, 9);
+  EXPECT_EQ(f.s->advanceTo(40), std::size_t(7));
+  EXPECT_EQ(f.order(), std::string("r@0 r@10 single-high@20 r@20 r@30 single@35 r@40"));
+  EXPECT_EQ(f.s->now(), 40LL);
+}
+
+TEST(Every, TheNextOccurrenceIsMeasuredFromTheScheduleNotFromTheAdvanceTarget) {
+  Fixture f;
+  f.every("r", 0, 10);
+  EXPECT_EQ(f.s->advanceTo(95), std::size_t(10));  // 0, 10, ..., 90
+  long long at = 0;
+  IS(f.s->nextRun("r", at), Ok);
+  EXPECT_EQ(at, 100LL);
+  EXPECT_EQ(f.s->advanceTo(100), std::size_t(1));
+}
+
+TEST(Every, OneSeriesIsOnePendingJobWithItsIdTaken) {
+  Fixture f;
+  IS(f.every("r", 10, 5), Ok);
+  EXPECT_EQ(f.s->pending(), std::size_t(1));
+  IS(f.every("r", 20, 5), DuplicateId);
+  IS(f.once("r", 20), DuplicateId);
+  f.s->advanceTo(100);
+  EXPECT_EQ(f.s->pending(), std::size_t(1));
+  long long at = 0;
+  IS(f.s->nextRun("r", at), Ok);
+  EXPECT_EQ(at, 105LL);
+  IS(f.every("other", 200, 5), Ok);
+  EXPECT_EQ(f.s->pending(), std::size_t(2));
+}
+
+TEST(Every, CancelEndsTheWholeSeries) {
+  Fixture f;
+  f.every("r", 0, 10);
+  f.s->advanceTo(25);
+  IS(f.s->cancel("r"), Ok);
+  EXPECT_EQ(f.s->pending(), std::size_t(0));
+  EXPECT_EQ(f.s->advanceTo(100), std::size_t(0));
+  IS(f.s->cancel("r"), NotFound);
+  EXPECT_EQ(f.order(), std::string("r@0 r@10 r@20"));
+  IS(f.every("r", 100, 10), Ok);
+}
+
+TEST(Every, ASeriesCanCancelItselfFromInsideItsOwnRun) {
+  auto s = sched::makeRecurringScheduler();
+  int runs = 0;
+  std::vector<Status> answers;
+  s->scheduleEvery("r", 0, 10, 0, [&] {
+    ++runs;
+    if (runs == 3) answers.push_back(s->cancel("r"));
+  });
+  EXPECT_EQ(s->advanceTo(1000), std::size_t(3));
+  EXPECT_EQ(runs, 3);
+  EXPECT_EQ(answers.size(), std::size_t(1));
+  EXPECT_TRUE(answers[0] == Status::Ok);
+  EXPECT_EQ(s->pending(), std::size_t(0));
+}
+
+TEST(Every, AnotherJobCanCancelASeriesBetweenItsOccurrences) {
+  Fixture f;
+  f.every("r", 0, 10);
+  f.s->schedule("stop", 25, 0, [&] { f.ran.push_back("stop"); f.s->cancel("r"); });
+  EXPECT_EQ(f.s->advanceTo(60), std::size_t(4));
+  EXPECT_EQ(f.order(), std::string("r@0 r@10 r@20 stop"));
+}
+
+TEST(Every, TheSeriesKeepsItsPlaceInTheFifoOrderInEveryRound) {
+  Fixture f;
+  f.once("before", 10);
+  f.once("before2", 20);
+  f.every("r", 0, 10);
+  f.once("after", 10);
+  f.once("after2", 20);
+  f.s->advanceTo(20);
+  EXPECT_EQ(f.order(), std::string("r@0 before@10 r@10 after@10 before2@20 r@20 after2@20"));
+}
+
+TEST(Every, TheSameCallableRunsEveryTimeSoItsOwnStateSurvives) {
+  auto s = sched::makeRecurringScheduler();
+  std::vector<int> seen;
+  int calls = 0;
+  s->scheduleEvery("counter", 0, 1, 0, [&seen, &calls, n = 0]() mutable {
+    ++n;
+    ++calls;
+    seen.push_back(n);
+  });
+  s->advanceTo(4);
+  EXPECT_EQ(calls, 5);
+  EXPECT_EQ(seen, (std::vector<int>{1, 2, 3, 4, 5}));
+}
+
+TEST(Every, ValidationAndTheDocumentedCheckOrder) {
+  Fixture f;
+  f.s->advanceTo(100);
+  IS(f.every("", 200, 5), InvalidId);
+  IS(f.every(std::string(33, 'z'), 200, 5), InvalidId);
+  IS(f.s->scheduleEvery("x", 200, 5, 0, sched::Job()), InvalidJob);
+  IS(f.every("x", 200, 0), InvalidPeriod);
+  IS(f.every("x", 200, -3), InvalidPeriod);
+  IS(f.every("x", 200, sched::kMaxPeriod + 1), InvalidPeriod);
+  IS(f.every("big", 200, sched::kMaxPeriod), Ok);
+  IS(f.every("x", sched::kMaxTime + 1, 5), InvalidTime);
+  IS(f.every("x", 99, 5), InThePast);
+  IS(f.every("big", 300, 5), DuplicateId);
+  // Order: id, job, period, time, duplicate.
+  IS(f.s->scheduleEvery("", 99, 0, 0, sched::Job()), InvalidId);
+  IS(f.s->scheduleEvery("big", 99, 0, 0, sched::Job()), InvalidJob);
+  IS(f.every("big", 99, 0), InvalidPeriod);
+  IS(f.every("big", sched::kMaxTime + 1, 5), InvalidTime);
+  IS(f.every("big", 99, 5), InThePast);
+  EXPECT_EQ(f.s->pending(), std::size_t(1));
+}
+
+TEST(Every, TheBaseCallsStillBehaveThroughTheNewInterface) {
+  Fixture f;
+  f.once("a", 10, 1);
+  f.once("b", 10, 2);
+  f.every("r", 10, 10);
+  EXPECT_EQ(f.s->advanceTo(10), std::size_t(3));
+  EXPECT_EQ(f.order(), std::string("b@10 a@10 r@10"));
+}
+
+TEST(Model, RandomSeriesAndOneShotsAgreeWithASimpleModel) {
+  struct ModelJob {
+    std::string id;
+    long long at;
+    long long period;  // 0 for one-shot
+    int priority;
+    int rank;
+  };
+  std::uint32_t rng = 777;
+  auto next = [&rng](std::uint32_t n) {
+    rng = rng * 1664525u + 1013904223u;
+    return (rng >> 8) % n;
+  };
+  Fixture f;
+  std::vector<ModelJob> model;
+  long long now = 0;
+  int rank = 0;
+  for (int step = 0; step < 3000; ++step) {
+    const std::uint32_t op = next(10);
+    if (op < 5) {
+      const std::string id = "j" + std::to_string(next(10));
+      const long long at = now + static_cast<long long>(next(12));
+      const long long period = next(2) == 0 ? 0 : 1 + static_cast<long long>(next(7));
+      const int priority = static_cast<int>(next(3));
+      bool dup = false;
+      for (const auto& m : model) dup = dup || m.id == id;
+      const Status got = period == 0 ? f.once(id, at, priority) : f.every(id, at, period, priority);
+      EXPECT_TRUE(got == (dup ? Status::DuplicateId : Status::Ok));
+      if (!dup) model.push_back({id, at, period, priority, rank++});
+    } else if (op < 7) {
+      const std::string id = "j" + std::to_string(next(10));
+      bool found = false;
+      for (std::size_t i = 0; i < model.size(); ++i) {
+        if (model[i].id == id) {
+          model.erase(model.begin() + static_cast<long>(i));
+          found = true;
+          break;
+        }
+      }
+      EXPECT_TRUE(f.s->cancel(id) == (found ? Status::Ok : Status::NotFound));
+    } else {
+      const long long target = now + static_cast<long long>(next(25));
+      f.clear();
+      std::vector<std::string> expected;
+      for (;;) {
+        int best = -1;
+        for (std::size_t i = 0; i < model.size(); ++i) {
+          if (model[i].at > target) continue;
+          if (best < 0) { best = static_cast<int>(i); continue; }
+          const ModelJob& a = model[i];
+          const ModelJob& b = model[static_cast<std::size_t>(best)];
+          if (a.at != b.at ? a.at < b.at : a.priority != b.priority ? a.priority > b.priority : a.rank < b.rank) best = static_cast<int>(i);
+        }
+        if (best < 0) break;
+        ModelJob& m = model[static_cast<std::size_t>(best)];
+        expected.push_back(m.id + "@" + std::to_string(m.at));
+        if (m.period > 0) m.at += m.period; else model.erase(model.begin() + best);
+      }
+      now = target;
+      EXPECT_EQ(f.s->advanceTo(target), expected.size());
+      EXPECT_EQ(f.ran, expected);
+    }
+    EXPECT_EQ(f.s->pending(), model.size());
+  }
+}
+22:T1d1e,#include <cstdint>
+#include <memory>
+#include <string>
+#include <vector>
+
+#include "api_storm2.h"
+#include "bp_test.h"
+
+namespace {
+using sched::CatchUp;
+using sched::Status;
+
+#define IS(call, expected) EXPECT_TRUE((call) == Status::expected)
+
+struct Fixture {
+  std::unique_ptr<sched::CatchUpScheduler> s = sched::makeCatchUpScheduler();
+  std::vector<std::string> ran;
+
+  sched::Job job(const std::string& tag) {
+    return [this, tag] { ran.push_back(tag + "@" + std::to_string(s->now())); };
+  }
+  Status every(const std::string& id, long long first, long long period, CatchUp policy, int priority = 0) {
+    return s->scheduleEveryWith(id, first, period, priority, policy, job(id));
+  }
+  std::string order() const {
+    std::string out;
+    for (const auto& r : ran) out += (out.empty() ? "" : " ") + r;
+    return out;
+  }
+  void clear() { ran.clear(); }
+};
+}  // namespace
+
+TEST(CatchUp, AllRunsEveryMissedOccurrenceOldestFirst) {
+  Fixture f;
+  IS(f.every("r", 10, 10, CatchUp::All), Ok);
+  EXPECT_EQ(f.s->advanceTo(35), std::size_t(3));
+  EXPECT_EQ(f.order(), std::string("r@10 r@20 r@30"));
+}
+
+TEST(CatchUp, LatestRunsOnlyTheLatestDueOccurrenceAtItsOwnTime) {
+  Fixture f;
+  f.every("r", 10, 10, CatchUp::Latest);
+  EXPECT_EQ(f.s->advanceTo(35), std::size_t(1));
+  EXPECT_EQ(f.order(), std::string("r@30"));
+  EXPECT_EQ(f.s->now(), 35LL);
+  long long at = 0;
+  IS(f.s->nextRun("r", at), Ok);
+  EXPECT_EQ(at, 40LL);
+  f.clear();
+  EXPECT_EQ(f.s->advanceTo(40), std::size_t(1));
+  EXPECT_EQ(f.order(), std::string("r@40"));
+}
+
+TEST(CatchUp, LatestWhenTheTargetIsExactlyAnOccurrenceSkipsTheOnesBefore) {
+  Fixture f;
+  f.every("r", 10, 10, CatchUp::Latest);
+  EXPECT_EQ(f.s->advanceTo(20), std::size_t(1));
+  EXPECT_EQ(f.order(), std::string("r@20"));
+}
+
+TEST(CatchUp, LatestWithASingleDueOccurrenceRunsIt) {
+  Fixture f;
+  f.every("r", 10, 10, CatchUp::Latest);
+  EXPECT_EQ(f.s->advanceTo(10), std::size_t(1));
+  EXPECT_EQ(f.s->advanceTo(19), std::size_t(0));
+  EXPECT_EQ(f.s->advanceTo(25), std::size_t(1));
+  EXPECT_EQ(f.order(), std::string("r@10 r@20"));
+}
+
+TEST(CatchUp, OnTimeOnlyRunsAnOccurrenceExactlyAtTheTargetAndSkipsTheMissedOnes) {
+  Fixture f;
+  f.every("r", 10, 10, CatchUp::OnTimeOnly);
+  EXPECT_EQ(f.s->advanceTo(35), std::size_t(0));
+  long long at = 0;
+  IS(f.s->nextRun("r", at), Ok);
+  EXPECT_EQ(at, 40LL);
+  EXPECT_EQ(f.s->advanceTo(40), std::size_t(1));
+  EXPECT_EQ(f.s->advanceTo(100), std::size_t(1));
+  EXPECT_EQ(f.s->advanceTo(101), std::size_t(0));
+  EXPECT_EQ(f.order(), std::string("r@40 r@100"));
+}
+
+TEST(CatchUp, EachSeriesKeepsItsOwnPolicyWhateverWasScheduledBeforeOrAfter) {
+  Fixture f;
+  f.every("all", 0, 10, CatchUp::All, 3);
+  f.every("latest", 0, 10, CatchUp::Latest, 2);
+  f.every("exact", 0, 10, CatchUp::OnTimeOnly, 1);
+  f.s->scheduleEvery("plain", 0, 10, 0, f.job("plain"));
+  EXPECT_EQ(f.s->advanceTo(25), std::size_t(7));
+  EXPECT_EQ(f.order(), std::string("all@0 plain@0 all@10 plain@10 all@20 latest@20 plain@20"));
+  f.clear();
+  EXPECT_EQ(f.s->advanceTo(30), std::size_t(4));
+  EXPECT_EQ(f.order(), std::string("all@30 latest@30 exact@30 plain@30"));
+}
+
+TEST(CatchUp, SkippedOccurrencesAreNotCountedAndDoNotDisturbTheOrderOfOtherJobs) {
+  Fixture f;
+  f.every("r", 0, 10, CatchUp::Latest, 5);
+  f.s->schedule("once-a", 5, 0, f.job("once-a"));
+  f.s->schedule("once-b", 20, 0, f.job("once-b"));
+  EXPECT_EQ(f.s->advanceTo(20), std::size_t(3));
+  EXPECT_EQ(f.order(), std::string("once-a@5 r@20 once-b@20"));
+}
+
+TEST(CatchUp, OneShotJobsAlwaysRunHoweverLate) {
+  Fixture f;
+  f.s->schedule("late", 3, 0, f.job("late"));
+  f.every("r", 0, 10, CatchUp::OnTimeOnly);
+  EXPECT_EQ(f.s->advanceTo(500), std::size_t(2));
+  EXPECT_EQ(f.order(), std::string("late@3 r@500"));
+}
+
+TEST(CatchUp, ASkippedSeriesIsStillOnePendingJobThatCanBeCancelled) {
+  Fixture f;
+  f.every("r", 0, 10, CatchUp::OnTimeOnly);
+  f.s->advanceTo(1000);
+  EXPECT_EQ(f.s->pending(), std::size_t(1));
+  IS(f.every("r", 2000, 10, CatchUp::All), DuplicateId);
+  IS(f.s->cancel("r"), Ok);
+  EXPECT_EQ(f.s->pending(), std::size_t(0));
+  EXPECT_EQ(f.s->advanceTo(2000), std::size_t(0));
+}
+
+TEST(CatchUp, ValidationMatchesScheduleEvery) {
+  Fixture f;
+  f.s->advanceTo(100);
+  IS(f.every("", 200, 5, CatchUp::Latest), InvalidId);
+  IS(f.s->scheduleEveryWith("x", 200, 5, 0, CatchUp::Latest, sched::Job()), InvalidJob);
+  IS(f.every("x", 200, 0, CatchUp::Latest), InvalidPeriod);
+  IS(f.every("x", sched::kMaxTime + 1, 5, CatchUp::Latest), InvalidTime);
+  IS(f.every("x", 99, 5, CatchUp::Latest), InThePast);
+  IS(f.every("x", 100, 5, CatchUp::Latest), Ok);
+  IS(f.every("x", 100, 5, CatchUp::All), DuplicateId);
+}
+
+TEST(Model, RandomPoliciesAgreeWithASimpleModel) {
+  struct ModelJob {
+    std::string id;
+    long long at;
+    long long period;
+    int priority;
+    int rank;
+    CatchUp policy;
+  };
+  std::uint32_t rng = 4242;
+  auto next = [&rng](std::uint32_t n) {
+    rng = rng * 1664525u + 1013904223u;
+    return (rng >> 8) % n;
+  };
+  Fixture f;
+  std::vector<ModelJob> model;
+  long long now = 0;
+  int rank = 0;
+  for (int step = 0; step < 3000; ++step) {
+    const std::uint32_t op = next(10);
+    if (op < 5) {
+      const std::string id = "j" + std::to_string(next(8));
+      const long long at = now + static_cast<long long>(next(10));
+      const long long period = next(4) == 0 ? 0 : 1 + static_cast<long long>(next(9));
+      const int priority = static_cast<int>(next(3));
+      const CatchUp policy = static_cast<CatchUp>(next(3));
+      bool dup = false;
+      for (const auto& m : model) dup = dup || m.id == id;
+      const Status got = period == 0 ? f.s->schedule(id, at, priority, f.job(id)) : f.every(id, at, period, policy, priority);
+      EXPECT_TRUE(got == (dup ? Status::DuplicateId : Status::Ok));
+      if (!dup) model.push_back({id, at, period, priority, rank++, policy});
+    } else if (op < 6) {
+      const std::string id = "j" + std::to_string(next(8));
+      bool found = false;
+      for (std::size_t i = 0; i < model.size(); ++i) {
+        if (model[i].id == id) {
+          model.erase(model.begin() + static_cast<long>(i));
+          found = true;
+          break;
+        }
+      }
+      EXPECT_TRUE(f.s->cancel(id) == (found ? Status::Ok : Status::NotFound));
+    } else {
+      const long long target = now + static_cast<long long>(next(30));
+      f.clear();
+      std::vector<std::string> expected;
+      for (;;) {
+        int best = -1;
+        for (std::size_t i = 0; i < model.size(); ++i) {
+          if (model[i].at > target) continue;
+          if (best < 0) { best = static_cast<int>(i); continue; }
+          const ModelJob& a = model[i];
+          const ModelJob& b = model[static_cast<std::size_t>(best)];
+          if (a.at != b.at ? a.at < b.at : a.priority != b.priority ? a.priority > b.priority : a.rank < b.rank) best = static_cast<int>(i);
+        }
+        if (best < 0) break;
+        ModelJob& m = model[static_cast<std::size_t>(best)];
+        bool run = true;
+        if (m.period > 0 && m.policy == CatchUp::Latest) run = m.at + m.period > target;
+        if (m.period > 0 && m.policy == CatchUp::OnTimeOnly) run = m.at == target;
+        if (run) expected.push_back(m.id + "@" + std::to_string(m.at));
+        if (m.period > 0) m.at += m.period; else model.erase(model.begin() + best);
+      }
+      now = target;
+      EXPECT_EQ(f.s->advanceTo(target), expected.size());
+      EXPECT_EQ(f.ran, expected);
+    }
+    EXPECT_EQ(f.s->pending(), model.size());
+  }
+}
+23:T4a6,#pragma once
+#include <array>
+#include <memory>
+
+#include "api_storm2.h"
+
+// Decides whether an occurrence that is due should really run (Strategy). `target` is the time advanceTo() was given.
+class CatchUpPolicy {
+ public:
+  virtual ~CatchUpPolicy() = default;
+  virtual bool shouldRun(long long at, long long period, long long target) const = 0;
+};
+
+class RunAll : public CatchUpPolicy {
+ public:
+  bool shouldRun(long long, long long, long long) const override { return true; }
+};
+
+// The occurrence after this one is still due, so this one is not the latest.
+class RunLatest : public CatchUpPolicy {
+ public:
+  bool shouldRun(long long at, long long period, long long target) const override { return at + period > target; }
+};
+
+class RunOnTime : public CatchUpPolicy {
+ public:
+  bool shouldRun(long long at, long long, long long target) const override { return at == target; }
+};
+
+inline std::shared_ptr<const CatchUpPolicy> makePolicy(sched::CatchUp which) {
+  static const std::array<std::shared_ptr<const CatchUpPolicy>, 3> table = {
+      std::make_shared<RunAll>(), std::make_shared<RunLatest>(), std::make_shared<RunOnTime>()};
+  return table[static_cast<std::size_t>(which)];
+}
+24:T59a,#pragma once
+#include <cstddef>
+#include <map>
+#include <string>
+#include <tuple>
+#include <unordered_map>
+
+#include "entry.h"
+
+// The pending jobs in running order: (time, higher priority first, scheduling order), with an index by id.
+class RunQueue {
+ public:
+  bool contains(const std::string& id) const { return index_.count(id) > 0; }
+  std::size_t size() const { return byOrder_.size(); }
+
+  void insert(const Entry& e) {
+    const Key key = keyOf(e);
+    index_[e.id] = key;
+    byOrder_[key] = e;
+  }
+
+  bool remove(const std::string& id) {
+    const auto it = index_.find(id);
+    if (it == index_.end()) return false;
+    byOrder_.erase(it->second);
+    index_.erase(it);
+    return true;
+  }
+
+  // Takes the first entry out if it is due at `target`.
+  bool popDue(long long target, Entry& out) {
+    if (byOrder_.empty() || byOrder_.begin()->second.at > target) return false;
+    out = byOrder_.begin()->second;
+    index_.erase(out.id);
+    byOrder_.erase(byOrder_.begin());
+    return true;
+  }
+
+  bool timeOf(const std::string& id, long long& at) const {
+    const auto it = index_.find(id);
+    if (it == index_.end()) return false;
+    at = std::get<0>(it->second);
+    return true;
+  }
+
+ private:
+  using Key = std::tuple<long long, int, unsigned long>;
+
+  static Key keyOf(const Entry& e) { return Key(e.at, -e.priority, e.rank); }
+
+  std::map<Key, Entry> byOrder_;
+  std::unordered_map<std::string, Key> index_;
+};
+25:Ta30,#pragma once
+#include <memory>
+#include <string>
+#include <utility>
+
+#include "api_storm2.h"
+#include "dispatcher.h"
+
+class SchedulerImpl : public sched::CatchUpScheduler {
+ public:
+  sched::Status schedule(const std::string& id, long long at, int priority, sched::Job job) override {
+    return admit(id, at, priority, Cadence(), makePolicy(sched::CatchUp::All), std::move(job));
+  }
+
+  sched::Status scheduleEvery(const std::string& id, long long first, long long period, int priority, sched::Job job) override {
+    return scheduleEveryWith(id, first, period, priority, sched::CatchUp::All, std::move(job));
+  }
+
+  sched::Status scheduleEveryWith(const std::string& id, long long first, long long period, int priority,
+                                  sched::CatchUp policy, sched::Job job) override {
+    if (!validId(id)) return sched::Status::InvalidId;
+    if (!job) return sched::Status::InvalidJob;
+    if (period < 1 || period > sched::kMaxPeriod) return sched::Status::InvalidPeriod;
+    return admit(id, first, priority, Cadence(period), makePolicy(policy), std::move(job));
+  }
+
+  sched::Status cancel(const std::string& id) override {
+    return queue_.remove(id) ? sched::Status::Ok : sched::Status::NotFound;
+  }
+
+  std::size_t advanceTo(long long time) override {
+    if (time < clock_.now()) return 0;
+    return dispatcher_.runDue(queue_, clock_, time);
+  }
+
+  long long now() const override { return clock_.now(); }
+  std::size_t pending() const override { return queue_.size(); }
+
+  sched::Status nextRun(const std::string& id, long long& at) const override {
+    return queue_.timeOf(id, at) ? sched::Status::Ok : sched::Status::NotFound;
+  }
+
+ private:
+  static bool validId(const std::string& id) { return !id.empty() && id.size() <= 32; }
+
+  sched::Status admit(const std::string& id, long long at, int priority, Cadence cadence,
+                      std::shared_ptr<const CatchUpPolicy> policy, sched::Job job) {
+    if (!validId(id)) return sched::Status::InvalidId;
+    if (!job) return sched::Status::InvalidJob;
+    if (at > sched::kMaxTime) return sched::Status::InvalidTime;
+    if (at < clock_.now()) return sched::Status::InThePast;
+    if (queue_.contains(id)) return sched::Status::DuplicateId;
+    Entry e;
+    e.id = id;
+    e.at = at;
+    e.priority = priority;
+    e.rank = nextRank_++;
+    e.cadence = cadence;
+    e.catchUp = std::move(policy);
+    e.job = std::make_shared<const sched::Job>(std::move(job));
+    queue_.insert(e);
+    return sched::Status::Ok;
+  }
+
+  SimClock clock_;
+  RunQueue queue_;
+  Dispatcher dispatcher_;
+  unsigned long nextRank_ = 0;
+};
+c:["$","$L1a",null,{"bundle":{"id":"task-scheduler","title":"Task scheduler (cron)","level":"Senior","parMinutes":75,"patterns":["Strategy","Command","Observer"],"requirements":[{"id":"R-order","text":"Jobs run earlier time first; at the same time the higher priority number first (any int, bigger is more urgent, negative allowed); at the same time and priority in the order they were scheduled (FIFO, not by name). Time always beats priority.","phase":"base","hidden":true},{"id":"R-time","text":"Time is simulated ticks starting at 0 and moving only through advanceTo(t). advanceTo(t) runs every job whose time is <= t (a job due exactly at t runs), then sets now() to t; inside a job now() is that job's own time. An earlier t does nothing and returns 0. The result is the number of jobs that ran.","phase":"base","hidden":true},{"id":"R-validate","text":"An id is 1 to 32 characters. Check order: InvalidId, InvalidJob (empty function), InvalidTime (beyond 10^12), InThePast (before now(); equal to now() is allowed and runs on the next advance, even to the same time), DuplicateId (a PENDING job has the id). A refused call changes nothing.","phase":"base","hidden":true},{"id":"R-cancel","text":"cancel() removes a pending job so it never runs; NotFound for an unknown, cancelled or already-run id. A job leaves the pending set when it STARTS: its id is free at once, a job can schedule itself again, and cancel() of itself from inside is NotFound. pending() and nextRun() describe the live set.","phase":"base","hidden":true},{"id":"R-reenter","text":"Jobs may call schedule() and cancel() while running. Jobs scheduled by a job for a time <= the target run in the same advance, in their proper place in the order (a more urgent job at the same tick overtakes the waiting ones); a job cancelled by an earlier job does not run. Inside a job the past means before that job's own time.","phase":"base","hidden":true},{"id":"R-every","text":"scheduleEvery(id, first, period, priority, job): occurrences at first + k * period, a fixed rate, period 1 to 10^9. Check order InvalidId, InvalidJob, InvalidPeriod, InvalidTime, InThePast, DuplicateId. A series is ONE pending job (pending() counts it once, its id is taken, nextRun is its next occurrence); cancel() ends it, also from inside its own run. Every due occurrence of one advance runs, in the usual order against everything else. The series keeps its FIFO place in every round, and one callable (with its own state) runs every time.","phase":"storm1","hidden":true},{"id":"R-catchup","text":"scheduleEveryWith(..., policy, job) with CatchUp::All (every due occurrence runs), Latest (only the latest occurrence <= t runs) or OnTimeOnly (only an occurrence exactly at t runs). The policy belongs to that series alone and scheduleEvery() is All. Skipped occurrences do not run and are not counted, the series carries on, and one-shot jobs always run however late.","phase":"storm2","hidden":true}],"brief":"$1b","editorial":"$1c","clarify":[{"id":"q-order","text":"When several jobs are due, what is the order? What does priority mean, and what happens between jobs that tie on everything?","answer":"Earlier time first. At the same time, the higher priority number runs first (any int, bigger means more urgent, negative numbers are fine). At the same time and priority the job that was scheduled first runs first: first come, first served, not alphabetical by id. Priority never lets a job jump ahead of work that is due earlier.","reveals":["R-order"],"quality":"essential"},{"id":"q-time","text":"How does time work? Who moves it, and what does 'due' mean exactly? What is now() while a job runs?","answer":"Simulated ticks starting at 0, moved only by advanceTo(t). A job is due when its time is at most t, so a job at exactly t runs. After the call now() is t. Inside a job, now() is the time that job was scheduled for, not t, so a job that asks 'what time is it' during a long catch-up gets its own tick. An advanceTo with an earlier time does nothing: time never goes backwards. The call returns how many jobs ran.","reveals":["R-time"],"quality":"essential"},{"id":"q-validate","text":"What is a valid id and time? Which errors are there, and in which order are they checked? What about a job for a time that has already passed?","answer":"An id is 1 to 32 characters and must be unique among pending jobs. Statuses: InvalidId, InvalidJob (an empty std::function), InvalidTime (beyond 10^12 ticks), InThePast (before now; equal to now is allowed and runs in the next advance, even advanceTo(now)), DuplicateId. They are checked in that order, and a refused call changes nothing.","reveals":["R-validate"],"quality":"essential"},{"id":"q-cancel","text":"What does cancel do to a job that is running or has finished? Can an id be reused? Can a job reschedule itself?","answer":"cancel removes a pending job (Ok) and answers NotFound for an unknown, already cancelled or already finished one. A job leaves the pending set the moment it starts running: its id is free at once, so a job can schedule itself again under the same name, and cancel of itself from inside is NotFound. pending() counts the live set and nextRun(id) gives the next tick of a pending job.","reveals":["R-cancel"],"quality":"essential"},{"id":"q-reenter","text":"May a job call the scheduler while it runs, to schedule or cancel? If a job schedules something that is already due, when does it run?","answer":"Yes. Jobs may call schedule and cancel on the same scheduler. A job scheduled by a running job for a time that is at most the target of this advance runs in this same advance, in its proper place in the order (so a more urgent job created at the same tick overtakes the ones still waiting). A job cancelled by an earlier job in the same advance does not run. Inside a job, 'the past' means before that job's own time. Calling advanceTo from inside a job is not allowed.","reveals":["R-reenter"],"quality":"essential"},{"id":"q-recurring-later","text":"Will jobs ever repeat, like 'every 10 minutes'? If so, is the period measured from the first time or from when the last run finished?","answer":"Plan for it (the next requirement will ask). When it comes: a fixed rate, first + k * period, measured from the schedule and never from when a run happened, so it cannot drift. A series is one pending job with one id. Every occurrence due in one advance runs. Say how your design would carry that.","reveals":["R-every"],"quality":"useful"},{"id":"q-sleep","text":"What if the process was asleep and time jumps past several occurrences of a recurring job? Should they all run?","answer":"That is a per-job decision, and a follow-up will ask for it: run every missed occurrence, run only the latest one, or run nothing unless the job is exactly on time. One-shot jobs always run, however late. A skipped occurrence is not counted in the result and the series carries on.","reveals":["R-catchup"],"quality":"useful"},{"id":"q-throw","text":"What if a job throws an exception, or takes a very long time?","answer":"Jobs must not throw, and they run on the caller's thread, so a long job delays everything after it: that is a property of a single-threaded scheduler. Say what you would change (a try/catch with a failure hook, a worker pool, timeouts), but the tests do none of it.","reveals":[],"quality":"useful"},{"id":"q-limits","text":"How many jobs, and should I worry about threads or performance?","answer":"A few thousand pending jobs, and no threads. Finding the next job must not be a scan of everything: an ordered structure is expected. Say what you would change for millions of timers and for several threads calling schedule.","reveals":[],"quality":"useful"},{"id":"q-cron-syntax","text":"Should it parse cron expressions like '*/5 * * * 1-5', time zones and daylight saving?","answer":"No: times are plain integers. A cron parser is a separate component that turns an expression into 'the next time after t', which would plug in where the fixed period is today. A good follow-up, not part of this problem.","reveals":[],"quality":"noise"},{"id":"q-persist","text":"Should pending jobs survive a restart, with a database behind them?","answer":"No. Everything is in memory. Durable scheduling (a table of due jobs, leases, at-least-once delivery) is a system design question and comes up in the follow-ups.","reveals":[],"quality":"noise"},{"id":"q-wall","text":"Should it use the system clock and sleep until the next job?","answer":"No, never inside the scheduler: time is an argument. Injecting the clock is what makes the order and the boundaries testable. A real driver would call advanceTo(clock.now()) in a loop.","reveals":[],"quality":"noise"},{"id":"q-ui","text":"Is there a UI that lists jobs, with names and descriptions?","answer":"Out of scope. The tests call the Scheduler interface, nothing else.","reveals":[],"quality":"noise"}],"rubric":[{"id":"res-facade","text":"Exposes the public calls and sequences the collaborators: validate the arguments, assign the scheduling rank, put the job in the queue, delegate running to the dispatcher","phase":"base","owners":["SchedulerImpl","SchedulerService","Scheduler","TaskScheduler","SchedulerFacade","JobScheduler"]},{"id":"res-clock","text":"Owns the simulated time and keeps it monotonic, separate from the queue","phase":"base","owners":["SimClock","Clock","SimulatedClock","ManualClock","FakeClock","TimeSource"]},{"id":"res-queue","text":"Keeps the pending jobs in running order (time, priority, scheduling order) together with the index by id, and updates both in single operations (insert, remove, pop the next due one)","phase":"base","owners":["RunQueue","JobQueue","PendingJobs","TaskQueue","ScheduleQueue","JobStore","Timeline"]},{"id":"res-dispatch","text":"Runs what is due in order from the live queue, one job at a time, setting the clock for each, so jobs can schedule and cancel while running","phase":"base","owners":["Dispatcher","Runner","JobRunner","Executor","Ticker","RunLoop"]},{"id":"res-entry","text":"Represents one pending job (id, time, priority, rank, job) as a value that the queue stores and the dispatcher reads","phase":"base","owners":["Entry","Task","JobEntry","ScheduledJob","ScheduledTask","Job"]},{"id":"res-cadence","text":"Knows how a job repeats (never, or at a fixed period) and produces the next occurrence from the previous one, keeping the rank","phase":"storm1","owners":["Cadence","Recurrence","Schedule","Repeat","Period","Trigger"]},{"id":"res-catchup","text":"Decides, per series and as its own Strategy, which due occurrences really run when time jumps, so adding a policy touches no existing one","phase":"storm2","owners":["CatchUpPolicy","MisfirePolicy","CatchUp","Misfire","MissedRunPolicy","RunPolicy"]}],"followups":[{"level":"SDE2","question":"Why an ordered map (or priority queue) rather than a vector you sort before every advance?","answer":"Finding the next job is the one thing a scheduler does all day. A vector re-sorted per call costs O(n log n) each time and cannot cope with a job that adds jobs while the loop runs; an ordered structure gives O(log n) insert and 'take the smallest' and stays valid while jobs change it. A binary heap has the same bounds and is smaller, but it cannot remove an arbitrary id, so it needs lazy deletion (mark cancelled and skip on pop) or an index into the heap. The ordered map with an id index is the simplest thing that supports cancel exactly."},{"level":"SDE2","question":"Why does the dispatcher take each job out of the queue before calling it?","answer":"Because the job may change the queue. If the job were still inside while it runs, scheduling under its own id would be a duplicate, cancelling it would race with the loop that is about to remove it, and an iterator held by the loop could be invalidated by an insert. Pop first, run second, and the queue is always in a consistent state whenever user code runs; the dispatcher never holds an iterator across a call into user code."},{"level":"SDE2","question":"How do you get 'first come, first served' among equal jobs without a clock?","answer":"A sequence number handed out when a job is scheduled, used as the last part of the ordering key. Wall-clock timestamps tie (two calls in the same microsecond) and can step backwards, so they cannot give a stable order. Ordering by id is deterministic but unrelated to arrival. A 64-bit counter will not overflow in practice, and a recurring job keeps the number it was given so it keeps its place."},{"level":"Senior","question":"Why put a recurring job's next occurrence in the queue before running the current one?","answer":"So that the queue is already in its final state while user code runs: a job that cancels its own series finds the successor and removes it, and a job that reads pending() sees the right count. If the successor is queued after the body returns, cancel from inside finds nothing, the series comes back to life, and every exceptional path (an exception, an early return) needs its own re-queue code. Putting it back first also means a skipped occurrence needs no special case: skipping is just 'do not call the body'."},{"level":"Senior","question":"Catch-up policies: why a Strategy object and not an enum with a switch in the dispatcher?","answer":"The dispatcher's loop is the part that must stay stable (it already handles reentrancy), and the policy is the part that varies. With a Strategy each policy is one small class asking one question ('is this occurrence still the one to run?'), and a new one (say, 'run at most N missed occurrences') is a new class and a line in the factory table. A switch in the loop would grow with every policy and would be the place where the next off-by-one appears. For three one-line policies a function pointer or lambda table is equally good; the point is that the choice is data, not a branch in the loop."},{"level":"Senior","question":"The interface says jobs must not throw. How would you make that safe without changing the contract much?","answer":"Catch around the call in the dispatcher, and report the failure somewhere that is not the return value (a listener, a counter, a log). The decision that matters is what the series does next: for a recurring job the usual answer is to keep the series and count a failure, because a scheduler that dies on the first exception is a worse outage than a job that fails. The order of operations (successor queued before the body runs) already means the series survives, which is another reason for that order."},{"level":"Senior","question":"What would you change to run jobs on a thread pool?","answer":"Split 'decide what is due' from 'run it'. The dispatcher still pops due entries in order under a lock, but hands the callable to an executor instead of calling it, and the clock value for the job travels with it. Three questions come with that: do two jobs of the same series run at once (usually no: serialise per id, or skip the occurrence under a policy like OnTimeOnly), do jobs run in the order of the queue (only start order, not finish order), and who may call schedule from a worker (the queue needs a mutex, and nobody holds it while a job runs). The public order guarantee becomes 'jobs start in this order'."},{"level":"Staff","question":"Design the same thing as a distributed service: a million timers, several nodes, and a node can die.","answer":"Persist the timers in a store ordered by due time (a partitioned table or a hierarchical timing wheel in memory over a log), and have workers claim due timers with a lease: take rows whose time has come and whose lease is empty or expired, set the lease, run, then delete or reschedule in the same transaction as the work's effects if possible. That is at-least-once, so jobs must be idempotent (an id plus the occurrence time makes a good idempotency key). Partition by id hash so one node owns a range; a dead node's leases expire and another takes the range. Catch-up policies become real configuration: after an outage, 'run all', 'latest' and 'skip' are different business decisions (billing needs all, a cache refresh needs the latest). Clock skew between nodes means the store's clock, not the workers', defines 'due'. Say what you give up: ordering is only per partition, and exactly-once is not on offer."}],"apiHeader":"$1d","phaseApis":{"storm1":"$1e","storm2":"$1f"},"phases":["base","storm1","storm2"],"tests":{"base":[{"path":"sched_base.cpp","content":"$20"}],"storm1":[{"path":"sched_storm1.cpp","content":"$21"}],"storm2":[{"path":"sched_storm2.cpp","content":"$22"}]},"reference":[{"path":"cadence.h","content":"#pragma once\n\n// How a job repeats: never (period 0) or every `period` ticks at a fixed rate.\nclass Cadence {\n public:\n  explicit Cadence(long long period = 0) : period_(period) {}\n\n  bool repeats() const { return period_ > 0; }\n  long long period() const { return period_; }\n  long long after(long long at) const { return at + period_; }\n\n private:\n  long long period_;\n};\n"},{"path":"catch_up.h","content":"$23"},{"path":"dispatcher.h","content":"#pragma once\n#include <cstddef>\n\n#include \"run_queue.h\"\n#include \"sim_clock.h\"\n\n// Runs what is due. Each entry leaves the queue before its job starts, and a recurring job's next occurrence goes back\n// first, so a job may schedule or cancel anything (itself included) while it runs.\nclass Dispatcher {\n public:\n  std::size_t runDue(RunQueue& queue, SimClock& clock, long long target) const {\n    std::size_t ran = 0;\n    Entry e;\n    while (queue.popDue(target, e)) {\n      if (e.cadence.repeats()) queue.insert(nextOccurrence(e));\n      clock.set(e.at);\n      if (!e.catchUp->shouldRun(e.at, e.cadence.period(), target)) continue;\n      (*e.job)();\n      ++ran;\n    }\n    clock.set(target);\n    return ran;\n  }\n};\n"},{"path":"entry.h","content":"#pragma once\n#include <memory>\n#include <string>\n\n#include \"cadence.h\"\n#include \"catch_up.h\"\n\n// One pending job. The job is shared, not copied, so the next occurrence of a recurring job runs the same callable.\nstruct Entry {\n  std::string id;\n  long long at = 0;\n  int priority = 0;\n  unsigned long rank = 0;  // the order of scheduling; a recurring job keeps its rank in every round\n  Cadence cadence;\n  std::shared_ptr<const CatchUpPolicy> catchUp;\n  std::shared_ptr<const sched::Job> job;\n};\n\ninline Entry nextOccurrence(const Entry& e) {\n  Entry next = e;\n  next.at = e.cadence.after(e.at);\n  return next;\n}\n"},{"path":"run_queue.h","content":"$24"},{"path":"scheduler_impl.h","content":"$25"},{"path":"service.cpp","content":"#include \"scheduler_impl.h\"\n\nstd::unique_ptr<sched::Scheduler> sched::makeScheduler() { return std::make_unique<SchedulerImpl>(); }\n\nstd::unique_ptr<sched::RecurringScheduler> sched::makeRecurringScheduler() { return std::make_unique<SchedulerImpl>(); }\n\nstd::unique_ptr<sched::CatchUpScheduler> sched::makeCatchUpScheduler() { return std::make_unique<SchedulerImpl>(); }\n"},{"path":"sim_clock.h","content":"#pragma once\n\n// The scheduler's idea of \"now\": simulated ticks that only move when told to.\nclass SimClock {\n public:\n  long long now() const { return now_; }\n  void set(long long time) { now_ = time; }\n\n private:\n  long long now_ = 0;\n};\n"}],"driver":{"path":"driver.cpp","content":"#define BP_TEST_MAIN\n#include \"bp_test.h\"\n","readOnly":true}}}]

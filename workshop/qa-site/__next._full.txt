@@ -1,0 +1,1614 @@
+1:"$Sreact.fragment"
+2:"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js"
+3:I[39756,["$2"],"default"]
+4:I[37457,["$2"],"default"]
+5:"/blueprint-clash/_next/static/chunks/2n5qeheznvl4u.js"
+6:I[22016,["$2","$5"],""]
+7:I[64576,["$2"],"PwaRegister"]
+d:I[97367,["$2"],"OutletBoundary"]
+e:"$Sreact.suspense"
+10:"ViewportBoundary"
+11:I[97367,["$2"],"$10"]
+13:"MetadataBoundary"
+14:I[97367,["$2"],"$13"]
+16:I[68027,["$2"],"default",1]
+:HL["/blueprint-clash/_next/static/chunks/1klm1scec-3x5.css","style"]
+:HL["/blueprint-clash/_next/static/media/07c7676b89ed2778-s.p.2bn3s6zvc0dyp.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/blueprint-clash/_next/static/media/486a103cae33528f-s.p.309ilb452anpd.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/blueprint-clash/_next/static/media/53897e768d329f66-s.p.3t6q91iet4nsy.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+9:X
+b:[["children",{"s":"__PAGE__","h":512,"d":{"r":["$","$1","c",{"children":["$Lc",[["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/2uk3wcjwqg0tl.js","async":true,"nonce":"$undefined"}],["$","script","script-1",{"src":"/blueprint-clash/_next/static/chunks/1zdu7yjl8efu4.js","async":true,"nonce":"$undefined"}]],["$","$Ld",null,{"children":["$","$e",null,{"name":"Next.MetadataOutlet","children":"$@f"}]}]]}],"p":false,"v":null}}]]
+a:[["children",{"s":{"n":"id","t":"d","k":"qa-site","s":[]},"h":66048,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],"p":false,"v":"$9"},"c":"$Qb"}]]
+8:[["children",{"s":"workshop","h":131584,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],"p":false,"v":"$9"},"c":"$Qa"}]]
+0:{"P":null,"c":["","workshop","qa-site",""],"q":"","i":false,"t":{"t":{"s":"","h":131600,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/1klm1scec-3x5.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}],["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js","async":true,"nonce":"$undefined"}]],["$","html",null,{"lang":"en","className":"r7opxW_variable auY9QW_variable u-EJdW_variable h-full","children":["$","body",null,{"className":"min-h-full","children":[["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","main",null,{"className":"flex min-h-dvh flex-col items-center justify-center gap-4 px-4 text-center","children":[["$","div",null,{"className":"font-display text-5xl text-[var(--accent)]","children":"404"}],["$","p",null,{"className":"text-white/60","children":"This room is not on the blueprint yet."}],["$","$L6",null,{"href":"/","className":"text-sm text-white/80 underline","children":"Back to the title screen"}]]}],[]],"forbidden":"$undefined","unauthorized":"$undefined"}],["$","$L7",null,{}]]}]}]]}],"p":false,"v":null},"c":"$Q8"},"h":{"r":["$","$1","h",{"children":[null,["$","$L11",null,{"children":"$L12"}],["$","$L14",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$e",null,{"name":"Next.Metadata","children":"$L15"}]}],null]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"p":false,"v":null}},"m":"$undefined","G":["$16",[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/1klm1scec-3x5.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]]],"S":true,"r":"$undefined","s":"$undefined","a":"$undefined","l":"$undefined","p":"$undefined","d":"$undefined","b":"2AOMJw3uqOQQQZHGX3CKn"}
+9:C
+12:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1, viewport-fit=cover"}],["$","meta","2",{"name":"theme-color","content":"#0a1530"}]]
+17:I[27201,["$2"],"IconMark"]
+f:null
+15:[["$","title","0",{"children":"Stack Overflow-lite: Blueprint Clash"}],["$","meta","1",{"name":"description","content":"A creature-tactics RPG that teaches low-level design in C++ and high-level system design, from fundamentals to big-tech interview level."}],["$","link","2",{"rel":"manifest","href":"/blueprint-clash/manifest.webmanifest","crossOrigin":"$undefined"}],["$","meta","3",{"name":"mobile-web-app-capable","content":"yes"}],["$","meta","4",{"name":"apple-mobile-web-app-title","content":"Blueprint Clash"}],["$","meta","5",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","link","6",{"rel":"icon","href":"/blueprint-clash/icon.png?icon.27re_xscs-jmw.png","sizes":"256x256","type":"image/png"}],["$","link","7",{"rel":"apple-touch-icon","href":"/blueprint-clash/apple-icon.png?apple-icon.2rac1w0yc3rju.png","sizes":"180x180","type":"image/png"}],["$","$L17","8",{}]]
+18:"/blueprint-clash/_next/static/chunks/2uk3wcjwqg0tl.js"
+19:"/blueprint-clash/_next/static/chunks/1zdu7yjl8efu4.js"
+1a:I[65612,["$2","$18","$19"],"WorkshopClient"]
+1b:T557,# Stack Overflow-lite
+
+You are building the core of a small question-and-answer site: the part that decides who has asked what, who has voted how, and, above all, **how much reputation everybody has**. There is no web page and no database: the tests call one interface and everything is in memory.
+
+What you know so far:
+
+- Users sign up with a name. A new user has reputation 1.
+- A user asks a question and any user can answer it.
+- Other users vote a post up or down.
+- The person who asked can accept one answer as the best.
+- Votes and acceptances change the reputation of the people involved.
+- You can ask for a user's reputation, a post's score and a question's answers, best first.
+
+Your task: design and implement it behind the `qa::Site` interface in `api.h`. The hidden tests call only that interface. Ask the interviewer before you write anything: "how many points is each thing worth?", "can I vote on my own post?", "what happens when I change my mind about a vote?", "what is the lowest reputation can go?" and "which error wins when several things are wrong?" are where first drafts go wrong. Expect two follow-up requests once you are done: a daily limit on what votes can earn, and letting authors delete their posts. Both are much easier if reputation is something you can recompute from what is true now, rather than a number you keep adjusting.
+1c:T1943,# Editorial: Stack Overflow-lite
+
+## Requirements
+Functional: add users; ask a question; answer it; vote a post up or down (one vote per voter per post, switching replaces, `unvote` takes it back); accept an answer; read a user's reputation, a post's score and a question's ordered answers. Then a daily cap on what upvotes can earn, and then authors deleting their posts.
+
+Hidden in the brief and revealed by good questions: the points table (+5 and +10 for upvotes, -2 for a downvote, -1 more for the voter who downvotes an answer, +15 and +2 for an acceptance and nothing for accepting your own answer); that reputation is derived and floored at 1 on the **total**; the voting rules (self vote, a downvote needs reputation 15, `AlreadyVoted` versus switching); the order of the statuses; that a question has at most one accepted answer and moving it moves the points; and the order of `answers`.
+
+**Change Storm 1, a daily cap:** per user and day, upvote points count at most the cap; penalties and acceptances are uncapped; a switched vote belongs to the day it was cast; taking a vote back can lift a day back under the cap.
+
+**Change Storm 2, deleting posts:** only the author may delete; a question takes its answers with it; every vote, acceptance and point that depended on a deleted post disappears; ids are free and clean again; votes the author cast elsewhere stay.
+
+## Reference design
+`SiteImpl` is a thin facade: it checks the documented rules in order and writes to the collaborators. It does no point arithmetic. `PostBoard` owns the live posts (kind, author, parent, creation sequence). `VoteBook` keeps every vote that stands, one per voter per post, with its day. `AcceptBook` maps a question to its accepted answer. These three hold **facts** and nothing else.
+
+`Ledger` turns the facts into `ReputationEvent`s for one user (an upvote pays the author by kind, a downvote charges the author and, on an answer, the voter; an acceptance pays the answer's author and the asker unless they are the same person). A `ReputationPolicy` adds the events up: `PlainPolicy` sums them, `DailyCapPolicy` limits the capped events per day. The floor is applied once, to the total. Reputation is therefore never stored, and every undo is just 'remove a fact'.
+
+Storm 1 added the clock, one new policy class and a factory; the ledger, the books and the existing policy were not edited. Storm 2 added `PostRemover`, which removes a post with its votes and acceptance (and a question's answers) in one place, and one method to the facade. Because reputation is derived, nothing needed correcting after a delete. `AnswerLister` builds the ordered list from the three books.
+
+## Alternatives
+- **Stored balances updated by each action.** Reading is O(1) and the code is short at first. Every undo (unvote, switch, move acceptance, delete) needs a mirror-image update, the floor makes some of those wrong, and the cap makes every later vote depend on earlier ones. Fast to write, slow to keep correct.
+- **Event log with replay.** Store each reward and reversal as an event and replay for reputation. Equivalent to this design when the reversals are modelled; the facts-first version avoids having to invent compensating events and keeps the data smaller.
+- **Per-user event lists maintained on every write.** An index from user to the votes and acceptances that affect them; reputation reads only those. A good optimisation of the reference (the 10x section), but it must be updated in the same places the books are, so it is a second structure that can drift.
+- **Soft-deleted posts.** Keep a flag and filter in every reader. Keeps history for moderation, at the price of every reader remembering the flag.
+- **One class with `if (kind == ...)` for points.** A fine first draft; the cap and the delete each add branches to the same methods.
+
+## Trade-offs
+- **Derive instead of store.** Every rule that removes something becomes trivial and exact; reads cost a pass over the facts (here a scan of all votes) until a cache is added.
+- **Policy as a Strategy over events.** The cap is rewritten from events every time, so it stays right under undo. The cost is one small interface and the discipline that events carry what the policy needs (day, whether capped).
+- **Hard delete.** Exact numbers and clean ids, but no audit history; real sites soft-delete underneath.
+- **The privilege check reads current reputation.** Correct and simple, but it ties a vote to a derived number, which is a race in a concurrent system.
+- **Ordering rule for statuses.** A fixed, documented order is the only thing a caller can rely on when several things are wrong at once.
+
+## What breaks at 10x
+- **Reputation reads:** `reputation()` walks every vote and acceptance. Keep a per-user index of the events that affect them, or a cache invalidated for the users a write touches (author, voter, asker).
+- **Answers:** `PostBoard::answersOf` scans every post. Keep a list of answers per question.
+- **Votes:** the `VoteBook` is a nested map by post; fine to millions of votes in memory, then it belongs in a table keyed by (post, voter) with an index by user.
+- **Threads:** the downvote privilege check and the write must be atomic; one writer per user or a transaction with the check as a condition.
+- **Scale-out:** the facts are an append-friendly stream; derive reputation in a stream processor and serve it from a cache, with a periodic full recompute as the audit.
+- **Abuse:** voting rings are a policy problem on the same facts, handled by offline detection and compensating reversals.
+
+## Level signals
+- **SDE II:** the points table right, the statuses in a sensible order with a refused call changing nothing, a vote switch that replaces the old effects, and an accepted answer that moves cleanly. Names and classes that separate posts, votes and the rules.
+- **Senior:** reputation derived from facts (and the floor on the total), a clean undo for every action, the cap as a policy rather than a branch, and a delete that removes the post and everything hanging on it in one place. Tests that compare against a plain model.
+- **Staff:** frames derived versus stored versus event-sourced reputation and what each does under undo and scale, raises the privilege race, caching and invalidation sets, streaming derivation with reconciliation, soft versus hard delete for audit, and abuse detection (voting rings) as policies over the same facts, naming what each choice gives up.
+1d:T1206,#pragma once
+// Public API for the Stack Overflow-lite problem. The hidden tests only use what is declared here.
+// You implement qa::makeSite() (in any of your .cpp files); everything behind it is your design.
+#include <memory>
+#include <string>
+#include <vector>
+
+namespace qa {
+
+enum class Status {
+  Ok,
+  InvalidInput,     // a name or id that is empty or longer than 32 characters, or a day outside the allowed range
+  DuplicateUser,    // a user with this name already exists
+  UnknownUser,      // no user with this name
+  DuplicatePost,    // a live post (question or answer) already has this id
+  UnknownPost,      // no live post with this id (or, for answer(), no live QUESTION with this id)
+  SelfVote,         // voting on your own post
+  LowReputation,    // a downvote needs reputation kMinDownvoteReputation
+  AlreadyVoted,     // the voter already has this very vote on the post
+  NoVote,           // unvote with no vote to take back
+  WrongKind,        // accept() on a question
+  NotAuthor,        // accept(): not the asker; remove(): not the author of the post
+  AlreadyAccepted,  // this answer is already the accepted one
+};
+
+constexpr int kMinDownvoteReputation = 15;  // reputation needed to downvote
+constexpr int kMaxDay = 1000000;            // (storm 1) days are 0..kMaxDay
+
+struct AnswerInfo {
+  std::string id;
+  std::string author;
+  int score = 0;       // upvotes minus downvotes
+  bool accepted = false;
+};
+
+// A small question-and-answer site. Users ask questions and answer them; other users vote on posts and the asker accepts
+// one answer. Everything the site pays out is REPUTATION, and reputation is the heart of this problem.
+// Single-threaded and deterministic. A refused call changes nothing.
+//
+// addUser(name): the name is 1 to 32 characters (InvalidInput), then DuplicateUser. A new user has reputation 1.
+// ask(id, author): InvalidInput (id empty or longer than 32 characters), UnknownUser, DuplicatePost.
+// answer(id, question, author): InvalidInput, UnknownUser, UnknownPost (no live QUESTION called `question`), DuplicatePost.
+//   Questions and answers share one id space. A user may answer their own question.
+//
+// vote(voter, post, up): CHECK ORDER UnknownUser, UnknownPost, SelfVote (the voter wrote the post), LowReputation (a
+// downvote needs the voter's CURRENT reputation >= kMinDownvoteReputation; upvotes need none), AlreadyVoted (the voter
+// already has this same vote on the post). A voter has at most one vote per post: voting the opposite way REPLACES the old
+// vote, as if it had been taken back first.
+// unvote(voter, post): UnknownUser, UnknownPost, NoVote. Takes the vote back, with every effect it had.
+//
+// Reputation points (the author of the post is the one who is paid):
+//   upvote on a question +5, upvote on an answer +10, downvote on any post -2 (and the VOTER pays 1 for downvoting an
+//   ANSWER, nothing for a question).
+//   accept(user, answer): UnknownUser, UnknownPost, WrongKind (it is a question), NotAuthor (only the asker of that
+//   answer's question may accept), AlreadyAccepted. The answer's author gets +15 and the asker +2, but when both are the
+//   same person nobody is paid. A question has at most ONE accepted answer: accepting another answer moves the acceptance,
+//   and the old answer's +15 and the asker's +2 for it are gone.
+//
+// reputation(user) is DERIVED from what is currently true: 1 plus the points of every vote and acceptance that currently
+// stands, but never below 1 (the floor applies to the total, not to each step). An unknown user has reputation 0.
+// score(post) is upvotes minus downvotes (0 for an unknown post).
+// answers(question): every live answer, the accepted one first, then higher score first, then the older answer first.
+//   Empty for an unknown post or for an answer.
+class Site {
+ public:
+  virtual ~Site() = default;
+  virtual Status addUser(const std::string& name) = 0;
+  virtual Status ask(const std::string& id, const std::string& author) = 0;
+  virtual Status answer(const std::string& id, const std::string& question, const std::string& author) = 0;
+  virtual Status vote(const std::string& voter, const std::string& post, bool up) = 0;
+  virtual Status unvote(const std::string& voter, const std::string& post) = 0;
+  virtual Status accept(const std::string& user, const std::string& answer) = 0;
+  virtual int reputation(const std::string& user) const = 0;
+  virtual int score(const std::string& post) const = 0;
+  virtual std::vector<AnswerInfo> answers(const std::string& question) const = 0;
+};
+
+std::unique_ptr<Site> makeSite();
+
+}  // namespace qa
+1e:T4db,#pragma once
+// Change Storm 1: a daily cap on reputation earned from votes.
+#include "api.h"
+
+namespace qa {
+
+// makeCappedSite(dailyCap) is a site with everything makeSite() has, plus days and a cap (dailyCap >= 1, otherwise nullptr).
+// Every vote belongs to the DAY it was cast (the replaced vote's day does not carry over). setDay(day) moves the clock:
+// InvalidInput when day is below the current day (never backwards) or above kMaxDay; the same day is fine; the clock
+// starts at day 0.
+//
+// THE CAP: for each user and each day, the points earned from UPVOTES that were cast that day count at most dailyCap
+// in total. Everything else is uncapped: downvote penalties (to the author and to the voter), and the acceptance points
+// (+15 and +2). So a user's reputation is 1 + sum over days of (min(dailyCap, upvote points of that day) + penalties of
+// that day) + acceptance points, never below 1. Because reputation is derived, taking a vote back or removing a post
+// can lift a day back under the cap, and the numbers must come out as if the vote had never been cast.
+class CappedSite : public Site {
+ public:
+  virtual Status setDay(int day) = 0;
+};
+
+std::unique_ptr<CappedSite> makeCappedSite(int dailyCap);
+
+}  // namespace qa
+1f:T431,#pragma once
+// Change Storm 2: authors may delete their posts.
+#include "api_storm1.h"
+
+namespace qa {
+
+// makeModeratedSite(dailyCap) is a capped site (the cap of storm 1; pass a very large cap such as 1000000 for none)
+// that also lets authors delete posts.
+//
+// remove(user, post): CHECK ORDER UnknownUser, UnknownPost, NotAuthor (only the author of the post). Deleting a QUESTION
+// deletes all of its answers too. A deleted post is gone as if it had never existed: the votes cast on it, the
+// acceptance of an answer (when the answer or its question goes) and every point those paid or charged (including the
+// voter's cost for downvoting an answer) disappear from everyone's reputation. Votes the author CAST on other posts are
+// not touched. The ids of the deleted posts are free again, and a new post under a reused id starts with no votes.
+class ModeratedSite : public CappedSite {
+ public:
+  virtual Status remove(const std::string& user, const std::string& post) = 0;
+};
+
+std::unique_ptr<ModeratedSite> makeModeratedSite(int dailyCap);
+
+}  // namespace qa
+20:T405b,#include <algorithm>
+#include <map>
+#include <memory>
+#include <string>
+#include <vector>
+
+#include "api.h"
+#include "bp_test.h"
+
+namespace {
+using qa::Status;
+
+#define IS(call, expected) EXPECT_TRUE((call) == Status::expected)
+
+struct Fixture {
+  std::unique_ptr<qa::Site> s = qa::makeSite();
+  Fixture() {
+    for (const char* name : {"alice", "bob", "cara", "dan"}) s->addUser(name);
+  }
+  // Gives `user` exactly 10 * n more reputation by n upvotes from fresh voters on a fresh answer.
+  void earn(const std::string& user, int n) {
+    ++round;
+    const std::string q = "earn-q" + std::to_string(round);
+    const std::string a = "earn-a" + std::to_string(round);
+    s->addUser("earn-asker" + std::to_string(round));
+    s->ask(q, "earn-asker" + std::to_string(round));
+    s->answer(a, q, user);
+    for (int i = 0; i < n; ++i) {
+      const std::string v = "earn-v" + std::to_string(round) + "-" + std::to_string(i);
+      s->addUser(v);
+      s->vote(v, a, true);
+    }
+  }
+  std::string order(const std::string& q) const {
+    std::string out;
+    for (const auto& a : s->answers(q)) out += (out.empty() ? "" : " ") + a.id + (a.accepted ? "*" : "") + ":" + std::to_string(a.score);
+    return out;
+  }
+  int round = 0;
+};
+}  // namespace
+
+TEST(Users, AddUserChecksItsNameAndStartsAtOne) {
+  auto s = qa::makeSite();
+  IS(s->addUser(""), InvalidInput);
+  IS(s->addUser(std::string(33, 'x')), InvalidInput);
+  IS(s->addUser(std::string(32, 'x')), Ok);
+  IS(s->addUser("alice"), Ok);
+  IS(s->addUser("alice"), DuplicateUser);
+  EXPECT_EQ(s->reputation("alice"), 1);
+  EXPECT_EQ(s->reputation(std::string(32, 'x')), 1);
+  EXPECT_EQ(s->reputation("nobody"), 0);
+  EXPECT_EQ(s->score("nothing"), 0);
+}
+
+TEST(Posting, AskAndAnswerCheckTheirArgumentsInTheDocumentedOrder) {
+  Fixture f;
+  IS(f.s->ask("", "alice"), InvalidInput);
+  IS(f.s->ask("", "ghost"), InvalidInput);
+  IS(f.s->ask(std::string(33, 'q'), "alice"), InvalidInput);
+  IS(f.s->ask("q1", "ghost"), UnknownUser);
+  IS(f.s->ask("q1", "alice"), Ok);
+  IS(f.s->ask("q1", "ghost"), UnknownUser);
+  IS(f.s->ask("q1", "bob"), DuplicatePost);
+  IS(f.s->answer("", "q1", "bob"), InvalidInput);
+  IS(f.s->answer("a1", "q1", "ghost"), UnknownUser);
+  IS(f.s->answer("a1", "nope", "ghost"), UnknownUser);
+  IS(f.s->answer("a1", "nope", "bob"), UnknownPost);
+  IS(f.s->answer("q1", "nope", "bob"), UnknownPost);
+  IS(f.s->answer("q1", "q1", "bob"), DuplicatePost);
+  IS(f.s->answer("a1", "q1", "bob"), Ok);
+  IS(f.s->answer("a2", "a1", "cara"), UnknownPost);
+  IS(f.s->answer("a1", "q1", "cara"), DuplicatePost);
+  IS(f.s->ask("a1", "dan"), DuplicatePost);
+  IS(f.s->answer("a3", "q1", "alice"), Ok);
+  EXPECT_EQ(f.order("q1"), std::string("a1:0 a3:0"));
+}
+
+TEST(Voting, UpvotesPayTheAuthorByKindAndDownvotesChargeBothSides) {
+  Fixture f;
+  f.s->ask("q", "alice");
+  f.s->answer("a", "q", "bob");
+  IS(f.s->vote("cara", "q", true), Ok);
+  EXPECT_EQ(f.s->reputation("alice"), 6);
+  IS(f.s->vote("cara", "a", true), Ok);
+  EXPECT_EQ(f.s->reputation("bob"), 11);
+  EXPECT_EQ(f.s->reputation("cara"), 1);
+  EXPECT_EQ(f.s->score("q"), 1);
+  f.earn("dan", 2);
+  EXPECT_EQ(f.s->reputation("dan"), 21);
+  IS(f.s->vote("dan", "q", false), Ok);
+  EXPECT_EQ(f.s->reputation("alice"), 4);
+  EXPECT_EQ(f.s->reputation("dan"), 21);
+  IS(f.s->vote("dan", "a", false), Ok);
+  EXPECT_EQ(f.s->reputation("bob"), 9);
+  EXPECT_EQ(f.s->reputation("dan"), 20);
+  EXPECT_EQ(f.s->score("q"), 0);
+  EXPECT_EQ(f.s->score("a"), 0);
+}
+
+TEST(Voting, ChecksRunInTheDocumentedOrderAndDownvotesNeedFifteen) {
+  Fixture f;
+  f.s->ask("q", "alice");
+  f.s->answer("a", "q", "bob");
+  IS(f.s->vote("ghost", "nope", true), UnknownUser);
+  IS(f.s->vote("cara", "nope", true), UnknownPost);
+  IS(f.s->vote("alice", "q", true), SelfVote);
+  IS(f.s->vote("alice", "q", false), SelfVote);
+  IS(f.s->vote("bob", "a", false), SelfVote);
+  IS(f.s->vote("cara", "q", false), LowReputation);
+  f.earn("cara", 1);
+  EXPECT_EQ(f.s->reputation("cara"), 11);
+  IS(f.s->vote("cara", "q", false), LowReputation);
+  f.s->addUser("dora");
+  f.earn("dora", 1);
+  EXPECT_EQ(f.s->reputation("dora"), 11);
+  f.s->ask("qq", "dora");
+  f.s->vote("alice", "qq", true);  // dora: 11 + 5 = 16
+  EXPECT_EQ(f.s->reputation("dora"), 16);
+  IS(f.s->vote("dora", "q", false), Ok);   // 16 >= 15: fine, a question costs the voter nothing
+  EXPECT_EQ(f.s->reputation("dora"), 16);
+  IS(f.s->vote("dora", "a", false), Ok);   // 16: allowed, and it costs 1 -> 15
+  EXPECT_EQ(f.s->reputation("dora"), 15);
+  f.s->answer("a2", "q", "cara");
+  IS(f.s->vote("dora", "a2", false), Ok);  // exactly 15 is enough -> 14
+  EXPECT_EQ(f.s->reputation("dora"), 14);
+  f.s->answer("a3", "q", "cara");
+  IS(f.s->vote("dora", "a3", false), LowReputation);
+  IS(f.s->vote("dora", "a", false), LowReputation);  // the check comes before AlreadyVoted
+  IS(f.s->vote("dora", "a3", true), Ok);             // an upvote needs no reputation
+  IS(f.s->vote("dora", "a3", true), AlreadyVoted);
+}
+
+TEST(Voting, VotingTheOtherWayReplacesTheOldVoteWithAllItsEffects) {
+  Fixture f;
+  f.s->ask("q", "alice");
+  f.s->answer("a", "q", "bob");
+  f.earn("dan", 2);
+  IS(f.s->vote("dan", "a", true), Ok);
+  EXPECT_EQ(f.s->reputation("bob"), 11);
+  EXPECT_EQ(f.s->score("a"), 1);
+  IS(f.s->vote("dan", "a", false), Ok);
+  EXPECT_EQ(f.s->reputation("bob"), 1);
+  EXPECT_EQ(f.s->reputation("dan"), 20);
+  EXPECT_EQ(f.s->score("a"), -1);
+  IS(f.s->vote("dan", "a", true), Ok);
+  EXPECT_EQ(f.s->reputation("bob"), 11);
+  EXPECT_EQ(f.s->reputation("dan"), 21);
+  EXPECT_EQ(f.s->score("a"), 1);
+  IS(f.s->vote("dan", "q", true), Ok);
+  IS(f.s->vote("dan", "q", false), Ok);
+  EXPECT_EQ(f.s->reputation("alice"), 1);
+  EXPECT_EQ(f.s->score("q"), -1);
+}
+
+TEST(Voting, UnvoteTakesTheVoteBackWithEveryEffect) {
+  Fixture f;
+  f.s->ask("q", "alice");
+  f.s->answer("a", "q", "bob");
+  f.earn("dan", 2);
+  IS(f.s->unvote("ghost", "a"), UnknownUser);
+  IS(f.s->unvote("dan", "nope"), UnknownPost);
+  IS(f.s->unvote("dan", "a"), NoVote);
+  IS(f.s->vote("dan", "a", false), Ok);
+  EXPECT_EQ(f.s->reputation("dan"), 20);
+  IS(f.s->unvote("dan", "a"), Ok);
+  EXPECT_EQ(f.s->reputation("dan"), 21);
+  EXPECT_EQ(f.s->reputation("bob"), 1);
+  EXPECT_EQ(f.s->score("a"), 0);
+  IS(f.s->unvote("dan", "a"), NoVote);
+  IS(f.s->vote("cara", "a", true), Ok);
+  IS(f.s->unvote("cara", "a"), Ok);
+  EXPECT_EQ(f.s->reputation("bob"), 1);
+  IS(f.s->vote("cara", "a", true), Ok);
+  EXPECT_EQ(f.s->reputation("bob"), 11);
+}
+
+TEST(Reputation, TheFloorAppliesToTheTotalNotToEachStep) {
+  Fixture f;
+  f.s->ask("q", "alice");
+  f.s->answer("a", "q", "bob");
+  f.earn("dan", 2);
+  IS(f.s->vote("dan", "a", false), Ok);   // bob: 1 - 2 is below the floor, shows as 1
+  EXPECT_EQ(f.s->reputation("bob"), 1);
+  IS(f.s->vote("cara", "a", true), Ok);   // 1 - 2 + 10 = 9, not 1 + 10
+  EXPECT_EQ(f.s->reputation("bob"), 1 + 10 - 2);
+  IS(f.s->unvote("dan", "a"), Ok);
+  EXPECT_EQ(f.s->reputation("bob"), 11);
+  IS(f.s->vote("dan", "a", false), Ok);
+  IS(f.s->unvote("cara", "a"), Ok);       // back under the floor: shows 1, and no points were lost for good
+  EXPECT_EQ(f.s->reputation("bob"), 1);
+  IS(f.s->unvote("dan", "a"), Ok);
+  EXPECT_EQ(f.s->reputation("bob"), 1);
+}
+
+TEST(Accept, PaysTheAnswerAuthorAndTheAskerAndOnlyTheAskerMayAccept) {
+  Fixture f;
+  f.s->ask("q", "alice");
+  f.s->answer("a", "q", "bob");
+  IS(f.s->accept("ghost", "a"), UnknownUser);
+  IS(f.s->accept("alice", "nope"), UnknownPost);
+  IS(f.s->accept("bob", "q"), WrongKind);
+  IS(f.s->accept("alice", "q"), WrongKind);
+  IS(f.s->accept("bob", "a"), NotAuthor);
+  IS(f.s->accept("cara", "a"), NotAuthor);
+  EXPECT_EQ(f.s->reputation("bob"), 1);
+  IS(f.s->accept("alice", "a"), Ok);
+  EXPECT_EQ(f.s->reputation("bob"), 16);
+  EXPECT_EQ(f.s->reputation("alice"), 3);
+  IS(f.s->accept("alice", "a"), AlreadyAccepted);
+  IS(f.s->accept("bob", "a"), NotAuthor);
+  EXPECT_EQ(f.order("q"), std::string("a*:0"));
+}
+
+TEST(Accept, AcceptingAnotherAnswerMovesTheAcceptanceAndItsPoints) {
+  Fixture f;
+  f.s->ask("q", "alice");
+  f.s->answer("a", "q", "bob");
+  f.s->answer("b", "q", "cara");
+  IS(f.s->accept("alice", "a"), Ok);
+  IS(f.s->accept("alice", "b"), Ok);
+  EXPECT_EQ(f.s->reputation("bob"), 1);
+  EXPECT_EQ(f.s->reputation("cara"), 16);
+  EXPECT_EQ(f.s->reputation("alice"), 3);
+  EXPECT_EQ(f.order("q"), std::string("b*:0 a:0"));
+  IS(f.s->accept("alice", "b"), AlreadyAccepted);
+  IS(f.s->accept("alice", "a"), Ok);
+  EXPECT_EQ(f.s->reputation("bob"), 16);
+  EXPECT_EQ(f.s->reputation("cara"), 1);
+  EXPECT_EQ(f.s->reputation("alice"), 3);
+  f.s->ask("q2", "dan");
+  f.s->answer("a2", "q2", "bob");
+  IS(f.s->accept("dan", "a2"), Ok);
+  EXPECT_EQ(f.s->reputation("bob"), 31);
+}
+
+TEST(Accept, AcceptingYourOwnAnswerPaysNobody) {
+  Fixture f;
+  f.s->ask("q", "alice");
+  f.s->answer("mine", "q", "alice");
+  f.s->answer("b", "q", "bob");
+  IS(f.s->accept("alice", "mine"), Ok);
+  EXPECT_EQ(f.s->reputation("alice"), 1);
+  EXPECT_EQ(f.order("q"), std::string("mine*:0 b:0"));
+  IS(f.s->accept("alice", "b"), Ok);
+  EXPECT_EQ(f.s->reputation("alice"), 3);
+  EXPECT_EQ(f.s->reputation("bob"), 16);
+  IS(f.s->accept("alice", "mine"), Ok);
+  EXPECT_EQ(f.s->reputation("alice"), 1);
+  EXPECT_EQ(f.s->reputation("bob"), 1);
+}
+
+TEST(Answers, AreListedAcceptedFirstThenByScoreThenOlderFirst) {
+  Fixture f;
+  f.s->ask("q", "alice");
+  for (const char* id : {"a1", "a2", "a3", "a4", "a5"}) f.s->answer(id, "q", "bob");
+  f.s->addUser("v1");
+  f.s->addUser("v2");
+  f.s->vote("cara", "a3", true);
+  f.s->vote("dan", "a3", true);
+  f.s->vote("v1", "a3", true);
+  f.s->vote("cara", "a4", true);
+  f.s->vote("dan", "a4", true);
+  f.earn("v2", 2);
+  f.s->vote("v2", "a5", false);
+  EXPECT_EQ(f.order("q"), std::string("a3:3 a4:2 a1:0 a2:0 a5:-1"));
+  f.s->accept("alice", "a5");
+  EXPECT_EQ(f.order("q"), std::string("a5*:-1 a3:3 a4:2 a1:0 a2:0"));
+  f.s->accept("alice", "a2");
+  EXPECT_EQ(f.order("q"), std::string("a2*:0 a3:3 a4:2 a1:0 a5:-1"));
+  EXPECT_TRUE(f.s->answers("a1").empty());
+  EXPECT_TRUE(f.s->answers("nope").empty());
+  const auto list = f.s->answers("q");
+  EXPECT_EQ(list.front().author, std::string("bob"));
+  f.s->ask("q2", "alice");
+  EXPECT_TRUE(f.s->answers("q2").empty());
+}
+
+// ---- A plain model of the same rules, recomputed from scratch every time. ----
+namespace {
+struct Model {
+  struct Post {
+    bool question;
+    std::string author, parent;
+    int seq;
+  };
+  std::vector<std::string> users;
+  std::map<std::string, Post> posts;
+  std::map<std::pair<std::string, std::string>, bool> votes;  // (post, voter) -> up
+  std::map<std::string, std::string> accepted;                // question -> answer
+  int seq = 0;
+
+  bool hasUser(const std::string& u) const { return std::find(users.begin(), users.end(), u) != users.end(); }
+
+  int reputation(const std::string& user) const {
+    if (!hasUser(user)) return 0;
+    int total = 1;
+    for (const auto& v : votes) {
+      const Post& p = posts.at(v.first.first);
+      if (v.second) {
+        if (p.author == user) total += p.question ? 5 : 10;
+      } else {
+        if (p.author == user) total -= 2;
+        if (!p.question && v.first.second == user) total -= 1;
+      }
+    }
+    for (const auto& a : accepted) {
+      const std::string& asker = posts.at(a.first).author;
+      const std::string& writer = posts.at(a.second).author;
+      if (asker == writer) continue;
+      if (writer == user) total += 15;
+      if (asker == user) total += 2;
+    }
+    return total < 1 ? 1 : total;
+  }
+  int score(const std::string& post) const {
+    int total = 0;
+    for (const auto& v : votes) {
+      if (v.first.first == post) total += v.second ? 1 : -1;
+    }
+    return total;
+  }
+  std::string order(const std::string& q) const {
+    auto it = posts.find(q);
+    if (it == posts.end() || !it->second.question) return "";
+    std::vector<std::string> ids;
+    for (const auto& p : posts) {
+      if (!p.second.question && p.second.parent == q) ids.push_back(p.first);
+    }
+    const std::string acc = accepted.count(q) ? accepted.at(q) : "";
+    std::sort(ids.begin(), ids.end(), [&](const std::string& a, const std::string& b) {
+      if ((a == acc) != (b == acc)) return a == acc;
+      if (score(a) != score(b)) return score(a) > score(b);
+      return posts.at(a).seq < posts.at(b).seq;
+    });
+    std::string out;
+    for (const auto& id : ids) out += (out.empty() ? "" : " ") + id + (id == acc ? "*" : "") + ":" + std::to_string(score(id));
+    return out;
+  }
+  Status ask(const std::string& id, const std::string& a) {
+    if (id.empty() || id.size() > 32) return Status::InvalidInput;
+    if (!hasUser(a)) return Status::UnknownUser;
+    if (posts.count(id)) return Status::DuplicatePost;
+    posts[id] = {true, a, "", seq++};
+    return Status::Ok;
+  }
+  Status answer(const std::string& id, const std::string& q, const std::string& a) {
+    if (id.empty() || id.size() > 32) return Status::InvalidInput;
+    if (!hasUser(a)) return Status::UnknownUser;
+    if (!posts.count(q) || !posts.at(q).question) return Status::UnknownPost;
+    if (posts.count(id)) return Status::DuplicatePost;
+    posts[id] = {false, a, q, seq++};
+    return Status::Ok;
+  }
+  Status vote(const std::string& v, const std::string& p, bool up) {
+    if (!hasUser(v)) return Status::UnknownUser;
+    if (!posts.count(p)) return Status::UnknownPost;
+    if (posts.at(p).author == v) return Status::SelfVote;
+    if (!up && reputation(v) < 15) return Status::LowReputation;
+    auto it = votes.find({p, v});
+    if (it != votes.end() && it->second == up) return Status::AlreadyVoted;
+    votes[{p, v}] = up;
+    return Status::Ok;
+  }
+  Status unvote(const std::string& v, const std::string& p) {
+    if (!hasUser(v)) return Status::UnknownUser;
+    if (!posts.count(p)) return Status::UnknownPost;
+    if (!votes.count({p, v})) return Status::NoVote;
+    votes.erase({p, v});
+    return Status::Ok;
+  }
+  Status accept(const std::string& u, const std::string& a) {
+    if (!hasUser(u)) return Status::UnknownUser;
+    if (!posts.count(a)) return Status::UnknownPost;
+    if (posts.at(a).question) return Status::WrongKind;
+    const std::string q = posts.at(a).parent;
+    if (posts.at(q).author != u) return Status::NotAuthor;
+    if (accepted.count(q) && accepted.at(q) == a) return Status::AlreadyAccepted;
+    accepted[q] = a;
+    return Status::Ok;
+  }
+};
+
+struct Rng {
+  unsigned long long state;
+  int next(int n) {
+    state = state * 6364136223846793005ULL + 1442695040888963407ULL;
+    return static_cast<int>((state >> 33) % static_cast<unsigned long long>(n));
+  }
+};
+}  // namespace
+
+TEST(Model, RandomOperationsAgreeWithAPlainModelOfTheRules) {
+  const std::vector<std::string> names = {"u0", "u1", "u2", "u3", "u4", "u5", "ghost"};
+  const std::vector<std::string> ids = {"p0", "p1", "p2", "p3", "p4", "p5", "p6", "p7", "p8", "p9", "p10", "p11"};
+  int mismatches = 0;
+  for (unsigned long long seed = 1; seed <= 6; ++seed) {
+    Rng rng{seed * 7919};
+    auto site = qa::makeSite();
+    Model model;
+    for (int i = 0; i < 6; ++i) {
+      site->addUser(names[i]);
+      model.users.push_back(names[i]);
+    }
+    for (int step = 0; step < 1500; ++step) {
+      const std::string& user = names[rng.next(7)];
+      const std::string& post = ids[rng.next(12)];
+      const std::string& other = ids[rng.next(12)];
+      const bool up = rng.next(4) != 0;
+      Status got = Status::Ok, want = Status::Ok;
+      switch (rng.next(8)) {
+        case 0: got = site->ask(post, user); want = model.ask(post, user); break;
+        case 1:
+        case 2: got = site->answer(post, other, user); want = model.answer(post, other, user); break;
+        case 3:
+        case 4: got = site->vote(user, post, up); want = model.vote(user, post, up); break;
+        case 5: got = site->unvote(user, post); want = model.unvote(user, post); break;
+        case 6:
+        case 7: got = site->accept(user, post); want = model.accept(user, post); break;
+      }
+      if (got != want) ++mismatches;
+      if (step % 10 == 0) {
+        for (const auto& n : names) {
+          if (site->reputation(n) != model.reputation(n)) ++mismatches;
+        }
+        for (const auto& id : ids) {
+          if (site->score(id) != model.score(id)) ++mismatches;
+          std::string order;
+          for (const auto& a : site->answers(id)) order += (order.empty() ? "" : " ") + a.id + (a.accepted ? "*" : "") + ":" + std::to_string(a.score);
+          if (order != model.order(id)) ++mismatches;
+        }
+      }
+    }
+  }
+  EXPECT_EQ(mismatches, 0);
+}
+21:T26ec,#include <algorithm>
+#include <map>
+#include <memory>
+#include <string>
+#include <vector>
+
+#include "api_storm1.h"
+#include "bp_test.h"
+
+namespace {
+using qa::Status;
+
+#define IS(call, expected) EXPECT_TRUE((call) == Status::expected)
+
+struct Fixture {
+  explicit Fixture(int cap) : s(qa::makeCappedSite(cap)) {
+    for (const char* name : {"alice", "bob", "cara", "dan"}) s->addUser(name);
+  }
+  // `n` fresh voters each upvote post `post` (+10 on an answer).
+  void upvotes(const std::string& post, int n, const std::string& tag) {
+    for (int i = 0; i < n; ++i) {
+      const std::string v = "v-" + tag + std::to_string(i);
+      s->addUser(v);
+      s->vote(v, post, true);
+    }
+  }
+  std::unique_ptr<qa::CappedSite> s;
+};
+}  // namespace
+
+TEST(Cap, TheDayClockOnlyMovesForwardAndTheCapIsChecked) {
+  EXPECT_TRUE(qa::makeCappedSite(0) == nullptr);
+  EXPECT_TRUE(qa::makeCappedSite(-3) == nullptr);
+  Fixture f(30);
+  IS(f.s->setDay(0), Ok);
+  IS(f.s->setDay(5), Ok);
+  IS(f.s->setDay(5), Ok);
+  IS(f.s->setDay(4), InvalidInput);
+  IS(f.s->setDay(-1), InvalidInput);
+  IS(f.s->setDay(qa::kMaxDay + 1), InvalidInput);
+  IS(f.s->setDay(qa::kMaxDay), Ok);
+  IS(f.s->setDay(qa::kMaxDay), Ok);
+}
+
+TEST(Cap, UpvotePointsOfOneDayCountOnlyUpToTheCapAndEachDayHasItsOwn) {
+  Fixture f(30);
+  f.s->ask("q", "alice");
+  for (const char* id : {"a1", "a2", "a3", "a4", "a5"}) f.s->answer(id, "q", "bob");
+  f.upvotes("a1", 2, "x");
+  EXPECT_EQ(f.s->reputation("bob"), 21);
+  f.upvotes("a2", 1, "y");
+  EXPECT_EQ(f.s->reputation("bob"), 31);
+  f.upvotes("a3", 1, "z");
+  EXPECT_EQ(f.s->reputation("bob"), 31);
+  f.s->setDay(1);
+  f.upvotes("a4", 1, "w");
+  EXPECT_EQ(f.s->reputation("bob"), 41);
+  f.upvotes("a5", 5, "u");
+  EXPECT_EQ(f.s->reputation("bob"), 61);
+  EXPECT_EQ(f.s->score("a5"), 5);
+}
+
+TEST(Cap, TheCapBelongsToEachUserSeparately) {
+  Fixture f(10);
+  f.s->ask("q", "alice");
+  f.s->answer("a", "q", "bob");
+  f.s->answer("b", "q", "cara");
+  f.upvotes("a", 3, "p");
+  f.upvotes("b", 2, "r");
+  EXPECT_EQ(f.s->reputation("bob"), 11);
+  EXPECT_EQ(f.s->reputation("cara"), 11);
+  f.upvotes("q", 4, "s");
+  EXPECT_EQ(f.s->reputation("alice"), 11);
+}
+
+TEST(Cap, TakingAVoteBackLiftsTheDayBackUnderTheCap) {
+  Fixture f(30);
+  f.s->ask("q", "alice");
+  f.s->answer("a", "q", "bob");
+  for (int i = 0; i < 5; ++i) {
+    f.s->addUser("w" + std::to_string(i));
+    f.s->vote("w" + std::to_string(i), "a", true);
+  }
+  EXPECT_EQ(f.s->reputation("bob"), 31);
+  IS(f.s->unvote("w0", "a"), Ok);
+  EXPECT_EQ(f.s->reputation("bob"), 31);
+  IS(f.s->unvote("w1", "a"), Ok);
+  EXPECT_EQ(f.s->reputation("bob"), 31);
+  IS(f.s->unvote("w2", "a"), Ok);
+  EXPECT_EQ(f.s->reputation("bob"), 21);
+  IS(f.s->vote("w2", "a", true), Ok);
+  EXPECT_EQ(f.s->reputation("bob"), 31);
+}
+
+TEST(Cap, OnlyUpvotesAreCappedPenaltiesAndAcceptancesAreNot) {
+  Fixture f(30);
+  f.s->ask("q", "alice");
+  f.s->answer("a", "q", "bob");
+  f.s->answer("b", "q", "bob");
+  f.upvotes("a", 4, "u");       // 40 of upvotes today: counts 30
+  f.s->addUser("rich");
+  f.s->ask("rq", "dan");
+  f.s->answer("ra", "rq", "rich");
+  f.upvotes("ra", 2, "t");
+  IS(f.s->vote("rich", "b", false), Ok);   // -2 for bob, -1 for rich
+  EXPECT_EQ(f.s->reputation("bob"), 1 + 30 - 2);
+  EXPECT_EQ(f.s->reputation("rich"), 1 + 20 - 1);
+  IS(f.s->accept("alice", "a"), Ok);      // +15 and +2, no cap
+  EXPECT_EQ(f.s->reputation("bob"), 1 + 30 - 2 + 15);
+  EXPECT_EQ(f.s->reputation("alice"), 3);
+}
+
+TEST(Cap, ADayBelongsToTheVoteThatStandsNotToTheOneItReplaced) {
+  Fixture f(10);
+  f.s->ask("q", "alice");
+  f.s->answer("a", "q", "bob");
+  f.s->addUser("v1");
+  f.s->addUser("v2");
+  f.s->ask("dq", "dan");  // an accepted answer pays 15 without the cap, enough to downvote
+  f.s->answer("da", "dq", "v2");
+  f.s->accept("dan", "da");
+  EXPECT_EQ(f.s->reputation("v2"), 16);
+  f.s->vote("v1", "a", true);
+  f.s->vote("v2", "a", true);
+  EXPECT_EQ(f.s->reputation("bob"), 11);
+  f.s->setDay(1);
+  IS(f.s->vote("v2", "a", false), Ok);
+  EXPECT_EQ(f.s->reputation("bob"), 1 + 10 - 2);
+  f.s->setDay(2);
+  IS(f.s->vote("v2", "a", true), Ok);
+  EXPECT_EQ(f.s->reputation("bob"), 1 + 10 + 10);
+}
+
+// ---- A plain model: events recomputed per day from the facts. ----
+namespace {
+struct Model {
+  struct Post {
+    bool question;
+    std::string author, parent;
+    int seq;
+  };
+  struct Vote {
+    bool up;
+    int day;
+  };
+  int cap = 1;
+  int day = 0;
+  std::vector<std::string> users;
+  std::map<std::string, Post> posts;
+  std::map<std::pair<std::string, std::string>, Vote> votes;
+  std::map<std::string, std::string> accepted;
+  int seq = 0;
+
+  bool hasUser(const std::string& u) const { return std::find(users.begin(), users.end(), u) != users.end(); }
+
+  int reputation(const std::string& user) const {
+    if (!hasUser(user)) return 0;
+    std::map<int, int> upByDay;
+    int other = 0;
+    for (const auto& v : votes) {
+      const Post& p = posts.at(v.first.first);
+      if (v.second.up) {
+        if (p.author == user) upByDay[v.second.day] += p.question ? 5 : 10;
+      } else {
+        if (p.author == user) other -= 2;
+        if (!p.question && v.first.second == user) other -= 1;
+      }
+    }
+    int total = 1 + other;
+    for (const auto& d : upByDay) total += std::min(cap, d.second);
+    for (const auto& a : accepted) {
+      const std::string& asker = posts.at(a.first).author;
+      const std::string& writer = posts.at(a.second).author;
+      if (asker == writer) continue;
+      if (writer == user) total += 15;
+      if (asker == user) total += 2;
+    }
+    return total < 1 ? 1 : total;
+  }
+  int score(const std::string& post) const {
+    int total = 0;
+    for (const auto& v : votes) {
+      if (v.first.first == post) total += v.second.up ? 1 : -1;
+    }
+    return total;
+  }
+  Status ask(const std::string& id, const std::string& a) {
+    if (id.empty() || id.size() > 32) return Status::InvalidInput;
+    if (!hasUser(a)) return Status::UnknownUser;
+    if (posts.count(id)) return Status::DuplicatePost;
+    posts[id] = {true, a, "", seq++};
+    return Status::Ok;
+  }
+  Status answer(const std::string& id, const std::string& q, const std::string& a) {
+    if (id.empty() || id.size() > 32) return Status::InvalidInput;
+    if (!hasUser(a)) return Status::UnknownUser;
+    if (!posts.count(q) || !posts.at(q).question) return Status::UnknownPost;
+    if (posts.count(id)) return Status::DuplicatePost;
+    posts[id] = {false, a, q, seq++};
+    return Status::Ok;
+  }
+  Status vote(const std::string& v, const std::string& p, bool up) {
+    if (!hasUser(v)) return Status::UnknownUser;
+    if (!posts.count(p)) return Status::UnknownPost;
+    if (posts.at(p).author == v) return Status::SelfVote;
+    if (!up && reputation(v) < 15) return Status::LowReputation;
+    auto it = votes.find({p, v});
+    if (it != votes.end() && it->second.up == up) return Status::AlreadyVoted;
+    votes[{p, v}] = {up, day};
+    return Status::Ok;
+  }
+  Status unvote(const std::string& v, const std::string& p) {
+    if (!hasUser(v)) return Status::UnknownUser;
+    if (!posts.count(p)) return Status::UnknownPost;
+    if (!votes.count({p, v})) return Status::NoVote;
+    votes.erase({p, v});
+    return Status::Ok;
+  }
+  Status accept(const std::string& u, const std::string& a) {
+    if (!hasUser(u)) return Status::UnknownUser;
+    if (!posts.count(a)) return Status::UnknownPost;
+    if (posts.at(a).question) return Status::WrongKind;
+    const std::string q = posts.at(a).parent;
+    if (posts.at(q).author != u) return Status::NotAuthor;
+    if (accepted.count(q) && accepted.at(q) == a) return Status::AlreadyAccepted;
+    accepted[q] = a;
+    return Status::Ok;
+  }
+};
+
+struct Rng {
+  unsigned long long state;
+  int next(int n) {
+    state = state * 6364136223846793005ULL + 1442695040888963407ULL;
+    return static_cast<int>((state >> 33) % static_cast<unsigned long long>(n));
+  }
+};
+}  // namespace
+
+TEST(Cap, RandomOperationsAgreeWithAPlainModelForSeveralCaps) {
+  const std::vector<std::string> names = {"u0", "u1", "u2", "u3", "u4", "u5", "ghost"};
+  const std::vector<std::string> ids = {"p0", "p1", "p2", "p3", "p4", "p5", "p6", "p7", "p8", "p9", "p10", "p11"};
+  const std::vector<int> caps = {1, 7, 10, 25, 1000};
+  int mismatches = 0;
+  for (std::size_t c = 0; c < caps.size(); ++c) {
+    Rng rng{(c + 1) * 104729ULL};
+    auto site = qa::makeCappedSite(caps[c]);
+    Model model;
+    model.cap = caps[c];
+    for (int i = 0; i < 6; ++i) {
+      site->addUser(names[i]);
+      model.users.push_back(names[i]);
+    }
+    for (int step = 0; step < 1500; ++step) {
+      const std::string& user = names[rng.next(7)];
+      const std::string& post = ids[rng.next(12)];
+      const std::string& other = ids[rng.next(12)];
+      const bool up = rng.next(4) != 0;
+      Status got = Status::Ok, want = Status::Ok;
+      switch (rng.next(10)) {
+        case 0: got = site->ask(post, user); want = model.ask(post, user); break;
+        case 1:
+        case 2: got = site->answer(post, other, user); want = model.answer(post, other, user); break;
+        case 3:
+        case 4: got = site->vote(user, post, up); want = model.vote(user, post, up); break;
+        case 5: got = site->unvote(user, post); want = model.unvote(user, post); break;
+        case 6:
+        case 7: got = site->accept(user, post); want = model.accept(user, post); break;
+        default: {
+          const int target = model.day + rng.next(3) - (rng.next(6) == 0 ? 1 : 0);
+          want = target < model.day ? Status::InvalidInput : Status::Ok;
+          got = site->setDay(target);
+          if (want == Status::Ok) model.day = target;
+          break;
+        }
+      }
+      if (got != want) ++mismatches;
+      if (step % 10 == 0) {
+        for (const auto& n : names) {
+          if (site->reputation(n) != model.reputation(n)) ++mismatches;
+        }
+        for (const auto& id : ids) {
+          if (site->score(id) != model.score(id)) ++mismatches;
+        }
+      }
+    }
+  }
+  EXPECT_EQ(mismatches, 0);
+}
+22:T2f54,#include <algorithm>
+#include <iterator>
+#include <map>
+#include <memory>
+#include <string>
+#include <vector>
+
+#include "api_storm2.h"
+#include "bp_test.h"
+
+namespace {
+using qa::Status;
+
+#define IS(call, expected) EXPECT_TRUE((call) == Status::expected)
+
+constexpr int kNoCap = 1000000;
+
+struct Fixture {
+  explicit Fixture(int cap = kNoCap) : s(qa::makeModeratedSite(cap)) {
+    for (const char* name : {"alice", "bob", "cara", "dan"}) s->addUser(name);
+  }
+  void upvotes(const std::string& post, int n, const std::string& tag) {
+    for (int i = 0; i < n; ++i) {
+      const std::string v = "v-" + tag + std::to_string(i);
+      s->addUser(v);
+      s->vote(v, post, true);
+    }
+  }
+  std::string order(const std::string& q) const {
+    std::string out;
+    for (const auto& a : s->answers(q)) out += (out.empty() ? "" : " ") + a.id + (a.accepted ? "*" : "") + ":" + std::to_string(a.score);
+    return out;
+  }
+  std::unique_ptr<qa::ModeratedSite> s;
+};
+}  // namespace
+
+TEST(Remove, ChecksTheDocumentedOrderAndOnlyTheAuthorMayRemove) {
+  Fixture f;
+  f.s->ask("q", "alice");
+  f.s->answer("a", "q", "bob");
+  IS(f.s->remove("ghost", "nope"), UnknownUser);
+  IS(f.s->remove("ghost", "q"), UnknownUser);
+  IS(f.s->remove("alice", "nope"), UnknownPost);
+  IS(f.s->remove("bob", "q"), NotAuthor);
+  IS(f.s->remove("alice", "a"), NotAuthor);  // the asker may not delete someone else's answer
+  IS(f.s->remove("cara", "a"), NotAuthor);
+  EXPECT_EQ(f.order("q"), std::string("a:0"));
+  IS(f.s->remove("bob", "a"), Ok);
+  IS(f.s->remove("bob", "a"), UnknownPost);
+  EXPECT_EQ(f.order("q"), std::string(""));
+  IS(f.s->remove("alice", "q"), Ok);
+  IS(f.s->answer("b", "q", "bob"), UnknownPost);
+}
+
+TEST(Remove, AnAnswerTakesItsVotesAndItsAcceptanceWithIt) {
+  Fixture f;
+  f.s->ask("q", "alice");
+  f.s->answer("a", "q", "bob");
+  f.upvotes("a", 2, "x");
+  f.upvotes("q", 1, "y");
+  f.s->ask("rq", "dan");
+  f.s->answer("ra", "rq", "cara");
+  f.upvotes("ra", 2, "z");
+  IS(f.s->vote("cara", "a", false), Ok);  // bob -2, cara -1
+  IS(f.s->accept("alice", "a"), Ok);
+  EXPECT_EQ(f.s->reputation("bob"), 1 + 20 - 2 + 15);
+  EXPECT_EQ(f.s->reputation("alice"), 1 + 5 + 2);
+  EXPECT_EQ(f.s->reputation("cara"), 1 + 20 - 1);
+  IS(f.s->remove("bob", "a"), Ok);
+  EXPECT_EQ(f.s->reputation("bob"), 1);
+  EXPECT_EQ(f.s->reputation("alice"), 1 + 5);
+  EXPECT_EQ(f.s->reputation("cara"), 21);  // the cost for downvoting it is refunded
+  EXPECT_EQ(f.s->score("a"), 0);
+  IS(f.s->answer("a", "q", "dan"), Ok);   // the id is free again and starts clean
+  EXPECT_EQ(f.order("q"), std::string("a:0"));
+  EXPECT_EQ(f.s->reputation("dan"), 1);
+  IS(f.s->vote("cara", "a", false), Ok);
+  IS(f.s->vote("v-x0", "a", true), Ok);
+  IS(f.s->unvote("v-x1", "a"), NoVote);
+}
+
+TEST(Remove, AQuestionTakesAllItsAnswersAndEverythingTheyEarned) {
+  Fixture f;
+  f.s->ask("q", "alice");
+  f.s->answer("a1", "q", "bob");
+  f.s->answer("a2", "q", "cara");
+  f.s->answer("a3", "q", "bob");
+  f.upvotes("a1", 1, "p");
+  f.upvotes("a2", 2, "r");
+  f.upvotes("q", 3, "s");
+  IS(f.s->accept("alice", "a2"), Ok);
+  EXPECT_EQ(f.s->reputation("cara"), 1 + 20 + 15);
+  EXPECT_EQ(f.s->reputation("alice"), 1 + 15 + 2);
+  f.s->ask("keep", "dan");
+  f.s->answer("ka", "keep", "bob");
+  f.upvotes("ka", 1, "k");
+  IS(f.s->remove("alice", "q"), Ok);
+  EXPECT_EQ(f.s->reputation("alice"), 1);
+  EXPECT_EQ(f.s->reputation("cara"), 1);
+  EXPECT_EQ(f.s->reputation("bob"), 11);
+  EXPECT_TRUE(f.s->answers("q").empty());
+  EXPECT_EQ(f.s->score("a2"), 0);
+  IS(f.s->remove("cara", "a2"), UnknownPost);
+  IS(f.s->ask("q", "dan"), Ok);
+  EXPECT_TRUE(f.s->answers("q").empty());
+  IS(f.s->answer("a2", "q", "cara"), Ok);
+  EXPECT_EQ(f.order("q"), std::string("a2:0"));  // not accepted: the old acceptance went with the old question
+  IS(f.s->accept("dan", "a2"), Ok);
+  EXPECT_EQ(f.s->reputation("cara"), 16);
+}
+
+TEST(Remove, RemovingTheAcceptedAnswerLeavesTheQuestionWithoutOne) {
+  Fixture f;
+  f.s->ask("q", "alice");
+  f.s->answer("a", "q", "bob");
+  f.s->answer("b", "q", "cara");
+  IS(f.s->accept("alice", "a"), Ok);
+  IS(f.s->remove("bob", "a"), Ok);
+  EXPECT_EQ(f.order("q"), std::string("b:0"));
+  EXPECT_EQ(f.s->reputation("alice"), 1);
+  IS(f.s->answer("a", "q", "dan"), Ok);
+  EXPECT_EQ(f.order("q"), std::string("b:0 a:0"));  // the reused id is not accepted
+  IS(f.s->accept("alice", "a"), Ok);
+  EXPECT_EQ(f.s->reputation("dan"), 16);
+}
+
+TEST(Remove, VotesTheAuthorCastOnOtherPostsStay) {
+  Fixture f;
+  f.s->ask("q", "alice");
+  f.s->answer("a", "q", "bob");
+  f.s->ask("other", "dan");
+  f.s->answer("oa", "other", "cara");
+  IS(f.s->vote("bob", "oa", true), Ok);
+  IS(f.s->vote("bob", "other", true), Ok);
+  IS(f.s->remove("bob", "a"), Ok);
+  EXPECT_EQ(f.s->reputation("cara"), 11);
+  EXPECT_EQ(f.s->reputation("dan"), 6);
+  EXPECT_EQ(f.s->score("oa"), 1);
+  IS(f.s->vote("bob", "oa", true), AlreadyVoted);
+}
+
+TEST(Remove, RemovingAPostLiftsADayBackUnderTheCap) {
+  Fixture f(30);
+  f.s->ask("q", "alice");
+  for (const char* id : {"a1", "a2", "a3", "a4"}) {
+    f.s->answer(id, "q", "bob");
+    f.upvotes(id, 1, id);
+  }
+  EXPECT_EQ(f.s->reputation("bob"), 31);
+  IS(f.s->remove("bob", "a1"), Ok);
+  EXPECT_EQ(f.s->reputation("bob"), 31);
+  IS(f.s->remove("bob", "a2"), Ok);
+  EXPECT_EQ(f.s->reputation("bob"), 21);
+  f.s->setDay(3);
+  f.s->answer("a5", "q", "bob");
+  f.upvotes("a5", 4, "late");
+  EXPECT_EQ(f.s->reputation("bob"), 51);
+  IS(f.s->remove("alice", "q"), Ok);
+  EXPECT_EQ(f.s->reputation("bob"), 1);
+}
+
+// ---- A plain model: events recomputed per day from the facts. ----
+namespace {
+struct Model {
+  struct Post {
+    bool question;
+    std::string author, parent;
+    int seq;
+  };
+  struct Vote {
+    bool up;
+    int day;
+  };
+  int cap = 1;
+  int day = 0;
+  std::vector<std::string> users;
+  std::map<std::string, Post> posts;
+  std::map<std::pair<std::string, std::string>, Vote> votes;
+  std::map<std::string, std::string> accepted;
+  int seq = 0;
+
+  bool hasUser(const std::string& u) const { return std::find(users.begin(), users.end(), u) != users.end(); }
+
+  int reputation(const std::string& user) const {
+    if (!hasUser(user)) return 0;
+    std::map<int, int> upByDay;
+    int other = 0;
+    for (const auto& v : votes) {
+      const Post& p = posts.at(v.first.first);
+      if (v.second.up) {
+        if (p.author == user) upByDay[v.second.day] += p.question ? 5 : 10;
+      } else {
+        if (p.author == user) other -= 2;
+        if (!p.question && v.first.second == user) other -= 1;
+      }
+    }
+    int total = 1 + other;
+    for (const auto& d : upByDay) total += std::min(cap, d.second);
+    for (const auto& a : accepted) {
+      const std::string& asker = posts.at(a.first).author;
+      const std::string& writer = posts.at(a.second).author;
+      if (asker == writer) continue;
+      if (writer == user) total += 15;
+      if (asker == user) total += 2;
+    }
+    return total < 1 ? 1 : total;
+  }
+  int score(const std::string& post) const {
+    int total = 0;
+    for (const auto& v : votes) {
+      if (v.first.first == post) total += v.second.up ? 1 : -1;
+    }
+    return total;
+  }
+  Status ask(const std::string& id, const std::string& a) {
+    if (id.empty() || id.size() > 32) return Status::InvalidInput;
+    if (!hasUser(a)) return Status::UnknownUser;
+    if (posts.count(id)) return Status::DuplicatePost;
+    posts[id] = {true, a, "", seq++};
+    return Status::Ok;
+  }
+  Status answer(const std::string& id, const std::string& q, const std::string& a) {
+    if (id.empty() || id.size() > 32) return Status::InvalidInput;
+    if (!hasUser(a)) return Status::UnknownUser;
+    if (!posts.count(q) || !posts.at(q).question) return Status::UnknownPost;
+    if (posts.count(id)) return Status::DuplicatePost;
+    posts[id] = {false, a, q, seq++};
+    return Status::Ok;
+  }
+  Status vote(const std::string& v, const std::string& p, bool up) {
+    if (!hasUser(v)) return Status::UnknownUser;
+    if (!posts.count(p)) return Status::UnknownPost;
+    if (posts.at(p).author == v) return Status::SelfVote;
+    if (!up && reputation(v) < 15) return Status::LowReputation;
+    auto it = votes.find({p, v});
+    if (it != votes.end() && it->second.up == up) return Status::AlreadyVoted;
+    votes[{p, v}] = {up, day};
+    return Status::Ok;
+  }
+  Status unvote(const std::string& v, const std::string& p) {
+    if (!hasUser(v)) return Status::UnknownUser;
+    if (!posts.count(p)) return Status::UnknownPost;
+    if (!votes.count({p, v})) return Status::NoVote;
+    votes.erase({p, v});
+    return Status::Ok;
+  }
+  Status remove(const std::string& u, const std::string& p) {
+    if (!hasUser(u)) return Status::UnknownUser;
+    if (!posts.count(p)) return Status::UnknownPost;
+    if (posts.at(p).author != u) return Status::NotAuthor;
+    std::vector<std::string> gone = {p};
+    if (posts.at(p).question) {
+      for (const auto& e : posts) {
+        if (!e.second.question && e.second.parent == p) gone.push_back(e.first);
+      }
+    }
+    for (const auto& id : gone) {
+      for (auto it = votes.begin(); it != votes.end();) {
+        it = it->first.first == id ? votes.erase(it) : std::next(it);
+      }
+      for (auto it = accepted.begin(); it != accepted.end();) {
+        it = (it->first == id || it->second == id) ? accepted.erase(it) : std::next(it);
+      }
+      posts.erase(id);
+    }
+    return Status::Ok;
+  }
+  Status accept(const std::string& u, const std::string& a) {
+    if (!hasUser(u)) return Status::UnknownUser;
+    if (!posts.count(a)) return Status::UnknownPost;
+    if (posts.at(a).question) return Status::WrongKind;
+    const std::string q = posts.at(a).parent;
+    if (posts.at(q).author != u) return Status::NotAuthor;
+    if (accepted.count(q) && accepted.at(q) == a) return Status::AlreadyAccepted;
+    accepted[q] = a;
+    return Status::Ok;
+  }
+};
+
+struct Rng {
+  unsigned long long state;
+  int next(int n) {
+    state = state * 6364136223846793005ULL + 1442695040888963407ULL;
+    return static_cast<int>((state >> 33) % static_cast<unsigned long long>(n));
+  }
+};
+}  // namespace
+
+
+TEST(Remove, RandomOperationsAgreeWithAPlainModelIncludingDeletes) {
+  const std::vector<std::string> names = {"u0", "u1", "u2", "u3", "u4", "u5", "ghost"};
+  const std::vector<std::string> ids = {"p0", "p1", "p2", "p3", "p4", "p5", "p6", "p7", "p8", "p9", "p10", "p11"};
+  const std::vector<int> caps = {1, 10, 25, kNoCap};
+  int mismatches = 0;
+  for (std::size_t c = 0; c < caps.size(); ++c) {
+    Rng rng{(c + 1) * 15485863ULL};
+    auto site = qa::makeModeratedSite(caps[c]);
+    Model model;
+    model.cap = caps[c];
+    for (int i = 0; i < 6; ++i) {
+      site->addUser(names[i]);
+      model.users.push_back(names[i]);
+    }
+    for (int step = 0; step < 2000; ++step) {
+      const std::string& user = names[rng.next(7)];
+      const std::string& post = ids[rng.next(12)];
+      const std::string& other = ids[rng.next(12)];
+      const bool up = rng.next(4) != 0;
+      Status got = Status::Ok, want = Status::Ok;
+      switch (rng.next(12)) {
+        case 0: got = site->ask(post, user); want = model.ask(post, user); break;
+        case 1:
+        case 2: got = site->answer(post, other, user); want = model.answer(post, other, user); break;
+        case 3:
+        case 4: got = site->vote(user, post, up); want = model.vote(user, post, up); break;
+        case 5: got = site->unvote(user, post); want = model.unvote(user, post); break;
+        case 6:
+        case 7: got = site->accept(user, post); want = model.accept(user, post); break;
+        case 8:
+        case 9: got = site->remove(user, post); want = model.remove(user, post); break;
+        default: {
+          const int target = model.day + rng.next(3);
+          got = site->setDay(target);
+          model.day = target;
+          break;
+        }
+      }
+      if (got != want) ++mismatches;
+      if (step % 10 == 0) {
+        for (const auto& n : names) {
+          if (site->reputation(n) != model.reputation(n)) ++mismatches;
+        }
+        for (const auto& id : ids) {
+          if (site->score(id) != model.score(id)) ++mismatches;
+        }
+      }
+    }
+  }
+  EXPECT_EQ(mismatches, 0);
+}
+23:T4c0,#pragma once
+#include <algorithm>
+#include <string>
+#include <vector>
+
+#include "accept_book.h"
+#include "api.h"
+#include "post_board.h"
+#include "vote_book.h"
+
+// Builds the ordered answer list of a question: accepted first, then higher score, then older.
+class AnswerLister {
+ public:
+  AnswerLister(const PostBoard& posts, const VoteBook& votes, const AcceptBook& accepts)
+      : posts_(posts), votes_(votes), accepts_(accepts) {}
+
+  std::vector<qa::AnswerInfo> listFor(const std::string& question) const {
+    const Post* asked = posts_.find(question);
+    std::vector<qa::AnswerInfo> infos;
+    if (asked == nullptr || asked->kind != PostKind::Question) return infos;
+    const std::string accepted = accepts_.acceptedFor(question);
+    for (const Post* post : posts_.answersOf(question)) {
+      infos.push_back({post->id, post->author, votes_.score(post->id), post->id == accepted});
+    }
+    std::stable_sort(infos.begin(), infos.end(), [](const qa::AnswerInfo& a, const qa::AnswerInfo& b) {
+      if (a.accepted != b.accepted) return a.accepted;
+      return a.score > b.score;
+    });
+    return infos;
+  }
+
+ private:
+  const PostBoard& posts_;
+  const VoteBook& votes_;
+  const AcceptBook& accepts_;
+};
+24:T7c5,#pragma once
+#include <string>
+#include <vector>
+
+#include "accept_book.h"
+#include "post_board.h"
+#include "reputation_event.h"
+#include "rewards.h"
+#include "vote_book.h"
+
+// Turns the current facts into reputation events for one user. It reads; it never writes.
+class Ledger {
+ public:
+  Ledger(const PostBoard& posts, const VoteBook& votes, const AcceptBook& accepts)
+      : posts_(posts), votes_(votes), accepts_(accepts) {}
+
+  std::vector<ReputationEvent> eventsOf(const std::string& user) const {
+    std::vector<ReputationEvent> events;
+    votes_.forEach([&](const Vote& vote) { addVoteEvents(vote, user, events); });
+    accepts_.forEach([&](const std::string& question, const std::string& answer) { addAcceptEvents(question, answer, user, events); });
+    return events;
+  }
+
+ private:
+  void addVoteEvents(const Vote& vote, const std::string& user, std::vector<ReputationEvent>& events) const {
+    const Post* post = posts_.find(vote.post);
+    if (post == nullptr) return;
+    const int points = vote.up ? rewards::upvoteFor(post->kind) : rewards::kDownvotePenalty;
+    if (post->author == user) events.push_back({user, points, vote.day, vote.up});
+    if (!vote.up && post->kind == PostKind::Answer && vote.voter == user) events.push_back({user, rewards::kDownvoterCost, vote.day, false});
+  }
+
+  void addAcceptEvents(const std::string& question, const std::string& answer, const std::string& user,
+                       std::vector<ReputationEvent>& events) const {
+    const Post* answerPost = posts_.find(answer);
+    const Post* questionPost = posts_.find(question);
+    if (answerPost == nullptr || questionPost == nullptr || answerPost->author == questionPost->author) return;
+    if (answerPost->author == user) events.push_back({user, rewards::kAcceptedAnswer, 0, false});
+    if (questionPost->author == user) events.push_back({user, rewards::kAcceptingAsker, 0, false});
+  }
+
+  const PostBoard& posts_;
+  const VoteBook& votes_;
+  const AcceptBook& accepts_;
+};
+25:T5e6,#pragma once
+#include <map>
+#include <string>
+#include <vector>
+
+#include "post.h"
+
+// The live posts, keyed by id. It knows nothing about votes or reputation.
+class PostBoard {
+ public:
+  bool contains(const std::string& id) const { return posts_.count(id) != 0; }
+
+  const Post* find(const std::string& id) const {
+    const auto it = posts_.find(id);
+    return it == posts_.end() ? nullptr : &it->second;
+  }
+
+  void addQuestion(const std::string& id, const std::string& author) {
+    posts_[id] = Post{id, PostKind::Question, author, "", nextSequence_++};
+  }
+
+  void addAnswer(const std::string& id, const std::string& question, const std::string& author) {
+    posts_[id] = Post{id, PostKind::Answer, author, question, nextSequence_++};
+  }
+
+  void erase(const std::string& id) { posts_.erase(id); }
+
+  // The live answers of a question, oldest first.
+  std::vector<const Post*> answersOf(const std::string& question) const {
+    std::vector<const Post*> found;
+    for (const auto& entry : posts_) {
+      if (entry.second.kind == PostKind::Answer && entry.second.parent == question) found.push_back(&entry.second);
+    }
+    sortOldestFirst(found);
+    return found;
+  }
+
+ private:
+  static void sortOldestFirst(std::vector<const Post*>& posts) {
+    for (std::size_t i = 1; i < posts.size(); ++i) {
+      for (std::size_t j = i; j > 0 && posts[j]->sequence < posts[j - 1]->sequence; --j) std::swap(posts[j], posts[j - 1]);
+    }
+  }
+
+  std::map<std::string, Post> posts_;
+  int nextSequence_ = 0;
+};
+26:T500,#pragma once
+#include <map>
+#include <vector>
+
+#include "reputation_event.h"
+
+// How events add up to points above the starting reputation (the floor is applied by the caller).
+class ReputationPolicy {
+ public:
+  virtual ~ReputationPolicy() = default;
+  virtual int pointsFrom(const std::vector<ReputationEvent>& events) const = 0;
+};
+
+class PlainPolicy : public ReputationPolicy {
+ public:
+  int pointsFrom(const std::vector<ReputationEvent>& events) const override {
+    int total = 0;
+    for (const ReputationEvent& event : events) total += event.points;
+    return total;
+  }
+};
+
+// Per day, the capped (upvote) points count at most `cap` together; everything else counts in full.
+class DailyCapPolicy : public ReputationPolicy {
+ public:
+  explicit DailyCapPolicy(int cap) : cap_(cap) {}
+
+  int pointsFrom(const std::vector<ReputationEvent>& events) const override {
+    std::map<int, int> cappedByDay;
+    int uncapped = 0;
+    for (const ReputationEvent& event : events) {
+      if (event.capped) {
+        cappedByDay[event.day] += event.points;
+      } else {
+        uncapped += event.points;
+      }
+    }
+    int total = uncapped;
+    for (const auto& day : cappedByDay) total += day.second < cap_ ? day.second : cap_;
+    return total;
+  }
+
+ private:
+  int cap_;
+};
+27:T1114,#pragma once
+#include <memory>
+#include <string>
+#include <utility>
+#include <vector>
+
+#include "accept_book.h"
+#include "answer_lister.h"
+#include "api_storm2.h"
+#include "day_clock.h"
+#include "ledger.h"
+#include "post_board.h"
+#include "post_remover.h"
+#include "reputation_policy.h"
+#include "rewards.h"
+#include "user_directory.h"
+#include "vote_book.h"
+
+class SiteImpl : public qa::ModeratedSite {
+ public:
+  explicit SiteImpl(std::unique_ptr<ReputationPolicy> policy)
+      : policy_(std::move(policy)), ledger_(posts_, votes_, accepts_), lister_(posts_, votes_, accepts_), remover_(posts_, votes_, accepts_) {}
+
+  qa::Status addUser(const std::string& name) override {
+    if (!isValidName(name)) return qa::Status::InvalidInput;
+    if (users_.contains(name)) return qa::Status::DuplicateUser;
+    users_.add(name);
+    return qa::Status::Ok;
+  }
+
+  qa::Status ask(const std::string& id, const std::string& author) override {
+    if (!isValidName(id)) return qa::Status::InvalidInput;
+    if (!users_.contains(author)) return qa::Status::UnknownUser;
+    if (posts_.contains(id)) return qa::Status::DuplicatePost;
+    posts_.addQuestion(id, author);
+    return qa::Status::Ok;
+  }
+
+  qa::Status answer(const std::string& id, const std::string& question, const std::string& author) override {
+    if (!isValidName(id)) return qa::Status::InvalidInput;
+    if (!users_.contains(author)) return qa::Status::UnknownUser;
+    const Post* asked = posts_.find(question);
+    if (asked == nullptr || asked->kind != PostKind::Question) return qa::Status::UnknownPost;
+    if (posts_.contains(id)) return qa::Status::DuplicatePost;
+    posts_.addAnswer(id, question, author);
+    return qa::Status::Ok;
+  }
+
+  qa::Status vote(const std::string& voter, const std::string& post, bool up) override {
+    if (!users_.contains(voter)) return qa::Status::UnknownUser;
+    const Post* target = posts_.find(post);
+    if (target == nullptr) return qa::Status::UnknownPost;
+    if (target->author == voter) return qa::Status::SelfVote;
+    if (!up && reputation(voter) < qa::kMinDownvoteReputation) return qa::Status::LowReputation;
+    const Vote* existing = votes_.find(post, voter);
+    if (existing != nullptr && existing->up == up) return qa::Status::AlreadyVoted;
+    votes_.put({voter, post, up, clock_.today()});
+    return qa::Status::Ok;
+  }
+
+  qa::Status unvote(const std::string& voter, const std::string& post) override {
+    if (!users_.contains(voter)) return qa::Status::UnknownUser;
+    if (!posts_.contains(post)) return qa::Status::UnknownPost;
+    if (votes_.find(post, voter) == nullptr) return qa::Status::NoVote;
+    votes_.erase(post, voter);
+    return qa::Status::Ok;
+  }
+
+  qa::Status accept(const std::string& user, const std::string& answer) override {
+    if (!users_.contains(user)) return qa::Status::UnknownUser;
+    const Post* chosen = posts_.find(answer);
+    if (chosen == nullptr) return qa::Status::UnknownPost;
+    if (chosen->kind != PostKind::Answer) return qa::Status::WrongKind;
+    if (posts_.find(chosen->parent)->author != user) return qa::Status::NotAuthor;
+    if (accepts_.acceptedFor(chosen->parent) == answer) return qa::Status::AlreadyAccepted;
+    accepts_.accept(chosen->parent, answer);
+    return qa::Status::Ok;
+  }
+
+  int reputation(const std::string& user) const override {
+    if (!users_.contains(user)) return 0;
+    return rewards::reputationFrom(policy_->pointsFrom(ledger_.eventsOf(user)));
+  }
+
+  int score(const std::string& post) const override { return votes_.score(post); }
+
+  std::vector<qa::AnswerInfo> answers(const std::string& question) const override { return lister_.listFor(question); }
+
+  qa::Status setDay(int day) override { return clock_.moveTo(day) ? qa::Status::Ok : qa::Status::InvalidInput; }
+
+  qa::Status remove(const std::string& user, const std::string& post) override {
+    if (!users_.contains(user)) return qa::Status::UnknownUser;
+    const Post* target = posts_.find(post);
+    if (target == nullptr) return qa::Status::UnknownPost;
+    if (target->author != user) return qa::Status::NotAuthor;
+    remover_.remove(*target);
+    return qa::Status::Ok;
+  }
+
+ private:
+  UserDirectory users_;
+  PostBoard posts_;
+  VoteBook votes_;
+  AcceptBook accepts_;
+  DayClock clock_;
+  std::unique_ptr<ReputationPolicy> policy_;
+  Ledger ledger_;
+  AnswerLister lister_;
+  PostRemover remover_;
+};
+28:T594,#pragma once
+#include <functional>
+#include <map>
+#include <string>
+
+// One voter's vote on one post, and the day it was cast.
+struct Vote {
+  std::string voter;
+  std::string post;
+  bool up = true;
+  int day = 0;
+};
+
+// Every vote that currently stands: at most one per voter per post.
+class VoteBook {
+ public:
+  const Vote* find(const std::string& post, const std::string& voter) const {
+    const auto byPost = votes_.find(post);
+    if (byPost == votes_.end()) return nullptr;
+    const auto it = byPost->second.find(voter);
+    return it == byPost->second.end() ? nullptr : &it->second;
+  }
+
+  void put(const Vote& vote) { votes_[vote.post][vote.voter] = vote; }
+
+  void erase(const std::string& post, const std::string& voter) {
+    const auto byPost = votes_.find(post);
+    if (byPost != votes_.end()) byPost->second.erase(voter);
+  }
+
+  void eraseAllOn(const std::string& post) { votes_.erase(post); }
+
+  int score(const std::string& post) const {
+    const auto byPost = votes_.find(post);
+    if (byPost == votes_.end()) return 0;
+    int total = 0;
+    for (const auto& entry : byPost->second) total += entry.second.up ? 1 : -1;
+    return total;
+  }
+
+  void forEach(const std::function<void(const Vote&)>& visit) const {
+    for (const auto& byPost : votes_) {
+      for (const auto& entry : byPost.second) visit(entry.second);
+    }
+  }
+
+ private:
+  std::map<std::string, std::map<std::string, Vote>> votes_;
+};
+c:["$","$L1a",null,{"bundle":{"id":"qa-site","title":"Stack Overflow-lite","level":"SDE2","parMinutes":75,"patterns":["Strategy","Facade"],"requirements":[{"id":"R-points","text":"The author of a post is paid: an upvote on a question +5, an upvote on an answer +10, a downvote on any post -2. The VOTER pays 1 for downvoting an ANSWER (nothing for a question). Accepting an answer pays its author +15 and the asker +2, but nobody when they are the same person.","phase":"base","hidden":true},{"id":"R-floor","text":"Reputation is derived from the votes and acceptances that currently stand: 1 plus their points, floored at 1 on the TOTAL (not on each step). An unknown user has reputation 0, an unknown post score 0.","phase":"base","hidden":true},{"id":"R-vote","text":"A voter has at most one vote per post. The same vote again is AlreadyVoted; the opposite vote replaces the old one with all its effects; unvote takes it back (NoVote if none). Voting on your own post is SelfVote. A downvote needs the voter's current reputation >= 15, an upvote needs none.","phase":"base","hidden":true},{"id":"R-order","text":"Names and ids are 1 to 32 characters (InvalidInput) and questions and answers share one id space. vote checks UnknownUser, UnknownPost, SelfVote, LowReputation, AlreadyVoted; answer checks InvalidInput, UnknownUser, UnknownPost (a live QUESTION), DuplicatePost; accept checks UnknownUser, UnknownPost, WrongKind, NotAuthor, AlreadyAccepted. A refused call changes nothing.","phase":"base","hidden":true},{"id":"R-accept","text":"Only the asker may accept an answer, and a question has at most ONE accepted answer: accepting another answer moves the acceptance, and the old answer's +15 and the asker's +2 for it are gone.","phase":"base","hidden":true},{"id":"R-listing","text":"answers(question) lists every live answer: the accepted one first, then higher score first, then the older answer first; each entry has id, author, score and accepted. Empty for an unknown post or an answer.","phase":"base","hidden":true},{"id":"R-cap","text":"setDay moves a clock that only goes forward (0 to kMaxDay). Each vote belongs to the day it was cast (a replaced vote does not carry its day). Per user and day, the points from upvotes count at most dailyCap; penalties and acceptance points are never capped. Taking a vote back can lift a day back under the cap.","phase":"storm1","hidden":true},{"id":"R-remove","text":"remove(user, post): only the author; a question takes its answers with it. A removed post is gone as if it never existed: its votes, its acceptance and every point they paid or charged vanish from reputation, its id is free again and starts clean. Votes the author cast on other posts stay.","phase":"storm2","hidden":true}],"brief":"$1b","editorial":"$1c","clarify":[{"id":"q-points","text":"How many reputation points is each thing worth, and who gets them?","answer":"The author of the post is paid: an upvote on a question +5, an upvote on an answer +10, a downvote on any post -2. Downvoting an ANSWER also costs the voter 1 (downvoting a question costs nothing). When the asker accepts an answer, the answer's author gets +15 and the asker +2, except that nobody is paid when they are the same person.","reveals":["R-points"],"quality":"essential"},{"id":"q-floor","text":"Can reputation go below zero? Do I store the number or work it out?","answer":"Reputation never shows below 1. It is derived from what is currently true: 1 plus the points of every vote and acceptance that currently stands, floored at 1 on the total, not on each step. So a user who is downvoted at reputation 1 and later upvoted ends at 1 - 2 + 10 = 9. An unknown user has reputation 0.","reveals":["R-floor"],"quality":"essential"},{"id":"q-vote","text":"Can a user vote twice on a post, or on their own? What if they change their mind? Who may downvote?","answer":"One vote per voter per post. The same vote twice is AlreadyVoted; voting the other way replaces the old vote, as if it had been taken back first, with every effect. unvote takes a vote back (NoVote if there is none). Voting on your own post is SelfVote. A downvote needs the voter's current reputation to be at least 15; an upvote needs nothing.","reveals":["R-vote"],"quality":"essential"},{"id":"q-errors","text":"Which statuses are there and which wins when several apply? Does a refused call change anything?","answer":"InvalidInput (a name or id of 1 to 32 characters), then UnknownUser, then the post checks. vote: UnknownUser, UnknownPost, SelfVote, LowReputation (downvotes only), AlreadyVoted. answer: InvalidInput, UnknownUser, UnknownPost (no live question with that id; an answer id does not count), DuplicatePost. Questions and answers share one id space. A refused call changes nothing.","reveals":["R-order"],"quality":"essential"},{"id":"q-accept","text":"Who may accept, how many answers can be accepted, and what if the asker picks a different one later?","answer":"Only the asker of the answer's question (NotAuthor otherwise). Accepting a question is WrongKind and accepting the answer that is already accepted is AlreadyAccepted. A question has at most one accepted answer: accepting another moves the acceptance, and the old answer's +15 and the asker's +2 for it are gone.","reveals":["R-accept"],"quality":"essential"},{"id":"q-list","text":"In what order does answers() list them? What is in each entry?","answer":"Each entry has the id, the author, the score (upvotes minus downvotes) and whether it is the accepted one. The accepted answer comes first, then higher score first, then the older answer first. An unknown id, or the id of an answer, gives an empty list.","reveals":["R-listing"],"quality":"useful"},{"id":"q-cap","text":"Real sites limit how much reputation votes can earn in a day. Will that matter?","answer":"Plan for it (a follow-up will ask). Days are numbers; the clock only moves forward. Per user and per day, the points earned from upvotes cast that day count at most the daily cap; downvote penalties and acceptance points are never capped. Taking a vote back must give the same numbers as if it had never been cast, so a day that was over the cap can come back under it.","reveals":["R-cap"],"quality":"useful"},{"id":"q-day-of-vote","text":"Which day does a vote that was changed belong to?","answer":"The day it was cast, and a replaced vote does not carry its day over: switching from down to up on day 5 makes an upvote of day 5. The clock starts at day 0 and setDay refuses to go backwards (InvalidInput), or past 1,000,000.","reveals":["R-cap"],"quality":"useful"},{"id":"q-delete","text":"Will authors be able to delete posts? What happens to the votes and the reputation?","answer":"Plan for it. remove(user, post) is for the author only. Deleting a question deletes its answers. A deleted post is gone as if it never existed: the votes on it, its acceptance and every point they paid or charged (including the voter's cost for downvoting an answer) disappear from everyone's reputation, and the ids are free again, starting with no votes. Votes the author cast on other posts stay.","reveals":["R-remove"],"quality":"useful"},{"id":"q-edit","text":"Do posts have text, tags, comments, edits, bounties or badges?","answer":"No. A post is an id, an author and a kind. Everything here is about who is paid what. Say how you would add tags and edits (separate records pointing at a post) but the tests do none of it.","reveals":[],"quality":"noise"},{"id":"q-threads","text":"Will many users vote at the same time? Do I need locking?","answer":"No threads in the tests: single-threaded and deterministic. Say what you would change (one writer per post or per user, or a log that is replayed) and why the privilege check and the vote must be one atomic step.","reveals":[],"quality":"noise"},{"id":"q-search","text":"Do I need search, ranking by hotness, or a feed?","answer":"No. Only answers(question) has an order, and it is fully specified. Search and feeds are other systems that would read events from this one.","reveals":[],"quality":"noise"},{"id":"q-perf","text":"How many users and votes? Do I need to worry about speed?","answer":"A few dozen users and a few thousand votes in the tests. Recomputing a user's reputation from the facts is allowed to cost time proportional to the facts. Say what you would cache (a per-user index of events, invalidated by writes) and what it costs in complexity.","reveals":[],"quality":"noise"}],"rubric":[{"id":"res-facade","text":"Exposes the public calls and sequences the collaborators: validate, look things up, check the documented rules in order, then write; no point arithmetic of its own","phase":"base","owners":["SiteImpl","QASite","SiteService","Site","ForumImpl","QuestionSite"]},{"id":"res-posts","text":"Owns the live questions and answers: ids, kinds, authors, which question an answer belongs to, creation order","phase":"base","owners":["PostBoard","PostStore","PostRepository","Posts","PostRegistry","PostDirectory"]},{"id":"res-votes","text":"Keeps every vote that currently stands (one per voter per post) and counts a post's score; knows nothing about points","phase":"base","owners":["VoteBook","VoteStore","VoteRegistry","Votes","VoteLedger","VoteRepository"]},{"id":"res-accept","text":"Remembers which answer, if any, is accepted for each question, so accepting another answer moves it","phase":"base","owners":["AcceptBook","AcceptanceBook","AcceptStore","Acceptances","AcceptedAnswers","AcceptRegistry"]},{"id":"res-ledger","text":"Derives what each user is currently owed or charged from the facts (votes and acceptances that stand) instead of keeping a running balance","phase":"base","owners":["Ledger","ReputationLedger","EventDeriver","ReputationCalculator","ReputationService","ReputationBook"]},{"id":"res-listing","text":"Builds a question's answer list in its documented order: accepted first, then score, then age","phase":"base","owners":["AnswerLister","AnswerRanker","AnswerList","AnswerSorter","AnswerView","AnswerQuery"]},{"id":"res-policy","text":"Decides, as its own Strategy, how reputation events add up (plain sum, daily cap), so a new rule adds a class instead of changing the ledger","phase":"storm1","owners":["ReputationPolicy","DailyCapPolicy","CapPolicy","ReputationStrategy","ScoringPolicy","PointsPolicy"]},{"id":"res-remover","text":"Removes a post together with everything that hangs on it (votes, acceptance, a question's answers) in one place","phase":"storm2","owners":["PostRemover","PostDeleter","PostEraser","Retirement","ContentRemover","PostRetirer"]}],"followups":[{"level":"SDE2","question":"Why derive reputation from the votes and acceptances that stand instead of adding to a stored number?","answer":"Every rule that undoes something (take a vote back, switch a vote, move an acceptance, delete a post) becomes 'remove a fact' and the numbers follow. With a stored balance each of those needs its own reversal code, and the reversals are easy to get wrong: the floor at 1 makes a step like 'subtract the 10 I added' wrong, because the 10 may have been partly absorbed by the floor. The price is that reading a number costs a pass over the facts; a cache keyed by user can be added later without changing the rules."},{"level":"SDE2","question":"A user at reputation 1 is downvoted (-2) and then upvoted (+10). What is their reputation, and why does clamping each step get it wrong?","answer":"9: the floor applies to the total, 1 + (-2) + 10. Clamping after each step gives max(1, 1 - 2) = 1 and then 11, so the user is 2 points richer than the rules say, and the error survives whatever happens next. The rule that the floor is on the total is part of the contract; the test is a downvote that goes below the floor followed by something that pays."},{"level":"SDE2","question":"A vote has several effects: the author's points, the voter's cost, the score and the day. Where do you keep them?","answer":"In one place, the vote itself: voter, post, direction and day. Everything else is read from it. If the effects were stored separately (a score counter, an author balance, a voter balance), taking the vote back would have to undo all of them and any missed one leaves the books wrong forever. One fact, many readers."},{"level":"Senior","question":"How would you cache reputation so that reading it is O(1) without losing the property that the numbers are always right?","answer":"Keep the derivation as the source of truth and add a cache beside it: a map from user to the computed number, invalidated (or recomputed) for exactly the users a write touches: the post's author, the voter, and for an acceptance the answer's author and the asker. Those sets are small and known, which is why the facts-first design makes caching easy: each write names its affected users. With a daily cap or a delete the affected set is still the same users. Test it the way this problem does: a model that recomputes from scratch must agree after every operation."},{"level":"Senior","question":"Why is the daily cap a Strategy over events rather than a check inside vote()?","answer":"A check at vote time answers 'does this vote still fit under the cap today' and stores the capped amount, which is then wrong when an earlier vote of the day is taken back, switched or deleted: the later vote that was cut short should now count in full. A policy that adds up the events that stand, per day, has no such state: changing the rule (weekly cap, a different cap per privilege level, no cap for a verified expert) is a new class. Both designs are small; only one stays correct under undo."},{"level":"Senior","question":"What are the options for deleting a post, and which one did you pick?","answer":"Hard delete (the post and its facts vanish, ids free again), as here; soft delete (a flag the readers must all remember to check, which keeps the history and the votes for audit); or tombstones that keep the id taken. Hard delete makes every reader simpler and the numbers exact, but throws away history that real sites keep for moderation and appeals. A production design usually soft-deletes in the primary store and exposes a view with the same semantics as the hard delete used here."},{"level":"Senior","question":"Two people vote at the same moment, one of them on the edge of the downvote privilege. What can go wrong?","answer":"The privilege check reads reputation and then the vote is written: between the two, another vote can lower the voter below the threshold, so a vote that should have been refused is accepted (a time-of-check to time-of-use race). Options: one lock per voter taken around check-and-write, a single writer thread, or a transaction with the check as a condition. The effect is small here, but the same shape (check a derived number, then write) is where double spending lives in a payment system."},{"level":"Staff","question":"Reputation is read on every page view and written on every vote, at hundreds of millions of users. How would you store and serve it?","answer":"Keep the votes and acceptances as an append-only log or a table keyed by post (the facts). Derive reputation incrementally in a stream processor that handles each fact as an event and applies the policy, writing a per-user row that the web tier reads from a cache. The daily cap needs per-user-per-day buckets, which are small. Undo (take back, delete) is a compensating event, and a periodic full recomputation from the facts is the audit that catches drift. Accept that the number is eventually consistent for readers, while the privilege check for a vote reads the freshest value or tolerates a small overshoot."},{"level":"Staff","question":"How would you detect and handle voting rings and sock puppets?","answer":"Reputation is a reward signal, so it will be gamed. Detect it offline from the same facts: pairs of accounts that vote on each other far more than chance, bursts of votes from new accounts, accounts that only ever vote on one user's posts. Respond with reversals (a compensating event, which this design makes cheap), a cap on votes between the same pair in a window, or a lower weight for votes from new accounts. Keep the rules in policy classes so a fraud rule can be added and tested without touching the vote path, and keep the evidence."}],"apiHeader":"$1d","phaseApis":{"storm1":"$1e","storm2":"$1f"},"phases":["base","storm1","storm2"],"tests":{"base":[{"path":"qa_base.cpp","content":"$20"}],"storm1":[{"path":"qa_storm1.cpp","content":"$21"}],"storm2":[{"path":"qa_storm2.cpp","content":"$22"}]},"reference":[{"path":"accept_book.h","content":"#pragma once\n#include <functional>\n#include <map>\n#include <string>\n\n// Which answer, if any, is accepted for each question.\nclass AcceptBook {\n public:\n  std::string acceptedFor(const std::string& question) const {\n    const auto it = accepted_.find(question);\n    return it == accepted_.end() ? std::string() : it->second;\n  }\n\n  void accept(const std::string& question, const std::string& answer) { accepted_[question] = answer; }\n  void clear(const std::string& question) { accepted_.erase(question); }\n\n  void forEach(const std::function<void(const std::string& question, const std::string& answer)>& visit) const {\n    for (const auto& entry : accepted_) visit(entry.first, entry.second);\n  }\n\n private:\n  std::map<std::string, std::string> accepted_;\n};\n"},{"path":"answer_lister.h","content":"$23"},{"path":"day_clock.h","content":"#pragma once\n#include \"api.h\"\n\n// The site's current day: it only moves forward.\nclass DayClock {\n public:\n  int today() const { return day_; }\n\n  bool moveTo(int day) {\n    if (day < day_ || day > qa::kMaxDay) return false;\n    day_ = day;\n    return true;\n  }\n\n private:\n  int day_ = 0;\n};\n"},{"path":"ledger.h","content":"$24"},{"path":"post.h","content":"#pragma once\n#include <string>\n\nenum class PostKind { Question, Answer };\n\n// One live question or answer: plain data. `parent` is the question an answer belongs to, empty for a question.\nstruct Post {\n  std::string id;\n  PostKind kind = PostKind::Question;\n  std::string author;\n  std::string parent;\n  int sequence = 0;  // creation order, never reused\n};\n"},{"path":"post_board.h","content":"$25"},{"path":"post_remover.h","content":"#pragma once\n#include <string>\n\n#include \"accept_book.h\"\n#include \"post_board.h\"\n#include \"vote_book.h\"\n\n// Takes a post out of the site together with everything that hangs on it: its votes, its acceptance and, for a question,\n// all of its answers. Votes that the author CAST on other posts stay.\nclass PostRemover {\n public:\n  PostRemover(PostBoard& posts, VoteBook& votes, AcceptBook& accepts) : posts_(posts), votes_(votes), accepts_(accepts) {}\n\n  void remove(Post target) {\n    if (target.kind == PostKind::Question) {\n      for (const Post* answered : posts_.answersOf(target.id)) drop(answered->id);\n      accepts_.clear(target.id);\n    } else if (accepts_.acceptedFor(target.parent) == target.id) {\n      accepts_.clear(target.parent);\n    }\n    drop(target.id);\n  }\n\n private:\n  void drop(const std::string& id) {\n    votes_.eraseAllOn(id);\n    posts_.erase(id);\n  }\n\n  PostBoard& posts_;\n  VoteBook& votes_;\n  AcceptBook& accepts_;\n};\n"},{"path":"reputation_event.h","content":"#pragma once\n#include <string>\n\n// One thing that currently pays or charges a user: derived from the votes and acceptances that stand, never stored.\nstruct ReputationEvent {\n  std::string user;\n  int points = 0;\n  int day = 0;         // the day of the vote behind it (0 for acceptances)\n  bool capped = false; // upvote points are the ones a daily cap limits\n};\n"},{"path":"reputation_policy.h","content":"$26"},{"path":"rewards.h","content":"#pragma once\n#include \"post.h\"\n\n// What the site pays, in one place.\nnamespace rewards {\nconstexpr int kStartReputation = 1;\nconstexpr int kUpvoteOnQuestion = 5;\nconstexpr int kUpvoteOnAnswer = 10;\nconstexpr int kDownvotePenalty = -2;\nconstexpr int kDownvoterCost = -1;  // paid by the voter, for downvoting an answer\nconstexpr int kAcceptedAnswer = 15;\nconstexpr int kAcceptingAsker = 2;\n\ninline int upvoteFor(PostKind kind) { return kind == PostKind::Question ? kUpvoteOnQuestion : kUpvoteOnAnswer; }\n\n// The floor applies to the total, never to a single step.\ninline int reputationFrom(int points) {\n  const int total = kStartReputation + points;\n  return total < kStartReputation ? kStartReputation : total;\n}\n}  // namespace rewards\n"},{"path":"service.cpp","content":"#include \"site_impl.h\"\n\nstd::unique_ptr<qa::Site> qa::makeSite() { return std::make_unique<SiteImpl>(std::make_unique<PlainPolicy>()); }\n\nstd::unique_ptr<qa::CappedSite> qa::makeCappedSite(int dailyCap) {\n  if (dailyCap < 1) return nullptr;\n  return std::make_unique<SiteImpl>(std::make_unique<DailyCapPolicy>(dailyCap));\n}\n\nstd::unique_ptr<qa::ModeratedSite> qa::makeModeratedSite(int dailyCap) {\n  if (dailyCap < 1) return nullptr;\n  return std::make_unique<SiteImpl>(std::make_unique<DailyCapPolicy>(dailyCap));\n}\n"},{"path":"site_impl.h","content":"$27"},{"path":"user_directory.h","content":"#pragma once\n#include <set>\n#include <string>\n\nconstexpr std::size_t kMaxNameLength = 32;\n\n// Names of users and ids of posts share one rule: 1 to 32 characters.\ninline bool isValidName(const std::string& name) { return !name.empty() && name.size() <= kMaxNameLength; }\n\nclass UserDirectory {\n public:\n  bool contains(const std::string& name) const { return names_.count(name) != 0; }\n  void add(const std::string& name) { names_.insert(name); }\n\n private:\n  std::set<std::string> names_;\n};\n"},{"path":"vote_book.h","content":"$28"}],"driver":{"path":"driver.cpp","content":"#define BP_TEST_MAIN\n#include \"bp_test.h\"\n","readOnly":true}}}]

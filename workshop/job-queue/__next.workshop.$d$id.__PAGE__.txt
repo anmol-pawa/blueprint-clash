@@ -1,0 +1,1220 @@
+1:"$Sreact.fragment"
+2:"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js"
+3:I[39756,["$2"],"default"]
+4:I[37457,["$2"],"default"]
+5:"/blueprint-clash/_next/static/chunks/2n5qeheznvl4u.js"
+6:I[22016,["$2","$5"],""]
+7:I[64576,["$2"],"PwaRegister"]
+10:"/blueprint-clash/_next/static/chunks/2uk3wcjwqg0tl.js"
+11:"/blueprint-clash/_next/static/chunks/1zdu7yjl8efu4.js"
+12:I[65612,["$2","$10","$11"],"WorkshopClient"]
+24:"ViewportBoundary"
+25:I[97367,["$2"],"$24"]
+26:"MetadataBoundary"
+27:I[97367,["$2"],"$26"]
+28:"$Sreact.suspense"
+29:I[27201,["$2"],"IconMark"]
+:HL["/blueprint-clash/_next/static/chunks/1klm1scec-3x5.css","style"]
+9:X
+c:X
+c:C
+13:T63c,# Job queue with retries, backoff and a dead-letter queue
+
+You are building the core of an in-process background job queue, the kind behind "send the welcome email", "resize this upload" and "charge the card". Callers enqueue a job, a worker calls its handler, and when the handler fails the queue tries again later, waiting longer each time. A job that keeps failing must not retry for ever: after the last attempt it is parked in a dead-letter queue where a person can look at it. To keep it testable, time is simulated: nothing reads a real clock, and a caller moves time forward with one call.
+
+What you know so far:
+
+- A job has an id and a handler; the handler is called with the attempt number and says whether the work was done.
+- A failed job is retried after a delay that grows with every failure.
+- A job that runs out of attempts is not lost: it is kept as dead.
+- A waiting job can be cancelled, and you can ask where any job is in its life.
+- Handlers run on the caller's thread, inside the call that moves time forward.
+
+Your task: design and implement it behind the `jobq::Queue` interface in `api.h`. The hidden tests call only that interface. Ask the interviewer questions first: "how long is the wait after each failure, and measured from when?", "what happens to the job after the last attempt?", "may an id be used again?" and "may a handler enqueue more jobs while it runs?" are where first drafts go wrong. Expect a request for a retry policy per job, and then a request about failures that are not worth retrying and about sending dead jobs back, after you have finished.
+14:T2360,# Editorial: Job queue with retries, backoff and a dead-letter queue
+
+## Requirements
+Functional: enqueue a job (id, handler); move simulated time with `advanceTo(t)`, which runs every attempt due; retry a failed attempt after a growing delay; park a job that runs out of attempts in a dead-letter queue; cancel a waiting job; query `state`, `attempts`, `nextAttempt`, `waiting` and `deadLetters`. Then a retry policy per job, and then fatal outcomes, reasons and redrive.
+
+Hidden in the brief and revealed by good questions: the exact running order (time, then first enqueued, never by name, and a retry keeps its job's place); that "due" means at most `t` and that `now()` inside a handler is the attempt's own tick; that the clock never goes backwards; the validation statuses and their order, with ids never reused; that the delay is `10 * 2^(n-1)` ticks after the n-th failure, measured from the failed attempt and not from the target; that the 5th failure kills the job and records it in order of death; that only a Waiting job can be cancelled (`NotFound` versus `NotWaiting`); and that handlers may enqueue and cancel while running, with new work joining the same advance.
+
+**Change Storm 1, a retry policy per job:** `enqueueWith(id, RetryPolicy, handler)` with a maximum number of attempts, a kind of backoff (fixed, linear, exponential), a base delay and a cap on any single delay; a documented check order with `InvalidPolicy` before `DuplicateId`; the policy belongs to that job alone.
+
+**Change Storm 2, failures that are final, and redrive:** handlers return `Done`, `Retry` or `Fatal`; `Fatal` kills the job at once with a reason, exhausted jobs have the other reason; `redrive` sends a dead job back with a fresh attempt count, the same handler and policy, and a new place in line.
+
+## Reference design
+`QueueImpl` holds the commands (enqueue, cancel, redrive, advance): it validates, hands out the enqueue rank and delegates, and contains no ordering or retry logic. Its base class `QueueQueries` owns the state and answers every query (`state`, `attempts`, `nextAttempt`, `deadReason`, `waiting`, `deadLetters`, `now`) without changing anything, a small command/query split that also keeps each class to one reason to change. `SimClock` is the only owner of "now". `JobRecord` is one job as a plain value (id, `RetryPlan`, shared handler, state, reason, attempts, due time, rank) and `JobBook` holds every record ever created by id, which is what makes "an id is never reused" and every query a lookup. `RunQueue` keeps an ordered map keyed by (time, rank) and an index by id, and updates both inside `insert`, `remove` and `popDue`, so they cannot disagree; it holds only ids. `DeadLetters` is the list of dead ids in the order they died. `AttemptRunner::runDue` is the loop: pop the next due attempt from the live queue, set the clock to its time, mark the job Running, count the attempt, call the handler, and `settle` the answer. The loop never holds an iterator across user code, so a handler can do anything to the queue.
+
+Storm 1 added `RetryPlan` (how many attempts, which rule, base, cap) and `BackoffRule`, a Strategy with `FixedBackoff`, `LinearBackoff` and `ExponentialBackoff` chosen from a table by the public enum; the cap is applied in one place, the plan. The base design had one hard-coded schedule; the change was a class, a table and one argument, and the runner only asks the plan "exhausted?" and "how long?". Storm 2 changed what a handler may say: the facade wraps a `bool` handler into an `Outcome` handler, and `settle` is the single place that turns an answer into a state (`Done` to Succeeded, `Fatal` to Dead with a reason, `Retry` to Dead when exhausted or to Waiting with a new due time and the same rank). `redrive` is one method that moves a record from Dead to Waiting and puts it in the queue with a new rank. That is the Open/Closed score of the design.
+
+## Alternatives
+- **State pattern, one class per state.** `Waiting`, `Running`, `Dead` objects each own the legal operations ("cancel" is legal only in `Waiting`). It reads well at ten states and costs a class per state for five; an enum with the checks in the facade and the transitions in `settle` is easier to see in one screen. Move to the pattern when states grow behaviour of their own.
+- **A delay queue as a binary heap.** `std::priority_queue` on (time, rank) is smaller and just as fast for insert and pop, but it cannot remove by id, so cancel marks the entry dead and the pop loop skips it. The ordered map with an id index answers every query exactly.
+- **A separate retry queue.** First attempts in one queue and retries in another, merged when due. It makes "the retry keeps its place" a merge rule and doubles the structures to keep consistent; one queue keyed by (time, rank) needs neither.
+- **Handlers that throw instead of returning an answer.** The usual C++ shape: an exception means failure, and a special exception type means fatal. It is natural for callers but puts control flow in try/catch inside the loop, and slides into "catch everything". A returned `Outcome` is explicit, testable and cheap; catching exceptions and mapping them to `Retry` is a sensible wrapper on top.
+- **Jitter in the delay.** Right for production (it prevents synchronised retry waves) and wrong for tests that need exact ticks; it would be one more `BackoffRule` fed by an injected random source.
+- **Deleting finished jobs.** Saves memory and breaks "ids are never reused", so duplicates after success look legitimate. Retention is the real design question.
+
+## Trade-offs
+- **Pop before run, Running while it runs.** The queue and the book are consistent whenever user code runs. The cost is that a job that is running cannot be cancelled (`NotWaiting`), which is what the contract documents.
+- **Rank on the record.** One counter gives deterministic first come, first served and lets a retry keep its place; a 64-bit counter is enough for ever. A timestamp ties and can go backwards.
+- **Shared handler.** The record holds the handler once, so every attempt calls the same callable and its captured state survives; the price is that the handler must not assume a fresh copy per attempt.
+- **Plan as data.** The policy is a value looked up per job, not a constant in the loop, so a new rule or limit never touches the loop. The price is one indirection per failure.
+- **Strict contract.** Refused calls change nothing, statuses have an order, time cannot go back and ids are never reused. That is what makes the queue something other code can build on.
+- **Single thread.** Everything runs on the caller's thread; a slow handler delays the rest and there is no locking. That is the contract of this problem, not the right answer for production.
+
+## What breaks at 10x
+- **Records**: keeping every job for ever grows without bound. Expire finished records after a retention period and say what a reused id then means; keep the dead-letter queue until someone handles it.
+- **Timers**: millions of waiting jobs make node-per-entry maps heavy. Use a heap in a vector with lazy deletion, or a hierarchical timing wheel with a rule for ordering inside a slot.
+- **Synchronised retries**: thousands of jobs failing together retry together. Add jitter and a retry budget, and a circuit breaker so that a down dependency is not hit by every job's schedule.
+- **Dead-letter queue**: it grows silently without alerting, a reason and the last error; a bulk redrive must be rate-limited or it recreates the outage.
+- **Threads**: a mutex held only around queue and book changes, never around a handler; the guarantee becomes "attempts start in this order", and two attempts of one job must not overlap.
+- **Durability**: a restart loses everything. A durable queue keeps rows with a due time, claims them with a lease (a visibility timeout) and runs them at least once, so handlers need an idempotency key.
+
+## Level signals
+- **SDE II:** the base problem correct: an ordered structure with an id index, the running order including first come first served, the delay measured from the attempt's own time, the fifth failure ending in the dead-letter queue, ids never reused, and the loop taking the next due attempt from the live queue so a handler can add work. Names the boundary cases (`<=`, an earlier advance, `NotFound` versus `NotWaiting`) before being asked.
+- **Senior:** all of the above plus the retry schedule as a per-job Strategy with a capped delay and no change to the loop, an `Outcome` that is settled in one place, a redrive that resets attempts and queue position, and an explanation of why a retry keeps its rank. Raises jitter, poison messages and idempotent handlers unprompted.
+- **Staff:** treats the in-memory queue as a model of a durable one: leases and visibility timeouts, at-least-once delivery with idempotency keys, ordering per partition and head-of-line blocking, retry budgets and circuit breakers across the whole queue, and an operating story for the dead-letter queue (alerting, ownership, rate-limited redrive).
+15:T1156,#pragma once
+// Public API for the Job Queue problem. The hidden tests only use what is declared here.
+// You implement jobq::makeQueue() (in any of your .cpp files); everything behind it is your design.
+#include <cstddef>
+#include <functional>
+#include <memory>
+#include <string>
+#include <vector>
+
+namespace jobq {
+
+enum class Status {
+  Ok,
+  InvalidId,       // the id is empty or longer than 32 characters
+  InvalidHandler,  // the handler is an empty std::function
+  InvalidPolicy,   // reserved for per-job retry policies (a later interface); enqueue() never returns it
+  DuplicateId,     // the id has been used before, in any state
+  NotFound,        // the id has never been used
+  NotWaiting,      // the id is known but the job is not Waiting (for cancel and nextAttempt)
+  NotDead,         // reserved for the dead-letter queue (a later interface); nothing here returns it
+};
+
+enum class State {
+  Waiting,    // an attempt (the first one or a retry) is due at nextAttempt()
+  Running,    // its handler is being called right now
+  Succeeded,  // the handler reported success
+  Dead,       // out of attempts; the job sits in the dead-letter queue
+  Cancelled,  // removed by cancel() before it could finish
+};
+
+// A handler is called once per attempt with the attempt number (1 for the first). It returns true when the work is
+// done and false when it failed and may be tried again. Handlers run on the caller's thread, inside advanceTo().
+using Handler = std::function<bool(int attempt)>;
+
+constexpr int kMaxAttempts = 5;          // attempts per job: the first one and four retries
+constexpr long long kBaseDelay = 10;     // ticks to wait after the first failed attempt
+constexpr std::size_t kMaxIdLength = 32;
+
+// A job queue over SIMULATED time: nothing here reads a real clock. Time is a whole number of ticks that starts at 0 and
+// moves only when the caller calls advanceTo().
+//
+// ENQUEUE. enqueue(id, handler) makes a job whose first attempt is due at now(). CHECK ORDER: InvalidId, InvalidHandler,
+// DuplicateId. A refused call changes nothing. An id is never reused: it stays taken after the job succeeded, died or was
+// cancelled.
+//
+// ATTEMPTS. advanceTo(t) with t >= now() runs every attempt due at a time <= t, one at a time, earlier time first and
+// at the same time the job that was enqueued first (FIFO: a retry keeps the place its job was given when it was
+// enqueued), then sets now() to t. While an attempt runs, now() is that attempt's own time and the job is Running. The
+// result is the number of attempts that ran. advanceTo(t) with t < now() does nothing and returns 0. A handler may call
+// enqueue() and cancel() on this queue (a job it enqueues is due at now() and runs in the same advance); it must not call
+// advanceTo().
+//
+// RETRIES. When an attempt fails and it was not the kMaxAttempts-th, the next attempt is due at (the time of the failed
+// attempt) + kBaseDelay * 2^(failed attempts - 1): 10, 20, 40, 80 ticks after attempts 1, 2, 3, 4. The delay is measured
+// from the attempt's own time, not from the time advanceTo() was asked to reach. A failure of the kMaxAttempts-th attempt
+// makes the job Dead: it leaves the run queue and its id is appended to the dead-letter queue.
+//
+// CANCEL. cancel(id) turns a Waiting job into Cancelled (it never runs again). NotFound for an unknown id; NotWaiting for
+// a known job that is Running, Succeeded, Dead or Cancelled.
+class Queue {
+ public:
+  virtual ~Queue() = default;
+
+  virtual Status enqueue(const std::string& id, Handler handler) = 0;
+  virtual Status cancel(const std::string& id) = 0;
+  virtual std::size_t advanceTo(long long time) = 0;
+  virtual long long now() const = 0;
+
+  // Queries. The out-parameter is touched only on Ok; NotFound for an unknown id.
+  virtual Status state(const std::string& id, State& out) const = 0;
+  // The number of attempts that have STARTED for the job (the current one counts while it runs).
+  virtual Status attempts(const std::string& id, int& out) const = 0;
+  // The tick of the next attempt; NotWaiting unless the job is Waiting.
+  virtual Status nextAttempt(const std::string& id, long long& at) const = 0;
+
+  // The number of Waiting jobs.
+  virtual std::size_t waiting() const = 0;
+  // The ids of the Dead jobs, in the order they died (oldest first).
+  virtual std::vector<std::string> deadLetters() const = 0;
+};
+
+std::unique_ptr<Queue> makeQueue();
+
+}  // namespace jobq
+16:T63e,#pragma once
+// Change Storm 1: a retry policy per job.
+#include "api.h"
+
+namespace jobq {
+
+enum class Backoff { Fixed, Linear, Exponential };
+
+constexpr int kMaxPolicyAttempts = 20;
+constexpr long long kMaxBaseDelay = 1000000LL;       // 10^6 ticks
+constexpr long long kMaxDelayCap = 1000000000LL;     // 10^9 ticks
+
+// How one job is retried. After the n-th failed attempt (n = 1, 2, ...) the next attempt is due `delay(n)` ticks after
+// the failed one, where
+//   Fixed        delay(n) = base
+//   Linear       delay(n) = base * n
+//   Exponential  delay(n) = base * 2^(n - 1)
+// and every delay is at most `cap`. The job dies when attempt number `maxAttempts` fails. The default is exactly the
+// behaviour of enqueue(): 5 attempts, exponential from 10 ticks (the cap is far beyond what 5 attempts can reach).
+struct RetryPolicy {
+  int maxAttempts = kMaxAttempts;
+  Backoff backoff = Backoff::Exponential;
+  long long base = kBaseDelay;
+  long long cap = kMaxDelayCap;
+};
+
+// makePolicyQueue() has everything makeQueue() has, plus a policy per job.
+// enqueueWith(id, policy, handler) CHECK ORDER: InvalidId, InvalidHandler, InvalidPolicy, DuplicateId.
+// InvalidPolicy: maxAttempts outside 1..kMaxPolicyAttempts, base outside 1..kMaxBaseDelay, or cap outside
+// base..kMaxDelayCap. A policy belongs to that job alone; enqueue() is enqueueWith(id, RetryPolicy{}, handler).
+class PolicyQueue : public Queue {
+ public:
+  virtual Status enqueueWith(const std::string& id, const RetryPolicy& policy, Handler handler) = 0;
+};
+
+std::unique_ptr<PolicyQueue> makePolicyQueue();
+
+}  // namespace jobq
+17:T6cf,#pragma once
+// Change Storm 2: failures that are not worth retrying, and sending dead jobs back.
+#include "api_storm1.h"
+
+namespace jobq {
+
+// A handler may say more than "it failed":
+//   Done   the work is finished (the job Succeeded).
+//   Retry  it failed for now: retry under the job's policy (a failure of the last attempt kills the job).
+//   Fatal  it can never work (a malformed message, say): the job is Dead at once, whatever attempts are left.
+enum class Outcome { Done, Retry, Fatal };
+using OutcomeHandler = std::function<Outcome(int attempt)>;
+
+// Why a Dead job is dead.
+enum class DeadReason { Exhausted, Fatal };
+
+// makeDrainingQueue() has everything makePolicyQueue() has, plus outcomes, reasons and redrive.
+//
+// enqueueOutcome(...) has the checks and statuses of enqueueWith(). A plain bool handler behaves as Done / Retry.
+//
+// deadReason(id, out): Ok for a Dead job; NotFound for an unknown id; NotDead for a job that is not Dead (the out-parameter
+// is touched only on Ok).
+//
+// redrive(id) sends a Dead job back: it becomes Waiting with its first attempt due at now(), its attempt count reset to
+// 0 (the handler sees attempt 1 again), the same handler and policy, and a NEW place in the FIFO order (it queues behind
+// everything already enqueued). It leaves the dead-letter queue at once. NotFound for an unknown id; NotDead otherwise.
+class DrainingQueue : public PolicyQueue {
+ public:
+  virtual Status enqueueOutcome(const std::string& id, const RetryPolicy& policy, OutcomeHandler handler) = 0;
+  virtual Status deadReason(const std::string& id, DeadReason& out) const = 0;
+  virtual Status redrive(const std::string& id) = 0;
+};
+
+std::unique_ptr<DrainingQueue> makeDrainingQueue();
+
+}  // namespace jobq
+18:T2748,#include <algorithm>
+#include <cstdint>
+#include <memory>
+#include <string>
+#include <vector>
+
+#include "api.h"
+#include "bp_test.h"
+
+namespace {
+using jobq::State;
+using jobq::Status;
+
+#define IS(call, expected) EXPECT_TRUE((call) == Status::expected)
+
+// Logs "id#attempt@time" for every attempt that runs, in order.
+struct Fixture {
+  std::unique_ptr<jobq::Queue> q = jobq::makeQueue();
+  std::vector<std::string> log;
+
+  std::string stamp(const std::string& id, int attempt) const {
+    return id + "#" + std::to_string(attempt) + "@" + std::to_string(q->now());
+  }
+  // Succeeds on attempt `succeedOn` (0 = never succeeds).
+  jobq::Handler job(const std::string& id, int succeedOn = 0) {
+    return [this, id, succeedOn](int attempt) {
+      log.push_back(stamp(id, attempt));
+      return succeedOn != 0 && attempt >= succeedOn;
+    };
+  }
+  Status add(const std::string& id, int succeedOn = 0) { return q->enqueue(id, job(id, succeedOn)); }
+  std::string order() const {
+    std::string out;
+    for (const auto& r : log) out += (out.empty() ? "" : " ") + r;
+    return out;
+  }
+  State stateOf(const std::string& id) const {
+    State s = State::Waiting;
+    q->state(id, s);
+    return s;
+  }
+  int attemptsOf(const std::string& id) const {
+    int n = -1;
+    q->attempts(id, n);
+    return n;
+  }
+};
+}  // namespace
+
+TEST(Enqueue, ValidationAndTheDocumentedCheckOrder) {
+  Fixture f;
+  IS(f.q->enqueue("", f.job("x")), InvalidId);
+  IS(f.q->enqueue(std::string(33, 'a'), f.job("x")), InvalidId);
+  IS(f.q->enqueue("ok", nullptr), InvalidHandler);
+  IS(f.q->enqueue("", nullptr), InvalidId);
+  IS(f.q->enqueue(std::string(32, 'a'), f.job("x")), Ok);
+  IS(f.q->enqueue("dup", f.job("dup")), Ok);
+  IS(f.q->enqueue("dup", f.job("dup")), DuplicateId);
+  IS(f.q->enqueue("dup", nullptr), InvalidHandler);
+  EXPECT_EQ(f.q->waiting(), std::size_t(2));
+  EXPECT_EQ(f.q->advanceTo(0), std::size_t(2));
+}
+
+TEST(Enqueue, AnIdIsNeverReusedEvenAfterSuccessDeathOrCancel) {
+  Fixture f;
+  f.add("done", 1);
+  f.add("dies");
+  f.add("gone");
+  IS(f.q->cancel("gone"), Ok);
+  f.q->advanceTo(1000);
+  EXPECT_TRUE(f.stateOf("done") == State::Succeeded);
+  EXPECT_TRUE(f.stateOf("dies") == State::Dead);
+  EXPECT_TRUE(f.stateOf("gone") == State::Cancelled);
+  IS(f.add("done"), DuplicateId);
+  IS(f.add("dies"), DuplicateId);
+  IS(f.add("gone"), DuplicateId);
+  EXPECT_EQ(f.q->waiting(), std::size_t(0));
+}
+
+TEST(Order, EqualTimeJobsRunInTheOrderTheyWereEnqueuedNotByName) {
+  Fixture f;
+  for (const char* id : {"zulu", "mike", "alpha", "yankee", "bravo"}) f.add(id, 1);
+  EXPECT_EQ(f.q->advanceTo(0), std::size_t(5));
+  EXPECT_EQ(f.order(), std::string("zulu#1@0 mike#1@0 alpha#1@0 yankee#1@0 bravo#1@0"));
+}
+
+TEST(Order, TimeBeatsEnqueueOrderSoARetryDueLaterRunsAfterAJobDueEarlier) {
+  Fixture f;
+  f.add("old");  // fails at 0, retries at 10
+  f.q->advanceTo(0);
+  f.q->advanceTo(9);
+  f.add("new", 1);  // due at 9, enqueued after "old"
+  f.q->advanceTo(10);
+  EXPECT_EQ(f.order(), std::string("old#1@0 new#1@9 old#2@10"));
+}
+
+TEST(Time, NowInsideAnAttemptIsTheAttemptsOwnTimeAndAfterwardsTheTarget) {
+  Fixture f;
+  f.add("x");
+  EXPECT_EQ(f.q->advanceTo(100), std::size_t(4));
+  EXPECT_EQ(f.order(), std::string("x#1@0 x#2@10 x#3@30 x#4@70"));
+  EXPECT_EQ(f.q->now(), 100LL);
+}
+
+TEST(Time, AnAttemptDueExactlyAtTheTargetRunsAndAnEarlierTargetDoesNothing) {
+  Fixture f;
+  f.add("x");
+  EXPECT_EQ(f.q->advanceTo(0), std::size_t(1));
+  EXPECT_EQ(f.q->advanceTo(9), std::size_t(0));
+  EXPECT_EQ(f.q->advanceTo(10), std::size_t(1));
+  EXPECT_EQ(f.q->advanceTo(5), std::size_t(0));
+  EXPECT_EQ(f.q->now(), 10LL);
+  EXPECT_EQ(f.order(), std::string("x#1@0 x#2@10"));
+}
+
+TEST(Retry, WaitsTenTwentyFortyEightyTicksFromEachFailedAttemptsOwnTime) {
+  Fixture f;
+  f.add("x");
+  EXPECT_EQ(f.q->advanceTo(100000), std::size_t(5));
+  EXPECT_EQ(f.order(), std::string("x#1@0 x#2@10 x#3@30 x#4@70 x#5@150"));
+  EXPECT_TRUE(f.stateOf("x") == State::Dead);
+  EXPECT_EQ(f.attemptsOf("x"), 5);
+}
+
+TEST(Retry, TheDelayIsMeasuredFromTheFailedAttemptNotFromTheAdvanceTarget) {
+  Fixture f;
+  f.add("x");
+  f.q->advanceTo(7);
+  long long at = -1;
+  IS(f.q->nextAttempt("x", at), Ok);
+  EXPECT_EQ(at, 10LL);
+  f.q->advanceTo(25);
+  IS(f.q->nextAttempt("x", at), Ok);
+  EXPECT_EQ(at, 30LL);
+  f.q->advanceTo(1000);
+  EXPECT_EQ(f.order(), std::string("x#1@0 x#2@10 x#3@30 x#4@70 x#5@150"));
+}
+
+TEST(Retry, ASuccessEndsTheJobAndLaterAttemptsNeverHappen) {
+  Fixture f;
+  f.add("x", 3);
+  EXPECT_EQ(f.q->advanceTo(1000), std::size_t(3));
+  EXPECT_EQ(f.order(), std::string("x#1@0 x#2@10 x#3@30"));
+  EXPECT_TRUE(f.stateOf("x") == State::Succeeded);
+  EXPECT_EQ(f.attemptsOf("x"), 3);
+  EXPECT_EQ(f.q->waiting(), std::size_t(0));
+  EXPECT_TRUE(f.q->deadLetters().empty());
+  long long at = -1;
+  IS(f.q->nextAttempt("x", at), NotWaiting);
+  EXPECT_EQ(at, -1LL);
+}
+
+TEST(DeadLetters, JobsAreListedInTheOrderTheyDiedNotByNameOrEnqueueOrder) {
+  Fixture f;
+  f.add("m");
+  f.q->advanceTo(5);
+  f.add("a");  // enqueued later, so it dies later: m dies at 150, a at 155
+  f.q->advanceTo(1000);
+  const std::vector<std::string> dead = f.q->deadLetters();
+  ASSERT_EQ(dead.size(), std::size_t(2));
+  EXPECT_EQ(dead[0], std::string("m"));
+  EXPECT_EQ(dead[1], std::string("a"));
+  f.add("later-but-fast", 1);
+  f.q->advanceTo(1000);
+  EXPECT_EQ(f.q->deadLetters().size(), std::size_t(2));
+}
+
+TEST(Cancel, OnlyAWaitingJobCanBeCancelledAndItNeverRunsAgain) {
+  Fixture f;
+  IS(f.q->cancel("nobody"), NotFound);
+  f.add("fresh");
+  f.add("retrying");
+  f.add("ok", 1);
+  IS(f.q->cancel("fresh"), Ok);
+  EXPECT_TRUE(f.stateOf("fresh") == State::Cancelled);
+  IS(f.q->cancel("fresh"), NotWaiting);
+  f.q->advanceTo(0);  // "retrying" fails once and waits for tick 10
+  IS(f.q->cancel("retrying"), Ok);
+  IS(f.q->cancel("ok"), NotWaiting);  // already succeeded
+  long long at = -1;
+  IS(f.q->nextAttempt("fresh", at), NotWaiting);
+  IS(f.q->nextAttempt("nobody", at), NotFound);
+  f.q->advanceTo(1000);
+  EXPECT_EQ(f.order(), std::string("retrying#1@0 ok#1@0"));
+  EXPECT_EQ(f.q->waiting(), std::size_t(0));
+  EXPECT_EQ(f.attemptsOf("retrying"), 1);
+  f.add("dies");
+  f.q->advanceTo(5000);
+  IS(f.q->cancel("dies"), NotWaiting);
+  EXPECT_TRUE(f.stateOf("dies") == State::Dead);
+}
+
+TEST(Cancel, AHandlerCanCancelAnotherWaitingJobButNotItself) {
+  Fixture f;
+  Status self = Status::Ok;
+  State seen = State::Waiting;
+  IS(f.q->enqueue("killer", [&](int) {
+    f.log.push_back("killer");
+    IS(f.q->cancel("victim"), Ok);
+    self = f.q->cancel("killer");
+    f.q->state("killer", seen);
+    return true;
+  }), Ok);
+  f.add("victim", 1);
+  EXPECT_EQ(f.q->advanceTo(0), std::size_t(1));
+  EXPECT_EQ(f.order(), std::string("killer"));
+  EXPECT_TRUE(self == Status::NotWaiting);
+  EXPECT_TRUE(seen == State::Running);
+  EXPECT_TRUE(f.stateOf("victim") == State::Cancelled);
+}
+
+TEST(Reentrancy, AHandlerMayEnqueueAJobThatRunsInTheSameAdvanceAfterWhatIsAlreadyDue) {
+  Fixture f;
+  IS(f.q->enqueue("parent", [&](int) {
+    f.log.push_back(f.stamp("parent", 1));
+    IS(f.q->enqueue("child", f.job("child", 1)), Ok);
+    return true;
+  }), Ok);
+  f.add("sibling", 1);
+  EXPECT_EQ(f.q->advanceTo(0), std::size_t(3));
+  EXPECT_EQ(f.order(), std::string("parent#1@0 sibling#1@0 child#1@0"));
+  f.add("x");
+  f.q->advanceTo(10);
+  f.q->advanceTo(12);
+  IS(f.q->enqueue("late", [&](int) { return true; }), Ok);  // due at now() = 12
+  long long at = -1;
+  IS(f.q->nextAttempt("late", at), Ok);
+  EXPECT_EQ(at, 12LL);
+}
+
+TEST(Queries, StateAttemptsAndNextAttemptDescribeTheLiveJob) {
+  Fixture f;
+  State s = State::Dead;
+  int n = -5;
+  long long at = -5;
+  IS(f.q->state("x", s), NotFound);
+  IS(f.q->attempts("x", n), NotFound);
+  EXPECT_TRUE(s == State::Dead);
+  EXPECT_EQ(n, -5);
+  f.add("x");
+  IS(f.q->state("x", s), Ok);
+  EXPECT_TRUE(s == State::Waiting);
+  EXPECT_EQ(f.attemptsOf("x"), 0);
+  IS(f.q->nextAttempt("x", at), Ok);
+  EXPECT_EQ(at, 0LL);
+  f.q->advanceTo(10);
+  EXPECT_EQ(f.attemptsOf("x"), 2);
+  IS(f.q->nextAttempt("x", at), Ok);
+  EXPECT_EQ(at, 30LL);
+  EXPECT_EQ(f.q->waiting(), std::size_t(1));
+}
+
+// A plain model: every job is (id, rank, due, attempts); run the smallest (due, rank) until none is due.
+TEST(Random, TheQueueMatchesAPlainModelOverManyJobsAndAdvances) {
+  std::uint64_t seed = 12345;
+  const auto next = [&seed](std::uint64_t mod) {
+    seed = seed * 6364136223846793005ULL + 1442695040888963407ULL;
+    return (seed >> 33) % mod;
+  };
+  for (int round = 0; round < 30; ++round) {
+    Fixture f;
+    struct M { int id; int succeedOn; int attempts; long long due; int rank; bool live; bool dead; };
+    std::vector<M> model;
+    std::vector<std::string> expected;
+    long long now = 0;
+    int ids = 0;
+    for (int step = 0; step < 40; ++step) {
+      if (next(3) != 0) {
+        const int succeedOn = static_cast<int>(next(6));  // 0 means never
+        const std::string id = "j" + std::to_string(ids);
+        f.add(id, succeedOn);
+        model.push_back({ids, succeedOn, 0, now, ids, true, false});
+        ++ids;
+      } else {
+        const long long target = now + static_cast<long long>(next(60));
+        for (;;) {
+          M* best = nullptr;
+          for (auto& m : model)
+            if (m.live && m.due <= target && (!best || m.due < best->due || (m.due == best->due && m.rank < best->rank))) best = &m;
+          if (!best) break;
+          ++best->attempts;
+          expected.push_back("j" + std::to_string(best->id) + "#" + std::to_string(best->attempts) + "@" + std::to_string(best->due));
+          if (best->succeedOn != 0 && best->attempts >= best->succeedOn) best->live = false;
+          else if (best->attempts >= 5) { best->live = false; best->dead = true; }
+          else best->due += 10LL << (best->attempts - 1);
+        }
+        now = target;
+        f.q->advanceTo(target);
+      }
+    }
+    EXPECT_EQ(f.log, expected);
+    std::size_t live = 0, dead = 0;
+    for (const auto& m : model) { live += m.live ? 1 : 0; dead += m.dead ? 1 : 0; }
+    EXPECT_EQ(f.q->waiting(), live);
+    EXPECT_EQ(f.q->deadLetters().size(), dead);
+  }
+}
+19:T1da6,#include <algorithm>
+#include <cstdint>
+#include <memory>
+#include <string>
+#include <vector>
+
+#include "api_storm1.h"
+#include "bp_test.h"
+
+namespace {
+using jobq::Backoff;
+using jobq::RetryPolicy;
+using jobq::State;
+using jobq::Status;
+
+#define IS(call, expected) EXPECT_TRUE((call) == Status::expected)
+
+struct Fixture {
+  std::unique_ptr<jobq::PolicyQueue> q = jobq::makePolicyQueue();
+  std::vector<std::string> log;
+
+  std::string stamp(const std::string& id, int attempt) const {
+    return id + "#" + std::to_string(attempt) + "@" + std::to_string(q->now());
+  }
+  jobq::Handler job(const std::string& id, int succeedOn = 0) {
+    return [this, id, succeedOn](int attempt) {
+      log.push_back(stamp(id, attempt));
+      return succeedOn != 0 && attempt >= succeedOn;
+    };
+  }
+  Status add(const std::string& id, int maxAttempts, Backoff b, long long base, long long cap = jobq::kMaxDelayCap, int succeedOn = 0) {
+    RetryPolicy p;
+    p.maxAttempts = maxAttempts;
+    p.backoff = b;
+    p.base = base;
+    p.cap = cap;
+    return q->enqueueWith(id, p, job(id, succeedOn));
+  }
+  std::string order() const {
+    std::string out;
+    for (const auto& r : log) out += (out.empty() ? "" : " ") + r;
+    return out;
+  }
+  State stateOf(const std::string& id) const {
+    State s = State::Waiting;
+    q->state(id, s);
+    return s;
+  }
+};
+}  // namespace
+
+TEST(Policy, ValidationAndTheDocumentedCheckOrder) {
+  Fixture f;
+  RetryPolicy p;
+  p.maxAttempts = 0;
+  IS(f.q->enqueueWith("a", p, f.job("a")), InvalidPolicy);
+  p.maxAttempts = 21;
+  IS(f.q->enqueueWith("a", p, f.job("a")), InvalidPolicy);
+  p = RetryPolicy{};
+  p.base = 0;
+  IS(f.q->enqueueWith("a", p, f.job("a")), InvalidPolicy);
+  p.base = jobq::kMaxBaseDelay + 1;
+  p.cap = jobq::kMaxDelayCap;
+  IS(f.q->enqueueWith("a", p, f.job("a")), InvalidPolicy);
+  p.base = 50;
+  p.cap = 49;
+  IS(f.q->enqueueWith("a", p, f.job("a")), InvalidPolicy);
+  p.cap = jobq::kMaxDelayCap + 1;
+  IS(f.q->enqueueWith("a", p, f.job("a")), InvalidPolicy);
+  EXPECT_EQ(f.q->waiting(), std::size_t(0));
+  // The edges are valid.
+  IS(f.add("min", 1, Backoff::Fixed, 1, 1), Ok);
+  IS(f.add("max", 20, Backoff::Exponential, jobq::kMaxBaseDelay, jobq::kMaxDelayCap), Ok);
+  IS(f.add("edge", 20, Backoff::Linear, jobq::kMaxBaseDelay, jobq::kMaxBaseDelay), Ok);
+  // Check order: InvalidId, InvalidHandler, InvalidPolicy, DuplicateId.
+  p = RetryPolicy{};
+  p.maxAttempts = 0;
+  IS(f.q->enqueueWith("", p, nullptr), InvalidId);
+  IS(f.q->enqueueWith("b", p, nullptr), InvalidHandler);
+  IS(f.q->enqueueWith("min", p, f.job("min")), InvalidPolicy);
+  IS(f.q->enqueueWith("min", RetryPolicy{}, f.job("min")), DuplicateId);
+  EXPECT_EQ(f.q->waiting(), std::size_t(3));
+}
+
+TEST(Policy, FixedLinearAndExponentialDelaysAreMeasuredFromTheFailedAttempt) {
+  Fixture f;
+  f.add("fixed", 4, Backoff::Fixed, 7);
+  f.add("linear", 4, Backoff::Linear, 5);
+  f.add("expo", 5, Backoff::Exponential, 3);
+  f.q->advanceTo(1000);
+  EXPECT_EQ(f.order(), std::string("fixed#1@0 linear#1@0 expo#1@0 expo#2@3 linear#2@5 fixed#2@7 expo#3@9 fixed#3@14 linear#3@15 fixed#4@21 expo#4@21 linear#4@30 expo#5@45"));
+  EXPECT_TRUE(f.stateOf("fixed") == State::Dead);
+  EXPECT_TRUE(f.stateOf("linear") == State::Dead);
+  EXPECT_TRUE(f.stateOf("expo") == State::Dead);
+}
+
+TEST(Policy, TheCapLimitsEveryDelay) {
+  Fixture f;
+  f.add("expo", 6, Backoff::Exponential, 10, 25);
+  f.q->advanceTo(1000);
+  EXPECT_EQ(f.order(), std::string("expo#1@0 expo#2@10 expo#3@30 expo#4@55 expo#5@80 expo#6@105"));
+  Fixture g;
+  g.add("lin", 5, Backoff::Linear, 10, 25);
+  g.q->advanceTo(1000);
+  EXPECT_EQ(g.order(), std::string("lin#1@0 lin#2@10 lin#3@30 lin#4@55 lin#5@80"));
+}
+
+TEST(Policy, MaxAttemptsBelongsToTheJobAndOneAttemptMeansNoRetries) {
+  Fixture f;
+  f.add("once", 1, Backoff::Fixed, 5);
+  f.add("thrice", 3, Backoff::Fixed, 5);
+  f.add("default", 5, Backoff::Exponential, 10);
+  f.q->advanceTo(10000);
+  EXPECT_EQ(f.order(), std::string("once#1@0 thrice#1@0 default#1@0 thrice#2@5 thrice#3@10 default#2@10 default#3@30 default#4@70 default#5@150"));
+  const std::vector<std::string> dead = f.q->deadLetters();
+  ASSERT_EQ(dead.size(), std::size_t(3));
+  EXPECT_EQ(dead[0], std::string("once"));
+  EXPECT_EQ(dead[1], std::string("thrice"));
+  EXPECT_EQ(dead[2], std::string("default"));
+}
+
+TEST(Policy, ThePlainEnqueueKeepsTheDefaultPolicyWhateverOtherJobsUse) {
+  Fixture f;
+  f.add("slow", 2, Backoff::Fixed, 1000);
+  IS(f.q->enqueue("plain", f.job("plain")), Ok);
+  f.q->advanceTo(100000);
+  EXPECT_EQ(f.order(), std::string("slow#1@0 plain#1@0 plain#2@10 plain#3@30 plain#4@70 plain#5@150 slow#2@1000"));
+}
+
+TEST(Policy, TheLargestDelaysDoNotOverflowAndStayUnderTheCap) {
+  Fixture f;
+  f.add("big", 20, Backoff::Exponential, jobq::kMaxBaseDelay, jobq::kMaxDelayCap);
+  f.q->advanceTo(1000000000000000LL);
+  std::string expected;
+  long long t = 0;
+  for (int n = 1; n <= 20; ++n) {
+    expected += (expected.empty() ? "" : " ") + std::string("big#") + std::to_string(n) + "@" + std::to_string(t);
+    long long d = jobq::kMaxBaseDelay;
+    for (int i = 1; i < n; ++i) d = std::min<long long>(d * 2, jobq::kMaxDelayCap);
+    t += std::min<long long>(d, jobq::kMaxDelayCap);
+  }
+  EXPECT_EQ(f.order(), expected);
+}
+
+TEST(Policy, ARetryKeepsItsJobsPlaceInLineAmongEqualTimes) {
+  Fixture f;
+  f.add("first", 4, Backoff::Fixed, 10);   // attempts at 0, 10, 20, 30
+  f.add("second", 2, Backoff::Fixed, 30);  // attempts at 0, 30
+  f.q->advanceTo(30);
+  EXPECT_EQ(f.order(), std::string("first#1@0 second#1@0 first#2@10 first#3@20 first#4@30 second#2@30"));
+}
+
+TEST(Random, PerJobPoliciesMatchAPlainModel) {
+  std::uint64_t seed = 99;
+  const auto next = [&seed](std::uint64_t mod) {
+    seed = seed * 6364136223846793005ULL + 1442695040888963407ULL;
+    return (seed >> 33) % mod;
+  };
+  for (int round = 0; round < 30; ++round) {
+    Fixture f;
+    struct M { int id; int succeedOn; int maxAttempts; int kind; long long base; long long cap; int attempts; long long due; int rank; bool live; };
+    std::vector<M> model;
+    std::vector<std::string> expected;
+    long long now = 0;
+    int ids = 0;
+    for (int step = 0; step < 40; ++step) {
+      if (next(3) != 0) {
+        M m{ids, static_cast<int>(next(5)), 1 + static_cast<int>(next(5)), static_cast<int>(next(3)), 1 + static_cast<long long>(next(9)), 0, 0, now, ids, true};
+        m.cap = m.base + static_cast<long long>(next(40));
+        f.add("j" + std::to_string(ids), m.maxAttempts, static_cast<Backoff>(m.kind), m.base, m.cap, m.succeedOn);
+        model.push_back(m);
+        ++ids;
+      } else {
+        const long long target = now + static_cast<long long>(next(50));
+        for (;;) {
+          M* best = nullptr;
+          for (auto& m : model)
+            if (m.live && m.due <= target && (!best || m.due < best->due || (m.due == best->due && m.rank < best->rank))) best = &m;
+          if (!best) break;
+          ++best->attempts;
+          expected.push_back("j" + std::to_string(best->id) + "#" + std::to_string(best->attempts) + "@" + std::to_string(best->due));
+          if (best->succeedOn != 0 && best->attempts >= best->succeedOn) {
+            best->live = false;
+          } else if (best->attempts >= best->maxAttempts) {
+            best->live = false;
+          } else {
+            long long d = best->kind == 0 ? best->base : best->kind == 1 ? best->base * best->attempts : best->base << (best->attempts - 1);
+            best->due += std::min(d, best->cap);
+          }
+        }
+        now = target;
+        f.q->advanceTo(target);
+      }
+    }
+    EXPECT_EQ(f.log, expected);
+  }
+}
+1a:T1d44,#include <memory>
+#include <string>
+#include <vector>
+
+#include "api_storm2.h"
+#include "bp_test.h"
+
+namespace {
+using jobq::DeadReason;
+using jobq::Outcome;
+using jobq::RetryPolicy;
+using jobq::State;
+using jobq::Status;
+
+#define IS(call, expected) EXPECT_TRUE((call) == Status::expected)
+
+struct Fixture {
+  std::unique_ptr<jobq::DrainingQueue> q = jobq::makeDrainingQueue();
+  std::vector<std::string> log;
+
+  std::string stamp(const std::string& id, int attempt) const {
+    return id + "#" + std::to_string(attempt) + "@" + std::to_string(q->now());
+  }
+  // Answers script[attempt - 1]; past the end of the script it answers `rest`.
+  jobq::OutcomeHandler script(const std::string& id, std::vector<Outcome> answers, Outcome rest = Outcome::Retry) {
+    return [this, id, answers, rest](int attempt) {
+      log.push_back(stamp(id, attempt));
+      return attempt <= static_cast<int>(answers.size()) ? answers[static_cast<std::size_t>(attempt - 1)] : rest;
+    };
+  }
+  Status add(const std::string& id, std::vector<Outcome> answers, Outcome rest = Outcome::Retry, RetryPolicy p = RetryPolicy{}) {
+    return q->enqueueOutcome(id, p, script(id, std::move(answers), rest));
+  }
+  std::string order() const {
+    std::string out;
+    for (const auto& r : log) out += (out.empty() ? "" : " ") + r;
+    return out;
+  }
+  State stateOf(const std::string& id) const {
+    State s = State::Waiting;
+    q->state(id, s);
+    return s;
+  }
+  int attemptsOf(const std::string& id) const {
+    int n = -1;
+    q->attempts(id, n);
+    return n;
+  }
+  DeadReason reasonOf(const std::string& id) const {
+    DeadReason r = DeadReason::Exhausted;
+    q->deadReason(id, r);
+    return r;
+  }
+};
+}  // namespace
+
+TEST(Outcome, FatalKillsTheJobAtOnceWhateverAttemptsAreLeft) {
+  Fixture f;
+  f.add("bad", {Outcome::Retry, Outcome::Retry, Outcome::Fatal});
+  EXPECT_EQ(f.q->advanceTo(10000), std::size_t(3));
+  EXPECT_EQ(f.order(), std::string("bad#1@0 bad#2@10 bad#3@30"));
+  EXPECT_TRUE(f.stateOf("bad") == State::Dead);
+  EXPECT_EQ(f.attemptsOf("bad"), 3);
+  EXPECT_TRUE(f.reasonOf("bad") == DeadReason::Fatal);
+  EXPECT_EQ(f.q->deadLetters().size(), std::size_t(1));
+  EXPECT_EQ(f.q->waiting(), std::size_t(0));
+  f.add("first", {Outcome::Fatal});
+  f.q->advanceTo(10000);
+  EXPECT_EQ(f.attemptsOf("first"), 1);
+}
+
+TEST(Outcome, RunningOutOfAttemptsIsExhaustedAndAFatalOnTheLastAttemptStaysFatal) {
+  Fixture f;
+  RetryPolicy two;
+  two.maxAttempts = 2;
+  f.add("tired", {}, Outcome::Retry, two);
+  f.add("fatal-last", {Outcome::Retry, Outcome::Fatal}, Outcome::Retry, two);
+  f.q->advanceTo(10000);
+  EXPECT_TRUE(f.reasonOf("tired") == DeadReason::Exhausted);
+  EXPECT_TRUE(f.reasonOf("fatal-last") == DeadReason::Fatal);
+  EXPECT_EQ(f.q->deadLetters().size(), std::size_t(2));
+}
+
+TEST(Outcome, DoneEndsTheJobAndPlainBoolHandlersStillMapToDoneAndRetry) {
+  Fixture f;
+  f.add("ok", {Outcome::Retry, Outcome::Done});
+  IS(f.q->enqueue("plain-ok", [&](int attempt) { f.log.push_back(f.stamp("plain-ok", attempt)); return true; }), Ok);
+  IS(f.q->enqueue("plain-bad", [&](int attempt) { f.log.push_back(f.stamp("plain-bad", attempt)); return false; }), Ok);
+  f.q->advanceTo(10000);
+  EXPECT_TRUE(f.stateOf("ok") == State::Succeeded);
+  EXPECT_TRUE(f.stateOf("plain-ok") == State::Succeeded);
+  EXPECT_EQ(f.attemptsOf("ok"), 2);
+  EXPECT_EQ(f.attemptsOf("plain-bad"), 5);
+  EXPECT_TRUE(f.reasonOf("plain-bad") == DeadReason::Exhausted);
+}
+
+TEST(Outcome, DeadReasonAndTheValidationOfEnqueueOutcomeFollowTheDocumentedStatuses) {
+  Fixture f;
+  DeadReason r = DeadReason::Fatal;
+  IS(f.q->deadReason("nobody", r), NotFound);
+  f.add("ok", {Outcome::Done});
+  f.add("waiting", {});
+  f.q->advanceTo(0);
+  IS(f.q->deadReason("ok", r), NotDead);
+  IS(f.q->deadReason("waiting", r), NotDead);
+  EXPECT_TRUE(r == DeadReason::Fatal);
+  IS(f.q->enqueueOutcome("", RetryPolicy{}, nullptr), InvalidId);
+  IS(f.q->enqueueOutcome("x", RetryPolicy{}, nullptr), InvalidHandler);
+  RetryPolicy bad;
+  bad.maxAttempts = 0;
+  IS(f.q->enqueueOutcome("x", bad, f.script("x", {})), InvalidPolicy);
+  IS(f.q->enqueueOutcome("ok", bad, f.script("x", {})), InvalidPolicy);
+  IS(f.q->enqueueOutcome("ok", RetryPolicy{}, f.script("x", {})), DuplicateId);
+}
+
+TEST(Redrive, SendsADeadJobBackWithAFreshAttemptCountAtNow) {
+  Fixture f;
+  f.add("x", {}, Outcome::Retry);
+  f.q->advanceTo(200);  // dies at 150
+  EXPECT_TRUE(f.stateOf("x") == State::Dead);
+  IS(f.q->redrive("x"), Ok);
+  EXPECT_TRUE(f.stateOf("x") == State::Waiting);
+  EXPECT_EQ(f.attemptsOf("x"), 0);
+  EXPECT_TRUE(f.q->deadLetters().empty());
+  EXPECT_EQ(f.q->waiting(), std::size_t(1));
+  long long at = -1;
+  IS(f.q->nextAttempt("x", at), Ok);
+  EXPECT_EQ(at, 200LL);
+  f.log.clear();
+  f.q->advanceTo(200);
+  EXPECT_EQ(f.order(), std::string("x#1@200"));
+  f.q->advanceTo(100000);
+  EXPECT_EQ(f.attemptsOf("x"), 5);
+  EXPECT_TRUE(f.stateOf("x") == State::Dead);
+  IS(f.q->redrive("x"), Ok);  // a fresh budget every time
+  EXPECT_EQ(f.attemptsOf("x"), 0);
+}
+
+TEST(Redrive, AnswersNotFoundForUnknownAndNotDeadForEveryOtherState) {
+  Fixture f;
+  IS(f.q->redrive("nobody"), NotFound);
+  f.add("ok", {Outcome::Done});
+  f.add("cancelled", {});
+  f.add("waiting", {});
+  IS(f.q->cancel("cancelled"), Ok);
+  f.q->advanceTo(0);
+  IS(f.q->redrive("ok"), NotDead);
+  IS(f.q->redrive("cancelled"), NotDead);
+  IS(f.q->redrive("waiting"), NotDead);
+  f.add("dies", {Outcome::Fatal});
+  f.q->advanceTo(0);
+  IS(f.q->redrive("dies"), Ok);
+  IS(f.q->redrive("dies"), NotDead);
+}
+
+TEST(Redrive, TheRedrivenJobQueuesBehindEverythingAlreadyEnqueued) {
+  Fixture f;
+  f.add("old", {Outcome::Fatal});
+  f.q->advanceTo(10);
+  f.add("newer", {Outcome::Done});  // due at 10, enqueued after "old" was first enqueued
+  IS(f.q->redrive("old"), Ok);       // due at 10 too, but it joins the line now
+  f.log.clear();
+  f.q->advanceTo(10);
+  EXPECT_EQ(f.order(), std::string("newer#1@10 old#1@10"));
+}
+
+TEST(Redrive, TheDeadLetterQueueKeepsTheOrderOfDeathAfterOthersLeaveIt) {
+  Fixture f;
+  f.add("a", {Outcome::Fatal});
+  f.add("b", {Outcome::Fatal});
+  f.add("c", {Outcome::Fatal});
+  f.q->advanceTo(0);
+  IS(f.q->redrive("b"), Ok);
+  std::vector<std::string> dead = f.q->deadLetters();
+  ASSERT_EQ(dead.size(), std::size_t(2));
+  EXPECT_EQ(dead[0], std::string("a"));
+  EXPECT_EQ(dead[1], std::string("c"));
+  f.q->advanceTo(0);  // "b" runs again and answers Fatal again: it dies last
+  dead = f.q->deadLetters();
+  ASSERT_EQ(dead.size(), std::size_t(3));
+  EXPECT_EQ(dead[0], std::string("a"));
+  EXPECT_EQ(dead[1], std::string("c"));
+  EXPECT_EQ(dead[2], std::string("b"));
+}
+
+TEST(Redrive, TheJobKeepsItsOwnHandlerAndPolicy) {
+  Fixture f;
+  RetryPolicy p;
+  p.maxAttempts = 2;
+  p.backoff = jobq::Backoff::Fixed;
+  p.base = 5;
+  f.add("x", {}, Outcome::Retry, p);
+  f.q->advanceTo(100);  // attempts at 0 and 5, dead
+  IS(f.q->redrive("x"), Ok);
+  f.log.clear();
+  f.q->advanceTo(1000);
+  EXPECT_EQ(f.order(), std::string("x#1@100 x#2@105"));
+  EXPECT_TRUE(f.stateOf("x") == State::Dead);
+  EXPECT_TRUE(f.reasonOf("x") == DeadReason::Exhausted);
+}
+
+TEST(Redrive, AHandlerMayRedriveAnotherDeadJobAndItRunsInTheSameAdvance) {
+  Fixture f;
+  f.add("dead", {Outcome::Fatal});
+  f.q->advanceTo(0);
+  IS(f.q->enqueueOutcome("healer", RetryPolicy{}, [&](int) {
+    f.log.push_back("healer");
+    IS(f.q->redrive("dead"), Ok);
+    return Outcome::Done;
+  }), Ok);
+  f.log.clear();
+  EXPECT_EQ(f.q->advanceTo(0), std::size_t(2));
+  EXPECT_EQ(f.order(), std::string("healer dead#1@0"));
+}
+1b:T6e3,#pragma once
+#include <cstddef>
+#include <string>
+
+#include "dead_letters.h"
+#include "job_book.h"
+#include "run_queue.h"
+#include "sim_clock.h"
+
+// Runs what is due. Each attempt leaves the run queue before its handler is called and the job is marked Running, so a
+// handler can enqueue or cancel anything while it runs. What the handler answers decides what happens to the job.
+class AttemptRunner {
+ public:
+  AttemptRunner(JobBook& book, RunQueue& queue, DeadLetters& dead, SimClock& clock)
+      : book_(book), queue_(queue), dead_(dead), clock_(clock) {}
+
+  std::size_t runDue(long long target) {
+    std::size_t ran = 0;
+    std::string id;
+    long long at = 0;
+    while (queue_.popDue(target, id, at)) {
+      clock_.set(at);
+      attempt(*book_.find(id));
+      ++ran;
+    }
+    clock_.set(target);
+    return ran;
+  }
+
+ private:
+  void attempt(JobRecord& job) {
+    job.state = jobq::State::Running;
+    const int number = ++job.attempts;
+    const auto handler = job.handler;
+    settle(job, (*handler)(number));
+  }
+
+  void settle(JobRecord& job, jobq::Outcome outcome) {
+    if (outcome == jobq::Outcome::Done) {
+      job.state = jobq::State::Succeeded;
+    } else if (outcome == jobq::Outcome::Fatal) {
+      bury(job, jobq::DeadReason::Fatal);
+    } else if (job.plan.exhausted(job.attempts)) {
+      bury(job, jobq::DeadReason::Exhausted);
+    } else {
+      job.state = jobq::State::Waiting;
+      job.at = clock_.now() + job.plan.delayAfter(job.attempts);
+      queue_.insert(job.id, job.at, job.rank);
+    }
+  }
+
+  void bury(JobRecord& job, jobq::DeadReason reason) {
+    job.state = jobq::State::Dead;
+    job.reason = reason;
+    dead_.add(job.id);
+  }
+
+  JobBook& book_;
+  RunQueue& queue_;
+  DeadLetters& dead_;
+  SimClock& clock_;
+};
+1c:T467,#pragma once
+#include <algorithm>
+#include <array>
+#include <memory>
+
+#include "api_storm1.h"
+
+// How long to wait after the n-th failed attempt (Strategy). The caller applies the cap.
+class BackoffRule {
+ public:
+  virtual ~BackoffRule() = default;
+  virtual long long delayAfter(int failedAttempts, long long base) const = 0;
+};
+
+class FixedBackoff : public BackoffRule {
+ public:
+  long long delayAfter(int, long long base) const override { return base; }
+};
+
+class LinearBackoff : public BackoffRule {
+ public:
+  long long delayAfter(int failedAttempts, long long base) const override { return base * failedAttempts; }
+};
+
+class ExponentialBackoff : public BackoffRule {
+ public:
+  long long delayAfter(int failedAttempts, long long base) const override { return base * (1LL << (failedAttempts - 1)); }
+};
+
+inline std::shared_ptr<const BackoffRule> makeRule(jobq::Backoff which) {
+  static const std::array<std::shared_ptr<const BackoffRule>, 3> table = {
+      std::make_shared<FixedBackoff>(), std::make_shared<LinearBackoff>(), std::make_shared<ExponentialBackoff>()};
+  return table[static_cast<std::size_t>(which)];
+}
+1d:Ta58,#pragma once
+#include <memory>
+#include <string>
+#include <utility>
+#include <vector>
+
+#include "api_storm2.h"
+#include "queue_queries.h"
+
+// The commands. The read side (every query) lives in QueueQueries, which owns the state.
+class QueueImpl : public QueueQueries {
+ public:
+  QueueImpl() : runner_(book_, queue_, dead_, clock_) {}
+
+  jobq::Status enqueue(const std::string& id, jobq::Handler handler) override {
+    return enqueueWith(id, jobq::RetryPolicy{}, std::move(handler));
+  }
+
+  jobq::Status enqueueWith(const std::string& id, const jobq::RetryPolicy& policy, jobq::Handler handler) override {
+    if (!handler) return checked(id, policy, nullptr);
+    auto outcome = [h = std::move(handler)](int attempt) { return h(attempt) ? jobq::Outcome::Done : jobq::Outcome::Retry; };
+    return checked(id, policy, std::move(outcome));
+  }
+
+  jobq::Status enqueueOutcome(const std::string& id, const jobq::RetryPolicy& policy, jobq::OutcomeHandler handler) override {
+    return checked(id, policy, std::move(handler));
+  }
+
+  jobq::Status cancel(const std::string& id) override {
+    JobRecord* job = book_.find(id);
+    if (!job) return jobq::Status::NotFound;
+    if (job->state != jobq::State::Waiting) return jobq::Status::NotWaiting;
+    queue_.remove(id);
+    job->state = jobq::State::Cancelled;
+    return jobq::Status::Ok;
+  }
+
+  jobq::Status redrive(const std::string& id) override {
+    JobRecord* job = book_.find(id);
+    if (!job) return jobq::Status::NotFound;
+    if (job->state != jobq::State::Dead) return jobq::Status::NotDead;
+    dead_.remove(id);
+    job->state = jobq::State::Waiting;
+    job->attempts = 0;
+    job->at = clock_.now();
+    job->rank = nextRank_++;
+    queue_.insert(id, job->at, job->rank);
+    return jobq::Status::Ok;
+  }
+
+  std::size_t advanceTo(long long time) override { return time < clock_.now() ? 0 : runner_.runDue(time); }
+
+ private:
+  jobq::Status checked(const std::string& id, const jobq::RetryPolicy& policy, jobq::OutcomeHandler handler) {
+    if (id.empty() || id.size() > jobq::kMaxIdLength) return jobq::Status::InvalidId;
+    if (!handler) return jobq::Status::InvalidHandler;
+    if (!RetryPlan::valid(policy)) return jobq::Status::InvalidPolicy;
+    if (book_.contains(id)) return jobq::Status::DuplicateId;
+    JobRecord job;
+    job.id = id;
+    job.plan = RetryPlan(policy);
+    job.handler = std::make_shared<const jobq::OutcomeHandler>(std::move(handler));
+    job.at = clock_.now();
+    job.rank = nextRank_++;
+    queue_.insert(id, job.at, job.rank);
+    book_.add(std::move(job));
+    return jobq::Status::Ok;
+  }
+
+  AttemptRunner runner_;
+  unsigned long nextRank_ = 0;
+};
+1e:T67a,#pragma once
+#include <string>
+#include <vector>
+
+#include "api_storm2.h"
+#include "attempt_runner.h"
+
+// The read side of the queue: it owns the state and answers every question about it without changing anything.
+// QueueImpl adds the commands on top.
+class QueueQueries : public jobq::DrainingQueue {
+ public:
+  long long now() const override { return clock_.now(); }
+  std::size_t waiting() const override { return book_.waiting(); }
+  std::vector<std::string> deadLetters() const override { return dead_.ids(); }
+
+  jobq::Status state(const std::string& id, jobq::State& out) const override {
+    const JobRecord* job = book_.find(id);
+    if (!job) return jobq::Status::NotFound;
+    out = job->state;
+    return jobq::Status::Ok;
+  }
+
+  jobq::Status attempts(const std::string& id, int& out) const override {
+    const JobRecord* job = book_.find(id);
+    if (!job) return jobq::Status::NotFound;
+    out = job->attempts;
+    return jobq::Status::Ok;
+  }
+
+  jobq::Status nextAttempt(const std::string& id, long long& at) const override {
+    const JobRecord* job = book_.find(id);
+    if (!job) return jobq::Status::NotFound;
+    if (job->state != jobq::State::Waiting) return jobq::Status::NotWaiting;
+    at = job->at;
+    return jobq::Status::Ok;
+  }
+
+  jobq::Status deadReason(const std::string& id, jobq::DeadReason& out) const override {
+    const JobRecord* job = book_.find(id);
+    if (!job) return jobq::Status::NotFound;
+    if (job->state != jobq::State::Dead) return jobq::Status::NotDead;
+    out = job->reason;
+    return jobq::Status::Ok;
+  }
+
+ protected:
+  SimClock clock_;
+  JobBook book_;
+  RunQueue queue_;
+  DeadLetters dead_;
+};
+1f:T483,#pragma once
+#include <map>
+#include <string>
+#include <tuple>
+#include <unordered_map>
+
+// The attempts that are due, in running order: (time, order of enqueueing), with an index by id so a job can be
+// removed. Holds only ids; the job's data lives in the JobBook.
+class RunQueue {
+ public:
+  void insert(const std::string& id, long long at, unsigned long rank) {
+    const Key key(at, rank);
+    index_[id] = key;
+    byOrder_[key] = id;
+  }
+
+  bool remove(const std::string& id) {
+    const auto it = index_.find(id);
+    if (it == index_.end()) return false;
+    byOrder_.erase(it->second);
+    index_.erase(it);
+    return true;
+  }
+
+  // Takes the first attempt out if it is due at `target`.
+  bool popDue(long long target, std::string& id, long long& at) {
+    if (byOrder_.empty() || byOrder_.begin()->first.first > target) return false;
+    at = byOrder_.begin()->first.first;
+    id = byOrder_.begin()->second;
+    index_.erase(id);
+    byOrder_.erase(byOrder_.begin());
+    return true;
+  }
+
+ private:
+  using Key = std::pair<long long, unsigned long>;
+
+  std::map<Key, std::string> byOrder_;
+  std::unordered_map<std::string, Key> index_;
+};
+f:[["children",{"s":"__PAGE__","h":160,"d":{"r":["$","$1","c",{"children":[["$","$L12",null,{"bundle":{"id":"job-queue","title":"Job queue with retries and a dead-letter queue","level":"Senior","parMinutes":75,"patterns":["Strategy","State","Observer"],"requirements":[{"id":"R-enqueue","text":"An id is 1 to 32 characters and is never reused: it stays taken after the job succeeded, died or was cancelled. Check order: InvalidId, InvalidHandler (empty function), DuplicateId. A refused call changes nothing.","phase":"base","hidden":true},{"id":"R-order","text":"Attempts run earlier time first; at the same time the job that was enqueued first runs first (FIFO, not by id), and a retry keeps its job's place. A handler may enqueue jobs (due at now()) and cancel other waiting jobs, and new due work runs in the same advance.","phase":"base","hidden":true},{"id":"R-time","text":"Time is simulated ticks starting at 0 and moving only through advanceTo(t). advanceTo(t) runs every attempt due at a time <= t, then sets now() to t; inside an attempt now() is that attempt's own time. An earlier t does nothing and returns 0. The result is the number of attempts that ran.","phase":"base","hidden":true},{"id":"R-retry","text":"A handler returns false for a failure and gets the attempt number (1, 2, ...). After a failed attempt n (n < 5) the next attempt is due 10 * 2^(n-1) ticks after the failed attempt's own time (10, 20, 40, 80), not after the advance target. The 5th failure makes the job Dead, and its id is appended to the dead-letter queue in the order of death.","phase":"base","hidden":true},{"id":"R-cancel","text":"Only a Waiting job can be cancelled (Ok); NotFound for an unknown id, NotWaiting for any other known job (Running, Succeeded, Dead, Cancelled). state(), attempts() (attempts started) and nextAttempt() (only while Waiting) describe the live job; waiting() counts Waiting jobs.","phase":"base","hidden":true},{"id":"R-policy","text":"enqueueWith(id, RetryPolicy{maxAttempts 1..20, Fixed|Linear|Exponential, base 1..10^6, cap base..10^9}, handler): delay(n) is base, base*n or base*2^(n-1), never more than cap; the job dies when attempt maxAttempts fails. Check order InvalidId, InvalidHandler, InvalidPolicy, DuplicateId. The policy belongs to that job alone and enqueue() uses the default (5 attempts, exponential from 10).","phase":"storm1","hidden":true},{"id":"R-outcome","text":"enqueueOutcome with a handler that returns Done, Retry or Fatal. Fatal makes the job Dead at once with DeadReason::Fatal, however many attempts are left, even on the last attempt; a job that runs out of attempts is Dead with DeadReason::Exhausted. deadReason() is Ok only for a Dead job (NotFound unknown, NotDead otherwise). A bool handler is Done or Retry.","phase":"storm2","hidden":true},{"id":"R-redrive","text":"redrive(id) turns a Dead job back into Waiting with its first attempt due at now(), the attempt count reset to 0, the same handler and policy, and a NEW place in the FIFO order (behind everything already enqueued). It leaves the dead-letter queue at once; the others keep their order. NotFound for an unknown id, NotDead for any job that is not Dead.","phase":"storm2","hidden":true}],"brief":"$13","editorial":"$14","clarify":[{"id":"q-enqueue","text":"What is a valid id and handler? What errors are there, in which order are they checked, and can an id be used again after the job is finished?","answer":"An id is 1 to 32 characters. Statuses: InvalidId, InvalidHandler (an empty std::function), DuplicateId, checked in that order, and a refused call changes nothing. An id is never reused: it stays taken after the job succeeded, died or was cancelled, so a caller can always ask what became of it.","reveals":["R-enqueue"],"quality":"essential"},{"id":"q-order","text":"When several attempts are due, in what order do they run? Does a retry go to the back of the line? May a handler enqueue more jobs?","answer":"Earlier time first. At the same time, the job that was enqueued first runs first (first come, first served, not alphabetical by id). A retry keeps the place its job was given when it was enqueued; it does not queue behind newer jobs. A handler may call enqueue and cancel on the same queue: a job it enqueues is due at now() and runs in the same advance, behind whatever is already due at that tick.","reveals":["R-order"],"quality":"essential"},{"id":"q-time","text":"How does time work? Who moves it, what does 'due' mean exactly, and what is now() while a handler runs?","answer":"Simulated ticks starting at 0, moved only by advanceTo(t). An attempt is due when its time is at most t, so one at exactly t runs. After the call now() is t. Inside a handler, now() is the time of that attempt, not t. An advanceTo with an earlier time does nothing and returns 0. The result is the number of attempts that ran, retries included.","reveals":["R-time"],"quality":"essential"},{"id":"q-retry","text":"How many attempts does a job get, how long is the wait after each failure, and measured from when? What does the handler return, and what does it see?","answer":"A handler returns true for done and false for failed, and it is told the attempt number (1 for the first). A job gets 5 attempts. After the n-th failure the next attempt is due 10 * 2^(n-1) ticks later: 10, 20, 40, 80. The wait is measured from the time of the attempt that failed, not from the target of advanceTo, so a long jump does not shorten or stretch it. The failure of the 5th attempt kills the job.","reveals":["R-retry"],"quality":"essential"},{"id":"q-dead","text":"What happens to a job after its last failed attempt? Is it deleted? Can I see it?","answer":"It is kept, not deleted. Its state becomes Dead, it leaves the run queue for good, and its id is appended to the dead-letter queue. deadLetters() returns the ids in the order they died, oldest first. Nothing happens to it after that unless a later interface says so.","reveals":["R-retry"],"quality":"essential"},{"id":"q-cancel","text":"Can a job be cancelled? What can I ask about a job, and what do the queries return for a job that is not waiting?","answer":"Only a Waiting job can be cancelled (its first attempt or a retry is pending): it becomes Cancelled and never runs. NotFound for an unknown id, NotWaiting for a known job that is Running, Succeeded, Dead or Cancelled. The states are Waiting, Running, Succeeded, Dead and Cancelled. state() and attempts() work for any known id (attempts counts attempts that have started, the current one included), nextAttempt() answers only for a Waiting job, and waiting() counts the Waiting jobs.","reveals":["R-cancel"],"quality":"essential"},{"id":"q-policy-later","text":"Will every job use the same retry schedule? Some jobs are cheap to retry and some are not.","answer":"Plan for it: the next requirement will ask for a retry policy per job (how many attempts, which kind of backoff, a base delay and a cap on any single delay). The schedule should be data the queue looks up for the job, not constants spread through the running loop. Say how your design would carry that.","reveals":["R-policy"],"quality":"useful"},{"id":"q-fatal-later","text":"Are all failures worth retrying? What about a message that is simply malformed, or a dead job that someone has fixed the cause of?","answer":"No, and a follow-up will ask: the handler may say that a failure is final, which kills the job at once whatever attempts are left, and dead jobs may be sent back to run again with a fresh budget. Say how your design would carry that; in particular, what the handler returns today and how that would grow.","reveals":["R-outcome","R-redrive"],"quality":"useful"},{"id":"q-throw","text":"What if a handler throws an exception, or runs for a very long time?","answer":"Handlers must not throw, and they run on the caller's thread, so a slow handler delays everything after it. Say what you would change (catch and treat as a failure, a worker pool, a timeout with a lease), but the tests do none of it.","reveals":[],"quality":"useful"},{"id":"q-limits","text":"How many jobs, and should I worry about threads or performance?","answer":"A few thousand jobs, and no threads. Finding the next attempt must not be a scan of everything: an ordered structure is expected. Say what you would change for millions of jobs and for several worker threads.","reveals":[],"quality":"useful"},{"id":"q-persist","text":"Should jobs survive a restart, with a database or a broker behind them?","answer":"No. Everything is in memory. Durable queues (a table of jobs, leases, at-least-once delivery) are a system design question and come up in the follow-ups.","reveals":[],"quality":"noise"},{"id":"q-jitter","text":"Should the delay have random jitter so that many jobs do not retry together?","answer":"Not here: tests need exact ticks, so the schedule is deterministic. Jitter is the right answer in production and a good follow-up; it would be one more rule in the backoff, fed by an injected random source.","reveals":[],"quality":"noise"},{"id":"q-wall","text":"Should it use the system clock and sleep until the next attempt?","answer":"No, never inside the queue: time is an argument. A real driver would call advanceTo(clock.now()) in a loop.","reveals":[],"quality":"noise"},{"id":"q-priority","text":"Do jobs have priorities, queue names or delays before the first attempt?","answer":"No. The first attempt is due when the job is enqueued. Priorities and named queues are a different problem.","reveals":[],"quality":"noise"}],"rubric":[{"id":"res-facade","text":"Exposes the public calls and sequences the collaborators: validate the arguments in the documented order, assign the enqueue rank, record the job, put its first attempt in the run queue, delegate running to the runner","phase":"base","owners":["QueueImpl","QueueQueries","JobQueue","Queue","QueueService","JobService","QueueFacade"]},{"id":"res-clock","text":"Owns the simulated time and keeps it separate from the queue","phase":"base","owners":["SimClock","Clock","SimulatedClock","ManualClock","FakeClock","TimeSource"]},{"id":"res-queue","text":"Keeps the due attempts in running order (time, then enqueue order) together with the index by id, and updates both in single operations (insert, remove, pop the next due one)","phase":"base","owners":["RunQueue","AttemptQueue","DueQueue","Timeline","ScheduleQueue","PendingQueue","DelayQueue"]},{"id":"res-book","text":"Remembers every job ever enqueued by id (handler, state, attempts, rank), so ids are never reused and queries work for finished jobs","phase":"base","owners":["JobBook","JobStore","JobRegistry","JobLedger","JobTable","Jobs","JobRepository"]},{"id":"res-runner","text":"Runs what is due in order from the live queue, one attempt at a time, setting the clock for each and marking the job Running, so handlers can enqueue and cancel while running","phase":"base","owners":["AttemptRunner","Dispatcher","Worker","JobRunner","Executor","RunLoop","Runner"]},{"id":"res-dead","text":"Keeps the dead-letter queue: the ids of dead jobs in the order they died","phase":"base","owners":["DeadLetters","DeadLetterQueue","Dlq","Graveyard","DeadJobs","DeadLetterBox"]},{"id":"res-backoff","text":"Decides the wait after each failure, per job and as its own Strategy (fixed, linear, exponential, with a cap), so adding a rule touches no existing one","phase":"storm1","owners":["BackoffRule","BackoffPolicy","BackoffStrategy","RetryPlan","RetryPolicy","DelayStrategy","RetryStrategy"]},{"id":"res-outcome","text":"Turns the handler's answer into the job's next state (done, retry, dead) in one place, so a new kind of answer is one new branch there and nothing else changes","phase":"storm2","owners":["AttemptRunner","OutcomeHandler","OutcomePolicy","Settler","OutcomeSettler","Dispatcher","JobRunner"]}],"followups":[{"level":"SDE2","question":"Why keep a record of every job, even finished ones, instead of deleting a job when it succeeds?","answer":"Because the contract says an id is never reused and callers can ask what became of a job. A job that is erased on success makes a second enqueue under the same id look legitimate, and a duplicate submission (a client that retried its own request) would run the work twice. The record is also where state, attempts and the dead-letter reason live. The cost is memory that grows with every job ever seen; the production answer is to expire records after a retention period and to say so in the contract."},{"level":"SDE2","question":"Why measure the retry delay from the failed attempt's own time and not from the time advanceTo was asked to reach?","answer":"The target is how far the caller jumped, which says nothing about when the failure happened. If the process slept for an hour and then advanced, a delay measured from the target would push every retry an hour into the future, and two jobs that failed at different ticks would be retried at the same moment. Inside the loop now() is the attempt's time, so 'now plus the delay' is the correct and the simplest thing; the queue also stays correct if the caller advances in many small steps or one big one."},{"level":"SDE2","question":"How do you keep first come, first served among equal times, and why does a retry keep its rank?","answer":"A counter handed out when the job is enqueued and used as the second part of the ordering key. A retry that took a fresh number would queue behind everything enqueued since, so a job that failed once would lose its place to newer work at the same tick; keeping the rank means the order depends only on when jobs arrived. Wall-clock timestamps tie and can step backwards, so they cannot give this order."},{"level":"Senior","question":"Why does the runner take an attempt out of the queue and mark the job Running before it calls the handler?","answer":"Because the handler may call the queue. With the entry still inside, cancelling itself would race with the loop and an insert could invalidate an iterator the loop holds. Taking it out first, and recording Running, means the queue and the book are consistent whenever user code runs, a handler asking about its own job sees the truth, and cancel answers NotWaiting for it. The loop never holds an iterator across a call into user code."},{"level":"Senior","question":"Exponential backoff without jitter: what goes wrong in production, and how would you add jitter here?","answer":"When a dependency fails, every job fails at about the same time, so every job retries at the same ticks, 10, 20, 40 later, and the recovering dependency is hit by synchronised waves (a thundering herd). Jitter spreads the waves: 'full jitter' picks a random delay between 0 and the capped exponential value; 'equal jitter' keeps half and randomises half. In this design it is one more BackoffRule that takes an injected random source, so the tests stay exact by using a seeded or fixed source, and the runner is unchanged. The cap matters as much as the jitter: without it the delay grows without bound."},{"level":"Senior","question":"What is a poison message, and how do fatal outcomes and the dead-letter queue deal with it?","answer":"A job that can never succeed (malformed input, a bug in the handler for that input). Retrying it wastes capacity and delays everything behind it, and with at-least-once delivery it can come back for ever. A Fatal outcome lets the handler say 'do not retry me', which sends the job to the dead-letter queue at once with a reason; exhausted jobs get the other reason, so an operator can tell 'transient failure that never cleared' from 'bad input'. The dead-letter queue also needs alerting and an owner, or it becomes a place where jobs are quietly forgotten."},{"level":"Senior","question":"What are the risks of redriving dead jobs, and why does redrive reset the attempt count and the queue position?","answer":"The cause may not be fixed, so a bulk redrive recreates the load that killed the jobs, possibly all at once; redrive in small batches, behind a rate limit. The handler may not be idempotent, so a job that did half of its work before failing will do it again. Resetting attempts gives the job a fresh budget, otherwise it would die on its first failure; a new place in the FIFO order means redriven work does not jump ahead of jobs that arrived while it was dead."},{"level":"Senior","question":"Retry budgets and circuit breakers: where do they fit?","answer":"Per-job backoff protects nobody when a dependency is down for everyone: 10,000 jobs each retrying 5 times is 50,000 calls to a service that is already struggling. A retry budget caps retries as a fraction of normal traffic (say 10%) across the queue, and a circuit breaker stops calling at all after a run of failures, then probes. In this design both would sit beside the backoff rule as another collaborator the runner asks before calling the handler ('may I run this now?'), which is why the runner must stay a small loop with the decisions injected."},{"level":"Staff","question":"At-least-once versus exactly-once: what does a real queue promise, and what must the handler do?","answer":"A durable queue can promise at-least-once delivery: a job is removed only after the handler reports success, so a crash between 'work done' and 'acknowledged' means the job runs again. Exactly-once effects come from idempotent handlers: an idempotency key (the job id plus anything that identifies the effect) stored with the effect, so a repeat is recognised and skipped. Retries in this problem make that real, since a handler that failed after doing part of its work will be called again with a higher attempt number."},{"level":"Staff","question":"Design the same queue as a durable service with several workers: visibility timeouts, leases and ordering.","answer":"Store jobs in a table or log ordered by due time. A worker claims a due job by setting a lease (a visibility timeout) in the same transaction, runs the handler and then marks it done, or records the failure and the next due time. If the worker dies the lease expires and another worker claims the job, which is at-least-once again. Choose the timeout longer than the handler's normal runtime, or extend it with heartbeats, or two workers run the same job. Strict FIFO and parallel workers conflict: you get ordering per key (partition by key) and head-of-line blocking if one slow job holds a partition, so say which one the business needs. The dead-letter queue is a second table or queue with the failure reason and last error, and redrive is a controlled copy back, rate-limited."},{"level":"Staff","question":"What changes if the queue is called from many threads?","answer":"The run queue, the book and the dead-letter list need one mutex, held only while popping, inserting and changing state, never while a handler runs. Workers pop an attempt and run it in parallel, so the guarantee becomes 'attempts start in this order', not finish in it, and two attempts of one job must never overlap (the job is Running and not in the queue, which gives that for free). The clock stops being a simple number: use a monotonic source, and decide whether 'now' inside a handler is the scheduled time or the real one. Cancel of a Running job has to say what it means: a flag the handler may check, never a forced stop."}],"apiHeader":"$15","phaseApis":{"storm1":"$16","storm2":"$17"},"phases":["base","storm1","storm2"],"tests":{"base":[{"path":"jq_base.cpp","content":"$18"}],"storm1":[{"path":"jq_storm1.cpp","content":"$19"}],"storm2":[{"path":"jq_storm2.cpp","content":"$1a"}]},"reference":[{"path":"attempt_runner.h","content":"$1b"},{"path":"backoff_rule.h","content":"$1c"},{"path":"dead_letters.h","content":"#pragma once\n#include <algorithm>\n#include <string>\n#include <vector>\n\n// The ids of dead jobs, oldest death first.\nclass DeadLetters {\n public:\n  void add(const std::string& id) { ids_.push_back(id); }\n  void remove(const std::string& id) { ids_.erase(std::remove(ids_.begin(), ids_.end(), id), ids_.end()); }\n  const std::vector<std::string>& ids() const { return ids_; }\n\n private:\n  std::vector<std::string> ids_;\n};\n"},{"path":"job_book.h","content":"#pragma once\n#include <string>\n#include <unordered_map>\n\n#include \"job_record.h\"\n\n// Every job ever enqueued, by id. Records never move, so a reference stays valid while handlers add more jobs.\nclass JobBook {\n public:\n  bool contains(const std::string& id) const { return jobs_.count(id) > 0; }\n\n  JobRecord& add(JobRecord record) {\n    const std::string id = record.id;\n    return jobs_[id] = std::move(record);\n  }\n\n  JobRecord* find(const std::string& id) {\n    const auto it = jobs_.find(id);\n    return it == jobs_.end() ? nullptr : &it->second;\n  }\n\n  const JobRecord* find(const std::string& id) const {\n    const auto it = jobs_.find(id);\n    return it == jobs_.end() ? nullptr : &it->second;\n  }\n\n  std::size_t waiting() const {\n    std::size_t n = 0;\n    for (const auto& entry : jobs_) n += entry.second.state == jobq::State::Waiting ? 1 : 0;\n    return n;\n  }\n\n private:\n  std::unordered_map<std::string, JobRecord> jobs_;\n};\n"},{"path":"job_record.h","content":"#pragma once\n#include <memory>\n#include <string>\n\n#include \"retry_plan.h\"\n\n// One job, for ever: the handler and plan it was enqueued with, and where it is in its life.\nstruct JobRecord {\n  std::string id;\n  RetryPlan plan;\n  std::shared_ptr<const jobq::OutcomeHandler> handler;\n  jobq::State state = jobq::State::Waiting;\n  jobq::DeadReason reason = jobq::DeadReason::Exhausted;  // meaningful only while Dead\n  int attempts = 0;\n  long long at = 0;       // when the next attempt is due (meaningful only while Waiting)\n  unsigned long rank = 0; // the order of enqueueing; a retry keeps its rank\n};\n"},{"path":"queue_impl.h","content":"$1d"},{"path":"queue_queries.h","content":"$1e"},{"path":"retry_plan.h","content":"#pragma once\n#include <algorithm>\n#include <memory>\n\n#include \"backoff_rule.h\"\n\n// One job's retry rules: how many attempts, and how long to wait between them (a rule, a base and a cap).\nclass RetryPlan {\n public:\n  RetryPlan() : RetryPlan(jobq::RetryPolicy{}) {}\n  explicit RetryPlan(const jobq::RetryPolicy& p)\n      : maxAttempts_(p.maxAttempts), rule_(makeRule(p.backoff)), base_(p.base), cap_(p.cap) {}\n\n  static bool valid(const jobq::RetryPolicy& p) {\n    return p.maxAttempts >= 1 && p.maxAttempts <= jobq::kMaxPolicyAttempts && p.base >= 1 && p.base <= jobq::kMaxBaseDelay &&\n           p.cap >= p.base && p.cap <= jobq::kMaxDelayCap;\n  }\n\n  bool exhausted(int attemptsMade) const { return attemptsMade >= maxAttempts_; }\n  long long delayAfter(int failedAttempts) const { return std::min(cap_, rule_->delayAfter(failedAttempts, base_)); }\n\n private:\n  int maxAttempts_;\n  std::shared_ptr<const BackoffRule> rule_;\n  long long base_;\n  long long cap_;\n};\n"},{"path":"run_queue.h","content":"$1f"},{"path":"service.cpp","content":"#include \"queue_impl.h\"\n\nstd::unique_ptr<jobq::Queue> jobq::makeQueue() { return std::make_unique<QueueImpl>(); }\n\nstd::unique_ptr<jobq::PolicyQueue> jobq::makePolicyQueue() { return std::make_unique<QueueImpl>(); }\n\nstd::unique_ptr<jobq::DrainingQueue> jobq::makeDrainingQueue() { return std::make_unique<QueueImpl>(); }\n"},{"path":"sim_clock.h","content":"#pragma once\n\n// The queue's idea of \"now\": simulated ticks that only move when told to.\nclass SimClock {\n public:\n  long long now() const { return now_; }\n  void set(long long time) { now_ = time; }\n\n private:\n  long long now_ = 0;\n};\n"}],"driver":{"path":"driver.cpp","content":"#define BP_TEST_MAIN\n#include \"bp_test.h\"\n","readOnly":true}}}],["$L20","$L21"],"$L22"]}],"p":"$@23","v":null,"s":"$9"}}]]
+d:[["children",{"s":{"n":"id","t":"d","k":"job-queue","s":[]},"h":65632,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}]}]]}],"p":"$@e","v":"$c","s":"$9"},"c":"$Qf"}]]
+a:[["children",{"s":"workshop","h":131168,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}]}]]}],"p":"$@b","v":"$c","s":"$9"},"c":"$Qd"}]]
+0:{"t":{"t":{"s":"","h":131152,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/1klm1scec-3x5.css","precedence":"next"}],["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js","async":true}]],["$","html",null,{"lang":"en","className":"r7opxW_variable auY9QW_variable u-EJdW_variable h-full","children":["$","body",null,{"className":"min-h-full","children":[["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}],"notFound":[["$","main",null,{"className":"flex min-h-dvh flex-col items-center justify-center gap-4 px-4 text-center","children":[["$","div",null,{"className":"font-display text-5xl text-[var(--accent)]","children":"404"}],["$","p",null,{"className":"text-white/60","children":"This room is not on the blueprint yet."}],["$","$L6",null,{"href":"/","className":"text-sm text-white/80 underline","children":"Back to the title screen"}]]}],[]]}],["$","$L7",null,{}]]}]}]]}],"p":"$@8","v":null,"s":"$9"},"c":"$Qa"},"h":{"r":["$","$1","h",{"children":[null,["$","$L25",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1, viewport-fit=cover"}],["$","meta","2",{"name":"theme-color","content":"#0a1530"}]]}],["$","$L27",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$28",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"Job queue with retries and a dead-letter queue: Blueprint Clash"}],["$","meta","1",{"name":"description","content":"A creature-tactics RPG that teaches low-level design in C++ and high-level system design, from fundamentals to big-tech interview level."}],["$","link","2",{"rel":"manifest","href":"/blueprint-clash/manifest.webmanifest"}],["$","meta","3",{"name":"mobile-web-app-capable","content":"yes"}],["$","meta","4",{"name":"apple-mobile-web-app-title","content":"Blueprint Clash"}],["$","meta","5",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","link","6",{"rel":"icon","href":"/blueprint-clash/icon.png?icon.27re_xscs-jmw.png","sizes":"256x256","type":"image/png"}],["$","link","7",{"rel":"apple-touch-icon","href":"/blueprint-clash/apple-icon.png?apple-icon.2rac1w0yc3rju.png","sizes":"180x180","type":"image/png"}],["$","$L29","8",{}]]}]}],null]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"p":"$@2a","v":null,"s":"$9"}},"a":"$@2b","u":"$@2c","b":"2AOMJw3uqOQQQZHGX3CKn"}
+2d:I[97367,["$2"],"OutletBoundary"]
+20:["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/2uk3wcjwqg0tl.js","async":true}]
+21:["$","script","script-1",{"src":"/blueprint-clash/_next/static/chunks/1zdu7yjl8efu4.js","async":true}]
+22:["$","$L2d",null,{"children":["$","$28",null,{"name":"Next.MetadataOutlet","children":"$@2e"}]}]
+9:300
+2e:null
+2c:true
+9:C
+2b:0
+e:"$undefined"
+b:"$undefined"
+8:"$undefined"
+2a:"$undefined"
+23:"$undefined"

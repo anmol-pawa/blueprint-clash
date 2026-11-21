@@ -1,0 +1,1041 @@
+1:"$Sreact.fragment"
+2:"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js"
+3:I[39756,["$2"],"default"]
+4:I[37457,["$2"],"default"]
+5:"/blueprint-clash/_next/static/chunks/2n5qeheznvl4u.js"
+6:I[22016,["$2","$5"],""]
+7:I[64576,["$2"],"PwaRegister"]
+10:"/blueprint-clash/_next/static/chunks/2uk3wcjwqg0tl.js"
+11:"/blueprint-clash/_next/static/chunks/1zdu7yjl8efu4.js"
+12:I[65612,["$2","$10","$11"],"WorkshopClient"]
+20:"ViewportBoundary"
+21:I[97367,["$2"],"$20"]
+22:"MetadataBoundary"
+23:I[97367,["$2"],"$22"]
+24:"$Sreact.suspense"
+25:I[27201,["$2"],"IconMark"]
+:HL["/blueprint-clash/_next/static/chunks/1klm1scec-3x5.css","style"]
+9:X
+c:X
+c:C
+13:T4dc,# Payment processor with retries and idempotency keys
+
+You are writing the payment core of a small marketplace. Checkout calls it to charge a card through a remote payment gateway. The network is unreliable, clients press the button twice, and mobile apps resend requests whose answers were lost. A customer must never be charged twice for one purchase, and must never be told "failed" for money that was taken.
+
+What you know so far:
+
+- Checkout sends a request to charge a card for an amount, with a key chosen by the caller.
+- The gateway is a remote service. It sometimes answers "approved", sometimes "declined", and sometimes fails for reasons that have nothing to do with the card.
+- The same request may arrive more than once.
+- Approved payments are recorded and can be looked up.
+
+Your task: design and implement it behind the `pay::Processor` interface in `api.h`. The gateway is supplied by the caller (the tests script it). The hidden tests call only that interface. Ask the interviewer questions first: the brief is deliberately incomplete, and "what exactly counts as the same request, and which answers do we remember?" is where most first drafts go wrong. Expect refunds and key expiry to be asked for after you have finished.
+14:T1be2,# Editorial: Payment processor with retries and idempotency keys
+
+## Requirements
+Functional: charge a card through a remote gateway for an amount in whole cents; record approved payments with an id; make every call safe to repeat; retry what is worth retrying; refund; forget keys after a while.
+
+Hidden in the brief and revealed by good questions: a request is a key, a card and an amount, and validation comes first and records nothing; the same key with the same request is a repeat and returns the earlier answer without calling the gateway; the same key with a different request is a conflict; approved and declined are both final answers and are replayed; only a temporary error is retried (at most 3 calls, same key every time); a request that never got an answer (GaveUp) is not recorded and leaves the key free.
+
+**Change Storm 1, refunds:** `refund(key, id, amount)` with partial refunds, a cap on the total, the same replay and retry rules, and one key namespace for payments and refunds. A repeat is replayed even when the cap has been reached since.
+
+**Change Storm 2, expiry:** `makeExpiringProcessor(gateway, clock, ttl)`: an answer is remembered for exactly `ttl` seconds from when it was recorded; replays do not extend it; an expired key behaves as if it was never used.
+
+## Reference design
+- `ProcessorImpl` is the facade. It validates in the documented order, asks the key book whether this is a repeat, calls the gateway through the retry policy and records the outcome. It holds no rule about what "the same request" means or how many attempts are allowed.
+- `RequestShape` is a value: kind, target (card for a payment, payment id for a refund) and amount, compared in one place. It is what turns a reused key on a different purchase into a loud `KeyConflict`.
+- `KeyBook` remembers the final answer to every request by key, for payments and refunds alike, and answers one question: fresh, replay or conflict.
+- `Lifetime` is the Strategy for how long an answer counts: `NoExpiry` and `TtlLifetime`. The key book never reads a clock; it asks the lifetime for a stamp when it records and whether a stamp has expired when it looks.
+- `Retrier` repeats a call while the gateway says "temporary", at most `kMaxAttempts` calls. It knows nothing about payments, keys or ledgers.
+- `PaymentLedger` records approved payments, issues ids and totals the refunds of each.
+- `ChargeOnlyGateway` is an Adapter so the processor talks to one gateway type: a plain `Gateway` is wrapped so that any refund is declined.
+
+**Storm 1 in the reference:** `ProcessorImpl::refund` is new and `PaymentLedger` gains a refunded total per payment. The key book, the retrier and the fingerprint are reused unchanged, because they were never specific to payments. That is what the storm tests.
+
+**Storm 2 in the reference:** `TtlLifetime` and one factory are new. `KeyBook` already asked a `Lifetime` instead of reading time, so nothing in the facade changes.
+
+## Alternatives
+- **Remember only approvals.** Simple, and wrong: a declined request goes back to the gateway on a repeat and may be approved the second time, against what the customer was told.
+- **Remember every outcome, GaveUp included.** The caller's own retry then replays the failure forever. "We do not know" must leave the key free.
+- **Key only, no request shape.** The first draft of most candidates. It treats a client bug (one key for two purchases) as a successful replay. Comparing the shape costs one small value type.
+- **A different key per retry at the gateway.** Looks tidy and defeats the point: a timeout may arrive after the gateway took the money, and only the same key makes the repeat safe.
+- **Retry loops inside `pay()` and again inside `refund()`.** Two copies drift. The usual drift is a different attempt count.
+- **Subclass per operation (`PayHandler`, `RefundHandler`) with a base class that does the replay.** Fine if the base owns the key logic once; a hierarchy that copies it is worse than two methods.
+- **Idempotency in a database unique constraint on the key.** The right production answer for concurrency; the in-memory model here shows the rules it must enforce (shape, answer, lifetime). Say both.
+- **Floating point for amounts.** Whole cents in a 64-bit integer. Never floats for money.
+
+## Trade-offs
+Replaying a decline saves a gateway call and gives the customer one consistent answer, at the cost that a card that is topped up a minute later still sees the old decline until the key is new. Callers are told to use a new key for a new attempt after a decline; the docs of any idempotent API say so.
+
+Retrying at once is the simplest correct rule and is wrong for production: synchronized retries turn a gateway blip into an outage. Real systems wait with exponential backoff and jitter, under a deadline and a retry budget; the `Retrier` is the one class that changes.
+
+Expiry bounds storage and costs correctness at the edge: a very late repeat is processed as a new request, which for a refund means money moves twice. Pick the window longer than any sane client retry and give high-value operations a second, permanent guard (a business-level unique constraint).
+
+The key book holds the whole record in memory. Production keeps it in a consistent store with a TTL and claims the key before calling the gateway.
+
+## What breaks at 10x
+The in-memory key book is one map and one process: at ten times the load it is the first thing that needs to be a store. The hazard is not speed but concurrency: two requests with one key arriving together both see "fresh" and both charge. The fix is an atomic claim of the key (conditional insert with the request shape and an "in progress" marker), with a timeout so a crashed worker does not block the key forever, and a defined response for the loser (wait, or "in progress, retry"). Retries amplify load exactly when the gateway is slow, so cap them with a budget and add a circuit breaker. The ledger needs a per-payment lock or a conditional write on the refunded total so concurrent refunds cannot jointly exceed the payment. Reconcile with the gateway's settlement report: the processor and the gateway can disagree after a crash between the gateway call and the record.
+
+## Level signals
+- **SDE2:** validates first, retries only temporary errors with a bounded count, keeps the same key on every attempt, replays a repeated request without calling the gateway, and refuses a reused key for a different request.
+- **Senior:** separates the key book, the retry policy and the ledger with one reason to change each; records final answers only and says why GaveUp is not one; writes "same request" once as a value; reuses the same machinery for refunds without copying; names the concurrent-claim hazard and the timeout-after-charge hazard.
+- **Staff:** treats the payment as a persisted state machine so a crashed worker can resume; sends keys downstream and reconciles with settlement files; designs retry budgets, jittered backoff, circuit breakers and gateway failover; explains what expiry costs and adds a permanent business-level guard for refunds; says which anomalies page a human.
+15:Tc4d,#pragma once
+// Public API for the Payment processor problem. The hidden tests only use what is declared here.
+// You implement pay::makeProcessor() (in any of your .cpp files); everything behind it is your design.
+#include <memory>
+#include <optional>
+#include <string>
+
+namespace pay {
+
+using Money = long long;  // whole cents
+using PaymentId = long long;
+constexpr PaymentId kNoPayment = 0;  // ids that are issued are always positive and never reused
+
+constexpr Money kMaxAmount = 100000000;  // cents per payment
+constexpr int kMaxAttempts = 3;          // most gateway calls one request may make
+
+// What a payment gateway answers to one call.
+enum class Reply {
+  Approved,
+  Declined,        // the card was refused: a final answer
+  TemporaryError,  // timeout, overload, "try again": says nothing about the card
+};
+
+// The remote payment gateway. The caller supplies it (the tests script it). `key` is the request's idempotency key: a
+// real gateway that remembers keys will not charge twice for one key, so every attempt of one request must carry the
+// same key.
+class Gateway {
+ public:
+  virtual ~Gateway() = default;
+  virtual Reply charge(const std::string& key, const std::string& card, Money amount) = 0;
+};
+
+enum class Status {
+  Ok,              // approved now, or an earlier approval replayed
+  Declined,        // the card was refused now, or an earlier refusal replayed
+  GaveUp,          // every attempt got a temporary error; nothing was recorded and the key is still free
+  InvalidRequest,  // empty key, empty card, or an amount outside 1..kMaxAmount
+  KeyConflict,     // the key was already used for a different request
+};
+
+struct PayResult {
+  Status status = Status::Ok;
+  PaymentId id = kNoPayment;  // kNoPayment unless status is Ok
+  bool replayed = false;      // true when the answer came from an earlier call with the same key
+};
+
+struct Payment {
+  std::string card;
+  Money amount = 0;
+};
+
+// Takes payments through a gateway. Retrying a call with the same key is always safe.
+class Processor {
+ public:
+  virtual ~Processor() = default;
+
+  // Charges `card` for `amount`. Checks, in order:
+  //  1. InvalidRequest (empty key, empty card, amount outside 1..kMaxAmount). Nothing is recorded.
+  //  2. The key. If it was used before for a different card or amount: KeyConflict. If it was used before for this same
+  //     request: the earlier answer is returned with replayed = true and the gateway is NOT called.
+  //  3. A fresh request calls the gateway. A TemporaryError is retried, at most kMaxAttempts calls in all, each with the
+  //     same key. Approved: a new payment id is issued. Declined: no retry, no id. Still a TemporaryError after the last
+  //     attempt: GaveUp.
+  // Approved and Declined are recorded under the key and replayed later. GaveUp is not: the key stays free.
+  virtual PayResult pay(const std::string& key, const std::string& card, Money amount) = 0;
+
+  // The payment with this id; empty for an id that was never issued.
+  virtual std::optional<Payment> payment(PaymentId id) const = 0;
+};
+
+std::unique_ptr<Processor> makeProcessor(Gateway& gateway);
+
+}  // namespace pay
+16:T78b,#pragma once
+// Change Storm 1 adds refunds. Everything from api.h still holds.
+#include "api.h"
+
+namespace pay {
+
+enum class RefundStatus {
+  Ok,
+  Declined,
+  GaveUp,
+  InvalidRequest,   // empty key, or an amount below 1
+  UnknownPayment,   // no payment with that id
+  KeyConflict,      // the key was used before (for a payment or a refund) for a different request
+  ExceedsPayment,   // this refund would take the total refunded above what the payment charged
+};
+
+struct RefundResult {
+  RefundStatus status = RefundStatus::Ok;
+  bool replayed = false;
+};
+
+// A gateway that can also give money back. The tests script it.
+class RefundGateway : public Gateway {
+ public:
+  virtual Reply refund(const std::string& key, const std::string& card, Money amount) = 0;
+};
+
+class RefundingProcessor : public Processor {
+ public:
+  // Gives `amount` of payment `id` back. Checks, in order:
+  //  1. InvalidRequest (empty key, amount < 1).
+  //  2. UnknownPayment.
+  //  3. The key, exactly as for pay(). Keys of payments and refunds are ONE namespace: a key used for a payment is a
+  //     KeyConflict for any refund and the other way round. The same refund again is replayed (replayed = true) with no
+  //     gateway call, and it is replayed whatever has happened to the payment since.
+  //  4. ExceedsPayment if `amount` is more than what the payment charged minus what was already refunded.
+  //  5. The gateway, retried exactly like a charge (same key, at most kMaxAttempts calls, TemporaryError only).
+  // Approved and Declined are recorded under the key; GaveUp is not. Only an approved refund counts as refunded.
+  virtual RefundResult refund(const std::string& key, PaymentId id, Money amount) = 0;
+
+  // Total refunded so far for the payment; 0 for an unknown id.
+  virtual Money refunded(PaymentId id) const = 0;
+};
+
+std::unique_ptr<RefundingProcessor> makeRefundingProcessor(RefundGateway& gateway);
+
+}  // namespace pay
+17:T2dc0,#include <cstdint>
+#include <map>
+#include <memory>
+#include <set>
+#include <string>
+#include <vector>
+
+#include "api.h"
+#include "bp_test.h"
+
+using pay::Reply;
+using pay::Status;
+
+namespace {
+struct Call {
+  std::string key;
+  std::string card;
+  pay::Money amount;
+};
+
+// Replies are taken from the script in order; when it runs out the gateway answers `fallback`.
+class FakeGateway : public pay::Gateway {
+ public:
+  void script(std::vector<Reply> replies) {
+    script_ = std::move(replies);
+    next_ = 0;
+  }
+  Reply charge(const std::string& key, const std::string& card, pay::Money amount) override {
+    calls.push_back(Call{key, card, amount});
+    if (next_ < script_.size()) return script_[next_++];
+    return fallback;
+  }
+  std::vector<Call> calls;
+  Reply fallback = Reply::Approved;
+
+ private:
+  std::vector<Reply> script_;
+  std::size_t next_ = 0;
+};
+
+struct Fixture {
+  FakeGateway gateway;
+  std::unique_ptr<pay::Processor> processor = pay::makeProcessor(gateway);
+  std::size_t calls() const { return gateway.calls.size(); }
+};
+}  // namespace
+
+TEST(Pay, AnApprovedPaymentGetsAnIdAndIsRecorded) {
+  Fixture f;
+  const pay::PayResult r = f.processor->pay("k1", "visa-1", 2500);
+  EXPECT_TRUE(r.status == Status::Ok);
+  EXPECT_TRUE(r.id > 0);
+  EXPECT_FALSE(r.replayed);
+  const auto stored = f.processor->payment(r.id);
+  ASSERT_TRUE(stored.has_value());
+  EXPECT_EQ(stored->card, std::string("visa-1"));
+  EXPECT_EQ(stored->amount, 2500);
+  ASSERT_EQ(f.calls(), static_cast<std::size_t>(1));
+  EXPECT_EQ(f.gateway.calls[0].key, std::string("k1"));
+  EXPECT_EQ(f.gateway.calls[0].card, std::string("visa-1"));
+  EXPECT_EQ(f.gateway.calls[0].amount, 2500);
+  EXPECT_FALSE(f.processor->payment(0).has_value());
+  EXPECT_FALSE(f.processor->payment(r.id + 100).has_value());
+}
+
+TEST(Pay, RejectsInvalidRequestsWithoutCallingTheGateway) {
+  Fixture f;
+  EXPECT_TRUE(f.processor->pay("", "visa-1", 100).status == Status::InvalidRequest);
+  EXPECT_TRUE(f.processor->pay("k", "", 100).status == Status::InvalidRequest);
+  EXPECT_TRUE(f.processor->pay("k", "visa-1", 0).status == Status::InvalidRequest);
+  EXPECT_TRUE(f.processor->pay("k", "visa-1", -5).status == Status::InvalidRequest);
+  EXPECT_TRUE(f.processor->pay("k", "visa-1", pay::kMaxAmount + 1).status == Status::InvalidRequest);
+  EXPECT_EQ(f.calls(), static_cast<std::size_t>(0));
+  const pay::PayResult bad = f.processor->pay("k", "visa-1", 0);
+  EXPECT_EQ(bad.id, pay::kNoPayment);
+  EXPECT_FALSE(bad.replayed);
+}
+
+TEST(Pay, AmountBoundsAreInclusive) {
+  Fixture f;
+  EXPECT_TRUE(f.processor->pay("low", "visa-1", 1).status == Status::Ok);
+  EXPECT_TRUE(f.processor->pay("high", "visa-1", pay::kMaxAmount).status == Status::Ok);
+  EXPECT_EQ(f.calls(), static_cast<std::size_t>(2));
+}
+
+TEST(Pay, AnInvalidRequestIsNotRecordedUnderItsKey) {
+  Fixture f;
+  EXPECT_TRUE(f.processor->pay("k", "visa-1", 0).status == Status::InvalidRequest);
+  const pay::PayResult r = f.processor->pay("k", "visa-2", 700);
+  EXPECT_TRUE(r.status == Status::Ok);
+  EXPECT_FALSE(r.replayed);
+}
+
+TEST(Pay, ValidationComesBeforeTheKeyCheck) {
+  Fixture f;
+  EXPECT_TRUE(f.processor->pay("k", "visa-1", 100).status == Status::Ok);
+  EXPECT_TRUE(f.processor->pay("k", "visa-1", 0).status == Status::InvalidRequest);
+  EXPECT_TRUE(f.processor->pay("k", "", 100).status == Status::InvalidRequest);
+  EXPECT_TRUE(f.processor->pay("k", "visa-2", pay::kMaxAmount + 1).status == Status::InvalidRequest);
+}
+
+TEST(Pay, EveryApprovedPaymentGetsItsOwnPositiveId) {
+  Fixture f;
+  std::set<pay::PaymentId> ids;
+  for (int i = 0; i < 20; ++i) {
+    const pay::PayResult r = f.processor->pay("key-" + std::to_string(i), "visa-1", 100 + i);
+    EXPECT_TRUE(r.id > 0);
+    ids.insert(r.id);
+    const auto stored = f.processor->payment(r.id);
+    ASSERT_TRUE(stored.has_value());
+    EXPECT_EQ(stored->amount, 100 + i);
+  }
+  EXPECT_EQ(ids.size(), static_cast<std::size_t>(20));
+}
+
+TEST(Pay, ADeclineIsFinalAndNotRetried) {
+  Fixture f;
+  f.gateway.script({Reply::Declined, Reply::Approved});
+  const pay::PayResult r = f.processor->pay("k", "visa-1", 900);
+  EXPECT_TRUE(r.status == Status::Declined);
+  EXPECT_EQ(r.id, pay::kNoPayment);
+  EXPECT_FALSE(r.replayed);
+  EXPECT_EQ(f.calls(), static_cast<std::size_t>(1));
+}
+
+TEST(Retry, TemporaryErrorsAreRetriedUntilTheGatewayAnswers) {
+  Fixture f;
+  f.gateway.script({Reply::TemporaryError, Reply::TemporaryError, Reply::Approved});
+  const pay::PayResult r = f.processor->pay("k", "visa-1", 900);
+  EXPECT_TRUE(r.status == Status::Ok);
+  EXPECT_TRUE(r.id > 0);
+  EXPECT_EQ(f.calls(), static_cast<std::size_t>(3));
+}
+
+TEST(Retry, AtMostThreeAttemptsThenGaveUp) {
+  Fixture f;
+  f.gateway.script({Reply::TemporaryError, Reply::TemporaryError, Reply::TemporaryError, Reply::Approved});
+  const pay::PayResult r = f.processor->pay("k", "visa-1", 900);
+  EXPECT_TRUE(r.status == Status::GaveUp);
+  EXPECT_EQ(r.id, pay::kNoPayment);
+  EXPECT_FALSE(r.replayed);
+  EXPECT_EQ(f.calls(), static_cast<std::size_t>(pay::kMaxAttempts));
+}
+
+TEST(Retry, ADeclineAfterATemporaryErrorStopsTheRetries) {
+  Fixture f;
+  f.gateway.script({Reply::TemporaryError, Reply::Declined, Reply::Approved});
+  EXPECT_TRUE(f.processor->pay("k", "visa-1", 900).status == Status::Declined);
+  EXPECT_EQ(f.calls(), static_cast<std::size_t>(2));
+}
+
+TEST(Retry, EveryAttemptCarriesTheSameKeyCardAndAmount) {
+  Fixture f;
+  f.gateway.script({Reply::TemporaryError, Reply::TemporaryError, Reply::Approved});
+  f.processor->pay("order-77", "visa-9", 1234);
+  ASSERT_EQ(f.calls(), static_cast<std::size_t>(3));
+  for (const Call& c : f.gateway.calls) {
+    EXPECT_EQ(c.key, std::string("order-77"));
+    EXPECT_EQ(c.card, std::string("visa-9"));
+    EXPECT_EQ(c.amount, 1234);
+  }
+}
+
+TEST(Retry, AGaveUpRequestLeavesTheKeyFree) {
+  Fixture f;
+  f.gateway.script({Reply::TemporaryError, Reply::TemporaryError, Reply::TemporaryError});
+  EXPECT_TRUE(f.processor->pay("k", "visa-1", 500).status == Status::GaveUp);
+  const pay::PayResult again = f.processor->pay("k", "visa-1", 500);
+  EXPECT_TRUE(again.status == Status::Ok);
+  EXPECT_FALSE(again.replayed);
+  EXPECT_EQ(f.calls(), static_cast<std::size_t>(4));
+}
+
+TEST(Retry, AGaveUpKeyCanBeUsedForADifferentRequest) {
+  Fixture f;
+  f.gateway.script({Reply::TemporaryError, Reply::TemporaryError, Reply::TemporaryError});
+  EXPECT_TRUE(f.processor->pay("k", "visa-1", 500).status == Status::GaveUp);
+  const pay::PayResult other = f.processor->pay("k", "visa-2", 800);
+  EXPECT_TRUE(other.status == Status::Ok);
+  EXPECT_FALSE(other.replayed);
+}
+
+TEST(Idempotency, AReplayDoesNotCallTheGatewayAgain) {
+  Fixture f;
+  const pay::PayResult first = f.processor->pay("k", "visa-1", 500);
+  f.gateway.fallback = Reply::TemporaryError;  // a replay must not need the gateway to be up
+  for (int i = 0; i < 3; ++i) {
+    const pay::PayResult again = f.processor->pay("k", "visa-1", 500);
+    EXPECT_TRUE(again.status == Status::Ok);
+    EXPECT_TRUE(again.replayed);
+    EXPECT_EQ(again.id, first.id);
+  }
+  EXPECT_EQ(f.calls(), static_cast<std::size_t>(1));
+}
+
+TEST(Idempotency, AReplayRecordsNothingNew) {
+  Fixture f;
+  const pay::PayResult first = f.processor->pay("k", "visa-1", 500);
+  f.processor->pay("k", "visa-1", 500);
+  f.processor->pay("k", "visa-1", 500);
+  EXPECT_FALSE(f.processor->payment(first.id + 1).has_value());
+  EXPECT_FALSE(f.processor->payment(first.id + 2).has_value());
+}
+
+TEST(Idempotency, ADeclineIsAnAnswerAndIsReplayed) {
+  Fixture f;
+  f.gateway.script({Reply::Declined});
+  EXPECT_TRUE(f.processor->pay("k", "visa-1", 500).status == Status::Declined);
+  const pay::PayResult again = f.processor->pay("k", "visa-1", 500);
+  EXPECT_TRUE(again.status == Status::Declined);
+  EXPECT_TRUE(again.replayed);
+  EXPECT_EQ(again.id, pay::kNoPayment);
+  EXPECT_EQ(f.calls(), static_cast<std::size_t>(1));
+}
+
+TEST(Idempotency, TheSameKeyForADifferentRequestIsAConflict) {
+  Fixture f;
+  const pay::PayResult first = f.processor->pay("k", "visa-1", 500);
+  const pay::PayResult otherAmount = f.processor->pay("k", "visa-1", 501);
+  const pay::PayResult otherCard = f.processor->pay("k", "visa-2", 500);
+  EXPECT_TRUE(otherAmount.status == Status::KeyConflict);
+  EXPECT_TRUE(otherCard.status == Status::KeyConflict);
+  EXPECT_EQ(otherAmount.id, pay::kNoPayment);
+  EXPECT_FALSE(otherAmount.replayed);
+  EXPECT_EQ(f.calls(), static_cast<std::size_t>(1));
+  EXPECT_FALSE(f.processor->payment(first.id + 1).has_value());
+}
+
+TEST(Idempotency, ADeclinedKeyAlsoConflictsWithADifferentRequest) {
+  Fixture f;
+  f.gateway.script({Reply::Declined});
+  f.processor->pay("k", "visa-1", 500);
+  EXPECT_TRUE(f.processor->pay("k", "visa-1", 600).status == Status::KeyConflict);
+  EXPECT_EQ(f.calls(), static_cast<std::size_t>(1));
+}
+
+TEST(Idempotency, DifferentKeysAreIndependentEvenForTheSameRequest) {
+  Fixture f;
+  const pay::PayResult a = f.processor->pay("k1", "visa-1", 500);
+  const pay::PayResult b = f.processor->pay("k2", "visa-1", 500);
+  EXPECT_TRUE(a.status == Status::Ok);
+  EXPECT_TRUE(b.status == Status::Ok);
+  EXPECT_FALSE(b.replayed);
+  EXPECT_TRUE(a.id != b.id);
+  EXPECT_EQ(f.calls(), static_cast<std::size_t>(2));
+}
+
+namespace {
+struct Rng {
+  std::uint64_t state;
+  std::uint32_t next() {
+    state = state * 6364136223846793005ULL + 1442695040888963407ULL;
+    return static_cast<std::uint32_t>(state >> 33);
+  }
+};
+
+Reply drawReply(Rng& rng) {
+  const std::uint32_t v = rng.next() % 10;
+  if (v < 5) return Reply::Approved;
+  if (v < 7) return Reply::Declined;
+  return Reply::TemporaryError;
+}
+
+// The gateway draws its replies from a seeded stream; the model draws from a copy of the same stream, one draw per
+// attempt it expects the processor to make. A processor that calls the gateway a different number of times drifts apart.
+class RandomGateway : public pay::Gateway {
+ public:
+  explicit RandomGateway(std::uint64_t seed) : rng_{seed} {}
+  Reply charge(const std::string&, const std::string&, pay::Money) override { return drawReply(rng_); }
+
+ private:
+  Rng rng_;
+};
+
+struct Known {
+  std::string card;
+  pay::Money amount;
+  Status status;
+  pay::PaymentId id;
+};
+}  // namespace
+
+TEST(Contention, ManyRandomRequestsAgreeWithASimpleModel) {
+  RandomGateway gateway(2024);
+  auto processor = pay::makeProcessor(gateway);
+  Rng modelReplies{2024};
+  Rng pick{99};
+  std::map<std::string, Known> known;
+  std::set<pay::PaymentId> issued;
+  for (int step = 0; step < 400; ++step) {
+    const std::string key = "k" + std::to_string(pick.next() % 6);
+    const std::string card = "card-" + std::to_string(pick.next() % 2);
+    const pay::Money amount = 100 + pick.next() % 2;
+    const pay::PayResult got = processor->pay(key, card, amount);
+    const auto it = known.find(key);
+    if (it != known.end()) {
+      const bool same = it->second.card == card && it->second.amount == amount;
+      EXPECT_TRUE(got.status == (same ? it->second.status : Status::KeyConflict));
+      EXPECT_EQ(got.replayed, same);
+      if (same) EXPECT_EQ(got.id, it->second.id);
+      continue;
+    }
+    Reply reply = Reply::TemporaryError;
+    for (int attempt = 0; attempt < pay::kMaxAttempts && reply == Reply::TemporaryError; ++attempt) reply = drawReply(modelReplies);
+    EXPECT_FALSE(got.replayed);
+    if (reply == Reply::TemporaryError) {
+      EXPECT_TRUE(got.status == Status::GaveUp);
+      continue;
+    }
+    const Status want = reply == Reply::Approved ? Status::Ok : Status::Declined;
+    EXPECT_TRUE(got.status == want);
+    if (reply == Reply::Approved) {
+      EXPECT_TRUE(got.id > 0);
+      EXPECT_TRUE(issued.insert(got.id).second);
+    } else {
+      EXPECT_EQ(got.id, pay::kNoPayment);
+    }
+    known[key] = Known{card, amount, want, got.id};
+  }
+  EXPECT_TRUE(known.size() > 3);
+}
+18:T2281,#include <memory>
+#include <string>
+#include <vector>
+
+#include "api_storm1.h"
+#include "bp_test.h"
+
+using pay::Reply;
+using pay::RefundStatus;
+using pay::Status;
+
+namespace {
+struct Call {
+  std::string key;
+  std::string card;
+  pay::Money amount;
+};
+
+class FakeGateway : public pay::RefundGateway {
+ public:
+  void scriptRefunds(std::vector<Reply> replies) {
+    refundScript_ = std::move(replies);
+    nextRefund_ = 0;
+  }
+  Reply charge(const std::string& key, const std::string& card, pay::Money amount) override {
+    charges.push_back(Call{key, card, amount});
+    return Reply::Approved;
+  }
+  Reply refund(const std::string& key, const std::string& card, pay::Money amount) override {
+    refunds.push_back(Call{key, card, amount});
+    if (nextRefund_ < refundScript_.size()) return refundScript_[nextRefund_++];
+    return Reply::Approved;
+  }
+  std::vector<Call> charges;
+  std::vector<Call> refunds;
+
+ private:
+  std::vector<Reply> refundScript_;
+  std::size_t nextRefund_ = 0;
+};
+
+struct Fixture {
+  FakeGateway gateway;
+  std::unique_ptr<pay::RefundingProcessor> processor = pay::makeRefundingProcessor(gateway);
+  pay::PaymentId paid(const std::string& key, pay::Money amount, const std::string& card = "visa-1") {
+    return processor->pay(key, card, amount).id;
+  }
+  std::size_t refundCalls() const { return gateway.refunds.size(); }
+};
+}  // namespace
+
+TEST(Refund, PartialRefundsAddUpAndReachTheGatewayWithTheCard) {
+  Fixture f;
+  const pay::PaymentId id = f.paid("p1", 10000, "visa-7");
+  const pay::RefundResult a = f.processor->refund("r1", id, 3000);
+  EXPECT_TRUE(a.status == RefundStatus::Ok);
+  EXPECT_FALSE(a.replayed);
+  EXPECT_EQ(f.processor->refunded(id), 3000);
+  EXPECT_TRUE(f.processor->refund("r2", id, 7000).status == RefundStatus::Ok);
+  EXPECT_EQ(f.processor->refunded(id), 10000);
+  ASSERT_EQ(f.refundCalls(), static_cast<std::size_t>(2));
+  EXPECT_EQ(f.gateway.refunds[0].key, std::string("r1"));
+  EXPECT_EQ(f.gateway.refunds[0].card, std::string("visa-7"));
+  EXPECT_EQ(f.gateway.refunds[0].amount, 3000);
+}
+
+TEST(Refund, TotalRefundsNeverExceedThePayment) {
+  Fixture f;
+  const pay::PaymentId id = f.paid("p1", 1000);
+  EXPECT_TRUE(f.processor->refund("r1", id, 600).status == RefundStatus::Ok);
+  EXPECT_TRUE(f.processor->refund("r2", id, 500).status == RefundStatus::ExceedsPayment);
+  EXPECT_EQ(f.processor->refunded(id), 600);
+  EXPECT_EQ(f.refundCalls(), static_cast<std::size_t>(1));
+  EXPECT_TRUE(f.processor->refund("r3", id, 400).status == RefundStatus::Ok);
+  EXPECT_EQ(f.processor->refunded(id), 1000);
+  EXPECT_TRUE(f.processor->refund("r4", id, 1).status == RefundStatus::ExceedsPayment);
+}
+
+TEST(Refund, RefundingTheWholePaymentInOneGoIsAllowed) {
+  Fixture f;
+  const pay::PaymentId id = f.paid("p1", 1000);
+  EXPECT_TRUE(f.processor->refund("r1", id, 1000).status == RefundStatus::Ok);
+  EXPECT_EQ(f.processor->refunded(id), 1000);
+  EXPECT_TRUE(f.processor->refund("r2", id, 1001).status == RefundStatus::ExceedsPayment);
+}
+
+TEST(Refund, RefundsAreTrackedPerPayment) {
+  Fixture f;
+  const pay::PaymentId a = f.paid("pa", 1000);
+  const pay::PaymentId b = f.paid("pb", 500);
+  EXPECT_TRUE(f.processor->refund("r1", a, 1000).status == RefundStatus::Ok);
+  EXPECT_TRUE(f.processor->refund("r2", b, 500).status == RefundStatus::Ok);
+  EXPECT_EQ(f.processor->refunded(a), 1000);
+  EXPECT_EQ(f.processor->refunded(b), 500);
+  EXPECT_EQ(f.processor->refunded(a + b + 100), 0);
+}
+
+TEST(Refund, ChecksAreInTheDocumentedOrder) {
+  Fixture f;
+  const pay::PaymentId id = f.paid("p1", 1000);
+  EXPECT_TRUE(f.processor->refund("", 99, 5).status == RefundStatus::InvalidRequest);
+  EXPECT_TRUE(f.processor->refund("r", id, 0).status == RefundStatus::InvalidRequest);
+  EXPECT_TRUE(f.processor->refund("r", id, -3).status == RefundStatus::InvalidRequest);
+  EXPECT_TRUE(f.processor->refund("r", 99, 5).status == RefundStatus::UnknownPayment);
+  EXPECT_TRUE(f.processor->refund("r", 0, 5).status == RefundStatus::UnknownPayment);
+  // The payment key "p1" is taken, but an unknown payment is reported before any key check.
+  EXPECT_TRUE(f.processor->refund("p1", 99, 5).status == RefundStatus::UnknownPayment);
+  EXPECT_EQ(f.refundCalls(), static_cast<std::size_t>(0));
+}
+
+TEST(Refund, ADeclinedPaymentHasNoIdToRefund) {
+  Fixture f;
+  EXPECT_TRUE(f.processor->refund("r", pay::kNoPayment, 5).status == RefundStatus::UnknownPayment);
+}
+
+TEST(Refund, AReplayedRefundIsNotAppliedTwice) {
+  Fixture f;
+  const pay::PaymentId id = f.paid("p1", 10000);
+  EXPECT_TRUE(f.processor->refund("r1", id, 3000).status == RefundStatus::Ok);
+  const pay::RefundResult again = f.processor->refund("r1", id, 3000);
+  EXPECT_TRUE(again.status == RefundStatus::Ok);
+  EXPECT_TRUE(again.replayed);
+  EXPECT_EQ(f.processor->refunded(id), 3000);
+  EXPECT_EQ(f.refundCalls(), static_cast<std::size_t>(1));
+}
+
+TEST(Refund, AReplayOfTheLastRefundStillReplays) {
+  Fixture f;
+  const pay::PaymentId id = f.paid("p1", 1000);
+  EXPECT_TRUE(f.processor->refund("r1", id, 1000).status == RefundStatus::Ok);
+  const pay::RefundResult again = f.processor->refund("r1", id, 1000);
+  EXPECT_TRUE(again.status == RefundStatus::Ok);
+  EXPECT_TRUE(again.replayed);
+  EXPECT_EQ(f.processor->refunded(id), 1000);
+}
+
+TEST(Refund, TheSameKeyForADifferentRefundIsAConflict) {
+  Fixture f;
+  const pay::PaymentId a = f.paid("pa", 1000);
+  const pay::PaymentId b = f.paid("pb", 1000);
+  EXPECT_TRUE(f.processor->refund("r1", a, 300).status == RefundStatus::Ok);
+  EXPECT_TRUE(f.processor->refund("r1", a, 400).status == RefundStatus::KeyConflict);
+  EXPECT_TRUE(f.processor->refund("r1", b, 300).status == RefundStatus::KeyConflict);
+  EXPECT_EQ(f.processor->refunded(a), 300);
+  EXPECT_EQ(f.processor->refunded(b), 0);
+  EXPECT_EQ(f.refundCalls(), static_cast<std::size_t>(1));
+}
+
+TEST(Refund, PaymentKeysAndRefundKeysAreOneNamespace) {
+  Fixture f;
+  const pay::PaymentId id = f.paid("p1", 1000);
+  EXPECT_TRUE(f.processor->refund("p1", id, 100).status == RefundStatus::KeyConflict);
+  EXPECT_TRUE(f.processor->refund("r1", id, 100).status == RefundStatus::Ok);
+  const pay::PayResult clash = f.processor->pay("r1", "visa-1", 100);
+  EXPECT_TRUE(clash.status == Status::KeyConflict);
+  EXPECT_EQ(f.gateway.charges.size(), static_cast<std::size_t>(1));
+  EXPECT_EQ(f.processor->refunded(id), 100);
+}
+
+TEST(Refund, ADeclinedRefundConsumesNothingAndIsReplayed) {
+  Fixture f;
+  const pay::PaymentId id = f.paid("p1", 1000);
+  f.gateway.scriptRefunds({Reply::Declined});
+  EXPECT_TRUE(f.processor->refund("r1", id, 1000).status == RefundStatus::Declined);
+  EXPECT_EQ(f.processor->refunded(id), 0);
+  const pay::RefundResult again = f.processor->refund("r1", id, 1000);
+  EXPECT_TRUE(again.status == RefundStatus::Declined);
+  EXPECT_TRUE(again.replayed);
+  EXPECT_EQ(f.refundCalls(), static_cast<std::size_t>(1));
+  EXPECT_TRUE(f.processor->refund("r2", id, 1000).status == RefundStatus::Ok);
+  EXPECT_EQ(f.processor->refunded(id), 1000);
+}
+
+TEST(Refund, AnAbandonedRefundConsumesNothingAndLeavesTheKeyFree) {
+  Fixture f;
+  const pay::PaymentId id = f.paid("p1", 1000);
+  f.gateway.scriptRefunds({Reply::TemporaryError, Reply::TemporaryError, Reply::TemporaryError});
+  EXPECT_TRUE(f.processor->refund("r1", id, 1000).status == RefundStatus::GaveUp);
+  EXPECT_EQ(f.refundCalls(), static_cast<std::size_t>(pay::kMaxAttempts));
+  EXPECT_EQ(f.processor->refunded(id), 0);
+  const pay::RefundResult again = f.processor->refund("r1", id, 1000);
+  EXPECT_TRUE(again.status == RefundStatus::Ok);
+  EXPECT_FALSE(again.replayed);
+  EXPECT_EQ(f.processor->refunded(id), 1000);
+}
+
+TEST(Refund, RefundsRetryLikeChargesWithTheSameKey) {
+  Fixture f;
+  const pay::PaymentId id = f.paid("p1", 1000, "visa-3");
+  f.gateway.scriptRefunds({Reply::TemporaryError, Reply::TemporaryError, Reply::Approved});
+  EXPECT_TRUE(f.processor->refund("r1", id, 250).status == RefundStatus::Ok);
+  ASSERT_EQ(f.refundCalls(), static_cast<std::size_t>(3));
+  for (const Call& c : f.gateway.refunds) {
+    EXPECT_EQ(c.key, std::string("r1"));
+    EXPECT_EQ(c.card, std::string("visa-3"));
+    EXPECT_EQ(c.amount, 250);
+  }
+}
+
+TEST(Refund, ADeclinedRefundIsNotRetried) {
+  Fixture f;
+  const pay::PaymentId id = f.paid("p1", 1000);
+  f.gateway.scriptRefunds({Reply::Declined, Reply::Approved});
+  EXPECT_TRUE(f.processor->refund("r1", id, 250).status == RefundStatus::Declined);
+  EXPECT_EQ(f.refundCalls(), static_cast<std::size_t>(1));
+}
+
+TEST(RefundRegression, PaymentsStillBehaveAsBefore) {
+  Fixture f;
+  const pay::PayResult first = f.processor->pay("k", "visa-1", 500);
+  const pay::PayResult again = f.processor->pay("k", "visa-1", 500);
+  EXPECT_TRUE(again.replayed);
+  EXPECT_EQ(again.id, first.id);
+  EXPECT_TRUE(f.processor->pay("k", "visa-1", 501).status == Status::KeyConflict);
+  EXPECT_EQ(f.gateway.charges.size(), static_cast<std::size_t>(1));
+}
+19:T1511,#include <memory>
+#include <string>
+#include <vector>
+
+#include "api_storm2.h"
+#include "bp_test.h"
+
+using pay::Reply;
+using pay::RefundStatus;
+using pay::Status;
+
+namespace {
+class FakeClock : public pay::Clock {
+ public:
+  long long seconds() const override { return now; }
+  long long now = 1000;
+};
+
+class FakeGateway : public pay::RefundGateway {
+ public:
+  void scriptCharges(std::vector<Reply> replies) {
+    script_ = std::move(replies);
+    next_ = 0;
+  }
+  Reply charge(const std::string&, const std::string&, pay::Money) override {
+    ++charges;
+    if (next_ < script_.size()) return script_[next_++];
+    return Reply::Approved;
+  }
+  Reply refund(const std::string&, const std::string&, pay::Money) override {
+    ++refunds;
+    return Reply::Approved;
+  }
+  int charges = 0;
+  int refunds = 0;
+
+ private:
+  std::vector<Reply> script_;
+  std::size_t next_ = 0;
+};
+
+struct Fixture {
+  explicit Fixture(long long ttl) : processor(pay::makeExpiringProcessor(gateway, clock, ttl)) {}
+  FakeClock clock;
+  FakeGateway gateway;
+  std::unique_ptr<pay::RefundingProcessor> processor;
+};
+}  // namespace
+
+TEST(Expiry, TheLifetimeMustBePositive) {
+  FakeClock clock;
+  FakeGateway gateway;
+  EXPECT_TRUE(pay::makeExpiringProcessor(gateway, clock, 0) == nullptr);
+  EXPECT_TRUE(pay::makeExpiringProcessor(gateway, clock, -5) == nullptr);
+  EXPECT_TRUE(pay::makeExpiringProcessor(gateway, clock, 1) != nullptr);
+}
+
+TEST(Expiry, AKeyIsLiveUntilExactlyTtlSecondsAfterItWasRecorded) {
+  Fixture f(60);
+  const pay::PayResult first = f.processor->pay("k", "visa-1", 500);
+  f.clock.now = 1059;
+  const pay::PayResult live = f.processor->pay("k", "visa-1", 500);
+  EXPECT_TRUE(live.replayed);
+  EXPECT_EQ(live.id, first.id);
+  EXPECT_EQ(f.gateway.charges, 1);
+  f.clock.now = 1060;
+  const pay::PayResult fresh = f.processor->pay("k", "visa-1", 500);
+  EXPECT_TRUE(fresh.status == Status::Ok);
+  EXPECT_FALSE(fresh.replayed);
+  EXPECT_TRUE(fresh.id != first.id);
+  EXPECT_EQ(f.gateway.charges, 2);
+}
+
+TEST(Expiry, AnExpiredKeyCanBeUsedForADifferentRequest) {
+  Fixture f(10);
+  f.processor->pay("k", "visa-1", 500);
+  f.clock.now = 1009;
+  EXPECT_TRUE(f.processor->pay("k", "visa-2", 800).status == Status::KeyConflict);
+  f.clock.now = 1010;
+  const pay::PayResult other = f.processor->pay("k", "visa-2", 800);
+  EXPECT_TRUE(other.status == Status::Ok);
+  EXPECT_FALSE(other.replayed);
+  const auto stored = f.processor->payment(other.id);
+  ASSERT_TRUE(stored.has_value());
+  EXPECT_EQ(stored->card, std::string("visa-2"));
+}
+
+TEST(Expiry, ReplaysDoNotExtendTheLifeOfAKey) {
+  Fixture f(10);
+  f.processor->pay("k", "visa-1", 500);
+  f.clock.now = 1009;
+  EXPECT_TRUE(f.processor->pay("k", "visa-1", 500).replayed);
+  f.clock.now = 1010;
+  EXPECT_FALSE(f.processor->pay("k", "visa-1", 500).replayed);
+}
+
+TEST(Expiry, AFreshAnswerAfterExpiryStartsANewWindow) {
+  Fixture f(10);
+  f.processor->pay("k", "visa-1", 500);
+  f.clock.now = 1010;
+  EXPECT_FALSE(f.processor->pay("k", "visa-1", 500).replayed);
+  f.clock.now = 1015;
+  EXPECT_TRUE(f.processor->pay("k", "visa-1", 500).replayed);
+  EXPECT_EQ(f.gateway.charges, 2);
+  f.clock.now = 1020;
+  EXPECT_FALSE(f.processor->pay("k", "visa-1", 500).replayed);
+}
+
+TEST(Expiry, EachKeyHasItsOwnClock) {
+  Fixture f(10);
+  f.processor->pay("early", "visa-1", 500);
+  f.clock.now = 1005;
+  f.processor->pay("late", "visa-1", 500);
+  f.clock.now = 1010;
+  EXPECT_FALSE(f.processor->pay("early", "visa-1", 500).replayed);
+  EXPECT_TRUE(f.processor->pay("late", "visa-1", 500).replayed);
+  f.clock.now = 1015;
+  EXPECT_FALSE(f.processor->pay("late", "visa-1", 500).replayed);
+}
+
+TEST(Expiry, ADeclinedAnswerExpiresToo) {
+  Fixture f(10);
+  f.gateway.scriptCharges({Reply::Declined});
+  EXPECT_TRUE(f.processor->pay("k", "visa-1", 500).status == Status::Declined);
+  f.clock.now = 1005;
+  EXPECT_TRUE(f.processor->pay("k", "visa-1", 500).replayed);
+  f.clock.now = 1010;
+  const pay::PayResult again = f.processor->pay("k", "visa-1", 500);
+  EXPECT_TRUE(again.status == Status::Ok);
+  EXPECT_FALSE(again.replayed);
+}
+
+TEST(Expiry, RefundKeysExpireLikePaymentKeys) {
+  Fixture f(10);
+  const pay::PaymentId id = f.processor->pay("p1", "visa-1", 1000).id;
+  f.clock.now = 1003;
+  EXPECT_TRUE(f.processor->refund("r1", id, 300).status == RefundStatus::Ok);
+  f.clock.now = 1008;
+  EXPECT_TRUE(f.processor->refund("r1", id, 300).replayed);
+  EXPECT_EQ(f.processor->refunded(id), 300);
+  // The documented price of expiry: after the window the same call is a new refund.
+  f.clock.now = 1013;
+  const pay::RefundResult again = f.processor->refund("r1", id, 300);
+  EXPECT_TRUE(again.status == RefundStatus::Ok);
+  EXPECT_FALSE(again.replayed);
+  EXPECT_EQ(f.processor->refunded(id), 600);
+  EXPECT_EQ(f.gateway.refunds, 2);
+}
+
+TEST(Expiry, AnExpiredKeyNoLongerBlocksADifferentKindOfRequest) {
+  Fixture f(10);
+  const pay::PaymentId id = f.processor->pay("shared", "visa-1", 1000).id;
+  f.clock.now = 1010;
+  EXPECT_TRUE(f.processor->refund("shared", id, 100).status == RefundStatus::Ok);
+}
+
+TEST(Expiry, GiveUpAndRetryRulesAreUnchanged) {
+  Fixture f(10);
+  f.gateway.scriptCharges({Reply::TemporaryError, Reply::TemporaryError, Reply::TemporaryError});
+  EXPECT_TRUE(f.processor->pay("k", "visa-1", 500).status == Status::GaveUp);
+  EXPECT_EQ(f.gateway.charges, pay::kMaxAttempts);
+  EXPECT_TRUE(f.processor->pay("k", "visa-2", 800).status == Status::Ok);
+}
+1a:T518,#pragma once
+#include <map>
+#include <memory>
+#include <string>
+#include <utility>
+
+#include "lifetime.h"
+#include "request.h"
+
+// Remembers the final answer to every request by its idempotency key, for payments and refunds alike. A key is one
+// namespace: the shape of the request it was first used for decides whether a later call is a replay or a conflict.
+class KeyBook {
+ public:
+  struct Verdict {
+    enum class Kind { Fresh, Replay, Conflict };
+    Kind kind = Kind::Fresh;
+    Answer answer;
+  };
+
+  explicit KeyBook(std::unique_ptr<Lifetime> lifetime) : lifetime_(std::move(lifetime)) {}
+
+  Verdict check(const std::string& key, const RequestShape& shape) const {
+    const auto it = records_.find(key);
+    if (it == records_.end() || lifetime_->expired(it->second.stamp)) return Verdict{};
+    if (!(it->second.shape == shape)) return Verdict{Verdict::Kind::Conflict, Answer{}};
+    return Verdict{Verdict::Kind::Replay, it->second.answer};
+  }
+
+  void remember(const std::string& key, const RequestShape& shape, const Answer& answer) {
+    records_[key] = Record{shape, answer, lifetime_->stamp()};
+  }
+
+ private:
+  struct Record {
+    RequestShape shape;
+    Answer answer;
+    long long stamp = 0;
+  };
+
+  std::unique_ptr<Lifetime> lifetime_;
+  std::map<std::string, Record> records_;
+};
+1b:Tfa1,#pragma once
+#include <memory>
+#include <string>
+#include <utility>
+
+#include "charge_only_gateway.h"
+#include "key_book.h"
+#include "payment_ledger.h"
+#include "retrier.h"
+
+namespace {
+inline pay::Status payStatus(pay::Reply reply) { return reply == pay::Reply::Approved ? pay::Status::Ok : pay::Status::Declined; }
+
+inline pay::RefundStatus refundStatus(pay::Reply reply) {
+  return reply == pay::Reply::Approved ? pay::RefundStatus::Ok : pay::RefundStatus::Declined;
+}
+
+inline pay::RefundResult refusedRefund(pay::RefundStatus status) { return pay::RefundResult{status, false}; }
+}  // namespace
+
+// The public face. It validates in the documented order, asks the key book whether this is a replay, calls the gateway
+// through the retry policy and records the outcome. The rules live in the collaborators.
+class ProcessorImpl : public pay::RefundingProcessor {
+ public:
+  ProcessorImpl(pay::Gateway& gateway, std::unique_ptr<Lifetime> lifetime)
+      : adapter_(std::make_unique<ChargeOnlyGateway>(gateway)), gateway_(*adapter_), keys_(std::move(lifetime)) {}
+
+  ProcessorImpl(pay::RefundGateway& gateway, std::unique_ptr<Lifetime> lifetime)
+      : gateway_(gateway), keys_(std::move(lifetime)) {}
+
+  pay::PayResult pay(const std::string& key, const std::string& card, pay::Money amount) override {
+    if (key.empty() || card.empty() || amount < 1 || amount > pay::kMaxAmount) {
+      return pay::PayResult{pay::Status::InvalidRequest, pay::kNoPayment, false};
+    }
+    const RequestShape shape{RequestShape::Kind::Pay, card, amount};
+    const KeyBook::Verdict verdict = keys_.check(key, shape);
+    if (verdict.kind == KeyBook::Verdict::Kind::Conflict) return pay::PayResult{pay::Status::KeyConflict, pay::kNoPayment, false};
+    if (verdict.kind == KeyBook::Verdict::Kind::Replay) {
+      return pay::PayResult{payStatus(verdict.answer.reply), verdict.answer.id, true};
+    }
+    const pay::Reply reply = retrier_.run([&] { return gateway_.charge(key, card, amount); });
+    if (reply == pay::Reply::TemporaryError) return pay::PayResult{pay::Status::GaveUp, pay::kNoPayment, false};
+    const pay::PaymentId id = reply == pay::Reply::Approved ? ledger_.record(pay::Payment{card, amount}) : pay::kNoPayment;
+    keys_.remember(key, shape, Answer{reply, id});
+    return pay::PayResult{payStatus(reply), id, false};
+  }
+
+  std::optional<pay::Payment> payment(pay::PaymentId id) const override {
+    const pay::Payment* found = ledger_.find(id);
+    if (found == nullptr) return std::nullopt;
+    return *found;
+  }
+
+  pay::RefundResult refund(const std::string& key, pay::PaymentId id, pay::Money amount) override {
+    if (key.empty() || amount < 1) return refusedRefund(pay::RefundStatus::InvalidRequest);
+    const pay::Payment* paid = ledger_.find(id);
+    if (paid == nullptr) return refusedRefund(pay::RefundStatus::UnknownPayment);
+    const RequestShape shape{RequestShape::Kind::Refund, std::to_string(id), amount};
+    const KeyBook::Verdict verdict = keys_.check(key, shape);
+    if (verdict.kind == KeyBook::Verdict::Kind::Conflict) return refusedRefund(pay::RefundStatus::KeyConflict);
+    if (verdict.kind == KeyBook::Verdict::Kind::Replay) return pay::RefundResult{refundStatus(verdict.answer.reply), true};
+    if (amount > paid->amount - ledger_.refunded(id)) return refusedRefund(pay::RefundStatus::ExceedsPayment);
+    const std::string card = paid->card;
+    const pay::Reply reply = retrier_.run([&] { return gateway_.refund(key, card, amount); });
+    if (reply == pay::Reply::TemporaryError) return refusedRefund(pay::RefundStatus::GaveUp);
+    if (reply == pay::Reply::Approved) ledger_.addRefund(id, amount);
+    keys_.remember(key, shape, Answer{reply, id});
+    return pay::RefundResult{refundStatus(reply), false};
+  }
+
+  pay::Money refunded(pay::PaymentId id) const override { return ledger_.refunded(id); }
+
+ private:
+  std::unique_ptr<ChargeOnlyGateway> adapter_;
+  pay::RefundGateway& gateway_;
+  KeyBook keys_;
+  PaymentLedger ledger_;
+  Retrier retrier_;
+};
+f:[["children",{"s":"__PAGE__","h":160,"d":{"r":["$","$1","c",{"children":[["$","$L12",null,{"bundle":{"id":"payment-processor","title":"Payment processor with retries and idempotency keys","level":"Senior","parMinutes":60,"patterns":["Strategy","Adapter"],"requirements":[{"id":"R-pay","text":"A request is a key, a card and an amount in whole cents. pay checks InvalidRequest first (empty key, empty card, amount outside 1..100,000,000, inclusive) and records nothing for it. An approved payment gets a new positive id, never reused, and is readable through payment(id) with its card and amount. A declined or abandoned request gets no id.","phase":"base","hidden":true},{"id":"R-idem","text":"Idempotency: after InvalidRequest, the key is checked. The same key with the same card and amount returns the earlier answer with replayed = true and never calls the gateway; the same key with a different card or amount is KeyConflict and changes nothing. Approved and declined answers are both recorded and replayed. Different keys are independent.","phase":"base","hidden":true},{"id":"R-retry","text":"Retries: a temporary error is retried at once, at most 3 gateway calls in all, every call with the same key, card and amount. A decline is final and never retried. If the last attempt is still a temporary error the answer is GaveUp, which is not recorded: the key stays free, even for a different request.","phase":"base","hidden":true},{"id":"R-refund","text":"Storm 1: refund(key, id, amount) gives money back. Checks in order: InvalidRequest (empty key, amount < 1), UnknownPayment, the key (payment and refund keys are one namespace; a repeat is replayed even if the payment has been fully refunded since), ExceedsPayment (more than charged minus already refunded; refunding exactly what is left is fine), then the gateway with the same retry rule. Only an approved refund counts; declined answers are recorded, GaveUp is not.","phase":"storm1","hidden":true},{"id":"R-expiry","text":"Storm 2: with makeExpiringProcessor(gateway, clock, ttl), an answer is remembered under its key for exactly ttl seconds from the moment it was recorded: live while now < t + ttl, expired from t + ttl. An expired key behaves as if never used (the same request is processed again with a new id, a different request is not a conflict). Replays do not extend life. Payment and refund keys expire alike. ttl < 1 gives nullptr.","phase":"storm2","hidden":true}],"brief":"$13","editorial":"$14","clarify":[{"id":"q-request","text":"What does a payment request contain, what is invalid, and what do I get back when it works?","answer":"A caller-chosen key, a card token and an amount in whole cents. Empty key, empty card, or an amount outside 1 to 100,000,000 is InvalidRequest, checked first, and nothing is recorded for it. An approved payment gets a new positive id (never reused) and is recorded with its card and amount, readable through payment(id). A refused or abandoned request gets no id.","reveals":["R-pay"],"quality":"essential"},{"id":"q-same","text":"The same request will arrive twice. What counts as the same request, and what should the second call do?","answer":"The key identifies the attempt, and the card and amount say what it was for. The same key with the same card and amount is a repeat: return the earlier answer, mark it replayed, and do not call the gateway. The same key with a different card or amount is a different request wearing an old key: refuse it with KeyConflict and change nothing. Different keys are independent even for identical requests.","reveals":["R-idem"],"quality":"essential"},{"id":"q-answers","text":"Which outcomes do we remember under a key? Is a decline remembered? What about a request that never got an answer?","answer":"An answer is remembered: approved and declined are both final, so both are replayed. A request whose every attempt ended in a temporary error has no answer: it is not recorded and the key stays free, so the caller can try again with the same key and the gateway is called again.","reveals":["R-idem","R-retry"],"quality":"essential"},{"id":"q-retry","text":"What do I do when the gateway fails? How many times, and what do I send?","answer":"A temporary error is retried at once (no waiting in this version), at most 3 gateway calls per request in all. Every call of one request carries the same key, card and amount, so a gateway that remembers keys cannot charge twice. A decline is final and is never retried. If the third call is still a temporary error the answer is GaveUp.","reveals":["R-retry"],"quality":"essential"},{"id":"q-order","text":"If a request is wrong in two ways at once, which error do I report?","answer":"In order: InvalidRequest first (a bad request is never looked up under its key), then the key (conflict or replay), then the gateway. The order is part of the API.","reveals":["R-pay","R-idem"],"quality":"useful"},{"id":"q-refund","text":"Will we need to give money back?","answer":"Yes, soon: partial refunds of a payment, never more than was charged in total, and refund calls must be safe to repeat too. Keys of payments and refunds will be one namespace. Think about whether your idempotency code could be reused for a second kind of request without being copied.","reveals":["R-refund"],"quality":"essential"},{"id":"q-expiry","text":"Do we keep every key forever?","answer":"Not for long: a later change will make a key expire a fixed time after its answer was recorded. After that it behaves as if it was never used. Say what that costs: a very late repeat of the same request is processed again, and decide who pays for that.","reveals":["R-expiry"],"quality":"essential"},{"id":"q-timeout","text":"What if the gateway times out after it took the money? How do we know?","answer":"In this version a timeout is simply a temporary error, and the same key on the retry is what protects the customer: a gateway that honours keys returns the first outcome. Without a key at the gateway you would need to query the payment's state before retrying. Say which you would build and what you would reconcile nightly.","reveals":[],"quality":"useful"},{"id":"q-backoff","text":"Should retries wait, and for how long?","answer":"Not here: the tests are instant. In production you would wait with exponential backoff and jitter and give up after a deadline, so thousands of clients do not hammer a struggling gateway together. The notification-service problem builds an exact backoff schedule.","reveals":[],"quality":"useful"},{"id":"q-thread","text":"Many requests with the same key may arrive at the same moment. Does this need to be thread safe?","answer":"Not for the tests, which are single-threaded. Say what you would do: claim the key atomically (a conditional insert in a database) before calling the gateway, so only one request charges, and what the second caller sees while the first is in flight.","reveals":[],"quality":"useful"},{"id":"q-money","text":"Which currency, and how do I handle fees and exchange rates?","answer":"One currency, whole cents in a 64-bit integer. Fees, taxes and conversion are other components.","reveals":[],"quality":"noise"},{"id":"q-cards","text":"Do I validate card numbers and store them securely?","answer":"No: the card is an opaque token supplied by the caller. Number checks, vaulting and compliance are another system.","reveals":[],"quality":"noise"},{"id":"q-ui","text":"Do I need a checkout page and receipts by email?","answer":"No. This component decides whether and how many times money moves, not how it is shown.","reveals":[],"quality":"noise"}],"rubric":[{"id":"res-facade","text":"Exposes the public operations, validates a request in the documented order and sequences the collaborators","phase":"base","owners":["ProcessorImpl","PaymentProcessor","PaymentService","PaymentFacade","Processor"]},{"id":"res-keys","text":"Remembers the final answer to each request by its key and says whether a new call is fresh, a replay or a conflict","phase":"base","owners":["KeyBook","IdempotencyStore","IdempotencyKeys","KeyStore","RequestLog"]},{"id":"res-retry","text":"Repeats a gateway call on a temporary error up to the limit and stops on any real answer, knowing nothing about payments","phase":"base","owners":["Retrier","RetryPolicy","RetryRunner","Retry","AttemptLoop"]},{"id":"res-ledger","text":"Records approved payments, issues ids and totals what has been refunded of each","phase":"base","owners":["PaymentLedger","PaymentStore","Payments","Ledger","PaymentRepository"]},{"id":"res-fingerprint","text":"Says what makes two requests 'the same', as a value that is compared, not as code scattered in the service","phase":"storm1","owners":["RequestShape","RequestFingerprint","Fingerprint","RequestKey","RequestSignature"]},{"id":"res-lifetime","text":"Decides when a remembered answer stops counting, behind an interface so keys can live forever or for a fixed time","phase":"storm2","owners":["Lifetime","ExpiryPolicy","KeyLifetime","Ttl","RetentionPolicy"]}],"followups":[{"level":"SDE2","question":"Why does a request that ended in GaveUp not occupy its key, when a decline does?","answer":"A decline is an answer: the gateway looked at the card and said no, and asking again with the same request gives the same no, so replaying it is correct and saves a call. GaveUp is the absence of an answer: the gateway never told us anything about this card, and remembering 'we do not know' under the key would make the caller's retry return a failure forever for a payment that might succeed. Only final answers go in the key book."},{"level":"SDE2","question":"Why must every retry carry the same key to the gateway?","answer":"Because a temporary error does not say that nothing happened: a timeout can arrive after the gateway took the money. If each retry looked like a new request the gateway would charge it again. With one key, a gateway that remembers keys answers the repeat with the first outcome. The processor's own key book protects against repeats from the caller; the key sent downstream protects against repeats from the processor."},{"level":"SDE2","question":"Why is the retry loop its own class and not a loop inside pay()?","answer":"Because refunds needed exactly the same rule and a copy would drift (one with three attempts, one with four). The Retrier takes any call that returns a Reply and knows nothing about payments, keys or ledgers, so it is tested by what the processor does with it and reused without edits. The rule 'three attempts, only temporary errors' lives in one place."},{"level":"Senior","question":"Two identical requests with the same key arrive at the same instant on different servers. What happens in your design, and what would you change?","answer":"In memory and single threaded, the first wins and the second is a replay. Across servers both would pass the 'is this key known' check and both would call the gateway. The fix is to claim the key before calling the gateway: an atomic conditional insert of the key with the request shape and state 'in progress'. The loser either waits and returns the winner's answer, or gets a 'request in progress' response (HTTP 409 style) and retries later. Either way the claim must carry the request shape so a conflicting request is still caught, and an in-progress claim needs a timeout so a crashed server does not block the key forever."},{"level":"Senior","question":"Why compare the card and amount at all? Is the key not enough?","answer":"A key is chosen by the client, and clients have bugs: a reused key on a different purchase would silently return the first purchase's answer, and the customer would believe the second was paid. Comparing the request's shape turns that bug into a loud KeyConflict. The shape is a value (kind, target, amount), compared in one place, so adding a field is one edit."},{"level":"Senior","question":"The refund feature arrived. What in your first design had to change, and what should not have?","answer":"The key book, the retrier and the ledger should not change: a refund is another request shape with the same replay, conflict and retry rules, which is what the Fingerprint value and the Strategy-free Retrier are for. What changes is the facade (one new method) and the ledger (a refunded total per payment). If your pay() contained the replay logic inline, you copy it into refund() and the two copies drift; the first drift is usually that replay is checked after the cap check, so a repeated refund of the last cent is reported as 'too much'."},{"level":"Senior","question":"Expiry makes a very late repeat of a refund apply twice. Is that a bug?","answer":"It is the documented cost of forgetting, so it needs a design answer rather than a patch. Choose the window to be longer than any sane client retry (Stripe-style systems use about a day), and give high-value operations a second, permanent guard, for example a business key such as 'refund of line item 7 of order 12' with a unique constraint, so a duplicate fails even after the key has expired. Expiry bounds storage; it is not a correctness mechanism."},{"level":"Staff","question":"Design this for a payments platform at 20,000 requests per second across regions, with a gateway that is slow and sometimes lies.","answer":"Keep the idempotency record in a strongly consistent store partitioned by key (the claim is a conditional write), with the request fingerprint and the stored response, and a TTL. Make the processor a state machine per payment (created, authorized, captured, voided, refunded) persisted before and after each gateway call, so a crashed worker can resume or reconcile instead of guessing. Send the key downstream. Retry with exponential backoff and jitter under a deadline and a retry budget (a cap on the share of traffic that is retries) so a gateway brown-out is not amplified; add a circuit breaker per gateway and a failover route. Reconcile with the gateway's settlement files daily and alert on any payment whose state disagrees. Say which anomalies page a human: money taken with no order, and order with no money."}],"apiHeader":"$15","phaseApis":{"storm1":"$16","storm2":"#pragma once\n// Change Storm 2 makes idempotency keys expire. Everything from api.h and api_storm1.h still holds.\n#include \"api_storm1.h\"\n\nnamespace pay {\n\n// Time, supplied by the caller (the tests move it by hand).\nclass Clock {\n public:\n  virtual ~Clock() = default;\n  virtual long long seconds() const = 0;\n};\n\n// Like makeRefundingProcessor, but an answer is remembered under its key for exactly `ttlSeconds` seconds from the moment\n// it was recorded. A key recorded at time t is live while seconds() < t + ttlSeconds and expired from t + ttlSeconds on.\n// An expired key behaves like a key that was never used: the same request is processed again (a new payment id, a new\n// gateway call) and a different request is NOT a conflict. Replays do not extend a key's life. Payment and refund keys\n// expire the same way. Returns nullptr when ttlSeconds < 1.\nstd::unique_ptr<RefundingProcessor> makeExpiringProcessor(RefundGateway& gateway, const Clock& clock, long long ttlSeconds);\n\n}  // namespace pay\n"},"phases":["base","storm1","storm2"],"tests":{"base":[{"path":"pay_base.cpp","content":"$17"}],"storm1":[{"path":"pay_storm1.cpp","content":"$18"}],"storm2":[{"path":"pay_storm2.cpp","content":"$19"}]},"reference":[{"path":"charge_only_gateway.h","content":"#pragma once\n#include \"api_storm1.h\"\n\n// Lets a plain Gateway be used where a RefundGateway is expected. Before refunds exist there is nothing to refund\n// with, so any refund call is declined. An Adapter, so the processor has one gateway type to talk to.\nclass ChargeOnlyGateway : public pay::RefundGateway {\n public:\n  explicit ChargeOnlyGateway(pay::Gateway& gateway) : gateway_(gateway) {}\n\n  pay::Reply charge(const std::string& key, const std::string& card, pay::Money amount) override {\n    return gateway_.charge(key, card, amount);\n  }\n\n  pay::Reply refund(const std::string&, const std::string&, pay::Money) override { return pay::Reply::Declined; }\n\n private:\n  pay::Gateway& gateway_;\n};\n"},{"path":"key_book.h","content":"$1a"},{"path":"lifetime.h","content":"#pragma once\n#include \"api_storm2.h\"\n\n// How long a recorded answer stays valid. A Strategy: the key book asks and never looks at a clock itself.\nclass Lifetime {\n public:\n  virtual ~Lifetime() = default;\n  virtual long long stamp() const = 0;\n  virtual bool expired(long long stamp) const = 0;\n};\n\nclass NoExpiry : public Lifetime {\n public:\n  long long stamp() const override { return 0; }\n  bool expired(long long) const override { return false; }\n};\n\nclass TtlLifetime : public Lifetime {\n public:\n  TtlLifetime(const pay::Clock& clock, long long ttlSeconds) : clock_(clock), ttlSeconds_(ttlSeconds) {}\n  long long stamp() const override { return clock_.seconds(); }\n  bool expired(long long stamp) const override { return clock_.seconds() >= stamp + ttlSeconds_; }\n\n private:\n  const pay::Clock& clock_;\n  long long ttlSeconds_;\n};\n"},{"path":"payment_ledger.h","content":"#pragma once\n#include <map>\n#include <utility>\n\n#include \"api.h\"\n\n// The payments that were approved and how much of each has been given back. Issues ids: positive, never reused.\nclass PaymentLedger {\n public:\n  pay::PaymentId record(pay::Payment payment) {\n    entries_.emplace(++lastId_, Entry{std::move(payment), 0});\n    return lastId_;\n  }\n\n  const pay::Payment* find(pay::PaymentId id) const {\n    const auto it = entries_.find(id);\n    return it == entries_.end() ? nullptr : &it->second.payment;\n  }\n\n  pay::Money refunded(pay::PaymentId id) const {\n    const auto it = entries_.find(id);\n    return it == entries_.end() ? 0 : it->second.refunded;\n  }\n\n  void addRefund(pay::PaymentId id, pay::Money amount) { entries_.at(id).refunded += amount; }\n\n private:\n  struct Entry {\n    pay::Payment payment;\n    pay::Money refunded = 0;\n  };\n\n  pay::PaymentId lastId_ = pay::kNoPayment;\n  std::map<pay::PaymentId, Entry> entries_;\n};\n"},{"path":"processor_impl.h","content":"$1b"},{"path":"request.h","content":"#pragma once\n#include <string>\n\n#include \"api_storm1.h\"\n\n// What a request asked for, reduced to what must match for a repeated call to count as \"the same request\".\nstruct RequestShape {\n  enum class Kind { Pay, Refund };\n  Kind kind = Kind::Pay;\n  std::string target;  // the card for a payment, the payment id for a refund\n  pay::Money amount = 0;\n};\n\ninline bool operator==(const RequestShape& a, const RequestShape& b) {\n  return a.kind == b.kind && a.target == b.target && a.amount == b.amount;\n}\n\n// The final answer a request got. A temporary error is never an answer.\nstruct Answer {\n  pay::Reply reply = pay::Reply::Declined;\n  pay::PaymentId id = pay::kNoPayment;\n};\n"},{"path":"retrier.h","content":"#pragma once\n#include <functional>\n\n#include \"api.h\"\n\n// The retry policy: repeat a call while the gateway says \"temporary\", at most kMaxAttempts calls. Anything else is an\n// answer and ends the loop. It knows nothing about payments, keys or ledgers.\nclass Retrier {\n public:\n  pay::Reply run(const std::function<pay::Reply()>& attempt) const {\n    pay::Reply reply = pay::Reply::TemporaryError;\n    for (int calls = 0; calls < pay::kMaxAttempts && reply == pay::Reply::TemporaryError; ++calls) reply = attempt();\n    return reply;\n  }\n};\n"},{"path":"service.cpp","content":"#include \"processor_impl.h\"\n\nstd::unique_ptr<pay::Processor> pay::makeProcessor(pay::Gateway& gateway) {\n  return std::make_unique<ProcessorImpl>(gateway, std::make_unique<NoExpiry>());\n}\n\nstd::unique_ptr<pay::RefundingProcessor> pay::makeRefundingProcessor(pay::RefundGateway& gateway) {\n  return std::make_unique<ProcessorImpl>(gateway, std::make_unique<NoExpiry>());\n}\n\nstd::unique_ptr<pay::RefundingProcessor> pay::makeExpiringProcessor(pay::RefundGateway& gateway, const pay::Clock& clock,\n                                                                    long long ttlSeconds) {\n  if (ttlSeconds < 1) return nullptr;\n  return std::make_unique<ProcessorImpl>(gateway, std::make_unique<TtlLifetime>(clock, ttlSeconds));\n}\n"}],"driver":{"path":"driver.cpp","content":"#define BP_TEST_MAIN\n#include \"bp_test.h\"\n","readOnly":true}}}],["$L1c","$L1d"],"$L1e"]}],"p":"$@1f","v":null,"s":"$9"}}]]
+d:[["children",{"s":{"n":"id","t":"d","k":"payment-processor","s":[]},"h":65632,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}]}]]}],"p":"$@e","v":"$c","s":"$9"},"c":"$Qf"}]]
+a:[["children",{"s":"workshop","h":131168,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}]}]]}],"p":"$@b","v":"$c","s":"$9"},"c":"$Qd"}]]
+0:{"t":{"t":{"s":"","h":131152,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/1klm1scec-3x5.css","precedence":"next"}],["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js","async":true}]],["$","html",null,{"lang":"en","className":"r7opxW_variable auY9QW_variable u-EJdW_variable h-full","children":["$","body",null,{"className":"min-h-full","children":[["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}],"notFound":[["$","main",null,{"className":"flex min-h-dvh flex-col items-center justify-center gap-4 px-4 text-center","children":[["$","div",null,{"className":"font-display text-5xl text-[var(--accent)]","children":"404"}],["$","p",null,{"className":"text-white/60","children":"This room is not on the blueprint yet."}],["$","$L6",null,{"href":"/","className":"text-sm text-white/80 underline","children":"Back to the title screen"}]]}],[]]}],["$","$L7",null,{}]]}]}]]}],"p":"$@8","v":null,"s":"$9"},"c":"$Qa"},"h":{"r":["$","$1","h",{"children":[null,["$","$L21",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1, viewport-fit=cover"}],["$","meta","2",{"name":"theme-color","content":"#0a1530"}]]}],["$","$L23",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$24",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"Payment processor with retries and idempotency keys: Blueprint Clash"}],["$","meta","1",{"name":"description","content":"A creature-tactics RPG that teaches low-level design in C++ and high-level system design, from fundamentals to big-tech interview level."}],["$","link","2",{"rel":"manifest","href":"/blueprint-clash/manifest.webmanifest"}],["$","meta","3",{"name":"mobile-web-app-capable","content":"yes"}],["$","meta","4",{"name":"apple-mobile-web-app-title","content":"Blueprint Clash"}],["$","meta","5",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","link","6",{"rel":"icon","href":"/blueprint-clash/icon.png?icon.27re_xscs-jmw.png","sizes":"256x256","type":"image/png"}],["$","link","7",{"rel":"apple-touch-icon","href":"/blueprint-clash/apple-icon.png?apple-icon.2rac1w0yc3rju.png","sizes":"180x180","type":"image/png"}],["$","$L25","8",{}]]}]}],null]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"p":"$@26","v":null,"s":"$9"}},"a":"$@27","u":"$@28","b":"2AOMJw3uqOQQQZHGX3CKn"}
+29:I[97367,["$2"],"OutletBoundary"]
+1c:["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/2uk3wcjwqg0tl.js","async":true}]
+1d:["$","script","script-1",{"src":"/blueprint-clash/_next/static/chunks/1zdu7yjl8efu4.js","async":true}]
+1e:["$","$L29",null,{"children":["$","$24",null,{"name":"Next.MetadataOutlet","children":"$@2a"}]}]
+9:300
+2a:null
+28:true
+9:C
+27:0
+e:"$undefined"
+b:"$undefined"
+8:"$undefined"
+26:"$undefined"
+1f:"$undefined"

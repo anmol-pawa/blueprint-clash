@@ -1,0 +1,1197 @@
+1:"$Sreact.fragment"
+2:"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js"
+3:I[39756,["$2"],"default"]
+4:I[37457,["$2"],"default"]
+5:"/blueprint-clash/_next/static/chunks/2n5qeheznvl4u.js"
+6:I[22016,["$2","$5"],""]
+7:I[64576,["$2"],"PwaRegister"]
+d:I[97367,["$2"],"OutletBoundary"]
+e:"$Sreact.suspense"
+10:"ViewportBoundary"
+11:I[97367,["$2"],"$10"]
+13:"MetadataBoundary"
+14:I[97367,["$2"],"$13"]
+16:I[68027,["$2"],"default",1]
+:HL["/blueprint-clash/_next/static/chunks/1klm1scec-3x5.css","style"]
+:HL["/blueprint-clash/_next/static/media/07c7676b89ed2778-s.p.2bn3s6zvc0dyp.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/blueprint-clash/_next/static/media/486a103cae33528f-s.p.309ilb452anpd.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/blueprint-clash/_next/static/media/53897e768d329f66-s.p.3t6q91iet4nsy.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+9:X
+b:[["children",{"s":"__PAGE__","h":512,"d":{"r":["$","$1","c",{"children":["$Lc",[["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/2uk3wcjwqg0tl.js","async":true,"nonce":"$undefined"}],["$","script","script-1",{"src":"/blueprint-clash/_next/static/chunks/1zdu7yjl8efu4.js","async":true,"nonce":"$undefined"}]],["$","$Ld",null,{"children":["$","$e",null,{"name":"Next.MetadataOutlet","children":"$@f"}]}]]}],"p":false,"v":null}}]]
+a:[["children",{"s":{"n":"id","t":"d","k":"shopping-cart","s":[]},"h":66048,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],"p":false,"v":"$9"},"c":"$Qb"}]]
+8:[["children",{"s":"workshop","h":131584,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],"p":false,"v":"$9"},"c":"$Qa"}]]
+0:{"P":null,"c":["","workshop","shopping-cart",""],"q":"","i":false,"t":{"t":{"s":"","h":131600,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/1klm1scec-3x5.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}],["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js","async":true,"nonce":"$undefined"}]],["$","html",null,{"lang":"en","className":"r7opxW_variable auY9QW_variable u-EJdW_variable h-full","children":["$","body",null,{"className":"min-h-full","children":[["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","main",null,{"className":"flex min-h-dvh flex-col items-center justify-center gap-4 px-4 text-center","children":[["$","div",null,{"className":"font-display text-5xl text-[var(--accent)]","children":"404"}],["$","p",null,{"className":"text-white/60","children":"This room is not on the blueprint yet."}],["$","$L6",null,{"href":"/","className":"text-sm text-white/80 underline","children":"Back to the title screen"}]]}],[]],"forbidden":"$undefined","unauthorized":"$undefined"}],["$","$L7",null,{}]]}]}]]}],"p":false,"v":null},"c":"$Q8"},"h":{"r":["$","$1","h",{"children":[null,["$","$L11",null,{"children":"$L12"}],["$","$L14",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$e",null,{"name":"Next.Metadata","children":"$L15"}]}],null]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"p":false,"v":null}},"m":"$undefined","G":["$16",[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/1klm1scec-3x5.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]]],"S":true,"r":"$undefined","s":"$undefined","a":"$undefined","l":"$undefined","p":"$undefined","d":"$undefined","b":"2AOMJw3uqOQQQZHGX3CKn"}
+9:C
+12:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1, viewport-fit=cover"}],["$","meta","2",{"name":"theme-color","content":"#0a1530"}]]
+17:I[27201,["$2"],"IconMark"]
+f:null
+15:[["$","title","0",{"children":"Shopping cart and discount engine: Blueprint Clash"}],["$","meta","1",{"name":"description","content":"A creature-tactics RPG that teaches low-level design in C++ and high-level system design, from fundamentals to big-tech interview level."}],["$","link","2",{"rel":"manifest","href":"/blueprint-clash/manifest.webmanifest","crossOrigin":"$undefined"}],["$","meta","3",{"name":"mobile-web-app-capable","content":"yes"}],["$","meta","4",{"name":"apple-mobile-web-app-title","content":"Blueprint Clash"}],["$","meta","5",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","link","6",{"rel":"icon","href":"/blueprint-clash/icon.png?icon.27re_xscs-jmw.png","sizes":"256x256","type":"image/png"}],["$","link","7",{"rel":"apple-touch-icon","href":"/blueprint-clash/apple-icon.png?apple-icon.2rac1w0yc3rju.png","sizes":"180x180","type":"image/png"}],["$","$L17","8",{}]]
+18:"/blueprint-clash/_next/static/chunks/2uk3wcjwqg0tl.js"
+19:"/blueprint-clash/_next/static/chunks/1zdu7yjl8efu4.js"
+1a:I[65612,["$2","$18","$19"],"WorkshopClient"]
+1b:T1cb3,# Editorial: Shopping cart and discount engine
+
+## Requirements
+Functional: products with a unit price and a stock; one cart per customer; checkout turns a cart into an order and moves stock; an order can be cancelled by its customer. The cart holds no stock. Money is whole cents in a 64-bit integer.
+
+Hidden in the brief and revealed by good questions: a line is 1 to 99 units and merges on repeated adds; adding never looks at the shelf; checkout is all or nothing and a failure changes nothing, the cart included; cancel puts the units back and spends the id; the order of checks is part of the API.
+
+**Change Storm 1, coupons:** `addCoupon(code, rule)` with three kinds (percent off the cart, an amount off the cart, a percent off one product's line) and an optional minimum spend. One coupon per cart, applying another replaces it. `total()` is the price checkout will charge; percentages round down; the total never goes below zero; a coupon that is ineligible at pricing time stays attached and gives nothing. Checkout uses the coupon up; a failed checkout keeps it. Revealable by asking what discounts marketing will want.
+
+**Change Storm 2, stacking:** `addStackableCoupon` registers coupons that combine. Ordinary coupons still replace everything; a stackable one drops an ordinary coupon and joins the stackable ones; coupons fold in attach order, each taking from what is left; eligibility is decided against the pre-coupon subtotal.
+
+## Reference design
+- `Catalog` is the only place that knows a unit price.
+- `Inventory` counts units on the shelf and moves stock for a whole set of lines all or nothing: `canTake` is asked first and `take` then cannot fail.
+- `CartBook` keeps one wish list per customer and the rules about lines: merge on add, remove a line at zero, drop an empty cart. It knows no prices and no stock.
+- `OrderLedger` records what was bought, by whom and for how much, issues ids and spends them on cancel.
+- `Pricer` prices the lines of a cart into a `Basket` (line totals and subtotal) and folds a list of `Discount`s over it. It owns the arithmetic and nothing else.
+- `Discount` is the Strategy: `reduction(basket, running)`. `PercentOffCart`, `AmountOffCart` and `PercentOffSku` are the kinds, and `MinimumSpend` is a Decorator that adds the eligibility rule to any of them, once. `makeDiscount` builds the right object for a rule and validates it.
+- `CouponBook` knows which coupons exist and which are attached to whose cart, in order, and enforces what may combine.
+- `ShopImpl` is the facade: it validates in the documented order and sequences the collaborators. It holds no rule about prices, stock or discounts, and `checkout` calls `total()` so the quote and the charge cannot disagree.
+
+**Storm 1 in the reference:** `Discount`, three subclasses, the `MinimumSpend` Decorator, `Pricer::total` and `CouponBook` are new; `ShopImpl` gets four small methods and `checkout` charges `total()` and clears the coupon. Nothing from the base phase is edited except those lines.
+
+**Storm 2 in the reference:** one flag per coupon and one method, `CouponBook::apply`, change; the pricing loop already folded a list in order, so it is untouched. That is what the storm tests: whether stacking is a change in one class or a rewrite.
+
+## Alternatives
+- **Reserving stock when the item is added** feels safe and is wrong for a shop: abandoned carts lock stock. The deciding moment is checkout. A time-limited hold is a separate feature (see the ticket-booking problem).
+- **Taking stock line by line while checking** is the first draft of most candidates. It is correct until a later line fails, and then it needs a rollback that is easy to get wrong. Checking all, then taking all, needs no rollback.
+- **A discount flag on each cart line** (`discountPercent`) works for one kind of coupon. A second kind adds another field and a branch in the pricing loop, and the third kind rewrites it. The Strategy interface is what keeps the loop closed.
+- **A `switch` on the coupon kind inside the pricer** is simple and honest for three kinds. It fails the change storm test: each new kind edits the pricer. Say that out loud; the switch is acceptable if you name when you would stop.
+- **Minimum spend as a field inside every discount** repeats a rule and lets the copies drift. The Decorator (or a Specification object that can be combined) writes it once.
+- **Re-pricing an order from the current price list** at cancel or refund time makes every old order depend on today's prices. The order stores the total it was charged.
+- **Floating point for percentages** loses cents in ways that depend on the order of operations. Integer arithmetic with an explicit rounding rule is reproducible.
+
+## Trade-offs
+A map from sku to quantity per customer makes every cart operation O(log lines) and the pricing of a cart O(lines), which is small. Keeping the cart ignorant of stock and prices makes it trivially correct and puts the two decisions that matter (can I buy it, what does it cost) at checkout where they are made once. The price of that choice is that a customer can hold an item that is gone by checkout; the product answer is to show stock on the cart page as a hint and let checkout decide.
+
+Folding discounts as a list in attach order is the simplest rule that is deterministic and explainable. The alternative, always applying percentages before amounts or choosing the best order for the customer, is a policy a business may prefer; it is a different `Pricer` ordering rule, and the test that pins attach order is the one to change. Deciding eligibility against the pre-coupon subtotal costs the shop some margin (a cart can qualify for a coupon it would not qualify for after another one) and buys predictability: adding a coupon never turns another one off.
+
+## What breaks at 10x
+At 10x the customers, nothing in the model changes: carts are per customer, so shard by customer. The shared structures are the shelf and the order ids. The shelf is where contention appears: a popular product is one hot counter, and the check-then-take of a whole cart is a critical section across several of them. Take locks in a fixed order (by sku) or move to conditional decrements inside one database transaction. Order ids come from a sequence, not a counter in memory. The coupon table is read-mostly and cacheable; what must be transactional is "use up the coupon" together with "write the order". At 100x, a flash sale on one product needs a waiting room in front of the counter and idempotent checkout so retries do not double-buy.
+
+## Level signals
+- **SDE2:** a cart that does not hold stock, all-or-nothing checkout that leaves nothing changed on failure, integer money, ids spent on cancel, and a clear order of checks.
+- **Senior:** asks what a cart means before coding; separates catalogue, inventory, carts and orders with one reason to change each; makes discounts a Strategy and writes eligibility once; makes the quote and the charge one function; names the concurrency hazard and the lock order.
+- **Staff:** treats stacking and eligibility as policy that changes without a deploy (rules as data with a dry run and a version on each order); moves the last-unit decision to a conditional write; designs the flash-sale path with a waiting room, idempotency keys and holds; says what to reconcile afterwards.
+1c:Tdb5,#pragma once
+// Public API for the Shopping cart problem. The hidden tests only use what is declared here.
+// You implement cart::makeShop() (in any of your .cpp files); everything behind it is your design.
+#include <memory>
+#include <optional>
+#include <string>
+
+namespace cart {
+
+using Money = long long;  // whole cents
+using OrderId = long long;
+constexpr OrderId kNoOrder = 0;  // ids that are issued are always positive and never reused
+
+constexpr Money kMaxPrice = 1000000;  // cents, per unit
+constexpr int kMaxStock = 1000000;
+constexpr int kMaxLineQuantity = 99;  // most units of one product in one cart
+
+enum class Status {
+  Ok,
+  InvalidRequest,   // empty customer, or a quantity that is not allowed
+  UnknownProduct,   // no such sku
+  NotInCart,        // the cart has no line for that sku
+  EmptyCart,        // nothing to check out
+  OutOfStock,       // some line wants more units than the shelf has
+  UnknownOrder,     // never issued, or already cancelled
+  WrongCustomer,    // the order belongs to someone else
+};
+
+struct CheckoutResult {
+  Status status = Status::Ok;
+  OrderId id = kNoOrder;  // kNoOrder unless status is Ok
+  Money total = 0;        // what the customer pays; 0 unless status is Ok
+};
+
+// A shop sells products from a shelf (stock) into carts, one cart per customer. A cart is only a wish list: it does
+// NOT hold stock. Stock moves when the customer checks out, and then every line moves or none does.
+class Shop {
+ public:
+  virtual ~Shop() = default;
+
+  // Adds a product. Returns false, changing nothing, when the sku is empty or taken, the price is outside
+  // 1..kMaxPrice or the stock is outside 0..kMaxStock.
+  virtual bool addProduct(const std::string& sku, Money unitPrice, int stock) = 0;
+
+  // Adds `quantity` units of the product to the customer's cart (the first call creates the cart). Checks, in order:
+  // InvalidRequest (empty customer, quantity outside 1..kMaxLineQuantity), UnknownProduct, InvalidRequest again if the
+  // line would then hold more than kMaxLineQuantity units. A failed call changes nothing. Stock is not looked at.
+  virtual Status addToCart(const std::string& customer, const std::string& sku, int quantity) = 0;
+
+  // Takes `quantity` units off the line. Checks, in order: InvalidRequest (empty customer, quantity < 1), NotInCart.
+  // Taking as many as the line holds or more removes the line.
+  virtual Status removeFromCart(const std::string& customer, const std::string& sku, int quantity) = 0;
+
+  // Unit prices times quantities for the cart as it is now; 0 for an empty or unknown cart.
+  virtual Money subtotal(const std::string& customer) const = 0;
+
+  // Units on the shelf; empty for an unknown sku.
+  virtual std::optional<int> stock(const std::string& sku) const = 0;
+
+  // Buys everything in the cart. Checks, in order: InvalidRequest (empty customer), EmptyCart, OutOfStock (some line
+  // asks for more than the shelf has). On success the stock of every line goes down, the cart is emptied, the order is
+  // recorded with the total charged and gets a new id. On any failure nothing changes, the cart included.
+  virtual CheckoutResult checkout(const std::string& customer) = 0;
+
+  // Puts every unit of the order back on the shelf and spends the id. Failures, in order: UnknownOrder (never issued
+  // or already cancelled), WrongCustomer. A failed call changes nothing.
+  virtual Status cancelOrder(OrderId id, const std::string& customer) = 0;
+};
+
+std::unique_ptr<Shop> makeShop();
+
+}  // namespace cart
+1d:T880,#pragma once
+// Change Storm 1 adds coupons. Everything from api.h still holds.
+#include "api.h"
+
+namespace cart {
+
+struct CouponRule {
+  enum class Kind {
+    PercentOffCart,  // `value` percent off what is left of the cart total
+    AmountOffCart,   // `value` cents off the cart total
+    PercentOffSku,   // `value` percent off the line of product `sku`
+  };
+  Kind kind = Kind::PercentOffCart;
+  long long value = 0;
+  Money minSubtotal = 0;  // the coupon only works while the cart subtotal (before any coupon) is at least this
+  std::string sku;        // used by PercentOffSku only
+};
+
+enum class CouponStatus {
+  Ok,
+  InvalidRequest,  // empty customer
+  UnknownCoupon,   // no coupon with that code
+};
+
+class CouponShop : public Shop {
+ public:
+  // Registers a coupon. Returns false, changing nothing, for an empty or taken code, a negative minSubtotal, a percent
+  // outside 1..100, an amount outside 1..kMaxPrice, or a PercentOffSku whose sku is not a product.
+  virtual bool addCoupon(const std::string& code, const CouponRule& rule) = 0;
+
+  // Attaches a coupon to the customer's cart. A cart carries at most one coupon: applying another replaces it. Checks,
+  // in order: InvalidRequest, UnknownCoupon. Whether the coupon is allowed to work is NOT checked here but each time the
+  // cart is priced, so a coupon that stops being eligible stays attached and simply gives nothing (until the cart
+  // changes again). The cart need not exist yet.
+  virtual CouponStatus applyCoupon(const std::string& customer, const std::string& code) = 0;
+
+  // Detaches whatever coupons the cart carries. Does nothing if there are none.
+  virtual void clearCoupons(const std::string& customer) = 0;
+
+  // What checkout() would charge right now: the subtotal minus the reduction of the attached coupon, never below 0.
+  // Percentages are taken of the amount they apply to and rounded down. 0 for an empty or unknown cart. checkout()
+  // charges exactly this, and a successful checkout uses the coupon up: the cart carries none afterwards.
+  virtual Money total(const std::string& customer) const = 0;
+};
+
+std::unique_ptr<CouponShop> makeCouponShop();
+
+}  // namespace cart
+1e:T538,#pragma once
+// Change Storm 2 adds stackable coupons. Everything from api.h and api_storm1.h still holds.
+#include "api_storm1.h"
+
+namespace cart {
+
+class StackingShop : public CouponShop {
+ public:
+  // Like addCoupon, but the coupon can be combined with other stackable coupons. Codes of both kinds share one
+  // namespace. Same validation and return value.
+  virtual bool addStackableCoupon(const std::string& code, const CouponRule& rule) = 0;
+
+  // applyCoupon now works like this. Applying an ordinary coupon replaces everything the cart carries (so behaviour
+  // with ordinary coupons is exactly as before). Applying a stackable coupon drops any ordinary coupon the cart carries
+  // and adds the stackable one after the stackable ones already there; applying one that is already attached changes
+  // nothing, its place included.
+  //
+  // total() takes the attached coupons in the order they were attached. Each works on what the earlier ones left:
+  // percentages are of the running amount, an amount never takes more than is left, a percent-off-sku takes its percent
+  // of the line's own total (before any coupon) but never more than is left. Whether a coupon is eligible is decided
+  // against the subtotal before any coupon, as in Storm 1.
+};
+
+std::unique_ptr<StackingShop> makeStackingShop();
+
+}  // namespace cart
+1f:T2f08,#include <map>
+#include <memory>
+#include <string>
+
+#include "api.h"
+#include "bp_test.h"
+
+using cart::Status;
+
+namespace {
+// Products: "pen" 150 cents, 10 on the shelf. "book" 1200, 3. "lamp" 4500, 1.
+struct Fixture {
+  std::unique_ptr<cart::Shop> shop = cart::makeShop();
+  Fixture() {
+    shop->addProduct("pen", 150, 10);
+    shop->addProduct("book", 1200, 3);
+    shop->addProduct("lamp", 4500, 1);
+  }
+  int stockOf(const std::string& sku) const {
+    const auto s = shop->stock(sku);
+    return s ? *s : -1;
+  }
+};
+}  // namespace
+
+TEST(Setup, ProductsMustBeNewAndHaveSaneNumbers) {
+  Fixture f;
+  EXPECT_FALSE(f.shop->addProduct("pen", 99, 5));
+  EXPECT_FALSE(f.shop->addProduct("", 99, 5));
+  EXPECT_FALSE(f.shop->addProduct("x", 0, 5));
+  EXPECT_FALSE(f.shop->addProduct("x", 1000001, 5));
+  EXPECT_FALSE(f.shop->addProduct("x", 99, -1));
+  EXPECT_FALSE(f.shop->addProduct("x", 99, 1000001));
+  EXPECT_TRUE(f.shop->addProduct("empty", 1, 0));
+  EXPECT_TRUE(f.shop->addProduct("big", 1000000, 1000000));
+  EXPECT_EQ(f.stockOf("empty"), 0);
+  EXPECT_EQ(f.stockOf("big"), 1000000);
+  EXPECT_EQ(f.stockOf("x"), -1);
+}
+
+TEST(Setup, ARefusedProductDoesNotDisturbTheExistingOne) {
+  Fixture f;
+  EXPECT_TRUE(f.shop->addToCart("ann", "pen", 2) == Status::Ok);
+  EXPECT_FALSE(f.shop->addProduct("pen", 99, 500));
+  EXPECT_EQ(f.stockOf("pen"), 10);
+  EXPECT_EQ(f.shop->subtotal("ann"), 300);
+}
+
+TEST(Cart, AddingBuildsLinesAndTheSubtotal) {
+  Fixture f;
+  EXPECT_TRUE(f.shop->addToCart("ann", "pen", 2) == Status::Ok);
+  EXPECT_TRUE(f.shop->addToCart("ann", "book", 1) == Status::Ok);
+  EXPECT_EQ(f.shop->subtotal("ann"), 1500);
+}
+
+TEST(Cart, AddingTheSameProductAgainMergesIntoOneLine) {
+  Fixture f;
+  f.shop->addToCart("ann", "pen", 2);
+  f.shop->addToCart("ann", "pen", 3);
+  EXPECT_EQ(f.shop->subtotal("ann"), 750);
+  EXPECT_TRUE(f.shop->removeFromCart("ann", "pen", 5) == Status::Ok);
+  EXPECT_EQ(f.shop->subtotal("ann"), 0);
+  EXPECT_TRUE(f.shop->removeFromCart("ann", "pen", 1) == Status::NotInCart);
+}
+
+TEST(Cart, AddChecksAreInTheDocumentedOrder) {
+  Fixture f;
+  EXPECT_TRUE(f.shop->addToCart("", "nope", 1) == Status::InvalidRequest);
+  EXPECT_TRUE(f.shop->addToCart("ann", "nope", 0) == Status::InvalidRequest);
+  EXPECT_TRUE(f.shop->addToCart("ann", "nope", 1) == Status::UnknownProduct);
+  EXPECT_TRUE(f.shop->addToCart("ann", "pen", 0) == Status::InvalidRequest);
+  EXPECT_TRUE(f.shop->addToCart("ann", "pen", -3) == Status::InvalidRequest);
+  EXPECT_EQ(f.shop->subtotal("ann"), 0);
+}
+
+TEST(Cart, QuantityBoundsAreInclusive) {
+  Fixture f;
+  EXPECT_TRUE(f.shop->addToCart("ann", "pen", 99) == Status::Ok);
+  EXPECT_TRUE(f.shop->addToCart("bob", "pen", 100) == Status::InvalidRequest);
+  EXPECT_TRUE(f.shop->addToCart("bob", "pen", 1) == Status::Ok);
+  EXPECT_EQ(f.shop->subtotal("ann"), 99 * 150);
+  EXPECT_EQ(f.shop->subtotal("bob"), 150);
+}
+
+TEST(Cart, ALineHoldsAtMostNinetyNineUnitsEvenAcrossCalls) {
+  Fixture f;
+  EXPECT_TRUE(f.shop->addToCart("ann", "pen", 98) == Status::Ok);
+  EXPECT_TRUE(f.shop->addToCart("ann", "pen", 2) == Status::InvalidRequest);
+  EXPECT_EQ(f.shop->subtotal("ann"), 98 * 150);
+  EXPECT_TRUE(f.shop->addToCart("ann", "pen", 1) == Status::Ok);
+  EXPECT_TRUE(f.shop->addToCart("ann", "pen", 1) == Status::InvalidRequest);
+  EXPECT_EQ(f.shop->subtotal("ann"), 99 * 150);
+  EXPECT_TRUE(f.shop->addToCart("ann", "book", 99) == Status::Ok);
+}
+
+TEST(Cart, AddingDoesNotLookAtOrReserveStock) {
+  Fixture f;
+  EXPECT_TRUE(f.shop->addToCart("ann", "lamp", 5) == Status::Ok);
+  EXPECT_TRUE(f.shop->addToCart("bob", "lamp", 1) == Status::Ok);
+  EXPECT_EQ(f.stockOf("lamp"), 1);
+}
+
+TEST(Cart, CartsAreIndependentPerCustomer) {
+  Fixture f;
+  f.shop->addToCart("ann", "pen", 1);
+  f.shop->addToCart("bob", "book", 2);
+  EXPECT_EQ(f.shop->subtotal("ann"), 150);
+  EXPECT_EQ(f.shop->subtotal("bob"), 2400);
+  EXPECT_EQ(f.shop->subtotal("cy"), 0);
+}
+
+TEST(Cart, RemovingReducesTheLine) {
+  Fixture f;
+  f.shop->addToCart("ann", "pen", 5);
+  EXPECT_TRUE(f.shop->removeFromCart("ann", "pen", 2) == Status::Ok);
+  EXPECT_EQ(f.shop->subtotal("ann"), 450);
+}
+
+TEST(Cart, RemovingMoreThanTheLineHoldsRemovesTheLine) {
+  Fixture f;
+  f.shop->addToCart("ann", "pen", 2);
+  f.shop->addToCart("ann", "book", 1);
+  EXPECT_TRUE(f.shop->removeFromCart("ann", "pen", 50) == Status::Ok);
+  EXPECT_EQ(f.shop->subtotal("ann"), 1200);
+  EXPECT_TRUE(f.shop->addToCart("ann", "pen", 99) == Status::Ok);
+}
+
+TEST(Cart, RemoveChecksAreInTheDocumentedOrder) {
+  Fixture f;
+  f.shop->addToCart("ann", "pen", 2);
+  EXPECT_TRUE(f.shop->removeFromCart("", "pen", 1) == Status::InvalidRequest);
+  EXPECT_TRUE(f.shop->removeFromCart("ann", "pen", 0) == Status::InvalidRequest);
+  EXPECT_TRUE(f.shop->removeFromCart("ann", "book", 1) == Status::NotInCart);
+  EXPECT_TRUE(f.shop->removeFromCart("ann", "nope", 1) == Status::NotInCart);
+  EXPECT_TRUE(f.shop->removeFromCart("bob", "pen", 1) == Status::NotInCart);
+  EXPECT_TRUE(f.shop->removeFromCart("ann", "nope", 0) == Status::InvalidRequest);
+  EXPECT_EQ(f.shop->subtotal("ann"), 300);
+}
+
+TEST(Checkout, BuysEverythingAndEmptiesTheCart) {
+  Fixture f;
+  f.shop->addToCart("ann", "pen", 4);
+  f.shop->addToCart("ann", "book", 2);
+  const cart::CheckoutResult r = f.shop->checkout("ann");
+  EXPECT_TRUE(r.status == Status::Ok);
+  EXPECT_TRUE(r.id > 0);
+  EXPECT_EQ(r.total, 3000);
+  EXPECT_EQ(f.stockOf("pen"), 6);
+  EXPECT_EQ(f.stockOf("book"), 1);
+  EXPECT_EQ(f.shop->subtotal("ann"), 0);
+  EXPECT_TRUE(f.shop->checkout("ann").status == Status::EmptyCart);
+}
+
+TEST(Checkout, OrderIdsAreDistinctAndPositive) {
+  Fixture f;
+  f.shop->addToCart("ann", "pen", 1);
+  const cart::CheckoutResult a = f.shop->checkout("ann");
+  f.shop->addToCart("ann", "pen", 1);
+  const cart::CheckoutResult b = f.shop->checkout("ann");
+  EXPECT_TRUE(a.id > 0);
+  EXPECT_TRUE(b.id > 0);
+  EXPECT_TRUE(a.id != b.id);
+}
+
+TEST(Checkout, ChecksAreInTheDocumentedOrder) {
+  Fixture f;
+  EXPECT_TRUE(f.shop->checkout("").status == Status::InvalidRequest);
+  EXPECT_TRUE(f.shop->checkout("ann").status == Status::EmptyCart);
+  f.shop->addToCart("ann", "lamp", 2);
+  const cart::CheckoutResult r = f.shop->checkout("ann");
+  EXPECT_TRUE(r.status == Status::OutOfStock);
+  EXPECT_EQ(r.id, 0);
+  EXPECT_EQ(r.total, 0);
+}
+
+TEST(Checkout, OutOfStockChangesNothingNotEvenTheLinesThatWereFine) {
+  Fixture f;
+  f.shop->addToCart("ann", "pen", 2);
+  f.shop->addToCart("ann", "book", 1);
+  f.shop->addToCart("ann", "lamp", 2);  // the shelf has 1
+  EXPECT_TRUE(f.shop->checkout("ann").status == Status::OutOfStock);
+  EXPECT_EQ(f.stockOf("pen"), 10);
+  EXPECT_EQ(f.stockOf("book"), 3);
+  EXPECT_EQ(f.stockOf("lamp"), 1);
+  EXPECT_EQ(f.shop->subtotal("ann"), 300 + 1200 + 9000);
+  EXPECT_TRUE(f.shop->removeFromCart("ann", "lamp", 1) == Status::Ok);
+  const cart::CheckoutResult r = f.shop->checkout("ann");
+  EXPECT_TRUE(r.status == Status::Ok);
+  EXPECT_EQ(r.total, 300 + 1200 + 4500);
+}
+
+TEST(Checkout, ExactlyTheShelfIsEnough) {
+  Fixture f;
+  f.shop->addToCart("ann", "book", 3);
+  EXPECT_TRUE(f.shop->checkout("ann").status == Status::Ok);
+  EXPECT_EQ(f.stockOf("book"), 0);
+}
+
+TEST(Checkout, TheLastUnitGoesToTheFirstBuyerAndTheOtherKeepsTheCart) {
+  Fixture f;
+  f.shop->addToCart("ann", "lamp", 1);
+  f.shop->addToCart("bob", "lamp", 1);
+  f.shop->addToCart("bob", "pen", 1);
+  EXPECT_TRUE(f.shop->checkout("ann").status == Status::Ok);
+  EXPECT_TRUE(f.shop->checkout("bob").status == Status::OutOfStock);
+  EXPECT_EQ(f.shop->subtotal("bob"), 4650);
+  EXPECT_EQ(f.stockOf("pen"), 10);
+}
+
+TEST(Cancel, PutsTheStockBackAndSpendsTheId) {
+  Fixture f;
+  f.shop->addToCart("ann", "pen", 4);
+  f.shop->addToCart("ann", "lamp", 1);
+  const cart::OrderId id = f.shop->checkout("ann").id;
+  EXPECT_EQ(f.stockOf("pen"), 6);
+  EXPECT_EQ(f.stockOf("lamp"), 0);
+  EXPECT_TRUE(f.shop->cancelOrder(id, "ann") == Status::Ok);
+  EXPECT_EQ(f.stockOf("pen"), 10);
+  EXPECT_EQ(f.stockOf("lamp"), 1);
+  EXPECT_TRUE(f.shop->cancelOrder(id, "ann") == Status::UnknownOrder);
+  EXPECT_EQ(f.stockOf("pen"), 10);
+}
+
+TEST(Cancel, OnlyTheBuyerMayCancelAndFailuresAreInOrder) {
+  Fixture f;
+  f.shop->addToCart("ann", "pen", 1);
+  const cart::OrderId id = f.shop->checkout("ann").id;
+  EXPECT_TRUE(f.shop->cancelOrder(id, "bob") == Status::WrongCustomer);
+  EXPECT_TRUE(f.shop->cancelOrder(id + 100, "bob") == Status::UnknownOrder);
+  EXPECT_TRUE(f.shop->cancelOrder(0, "ann") == Status::UnknownOrder);
+  EXPECT_TRUE(f.shop->cancelOrder(-1, "ann") == Status::UnknownOrder);
+  EXPECT_EQ(f.stockOf("pen"), 9);
+  EXPECT_TRUE(f.shop->cancelOrder(id, "ann") == Status::Ok);
+}
+
+TEST(Cancel, GivesBackOnlyThatOrdersUnits) {
+  Fixture f;
+  f.shop->addToCart("ann", "pen", 3);
+  const cart::OrderId a = f.shop->checkout("ann").id;
+  f.shop->addToCart("bob", "pen", 2);
+  f.shop->checkout("bob");
+  EXPECT_EQ(f.stockOf("pen"), 5);
+  f.shop->cancelOrder(a, "ann");
+  EXPECT_EQ(f.stockOf("pen"), 8);
+}
+
+TEST(Cancel, FreedStockCanBeBoughtAgain) {
+  Fixture f;
+  f.shop->addToCart("ann", "lamp", 1);
+  const cart::OrderId id = f.shop->checkout("ann").id;
+  f.shop->addToCart("bob", "lamp", 1);
+  EXPECT_TRUE(f.shop->checkout("bob").status == Status::OutOfStock);
+  f.shop->cancelOrder(id, "ann");
+  EXPECT_TRUE(f.shop->checkout("bob").status == Status::Ok);
+}
+
+namespace {
+// A tiny model of the whole shop, written the obvious way, to compare against.
+struct Model {
+  std::map<std::string, int> stock{{"pen", 10}, {"book", 3}, {"lamp", 1}};
+  std::map<std::string, long long> price{{"pen", 150}, {"book", 1200}, {"lamp", 4500}};
+  std::map<std::string, std::map<std::string, int>> carts;
+  struct Placed {
+    std::string who;
+    std::map<std::string, int> lines;
+  };
+  std::map<long long, Placed> orders;
+
+  long long subtotal(const std::string& who) {
+    long long sum = 0;
+    for (const auto& [sku, q] : carts[who]) sum += price[sku] * q;
+    return sum;
+  }
+};
+}  // namespace
+
+TEST(Contention, ManyRandomShoppersAgreeWithASimpleModel) {
+  Fixture f;
+  Model model;
+  unsigned seed = 12345;
+  const auto next = [&seed](unsigned bound) {
+    seed = seed * 1103515245u + 12345u;
+    return (seed >> 16) % bound;
+  };
+  const char* who[] = {"ann", "bob", "cy"};
+  const char* skus[] = {"pen", "book", "lamp"};
+  std::map<long long, std::string> ids;
+  for (int step = 0; step < 600; ++step) {
+    const std::string c = who[next(3)];
+    const std::string sku = skus[next(3)];
+    switch (next(5)) {
+      case 0: {
+        const int q = 1 + static_cast<int>(next(4));
+        const bool fits = model.carts[c][sku] + q <= 99;
+        EXPECT_TRUE((f.shop->addToCart(c, sku, q) == Status::Ok) == fits);
+        if (fits) model.carts[c][sku] += q;
+        break;
+      }
+      case 1: {
+        const int q = 1 + static_cast<int>(next(3));
+        const bool has = model.carts[c].count(sku) > 0;
+        EXPECT_TRUE((f.shop->removeFromCart(c, sku, q) == Status::Ok) == has);
+        if (has) {
+          model.carts[c][sku] -= q;
+          if (model.carts[c][sku] <= 0) model.carts[c].erase(sku);
+        }
+        break;
+      }
+      case 2:
+      case 3: {
+        bool fine = !model.carts[c].empty();
+        for (const auto& [s, q] : model.carts[c]) fine = fine && q <= model.stock[s];
+        const cart::CheckoutResult r = f.shop->checkout(c);
+        EXPECT_TRUE((r.status == Status::Ok) == fine);
+        if (fine) {
+          EXPECT_EQ(r.total, model.subtotal(c));
+          for (const auto& [s, q] : model.carts[c]) model.stock[s] -= q;
+          model.orders[r.id] = Model::Placed{c, model.carts[c]};
+          model.carts[c].clear();
+        }
+        break;
+      }
+      default: {
+        if (model.orders.empty()) break;
+        const auto it = model.orders.begin();
+        EXPECT_TRUE(f.shop->cancelOrder(it->first, it->second.who) == Status::Ok);
+        for (const auto& [s, q] : it->second.lines) model.stock[s] += q;
+        model.orders.erase(it);
+        break;
+      }
+    }
+    for (const char* s : skus) EXPECT_EQ(f.stockOf(s), model.stock[s]);
+    for (const char* p : who) EXPECT_EQ(f.shop->subtotal(p), model.subtotal(p));
+  }
+}
+20:T1cb7,#include <memory>
+#include <string>
+
+#include "api_storm1.h"
+#include "bp_test.h"
+
+using cart::CouponRule;
+using cart::CouponStatus;
+using cart::Status;
+using Kind = cart::CouponRule::Kind;
+
+namespace {
+CouponRule rule(Kind kind, long long value, cart::Money minSubtotal = 0, const std::string& sku = "") {
+  CouponRule r;
+  r.kind = kind;
+  r.value = value;
+  r.minSubtotal = minSubtotal;
+  r.sku = sku;
+  return r;
+}
+
+// Products: "pen" 150 (10 on the shelf), "book" 1200 (3), "lamp" 4500 (1).
+struct Fixture {
+  std::unique_ptr<cart::CouponShop> shop = cart::makeCouponShop();
+  Fixture() {
+    shop->addProduct("pen", 150, 10);
+    shop->addProduct("book", 1200, 3);
+    shop->addProduct("lamp", 4500, 1);
+  }
+};
+}  // namespace
+
+TEST(CouponSetup, CouponsMustBeNewAndValid) {
+  Fixture f;
+  EXPECT_TRUE(f.shop->addCoupon("TEN", rule(Kind::PercentOffCart, 10)));
+  EXPECT_FALSE(f.shop->addCoupon("TEN", rule(Kind::PercentOffCart, 20)));
+  EXPECT_FALSE(f.shop->addCoupon("", rule(Kind::PercentOffCart, 10)));
+  EXPECT_FALSE(f.shop->addCoupon("A", rule(Kind::PercentOffCart, 0)));
+  EXPECT_FALSE(f.shop->addCoupon("B", rule(Kind::PercentOffCart, 101)));
+  EXPECT_TRUE(f.shop->addCoupon("C", rule(Kind::PercentOffCart, 100)));
+  EXPECT_FALSE(f.shop->addCoupon("D", rule(Kind::AmountOffCart, 0)));
+  EXPECT_FALSE(f.shop->addCoupon("E", rule(Kind::AmountOffCart, 1000001)));
+  EXPECT_TRUE(f.shop->addCoupon("F", rule(Kind::AmountOffCart, 1000000)));
+  EXPECT_FALSE(f.shop->addCoupon("G", rule(Kind::PercentOffCart, 10, -1)));
+  EXPECT_FALSE(f.shop->addCoupon("H", rule(Kind::PercentOffSku, 10, 0, "nope")));
+  EXPECT_FALSE(f.shop->addCoupon("I", rule(Kind::PercentOffSku, 0, 0, "pen")));
+  EXPECT_TRUE(f.shop->addCoupon("J", rule(Kind::PercentOffSku, 10, 0, "pen")));
+}
+
+TEST(CouponSetup, ApplyChecksAreInOrderAndTheCartNeedNotExist) {
+  Fixture f;
+  f.shop->addCoupon("TEN", rule(Kind::PercentOffCart, 10));
+  EXPECT_TRUE(f.shop->applyCoupon("", "nope") == CouponStatus::InvalidRequest);
+  EXPECT_TRUE(f.shop->applyCoupon("ann", "nope") == CouponStatus::UnknownCoupon);
+  EXPECT_TRUE(f.shop->applyCoupon("ann", "TEN") == CouponStatus::Ok);
+  f.shop->addToCart("ann", "book", 1);
+  EXPECT_EQ(f.shop->total("ann"), 1080);
+}
+
+TEST(Coupon, WithNoCouponTheTotalIsTheSubtotal) {
+  Fixture f;
+  f.shop->addToCart("ann", "pen", 2);
+  EXPECT_EQ(f.shop->total("ann"), 300);
+  EXPECT_EQ(f.shop->total("nobody"), 0);
+}
+
+TEST(Coupon, PercentOffTheCartRoundsDown) {
+  Fixture f;
+  f.shop->addCoupon("TEN", rule(Kind::PercentOffCart, 10));
+  f.shop->addToCart("ann", "pen", 3);  // 450 -> 45 off
+  f.shop->applyCoupon("ann", "TEN");
+  EXPECT_EQ(f.shop->total("ann"), 405);
+  f.shop->addToCart("ann", "pen", 1);  // 600 -> 60 off
+  EXPECT_EQ(f.shop->total("ann"), 540);
+  f.shop->addCoupon("THIRD", rule(Kind::PercentOffCart, 33));
+  f.shop->addToCart("bob", "pen", 1);  // 150 -> 49.5 -> 49 off
+  f.shop->applyCoupon("bob", "THIRD");
+  EXPECT_EQ(f.shop->total("bob"), 101);
+}
+
+TEST(Coupon, AmountOffNeverGoesBelowZero) {
+  Fixture f;
+  f.shop->addCoupon("FIVE", rule(Kind::AmountOffCart, 500));
+  f.shop->addCoupon("HUGE", rule(Kind::AmountOffCart, 100000));
+  f.shop->addToCart("ann", "book", 1);
+  f.shop->applyCoupon("ann", "FIVE");
+  EXPECT_EQ(f.shop->total("ann"), 700);
+  f.shop->applyCoupon("ann", "HUGE");
+  EXPECT_EQ(f.shop->total("ann"), 0);
+  f.shop->addCoupon("ALL", rule(Kind::PercentOffCart, 100));
+  f.shop->applyCoupon("ann", "ALL");
+  EXPECT_EQ(f.shop->total("ann"), 0);
+}
+
+TEST(Coupon, PercentOffASkuOnlyTouchesThatLine) {
+  Fixture f;
+  f.shop->addCoupon("PENS", rule(Kind::PercentOffSku, 50, 0, "pen"));
+  f.shop->addToCart("ann", "pen", 4);   // 600 -> 300 off
+  f.shop->addToCart("ann", "book", 1);  // 1200 untouched
+  f.shop->applyCoupon("ann", "PENS");
+  EXPECT_EQ(f.shop->total("ann"), 1500);
+  f.shop->addToCart("bob", "book", 2);  // no pens in the cart
+  f.shop->applyCoupon("bob", "PENS");
+  EXPECT_EQ(f.shop->total("bob"), 2400);
+}
+
+TEST(Coupon, TheMinimumSubtotalIsInclusiveAndLooksAtTheSubtotalBeforeTheCoupon) {
+  Fixture f;
+  f.shop->addCoupon("BIG", rule(Kind::AmountOffCart, 200, 1500));
+  f.shop->addToCart("ann", "book", 1);
+  f.shop->addToCart("ann", "pen", 2);  // 1500 exactly
+  f.shop->applyCoupon("ann", "BIG");
+  EXPECT_EQ(f.shop->total("ann"), 1300);
+  f.shop->removeFromCart("ann", "pen", 1);  // 1350 < 1500: the coupon stays attached but gives nothing
+  EXPECT_EQ(f.shop->total("ann"), 1350);
+  f.shop->addToCart("ann", "pen", 1);  // eligible again
+  EXPECT_EQ(f.shop->total("ann"), 1300);
+}
+
+TEST(Coupon, TheMinimumAppliesToSkuCouponsToo) {
+  Fixture f;
+  f.shop->addCoupon("PENS", rule(Kind::PercentOffSku, 100, 1000, "pen"));
+  f.shop->addToCart("ann", "pen", 2);
+  f.shop->applyCoupon("ann", "PENS");
+  EXPECT_EQ(f.shop->total("ann"), 300);
+  f.shop->addToCart("ann", "book", 1);
+  EXPECT_EQ(f.shop->total("ann"), 1200);
+}
+
+TEST(Coupon, ApplyingAnotherCouponReplacesTheFirstAndClearRemovesIt) {
+  Fixture f;
+  f.shop->addCoupon("TEN", rule(Kind::PercentOffCart, 10));
+  f.shop->addCoupon("FIVE", rule(Kind::AmountOffCart, 500));
+  f.shop->addToCart("ann", "book", 1);
+  f.shop->applyCoupon("ann", "TEN");
+  f.shop->applyCoupon("ann", "FIVE");
+  EXPECT_EQ(f.shop->total("ann"), 700);
+  f.shop->clearCoupons("ann");
+  EXPECT_EQ(f.shop->total("ann"), 1200);
+  f.shop->clearCoupons("ann");
+  f.shop->clearCoupons("nobody");
+  EXPECT_EQ(f.shop->total("ann"), 1200);
+}
+
+TEST(Coupon, CouponsBelongToACartNotToTheShop) {
+  Fixture f;
+  f.shop->addCoupon("TEN", rule(Kind::PercentOffCart, 10));
+  f.shop->addToCart("ann", "book", 1);
+  f.shop->addToCart("bob", "book", 1);
+  f.shop->applyCoupon("ann", "TEN");
+  EXPECT_EQ(f.shop->total("ann"), 1080);
+  EXPECT_EQ(f.shop->total("bob"), 1200);
+}
+
+TEST(CouponCheckout, ChargesTheDiscountedTotalAndTheCouponIsUsedUp) {
+  Fixture f;
+  f.shop->addCoupon("TEN", rule(Kind::PercentOffCart, 10));
+  f.shop->addToCart("ann", "book", 2);
+  f.shop->applyCoupon("ann", "TEN");
+  const cart::CheckoutResult r = f.shop->checkout("ann");
+  EXPECT_TRUE(r.status == Status::Ok);
+  EXPECT_EQ(r.total, 2160);
+  f.shop->addToCart("ann", "pen", 2);
+  EXPECT_EQ(f.shop->total("ann"), 300);  // the next cart starts without a coupon
+}
+
+TEST(CouponCheckout, AFailedCheckoutKeepsTheCoupon) {
+  Fixture f;
+  f.shop->addCoupon("TEN", rule(Kind::PercentOffCart, 10));
+  f.shop->addToCart("ann", "lamp", 2);
+  f.shop->applyCoupon("ann", "TEN");
+  EXPECT_TRUE(f.shop->checkout("ann").status == Status::OutOfStock);
+  EXPECT_EQ(f.shop->total("ann"), 8100);
+  f.shop->removeFromCart("ann", "lamp", 1);
+  EXPECT_EQ(f.shop->checkout("ann").total, 4050);
+}
+
+TEST(CouponCheckout, TheQuotedTotalIsWhatCheckoutCharges) {
+  Fixture f;
+  f.shop->addCoupon("PENS", rule(Kind::PercentOffSku, 33, 0, "pen"));
+  f.shop->addToCart("ann", "pen", 7);
+  f.shop->addToCart("ann", "book", 1);
+  f.shop->applyCoupon("ann", "PENS");
+  const cart::Money quoted = f.shop->total("ann");
+  EXPECT_EQ(f.shop->checkout("ann").total, quoted);
+}
+
+TEST(CouponCheckout, CancellingAnOrderDoesNotGiveTheCouponBack) {
+  Fixture f;
+  f.shop->addCoupon("TEN", rule(Kind::PercentOffCart, 10));
+  f.shop->addToCart("ann", "book", 1);
+  f.shop->applyCoupon("ann", "TEN");
+  const cart::OrderId id = f.shop->checkout("ann").id;
+  f.shop->cancelOrder(id, "ann");
+  f.shop->addToCart("ann", "book", 1);
+  EXPECT_EQ(f.shop->total("ann"), 1200);
+}
+21:T1603,#include <memory>
+#include <string>
+
+#include "api_storm2.h"
+#include "bp_test.h"
+
+using cart::CouponRule;
+using cart::CouponStatus;
+using Kind = cart::CouponRule::Kind;
+
+namespace {
+CouponRule rule(Kind kind, long long value, cart::Money minSubtotal = 0, const std::string& sku = "") {
+  CouponRule r;
+  r.kind = kind;
+  r.value = value;
+  r.minSubtotal = minSubtotal;
+  r.sku = sku;
+  return r;
+}
+
+// Products: "pen" 150 (10 on the shelf), "book" 1200 (3), "lamp" 4500 (1).
+// Coupons: TEN (10% off, ordinary), WELCOME (10% off, stackable), FIVE (500 off, stackable),
+// BOOKS (50% off books, stackable), BIGSPEND (1000 off, stackable, minimum 5000).
+struct Fixture {
+  std::unique_ptr<cart::StackingShop> shop = cart::makeStackingShop();
+  Fixture() {
+    shop->addProduct("pen", 150, 10);
+    shop->addProduct("book", 1200, 3);
+    shop->addProduct("lamp", 4500, 1);
+    shop->addCoupon("TEN", rule(Kind::PercentOffCart, 10));
+    shop->addStackableCoupon("WELCOME", rule(Kind::PercentOffCart, 10));
+    shop->addStackableCoupon("FIVE", rule(Kind::AmountOffCart, 500));
+    shop->addStackableCoupon("BOOKS", rule(Kind::PercentOffSku, 50, 0, "book"));
+    shop->addStackableCoupon("BIGSPEND", rule(Kind::AmountOffCart, 1000, 5000));
+  }
+};
+}  // namespace
+
+TEST(Stacking, CouponCodesShareOneNamespaceAndAreValidatedTheSameWay) {
+  Fixture f;
+  EXPECT_FALSE(f.shop->addStackableCoupon("TEN", rule(Kind::PercentOffCart, 5)));
+  EXPECT_FALSE(f.shop->addCoupon("FIVE", rule(Kind::PercentOffCart, 5)));
+  EXPECT_FALSE(f.shop->addStackableCoupon("", rule(Kind::PercentOffCart, 5)));
+  EXPECT_FALSE(f.shop->addStackableCoupon("X", rule(Kind::PercentOffCart, 101)));
+  EXPECT_FALSE(f.shop->addStackableCoupon("Y", rule(Kind::PercentOffSku, 10, 0, "nope")));
+  EXPECT_TRUE(f.shop->addStackableCoupon("Z", rule(Kind::AmountOffCart, 1)));
+}
+
+TEST(Stacking, StackableCouponsApplyInTheOrderTheyWereAttached) {
+  Fixture f;
+  f.shop->addToCart("ann", "book", 1);  // 1200
+  f.shop->applyCoupon("ann", "WELCOME");
+  f.shop->applyCoupon("ann", "FIVE");
+  EXPECT_EQ(f.shop->total("ann"), 580);  // 1200 -> 1080 -> 580
+  f.shop->addToCart("bob", "book", 1);
+  f.shop->applyCoupon("bob", "FIVE");
+  f.shop->applyCoupon("bob", "WELCOME");
+  EXPECT_EQ(f.shop->total("bob"), 630);  // 1200 -> 700 -> 630
+}
+
+TEST(Stacking, EachPercentageIsOfWhatTheEarlierOnesLeft) {
+  Fixture f;
+  f.shop->addStackableCoupon("HALF", rule(Kind::PercentOffCart, 50));
+  f.shop->addToCart("ann", "book", 1);
+  f.shop->applyCoupon("ann", "HALF");
+  f.shop->applyCoupon("ann", "HALF");
+  EXPECT_EQ(f.shop->total("ann"), 600);  // attaching the same one twice changes nothing
+  f.shop->applyCoupon("ann", "WELCOME");
+  EXPECT_EQ(f.shop->total("ann"), 540);  // 1200 -> 600 -> 540
+}
+
+TEST(Stacking, ReapplyingAStackableCouponKeepsItsPlace) {
+  Fixture f;
+  f.shop->addToCart("ann", "book", 1);
+  f.shop->applyCoupon("ann", "WELCOME");
+  f.shop->applyCoupon("ann", "FIVE");
+  f.shop->applyCoupon("ann", "WELCOME");  // already first: must not move to the end
+  EXPECT_EQ(f.shop->total("ann"), 580);
+}
+
+TEST(Stacking, AnOrdinaryCouponReplacesEverything) {
+  Fixture f;
+  f.shop->addToCart("ann", "book", 1);
+  f.shop->applyCoupon("ann", "WELCOME");
+  f.shop->applyCoupon("ann", "FIVE");
+  f.shop->applyCoupon("ann", "TEN");
+  EXPECT_EQ(f.shop->total("ann"), 1080);
+}
+
+TEST(Stacking, AStackableCouponPushesOutAnOrdinaryOneButJoinsStackables) {
+  Fixture f;
+  f.shop->addToCart("ann", "book", 1);
+  f.shop->applyCoupon("ann", "TEN");
+  f.shop->applyCoupon("ann", "FIVE");
+  EXPECT_EQ(f.shop->total("ann"), 700);  // TEN is gone
+  f.shop->applyCoupon("ann", "WELCOME");
+  EXPECT_EQ(f.shop->total("ann"), 630);  // FIVE then WELCOME
+}
+
+TEST(Stacking, ASkuCouponTakesItsPercentOfTheLineButNeverMoreThanIsLeft) {
+  Fixture f;
+  f.shop->addToCart("ann", "book", 2);  // 2400
+  f.shop->addToCart("ann", "pen", 1);   // 150
+  f.shop->applyCoupon("ann", "BOOKS");  // 1200 off the line
+  EXPECT_EQ(f.shop->total("ann"), 1350);
+  f.shop->addStackableCoupon("ALMOST", rule(Kind::AmountOffCart, 1300));
+  f.shop->applyCoupon("ann", "ALMOST");  // leaves 50
+  EXPECT_EQ(f.shop->total("ann"), 50);
+  f.shop->addStackableCoupon("ALLBOOKS", rule(Kind::PercentOffSku, 100, 0, "book"));
+  f.shop->applyCoupon("ann", "ALLBOOKS");  // 2400 of line, but only 50 left
+  EXPECT_EQ(f.shop->total("ann"), 0);
+}
+
+TEST(Stacking, EligibilityLooksAtTheSubtotalBeforeAnyCoupon) {
+  Fixture f;
+  f.shop->addToCart("ann", "lamp", 1);  // 4500
+  f.shop->addToCart("ann", "pen", 4);   // 600: subtotal 5100
+  f.shop->applyCoupon("ann", "FIVE");
+  f.shop->applyCoupon("ann", "BIGSPEND");  // FIVE leaves 4600, but the subtotal 5100 is what counts
+  EXPECT_EQ(f.shop->total("ann"), 3600);
+  f.shop->removeFromCart("ann", "pen", 4);  // subtotal 4500 < 5000: BIGSPEND gives nothing
+  EXPECT_EQ(f.shop->total("ann"), 4000);
+}
+
+TEST(Stacking, CheckoutChargesTheStackAndUsesAllOfItUp) {
+  Fixture f;
+  f.shop->addToCart("ann", "book", 2);
+  f.shop->applyCoupon("ann", "WELCOME");
+  f.shop->applyCoupon("ann", "FIVE");
+  const cart::Money quoted = f.shop->total("ann");
+  const cart::CheckoutResult r = f.shop->checkout("ann");
+  EXPECT_EQ(r.total, quoted);
+  EXPECT_EQ(r.total, 1660);  // 2400 -> 2160 -> 1660
+  f.shop->addToCart("ann", "pen", 1);
+  EXPECT_EQ(f.shop->total("ann"), 150);
+}
+
+TEST(Stacking, ClearingRemovesTheWholeStack) {
+  Fixture f;
+  f.shop->addToCart("ann", "book", 1);
+  f.shop->applyCoupon("ann", "WELCOME");
+  f.shop->applyCoupon("ann", "FIVE");
+  f.shop->clearCoupons("ann");
+  EXPECT_EQ(f.shop->total("ann"), 1200);
+  f.shop->applyCoupon("ann", "FIVE");
+  EXPECT_EQ(f.shop->total("ann"), 700);
+}
+22:T52f,#pragma once
+#include <map>
+#include <string>
+
+#include "basket.h"
+
+// One wish list per customer. It holds no stock and knows no prices.
+class CartBook {
+ public:
+  void add(const std::string& customer, const std::string& sku, int quantity) { carts_[customer][sku] += quantity; }
+
+  int quantityOf(const std::string& customer, const std::string& sku) const {
+    const auto cart = carts_.find(customer);
+    if (cart == carts_.end()) return 0;
+    const auto line = cart->second.find(sku);
+    return line == cart->second.end() ? 0 : line->second;
+  }
+
+  // Takes units off a line; the line goes away when nothing is left, and so does an empty cart.
+  void remove(const std::string& customer, const std::string& sku, int quantity) {
+    auto cart = carts_.find(customer);
+    if (cart == carts_.end()) return;
+    auto line = cart->second.find(sku);
+    if (line == cart->second.end()) return;
+    if (quantity >= line->second) cart->second.erase(line);
+    else line->second -= quantity;
+    if (cart->second.empty()) carts_.erase(cart);
+  }
+
+  Lines lines(const std::string& customer) const {
+    const auto cart = carts_.find(customer);
+    return cart == carts_.end() ? Lines{} : cart->second;
+  }
+
+  void clear(const std::string& customer) { carts_.erase(customer); }
+
+ private:
+  std::map<std::string, Lines> carts_;
+};
+23:T72e,#pragma once
+#include <algorithm>
+#include <map>
+#include <memory>
+#include <string>
+#include <utility>
+#include <vector>
+
+#include "discounts.h"
+
+// Which coupons exist and which are attached to whose cart, in the order they were attached.
+class CouponBook {
+ public:
+  bool add(const std::string& code, std::unique_ptr<Discount> discount, bool stackable) {
+    if (code.empty() || discount == nullptr) return false;
+    return byCode_.emplace(code, Entry{std::move(discount), stackable}).second;
+  }
+
+  bool has(const std::string& code) const { return byCode_.count(code) > 0; }
+
+  // Precondition: has(code). An ordinary coupon replaces everything; a stackable one joins the stackable ones and
+  // pushes out an ordinary one.
+  void apply(const std::string& customer, const std::string& code) {
+    auto& attached = attached_[customer];
+    if (!byCode_.at(code).stackable) {
+      attached.assign(1, code);
+      return;
+    }
+    attached.erase(std::remove_if(attached.begin(), attached.end(),
+                                  [this](const std::string& c) { return !byCode_.at(c).stackable; }),
+                   attached.end());
+    if (std::find(attached.begin(), attached.end(), code) == attached.end()) attached.push_back(code);
+  }
+
+  void clear(const std::string& customer) { attached_.erase(customer); }
+
+  std::vector<const Discount*> attachedTo(const std::string& customer) const {
+    std::vector<const Discount*> out;
+    const auto it = attached_.find(customer);
+    if (it == attached_.end()) return out;
+    for (const std::string& code : it->second) out.push_back(byCode_.at(code).discount.get());
+    return out;
+  }
+
+ private:
+  struct Entry {
+    std::unique_ptr<Discount> discount;
+    bool stackable;
+  };
+  std::map<std::string, Entry> byCode_;
+  std::map<std::string, std::vector<std::string>> attached_;
+};
+24:Tf8d,#pragma once
+#include <algorithm>
+#include <map>
+#include <memory>
+#include <string>
+#include <utility>
+
+#include "basket.h"
+#include "catalog.h"
+
+// One way a coupon takes money off. `running` is what is left to pay after earlier coupons; a discount never takes
+// more than that. Open for new kinds of discount (a new subclass); nothing that uses a Discount changes.
+class Discount {
+ public:
+  virtual ~Discount() = default;
+  virtual cart::Money reduction(const Basket& basket, cart::Money running) const = 0;
+};
+
+class PercentOffCart : public Discount {
+ public:
+  explicit PercentOffCart(long long percent) : percent_(percent) {}
+  cart::Money reduction(const Basket&, cart::Money running) const override { return running * percent_ / 100; }
+
+ private:
+  long long percent_;
+};
+
+class AmountOffCart : public Discount {
+ public:
+  explicit AmountOffCart(cart::Money amount) : amount_(amount) {}
+  cart::Money reduction(const Basket&, cart::Money running) const override { return std::min(amount_, running); }
+
+ private:
+  cart::Money amount_;
+};
+
+class PercentOffSku : public Discount {
+ public:
+  PercentOffSku(std::string sku, long long percent) : sku_(std::move(sku)), percent_(percent) {}
+  cart::Money reduction(const Basket& basket, cart::Money running) const override {
+    const auto line = basket.lineTotals.find(sku_);
+    if (line == basket.lineTotals.end()) return 0;
+    return std::min(line->second * percent_ / 100, running);
+  }
+
+ private:
+  std::string sku_;
+  long long percent_;
+};
+
+// A Decorator that adds the eligibility rule "the cart subtotal is at least X" to any other discount. The rule is
+// written once here instead of inside every kind of discount.
+class MinimumSpend : public Discount {
+ public:
+  MinimumSpend(std::unique_ptr<Discount> inner, cart::Money minimum) : inner_(std::move(inner)), minimum_(minimum) {}
+  cart::Money reduction(const Basket& basket, cart::Money running) const override {
+    if (basket.subtotal < minimum_) return 0;
+    return inner_->reduction(basket, running);
+  }
+
+ private:
+  std::unique_ptr<Discount> inner_;
+  cart::Money minimum_;
+};
+
+// One row per kind of coupon: how to build its discount from a rule, or nullptr when the rule is not valid for it. A
+// new kind of coupon is a new Discount subclass plus one row here; nothing that prices a cart changes.
+using DiscountBuilder = std::unique_ptr<Discount> (*)(const cart::CouponRule&, const Catalog&);
+
+inline std::unique_ptr<Discount> buildPercentOffCart(const cart::CouponRule& rule, const Catalog&) {
+  if (rule.value < 1 || rule.value > 100) return nullptr;
+  return std::make_unique<PercentOffCart>(rule.value);
+}
+
+inline std::unique_ptr<Discount> buildAmountOffCart(const cart::CouponRule& rule, const Catalog&) {
+  if (rule.value < 1 || rule.value > cart::kMaxPrice) return nullptr;
+  return std::make_unique<AmountOffCart>(rule.value);
+}
+
+inline std::unique_ptr<Discount> buildPercentOffSku(const cart::CouponRule& rule, const Catalog& catalog) {
+  if (rule.value < 1 || rule.value > 100 || !catalog.has(rule.sku)) return nullptr;
+  return std::make_unique<PercentOffSku>(rule.sku, rule.value);
+}
+
+// Builds the discount a rule describes, wrapped in the minimum-spend rule when it has one, or nullptr when invalid.
+inline std::unique_ptr<Discount> makeDiscount(const cart::CouponRule& rule, const Catalog& catalog) {
+  static const std::map<cart::CouponRule::Kind, DiscountBuilder> builders = {
+      {cart::CouponRule::Kind::PercentOffCart, &buildPercentOffCart},
+      {cart::CouponRule::Kind::AmountOffCart, &buildAmountOffCart},
+      {cart::CouponRule::Kind::PercentOffSku, &buildPercentOffSku},
+  };
+  const auto builder = builders.find(rule.kind);
+  if (rule.minSubtotal < 0 || builder == builders.end()) return nullptr;
+  std::unique_ptr<Discount> discount = builder->second(rule, catalog);
+  if (discount == nullptr || rule.minSubtotal == 0) return discount;
+  return std::make_unique<MinimumSpend>(std::move(discount), rule.minSubtotal);
+}
+25:T10c0,#pragma once
+#include <memory>
+#include <string>
+#include <utility>
+
+#include "cart_book.h"
+#include "catalog.h"
+#include "coupon_book.h"
+#include "inventory.h"
+#include "order_ledger.h"
+#include "pricer.h"
+
+namespace {
+inline cart::CheckoutResult refuseCheckout(cart::Status status) { return cart::CheckoutResult{status, cart::kNoOrder, 0}; }
+
+inline bool registerCoupon(CouponBook& coupons, const Catalog& catalog, const std::string& code,
+                           const cart::CouponRule& rule, bool stackable) {
+  return coupons.add(code, makeDiscount(rule, catalog), stackable);
+}
+}  // namespace
+
+// The public face. It validates a request in the documented order and sequences the collaborators. It holds no rule
+// of its own about prices, stock or discounts.
+class ShopImpl : public cart::StackingShop {
+ public:
+  bool addProduct(const std::string& sku, cart::Money unitPrice, int stock) override {
+    if (sku.empty() || unitPrice < 1 || unitPrice > cart::kMaxPrice) return false;
+    if (stock < 0 || stock > cart::kMaxStock) return false;
+    if (!catalog_.add(sku, unitPrice)) return false;
+    inventory_.setStock(sku, stock);
+    return true;
+  }
+
+  cart::Status addToCart(const std::string& customer, const std::string& sku, int quantity) override {
+    if (customer.empty() || quantity < 1 || quantity > cart::kMaxLineQuantity) return cart::Status::InvalidRequest;
+    if (!catalog_.has(sku)) return cart::Status::UnknownProduct;
+    if (carts_.quantityOf(customer, sku) + quantity > cart::kMaxLineQuantity) return cart::Status::InvalidRequest;
+    carts_.add(customer, sku, quantity);
+    return cart::Status::Ok;
+  }
+
+  cart::Status removeFromCart(const std::string& customer, const std::string& sku, int quantity) override {
+    if (customer.empty() || quantity < 1) return cart::Status::InvalidRequest;
+    if (carts_.quantityOf(customer, sku) == 0) return cart::Status::NotInCart;
+    carts_.remove(customer, sku, quantity);
+    return cart::Status::Ok;
+  }
+
+  cart::Money subtotal(const std::string& customer) const override {
+    return pricer_.price(catalog_, carts_.lines(customer)).subtotal;
+  }
+
+  std::optional<int> stock(const std::string& sku) const override { return inventory_.stock(sku); }
+
+  cart::CheckoutResult checkout(const std::string& customer) override {
+    if (customer.empty()) return refuseCheckout(cart::Status::InvalidRequest);
+    const Lines lines = carts_.lines(customer);
+    if (lines.empty()) return refuseCheckout(cart::Status::EmptyCart);
+    if (!inventory_.canTake(lines)) return refuseCheckout(cart::Status::OutOfStock);
+    const cart::Money charged = total(customer);
+    inventory_.take(lines);
+    carts_.clear(customer);
+    coupons_.clear(customer);
+    const cart::OrderId id = orders_.record(Order{customer, lines, charged});
+    return cart::CheckoutResult{cart::Status::Ok, id, charged};
+  }
+
+  cart::Status cancelOrder(cart::OrderId id, const std::string& customer) override {
+    const Order* order = orders_.find(id);
+    if (order == nullptr) return cart::Status::UnknownOrder;
+    if (order->customer != customer) return cart::Status::WrongCustomer;
+    inventory_.give(order->lines);
+    orders_.spend(id);
+    return cart::Status::Ok;
+  }
+
+  bool addCoupon(const std::string& code, const cart::CouponRule& rule) override {
+    return registerCoupon(coupons_, catalog_, code, rule, false);
+  }
+
+  bool addStackableCoupon(const std::string& code, const cart::CouponRule& rule) override {
+    return registerCoupon(coupons_, catalog_, code, rule, true);
+  }
+
+  cart::CouponStatus applyCoupon(const std::string& customer, const std::string& code) override {
+    if (customer.empty()) return cart::CouponStatus::InvalidRequest;
+    if (!coupons_.has(code)) return cart::CouponStatus::UnknownCoupon;
+    coupons_.apply(customer, code);
+    return cart::CouponStatus::Ok;
+  }
+
+  void clearCoupons(const std::string& customer) override { coupons_.clear(customer); }
+
+  cart::Money total(const std::string& customer) const override {
+    const Basket basket = pricer_.price(catalog_, carts_.lines(customer));
+    return pricer_.total(basket, coupons_.attachedTo(customer));
+  }
+
+ private:
+  Catalog catalog_;
+  Inventory inventory_;
+  CartBook carts_;
+  OrderLedger orders_;
+  CouponBook coupons_;
+  Pricer pricer_;
+};
+c:["$","$L1a",null,{"bundle":{"id":"shopping-cart","title":"Shopping cart and discount engine","level":"Senior","parMinutes":60,"patterns":["Decorator","Specification","Strategy"],"requirements":[{"id":"R-cart","text":"A cart is one wish list per customer and holds no stock. addToCart checks InvalidRequest (empty customer, quantity outside 1..99), UnknownProduct, then InvalidRequest again if the line would pass 99 units; adding a product already in the cart grows its line. removeFromCart checks InvalidRequest (empty customer, quantity < 1) then NotInCart, and removes the line when it takes as many as the line holds or more. subtotal is unit price times quantity over the lines, 0 for an empty or unknown cart. addProduct refuses an existing sku and out-of-range numbers.","phase":"base","hidden":true},{"id":"R-checkout","text":"checkout checks InvalidRequest (empty customer), EmptyCart, OutOfStock (some line asks for more than the shelf has; asking for exactly what is there is fine). On success every line comes off the shelf, the cart is emptied, and an order with a new positive id and the total charged is recorded. A failure changes nothing, the cart included, and never leaves part of a cart taken.","phase":"base","hidden":true},{"id":"R-cancel","text":"cancelOrder puts the units of that order back and spends the id. Failures in order: UnknownOrder (never issued, or already cancelled), WrongCustomer. A failed call changes nothing. Ids are positive and never reused.","phase":"base","hidden":true},{"id":"R-coupon","text":"Storm 1: coupons registered with addCoupon(code, rule): percent off the cart, an amount off the cart, or a percent off one product's line, each with an optional minimum subtotal (inclusive, measured before any coupon). A cart carries at most one coupon; applying another replaces it. total(customer) is the subtotal minus the coupon's reduction, never below 0, percentages rounded down; a coupon that is not eligible at that moment stays attached and gives nothing. checkout charges exactly total() and uses the coupon up; a failed checkout keeps it.","phase":"storm1","hidden":true},{"id":"R-stack","text":"Storm 2: addStackableCoupon registers a coupon that can combine. Applying an ordinary coupon replaces everything; applying a stackable one drops an ordinary coupon and joins the stackable ones after the earlier ones; re-applying one that is attached changes nothing. total() folds the attached coupons in attach order, each taking from what the earlier ones left (a product coupon takes its percent of the line's own total, capped by what is left). Eligibility is decided against the subtotal before any coupon.","phase":"storm2","hidden":true}],"brief":"# Shopping cart and discount engine\n\nYou are writing the core of a small online shop. Customers put products in a cart, check out, and sometimes change their minds. The shop must never sell a unit it does not have, and the price a customer is charged must be one the shop can explain.\n\nWhat you know so far:\n\n- The shop sells products, each with a price and a number of units on the shelf.\n- A customer has a cart. Products go in and come out of it.\n- Checking out turns a cart into an order.\n- Orders can be cancelled.\n\nYour task: design and implement it behind the `cart::Shop` interface in `api.h`. The hidden tests call only that interface. Ask the interviewer questions first: the brief is deliberately incomplete, and \"does a full cart hold stock for me?\" is where most first drafts go wrong. Expect the pricing rules to change after you have finished.\n","editorial":"$1b","clarify":[{"id":"q-cart","text":"Does putting something in my cart hold it for me? What are the limits on a cart, and what happens when I remove things?","answer":"No: a cart is a wish list and holds no stock, so adding never looks at the shelf. A line holds 1 to 99 units of one product; adding a product that is already there grows the line, and a line may never pass 99. Checks run in order: InvalidRequest (empty customer, quantity outside 1..99), UnknownProduct, then InvalidRequest again if the line would pass 99. Removing takes units off a line and removes the line when it takes all of it or more; a missing line is NotInCart. The subtotal is price times quantity over the lines. Product creation refuses a taken sku and numbers out of range.","reveals":["R-cart"],"quality":"essential"},{"id":"q-checkout","text":"What exactly happens at checkout, and what if one of the things is out of stock?","answer":"Checkout buys the whole cart or nothing. In order: InvalidRequest (empty customer), EmptyCart, OutOfStock (a line asks for more than the shelf has; exactly what the shelf has is fine). On success each line comes off the shelf, the cart is emptied and an order with a new id and the total charged is recorded. On failure nothing changes at all, the cart included, and no line is left half taken.","reveals":["R-checkout"],"quality":"essential"},{"id":"q-cancel","text":"Can an order be cancelled, by whom, and what comes back?","answer":"The customer who placed it can cancel, and the units go back on the shelf. The id is spent: a second cancel, or an id that was never issued, is UnknownOrder; someone else's order is WrongCustomer. A failed call changes nothing. Ids are positive and never reused.","reveals":["R-cancel"],"quality":"essential"},{"id":"q-coupon","text":"The marketing team will want discounts. What kinds are likely, and how do they interact with the cart and the order?","answer":"Coupons with a code: a percent off the cart, an amount off the cart, or a percent off one product. Any of them may have a minimum spend. They are attached to a cart, and whatever is attached when the customer checks out is what is charged, then used up. Think about what happens when the cart changes after the coupon is attached, and about rounding.","reveals":["R-coupon"],"quality":"essential"},{"id":"q-stack","text":"Will customers use more than one coupon at a time?","answer":"Some coupons yes, some no. The next change will let certain coupons be combined. Think about what the order of combining does to the total, and what 'minimum spend' should be measured against once several coupons are in play.","reveals":["R-stack"],"quality":"essential"},{"id":"q-price","text":"Can prices change while a customer is shopping? Which price do they pay?","answer":"Not in this version: products have one fixed price. Say what you would do: price at checkout from the current price list and show the change in the cart, or lock the price when the item is added, and what each choice means for orders already placed.","reveals":[],"quality":"useful"},{"id":"q-thread","text":"Many customers check out at once. Does this need to be thread safe?","answer":"Not for the tests, which are single-threaded. Say what you would do: the check of every line and the taking of stock as one critical section per product set, or a conditional decrement in a database, and why checking then writing without that sells the last unit twice.","reveals":[],"quality":"useful"},{"id":"q-hold","text":"Should the cart hold stock for ten minutes, like concert tickets?","answer":"Not here. A time-limited hold is a different feature with its own expiry rules (the ticket-booking problem). Say how you would add it: a hold record with an expiry that checkout converts, and what it costs in stock that nobody is buying.","reveals":[],"quality":"useful"},{"id":"q-money","text":"Which currency, and how do I round?","answer":"Whole cents in a 64-bit integer, one currency. Percentages are of the amount they apply to and round down. Never use floating point for money.","reveals":[],"quality":"useful"},{"id":"q-tax","text":"Do I handle tax, shipping and payment?","answer":"No. Those are other components. This one decides what is in the order and what the goods cost after discounts.","reveals":[],"quality":"noise"},{"id":"q-db","text":"Which database should I use for orders?","answer":"None here: it is an in-memory component and the tests build it from scratch. How you would persist it is a good discussion for the end.","reveals":[],"quality":"noise"},{"id":"q-ui","text":"Do I need a product search page or recommendations?","answer":"No. The core only answers cart, stock and price questions; discovery is another system.","reveals":[],"quality":"noise"}],"rubric":[{"id":"res-facade","text":"Exposes the public operations, validates a request in the documented order and sequences the collaborators","phase":"base","owners":["ShopImpl","ShopService","Storefront","ShoppingService","ShopFacade"]},{"id":"res-catalog","text":"Knows what each product costs and which products exist","phase":"base","owners":["Catalog","ProductCatalog","PriceList","ProductRegistry","Products"]},{"id":"res-inventory","text":"Counts units on the shelf and moves the stock of a whole set of lines all or nothing","phase":"base","owners":["Inventory","StockRoom","StockLedger","Stock","Warehouse"]},{"id":"res-carts","text":"Keeps one wish list per customer and the rules about its lines (merging, removing, emptying)","phase":"base","owners":["CartBook","CartStore","Carts","CartRepository","CartRegistry"]},{"id":"res-orders","text":"Records what was bought, by whom and for how much; issues order ids and spends them on cancel","phase":"base","owners":["OrderLedger","OrderBook","Orders","OrderStore","OrderRepository"]},{"id":"res-discount","text":"Says how much one kind of coupon takes off, behind an interface so a new kind is a new class","phase":"storm1","owners":["Discount","DiscountRule","Coupon","PricingRule","Promotion"]},{"id":"res-pricer","text":"Turns a cart into a total: prices the lines, then folds the attached discounts over them in order","phase":"storm1","owners":["Pricer","PriceEngine","PriceCalculator","DiscountEngine","Pricing"]},{"id":"res-stacking","text":"Knows which coupons exist and which are attached to whose cart, in order, and enforces what may combine","phase":"storm2","owners":["CouponBook","CouponRegistry","CouponWallet","CouponStore","Coupons"]}],"followups":[{"level":"SDE2","question":"Why does checkout look at every line before it takes any stock?","answer":"Because a failure half-way must leave nothing changed. If the third line is out of stock and the first two were already taken, the customer sees an error while the shelf is short of units that nobody owns and nobody can cancel. The reference asks Inventory::canTake for the whole set first and then take cannot fail. In a database the same idea is one transaction (or one conditional update per line inside it) that either commits all decrements or rolls back."},{"level":"SDE2","question":"Why does adding to a cart not reserve stock?","answer":"A cart is a wish list. Reserving on add means every abandoned cart locks goods that could be sold, and most carts are abandoned. The decision about who gets the last unit is made at checkout, when the customer commits, and the check there is the only one that counts; an earlier check is a stale hint. If you want to protect the customer's choice for a while, that is a time-limited hold, a separate feature with an expiry and its own cost in unsold stock."},{"level":"Senior","question":"Two customers have the last lamp in their carts and press checkout together. What happens in your design, and what would you change to make it true under concurrency?","answer":"Single-threaded, the first call wins and the second gets OutOfStock with its cart intact, which is the documented behaviour. Under concurrency the check and the decrement of every line must be one critical section, or checking then writing sells the lamp twice. A mutex per product (taken in a fixed order, such as sorted by sku, to avoid deadlock between carts with several products) or one lock for the inventory are both defensible at this size; at scale it becomes a conditional decrement (stock >= n) in the database inside one transaction, with the order row written in the same transaction."},{"level":"Senior","question":"Coupons arrived and the first draft put 'minimum spend' inside each kind of coupon. What is wrong with that and what did the reference do?","answer":"The rule is the same for every kind, so it is copied three times and the next kind will copy it again, and the copies will drift (one exclusive, one inclusive). The reference writes the eligibility once as a Decorator, MinimumSpend, that wraps any Discount and answers 0 when the cart is below the minimum, and a factory decides whether to wrap. The same shape is a Specification: eligibility is a predicate over the cart that can be combined (and, or, not) without touching the discounts. Adding a new kind of discount is a new subclass and one case in the factory; the pricing loop never changes, which is the open/closed point of the storm."},{"level":"Senior","question":"A coupon is attached, then the customer removes items and the cart drops below the minimum. What should happen, and why not refuse at attach time?","answer":"The coupon stays attached and gives nothing while the cart is ineligible, and works again if the cart grows back. Eligibility depends on the cart as it is when it is priced, so checking at attach time would be stale the moment the cart changes, and you would need a second check at checkout anyway. The single place that decides is the pricing step, called by both total() and checkout(), so what the customer was shown is what they are charged."},{"level":"Senior","question":"Why do both quote and charge call one function, and what bug does that prevent?","answer":"If total() and checkout() each computed the price, any rule added to one and forgotten in the other makes the customer see one number and pay another, which is the most expensive bug a shop can have. In the reference checkout() calls total() and records exactly that number in the order, so they cannot disagree. The recorded total also matters later: a refund is a fraction of what was paid, not of what the price list says today."},{"level":"Staff","question":"Stacking arrived: some coupons combine and order matters. What are the policy choices and how would you let marketing change them without a deploy?","answer":"There are three decisions: which coupons may combine (a per-coupon flag here, but it could be groups, exclusions or a priority), in what order they fold (attach order here; alternatives are percentages first, or best-for-customer, or a fixed priority per coupon), and what eligibility is measured against (the pre-coupon subtotal here, so one coupon cannot switch another off). Each is a separate small policy object. To let non-engineers change them you move the rules into data (a versioned rule set the engine interprets, validated on load, with a dry-run that prices sample carts and shows the difference), keep the interpreter small and heavily tested, and record the rule version on each order so a dispute can be replayed."},{"level":"Staff","question":"Design this for a flash sale: 200,000 customers, 500 units of one product, in one minute.","answer":"The hot key is the stock counter of that one product; everything else scales out. Put a queue or waiting room in front so only a bounded number of checkouts reach the counter, keep carts and pricing stateless and cacheable, and make the stock decrement a single conditional write (decrement if stock >= n) on one partition, ideally a counter held in memory with a durable log behind it, so the 501st request fails fast with OutOfStock without touching the database. Make checkout idempotent with a client-supplied key so retries do not buy twice, and separate 'reserved' from 'paid' with a short hold so abandoned payments release stock. Reconcile counters with orders afterwards, because a counter that is fast is also a counter that can drift."}],"apiHeader":"$1c","phaseApis":{"storm1":"$1d","storm2":"$1e"},"phases":["base","storm1","storm2"],"tests":{"base":[{"path":"cart_base.cpp","content":"$1f"}],"storm1":[{"path":"cart_storm1.cpp","content":"$20"}],"storm2":[{"path":"cart_storm2.cpp","content":"$21"}]},"reference":[{"path":"basket.h","content":"#pragma once\n#include <map>\n#include <string>\n\n#include \"api_storm2.h\"\n\n// A cart's contents: sku -> units. Plain data; the rules about it live in CartBook.\nusing Lines = std::map<std::string, int>;\n\n// A cart priced line by line, before any coupon. Plain data; Pricer builds it.\nstruct Basket {\n  std::map<std::string, cart::Money> lineTotals;\n  cart::Money subtotal = 0;\n};\n"},{"path":"cart_book.h","content":"$22"},{"path":"catalog.h","content":"#pragma once\n#include <map>\n#include <optional>\n#include <string>\n\n#include \"api_storm2.h\"\n\n// What each product costs. The only place that knows a unit price.\nclass Catalog {\n public:\n  bool add(const std::string& sku, cart::Money unitPrice) { return prices_.emplace(sku, unitPrice).second; }\n  bool has(const std::string& sku) const { return prices_.count(sku) > 0; }\n  cart::Money price(const std::string& sku) const { return prices_.at(sku); }\n\n private:\n  std::map<std::string, cart::Money> prices_;\n};\n"},{"path":"coupon_book.h","content":"$23"},{"path":"discounts.h","content":"$24"},{"path":"inventory.h","content":"#pragma once\n#include <map>\n#include <optional>\n#include <string>\n\n#include \"basket.h\"\n\n// Units on the shelf. Moving stock for a whole set of lines is all or nothing: canTake() is asked first and take()\n// then cannot fail.\nclass Inventory {\n public:\n  void setStock(const std::string& sku, int units) { units_[sku] = units; }\n\n  std::optional<int> stock(const std::string& sku) const {\n    const auto it = units_.find(sku);\n    if (it == units_.end()) return std::nullopt;\n    return it->second;\n  }\n\n  bool canTake(const Lines& lines) const {\n    for (const auto& [sku, wanted] : lines) {\n      if (wanted > units_.at(sku)) return false;\n    }\n    return true;\n  }\n\n  void take(const Lines& lines) {\n    for (const auto& [sku, wanted] : lines) units_.at(sku) -= wanted;\n  }\n\n  void give(const Lines& lines) {\n    for (const auto& [sku, returned] : lines) units_.at(sku) += returned;\n  }\n\n private:\n  std::map<std::string, int> units_;\n};\n"},{"path":"order_ledger.h","content":"#pragma once\n#include <map>\n#include <string>\n\n#include \"basket.h\"\n\n// What was bought, by whom and for how much. Plain data.\nstruct Order {\n  std::string customer;\n  Lines lines;\n  cart::Money total = 0;\n};\n\n// Issues order ids and spends them on cancel. Ids are positive and never reused.\nclass OrderLedger {\n public:\n  cart::OrderId record(Order order) {\n    orders_.emplace(++lastId_, std::move(order));\n    return lastId_;\n  }\n\n  const Order* find(cart::OrderId id) const {\n    const auto it = orders_.find(id);\n    return it == orders_.end() ? nullptr : &it->second;\n  }\n\n  void spend(cart::OrderId id) { orders_.erase(id); }\n\n private:\n  cart::OrderId lastId_ = cart::kNoOrder;\n  std::map<cart::OrderId, Order> orders_;\n};\n"},{"path":"pricer.h","content":"#pragma once\n#include <vector>\n\n#include \"basket.h\"\n#include \"catalog.h\"\n#include \"discounts.h\"\n\n// Turns a cart into money: prices the lines, then folds the attached discounts over the result in order. It owns the\n// arithmetic; it knows nothing about customers, stock or where coupons are kept.\nclass Pricer {\n public:\n  Basket price(const Catalog& catalog, const Lines& lines) const {\n    Basket basket;\n    for (const auto& [sku, quantity] : lines) {\n      const cart::Money lineTotal = catalog.price(sku) * quantity;\n      basket.lineTotals[sku] = lineTotal;\n      basket.subtotal += lineTotal;\n    }\n    return basket;\n  }\n\n  cart::Money total(const Basket& basket, const std::vector<const Discount*>& discounts) const {\n    cart::Money running = basket.subtotal;\n    for (const Discount* discount : discounts) running -= discount->reduction(basket, running);\n    return running;\n  }\n};\n"},{"path":"service.cpp","content":"#include \"shop_impl.h\"\n\nstd::unique_ptr<cart::Shop> cart::makeShop() { return std::make_unique<ShopImpl>(); }\n\nstd::unique_ptr<cart::CouponShop> cart::makeCouponShop() { return std::make_unique<ShopImpl>(); }\n\nstd::unique_ptr<cart::StackingShop> cart::makeStackingShop() { return std::make_unique<ShopImpl>(); }\n"},{"path":"shop_impl.h","content":"$25"}],"driver":{"path":"driver.cpp","content":"#define BP_TEST_MAIN\n#include \"bp_test.h\"\n","readOnly":true}}}]
