@@ -124,6 +124,10 @@ import { clarify as sheetClarify } from "./spreadsheet/clarify";
 import { followups as sheetFollowups } from "./spreadsheet/followups";
 import { meta as sheetMeta } from "./spreadsheet/meta";
 import { rubric as sheetRubric } from "./spreadsheet/rubric";
+import { clarify as qaClarify } from "./qa-site/clarify";
+import { followups as qaFollowups } from "./qa-site/followups";
+import { meta as qaMeta } from "./qa-site/meta";
+import { rubric as qaRubric } from "./qa-site/rubric";
 import type { PackageModules } from "@/lib/workshop/load";
 
 export const WORKSHOP_REGISTRY: Record<string, PackageModules> = {
@@ -149,6 +153,7 @@ export const WORKSHOP_REGISTRY: Record<string, PackageModules> = {
   "card-game": { meta: cardsMeta, clarify: cardsClarify, rubric: cardsRubric, followups: cardsFollowups },
   brokerage: { meta: brokerageMeta, clarify: brokerageClarify, rubric: brokerageRubric, followups: brokerageFollowups },
   "meeting-rooms": { meta: roomsMeta, clarify: roomsClarify, rubric: roomsRubric, followups: roomsFollowups },
+  "qa-site": { meta: qaMeta, clarify: qaClarify, rubric: qaRubric, followups: qaFollowups },
   "order-book": { meta: orderBookMeta, clarify: orderBookClarify, rubric: orderBookRubric, followups: orderBookFollowups },
   chess: { meta: chessMeta, clarify: chessClarify, rubric: chessRubric, followups: chessFollowups },
   "task-scheduler": { meta: schedMeta, clarify: schedClarify, rubric: schedRubric, followups: schedFollowups },
