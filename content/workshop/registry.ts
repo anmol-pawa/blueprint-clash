@@ -100,6 +100,10 @@ import { clarify as brokerageClarify } from "./brokerage/clarify";
 import { followups as brokerageFollowups } from "./brokerage/followups";
 import { meta as brokerageMeta } from "./brokerage/meta";
 import { rubric as brokerageRubric } from "./brokerage/rubric";
+import { clarify as roomsClarify } from "./meeting-rooms/clarify";
+import { followups as roomsFollowups } from "./meeting-rooms/followups";
+import { meta as roomsMeta } from "./meeting-rooms/meta";
+import { rubric as roomsRubric } from "./meeting-rooms/rubric";
 import { clarify as orderBookClarify } from "./order-book/clarify";
 import { followups as orderBookFollowups } from "./order-book/followups";
 import { meta as orderBookMeta } from "./order-book/meta";
@@ -144,6 +148,7 @@ export const WORKSHOP_REGISTRY: Record<string, PackageModules> = {
   "job-queue": { meta: jobqMeta, clarify: jobqClarify, rubric: jobqRubric, followups: jobqFollowups },
   "card-game": { meta: cardsMeta, clarify: cardsClarify, rubric: cardsRubric, followups: cardsFollowups },
   brokerage: { meta: brokerageMeta, clarify: brokerageClarify, rubric: brokerageRubric, followups: brokerageFollowups },
+  "meeting-rooms": { meta: roomsMeta, clarify: roomsClarify, rubric: roomsRubric, followups: roomsFollowups },
   "order-book": { meta: orderBookMeta, clarify: orderBookClarify, rubric: orderBookRubric, followups: orderBookFollowups },
   chess: { meta: chessMeta, clarify: chessClarify, rubric: chessRubric, followups: chessFollowups },
   "task-scheduler": { meta: schedMeta, clarify: schedClarify, rubric: schedRubric, followups: schedFollowups },

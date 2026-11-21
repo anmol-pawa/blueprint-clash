@@ -191,7 +191,8 @@ Work top to bottom: take the **first unchecked box**, and split big boxes into r
   - [x] C12aa. Card game framework (Template Method round skeleton with four hooks, Scorer Strategy, plain table state; Twenty-One base; two storms: house rules as data, a second game with no decisions).
   - [x] C12ab. Order book / matching engine (ordered price levels with queues, one matching rule, id ledger plus resting index, Facade; two storms: time in force as small policies with a pure fill-or-kill preview, amends that keep or lose their queue place).
   - [x] C12ac. Stock brokerage portfolio (FIFO tax lots with a cost that gives up in proportion, quotes, one trade desk that checks before it writes, thin facade; two storms: commissions with a written rounding rule, splits and dividends as one corporate-actions class).
-  - [ ] C12ad onward: next problem in CUR L8 order (item 31, Meeting room scheduler; see CUR L8 items 31 to 36, one per box as reached).
+  - [x] C12ad. Meeting room scheduler (half-open spans in a per-room ordered calendar with a neighbour check, request validation, id index; two storms: best-fit room choice as a Strategy, all-or-nothing repeating bookings with stable occurrence indexes).
+  - [ ] C12ae onward: next problem in CUR L8 order (item 32, Stack Overflow-lite; see CUR L8 items 32 to 36, one per box as reached).
 - [ ] C13. **Refactor Arena** (L9): the mode, plus 12 legacy modules (split across runs).
 - [ ] C14. **Machine-coding mock** (GDD §5.9) with the review conversation.
 
