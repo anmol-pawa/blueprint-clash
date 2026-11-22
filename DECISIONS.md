@@ -13,3 +13,8 @@ Routine runs never stop for approval. When in doubt they proceed with their reco
 - What: on some runs `next build` stops with a SecurityFatalError (Next 16.4.3 flagged by an npm advisory lookup) and a hint to run `next upgrade --agent=security`; a retry succeeds.
 - Alternatives: upgrade Next.js now; ignore. 
 - Decision: did not upgrade in a content run (a framework upgrade can break the static export and the PWA worker fragment fix); the owner should review the advisory and choose a patched version in a dedicated run.
+
+## 2026-11-22 - Coverage-gap box D1a ahead of C12af
+- What: inserted and did D1a (estimation solvers + queueing core) before the next workshop problem (Cricket/football scoreboard).
+- Why: ROUTINE_V2 coverage check. The HLD half of the product had zero shipped code (no `lib/sim`, no `lib/estimation`) against 32 LLD problems, and every Siege/Fermi box depends on this foundation. C12af is lower marginal value.
+- Alternatives: keep going down C12; do all of D1 in one run (too big, so split into D1a/D1b).

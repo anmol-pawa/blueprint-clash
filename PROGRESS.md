@@ -1012,3 +1012,10 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Known gaps: no post text, tags, comments, edits, bounties or badges; no thread-safety storm (follow-up only); `reputation()` and `answersOf` scan (10x section names a per-user event index and a per-question answer list); hard delete only (the follow-ups discuss soft delete).
 - Process: the mutation tooling (amalgamator plus exact-once edits) lived in the scratchpad; the 37 `bad/*/service.cpp` files are its output. The Actions quota note has expired (today is after 2026-11-01), so CI/Pages confirmation is done through the GitHub MCP tools (no `gh` CLI here).
 - Next: C12af (Cricket/football scoreboard, CUR L8 item 33).
+
+## 2026-11-22 - D1a: estimation solvers and the queueing core (coverage-gap box, ahead of C12af)
+- New `lib/estimation/index.ts` (QPS and peak, storage with replication, bandwidth, fleet/shard/cache sizing, downtime and series/parallel availability, Bloom sizing and false-positive rate, HLL error, `formatBytes`), `lib/sim/rng.ts`, `lib/sim/queueing.ts` (Erlang C, M/M/1, M/M/c, wait tail and quantiles, Little's law) and `lib/sim/des.ts` (M/M/c event simulation for validation only). 22 new tests: closed forms (M/M/1, hand-derived M/M/2 = 9/14), textbook series for c up to 20, stability at c = 500, DES vs analytic within 5 % for c = 1, 2, 4 (600k customers), Little's law, determinism.
+- Why now: the coverage check found no HLD code at all; logged in DECISIONS.md. ARCH §4/§6 updated with "as built".
+- Verification: `lint` (0 errors, 9 pre-existing warnings), `typecheck`, `npm test` (741 pass), `build:pages` pass. `npm run build` not run separately. CI/Pages confirmed via the GitHub MCP tools. No UI change, so no screenshots.
+- Known gaps: no topology, tick model, caches, chaos yet (D1b onward). Latency/cost figures are not yet used anywhere.
+- Next: D1b (topology, traffic, fluid tick model), or C12af if the owner prefers the LLD queue first.
