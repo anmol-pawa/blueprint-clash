@@ -201,7 +201,8 @@ Work top to bottom: take the **first unchecked box**, and split big boxes into r
 
 - [ ] D1. **Simulator core** (ARCH §4): topology, traffic, the fluid tick model, M/M/c latency, backlog, errors, and the full set of validation tests (queueing, Little's law, determinism). Add the `/dev/sim` playground with charts.
   - [x] D1a. `lib/estimation/` solvers (ARCH §6) and the queueing core: seeded `Rng`, Erlang C / M/M/1 / M/M/c with wait quantiles, a DES used only for validation; closed-form, DES (±5 %), Little's-law and determinism tests.
-  - [ ] D1b. Topology + traffic types and the fluid tick model with backlog, timeouts and determinism tests; then the `/dev/sim` playground.
+  - [x] D1b. Topology + traffic types and the fluid tick model with backlog, timeouts, retry amplification and determinism tests (`lib/sim/topology.ts`, `lib/sim/tick.ts`).
+  - [ ] D1c. `/dev/sim` playground: pick a preset topology, edit rates/servers/retries, run the tick model in a Web Worker and chart throughput, errors, backlog and latency (pixel-styled, desktop + iPhone check).
 - [ ] D2. **Simulator components, part 1:** LB algorithms, app tier + autoscaling, cache (Che approximation + validation), DB primary/replicas with lag and stale reads.
 - [ ] D3. **Simulator components, part 2:** sharding + consistent hashing (with validation), leaderless N/R/W, queues + DLQ, CDN, rate limiter, circuit breaker, retries (amplification validation).
 - [ ] D4. **Chaos scheduler and bottleneck analyser.**

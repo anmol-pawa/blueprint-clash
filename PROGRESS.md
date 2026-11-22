@@ -1019,3 +1019,9 @@ See `DECISIONS.md` (the routine proceeds with its recommendation and logs it the
 - Verification: `lint` (0 errors, 9 pre-existing warnings), `typecheck`, `npm test` (741 pass), `build:pages` pass. `npm run build` not run separately. CI/Pages confirmed via the GitHub MCP tools. No UI change, so no screenshots.
 - Known gaps: no topology, tick model, caches, chaos yet (D1b onward). Latency/cost figures are not yet used anywhere.
 - Next: D1b (topology, traffic, fluid tick model), or C12af if the owner prefers the LLD queue first.
+
+## 2026-11-22 - D1b: topology and the fluid tick model (coverage-gap box, ahead of C12af)
+- New `lib/sim/topology.ts` (component: servers, service rate, queue limit, timeout; edge: call probability, latency, retries; `piecewiseRate`; `topologicalOrder` with validation) and `lib/sim/tick.ts` (`Simulation.step/run`: per-component backlog carried across ticks, queue-limit and timeout drops, analytic M/M/c latency below rho 0.95 and backlog drain time above, end-to-end failure and mean latency by a backward pass, retry amplification 1+f+...+f^r from the callee's previous-tick failure). 13 tests in `tests/sim-tick.test.ts`: M/M/c closed form, linear backlog growth, timeout cap, spike then drain, conservation per node per tick, determinism, latency composition, and retry amplification settling at an independently bisected fixed point.
+- Verification: `lint` (0 errors, 9 pre-existing warnings), `typecheck`, `npm test` (754 pass), `build:pages` and `build` pass (each first run hit the Next.js advisory network error, identical retry passed; no `next upgrade`, owner's call). No UI change, so no screenshots.
+- Known gaps: p95/p99 only per component (no end-to-end mixture), retry delay not added to latency, no caches, replicas, chaos or autoscaling yet. Latency figures are model outputs, not measurements.
+- Next: D1c (`/dev/sim` playground with worker and charts), then D2 (caches/Che), unless the owner prefers C12af.
