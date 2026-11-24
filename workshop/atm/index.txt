@@ -1,0 +1,1241 @@
+1:"$Sreact.fragment"
+2:"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js"
+3:I[39756,["$2"],"default"]
+4:I[37457,["$2"],"default"]
+5:"/blueprint-clash/_next/static/chunks/2n5qeheznvl4u.js"
+6:I[22016,["$2","$5"],""]
+7:I[64576,["$2"],"PwaRegister"]
+d:I[97367,["$2"],"OutletBoundary"]
+e:"$Sreact.suspense"
+10:"ViewportBoundary"
+11:I[97367,["$2"],"$10"]
+13:"MetadataBoundary"
+14:I[97367,["$2"],"$13"]
+16:I[68027,["$2"],"default",1]
+:HL["/blueprint-clash/_next/static/chunks/2lbfwxo4jtf0j.css","style"]
+:HL["/blueprint-clash/_next/static/media/07c7676b89ed2778-s.p.2bn3s6zvc0dyp.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/blueprint-clash/_next/static/media/486a103cae33528f-s.p.309ilb452anpd.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/blueprint-clash/_next/static/media/53897e768d329f66-s.p.3t6q91iet4nsy.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+9:X
+b:[["children",{"s":"__PAGE__","h":512,"d":{"r":["$","$1","c",{"children":["$Lc",[["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/2uk3wcjwqg0tl.js","async":true,"nonce":"$undefined"}],["$","script","script-1",{"src":"/blueprint-clash/_next/static/chunks/1zdu7yjl8efu4.js","async":true,"nonce":"$undefined"}]],["$","$Ld",null,{"children":["$","$e",null,{"name":"Next.MetadataOutlet","children":"$@f"}]}]]}],"p":false,"v":null}}]]
+a:[["children",{"s":{"n":"id","t":"d","k":"atm","s":[]},"h":66048,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],"p":false,"v":"$9"},"c":"$Qb"}]]
+8:[["children",{"s":"workshop","h":131584,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],"p":false,"v":"$9"},"c":"$Qa"}]]
+0:{"P":null,"c":["","workshop","atm",""],"q":"","i":false,"t":{"t":{"s":"","h":131600,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/2lbfwxo4jtf0j.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}],["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js","async":true,"nonce":"$undefined"}]],["$","html",null,{"lang":"en","className":"r7opxW_variable auY9QW_variable u-EJdW_variable h-full","children":["$","body",null,{"className":"min-h-full","children":[["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","main",null,{"className":"flex min-h-dvh flex-col items-center justify-center gap-4 px-4 text-center","children":[["$","div",null,{"className":"font-display text-5xl text-[var(--accent)]","children":"404"}],["$","p",null,{"className":"text-white/60","children":"This room is not on the blueprint yet."}],["$","$L6",null,{"href":"/","className":"text-sm text-white/80 underline","children":"Back to the title screen"}]]}],[]],"forbidden":"$undefined","unauthorized":"$undefined"}],["$","$L7",null,{}]]}]}]]}],"p":false,"v":null},"c":"$Q8"},"h":{"r":["$","$1","h",{"children":[null,["$","$L11",null,{"children":"$L12"}],["$","$L14",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$e",null,{"name":"Next.Metadata","children":"$L15"}]}],null]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"p":false,"v":null}},"m":"$undefined","G":["$16",[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/2lbfwxo4jtf0j.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]]],"S":true,"r":"$undefined","s":"$undefined","a":"$undefined","l":"$undefined","p":"$undefined","d":"$undefined","b":"WHHKcqqrgr3tfT2ZA5zb7"}
+9:C
+12:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1, viewport-fit=cover"}],["$","meta","2",{"name":"theme-color","content":"#0a1530"}]]
+17:I[27201,["$2"],"IconMark"]
+f:null
+15:[["$","title","0",{"children":"ATM (cash machine): Blueprint Clash"}],["$","meta","1",{"name":"description","content":"A creature-tactics RPG that teaches low-level design in C++ and high-level system design, from fundamentals to big-tech interview level."}],["$","link","2",{"rel":"manifest","href":"/blueprint-clash/manifest.webmanifest","crossOrigin":"$undefined"}],["$","meta","3",{"name":"mobile-web-app-capable","content":"yes"}],["$","meta","4",{"name":"apple-mobile-web-app-title","content":"Blueprint Clash"}],["$","meta","5",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","link","6",{"rel":"icon","href":"/blueprint-clash/icon.png?icon.27re_xscs-jmw.png","sizes":"256x256","type":"image/png"}],["$","link","7",{"rel":"apple-touch-icon","href":"/blueprint-clash/apple-icon.png?apple-icon.2rac1w0yc3rju.png","sizes":"180x180","type":"image/png"}],["$","$L17","8",{}]]
+18:"/blueprint-clash/_next/static/chunks/2uk3wcjwqg0tl.js"
+19:"/blueprint-clash/_next/static/chunks/1zdu7yjl8efu4.js"
+1a:I[65612,["$2","$18","$19"],"WorkshopClient"]
+1b:T487,# ATM
+
+A bank wants the software for a cash machine. A customer puts a card in, proves who they are with a PIN, asks for cash, takes the notes, and the card comes back. The machine holds a limited supply of notes in a few denominations, and the customer's money lives in the bank, not in the machine.
+
+What you know so far:
+
+- The machine is always in some state (waiting, waiting for the PIN, ready for a transaction, out of service) and an action that makes no sense in that state must be refused, not guessed at.
+- Every withdrawal pays out real notes from a real stock. The bank is asked about the account; the machine never keeps balances of its own.
+- A refused request must leave the machine, the account and the stock exactly as they were.
+
+Your task: design and implement it behind the `atm::Atm` interface in `api.h`, creating it in `atm::makeAtm(bank, stock)`. The hidden tests supply a fake `atm::Bank` and call only that interface. Ask the interviewer questions first: "what exactly happens on the third wrong PIN, which notes do I hand out when there is a choice, and what if I cannot pay the exact amount?" is where most first drafts go wrong.
+1c:T1fc8,# Editorial: ATM (cash machine)
+
+## Requirements
+Functional: a card goes in (`insertCard`), the customer proves who they are (`enterPin`), asks for cash (`withdraw`), and the card comes out (`ejectCard`). The machine is always in one of four states: Idle, AwaitingPin, Ready, or OutOfService (idle with no notes at all). Every operation an inappropriate state does not allow answers `WrongState` and changes nothing. Three wrong PINs in a row retain the card; the count belongs to the card and survives ejecting and re-inserting. A withdrawal checks, in order, the amount (`InvalidAmount`), the account (`InsufficientFunds`) and the notes (`CannotDispense`), is all-or-nothing, and debits the bank exactly once. Notes are chosen greedily, largest denomination first, limited by the stock.
+
+**Change Storm 1, pay whenever possible:** `makeFlexibleAtm` pays any amount some combination of the held notes can make, with the fewest notes, and among equally short combinations with more of the larger denomination. 60 from one 50 and three 20s used to be refused and is now three 20s.
+
+**Change Storm 2, daily limits:** `makeLimitedAtm(bank, stock, dailyLimit)`: each card may withdraw `dailyLimit` in total per day across sessions, checked between the amount and the funds, counting only successful withdrawals; `endOfDay()` resets the totals.
+
+## Reference design
+- `AtmImpl` is the public face. It holds the machine and the current `AtmState`, forwards each call to the state, and follows the `Step` the state returns (a status and the next state). It has no rule of its own.
+- `AtmState` is the State pattern: an abstract class that answers `WrongState` to everything, and four stateless singletons (`Idle`, `AwaitingPin`, `Ready`, `OutOfService`) that override only what they allow. Since a state has no data, one shared instance each is enough, and a transition is the pointer in the returned `Step`.
+- `Machine` bundles what a session uses: the card slot, `CashBox`, `PinGuard` and `Payout`. The states decide when each part may be used; the machine does the work.
+- `PinGuard` owns the PIN rules: wrong attempts per card across visits, the third in a row retains, a correct PIN clears, and the set of retained cards.
+- `CashBox` owns the notes inside the machine. `Payout` sequences one withdrawal: every check first, then debit, then remove notes, then record.
+- `NoteDispenser` is the Strategy for turning an amount into notes. `ChainDispenser` builds the chain of responsibility (`NoteHandler`: take as many of my denomination as I can, pass the rest on, largest first). `FewestNotesDispenser` (Storm 1) is a bounded-knapsack search.
+- `WithdrawalLimit` is the rule about how much a card may take: `NoLimit` for the base machine, `DailyLimit` for Storm 2. The payout asks `allows` before it moves anything and calls `record` after success.
+
+Change cost: Storm 1 is one new class (`FewestNotesDispenser`) and one factory line; the chain, the states and the payout are untouched. Storm 2 is one new class (`DailyLimit`), one `Payout` check line, and one factory; the states do not change.
+
+## Alternatives
+- **One class with a state enum and `switch` in every method.** It works for four states and four operations (sixteen cells), and for an interview that is a perfectly honest first answer. It gets worse with every new transaction type, because each new operation needs a new switch and it is easy to forget a cell. Say that you chose the State pattern because every cell is a question the code must answer, and a state class with a refuse-by-default base makes forgetting a cell safe.
+- **A transition table (map from state and event to next state).** Good when states are numerous and mostly data (protocol machines). Here each cell does real work (check a PIN, pay out), so classes beat a table; with a table you would still need a handler per cell.
+- **Per-session data on the state objects.** Natural first draft: `AwaitingPinState` has a `wrongAttempts` field. It then resets on every visit and a thief tries two PINs at a time. Data that outlives a session belongs to a guard keyed by card.
+- **A loop over sorted denominations instead of a chain.** Shorter, and fine when links are identical. The chain pays off when links differ (a cassette marked damaged, a link that avoids the last note of a denomination) and when the chain is built from configuration. Either way the order is the algorithm.
+- **Backtracking in the chain.** Make each link try fewer notes when the rest fails. It works but is exponential in the worst case and spreads the search across classes that were meant to be simple; a table-based search behind the same interface is clearer and bounded.
+- **Debit first, dispense second, refund on failure.** Tempting because the dispense is the step that can fail in the real world. It needs a refund path that can itself fail. Check everything, then debit, then dispense, with a reconciliation process for the crash in between (see the Staff follow-up).
+- **Bank-side PIN counter.** What real systems do, so a thief cannot rotate through machines. The exercise keeps it on the machine to practise the "per-card, outlives the session" idea; say so.
+
+## Trade-offs
+The State pattern buys safety and locality: every state lists what it allows, the base class refuses the rest, and adding a transaction is one method and one override. It costs a few small classes and a place (the `Step` return) where transitions are visible only by reading the states. The chain of responsibility gives you the first requirement in a dozen lines and a new denomination for free, but it cannot see beyond its own link, and Storm 1 is precisely the case where that blindness shows. Replacing it behind the interface is cheap, which is the argument for putting the dispensing rule behind an interface at all; it is not an argument for starting with the search, which is harder to read and to prove correct. Greedy is also what real machines do when the note set is canonical (100, 50, 20, 10, 5) and stock is plentiful, because for such sets greedy is optimal.
+
+Contested: should a refused card be ejected automatically on an unknown-card error? The contract says it is handed back at once and the machine stays Idle. A real machine keeps the card for a short time to read it; say what you assumed.
+
+## What breaks at 10x
+At 10x the stock counts or the withdrawal limit, the search table (size `denominations x amount`, filled in `denominations x amount x stock` steps) becomes a real cost; cap the amount, restrict the search to the denominations that can matter, or precompute per stock level. At 10x the machines you need a fleet design: a central, idempotent transaction service, an authorisation ledger instead of direct debits, and the PIN counter moving to the bank so it holds across machines. At 10x the denominations the chain gets long and greedy stops being optimal for non-canonical sets, so the search becomes the default and the chain a fast path.
+
+## Level signals
+- **SDE2:** a working state machine (even with an enum and `switch`), a PIN check with a counter, greedy notes, and the bank asked for balance and debit. Handles `WrongState`. May put the counter in the session and need a nudge to see why it must survive ejecting; may debit before checking the notes.
+- **Senior:** asks about the order of checks, what a refused request leaves behind, where the PIN counter lives, and what happens with odd amounts, before drawing anything. Uses State with refuse-by-default, a dispensing interface, check-then-commit, and explains why greedy is the written rule and when it fails. Absorbs Storm 1 by adding one class and Storm 2 by adding one rule without touching the states.
+- **Staff:** frames the single-process version as a slice of a distributed transaction: authorisation then capture, idempotency keys, reconciliation after a power cut, and the PIN counter in the bank. Knows when greedy is optimal (canonical note sets) and prices the search. Discusses offline operation as a risk limit, not a code path, and the fleet concerns (replenishment forecasting, monitoring) separately from the class design.
+1d:T11f4,#pragma once
+// Public API for the ATM problem. The hidden tests only use what is declared here.
+// You implement atm::makeAtm() (in any of your .cpp files); everything behind it is your design.
+// Nothing here throws: this code is compiled without exceptions.
+#include <map>
+#include <memory>
+#include <string>
+
+namespace atm {
+
+// A collection of notes: denomination (the value of one note) -> how many. Counts of zero may be present or absent.
+using Notes = std::map<int, int>;
+
+// The most one transaction may ask for.
+constexpr long long kMaxWithdrawal = 10000;
+
+enum class Status {
+  Ok,
+  WrongState,         // the operation makes no sense right now (for example withdraw before the PIN was accepted)
+  OutOfService,       // no card is inside and the machine holds no notes at all
+  UnknownCard,        // the bank does not know this card; it is handed back at once
+  CardBlocked,        // this machine has kept this card after three wrong PINs and will not take it again
+  WrongPin,           // the PIN was wrong and the card stays in
+  CardRetained,       // the third wrong PIN in a row: the machine keeps the card
+  InvalidAmount,      // below 1 or above kMaxWithdrawal
+  InsufficientFunds,  // the account does not hold the amount
+  CannotDispense,     // the machine cannot pay this amount exactly with the notes it holds
+  DailyLimitExceeded, // only the machine of Change Storm 2 gives this answer; makeAtm never does
+};
+
+enum class State {
+  Idle,          // waiting for a card
+  AwaitingPin,   // a card is in, the PIN has not been accepted
+  Ready,         // the PIN was accepted: the customer may withdraw
+  OutOfService,  // idle, and the machine holds no notes
+};
+
+// The customer's bank. The tests provide a fake; the machine never stores balances itself.
+class Bank {
+ public:
+  virtual ~Bank() = default;
+  virtual bool knowsCard(const std::string& card) const = 0;
+  virtual bool pinMatches(const std::string& card, const std::string& pin) const = 0;
+  virtual long long available(const std::string& card) const = 0;
+  virtual void debit(const std::string& card, long long amount) = 0;
+};
+
+class Atm {
+ public:
+  virtual ~Atm() = default;
+
+  // Only in State::Idle or State::OutOfService; every other state answers WrongState. Checks in order:
+  //   1. the machine holds no notes at all   -> OutOfService
+  //   2. the card was retained earlier       -> CardBlocked
+  //   3. the bank does not know the card     -> UnknownCard
+  // Otherwise the card goes in and the state becomes AwaitingPin. A refused card leaves the state as it was.
+  virtual Status insertCard(const std::string& card) = 0;
+
+  // Only in AwaitingPin (else WrongState). A matching PIN moves to Ready and clears that card's wrong-PIN count. A wrong PIN
+  // adds one to the count of wrong PINs in a row for THAT CARD; the count survives ejecting and re-inserting the card.
+  // The first two wrong PINs answer WrongPin and keep the state; the third answers CardRetained, the machine keeps the
+  // card (it is never accepted again by this machine) and the state goes back to Idle (or OutOfService).
+  virtual Status enterPin(const std::string& pin) = 0;
+
+  // Only in Ready (else WrongState). Checks in order, the first failure decides and `out` is left empty:
+  //   1. amount below 1 or above kMaxWithdrawal   -> InvalidAmount
+  //   2. amount above bank.available(card)        -> InsufficientFunds
+  //   3. the notes cannot make the amount exactly -> CannotDispense
+  // On Ok the bank is debited exactly `amount` once, the notes are removed from the machine and returned in `out`
+  // (denomination -> count, no zero entries), and the state stays Ready. A refused withdrawal changes nothing.
+  // Notes are chosen greedily: the largest denomination first, as many of it as the stock allows without going over the
+  // amount, then the next denomination, and so on. If something is left over, the answer is CannotDispense.
+  virtual Status withdraw(long long amount, Notes& out) = 0;
+
+  // In AwaitingPin or Ready: the card is handed back and the state becomes Idle (or OutOfService when the machine holds
+  // no notes). In Idle or OutOfService: WrongState.
+  virtual Status ejectCard() = 0;
+
+  virtual State state() const = 0;
+
+  // The notes currently in the machine (no zero entries).
+  virtual Notes stock() const = 0;
+};
+
+// `stock` lists the denominations the machine knows and how many notes of each it starts with. Counts of zero still
+// declare a denomination. The bank must outlive the machine.
+std::unique_ptr<Atm> makeAtm(Bank& bank, const Notes& stock);
+
+}  // namespace atm
+1e:T48e,#pragma once
+// Change Storm 2: a daily withdrawal limit per card. Everything from api.h still holds (notes are chosen greedily, as in makeAtm).
+#include "api_storm1.h"
+
+namespace atm {
+
+class LimitedAtm : public Atm {
+ public:
+  // A new banking day: every card's total for the day goes back to zero. Cards retained earlier stay retained.
+  virtual void endOfDay() = 0;
+};
+
+// Each card may withdraw at most `dailyLimit` in total per day. The check goes between the amount check and the funds check:
+//   1. amount below 1 or above kMaxWithdrawal             -> InvalidAmount
+//   2. withdrawn today by this card + amount > dailyLimit -> DailyLimitExceeded
+//   3. amount above bank.available(card)                  -> InsufficientFunds
+//   4. the notes cannot make the amount exactly           -> CannotDispense
+// Only successful withdrawals count towards the day's total; refused ones do not. A card that has used up its limit can
+// still be inserted and ejected; only the withdrawal is refused. The total is kept per card, not per session.
+std::unique_ptr<LimitedAtm> makeLimitedAtm(Bank& bank, const Notes& stock, long long dailyLimit);
+
+}  // namespace atm
+1f:T2b8d,#include <map>
+#include <string>
+
+#include "api.h"
+#include "bp_test.h"
+
+namespace {
+using atm::Notes;
+using atm::State;
+using atm::Status;
+
+// A fake bank with three customers: "c1" (pin 1111, 1000 in the account), "c2" (pin 2222, 5000) and "poor" (pin 0000, 30).
+class FakeBank : public atm::Bank {
+ public:
+  FakeBank() {
+    pins_ = {{"c1", "1111"}, {"c2", "2222"}, {"poor", "0000"}};
+    balances_ = {{"c1", 1000}, {"c2", 5000}, {"poor", 30}};
+  }
+  bool knowsCard(const std::string& card) const override { return pins_.count(card) > 0; }
+  bool pinMatches(const std::string& card, const std::string& pin) const override {
+    const auto found = pins_.find(card);
+    return found != pins_.end() && found->second == pin;
+  }
+  long long available(const std::string& card) const override {
+    const auto found = balances_.find(card);
+    return found == balances_.end() ? 0 : found->second;
+  }
+  void debit(const std::string& card, long long amount) override {
+    balances_[card] -= amount;
+    ++debits_;
+  }
+  int debits() const { return debits_; }
+  long long balance(const std::string& card) const { return available(card); }
+
+ private:
+  std::map<std::string, std::string> pins_;
+  std::map<std::string, long long> balances_;
+  int debits_ = 0;
+};
+
+Notes standardStock() { return Notes{{100, 5}, {50, 5}, {20, 10}, {10, 10}}; }
+
+long long total(const Notes& notes) {
+  long long sum = 0;
+  for (const auto& entry : notes) sum += static_cast<long long>(entry.first) * entry.second;
+  return sum;
+}
+
+// A machine with the standard stock and a customer who has typed the right PIN.
+struct Session {
+  explicit Session(const std::string& card = "c1", const Notes& stock = standardStock()) : machine(atm::makeAtm(bank, stock)) {
+    machine->insertCard(card);
+    machine->enterPin(card == "c1" ? "1111" : card == "c2" ? "2222" : "0000");
+  }
+  FakeBank bank;
+  std::unique_ptr<atm::Atm> machine;
+};
+}  // namespace
+
+TEST(Session, AMachineWaitsForACard) {
+  FakeBank bank;
+  auto machine = atm::makeAtm(bank, standardStock());
+  EXPECT_TRUE(machine->state() == State::Idle);
+}
+
+TEST(Session, ACardAsksForThePin) {
+  FakeBank bank;
+  auto machine = atm::makeAtm(bank, standardStock());
+  EXPECT_TRUE(machine->insertCard("c1") == Status::Ok);
+  EXPECT_TRUE(machine->state() == State::AwaitingPin);
+}
+
+TEST(Session, AnUnknownCardIsHandedBackAtOnce) {
+  FakeBank bank;
+  auto machine = atm::makeAtm(bank, standardStock());
+  EXPECT_TRUE(machine->insertCard("ghost") == Status::UnknownCard);
+  EXPECT_TRUE(machine->state() == State::Idle);
+  EXPECT_TRUE(machine->insertCard("c1") == Status::Ok);
+}
+
+TEST(Session, NothingWorksBeforeThePinIsAccepted) {
+  FakeBank bank;
+  auto machine = atm::makeAtm(bank, standardStock());
+  Notes out;
+  EXPECT_TRUE(machine->enterPin("1111") == Status::WrongState);
+  EXPECT_TRUE(machine->withdraw(100, out) == Status::WrongState);
+  EXPECT_TRUE(machine->ejectCard() == Status::WrongState);
+  machine->insertCard("c1");
+  EXPECT_TRUE(machine->withdraw(100, out) == Status::WrongState);
+  EXPECT_TRUE(out.empty());
+  EXPECT_EQ(bank.debits(), 0);
+  EXPECT_EQ(total(machine->stock()), total(standardStock()));
+}
+
+TEST(Session, ACardAlreadyInsideCannotBeInsertedAgain) {
+  FakeBank bank;
+  auto machine = atm::makeAtm(bank, standardStock());
+  machine->insertCard("c1");
+  EXPECT_TRUE(machine->insertCard("c2") == Status::WrongState);
+  EXPECT_TRUE(machine->state() == State::AwaitingPin);
+  machine->enterPin("1111");
+  EXPECT_TRUE(machine->insertCard("c2") == Status::WrongState);
+  EXPECT_TRUE(machine->state() == State::Ready);
+}
+
+TEST(Session, EjectingReturnsToIdleFromEitherStage) {
+  FakeBank bank;
+  auto machine = atm::makeAtm(bank, standardStock());
+  machine->insertCard("c1");
+  EXPECT_TRUE(machine->ejectCard() == Status::Ok);
+  EXPECT_TRUE(machine->state() == State::Idle);
+  machine->insertCard("c1");
+  machine->enterPin("1111");
+  EXPECT_TRUE(machine->ejectCard() == Status::Ok);
+  EXPECT_TRUE(machine->state() == State::Idle);
+  EXPECT_TRUE(machine->insertCard("c2") == Status::Ok);
+}
+
+TEST(Session, AfterWithdrawingTheCustomerStaysReady) {
+  Session s;
+  Notes out;
+  EXPECT_TRUE(s.machine->withdraw(100, out) == Status::Ok);
+  EXPECT_TRUE(s.machine->state() == State::Ready);
+  EXPECT_TRUE(s.machine->withdraw(50, out) == Status::Ok);
+  EXPECT_EQ(s.bank.balance("c1"), 850);
+}
+
+TEST(Session, AMachineWithoutNotesIsOutOfService) {
+  FakeBank bank;
+  auto machine = atm::makeAtm(bank, Notes{{100, 0}, {50, 0}});
+  EXPECT_TRUE(machine->state() == State::OutOfService);
+  EXPECT_TRUE(machine->insertCard("c1") == Status::OutOfService);
+  EXPECT_TRUE(machine->state() == State::OutOfService);
+  EXPECT_TRUE(machine->ejectCard() == Status::WrongState);
+}
+
+TEST(Session, OutOfServiceIsReportedBeforeAnUnknownCard) {
+  FakeBank bank;
+  auto machine = atm::makeAtm(bank, Notes{{100, 0}});
+  EXPECT_TRUE(machine->insertCard("ghost") == Status::OutOfService);
+}
+
+TEST(Session, ADrainedMachineGoesOutOfServiceWhenTheCustomerLeaves) {
+  Session s("c1", Notes{{100, 1}});
+  Notes out;
+  EXPECT_TRUE(s.machine->withdraw(100, out) == Status::Ok);
+  EXPECT_TRUE(s.machine->state() == State::Ready);
+  EXPECT_TRUE(s.machine->ejectCard() == Status::Ok);
+  EXPECT_TRUE(s.machine->state() == State::OutOfService);
+  EXPECT_TRUE(s.machine->insertCard("c2") == Status::OutOfService);
+}
+
+TEST(Pin, TheRightPinOpensTheSession) {
+  FakeBank bank;
+  auto machine = atm::makeAtm(bank, standardStock());
+  machine->insertCard("c2");
+  EXPECT_TRUE(machine->enterPin("2222") == Status::Ok);
+  EXPECT_TRUE(machine->state() == State::Ready);
+}
+
+TEST(Pin, AWrongPinKeepsTheCardInside) {
+  FakeBank bank;
+  auto machine = atm::makeAtm(bank, standardStock());
+  machine->insertCard("c1");
+  EXPECT_TRUE(machine->enterPin("9999") == Status::WrongPin);
+  EXPECT_TRUE(machine->state() == State::AwaitingPin);
+  EXPECT_TRUE(machine->enterPin("1111") == Status::Ok);
+  EXPECT_TRUE(machine->state() == State::Ready);
+}
+
+TEST(Pin, TheThirdWrongPinInARowKeepsTheCard) {
+  FakeBank bank;
+  auto machine = atm::makeAtm(bank, standardStock());
+  machine->insertCard("c1");
+  EXPECT_TRUE(machine->enterPin("1") == Status::WrongPin);
+  EXPECT_TRUE(machine->enterPin("2") == Status::WrongPin);
+  EXPECT_TRUE(machine->enterPin("3") == Status::CardRetained);
+  EXPECT_TRUE(machine->state() == State::Idle);
+  EXPECT_TRUE(machine->insertCard("c1") == Status::CardBlocked);
+  EXPECT_TRUE(machine->state() == State::Idle);
+}
+
+TEST(Pin, WrongPinsAreCountedAcrossVisits) {
+  FakeBank bank;
+  auto machine = atm::makeAtm(bank, standardStock());
+  machine->insertCard("c1");
+  machine->enterPin("x");
+  machine->ejectCard();
+  machine->insertCard("c1");
+  machine->enterPin("x");
+  machine->ejectCard();
+  machine->insertCard("c1");
+  EXPECT_TRUE(machine->enterPin("x") == Status::CardRetained);
+}
+
+TEST(Pin, ARightPinClearsTheCount) {
+  FakeBank bank;
+  auto machine = atm::makeAtm(bank, standardStock());
+  machine->insertCard("c1");
+  machine->enterPin("x");
+  machine->enterPin("x");
+  EXPECT_TRUE(machine->enterPin("1111") == Status::Ok);
+  machine->ejectCard();
+  machine->insertCard("c1");
+  EXPECT_TRUE(machine->enterPin("x") == Status::WrongPin);
+  EXPECT_TRUE(machine->enterPin("x") == Status::WrongPin);
+  EXPECT_TRUE(machine->enterPin("x") == Status::CardRetained);
+}
+
+TEST(Pin, CountsAreKeptPerCard) {
+  FakeBank bank;
+  auto machine = atm::makeAtm(bank, standardStock());
+  machine->insertCard("c1");
+  machine->enterPin("x");
+  machine->enterPin("x");
+  machine->ejectCard();
+  machine->insertCard("c2");
+  EXPECT_TRUE(machine->enterPin("x") == Status::WrongPin);
+  EXPECT_TRUE(machine->enterPin("x") == Status::WrongPin);
+  EXPECT_TRUE(machine->enterPin("2222") == Status::Ok);
+}
+
+TEST(Pin, ARetainedCardDoesNotBlockOtherCards) {
+  FakeBank bank;
+  auto machine = atm::makeAtm(bank, standardStock());
+  machine->insertCard("c1");
+  machine->enterPin("x");
+  machine->enterPin("x");
+  machine->enterPin("x");
+  EXPECT_TRUE(machine->insertCard("c2") == Status::Ok);
+  EXPECT_TRUE(machine->enterPin("2222") == Status::Ok);
+}
+
+TEST(Withdraw, TheLargestNotesGoFirst) {
+  Session s;
+  Notes out;
+  EXPECT_TRUE(s.machine->withdraw(370, out) == Status::Ok);
+  EXPECT_TRUE((out == Notes{{100, 3}, {50, 1}, {20, 1}}));
+}
+
+TEST(Withdraw, TheBankIsDebitedExactlyOnce) {
+  Session s;
+  Notes out;
+  s.machine->withdraw(270, out);
+  EXPECT_EQ(s.bank.debits(), 1);
+  EXPECT_EQ(s.bank.balance("c1"), 730);
+}
+
+TEST(Withdraw, TheNotesLeaveTheMachine) {
+  Session s;
+  Notes out;
+  s.machine->withdraw(370, out);
+  EXPECT_TRUE((s.machine->stock() == Notes{{100, 2}, {50, 4}, {20, 9}, {10, 10}}));
+}
+
+TEST(Withdraw, TheStockLimitsWhatCanBeTaken) {
+  Session s("c2", Notes{{100, 1}, {50, 2}, {20, 5}, {10, 5}});
+  Notes out;
+  EXPECT_TRUE(s.machine->withdraw(250, out) == Status::Ok);
+  EXPECT_TRUE((out == Notes{{100, 1}, {50, 2}, {20, 2}, {10, 1}}));
+  EXPECT_EQ(total(out), 250);
+}
+
+TEST(Withdraw, NoDenominationIsReportedWithACountOfZero) {
+  Session s;
+  Notes out;
+  s.machine->withdraw(100, out);
+  EXPECT_EQ(out.size(), static_cast<std::size_t>(1));
+  EXPECT_EQ(out.begin()->second, 1);
+  EXPECT_TRUE((s.machine->stock() == Notes{{100, 4}, {50, 5}, {20, 10}, {10, 10}}));
+}
+
+TEST(Withdraw, TheAmountMustBeBetweenOneAndTheLimit) {
+  Session s("c2");
+  Notes out;
+  EXPECT_TRUE(s.machine->withdraw(0, out) == Status::InvalidAmount);
+  EXPECT_TRUE(s.machine->withdraw(-10, out) == Status::InvalidAmount);
+  EXPECT_TRUE(s.machine->withdraw(atm::kMaxWithdrawal + 10, out) == Status::InvalidAmount);
+  EXPECT_EQ(s.bank.debits(), 0);
+}
+
+TEST(Withdraw, TheAccountMustHoldTheAmount) {
+  Session s("poor");
+  Notes out;
+  EXPECT_TRUE(s.machine->withdraw(40, out) == Status::InsufficientFunds);
+  EXPECT_TRUE(out.empty());
+  EXPECT_EQ(s.bank.debits(), 0);
+  EXPECT_TRUE(s.machine->withdraw(30, out) == Status::Ok);
+  EXPECT_EQ(s.bank.balance("poor"), 0);
+}
+
+TEST(Withdraw, AnAmountTheNotesCannotMakeIsRefused) {
+  Session s;
+  Notes out;
+  EXPECT_TRUE(s.machine->withdraw(15, out) == Status::CannotDispense);
+  EXPECT_TRUE(out.empty());
+  EXPECT_EQ(s.bank.debits(), 0);
+  EXPECT_EQ(s.bank.balance("c1"), 1000);
+  EXPECT_TRUE(s.machine->state() == State::Ready);
+}
+
+TEST(Withdraw, ARefusedWithdrawalChangesNothing) {
+  Session s("c1", Notes{{100, 1}, {50, 1}});
+  Notes out;
+  EXPECT_TRUE(s.machine->withdraw(200, out) == Status::CannotDispense);
+  EXPECT_TRUE((s.machine->stock() == Notes{{100, 1}, {50, 1}}));
+  EXPECT_EQ(s.bank.debits(), 0);
+  EXPECT_EQ(s.bank.balance("c1"), 1000);
+  EXPECT_TRUE(s.machine->withdraw(150, out) == Status::Ok);
+}
+
+TEST(Withdraw, ChecksRunInTheDocumentedOrder) {
+  Session s("poor");
+  Notes out;
+  EXPECT_TRUE(s.machine->withdraw(0, out) == Status::InvalidAmount);
+  EXPECT_TRUE(s.machine->withdraw(45, out) == Status::InsufficientFunds);
+  Session rich("c2");
+  EXPECT_TRUE(rich.machine->withdraw(45, out) == Status::CannotDispense);
+}
+
+TEST(Withdraw, GreedyGivesUpEvenIfAnotherCombinationWouldPay) {
+  Session s("c1", Notes{{50, 1}, {20, 3}});
+  Notes out;
+  EXPECT_TRUE(s.machine->withdraw(60, out) == Status::CannotDispense);
+  EXPECT_TRUE(s.machine->withdraw(50, out) == Status::Ok);
+  EXPECT_TRUE((out == Notes{{50, 1}}));
+}
+20:T15a7,#include <map>
+#include <string>
+#include <vector>
+
+#include "api_storm1.h"
+#include "bp_test.h"
+
+namespace {
+using atm::Notes;
+using atm::State;
+using atm::Status;
+
+class FakeBank : public atm::Bank {
+ public:
+  bool knowsCard(const std::string& card) const override { return card == "c1" || card == "poor"; }
+  bool pinMatches(const std::string& card, const std::string& pin) const override {
+    return (card == "c1" && pin == "1111") || (card == "poor" && pin == "0000");
+  }
+  long long available(const std::string& card) const override { return card == "c1" ? balance_ : card == "poor" ? 30 : 0; }
+  void debit(const std::string&, long long amount) override {
+    balance_ -= amount;
+    ++debits_;
+  }
+  int debits() const { return debits_; }
+  long long balance() const { return balance_; }
+
+ private:
+  long long balance_ = 100000;
+  int debits_ = 0;
+};
+
+long long total(const Notes& notes) {
+  long long sum = 0;
+  for (const auto& entry : notes) sum += static_cast<long long>(entry.first) * entry.second;
+  return sum;
+}
+
+int count(const Notes& notes) {
+  int n = 0;
+  for (const auto& entry : notes) n += entry.second;
+  return n;
+}
+
+struct Session {
+  explicit Session(const Notes& stock, const std::string& card = "c1") : machine(atm::makeFlexibleAtm(bank, stock)) {
+    machine->insertCard(card);
+    machine->enterPin(card == "c1" ? "1111" : "0000");
+  }
+  FakeBank bank;
+  std::unique_ptr<atm::Atm> machine;
+};
+}  // namespace
+
+TEST(Flexible, ASearchPaysWhereGreedyGivesUp) {
+  Session s(Notes{{50, 1}, {20, 3}});
+  Notes out;
+  EXPECT_TRUE(s.machine->withdraw(60, out) == Status::Ok);
+  EXPECT_TRUE((out == Notes{{20, 3}}));
+  EXPECT_EQ(s.bank.balance(), 99940);
+  EXPECT_EQ(s.bank.debits(), 1);
+}
+
+TEST(Flexible, TheFewestNotesWin) {
+  Session s(Notes{{40, 2}, {30, 2}, {10, 5}});
+  Notes out;
+  EXPECT_TRUE(s.machine->withdraw(60, out) == Status::Ok);
+  EXPECT_TRUE((out == Notes{{30, 2}}));
+}
+
+TEST(Flexible, ATieGoesToTheLargerDenomination) {
+  Session s(Notes{{60, 1}, {50, 2}, {40, 1}});
+  Notes out;
+  EXPECT_TRUE(s.machine->withdraw(100, out) == Status::Ok);
+  EXPECT_TRUE((out == Notes{{60, 1}, {40, 1}}));
+}
+
+TEST(Flexible, AnAmountNoCombinationMakesIsStillRefused) {
+  Session s(Notes{{50, 1}, {20, 3}});
+  Notes out;
+  EXPECT_TRUE(s.machine->withdraw(55, out) == Status::CannotDispense);
+  EXPECT_TRUE(s.machine->withdraw(100, out) == Status::CannotDispense);
+  EXPECT_TRUE(out.empty());
+  EXPECT_EQ(s.bank.debits(), 0);
+  EXPECT_TRUE((s.machine->stock() == Notes{{50, 1}, {20, 3}}));
+}
+
+TEST(Flexible, TheChosenNotesLeaveTheMachine) {
+  Session s(Notes{{50, 1}, {20, 3}, {10, 2}});
+  Notes out;
+  s.machine->withdraw(60, out);
+  EXPECT_TRUE((out == Notes{{50, 1}, {10, 1}}));
+  EXPECT_TRUE((s.machine->stock() == Notes{{20, 3}, {10, 1}}));
+}
+
+TEST(Flexible, UsingTheLastNotesLeavesTheMachineOutOfService) {
+  Session s(Notes{{20, 3}});
+  Notes out;
+  EXPECT_TRUE(s.machine->withdraw(60, out) == Status::Ok);
+  EXPECT_TRUE(s.machine->state() == State::Ready);
+  s.machine->ejectCard();
+  EXPECT_TRUE(s.machine->state() == State::OutOfService);
+}
+
+TEST(Flexible, EverythingElseBehavesAsBefore) {
+  Session s(Notes{{100, 5}, {20, 5}}, "poor");
+  Notes out;
+  EXPECT_TRUE(s.machine->withdraw(0, out) == Status::InvalidAmount);
+  EXPECT_TRUE(s.machine->withdraw(atm::kMaxWithdrawal + 1, out) == Status::InvalidAmount);
+  EXPECT_TRUE(s.machine->withdraw(100, out) == Status::InsufficientFunds);
+  EXPECT_TRUE(s.machine->withdraw(25, out) == Status::CannotDispense);
+  s.machine->ejectCard();
+  EXPECT_TRUE(s.machine->withdraw(20, out) == Status::WrongState);
+  s.machine->insertCard("poor");
+  s.machine->enterPin("x");
+  s.machine->enterPin("x");
+  EXPECT_TRUE(s.machine->enterPin("x") == Status::CardRetained);
+  EXPECT_TRUE(s.machine->insertCard("poor") == Status::CardBlocked);
+}
+
+TEST(Flexible, AnythingThatCanBePaidIsPaidWithTheFewestNotes) {
+  // Checked against a brute-force enumeration for every amount from 1 to 260.
+  const Notes stock{{30, 3}, {25, 2}, {10, 4}, {5, 3}};
+  for (long long amount = 1; amount <= 260; ++amount) {
+    bool found = false;
+    int bestCount = 0;
+    Notes best;
+    for (int a = 0; a <= 3; ++a) {
+      for (int b = 0; b <= 2; ++b) {
+        for (int c = 0; c <= 4; ++c) {
+          for (int d = 0; d <= 3; ++d) {
+            if (30LL * a + 25LL * b + 10LL * c + 5LL * d != amount) continue;
+            const int notes = a + b + c + d;
+            const std::vector<int> mine{a, b, c, d};
+            const std::vector<int> theirs{best.count(30) ? best[30] : 0, best.count(25) ? best[25] : 0,
+                                          best.count(10) ? best[10] : 0, best.count(5) ? best[5] : 0};
+            if (!found || notes < bestCount || (notes == bestCount && mine > theirs)) {
+              found = true;
+              bestCount = notes;
+              best.clear();
+              if (a) best[30] = a;
+              if (b) best[25] = b;
+              if (c) best[10] = c;
+              if (d) best[5] = d;
+            }
+          }
+        }
+      }
+    }
+    Session s(stock);
+    Notes out;
+    const Status status = s.machine->withdraw(amount, out);
+    if (!found) {
+      EXPECT_TRUE(status == Status::CannotDispense);
+    } else {
+      EXPECT_TRUE(status == Status::Ok);
+      EXPECT_TRUE(out == best);
+    }
+  }
+}
+
+TEST(Flexible, ALargeWithdrawalStillAddsUp) {
+  Session s(Notes{{100, 200}, {50, 50}, {20, 100}, {10, 100}});
+  Notes out;
+  EXPECT_TRUE(s.machine->withdraw(9990, out) == Status::Ok);
+  EXPECT_EQ(total(out), 9990);
+  EXPECT_EQ(count(out), 102);
+}
+21:T11b9,#include <map>
+#include <string>
+
+#include "api_storm2.h"
+#include "bp_test.h"
+
+namespace {
+using atm::Notes;
+using atm::State;
+using atm::Status;
+
+class FakeBank : public atm::Bank {
+ public:
+  FakeBank() {
+    pins_ = {{"c1", "1111"}, {"c2", "2222"}, {"poor", "0000"}};
+    balances_ = {{"c1", 5000}, {"c2", 5000}, {"poor", 30}};
+  }
+  bool knowsCard(const std::string& card) const override { return pins_.count(card) > 0; }
+  bool pinMatches(const std::string& card, const std::string& pin) const override {
+    const auto found = pins_.find(card);
+    return found != pins_.end() && found->second == pin;
+  }
+  long long available(const std::string& card) const override {
+    const auto found = balances_.find(card);
+    return found == balances_.end() ? 0 : found->second;
+  }
+  void debit(const std::string& card, long long amount) override { balances_[card] -= amount; }
+  long long balance(const std::string& card) const { return available(card); }
+
+ private:
+  std::map<std::string, std::string> pins_;
+  std::map<std::string, long long> balances_;
+};
+
+Notes stock() { return Notes{{100, 50}, {50, 50}, {20, 50}, {10, 50}}; }
+
+std::string pinOf(const std::string& card) { return card == "c1" ? "1111" : card == "c2" ? "2222" : "0000"; }
+
+struct Desk {
+  Desk() : machine(atm::makeLimitedAtm(bank, stock(), 500)) {}
+  void visit(const std::string& card) {
+    machine->insertCard(card);
+    machine->enterPin(pinOf(card));
+  }
+  Status take(long long amount) {
+    Notes out;
+    return machine->withdraw(amount, out);
+  }
+  FakeBank bank;
+  std::unique_ptr<atm::LimitedAtm> machine;
+};
+}  // namespace
+
+TEST(Limit, WithdrawalsUpToTheLimitSucceed) {
+  Desk d;
+  d.visit("c1");
+  EXPECT_TRUE(d.take(300) == Status::Ok);
+  EXPECT_TRUE(d.take(200) == Status::Ok);
+  EXPECT_TRUE(d.take(10) == Status::DailyLimitExceeded);
+  EXPECT_EQ(d.bank.balance("c1"), 4500);
+}
+
+TEST(Limit, ExactlyTheLimitIsAllowedAndOneNoteMoreIsNot) {
+  Desk d;
+  d.visit("c1");
+  EXPECT_TRUE(d.take(510) == Status::DailyLimitExceeded);
+  EXPECT_TRUE(d.take(500) == Status::Ok);
+  EXPECT_TRUE(d.take(10) == Status::DailyLimitExceeded);
+}
+
+TEST(Limit, EachCardHasItsOwnTotal) {
+  Desk d;
+  d.visit("c1");
+  EXPECT_TRUE(d.take(500) == Status::Ok);
+  d.machine->ejectCard();
+  d.visit("c2");
+  EXPECT_TRUE(d.take(300) == Status::Ok);
+  EXPECT_TRUE(d.take(300) == Status::DailyLimitExceeded);
+}
+
+TEST(Limit, TheTotalSurvivesEjectingTheCard) {
+  Desk d;
+  d.visit("c1");
+  EXPECT_TRUE(d.take(400) == Status::Ok);
+  d.machine->ejectCard();
+  d.visit("c1");
+  EXPECT_TRUE(d.take(200) == Status::DailyLimitExceeded);
+  EXPECT_TRUE(d.take(100) == Status::Ok);
+}
+
+TEST(Limit, RefusedWithdrawalsDoNotCount) {
+  Desk d;
+  d.visit("c1");
+  EXPECT_TRUE(d.take(400) == Status::Ok);
+  EXPECT_TRUE(d.take(200) == Status::DailyLimitExceeded);
+  EXPECT_TRUE(d.take(15) == Status::CannotDispense);
+  EXPECT_TRUE(d.take(0) == Status::InvalidAmount);
+  EXPECT_TRUE(d.take(100) == Status::Ok);
+}
+
+TEST(Limit, ANewDayStartsFromZero) {
+  Desk d;
+  d.visit("c1");
+  EXPECT_TRUE(d.take(500) == Status::Ok);
+  EXPECT_TRUE(d.take(10) == Status::DailyLimitExceeded);
+  d.machine->endOfDay();
+  EXPECT_TRUE(d.take(500) == Status::Ok);
+}
+
+TEST(Limit, TheLimitIsCheckedAfterTheAmountAndBeforeTheFunds) {
+  Desk d;
+  d.visit("poor");
+  EXPECT_TRUE(d.take(20000) == Status::InvalidAmount);
+  EXPECT_TRUE(d.take(600) == Status::DailyLimitExceeded);
+  EXPECT_TRUE(d.take(100) == Status::InsufficientFunds);
+}
+
+TEST(Limit, TheLimitIsCheckedBeforeTheNotes) {
+  Desk d;
+  d.visit("c1");
+  EXPECT_TRUE(d.take(490) == Status::Ok);
+  EXPECT_TRUE(d.take(15) == Status::DailyLimitExceeded);
+  EXPECT_TRUE(d.take(5) == Status::CannotDispense);
+}
+
+TEST(Limit, ACardAtItsLimitCanStillComeAndGo) {
+  Desk d;
+  d.visit("c1");
+  d.take(500);
+  EXPECT_TRUE(d.machine->ejectCard() == Status::Ok);
+  EXPECT_TRUE(d.machine->insertCard("c1") == Status::Ok);
+  EXPECT_TRUE(d.machine->enterPin("1111") == Status::Ok);
+  EXPECT_TRUE(d.machine->state() == State::Ready);
+}
+
+TEST(Limit, NotesAreStillChosenGreedily) {
+  Desk d;
+  d.visit("c1");
+  Notes out;
+  EXPECT_TRUE(d.machine->withdraw(370, out) == Status::Ok);
+  EXPECT_TRUE((out == Notes{{100, 3}, {50, 1}, {20, 1}}));
+  EXPECT_TRUE(d.machine->withdraw(130, out) == Status::Ok);
+}
+
+TEST(Limit, ARetainedCardStaysRetainedAfterTheNightPasses) {
+  Desk d;
+  d.machine->insertCard("c1");
+  d.machine->enterPin("x");
+  d.machine->enterPin("x");
+  d.machine->enterPin("x");
+  d.machine->endOfDay();
+  EXPECT_TRUE(d.machine->insertCard("c1") == Status::CardBlocked);
+}
+22:T5ff,#pragma once
+#include <memory>
+#include <string>
+#include <utility>
+
+#include "api_storm2.h"
+#include "atm_state.h"
+#include "machine.h"
+
+// The public face: forwards each operation to the current state and follows the state's decision about what comes next.
+// It has no rule of its own about cards, PINs, notes or limits.
+class AtmImpl : public atm::LimitedAtm {
+ public:
+  explicit AtmImpl(std::unique_ptr<Machine> machine) : machine_(std::move(machine)), state_(&resting()) {}
+
+  atm::Status insertCard(const std::string& card) override { return apply(state_->insertCard(*machine_, card)); }
+  atm::Status enterPin(const std::string& pin) override { return apply(state_->enterPin(*machine_, pin)); }
+  atm::Status withdraw(long long amount, atm::Notes& out) override {
+    out.clear();
+    return apply(state_->withdraw(*machine_, amount, out));
+  }
+  atm::Status ejectCard() override { return apply(state_->eject(*machine_)); }
+  atm::State state() const override { return state_->id(); }
+  atm::Notes stock() const override { return machine_->stock(); }
+  void endOfDay() override { machine_->newDay(); }
+
+ private:
+  // Waiting for a customer: Idle, unless there is nothing to give.
+  const AtmState& resting() const { return machine_->hasNotes() ? AtmState::idle() : AtmState::outOfService(); }
+
+  atm::Status apply(const Step& step) {
+    if (step.next != nullptr) state_ = step.next == &AtmState::idle() ? &resting() : step.next;
+    return step.status;
+  }
+
+  std::unique_ptr<Machine> machine_;
+  const AtmState* state_;
+};
+23:Tcdf,#pragma once
+#include <string>
+
+#include "api_storm2.h"
+#include "machine.h"
+
+class AtmState;
+
+// What a state decided: the answer for the caller and the state to move to (nullptr: stay where we are).
+struct Step {
+  atm::Status status;
+  const AtmState* next;
+};
+
+// The State pattern: one object per state, no data of its own, so the objects can be shared. A state answers every
+// operation; the ones it does not allow answer WrongState.
+class AtmState {
+ public:
+  virtual ~AtmState() = default;
+  virtual atm::State id() const = 0;
+  virtual Step insertCard(Machine&, const std::string&) const { return Step{atm::Status::WrongState, nullptr}; }
+  virtual Step enterPin(Machine&, const std::string&) const { return Step{atm::Status::WrongState, nullptr}; }
+  virtual Step withdraw(Machine&, long long, atm::Notes&) const { return Step{atm::Status::WrongState, nullptr}; }
+  virtual Step eject(Machine&) const { return Step{atm::Status::WrongState, nullptr}; }
+
+  static const AtmState& idle();
+  static const AtmState& awaitingPin();
+  static const AtmState& ready();
+  static const AtmState& outOfService();
+};
+
+namespace states {
+
+class Idle : public AtmState {
+ public:
+  atm::State id() const override { return atm::State::Idle; }
+  Step insertCard(Machine& machine, const std::string& card) const override {
+    const atm::Status admitted = machine.admit(card);
+    return Step{admitted, admitted == atm::Status::Ok ? &AtmState::awaitingPin() : nullptr};
+  }
+};
+
+class AwaitingPin : public AtmState {
+ public:
+  atm::State id() const override { return atm::State::AwaitingPin; }
+  Step enterPin(Machine& machine, const std::string& pin) const override {
+    switch (machine.verifyPin(pin)) {
+      case PinGuard::Verdict::Accepted:
+        return Step{atm::Status::Ok, &AtmState::ready()};
+      case PinGuard::Verdict::Rejected:
+        return Step{atm::Status::WrongPin, nullptr};
+      case PinGuard::Verdict::Retained:
+        machine.release();
+        return Step{atm::Status::CardRetained, &AtmState::idle()};
+    }
+    return Step{atm::Status::WrongState, nullptr};
+  }
+  Step eject(Machine& machine) const override {
+    machine.release();
+    return Step{atm::Status::Ok, &AtmState::idle()};
+  }
+};
+
+class Ready : public AtmState {
+ public:
+  atm::State id() const override { return atm::State::Ready; }
+  Step withdraw(Machine& machine, long long amount, atm::Notes& out) const override {
+    return Step{machine.pay(amount, out), nullptr};
+  }
+  Step eject(Machine& machine) const override {
+    machine.release();
+    return Step{atm::Status::Ok, &AtmState::idle()};
+  }
+};
+
+class OutOfService : public AtmState {
+ public:
+  atm::State id() const override { return atm::State::OutOfService; }
+  Step insertCard(Machine&, const std::string&) const override { return Step{atm::Status::OutOfService, nullptr}; }
+};
+
+}  // namespace states
+
+inline const AtmState& AtmState::idle() {
+  static const states::Idle instance;
+  return instance;
+}
+inline const AtmState& AtmState::awaitingPin() {
+  static const states::AwaitingPin instance;
+  return instance;
+}
+inline const AtmState& AtmState::ready() {
+  static const states::Ready instance;
+  return instance;
+}
+inline const AtmState& AtmState::outOfService() {
+  static const states::OutOfService instance;
+  return instance;
+}
+24:T40f,#pragma once
+#include "api_storm2.h"
+
+// The notes inside the machine. It knows nothing about customers, PINs or what a good payout is.
+class CashBox {
+ public:
+  explicit CashBox(const atm::Notes& initial) {
+    for (const auto& entry : initial) {
+      if (entry.first > 0 && entry.second >= 0) notes_[entry.first] = entry.second;
+    }
+  }
+
+  // Every declared denomination, zero counts included, so a dispenser can plan with them.
+  const atm::Notes& declared() const { return notes_; }
+
+  // Only denominations that still have notes, as the API reports them.
+  atm::Notes inStock() const {
+    atm::Notes present;
+    for (const auto& entry : notes_) {
+      if (entry.second > 0) present[entry.first] = entry.second;
+    }
+    return present;
+  }
+
+  bool empty() const {
+    for (const auto& entry : notes_) {
+      if (entry.second > 0) return false;
+    }
+    return true;
+  }
+
+  void remove(const atm::Notes& taken) {
+    for (const auto& entry : taken) notes_[entry.first] -= entry.second;
+  }
+
+ private:
+  atm::Notes notes_;
+};
+25:T88d,#pragma once
+#include <algorithm>
+#include <cstddef>
+#include <vector>
+
+#include "note_dispenser.h"
+
+// Change Storm 1: any exact combination will do, so search for one. The fewest notes win; among equals, more of the
+// larger denominations win. A chain cannot do this, because a link never sees what the later links can pay.
+class FewestNotesDispenser : public NoteDispenser {
+ public:
+  bool plan(long long amount, const atm::Notes& stock, atm::Notes& out) const override {
+    std::vector<int> value;
+    std::vector<long long> count;
+    for (auto entry = stock.rbegin(); entry != stock.rend(); ++entry) {
+      value.push_back(entry->first);
+      count.push_back(entry->second);
+    }
+    const std::size_t kinds = value.size();
+    const std::size_t target = static_cast<std::size_t>(amount);
+    // fewest[i][r]: the fewest notes of denominations i.. that pay r exactly, or kImpossible.
+    std::vector<std::vector<int>> fewest(kinds + 1, std::vector<int>(target + 1, kImpossible));
+    fewest[kinds][0] = 0;
+    for (std::size_t i = kinds; i-- > 0;) {
+      for (std::size_t r = 0; r <= target; ++r) {
+        const long long most = std::min<long long>(count[i], static_cast<long long>(r) / value[i]);
+        for (long long take = 0; take <= most; ++take) {
+          const int rest = fewest[i + 1][r - static_cast<std::size_t>(take * value[i])];
+          if (rest != kImpossible) fewest[i][r] = std::min(fewest[i][r], rest + static_cast<int>(take));
+        }
+      }
+    }
+    out.clear();
+    if (fewest[0][target] == kImpossible) return false;
+    std::size_t remaining = target;
+    for (std::size_t i = 0; i < kinds; ++i) {
+      for (long long take = std::min<long long>(count[i], static_cast<long long>(remaining) / value[i]); take >= 0; --take) {
+        const int rest = fewest[i + 1][remaining - static_cast<std::size_t>(take * value[i])];
+        if (rest != kImpossible && rest + take == fewest[i][remaining]) {
+          if (take > 0) out[value[i]] = static_cast<int>(take);
+          remaining -= static_cast<std::size_t>(take * value[i]);
+          break;
+        }
+      }
+    }
+    return true;
+  }
+
+ private:
+  static constexpr int kImpossible = 1 << 30;
+};
+26:T568,#pragma once
+#include <memory>
+#include <string>
+#include <utility>
+
+#include "api_storm2.h"
+#include "cash_box.h"
+#include "payout.h"
+#include "pin_guard.h"
+
+// The parts a session uses: the card slot, the cash, the PIN rules and the payout. The states decide WHEN each part may
+// be used; the machine only does the work.
+class Machine {
+ public:
+  Machine(atm::Bank& bank, const atm::Notes& stock, std::unique_ptr<NoteDispenser> dispenser, std::unique_ptr<WithdrawalLimit> limit)
+      : bank_(bank), cash_(stock), payout_(bank, cash_, std::move(dispenser), std::move(limit)) {}
+
+  bool hasNotes() const { return !cash_.empty(); }
+
+  atm::Notes stock() const { return cash_.inStock(); }
+
+  // Takes the card into the slot when the machine is willing to; otherwise says why.
+  atm::Status admit(const std::string& card) {
+    if (pins_.isRetained(card)) return atm::Status::CardBlocked;
+    if (!bank_.knowsCard(card)) return atm::Status::UnknownCard;
+    card_ = card;
+    return atm::Status::Ok;
+  }
+
+  PinGuard::Verdict verifyPin(const std::string& pin) { return pins_.check(bank_, card_, pin); }
+
+  atm::Status pay(long long amount, atm::Notes& out) { return payout_.pay(card_, amount, out); }
+
+  void release() { card_.clear(); }
+
+  void newDay() { payout_.newDay(); }
+
+ private:
+  atm::Bank& bank_;
+  CashBox cash_;
+  PinGuard pins_;
+  Payout payout_;
+  std::string card_;
+};
+27:T73e,#pragma once
+#include <algorithm>
+#include <memory>
+#include <vector>
+
+#include "api_storm2.h"
+
+// Decides which notes pay an amount. `stock` lists every declared denomination with its count. Returns false when no
+// payment is possible. On true, `out` holds the chosen notes (no zero entries) and they all exist in the stock.
+class NoteDispenser {
+ public:
+  virtual ~NoteDispenser() = default;
+  virtual bool plan(long long amount, const atm::Notes& stock, atm::Notes& out) const = 0;
+};
+
+// One link of the chain: it pays as much of the amount as it can with ITS denomination and hands the rest on.
+class NoteHandler {
+ public:
+  NoteHandler(int denomination, std::unique_ptr<NoteHandler> next) : denomination_(denomination), next_(std::move(next)) {}
+
+  bool handle(long long remaining, const atm::Notes& stock, atm::Notes& out) const {
+    const auto found = stock.find(denomination_);
+    const long long held = found == stock.end() ? 0 : found->second;
+    const long long taken = std::min<long long>(held, remaining / denomination_);
+    if (taken > 0) out[denomination_] = static_cast<int>(taken);
+    remaining -= taken * denomination_;
+    if (remaining == 0) return true;
+    return next_ != nullptr && next_->handle(remaining, stock, out);
+  }
+
+ private:
+  int denomination_;
+  std::unique_ptr<NoteHandler> next_;
+};
+
+// The greedy rule as a chain of responsibility: the largest denomination goes first.
+class ChainDispenser : public NoteDispenser {
+ public:
+  bool plan(long long amount, const atm::Notes& stock, atm::Notes& out) const override {
+    std::unique_ptr<NoteHandler> head;
+    for (const auto& entry : stock) head = std::make_unique<NoteHandler>(entry.first, std::move(head));
+    out.clear();
+    if (head == nullptr || !head->handle(amount, stock, out)) {
+      out.clear();
+      return false;
+    }
+    return true;
+  }
+};
+28:T521,#pragma once
+#include <memory>
+#include <string>
+#include <utility>
+
+#include "api_storm2.h"
+#include "cash_box.h"
+#include "note_dispenser.h"
+#include "withdrawal_limit.h"
+
+// One withdrawal, all or nothing: every check runs before anything moves, and the bank is debited exactly once.
+class Payout {
+ public:
+  Payout(atm::Bank& bank, CashBox& cash, std::unique_ptr<NoteDispenser> dispenser, std::unique_ptr<WithdrawalLimit> limit)
+      : bank_(bank), cash_(cash), dispenser_(std::move(dispenser)), limit_(std::move(limit)) {}
+
+  atm::Status pay(const std::string& card, long long amount, atm::Notes& out) {
+    out.clear();
+    if (amount < 1 || amount > atm::kMaxWithdrawal) return atm::Status::InvalidAmount;
+    if (!limit_->allows(card, amount)) return atm::Status::DailyLimitExceeded;
+    if (amount > bank_.available(card)) return atm::Status::InsufficientFunds;
+    atm::Notes chosen;
+    if (!dispenser_->plan(amount, cash_.declared(), chosen)) return atm::Status::CannotDispense;
+    bank_.debit(card, amount);
+    cash_.remove(chosen);
+    limit_->record(card, amount);
+    out = chosen;
+    return atm::Status::Ok;
+  }
+
+  void newDay() { limit_->newDay(); }
+
+ private:
+  atm::Bank& bank_;
+  CashBox& cash_;
+  std::unique_ptr<NoteDispenser> dispenser_;
+  std::unique_ptr<WithdrawalLimit> limit_;
+};
+29:T510,#pragma once
+#include <map>
+#include <string>
+
+#include "api_storm2.h"
+
+// A rule about how much one card may take out. The payout asks `allows` before it moves anything and calls `record` only
+// after a withdrawal succeeded.
+class WithdrawalLimit {
+ public:
+  virtual ~WithdrawalLimit() = default;
+  virtual bool allows(const std::string& card, long long amount) const = 0;
+  virtual void record(const std::string& card, long long amount) = 0;
+  virtual void newDay() = 0;
+};
+
+class NoLimit : public WithdrawalLimit {
+ public:
+  bool allows(const std::string&, long long) const override { return true; }
+  void record(const std::string&, long long) override {}
+  void newDay() override {}
+};
+
+// Change Storm 2: a total per card per day.
+class DailyLimit : public WithdrawalLimit {
+ public:
+  explicit DailyLimit(long long limit) : limit_(limit) {}
+
+  bool allows(const std::string& card, long long amount) const override {
+    const auto found = today_.find(card);
+    const long long used = found == today_.end() ? 0 : found->second;
+    return used + amount <= limit_;
+  }
+
+  void record(const std::string& card, long long amount) override { today_[card] += amount; }
+
+  void newDay() override { today_.clear(); }
+
+ private:
+  long long limit_;
+  std::map<std::string, long long> today_;
+};
+c:["$","$L1a",null,{"bundle":{"id":"atm","title":"ATM (cash machine)","level":"Senior","parMinutes":50,"patterns":["State","Chain of Responsibility","Strategy"],"requirements":[{"id":"R-session","text":"The machine is Idle, AwaitingPin, Ready or OutOfService (idle with no notes at all). insertCard works only when idle or out of service and checks in order: no notes -> OutOfService; card retained earlier -> CardBlocked; bank does not know it -> UnknownCard; a refused card leaves the state alone. enterPin works only in AwaitingPin, withdraw only in Ready, ejectCard in AwaitingPin or Ready (back to Idle, or OutOfService when the stock is empty); anything else answers WrongState and changes nothing. After a withdrawal the customer stays Ready.","phase":"base","hidden":true},{"id":"R-pin","text":"A wrong PIN counts against THAT CARD; the count survives ejecting and re-inserting. The first two wrong PINs in a row answer WrongPin and keep the card inside; the third answers CardRetained, the machine keeps the card for good (insertCard answers CardBlocked from then on) and the state goes back to Idle. A correct PIN clears that card's count. Other cards are unaffected.","phase":"base","hidden":true},{"id":"R-withdraw","text":"withdraw(amount, out) checks in order and the first failure decides: amount outside 1 .. kMaxWithdrawal -> InvalidAmount; amount above the bank's available -> InsufficientFunds; the notes cannot make it -> CannotDispense. A refused withdrawal changes nothing: no debit, no notes removed, out stays empty. On success the bank is debited exactly the amount once, the notes leave the stock and are returned in out without zero entries.","phase":"base","hidden":true},{"id":"R-greedy","text":"Notes are chosen greedily: the largest denomination first, as many as the stock allows without going over, then the next, and so on. If an amount is left over the answer is CannotDispense, even if another combination of the same notes would have paid it (60 from one 50 and three 20s is refused).","phase":"base","hidden":true},{"id":"R-flexible","text":"Storm 1: makeFlexibleAtm pays whenever some exact combination exists: the fewest notes win, and among equally short combinations the one with more of the larger denomination (compare counts from the largest down). Everything else is as in the base machine; CannotDispense now means no combination exists.","phase":"storm1","hidden":true},{"id":"R-limit","text":"Storm 2: makeLimitedAtm(bank, stock, dailyLimit): each card may withdraw at most dailyLimit per day in total, across sessions. The check sits between the amount check and the funds check and answers DailyLimitExceeded. Only successful withdrawals count. endOfDay() resets every card's total; retained cards stay retained. Notes are still chosen greedily.","phase":"storm2","hidden":true}],"brief":"$1b","editorial":"$1c","clarify":[{"id":"q-states","text":"What states can the machine be in, and what should happen if the customer does something that makes no sense in the current state, like withdrawing before the PIN?","answer":"Idle (waiting for a card), AwaitingPin, Ready (PIN accepted) and OutOfService (idle with no notes at all). insertCard works from Idle or OutOfService, enterPin only in AwaitingPin, withdraw only in Ready, eject in AwaitingPin or Ready. Anything else answers WrongState and changes nothing. A refused card leaves the state as it was; after a withdrawal the customer stays Ready.","reveals":["R-session"],"quality":"essential"},{"id":"q-pin","text":"What happens on a wrong PIN? Is there a limit? Does the limit reset when the card is taken out and put back?","answer":"Three wrong PINs in a row retain the card. The count belongs to the card and survives ejecting and re-inserting; a correct PIN resets it; other cards are unaffected. The first two wrong PINs answer WrongPin and keep the card inside; the third answers CardRetained, the state goes to Idle, and this machine will never accept that card again (CardBlocked).","reveals":["R-pin"],"quality":"essential"},{"id":"q-money","text":"Where does the money live and what must be true when a withdrawal fails halfway?","answer":"In the bank, behind an interface the tests implement: knowsCard, pinMatches, available, debit. The machine never keeps balances. A refused withdrawal changes nothing: no debit, no notes removed. Checks run in this order and the first failure decides: amount outside 1..kMaxWithdrawal (InvalidAmount), more than the account holds (InsufficientFunds), notes cannot make it (CannotDispense). On success the bank is debited exactly once.","reveals":["R-withdraw"],"quality":"essential"},{"id":"q-notes","text":"Which notes do I hand out when there is a choice, and what if I cannot pay the exact amount?","answer":"Greedy: the largest denomination first, as many as the stock allows without going over, then the next. If something is left over the answer is CannotDispense, even if another combination would have worked: one 50 and three 20s cannot pay 60 here. A report of the notes has no zero entries.","reveals":["R-greedy"],"quality":"essential"},{"id":"q-search","text":"Greedy gives up on some amounts that could be paid. Will we need to do better than that?","answer":"Yes, a later version will: pay whenever any combination exists, with the fewest notes. Details arrive with the change.","reveals":["R-flexible"],"quality":"essential"},{"id":"q-limits","text":"Is there a limit on how much one customer may withdraw per day?","answer":"Not today, but the bank has asked for one. Details arrive with the change.","reveals":["R-limit"],"quality":"essential"},{"id":"q-denoms","text":"Which denominations exist, and can the stock change at runtime?","answer":"Whatever the stock passed to makeAtm declares (the tests use 100, 50, 20 and 10, and a few odd ones). Restocking is not in this exercise; say how you would add it (a CashBox method behind a technician state) but do not build it.","reveals":[],"quality":"useful"},{"id":"q-threads","text":"Is one machine used from several threads?","answer":"No: one customer at a time, single-threaded tests. Say how you would protect it if several threads called in (one lock around the whole session, or one owner thread) but do not build it.","reveals":[],"quality":"useful"},{"id":"q-timeout","text":"What if the customer walks away with the card still in?","answer":"Real machines time out and retain the card. Here there is no clock; say how you would add a timeout event that the states handle (a timeout from AwaitingPin ejects the card) but do not build it.","reveals":[],"quality":"useful"},{"id":"q-receipt","text":"Balance enquiries, deposits, receipts, transfers?","answer":"Not in this exercise. Say where they would go: each transaction is a new operation that only the Ready state allows, so adding one is a new method and one state's override, not a change to the other states.","reveals":[],"quality":"useful"},{"id":"q-hardware","text":"Do we model the card reader, the keypad and the cash dispenser hardware?","answer":"No. The tests call the interface directly; hardware drivers sit below it.","reveals":[],"quality":"noise"},{"id":"q-security","text":"Should we encrypt the PIN and talk to the bank over a secure channel?","answer":"That is the bank interface's job and out of scope here; the machine only asks 'does this PIN match'.","reveals":[],"quality":"noise"}],"rubric":[{"id":"res-facade","text":"Forwards each operation to the current state and follows its decision about the next state; no rule of its own about PINs, notes or limits","phase":"base","owners":["AtmImpl","AtmMachine","AtmContext","AtmController","Atm","CashMachine","AtmService"]},{"id":"res-states","text":"Decides which operations are allowed in which situation (Idle, AwaitingPin, Ready, OutOfService) and what each one leads to, one class per state","phase":"base","owners":["AtmState","IdleState","AwaitingPinState","ReadyState","OutOfServiceState","State","HasCardState","PinEnteredState","NoCardState"]},{"id":"res-pin","text":"Owns the PIN rules: wrong attempts counted per card across visits, retention after three in a row, and the blocked-card memory","phase":"base","owners":["PinGuard","PinValidator","PinChecker","PinPolicy","CardRegistry","AttemptCounter","Authenticator","PinVerifier"]},{"id":"res-notes","text":"Owns how an amount becomes notes (largest first, limited by stock), as a replaceable rule","phase":"base","owners":["NoteDispenser","NoteHandler","ChainDispenser","DispenseHandler","DispenserChain","CashDispenser","NoteStrategy","DenominationHandler"]},{"id":"res-cash","text":"Owns the notes inside the machine: counts per denomination, removal, and whether the machine is empty","phase":"base","owners":["CashBox","CashDrawer","CashStock","NoteStock","CashInventory","CashCassette","Inventory","CashVault"]},{"id":"res-payout","text":"Sequences one withdrawal so that every check runs before the first side effect and the bank and the stock change together","phase":"base","owners":["Payout","Withdrawal","WithdrawalService","Teller","TransactionService","CashWithdrawal","WithdrawalProcessor"]},{"id":"res-search","text":"Adds the fewest-notes search as a new dispensing rule next to the chain, without editing the chain or the states","phase":"storm1","owners":["FewestNotesDispenser","SearchDispenser","MinNotesDispenser","OptimalDispenser","DpDispenser","FewestNotesStrategy","KnapsackDispenser"]},{"id":"res-limit","text":"Owns the daily total per card as a rule consulted before and recorded after a payout, not as state in the session","phase":"storm2","owners":["WithdrawalLimit","DailyLimit","LimitPolicy","DailyLimitPolicy","LimitTracker","WithdrawalPolicy","WithdrawalTracker"]}],"followups":[{"level":"SDE2","question":"Draw the states and the transitions. What happens if the customer presses withdraw in AwaitingPin?","answer":"Four states: Idle, AwaitingPin, Ready, OutOfService. Insert card: Idle to AwaitingPin; right PIN: AwaitingPin to Ready; eject: AwaitingPin or Ready to Idle; third wrong PIN: AwaitingPin to Idle with the card kept. Withdraw in AwaitingPin is not a transition at all, so the machine answers WrongState and nothing changes. The point of the State pattern is that this answer comes from the state class by default (the base class refuses everything) and each state overrides only what it allows, instead of one function full of 'if (state == ...)' checks that grows with every new operation."},{"level":"SDE2","question":"Why does a failed withdrawal have to check everything before it touches the account?","answer":"Because there is no undo in the contract: once the bank has been debited the customer has been charged. If the notes cannot make the amount, the machine would then have to refund, which can itself fail. The simple discipline is check-then-commit: run every check against current state, compute the notes to give, and only then debit the account, remove the notes and report success. Doing the debit last, after everything that can fail, is the cheapest way to get an all-or-nothing transaction in a single process."},{"level":"Senior","question":"Where do the wrong-PIN counts live, and why not in the state objects?","answer":"In a small PinGuard owned by the machine, keyed by card. A state object describes what is allowed right now and carries no data, so one instance can be shared. Session data (the card in the slot) belongs to the machine; data that must outlive a session (how many wrong PINs this card has had, which cards were kept) cannot be tied to a session at all. Putting the counter in AwaitingPinState is the usual first draft and resets it every time the customer ejects and tries again, which defeats the rule."},{"level":"Senior","question":"Walk through the chain of responsibility for notes. What makes it a chain rather than a loop, and when would a loop be better?","answer":"Each link owns one denomination: it takes as many as it can without going over what is left and passes the remainder to the next link. A new denomination is a new link with no change to the others. For a fixed, small set of denominations a loop over a sorted map is shorter and just as clear; the chain earns its keep when links have different logic (a link for a damaged cassette, a link that prefers to split large notes) or when the chain is assembled from configuration. What matters is that the order of the links is the algorithm: reversing it produces the smallest-first bug."},{"level":"Senior","question":"Greedy refuses 60 from one 50 and three 20s. Change Storm 1 asks you to pay it. What changes in your design, and why can the chain not do it?","answer":"A new class behind the NoteDispenser interface and one line in the factory. A chain cannot do it because each link decides locally and never sees whether the rest of the chain can finish the job; the 50 link takes the 50 and the failure appears two links later with no way back. The replacement is a search: a table over denominations and amounts holding the fewest notes that pay exactly, then a walk through it choosing the largest count of the largest denomination that still reaches the minimum, which also gives the written tie-break. It is bounded knapsack with a small table (kMaxWithdrawal is 10000), so the cost is denominations times amount times stock, a few tens of millions of steps in the worst case, fine for a single request. The honest design point: the chain was the right answer to the first requirement and the wrong tool for the second, and the interface is what made swapping it cheap."},{"level":"Senior","question":"Should 'fewest notes' be the rule? What else might the bank want?","answer":"It is one policy among several. Fewest notes minimises the time the dispenser runs and the notes carried to the customer. A bank may prefer to keep a balanced stock (so the machine does not run out of twenties first), to avoid dispensing the last notes of a denomination, or to match what the customer usually asks for. Each is a different objective for the same search, which is why the dispenser is a Strategy: the interface (amount and stock in, notes out) stays and the objective changes. If the objective needs knowledge about the stock the choice can be wrapped in a decorator that tries the preferred plan first and falls back."},{"level":"Senior","question":"How did the daily limit fit in, and what would you have done if it had needed the date?","answer":"As a WithdrawalLimit consulted before the payout and told about the result afterwards: allows(card, amount) and record(card, amount). The payout class sequences the checks, the limit object owns the per-card total. No state class changed. endOfDay() is an explicit call in the exercise so that tests are deterministic. With a real date the limit would take a clock interface (injected, like the clocks in the rate limiter and the key-value store), keep totals keyed by card and day, and drop old days; the machine would still not know what a day is."},{"level":"Staff","question":"The bank debit and the notes leaving the machine are two systems. What can go wrong in production, and how do real systems cope?","answer":"A crash between the debit and the dispense leaves the customer charged with no cash, or (if you dispense first) cash with no charge. Real systems use a transaction log with idempotency keys and a reconciliation process: the machine writes 'intent to dispense X for transaction T', the bank holds the amount (an authorisation, not a final debit), the machine dispenses and confirms, the bank captures. After a power cut the log says whether the dispense happened (a sensor confirms notes presented and taken); an unconfirmed authorisation is released automatically after a timeout and anything ambiguous goes to a human via end-of-day reconciliation. The code in this exercise is the single-process version of that: all checks first, side effects last, and one place that sequences them."},{"level":"Staff","question":"You operate 50,000 of these machines. What does the central design look like, and what must stay on the machine?","answer":"The machine must keep working when the network is down for what is safe to do alone: reading the card, checking the PIN counter it owns, and refusing. A withdrawal needs the bank, so offline mode is a business decision (a small offline limit with the risk priced in). Centrally: a transaction service per region with idempotent endpoints keyed by (machine, sequence number), an authorisation ledger, replenishment forecasting from the stock reports each machine sends, and fleet monitoring (cassette low, hardware faults, PIN-guard anomalies). The wrong-PIN counter that lives per card on one machine in this exercise would have to move to the bank in real life: otherwise a thief rotates through machines, three tries each."}],"apiHeader":"$1d","phaseApis":{"storm1":"#pragma once\n// Change Storm 1: pay whenever it is possible. Everything from api.h still holds for the new machine, except how notes are\n// chosen.\n#include \"api.h\"\n\nnamespace atm {\n\n// makeAtm() is greedy: with 1 note of 50 and 3 of 20, a request for 60 takes the 50, finds 10 left over and gives up,\n// although three 20s would do. This machine never gives up while some combination of the notes it holds pays the amount\n// exactly.\n//   - Among all exact combinations it picks the one with the FEWEST notes.\n//   - If several combinations use the same number of notes, it picks the one that uses more of the larger denomination\n//     (compare the counts from the largest denomination down; the first difference decides, more is better).\n//   - Every other rule (checks, order of checks, states, PIN handling) is exactly as in api.h. CannotDispense now means that\n//     no combination exists.\nstd::unique_ptr<Atm> makeFlexibleAtm(Bank& bank, const Notes& stock);\n\n}  // namespace atm\n","storm2":"$1e"},"phases":["base","storm1","storm2"],"tests":{"base":[{"path":"atm_base.cpp","content":"$1f"}],"storm1":[{"path":"atm_storm1.cpp","content":"$20"}],"storm2":[{"path":"atm_storm2.cpp","content":"$21"}]},"reference":[{"path":"atm_impl.h","content":"$22"},{"path":"atm_state.h","content":"$23"},{"path":"cash_box.h","content":"$24"},{"path":"fewest_notes_dispenser.h","content":"$25"},{"path":"machine.h","content":"$26"},{"path":"note_dispenser.h","content":"$27"},{"path":"payout.h","content":"$28"},{"path":"pin_guard.h","content":"#pragma once\n#include <map>\n#include <set>\n#include <string>\n\n#include \"api_storm2.h\"\n\n// Owns the PIN rules: wrong attempts are counted per card across visits, and a card that fails three times in a row is\n// kept for good.\nclass PinGuard {\n public:\n  enum class Verdict { Accepted, Rejected, Retained };\n\n  bool isRetained(const std::string& card) const { return retained_.count(card) > 0; }\n\n  Verdict check(const atm::Bank& bank, const std::string& card, const std::string& pin) {\n    if (bank.pinMatches(card, pin)) {\n      wrongInARow_.erase(card);\n      return Verdict::Accepted;\n    }\n    if (++wrongInARow_[card] < kAttempts) return Verdict::Rejected;\n    wrongInARow_.erase(card);\n    retained_.insert(card);\n    return Verdict::Retained;\n  }\n\n private:\n  static constexpr int kAttempts = 3;\n  std::map<std::string, int> wrongInARow_;\n  std::set<std::string> retained_;\n};\n"},{"path":"service.cpp","content":"#include \"atm_impl.h\"\n#include \"fewest_notes_dispenser.h\"\n\nnamespace {\nstd::unique_ptr<AtmImpl> build(atm::Bank& bank, const atm::Notes& stock, std::unique_ptr<NoteDispenser> dispenser,\n                               std::unique_ptr<WithdrawalLimit> limit) {\n  return std::make_unique<AtmImpl>(std::make_unique<Machine>(bank, stock, std::move(dispenser), std::move(limit)));\n}\n}  // namespace\n\nstd::unique_ptr<atm::Atm> atm::makeAtm(Bank& bank, const Notes& stock) {\n  return build(bank, stock, std::make_unique<ChainDispenser>(), std::make_unique<NoLimit>());\n}\n\nstd::unique_ptr<atm::Atm> atm::makeFlexibleAtm(Bank& bank, const Notes& stock) {\n  return build(bank, stock, std::make_unique<FewestNotesDispenser>(), std::make_unique<NoLimit>());\n}\n\nstd::unique_ptr<atm::LimitedAtm> atm::makeLimitedAtm(Bank& bank, const Notes& stock, long long dailyLimit) {\n  return build(bank, stock, std::make_unique<ChainDispenser>(), std::make_unique<DailyLimit>(dailyLimit));\n}\n"},{"path":"withdrawal_limit.h","content":"$29"}],"driver":{"path":"driver.cpp","content":"#define BP_TEST_MAIN\n#include \"bp_test.h\"\n","readOnly":true}}}]

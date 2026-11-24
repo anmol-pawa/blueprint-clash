@@ -1,0 +1,1385 @@
+1:"$Sreact.fragment"
+2:"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js"
+3:I[39756,["$2"],"default"]
+4:I[37457,["$2"],"default"]
+5:"/blueprint-clash/_next/static/chunks/2n5qeheznvl4u.js"
+6:I[22016,["$2","$5"],""]
+7:I[64576,["$2"],"PwaRegister"]
+d:I[97367,["$2"],"OutletBoundary"]
+e:"$Sreact.suspense"
+10:"ViewportBoundary"
+11:I[97367,["$2"],"$10"]
+13:"MetadataBoundary"
+14:I[97367,["$2"],"$13"]
+16:I[68027,["$2"],"default",1]
+:HL["/blueprint-clash/_next/static/chunks/2lbfwxo4jtf0j.css","style"]
+:HL["/blueprint-clash/_next/static/media/07c7676b89ed2778-s.p.2bn3s6zvc0dyp.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/blueprint-clash/_next/static/media/486a103cae33528f-s.p.309ilb452anpd.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/blueprint-clash/_next/static/media/53897e768d329f66-s.p.3t6q91iet4nsy.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+9:X
+b:[["children",{"s":"__PAGE__","h":512,"d":{"r":["$","$1","c",{"children":["$Lc",[["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/2uk3wcjwqg0tl.js","async":true,"nonce":"$undefined"}],["$","script","script-1",{"src":"/blueprint-clash/_next/static/chunks/1zdu7yjl8efu4.js","async":true,"nonce":"$undefined"}]],["$","$Ld",null,{"children":["$","$e",null,{"name":"Next.MetadataOutlet","children":"$@f"}]}]]}],"p":false,"v":null}}]]
+a:[["children",{"s":{"n":"id","t":"d","k":"order-book","s":[]},"h":66048,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],"p":false,"v":"$9"},"c":"$Qb"}]]
+8:[["children",{"s":"workshop","h":131584,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],"p":false,"v":"$9"},"c":"$Qa"}]]
+0:{"P":null,"c":["","workshop","order-book",""],"q":"","i":false,"t":{"t":{"s":"","h":131600,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/2lbfwxo4jtf0j.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}],["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js","async":true,"nonce":"$undefined"}]],["$","html",null,{"lang":"en","className":"r7opxW_variable auY9QW_variable u-EJdW_variable h-full","children":["$","body",null,{"className":"min-h-full","children":[["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","main",null,{"className":"flex min-h-dvh flex-col items-center justify-center gap-4 px-4 text-center","children":[["$","div",null,{"className":"font-display text-5xl text-[var(--accent)]","children":"404"}],["$","p",null,{"className":"text-white/60","children":"This room is not on the blueprint yet."}],["$","$L6",null,{"href":"/","className":"text-sm text-white/80 underline","children":"Back to the title screen"}]]}],[]],"forbidden":"$undefined","unauthorized":"$undefined"}],["$","$L7",null,{}]]}]}]]}],"p":false,"v":null},"c":"$Q8"},"h":{"r":["$","$1","h",{"children":[null,["$","$L11",null,{"children":"$L12"}],["$","$L14",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$e",null,{"name":"Next.Metadata","children":"$L15"}]}],null]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"p":false,"v":null}},"m":"$undefined","G":["$16",[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/2lbfwxo4jtf0j.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]]],"S":true,"r":"$undefined","s":"$undefined","a":"$undefined","l":"$undefined","p":"$undefined","d":"$undefined","b":"WHHKcqqrgr3tfT2ZA5zb7"}
+9:C
+12:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1, viewport-fit=cover"}],["$","meta","2",{"name":"theme-color","content":"#0a1530"}]]
+17:I[27201,["$2"],"IconMark"]
+f:null
+15:[["$","title","0",{"children":"Order book: price-time priority, time in force and amends: Blueprint Clash"}],["$","meta","1",{"name":"description","content":"A creature-tactics RPG that teaches low-level design in C++ and high-level system design, from fundamentals to big-tech interview level."}],["$","link","2",{"rel":"manifest","href":"/blueprint-clash/manifest.webmanifest","crossOrigin":"$undefined"}],["$","meta","3",{"name":"mobile-web-app-capable","content":"yes"}],["$","meta","4",{"name":"apple-mobile-web-app-title","content":"Blueprint Clash"}],["$","meta","5",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","link","6",{"rel":"icon","href":"/blueprint-clash/icon.png?icon.27re_xscs-jmw.png","sizes":"256x256","type":"image/png"}],["$","link","7",{"rel":"apple-touch-icon","href":"/blueprint-clash/apple-icon.png?apple-icon.2rac1w0yc3rju.png","sizes":"180x180","type":"image/png"}],["$","$L17","8",{}]]
+18:"/blueprint-clash/_next/static/chunks/2uk3wcjwqg0tl.js"
+19:"/blueprint-clash/_next/static/chunks/1zdu7yjl8efu4.js"
+1a:I[65612,["$2","$18","$19"],"WorkshopClient"]
+1b:T640,# Order book: the matching engine of an exchange, one instrument
+
+You are building the heart of a small exchange: no network, no screen, no money, only the book. Traders send **limit orders** (buy or sell, a price, a quantity). The book trades them against orders that are already waiting, and keeps whatever is left so that later orders can trade with it. The same few rules run every stock exchange, so every candidate is expected to know them cold.
+
+What you know so far:
+
+- A buy order wants to pay at most its limit; a sell order wants to receive at least its limit. Prices and quantities are whole numbers.
+- Orders that cannot trade yet wait in the book, buys on one side and sells on the other.
+- A new order trades with the waiting orders on the other side. It goes to the best price first, and among equal prices to whoever came first.
+- A waiting order can be cancelled. Everything is single-threaded and deterministic, so every test can replay an exact sequence.
+
+Your task: design and implement it behind the `book::Book` interface in `api.h` (`makeBook()` is yours to define). The hidden tests call only that interface. Ask the interviewer questions first: "at which price does a trade happen?", "what does an order that is only partly filled do?", "what is the best price on each side?", "can an id come back?" and "what does each call answer, and in which order does it check?" are where first drafts go wrong. Expect a change request for how long an order may wait (immediate-or-cancel, fill-or-kill) once the basics work, and then one for amending an order that is already resting.
+1c:T1c73,# Editorial: An order book with price-time priority, time in force and amends
+
+## Requirements
+Functional: a `Book` for one instrument that accepts limit orders (`submit`), cancels resting ones (`cancel`) and answers `remaining`, `bestBid`, `bestAsk`, `depthAt`, `restingCount`. Then time in force (immediate-or-cancel, fill-or-kill) and then `amend`.
+
+Hidden in the brief and revealed by good questions: the ranges (ids from 1, prices and quantities with both ends inclusive) and the check order (InvalidOrder before DuplicateId; a refusal changes nothing, not even the caller's vector); that an id is spent forever by any accepted order; that a trade happens at the WAITING order's price; best price first (lowest sell, highest buy) then earliest arrival; that the remainder rests at its own limit and a partly filled order keeps its place; that cancel needs a resting order and leaves the others in place; and that the top of book is the total at the best price.
+
+**Change Storm 1, time in force:** Ioc never rests; Fok trades everything or leaves the book untouched, so it needs a question the book can answer without changing. **Change Storm 2, amend:** the same price with a smaller or equal size keeps the place; anything else is a new arrival with the old id that trades at once if it crosses.
+
+## Reference design
+Seven small classes, each with one reason to change.
+
+- **`Order`:** id, side, price and what is still unfilled. Only the unfilled quantity changes.
+- **`HalfBook`:** one side as an ordered map from price to a `std::list` queue, with the best price always first (sells are keyed by price, buys by its negation, so `begin()` is the best on both sides). It can add, remove by position, sum a level, and answer `availableFor(limit)` as a pure query. It knows nothing about trading.
+- **`RestingIndex` and `IdLedger`:** the first maps an id to its side, price and list position so cancel, amend and `remaining` are O(1) lookups; the second is the set of every id ever accepted. They answer different questions ('where is it?' versus 'was it ever used?'), which is why a filled order is in the ledger and not in the index.
+- **`Matcher`:** the one rule of the market. While the taker has quantity and the best opposite price is acceptable, trade with the oldest order at that price, at its price, and retire a maker that is fully filled. `available(order)` is the read-only twin used by fill-or-kill.
+- **`Disposition` (Strategy):** `GoodTillCancelled`, `ImmediateOrCancel`, `FillOrKill` each answer two small questions: may this order start trading, and does the remainder rest? The enum maps to an object in one place.
+- **`OrderRules`:** the ranges, in one class.
+- **`BookImpl` (Facade):** validates, records the id, and sends the order down one private path, `enter`, that previews, matches and rests. An amend that loses its place calls `enter` as well, so a crossing amend trades exactly like a new order.
+
+The storms edited nothing that existed: storm 1 added two small classes and a map entry, storm 2 added one method that reuses `enter`.
+
+## Alternatives
+- **Sorted vector of levels (or a dense array indexed by tick):** faster for the real hot path (see 10x), simpler to reason about for a small tick range, but O(L) inserts as a vector and a memory cost as an array. The map is the right interview default; naming the array is a senior signal.
+- **One map for both sides with a comparator flag:** shorter, but every use then has to remember which direction 'best' means. Two `HalfBook` objects make the direction a property of the object, and the matcher never branches on it.
+- **A priority queue of orders:** gives best price but not FIFO within a price unless every order carries a sequence number, and cancelling from the middle needs lazy deletion. It works (heap + sequence + tombstones) and is a common first draft; the ordered map is cleaner when cancels are frequent.
+- **Time in force as flags and `if`s in `submit`:** the shortest first draft and the one the storm punishes: every new kind edits the same function. Small policy classes put each rule in one place.
+- **Amend as 'cancel then submit' by the caller:** simple, but it loses atomicity (another order can arrive between the two calls) and the in-place reduction cannot be expressed. The book must own the amend.
+
+## Trade-offs
+- **Ordered map versus arrays.** `std::map<int, std::list<Order>>` allocates per order and per level and chases pointers. It is easy to get right and fast enough for an interview, and the wrong choice for a production engine with a microsecond budget.
+- **Keeping the book honest on refusals.** Every check happens before the first change, so a refused call leaves nothing behind. That is why `fills.clear()` comes after the validation and why a refused amend does not touch the caller's vector.
+- **Preview then commit versus rollback.** Fok asks a pure question first. It costs a second walk over the levels, and it is the only design where an observer never sees a half-trade.
+- **One class with many methods versus a facade over parts.** The facade has nine methods and no rule of its own. The cost is that the parts hand data to each other through small interfaces; the gain is that each of them is tested by the same random model without caring which one broke.
+- **Statuses instead of exceptions.** The judge builds without exceptions and the caller meets refusals in normal use, so a documented check order is a better contract.
+
+## What breaks at 10x
+- **Throughput:** the map and list allocate on every order. Use an arena of orders addressed by index, a dense array of price levels with a bitmap to find the best one, and an intrusive queue per level. Pin one thread to the instrument.
+- **Many instruments:** one book per instrument, sharded by symbol across threads; the books share nothing. Cross-instrument risk checks go in front of the book, not inside it.
+- **Recovery:** the book is a function of an input log. Persist and sequence the log, snapshot periodically, replay the tail, and let a standby follow the same log.
+- **Fairness and audit:** assign a sequence number to every event; time priority is then exactly 'lower sequence first' and can be proved from the log.
+- **More order types:** market orders are Ioc with an extreme price; stops wait outside the book and enter through `enter`; icebergs make queue entries refreshable. None of them changes `Matcher`.
+
+## Level signals
+- **SDE II:** a working book: a map per side, a queue per price, best price first, trades at the resting price, cancel by scanning if needed. Passes the base tests; matching probably lives inside the book class.
+- **Senior:** one place for the matching rule, a side that hides which direction is 'best', an id index for O(1) cancel, a separate ledger for used ids, fill-or-kill decided by a pure preview, time in force as small policies, and an amend that reuses the entry path. States when the priority rule is fair and why reducing keeps the place.
+- **Staff:** talks about the sequenced input log, deterministic replay and failover before being asked, the arena and tick-array layout for the hot path, the model-based test with invariants, risk checks in front of the book, and what to freeze in the contract (check order, fill shape, id rule).
+1d:Tc9b,#pragma once
+// Public API for the Order Book problem. The hidden tests only use what is declared here.
+// You implement book::makeBook() (in any of your .cpp files); everything behind it is your design.
+#include <memory>
+#include <vector>
+
+namespace book {
+
+enum class Side { Buy, Sell };
+
+enum class Status {
+  Ok,
+  InvalidOrder,  // id, price or quantity outside the documented range
+  DuplicateId,   // the id was used before, by an order in any state
+  UnknownOrder,  // no RESTING order has that id
+};
+
+// One trade. The price is always the RESTING (maker) order's price, never the incoming order's limit.
+struct Fill {
+  int takerId;  // the incoming order
+  int makerId;  // the order that was already resting
+  int price;
+  int quantity;
+};
+inline bool operator==(const Fill& a, const Fill& b) {
+  return a.takerId == b.takerId && a.makerId == b.makerId && a.price == b.price && a.quantity == b.quantity;
+}
+
+constexpr int kMaxPrice = 100000;
+constexpr int kMaxQuantity = 1000000;
+
+// A limit-order book for ONE instrument, in integer ticks, matched by PRICE-TIME PRIORITY.
+//
+// ORDERS. An order has an id (1 or more), a side, a limit price (1..kMaxPrice) and a quantity (1..kMaxQuantity). Ids are
+// never reused: an id that was ever accepted is a DuplicateId forever, even after the order was filled or cancelled.
+//
+// SUBMIT. submit() checks InvalidOrder first, then DuplicateId; a refused call changes nothing and leaves `fills` alone. On
+// Ok, `fills` is replaced by the trades this order caused, in the order they happened (possibly none). A BUY order trades
+// with resting SELL orders priced at or below its limit; a SELL order trades with resting BUY orders priced at or above it.
+// It always takes the BEST price first (lowest sell, highest buy), and among orders at the same price the one that arrived
+// FIRST. Each trade is min(remaining of both) at the resting order's price. Whatever is left of the incoming order then
+// rests in the book at its limit, behind the orders already at that price. An order never trades with its own side.
+//
+// CANCEL. cancel(id) removes a resting order: UnknownOrder when no resting order has that id (never accepted, filled in
+// full, or already cancelled). The orders behind it keep their places.
+//
+// QUERIES (never change anything). remaining() is the unfilled quantity of a RESTING order, UnknownOrder otherwise (the
+// out-parameter is touched only on Ok). bestBid() and bestAsk() give the best price on that side and the TOTAL quantity
+// resting at that price, and answer false when the side is empty. depthAt() is the total resting quantity of a side at one
+// price (0 when none), and restingCount() is the number of resting orders.
+class Book {
+ public:
+  virtual ~Book() = default;
+
+  virtual Status submit(int id, Side side, int price, int quantity, std::vector<Fill>& fills) = 0;
+  virtual Status cancel(int id) = 0;
+
+  virtual Status remaining(int id, int& out) const = 0;
+  virtual bool bestBid(int& price, int& quantity) const = 0;
+  virtual bool bestAsk(int& price, int& quantity) const = 0;
+  virtual int depthAt(Side side, int price) const = 0;
+  virtual int restingCount() const = 0;
+};
+
+std::unique_ptr<Book> makeBook();
+
+}  // namespace book
+1e:T447,#pragma once
+// Change Storm 2: amending a resting order.
+#include "api_storm1.h"
+
+namespace book {
+
+class AmendBook : public TimedBook {
+ public:
+  // Changes a RESTING order's price and quantity (the new quantity is the NEW TOTAL REMAINING, 1..kMaxQuantity; the side
+  // and the id stay). Checks: InvalidOrder (price or quantity out of range), then UnknownOrder. A refused call changes
+  // nothing and leaves `fills` alone.
+  //  - Same price and a quantity that is not larger than the remaining: the order keeps its place in the queue.
+  //  - Anything else (a new price, or more quantity): the order loses its place. It leaves the book and comes back as a new
+  //    arrival with its old id (so it queues last at its price) and trades at once if the new price crosses; `fills` holds
+  //    those trades (taker = this id) and the rest rests. The order is Gtc. On Ok `fills` is replaced (empty when the order kept its place).
+  virtual Status amend(int id, int newPrice, int newQuantity, std::vector<Fill>& fills) = 0;
+};
+
+std::unique_ptr<AmendBook> makeAmendBook();
+
+}  // namespace book
+1f:T3050,#include <algorithm>
+#include <cstdint>
+#include <memory>
+#include <set>
+#include <vector>
+
+#include "api.h"
+#include "bp_test.h"
+
+namespace {
+using book::Fill;
+using book::Side;
+using book::Status;
+
+#define IS(call, expected) EXPECT_TRUE((call) == Status::expected)
+
+constexpr Side B = Side::Buy;
+constexpr Side S = Side::Sell;
+
+std::vector<Fill> put(book::Book& b, int id, Side side, int price, int qty) {
+  std::vector<Fill> fills;
+  EXPECT_TRUE(b.submit(id, side, price, qty, fills) == Status::Ok);
+  return fills;
+}
+
+bool same(const std::vector<Fill>& got, const std::vector<Fill>& want) {
+  if (got.size() != want.size()) return false;
+  for (std::size_t i = 0; i < got.size(); ++i) {
+    if (!(got[i] == want[i])) return false;
+  }
+  return true;
+}
+
+int remainingOf(const book::Book& b, int id) {
+  int q = -1;
+  return b.remaining(id, q) == Status::Ok ? q : -1;
+}
+int bidPrice(const book::Book& b) {
+  int p = 0, q = 0;
+  return b.bestBid(p, q) ? p : 0;
+}
+int askPrice(const book::Book& b) {
+  int p = 0, q = 0;
+  return b.bestAsk(p, q) ? p : 0;
+}
+int askQty(const book::Book& b) {
+  int p = 0, q = 0;
+  return b.bestAsk(p, q) ? q : 0;
+}
+int bidQty(const book::Book& b) {
+  int p = 0, q = 0;
+  return b.bestBid(p, q) ? q : 0;
+}
+}  // namespace
+
+TEST(Orders, TheRangesAreCheckedAndRefusalsChangeNothing) {
+  auto b = book::makeBook();
+  std::vector<Fill> fills{Fill{9, 9, 9, 9}};
+  IS(b->submit(0, B, 10, 1, fills), InvalidOrder);
+  IS(b->submit(-5, B, 10, 1, fills), InvalidOrder);
+  IS(b->submit(1, B, 0, 1, fills), InvalidOrder);
+  IS(b->submit(1, B, book::kMaxPrice + 1, 1, fills), InvalidOrder);
+  IS(b->submit(1, B, 10, 0, fills), InvalidOrder);
+  IS(b->submit(1, B, 10, book::kMaxQuantity + 1, fills), InvalidOrder);
+  EXPECT_EQ(fills.size(), static_cast<std::size_t>(1));  // a refused call leaves the out-parameter alone
+  EXPECT_EQ(b->restingCount(), 0);
+  IS(b->submit(1, B, 1, 1, fills), Ok);
+  IS(b->submit(2, S, book::kMaxPrice, book::kMaxQuantity, fills), Ok);
+  EXPECT_EQ(b->restingCount(), 2);
+  EXPECT_EQ(remainingOf(*b, 2), book::kMaxQuantity);
+}
+
+TEST(Orders, AnIdIsNeverReusedAndInvalidIsCheckedBeforeDuplicate) {
+  auto b = book::makeBook();
+  std::vector<Fill> fills;
+  IS(b->submit(7, S, 100, 5, fills), Ok);
+  IS(b->submit(7, B, 90, 1, fills), DuplicateId);  // still resting
+  IS(b->submit(7, B, 0, 1, fills), InvalidOrder);  // the order of the checks is the contract
+  EXPECT_EQ(b->restingCount(), 1);
+  EXPECT_EQ(remainingOf(*b, 7), 5);
+  IS(b->submit(8, B, 100, 5, fills), Ok);  // 7 is filled in full
+  EXPECT_EQ(b->restingCount(), 0);
+  IS(b->submit(7, S, 100, 1, fills), DuplicateId);  // filled
+  IS(b->submit(9, S, 100, 1, fills), Ok);
+  IS(b->cancel(9), Ok);
+  IS(b->submit(9, S, 100, 1, fills), DuplicateId);  // cancelled
+  IS(b->submit(8, S, 100, 1, fills), DuplicateId);  // the taker that traded everything is used too
+  EXPECT_EQ(b->restingCount(), 0);
+}
+
+TEST(Orders, OrdersThatDoNotCrossRestAndTheTopOfBookAddsUpAPriceLevel) {
+  auto b = book::makeBook();
+  EXPECT_TRUE(put(*b, 1, B, 99, 10).empty());
+  EXPECT_TRUE(put(*b, 2, B, 99, 5).empty());
+  EXPECT_TRUE(put(*b, 3, B, 98, 7).empty());
+  EXPECT_TRUE(put(*b, 4, S, 101, 4).empty());
+  EXPECT_TRUE(put(*b, 5, S, 101, 6).empty());
+  EXPECT_TRUE(put(*b, 6, S, 103, 1).empty());
+  EXPECT_EQ(bidPrice(*b), 99);
+  EXPECT_EQ(bidQty(*b), 15);
+  EXPECT_EQ(askPrice(*b), 101);
+  EXPECT_EQ(askQty(*b), 10);
+  EXPECT_EQ(b->depthAt(B, 98), 7);
+  EXPECT_EQ(b->depthAt(S, 103), 1);
+  EXPECT_EQ(b->depthAt(B, 101), 0);  // a price on the other side is not here
+  EXPECT_EQ(b->depthAt(S, 99), 0);
+  EXPECT_EQ(b->restingCount(), 6);
+  int p = -1, q = -1;
+  auto empty = book::makeBook();
+  EXPECT_TRUE(!empty->bestBid(p, q));
+  EXPECT_TRUE(!empty->bestAsk(p, q));
+  EXPECT_EQ(p, -1);
+  EXPECT_EQ(q, -1);
+}
+
+TEST(Matching, ATradeHappensAtTheRestingOrdersPriceNotTheIncomingLimit) {
+  auto b = book::makeBook();
+  put(*b, 1, S, 100, 10);
+  const auto fills = put(*b, 2, B, 105, 4);
+  EXPECT_TRUE(same(fills, {Fill{2, 1, 100, 4}}));
+  EXPECT_EQ(remainingOf(*b, 1), 6);
+  EXPECT_EQ(remainingOf(*b, 2), -1);  // fully traded: nothing rests
+  const auto sells = put(*b, 3, S, 90, 3);  // no bids yet: a sell at 90 just rests
+  EXPECT_TRUE(sells.empty());               
+  put(*b, 4, B, 120, 5);                    // the buy meets the lowest ask first: 90, then 100
+  EXPECT_EQ(remainingOf(*b, 3), -1);
+  EXPECT_EQ(remainingOf(*b, 1), 4);
+}
+
+TEST(Matching, TheBestPriceTradesFirstOnBothSides) {
+  auto b = book::makeBook();
+  put(*b, 1, S, 102, 5);
+  put(*b, 2, S, 100, 5);
+  put(*b, 3, S, 101, 5);
+  const auto buys = put(*b, 4, B, 102, 12);
+  EXPECT_TRUE(same(buys, {Fill{4, 2, 100, 5}, Fill{4, 3, 101, 5}, Fill{4, 1, 102, 2}}));
+  EXPECT_EQ(remainingOf(*b, 1), 3);
+
+  auto c = book::makeBook();
+  put(*c, 1, B, 98, 5);
+  put(*c, 2, B, 100, 5);
+  put(*c, 3, B, 99, 5);
+  const auto sells = put(*c, 4, S, 98, 12);
+  EXPECT_TRUE(same(sells, {Fill{4, 2, 100, 5}, Fill{4, 3, 99, 5}, Fill{4, 1, 98, 2}}));
+  EXPECT_EQ(remainingOf(*c, 1), 3);
+}
+
+TEST(Matching, TheEarlierOrderAtAPriceTradesFirstAndAPartiallyFilledOneKeepsItsPlace) {
+  auto b = book::makeBook();
+  put(*b, 1, S, 100, 10);
+  put(*b, 2, S, 100, 10);
+  put(*b, 3, S, 100, 10);
+  EXPECT_TRUE(same(put(*b, 4, B, 100, 4), {Fill{4, 1, 100, 4}}));
+  // order 1 was hit but is still first in line
+  EXPECT_TRUE(same(put(*b, 5, B, 100, 8), {Fill{5, 1, 100, 6}, Fill{5, 2, 100, 2}}));
+  EXPECT_EQ(remainingOf(*b, 2), 8);
+  EXPECT_EQ(askQty(*b), 18);
+  // a later arrival at a better price jumps ahead, a later arrival at the same price does not
+  put(*b, 6, S, 99, 1);
+  put(*b, 7, S, 100, 1);
+  EXPECT_TRUE(same(put(*b, 8, B, 100, 30), {Fill{8, 6, 99, 1}, Fill{8, 2, 100, 8}, Fill{8, 3, 100, 10}, Fill{8, 7, 100, 1}}));
+  EXPECT_EQ(remainingOf(*b, 8), 10);
+  EXPECT_EQ(bidPrice(*b), 100);
+}
+
+TEST(Matching, TheLimitIsRespectedAndTheRemainderRestsAtTheLimitNotAtTheLastPrice) {
+  auto b = book::makeBook();
+  put(*b, 1, S, 100, 4);
+  put(*b, 2, S, 103, 4);
+  EXPECT_TRUE(put(*b, 3, B, 99, 5).empty());  // 99 does not reach 100
+  EXPECT_EQ(bidPrice(*b), 99);
+  const auto fills = put(*b, 4, B, 102, 10);  // reaches 100 only
+  EXPECT_TRUE(same(fills, {Fill{4, 1, 100, 4}}));
+  EXPECT_EQ(remainingOf(*b, 4), 6);
+  EXPECT_EQ(b->depthAt(B, 102), 6);  // it rests at ITS price, 102
+  EXPECT_EQ(bidPrice(*b), 102);
+  EXPECT_EQ(askPrice(*b), 103);
+  // the best bid now crosses nothing, and a sell at 102 meets it first, before the older 99
+  const auto sells = put(*b, 5, S, 99, 8);
+  EXPECT_TRUE(same(sells, {Fill{5, 4, 102, 6}, Fill{5, 3, 99, 2}}));
+  EXPECT_EQ(remainingOf(*b, 3), 3);
+}
+
+TEST(Matching, AnOrderNeverTradesWithItsOwnSideAndFillsAreReplacedOnOk) {
+  auto b = book::makeBook();
+  put(*b, 1, B, 100, 5);
+  std::vector<Fill> fills{Fill{9, 9, 9, 9}, Fill{8, 8, 8, 8}};
+  IS(b->submit(2, B, 120, 5, fills), Ok);
+  EXPECT_TRUE(fills.empty());  // replaced by "no trades", the old content is gone
+  EXPECT_EQ(b->restingCount(), 2);
+  EXPECT_EQ(bidPrice(*b), 120);
+}
+
+TEST(Cancel, OnlyARestingOrderCanBeCancelledAndTheOthersKeepTheirPlaces) {
+  auto b = book::makeBook();
+  IS(b->cancel(1), UnknownOrder);  // never existed
+  put(*b, 1, S, 100, 5);
+  put(*b, 2, S, 100, 5);
+  put(*b, 3, S, 100, 5);
+  put(*b, 4, S, 101, 5);
+  IS(b->cancel(2), Ok);
+  IS(b->cancel(2), UnknownOrder);  // already gone
+  EXPECT_EQ(askQty(*b), 10);
+  EXPECT_EQ(b->restingCount(), 3);
+  EXPECT_TRUE(same(put(*b, 5, B, 100, 7), {Fill{5, 1, 100, 5}, Fill{5, 3, 100, 2}}));
+  IS(b->cancel(1), UnknownOrder);  // filled in full
+  IS(b->cancel(5), UnknownOrder);  // the taker never rested
+  IS(b->cancel(3), Ok);            // partly filled is still resting
+  EXPECT_EQ(askPrice(*b), 101);    // the level 100 is gone with its last order
+  EXPECT_EQ(b->depthAt(S, 100), 0);
+  IS(b->cancel(4), Ok);
+  int p = 0, q = 0;
+  EXPECT_TRUE(!b->bestAsk(p, q));
+  EXPECT_EQ(b->restingCount(), 0);
+}
+
+TEST(Queries, AnUnknownOrderLeavesTheOutParameterAlone) {
+  auto b = book::makeBook();
+  put(*b, 1, B, 50, 3);
+  int q = 77;
+  IS(b->remaining(2, q), UnknownOrder);
+  EXPECT_EQ(q, 77);
+  IS(b->remaining(1, q), Ok);
+  EXPECT_EQ(q, 3);
+  put(*b, 2, S, 50, 3);
+  IS(b->remaining(1, q), UnknownOrder);  // filled
+  EXPECT_EQ(q, 3);
+}
+
+namespace {
+// An independent model: a list of orders and a linear search for the best counterparty each time.
+struct ModelOrder {
+  int id;
+  Side side;
+  int price;
+  int rem;
+  long seq;
+};
+
+class ModelBook {
+ public:
+  std::vector<Fill> submit(int id, Side side, int price, int qty) {
+    std::vector<Fill> fills;
+    ModelOrder taker{id, side, price, qty, seq_++};
+    while (taker.rem > 0) {
+      int best = -1;
+      for (int i = 0; i < static_cast<int>(orders_.size()); ++i) {
+        const ModelOrder& o = orders_[i];
+        if (o.side == side) continue;
+        const bool crosses = side == B ? o.price <= price : o.price >= price;
+        if (!crosses) continue;
+        if (best < 0 || better(o, orders_[best], side)) best = i;
+      }
+      if (best < 0) break;
+      ModelOrder& maker = orders_[best];
+      const int traded = std::min(taker.rem, maker.rem);
+      fills.push_back(Fill{id, maker.id, maker.price, traded});
+      taker.rem -= traded;
+      maker.rem -= traded;
+      if (maker.rem == 0) orders_.erase(orders_.begin() + best);
+    }
+    if (taker.rem > 0) orders_.push_back(taker);
+    return fills;
+  }
+  bool cancel(int id) {
+    for (std::size_t i = 0; i < orders_.size(); ++i) {
+      if (orders_[i].id == id) {
+        orders_.erase(orders_.begin() + static_cast<long>(i));
+        return true;
+      }
+    }
+    return false;
+  }
+  int depth(Side side, int price) const {
+    int sum = 0;
+    for (const auto& o : orders_) sum += (o.side == side && o.price == price) ? o.rem : 0;
+    return sum;
+  }
+  int best(Side side) const {
+    int p = 0;
+    for (const auto& o : orders_) {
+      if (o.side != side) continue;
+      if (p == 0 || (side == B ? o.price > p : o.price < p)) p = o.price;
+    }
+    return p;
+  }
+  int count() const { return static_cast<int>(orders_.size()); }
+  int remaining(int id) const {
+    for (const auto& o : orders_) {
+      if (o.id == id) return o.rem;
+    }
+    return -1;
+  }
+
+ private:
+  // For an incoming taker on `side`: is `a` a better counterparty than `b`?
+  static bool better(const ModelOrder& a, const ModelOrder& b, Side side) {
+    if (a.price != b.price) return side == B ? a.price < b.price : a.price > b.price;
+    return a.seq < b.seq;
+  }
+  std::vector<ModelOrder> orders_;
+  long seq_ = 0;
+};
+
+class Rng {
+ public:
+  explicit Rng(std::uint64_t seed) : s_(seed) {}
+  int next(int bound) {
+    s_ = s_ * 6364136223846793005ULL + 1442695040888963407ULL;
+    return static_cast<int>((s_ >> 33) % static_cast<std::uint64_t>(bound));
+  }
+
+ private:
+  std::uint64_t s_;
+};
+}  // namespace
+
+TEST(Model, RandomOrdersAndCancelsMatchAnIndependentImplementation) {
+  for (std::uint64_t seed = 1; seed <= 25; ++seed) {
+    Rng rng(seed);
+    auto b = book::makeBook();
+    ModelBook model;
+    std::set<int> used;
+    int nextId = 1;
+    for (int step = 0; step < 300; ++step) {
+      if (rng.next(5) == 0 && nextId > 1) {
+        const int id = 1 + rng.next(nextId - 1);
+        const bool was = model.cancel(id);
+        EXPECT_TRUE(b->cancel(id) == (was ? Status::Ok : Status::UnknownOrder));
+      } else {
+        const int id = nextId++;
+        const Side side = rng.next(2) == 0 ? B : S;
+        const int price = 95 + rng.next(11);
+        const int qty = 1 + rng.next(12);
+        const auto want = model.submit(id, side, price, qty);
+        const auto got = put(*b, id, side, price, qty);
+        EXPECT_TRUE(same(got, want));
+        std::vector<Fill> again;
+        EXPECT_TRUE(b->submit(id, side, price, qty, again) == Status::DuplicateId);
+      }
+      EXPECT_EQ(b->restingCount(), model.count());
+      EXPECT_EQ(bidPrice(*b), model.best(B));
+      EXPECT_EQ(askPrice(*b), model.best(S));
+      if (model.best(B) != 0) EXPECT_EQ(bidQty(*b), model.depth(B, model.best(B)));
+      if (model.best(S) != 0) EXPECT_EQ(askQty(*b), model.depth(S, model.best(S)));
+    }
+    for (int price = 95; price <= 105; ++price) {
+      EXPECT_EQ(b->depthAt(B, price), model.depth(B, price));
+      EXPECT_EQ(b->depthAt(S, price), model.depth(S, price));
+    }
+    for (int id = 1; id < nextId; ++id) EXPECT_EQ(remainingOf(*b, id), model.remaining(id));
+  }
+}
+20:T249e,#include <algorithm>
+#include <cstdint>
+#include <memory>
+#include <vector>
+
+#include "api_storm1.h"
+#include "bp_test.h"
+
+namespace {
+using book::Fill;
+using book::Side;
+using book::Status;
+using book::TimeInForce;
+
+#define IS(call, expected) EXPECT_TRUE((call) == Status::expected)
+
+constexpr Side B = Side::Buy;
+constexpr Side S = Side::Sell;
+
+bool same(const std::vector<Fill>& got, const std::vector<Fill>& want) {
+  if (got.size() != want.size()) return false;
+  for (std::size_t i = 0; i < got.size(); ++i) {
+    if (!(got[i] == want[i])) return false;
+  }
+  return true;
+}
+int remainingOf(const book::Book& b, int id) {
+  int q = -1;
+  return b.remaining(id, q) == Status::Ok ? q : -1;
+}
+int bidPrice(const book::Book& b) {
+  int p = 0, q = 0;
+  return b.bestBid(p, q) ? p : 0;
+}
+int askPrice(const book::Book& b) {
+  int p = 0, q = 0;
+  return b.bestAsk(p, q) ? p : 0;
+}
+int askQty(const book::Book& b) {
+  int p = 0, q = 0;
+  return b.bestAsk(p, q) ? q : 0;
+}
+int bidQty(const book::Book& b) {
+  int p = 0, q = 0;
+  return b.bestBid(p, q) ? q : 0;
+}
+
+std::vector<Fill> put(book::TimedBook& b, int id, Side side, int price, int qty, TimeInForce tif = TimeInForce::Gtc) {
+  std::vector<Fill> fills;
+  EXPECT_TRUE(b.submitWith(id, side, price, qty, tif, fills) == Status::Ok);
+  return fills;
+}
+
+struct ModelOrder {
+  int id;
+  Side side;
+  int price;
+  int rem;
+  long seq;
+};
+
+class ModelBook {
+ public:
+  // tif: 0 = Gtc, 1 = Ioc, 2 = Fok
+  std::vector<Fill> submit(int id, Side side, int price, int qty, int tif = 0) {
+    ModelOrder taker{id, side, price, qty, seq_++};
+    return enter(taker, tif);
+  }
+  std::vector<Fill> amend(int id, int price, int qty) {
+    for (std::size_t i = 0; i < orders_.size(); ++i) {
+      if (orders_[i].id != id) continue;
+      if (orders_[i].price == price && qty <= orders_[i].rem) {
+        orders_[i].rem = qty;
+        return {};
+      }
+      ModelOrder again{id, orders_[i].side, price, qty, seq_++};
+      orders_.erase(orders_.begin() + static_cast<long>(i));
+      return enter(again, 0);
+    }
+    return {};
+  }
+  bool cancel(int id) {
+    for (std::size_t i = 0; i < orders_.size(); ++i) {
+      if (orders_[i].id == id) {
+        orders_.erase(orders_.begin() + static_cast<long>(i));
+        return true;
+      }
+    }
+    return false;
+  }
+  int depth(Side side, int price) const {
+    int sum = 0;
+    for (const auto& o : orders_) sum += (o.side == side && o.price == price) ? o.rem : 0;
+    return sum;
+  }
+  int best(Side side) const {
+    int p = 0;
+    for (const auto& o : orders_) {
+      if (o.side != side) continue;
+      if (p == 0 || (side == B ? o.price > p : o.price < p)) p = o.price;
+    }
+    return p;
+  }
+  int count() const { return static_cast<int>(orders_.size()); }
+  int remaining(int id) const {
+    for (const auto& o : orders_) {
+      if (o.id == id) return o.rem;
+    }
+    return -1;
+  }
+
+ private:
+  static bool crosses(const ModelOrder& taker, const ModelOrder& o) {
+    if (o.side == taker.side) return false;
+    return taker.side == B ? o.price <= taker.price : o.price >= taker.price;
+  }
+  int available(const ModelOrder& taker) const {
+    int sum = 0;
+    for (const auto& o : orders_) sum += crosses(taker, o) ? o.rem : 0;
+    return sum;
+  }
+  std::vector<Fill> enter(ModelOrder taker, int tif) {
+    std::vector<Fill> fills;
+    if (tif == 2 && available(taker) < taker.rem) return fills;
+    while (taker.rem > 0) {
+      int best = -1;
+      for (int i = 0; i < static_cast<int>(orders_.size()); ++i) {
+        if (!crosses(taker, orders_[i])) continue;
+        if (best < 0 || better(orders_[i], orders_[best], taker.side)) best = i;
+      }
+      if (best < 0) break;
+      ModelOrder& maker = orders_[best];
+      const int traded = std::min(taker.rem, maker.rem);
+      fills.push_back(Fill{taker.id, maker.id, maker.price, traded});
+      taker.rem -= traded;
+      maker.rem -= traded;
+      if (maker.rem == 0) orders_.erase(orders_.begin() + best);
+    }
+    if (taker.rem > 0 && tif == 0) orders_.push_back(taker);
+    return fills;
+  }
+  static bool better(const ModelOrder& a, const ModelOrder& b, Side side) {
+    if (a.price != b.price) return side == B ? a.price < b.price : a.price > b.price;
+    return a.seq < b.seq;
+  }
+  std::vector<ModelOrder> orders_;
+  long seq_ = 0;
+};
+
+class Rng {
+ public:
+  explicit Rng(std::uint64_t seed) : s_(seed) {}
+  int next(int bound) {
+    s_ = s_ * 6364136223846793005ULL + 1442695040888963407ULL;
+    return static_cast<int>((s_ >> 33) % static_cast<std::uint64_t>(bound));
+  }
+
+ private:
+  std::uint64_t s_;
+};
+}  // namespace
+
+TEST(Tif, GoodTillCancelledIsTheOldBehaviourAndTheChecksAreUnchanged) {
+  auto b = book::makeTimedBook();
+  std::vector<Fill> fills{Fill{9, 9, 9, 9}};
+  IS(b->submitWith(0, B, 10, 1, TimeInForce::Ioc, fills), InvalidOrder);
+  IS(b->submitWith(1, B, 0, 1, TimeInForce::Fok, fills), InvalidOrder);
+  EXPECT_EQ(fills.size(), static_cast<std::size_t>(1));
+  EXPECT_TRUE(put(*b, 1, S, 100, 5).empty());
+  IS(b->submitWith(1, B, 100, 1, TimeInForce::Ioc, fills), DuplicateId);
+  EXPECT_TRUE(same(put(*b, 2, B, 100, 8, TimeInForce::Gtc), {Fill{2, 1, 100, 5}}));
+  EXPECT_EQ(remainingOf(*b, 2), 3);
+  // the plain interface is the same game
+  std::vector<Fill> plain;
+  IS(b->submit(3, S, 100, 10, plain), Ok);
+  EXPECT_TRUE(same(plain, {Fill{3, 2, 100, 3}}));
+  EXPECT_EQ(remainingOf(*b, 3), 7);
+}
+
+TEST(Tif, ImmediateOrCancelTradesWhatItCanAndNeverRests) {
+  auto b = book::makeTimedBook();
+  put(*b, 1, S, 100, 4);
+  put(*b, 2, S, 101, 4);
+  put(*b, 3, S, 105, 4);
+  const auto fills = put(*b, 4, B, 102, 10, TimeInForce::Ioc);
+  EXPECT_TRUE(same(fills, {Fill{4, 1, 100, 4}, Fill{4, 2, 101, 4}}));
+  EXPECT_EQ(remainingOf(*b, 4), -1);  // the 2 left over is dropped, not rested at 102
+  EXPECT_EQ(bidPrice(*b), 0);
+  EXPECT_EQ(b->restingCount(), 1);
+  // nothing to trade with: still accepted, nothing rests, the id is spent
+  std::vector<Fill> none{Fill{9, 9, 9, 9}};
+  IS(b->submitWith(5, S, 200, 5, TimeInForce::Ioc, none), Ok);
+  EXPECT_TRUE(none.empty());
+  EXPECT_EQ(b->restingCount(), 1);
+  IS(b->submitWith(5, S, 200, 5, TimeInForce::Gtc, none), DuplicateId);
+  IS(b->cancel(5), UnknownOrder);
+}
+
+TEST(Tif, FillOrKillTradesEverythingOrNothingAndTheBookIsUntouchedWhenItDoesNot) {
+  auto b = book::makeTimedBook();
+  put(*b, 1, S, 100, 4);
+  put(*b, 2, S, 100, 3);
+  put(*b, 3, S, 101, 5);
+  put(*b, 4, S, 110, 50);   // beyond the limit
+  put(*b, 5, B, 90, 100);   // own side: never counted
+  // 12 wanted, only 12 reachable at 101 or better
+  std::vector<Fill> none{Fill{9, 9, 9, 9}};
+  IS(b->submitWith(6, B, 101, 13, TimeInForce::Fok, none), Ok);
+  EXPECT_TRUE(none.empty());
+  EXPECT_EQ(b->depthAt(S, 100), 7);  // nothing moved
+  EXPECT_EQ(b->depthAt(S, 101), 5);
+  EXPECT_EQ(remainingOf(*b, 1), 4);
+  EXPECT_EQ(b->restingCount(), 5);   // the killed order did not rest
+  EXPECT_EQ(remainingOf(*b, 6), -1);
+  IS(b->submitWith(6, B, 101, 1, TimeInForce::Gtc, none), DuplicateId);
+  // exactly enough: the whole quantity trades, in priority order
+  const auto fills = put(*b, 7, B, 101, 12, TimeInForce::Fok);
+  EXPECT_TRUE(same(fills, {Fill{7, 1, 100, 4}, Fill{7, 2, 100, 3}, Fill{7, 3, 101, 5}}));
+  EXPECT_EQ(b->restingCount(), 2);
+  // sells see only buys: the resting buy at 90 is 100 deep, and a sell limit of 91 cannot reach it
+  std::vector<Fill> no91;
+  IS(b->submitWith(8, S, 91, 1, TimeInForce::Fok, no91), Ok);
+  EXPECT_TRUE(no91.empty());
+  EXPECT_EQ(remainingOf(*b, 5), 100);
+  EXPECT_TRUE(same(put(*b, 9, S, 90, 100, TimeInForce::Fok), {Fill{9, 5, 90, 100}}));
+}
+
+TEST(Tif, ARestingRemainderKeepsTimePriorityAmongGtcOrdersOnly) {
+  auto b = book::makeTimedBook();
+  put(*b, 1, B, 100, 5);
+  put(*b, 2, S, 100, 2, TimeInForce::Ioc);  // trades 2 with order 1
+  put(*b, 3, B, 100, 5);
+  EXPECT_TRUE(same(put(*b, 4, S, 100, 6), {Fill{4, 1, 100, 3}, Fill{4, 3, 100, 3}}));
+  EXPECT_EQ(remainingOf(*b, 3), 2);
+}
+
+TEST(Tif, RandomOrdersOfEveryKindMatchAnIndependentModel) {
+  for (std::uint64_t seed = 1; seed <= 25; ++seed) {
+    Rng rng(seed);
+    auto b = book::makeTimedBook();
+    ModelBook model;
+    int nextId = 1;
+    for (int step = 0; step < 300; ++step) {
+      if (rng.next(6) == 0 && nextId > 1) {
+        const int id = 1 + rng.next(nextId - 1);
+        const bool was = model.cancel(id);
+        EXPECT_TRUE(b->cancel(id) == (was ? Status::Ok : Status::UnknownOrder));
+      } else {
+        const int id = nextId++;
+        const Side side = rng.next(2) == 0 ? B : S;
+        const int price = 95 + rng.next(11);
+        const int qty = 1 + rng.next(14);
+        const int kind = rng.next(5);  // 0,1: Gtc, 2: Gtc, 3: Ioc, 4: Fok
+        const int tif = kind < 3 ? 0 : kind - 2;
+        const TimeInForce how = tif == 0 ? TimeInForce::Gtc : (tif == 1 ? TimeInForce::Ioc : TimeInForce::Fok);
+        const auto want = model.submit(id, side, price, qty, tif);
+        EXPECT_TRUE(same(put(*b, id, side, price, qty, how), want));
+      }
+      EXPECT_EQ(b->restingCount(), model.count());
+      EXPECT_EQ(bidPrice(*b), model.best(B));
+      EXPECT_EQ(askPrice(*b), model.best(S));
+      if (model.best(B) != 0) EXPECT_EQ(bidQty(*b), model.depth(B, model.best(B)));
+      if (model.best(S) != 0) EXPECT_EQ(askQty(*b), model.depth(S, model.best(S)));
+    }
+    for (int id = 1; id < nextId; ++id) EXPECT_EQ(remainingOf(*b, id), model.remaining(id));
+  }
+}
+21:T287b,#include <algorithm>
+#include <cstdint>
+#include <memory>
+#include <vector>
+
+#include "api_storm2.h"
+#include "bp_test.h"
+
+namespace {
+using book::Fill;
+using book::Side;
+using book::Status;
+using book::TimeInForce;
+
+#define IS(call, expected) EXPECT_TRUE((call) == Status::expected)
+
+constexpr Side B = Side::Buy;
+constexpr Side S = Side::Sell;
+
+bool same(const std::vector<Fill>& got, const std::vector<Fill>& want) {
+  if (got.size() != want.size()) return false;
+  for (std::size_t i = 0; i < got.size(); ++i) {
+    if (!(got[i] == want[i])) return false;
+  }
+  return true;
+}
+int remainingOf(const book::Book& b, int id) {
+  int q = -1;
+  return b.remaining(id, q) == Status::Ok ? q : -1;
+}
+int bidPrice(const book::Book& b) {
+  int p = 0, q = 0;
+  return b.bestBid(p, q) ? p : 0;
+}
+int askPrice(const book::Book& b) {
+  int p = 0, q = 0;
+  return b.bestAsk(p, q) ? p : 0;
+}
+int askQty(const book::Book& b) {
+  int p = 0, q = 0;
+  return b.bestAsk(p, q) ? q : 0;
+}
+int bidQty(const book::Book& b) {
+  int p = 0, q = 0;
+  return b.bestBid(p, q) ? q : 0;
+}
+
+std::vector<Fill> put(book::AmendBook& b, int id, Side side, int price, int qty, TimeInForce tif = TimeInForce::Gtc) {
+  std::vector<Fill> fills;
+  EXPECT_TRUE(b.submitWith(id, side, price, qty, tif, fills) == Status::Ok);
+  return fills;
+}
+std::vector<Fill> change(book::AmendBook& b, int id, int price, int qty) {
+  std::vector<Fill> fills{Fill{9, 9, 9, 9}};
+  EXPECT_TRUE(b.amend(id, price, qty, fills) == Status::Ok);
+  return fills;
+}
+
+struct ModelOrder {
+  int id;
+  Side side;
+  int price;
+  int rem;
+  long seq;
+};
+
+class ModelBook {
+ public:
+  // tif: 0 = Gtc, 1 = Ioc, 2 = Fok
+  std::vector<Fill> submit(int id, Side side, int price, int qty, int tif = 0) {
+    ModelOrder taker{id, side, price, qty, seq_++};
+    return enter(taker, tif);
+  }
+  std::vector<Fill> amend(int id, int price, int qty) {
+    for (std::size_t i = 0; i < orders_.size(); ++i) {
+      if (orders_[i].id != id) continue;
+      if (orders_[i].price == price && qty <= orders_[i].rem) {
+        orders_[i].rem = qty;
+        return {};
+      }
+      ModelOrder again{id, orders_[i].side, price, qty, seq_++};
+      orders_.erase(orders_.begin() + static_cast<long>(i));
+      return enter(again, 0);
+    }
+    return {};
+  }
+  bool cancel(int id) {
+    for (std::size_t i = 0; i < orders_.size(); ++i) {
+      if (orders_[i].id == id) {
+        orders_.erase(orders_.begin() + static_cast<long>(i));
+        return true;
+      }
+    }
+    return false;
+  }
+  int depth(Side side, int price) const {
+    int sum = 0;
+    for (const auto& o : orders_) sum += (o.side == side && o.price == price) ? o.rem : 0;
+    return sum;
+  }
+  int best(Side side) const {
+    int p = 0;
+    for (const auto& o : orders_) {
+      if (o.side != side) continue;
+      if (p == 0 || (side == B ? o.price > p : o.price < p)) p = o.price;
+    }
+    return p;
+  }
+  int count() const { return static_cast<int>(orders_.size()); }
+  int remaining(int id) const {
+    for (const auto& o : orders_) {
+      if (o.id == id) return o.rem;
+    }
+    return -1;
+  }
+
+ private:
+  static bool crosses(const ModelOrder& taker, const ModelOrder& o) {
+    if (o.side == taker.side) return false;
+    return taker.side == B ? o.price <= taker.price : o.price >= taker.price;
+  }
+  int available(const ModelOrder& taker) const {
+    int sum = 0;
+    for (const auto& o : orders_) sum += crosses(taker, o) ? o.rem : 0;
+    return sum;
+  }
+  std::vector<Fill> enter(ModelOrder taker, int tif) {
+    std::vector<Fill> fills;
+    if (tif == 2 && available(taker) < taker.rem) return fills;
+    while (taker.rem > 0) {
+      int best = -1;
+      for (int i = 0; i < static_cast<int>(orders_.size()); ++i) {
+        if (!crosses(taker, orders_[i])) continue;
+        if (best < 0 || better(orders_[i], orders_[best], taker.side)) best = i;
+      }
+      if (best < 0) break;
+      ModelOrder& maker = orders_[best];
+      const int traded = std::min(taker.rem, maker.rem);
+      fills.push_back(Fill{taker.id, maker.id, maker.price, traded});
+      taker.rem -= traded;
+      maker.rem -= traded;
+      if (maker.rem == 0) orders_.erase(orders_.begin() + best);
+    }
+    if (taker.rem > 0 && tif == 0) orders_.push_back(taker);
+    return fills;
+  }
+  static bool better(const ModelOrder& a, const ModelOrder& b, Side side) {
+    if (a.price != b.price) return side == B ? a.price < b.price : a.price > b.price;
+    return a.seq < b.seq;
+  }
+  std::vector<ModelOrder> orders_;
+  long seq_ = 0;
+};
+
+class Rng {
+ public:
+  explicit Rng(std::uint64_t seed) : s_(seed) {}
+  int next(int bound) {
+    s_ = s_ * 6364136223846793005ULL + 1442695040888963407ULL;
+    return static_cast<int>((s_ >> 33) % static_cast<std::uint64_t>(bound));
+  }
+
+ private:
+  std::uint64_t s_;
+};
+}  // namespace
+
+TEST(Amend, RefusalsFollowTheDocumentedOrderAndChangeNothing) {
+  auto b = book::makeAmendBook();
+  put(*b, 1, S, 100, 5);
+  std::vector<Fill> fills{Fill{9, 9, 9, 9}};
+  IS(b->amend(1, 0, 5, fills), InvalidOrder);
+  IS(b->amend(1, book::kMaxPrice + 1, 5, fills), InvalidOrder);
+  IS(b->amend(1, 100, 0, fills), InvalidOrder);
+  IS(b->amend(1, 100, book::kMaxQuantity + 1, fills), InvalidOrder);
+  IS(b->amend(2, 0, 5, fills), InvalidOrder);  // invalid is checked before unknown
+  IS(b->amend(2, 100, 5, fills), UnknownOrder);
+  EXPECT_EQ(fills.size(), static_cast<std::size_t>(1));
+  EXPECT_EQ(remainingOf(*b, 1), 5);
+  put(*b, 3, B, 100, 5);  // fills order 1 in full
+  IS(b->amend(1, 100, 5, fills), UnknownOrder);
+  put(*b, 4, B, 50, 5);
+  IS(b->cancel(4), Ok);
+  IS(b->amend(4, 50, 3, fills), UnknownOrder);
+  IS(b->amend(0, 50, 3, fills), UnknownOrder);
+}
+
+TEST(Amend, LessQuantityAtTheSamePriceKeepsThePlaceInTheQueue) {
+  auto b = book::makeAmendBook();
+  put(*b, 1, S, 100, 10);
+  put(*b, 2, S, 100, 10);
+  EXPECT_TRUE(change(*b, 1, 100, 4).empty());  // the out-parameter is replaced by "no trades"
+  EXPECT_EQ(remainingOf(*b, 1), 4);
+  EXPECT_EQ(b->depthAt(S, 100), 14);
+  EXPECT_TRUE(change(*b, 1, 100, 4).empty());  // the same quantity keeps it too
+  EXPECT_TRUE(same(put(*b, 3, B, 100, 6), {Fill{3, 1, 100, 4}, Fill{3, 2, 100, 2}}));
+}
+
+TEST(Amend, MoreQuantityOrANewPriceSendsTheOrderToTheBackOfItsQueue) {
+  auto b = book::makeAmendBook();
+  put(*b, 1, S, 100, 5);
+  put(*b, 2, S, 100, 5);
+  put(*b, 3, S, 101, 5);
+  EXPECT_TRUE(change(*b, 1, 100, 6).empty());  // 5 -> 6 loses the place
+  EXPECT_TRUE(same(put(*b, 4, B, 100, 7), {Fill{4, 2, 100, 5}, Fill{4, 1, 100, 2}}));
+  EXPECT_EQ(remainingOf(*b, 1), 4);
+  // a price change and a change back: back of the queue at the new level
+  EXPECT_TRUE(change(*b, 3, 100, 5).empty());
+  EXPECT_TRUE(change(*b, 1, 102, 4).empty());
+  EXPECT_TRUE(change(*b, 1, 100, 4).empty());  // now behind order 3 at 100
+  EXPECT_TRUE(same(put(*b, 5, B, 100, 6), {Fill{5, 3, 100, 5}, Fill{5, 1, 100, 1}}));
+  EXPECT_EQ(askPrice(*b), 100);
+  EXPECT_EQ(remainingOf(*b, 1), 3);
+}
+
+TEST(Amend, TheNewQuantityIsTheNewTotalRemainingAfterAPartialFill) {
+  auto b = book::makeAmendBook();
+  put(*b, 1, S, 100, 10);
+  put(*b, 2, S, 100, 10);
+  put(*b, 3, B, 100, 4);  // order 1 has 6 left
+  EXPECT_TRUE(change(*b, 1, 100, 6).empty());  // not larger than what remains: keeps its place
+  EXPECT_TRUE(same(put(*b, 4, B, 100, 1), {Fill{4, 1, 100, 1}}));
+  EXPECT_TRUE(change(*b, 1, 100, 6).empty());  // 5 -> 6 is MORE: loses its place
+  EXPECT_TRUE(same(put(*b, 5, B, 100, 11), {Fill{5, 2, 100, 10}, Fill{5, 1, 100, 1}}));
+  EXPECT_EQ(remainingOf(*b, 1), 5);
+}
+
+TEST(Amend, ACrossingAmendTradesAtOnceAtTheMakersPriceAndTheRestRests) {
+  auto b = book::makeAmendBook();
+  put(*b, 1, S, 100, 4);
+  put(*b, 2, S, 101, 4);
+  put(*b, 3, B, 95, 10);
+  const auto fills = change(*b, 3, 101, 10);
+  EXPECT_TRUE(same(fills, {Fill{3, 1, 100, 4}, Fill{3, 2, 101, 4}}));
+  EXPECT_EQ(remainingOf(*b, 3), 2);
+  EXPECT_EQ(b->depthAt(B, 95), 0);
+  EXPECT_EQ(b->depthAt(B, 101), 2);  // rests at its new price, as a good-till-cancelled order
+  EXPECT_EQ(b->restingCount(), 1);
+  IS(b->cancel(3), Ok);
+  std::vector<Fill> dup;
+  IS(b->submit(3, B, 10, 1, dup), DuplicateId);  // the id never comes free
+}
+
+TEST(Amend, ACrossingAmendThatTradesEverythingLeavesNothingResting) {
+  auto b = book::makeAmendBook();
+  put(*b, 1, S, 100, 10);
+  put(*b, 2, B, 90, 5);
+  EXPECT_TRUE(same(change(*b, 2, 100, 5), {Fill{2, 1, 100, 5}}));
+  EXPECT_EQ(remainingOf(*b, 2), -1);
+  EXPECT_EQ(remainingOf(*b, 1), 5);
+  std::vector<Fill> fills;
+  IS(b->amend(2, 100, 5, fills), UnknownOrder);
+}
+
+TEST(Amend, RandomOperationsIncludingAmendsMatchAnIndependentModel) {
+  for (std::uint64_t seed = 1; seed <= 25; ++seed) {
+    Rng rng(seed);
+    auto b = book::makeAmendBook();
+    ModelBook model;
+    int nextId = 1;
+    for (int step = 0; step < 300; ++step) {
+      const int roll = rng.next(8);
+      if (roll == 0 && nextId > 1) {
+        const int id = 1 + rng.next(nextId - 1);
+        const bool was = model.cancel(id);
+        EXPECT_TRUE(b->cancel(id) == (was ? Status::Ok : Status::UnknownOrder));
+      } else if (roll <= 3 && nextId > 1) {
+        const int id = 1 + rng.next(nextId - 1);
+        const int price = 95 + rng.next(11);
+        const int qty = 1 + rng.next(14);
+        const bool resting = model.remaining(id) > 0;
+        std::vector<Fill> fills;
+        const Status st = b->amend(id, price, qty, fills);
+        EXPECT_TRUE(st == (resting ? Status::Ok : Status::UnknownOrder));
+        if (resting) EXPECT_TRUE(same(fills, model.amend(id, price, qty)));
+      } else {
+        const int id = nextId++;
+        const Side side = rng.next(2) == 0 ? B : S;
+        const int price = 95 + rng.next(11);
+        const int qty = 1 + rng.next(14);
+        const int tif = rng.next(4) == 0 ? 1 + rng.next(2) : 0;
+        const TimeInForce how = tif == 0 ? TimeInForce::Gtc : (tif == 1 ? TimeInForce::Ioc : TimeInForce::Fok);
+        EXPECT_TRUE(same(put(*b, id, side, price, qty, how), model.submit(id, side, price, qty, tif)));
+      }
+      EXPECT_EQ(b->restingCount(), model.count());
+      EXPECT_EQ(bidPrice(*b), model.best(B));
+      EXPECT_EQ(askPrice(*b), model.best(S));
+      if (model.best(B) != 0) EXPECT_EQ(bidQty(*b), model.depth(B, model.best(B)));
+      if (model.best(S) != 0) EXPECT_EQ(askQty(*b), model.depth(S, model.best(S)));
+    }
+    for (int id = 1; id < nextId; ++id) EXPECT_EQ(remainingOf(*b, id), model.remaining(id));
+  }
+}
+22:Tcb4,#pragma once
+#include <vector>
+
+#include "time_in_force.h"
+
+// The facade the interface sees: validate, record the id, let the matcher trade, rest what is left. It owns no rule itself.
+class BookImpl : public book::AmendBook {
+ public:
+  BookImpl() : matcher_(sides_, index_) {}
+
+  book::Status submit(int id, book::Side side, int price, int quantity, std::vector<book::Fill>& fills) override {
+    return submitWith(id, side, price, quantity, book::TimeInForce::Gtc, fills);
+  }
+
+  book::Status submitWith(int id, book::Side side, int price, int quantity, book::TimeInForce tif,
+                          std::vector<book::Fill>& fills) override {
+    if (!OrderRules::valid(id, price, quantity)) return book::Status::InvalidOrder;
+    if (ledger_.seen(id)) return book::Status::DuplicateId;
+    ledger_.record(id);
+    Order order(id, side, price, quantity);
+    fills.clear();
+    enter(order, Dispositions::of(tif), fills);
+    return book::Status::Ok;
+  }
+
+  book::Status cancel(int id) override {
+    const RestingIndex::Handle* handle = index_.find(id);
+    if (handle == nullptr) return book::Status::UnknownOrder;
+    sides_.own(handle->side).remove(handle->price, handle->position);
+    index_.forget(id);
+    return book::Status::Ok;
+  }
+
+  book::Status amend(int id, int newPrice, int newQuantity, std::vector<book::Fill>& fills) override {
+    if (!OrderRules::validTerms(newPrice, newQuantity)) return book::Status::InvalidOrder;
+    const RestingIndex::Handle* handle = index_.find(id);
+    if (handle == nullptr) return book::Status::UnknownOrder;
+    fills.clear();
+    if (handle->price == newPrice && newQuantity <= handle->position->remaining()) {
+      handle->position->resize(newQuantity);  // same price, not larger: the place in the queue is kept
+      return book::Status::Ok;
+    }
+    const book::Side side = handle->side;
+    cancel(id);
+    Order order(id, side, newPrice, newQuantity);
+    enter(order, Dispositions::of(book::TimeInForce::Gtc), fills);
+    return book::Status::Ok;
+  }
+
+  book::Status remaining(int id, int& out) const override {
+    const RestingIndex::Handle* handle = index_.find(id);
+    if (handle == nullptr) return book::Status::UnknownOrder;
+    out = handle->position->remaining();
+    return book::Status::Ok;
+  }
+
+  bool bestBid(int& price, int& quantity) const override { return sides_.own(book::Side::Buy).best(price, quantity); }
+  bool bestAsk(int& price, int& quantity) const override { return sides_.own(book::Side::Sell).best(price, quantity); }
+  int depthAt(book::Side side, int price) const override { return sides_.own(side).depthAt(price); }
+  int restingCount() const override { return index_.count(); }
+
+ private:
+  // The one path an arriving order takes, whether it is new or comes back from an amend.
+  void enter(Order& order, const Disposition& how, std::vector<book::Fill>& fills) {
+    if (!how.mayTrade(matcher_, order)) return;
+    matcher_.match(order, fills);
+    if (order.done() || !how.restsRemainder()) return;
+    const HalfBook::Position position = sides_.own(order.side()).add(order);
+    index_.add(order.id(), RestingIndex::Handle{order.side(), order.price(), position});
+  }
+
+  Sides sides_;
+  RestingIndex index_;
+  IdLedger ledger_;
+  Matcher matcher_;
+};
+23:Ta8a,#pragma once
+#include <list>
+#include <map>
+
+#include "order.h"
+
+// Which way "better" points on one side, and how a price becomes a map key so that the best price sorts first: sells by
+// price, buys by its negation.
+class PriceOrder {
+ public:
+  explicit PriceOrder(book::Side side) : side_(side) {}
+
+  int keyOf(int price) const { return side_ == book::Side::Sell ? price : -price; }
+  int priceOf(int key) const { return side_ == book::Side::Sell ? key : -key; }
+  // Would an incoming order with this limit trade at `price` on this side?
+  bool acceptable(int price, int limit) const { return side_ == book::Side::Sell ? price <= limit : price >= limit; }
+
+ private:
+  book::Side side_;
+};
+
+// All the resting orders of ONE side, grouped by price, each price a queue in arrival order. The map key is arranged so that
+// the BEST price is always first: sells by price, buys by negated price. Nothing here knows how orders trade.
+class HalfBook {
+ public:
+  using Queue = std::list<Order>;
+  using Position = Queue::iterator;
+
+  explicit HalfBook(book::Side side) : order_(side) {}
+
+  bool empty() const { return levels_.empty(); }
+  int bestPrice() const { return order_.priceOf(levels_.begin()->first); }
+  Order& oldestAtBest() { return levels_.begin()->second.front(); }
+
+  // True when an incoming order with this limit would trade with the best price here.
+  bool crossedBy(int limit) const {
+    return !empty() && order_.acceptable(bestPrice(), limit);
+  }
+
+  Position add(const Order& order) {
+    Queue& queue = levels_[order_.keyOf(order.price())];
+    queue.push_back(order);
+    return std::prev(queue.end());
+  }
+
+  void remove(int price, Position position) {
+    const auto level = levels_.find(order_.keyOf(price));
+    level->second.erase(position);
+    if (level->second.empty()) levels_.erase(level);
+  }
+
+  int depthAt(int price) const {
+    const auto level = levels_.find(order_.keyOf(price));
+    return level == levels_.end() ? 0 : total(level->second);
+  }
+
+  bool best(int& price, int& quantity) const {
+    if (empty()) return false;
+    price = bestPrice();
+    quantity = total(levels_.begin()->second);
+    return true;
+  }
+
+  // Quantity an incoming order with this limit could trade with, best price first, without changing anything.
+  int availableFor(int limit) const {
+    int sum = 0;
+    for (const auto& [key, queue] : levels_) {
+      if (!order_.acceptable(order_.priceOf(key), limit)) break;
+      sum += total(queue);
+    }
+    return sum;
+  }
+
+ private:
+  static int total(const Queue& queue) {
+    int sum = 0;
+    for (const Order& order : queue) sum += order.remaining();
+    return sum;
+  }
+
+  PriceOrder order_;
+  std::map<int, Queue> levels_;
+};
+24:T784,#pragma once
+#include <algorithm>
+#include <vector>
+
+#include "registry.h"
+
+// The two sides of the book and the one rule that moves orders between them: price-time priority.
+class Sides {
+ public:
+  Sides() : bids_(book::Side::Buy), asks_(book::Side::Sell) {}
+
+  HalfBook& own(book::Side side) { return side == book::Side::Buy ? bids_ : asks_; }
+  const HalfBook& own(book::Side side) const { return side == book::Side::Buy ? bids_ : asks_; }
+  HalfBook& other(book::Side side) { return own(side == book::Side::Buy ? book::Side::Sell : book::Side::Buy); }
+  const HalfBook& other(book::Side side) const {
+    return own(side == book::Side::Buy ? book::Side::Sell : book::Side::Buy);
+  }
+
+ private:
+  HalfBook bids_;
+  HalfBook asks_;
+};
+
+class Matcher {
+ public:
+  Matcher(Sides& sides, RestingIndex& index) : sides_(sides), index_(index) {}
+
+  // Trades `taker` against the opposite side while the best price is acceptable, oldest order first, at the maker's price.
+  void match(Order& taker, std::vector<book::Fill>& fills) {
+    HalfBook& opposite = sides_.other(taker.side());
+    while (!taker.done() && opposite.crossedBy(taker.price())) {
+      Order& maker = opposite.oldestAtBest();
+      const int traded = std::min(taker.remaining(), maker.remaining());
+      fills.push_back(book::Fill{taker.id(), maker.id(), maker.price(), traded});
+      taker.fill(traded);
+      maker.fill(traded);
+      if (maker.done()) retire(opposite, maker);
+    }
+  }
+
+  // What an order like this could trade right now. Pure: nothing moves.
+  int available(const Order& taker) const { return sides_.other(taker.side()).availableFor(taker.price()); }
+
+ private:
+  void retire(HalfBook& side, const Order& maker) {
+    const RestingIndex::Handle* handle = index_.find(maker.id());
+    const int id = maker.id();
+    side.remove(handle->price, handle->position);
+    index_.forget(id);
+  }
+
+  Sides& sides_;
+  RestingIndex& index_;
+};
+25:T453,#pragma once
+#include <algorithm>
+
+#include "api_storm2.h"
+
+// One order as the book holds it: what it is and how much is still unfilled. Only the unfilled quantity ever changes.
+class Order {
+ public:
+  Order(int id, book::Side side, int price, int quantity) : id_(id), side_(side), price_(price), remaining_(quantity) {}
+
+  int id() const { return id_; }
+  book::Side side() const { return side_; }
+  int price() const { return price_; }
+  int remaining() const { return remaining_; }
+  bool done() const { return remaining_ == 0; }
+  void fill(int quantity) { remaining_ -= quantity; }
+  void resize(int quantity) { remaining_ = quantity; }
+
+ private:
+  int id_;
+  book::Side side_;
+  int price_;
+  int remaining_;
+};
+
+// What the interface accepts as an order; nothing else in the design repeats these limits.
+class OrderRules {
+ public:
+  static bool valid(int id, int price, int quantity) { return id >= 1 && validTerms(price, quantity); }
+  static bool validTerms(int price, int quantity) {
+    return price >= 1 && price <= book::kMaxPrice && quantity >= 1 && quantity <= book::kMaxQuantity;
+  }
+};
+26:T568,#pragma once
+#include <memory>
+
+#include "matcher.h"
+
+// What an order does when it meets the book: may it start trading, and does the rest wait? One small class per rule.
+class Disposition {
+ public:
+  virtual ~Disposition() = default;
+  virtual bool mayTrade(const Matcher& matcher, const Order& order) const = 0;
+  virtual bool restsRemainder() const = 0;
+};
+
+class GoodTillCancelled : public Disposition {
+ public:
+  bool mayTrade(const Matcher&, const Order&) const override { return true; }
+  bool restsRemainder() const override { return true; }
+};
+
+class ImmediateOrCancel : public Disposition {
+ public:
+  bool mayTrade(const Matcher&, const Order&) const override { return true; }
+  bool restsRemainder() const override { return false; }
+};
+
+class FillOrKill : public Disposition {
+ public:
+  bool mayTrade(const Matcher& matcher, const Order& order) const override {
+    return matcher.available(order) >= order.remaining();
+  }
+  bool restsRemainder() const override { return false; }
+};
+
+class Dispositions {
+ public:
+  static const Disposition& of(book::TimeInForce tif) {
+    static const GoodTillCancelled gtc;
+    static const ImmediateOrCancel ioc;
+    static const FillOrKill fok;
+    switch (tif) {
+      case book::TimeInForce::Ioc: return ioc;
+      case book::TimeInForce::Fok: return fok;
+      case book::TimeInForce::Gtc: break;
+    }
+    return gtc;
+  }
+};
+c:["$","$L1a",null,{"bundle":{"id":"order-book","title":"Order book: price-time priority, time in force and amends","level":"Senior","parMinutes":90,"patterns":["Strategy","Facade","Value Object"],"requirements":[{"id":"R-order","text":"Orders: id 1 or more, price 1..kMaxPrice, quantity 1..kMaxQuantity (both ends inclusive). submit checks InvalidOrder, then DuplicateId. An id is spent forever by any accepted order, including one that traded everything or was cancelled. A refused call changes nothing and leaves fills alone.","phase":"base","hidden":true},{"id":"R-price","text":"A buy trades with sells priced at or below its limit, a sell with buys at or above it; never with its own side. It takes the best price first (lowest sell, highest buy), then the earliest arrival at that price.","phase":"base","hidden":true},{"id":"R-maker","text":"Each trade is min(remaining of both) at the RESTING order's price. Fill has taker = the incoming id and maker = the resting id. Fills are listed in the order they happened and replace the caller's vector on Ok (possibly empty).","phase":"base","hidden":true},{"id":"R-rest","text":"What is left of an order rests at its OWN limit, behind the orders already at that price. A partly filled resting order keeps its place. A fully filled order leaves the book.","phase":"base","hidden":true},{"id":"R-cancel","text":"cancel(id) removes a RESTING order only (UnknownOrder for an unknown, filled or cancelled id); the orders behind it keep their places and an emptied price level disappears. It does not free the id.","phase":"base","hidden":true},{"id":"R-queries","text":"remaining(id) is the unfilled quantity of a resting order, else UnknownOrder with the out-parameter untouched. bestBid/bestAsk give the best price and the TOTAL quantity at it (false when the side is empty); depthAt is a side's total quantity at one price; restingCount counts resting orders.","phase":"base","hidden":true},{"id":"R-ioc","text":"TimeInForce::Ioc: trade what is possible now and drop the remainder; it never rests. An Ioc order that trades nothing is still Ok and its id is spent.","phase":"storm1","hidden":true},{"id":"R-fok","text":"TimeInForce::Fok: trade the whole quantity at once or do nothing at all (Ok, empty fills, book untouched, id spent). Only liquidity at acceptable prices on the opposite side counts, summed over every level. Gtc is today's behaviour and submitWith has the same checks as submit.","phase":"storm1","hidden":true},{"id":"R-amend-keep","text":"amend(id, price, qty) with the SAME price and a quantity not larger than the remaining keeps the order's place in its queue. The new quantity is the new total remaining.","phase":"storm2","hidden":true},{"id":"R-amend-requeue","text":"Any other amend (a new price, or more quantity) takes the order out and brings it back as a new arrival with the same id: last in line at its price, trading at once if it crosses (taker = that id, at the makers' prices), the rest resting as Gtc. Checks: InvalidOrder, then UnknownOrder; a refusal changes nothing; fills is replaced on Ok.","phase":"storm2","hidden":true}],"brief":"$1b","editorial":"$1c","clarify":[{"id":"q-orders","text":"What exactly is an order, what ranges are legal, and what happens to an id once it has been used?","answer":"An id (1 or more), a side, a limit price in whole ticks (1 to kMaxPrice) and a quantity (1 to kMaxQuantity), both ends inclusive. submit checks InvalidOrder first, then DuplicateId. An id is spent for good by ANY accepted order: one that rests, one that traded everything at once, one that was cancelled. A refused call changes nothing and does not touch the caller's fills vector.","reveals":["R-order"],"quality":"essential"},{"id":"q-match","text":"Which orders trade with which, and in what order does a new order meet the waiting ones?","answer":"A buy trades with waiting sells priced at or below its limit, a sell with waiting buys at or above its limit. Never with its own side. It meets the BEST price first (lowest sell, highest buy) and, among orders at the same price, the one that arrived first: price-time priority. It keeps trading until it is filled or nothing acceptable is left.","reveals":["R-price"],"quality":"essential"},{"id":"q-price","text":"At what price does a trade happen: the buyer's limit, the seller's limit, or something in between? And what does a Fill report?","answer":"At the price of the order that was ALREADY WAITING (the maker), never at the incoming order's limit, so a buy limit of 105 against an ask of 100 trades at 100. A Fill is (takerId = the incoming order, makerId = the waiting one, price, quantity), quantity is min(remaining of both). On Ok the caller's vector is replaced by the trades in the order they happened, possibly none.","reveals":["R-maker"],"quality":"essential"},{"id":"q-rest","text":"What happens to the part of an order that could not trade? Where does it wait, and does a partly filled order keep its turn?","answer":"It rests at its OWN limit price (not at the last trade price), at the back of the queue for that price. A waiting order that was partly filled keeps its place at the front of its queue, and a fully filled order leaves the book at once.","reveals":["R-rest"],"quality":"essential"},{"id":"q-cancel","text":"What can be cancelled, and what does a cancel do to the other orders?","answer":"Only a resting order: UnknownOrder for an id that never existed, was filled in full or was already cancelled. The orders behind it keep their places, and a price level with no orders left disappears from the book. Cancelling does not free the id.","reveals":["R-cancel"],"quality":"essential"},{"id":"q-queries","text":"What can I ask the book, and what does each query answer when there is nothing to answer?","answer":"remaining(id) for a resting order (UnknownOrder otherwise, out-parameter untouched), bestBid and bestAsk (best price and the TOTAL quantity waiting at it, false when that side is empty), depthAt(side, price) (0 when none) and restingCount. Queries never change anything.","reveals":["R-queries"],"quality":"useful"},{"id":"q-wait","text":"Will traders want to control how long an order waits?","answer":"Yes, as the first change request: Ioc (immediate or cancel: trade what you can now, never rest) and Fok (fill or kill: the whole quantity now or nothing, with the book untouched when it cannot), next to today's good-till-cancelled. Think about how Fok can look at the book without changing it.","reveals":["R-ioc","R-fok"],"quality":"useful"},{"id":"q-change","text":"Will traders change an order that is already waiting?","answer":"Yes, as the second change request: an amend with a new price and quantity. Reducing the size at the same price keeps the order's place; anything else (a new price or a larger size) sends it to the back of the line, and it trades at once if the new price crosses. This is where the reason for time priority becomes visible.","reveals":["R-amend-keep","R-amend-requeue"],"quality":"useful"},{"id":"q-market","text":"Do I need market orders, stop orders, hidden or iceberg orders, auctions?","answer":"No. Only limit orders at first, then time in force and amends. A market order is a limit order with an extreme price plus Ioc, which is a fair follow-up; icebergs, stops and auctions are not part of this exercise.","reveals":[],"quality":"noise"},{"id":"q-money","text":"Do I handle accounts, balances, fees, risk limits or settlement?","answer":"No. The book only matches. Accounts, risk checks before an order enters and settlement after a trade are other components around it.","reveals":[],"quality":"noise"},{"id":"q-threads","text":"Will several threads call the book at once, and how fast must it be?","answer":"No: one caller at a time, no locking. Real engines run one matching thread per instrument for exactly this reason (a total order of events), and the editorial's 10x section discusses speed. Do not use floating point for prices.","reveals":[],"quality":"useful"},{"id":"q-time","text":"Do orders carry timestamps, and does the book read a clock?","answer":"No. Arrival order is the only time there is: the order of calls is the order of priority, so replays are exact. A real engine stamps a sequence number on every event, which is what this book does implicitly.","reveals":[],"quality":"useful"},{"id":"q-persist","text":"Does the book need to be saved, replayed or published to market-data feeds?","answer":"No persistence or feed. The fills returned are the only output; an event log of the calls would be enough to rebuild the book and is a good follow-up.","reveals":[],"quality":"noise"}],"rubric":[{"id":"res-side","text":"Keeps the waiting orders of ONE side grouped by price with each price a queue in arrival order, with the best price always first, and knows nothing about how orders trade","phase":"base","owners":["HalfBook","BookSide","OrderSide","PriceLevels","Side","SideBook","Levels","PriceLadder"]},{"id":"res-matching","text":"Owns the one matching rule (best price first, oldest first, trade at the waiting order's price, stop at the limit) in a single place that the book calls","phase":"base","owners":["Matcher","MatchingEngine","Matching","Engine","OrderMatcher","Crosser"]},{"id":"res-order","text":"Is the value that one order is (id, side, price and what is still unfilled) and changes only its unfilled quantity","phase":"base","owners":["Order","LimitOrder","BookOrder","RestingOrder"]},{"id":"res-ids","text":"Remembers every id ever accepted so an id is never reused, separately from the orders that are still waiting","phase":"base","owners":["IdLedger","IdRegistry","UsedIds","SeenIds","IdSet","Ledger"]},{"id":"res-index","text":"Finds a waiting order by id in constant time so a cancel, an amend and a remaining() query go straight to it","phase":"base","owners":["RestingIndex","OrderIndex","OrderLookup","Index","Registry","OrderMap"]},{"id":"res-validate","text":"Holds the legal ranges of an id, a price and a quantity in one place, so no other class repeats them","phase":"base","owners":["OrderRules","OrderValidator","Validator","Rules","Limits","OrderLimits"]},{"id":"res-facade","text":"Is the thin facade behind the interface: checks the call, records the id, hands the order to the matcher and rests the remainder, but contains no matching rule itself","phase":"base","owners":["BookImpl","OrderBook","BookFacade","Exchange","MatchingBook","LimitOrderBook"]},{"id":"res-tif","text":"Expresses what an order may do when it meets the book (may it start trading, does the remainder rest) as small replaceable policies, so a new time in force edits no existing branch","phase":"storm1","owners":["Disposition","TimeInForce","TifPolicy","ExecutionPolicy","FillOrKill","ImmediateOrCancel","Dispositions"]},{"id":"res-preview","text":"Answers 'how much could this order trade right now' without changing anything, so fill-or-kill decides before the first trade","phase":"storm1","owners":["Matcher","availableFor","available","Liquidity","Preview","Matching"]},{"id":"res-entry","text":"Sends a new order and an amended order down the same entry path, so an amend that crosses trades exactly like a fresh submission","phase":"storm2","owners":["BookImpl","enter","OrderBook","Entry","Admission","OrderFlow"]}],"followups":[{"level":"SDE2","question":"Why does a trade happen at the resting order's price and not at the incoming order's limit?","answer":"Because the resting order is the one that published a price and waited for it. The incoming order said 'I will pay up to X', which is a bound, not an offer. Trading at the waiting price gives the taker any price improvement, keeps the book's prices meaningful, and makes the rule independent of how aggressive the taker was. Trading at the taker's limit would let a trader overpay just by being generous, and would punish exactly the orders that provide liquidity."},{"level":"SDE2","question":"What data structures give you best-price-first and first-come-first-served at one price, and what are the costs?","answer":"An ordered map from price to a queue of orders per side, with the best price at one end (the reference stores sells by price and buys by negated price so begin() is always the best). Each queue is a linked list in arrival order, so the front is the oldest. Matching touches only the front of the best level: O(log L) to find a level (L = distinct prices) and O(1) per trade; inserting is O(log L), removal is O(log L) with a stored iterator. A sorted vector of levels is simpler and faster for few levels but costs O(L) per insert. A heap does not give FIFO within a price."},{"level":"SDE2","question":"Why is an id never reused, even after the order was filled or cancelled?","answer":"Because an id names an order in everything the outside world keeps: acknowledgements, trade reports, audit logs and the client's own tables. If an id could return, a late 'cancel 7' might hit a different order, and two different orders would share one history. Keeping a ledger of used ids (separate from the resting orders) makes the rule cheap to enforce and keeps every call unambiguous. At scale the ledger is bounded by an id range per client or per day."},{"level":"SDE2","question":"How do you cancel an order in the middle of a queue without scanning?","answer":"Keep an index from id to the order's position (a list iterator) and its price. Cancel then removes the node in O(1) from its queue and removes the price level if it became empty. The index must be updated when an order is filled and leaves the book, which is why the matcher reports 'retired' to the same index that cancel uses. Lazy deletion (mark it dead, skip it later) is the alternative when the container does not give stable positions."},{"level":"Senior","question":"Fill-or-kill must not change the book when it cannot fill. How did you decide before trading, and what would go wrong with 'try it and roll back'?","answer":"Ask the opposite side how much quantity sits at acceptable prices (walk the levels from the best until the limit stops being acceptable) and compare with the order's quantity. That query is pure, so nothing needs undoing. Rolling back means mutating the book, emitting fills and then un-emitting them: every partly filled maker has to be restored with its exact place in the queue, and any observer that saw the intermediate state saw something that never happened. Preview-then-commit is the same shape as check-then-take in a booking system."},{"level":"Senior","question":"Why does reducing an order's size keep its place but raising it does not? What is being protected?","answer":"Time priority is a reward for committing liquidity early. A smaller order claims less of the queue and takes nothing from the traders behind it, so keeping its place is fair. A larger order would let a trader grab more of the early queue position than they originally paid for, and a changed price is a different place in the book entirely. Many exchanges follow exactly this rule. The consequence for the design: an amend is either an in-place edit or a cancel plus a fresh arrival with the same id, and the fresh arrival must take the same entry path as a new order so it trades if it now crosses."},{"level":"Senior","question":"How would you add market orders, stop orders and iceberg orders without rewriting the matcher?","answer":"Market orders are a limit order with the extreme price and Ioc, so they cost nothing new. Stop orders are held outside the book until a trigger price trades, then enter through the same entry path: a separate StopBook with a trigger check after each trade. An iceberg is an order with a visible slice and a hidden reserve; it needs the queue entry to carry a refresh rule, and each refresh goes to the back of the queue (it is a new slice). The matcher's contract stays 'trade with the front of the best acceptable level'; what grows is the order and the queue entry, which is why they are separate classes."},{"level":"Senior","question":"Where does your design put the 'is this order allowed to trade' decision, and what happens when a third time in force arrives, such as good-till-date?","answer":"In small Disposition classes: one asks whether the order may start trading (Fok checks the available quantity, the others say yes), the other says whether the remainder rests. The facade calls both and has no switch of its own; only the one small factory function maps the enum to the object. Good-till-date is a new Disposition whose resting part carries an expiry, plus a sweep that removes expired orders on each call, so the rest of the code is unchanged. If the policies started to need book state they would take the Matcher or a read-only view, as Fok does."},{"level":"Staff","question":"You must handle a million orders per second per instrument with a latency tail under 50 microseconds. What changes?","answer":"Allocation and cache misses become the cost, not the algorithm. Replace std::map and std::list with pre-allocated pools: orders in a contiguous arena addressed by index, price levels in a dense array indexed by tick (prices are bounded integers) with a bitmap to find the best level, and an intrusive doubly-linked queue per level. Ids map to arena slots through a flat hash or a direct table. One thread owns the book and processes a sequenced input log, so there are no locks and replay gives the same output; fills go to a ring buffer read by other threads. Avoid virtual calls on the hot path (templates or a closed set of dispositions), and measure with a deterministic replay benchmark."},{"level":"Staff","question":"How do you make the engine recoverable and auditable, and how do you test it?","answer":"Make the book a pure function of an ordered input log (every submit, cancel and amend with its sequence number): persist the log before acknowledging, snapshot the book periodically, and rebuild by loading the snapshot and replaying the tail. A standby replays the same log, so failover loses nothing and divergence is detectable by comparing book checksums at sequence numbers. For testing, the repo's shape generalises: a naive model that is obviously correct (a vector and a linear search) compared against the engine on seeded random streams, plus golden logs from past incidents. Add invariants checked after every step in debug builds (no crossed book, per-level quantity equals the sum of its orders, index and levels agree)."}],"apiHeader":"$1d","phaseApis":{"storm1":"#pragma once\n// Change Storm 1: time in force.\n#include \"api.h\"\n\nnamespace book {\n\n// How long an order may wait for a trade. makeTimedBook() is exactly makeBook() when every order is Gtc.\nenum class TimeInForce {\n  Gtc,  // good till cancelled: today's behaviour, the remainder rests\n  Ioc,  // immediate or cancel: trade what you can now; the remainder is dropped and never rests\n  Fok,  // fill or kill: trade the WHOLE quantity now or do nothing at all (no fills, nothing changes, still Ok)\n};\n\nclass TimedBook : public Book {\n public:\n  // Same checks and answers as Book::submit. An Ioc or Fok order is still accepted (its id is used for good) even when it\n  // trades nothing. An Fok order sees only orders it could really trade with: price limit respected, own side ignored.\n  virtual Status submitWith(int id, Side side, int price, int quantity, TimeInForce tif, std::vector<Fill>& fills) = 0;\n};\n\nstd::unique_ptr<TimedBook> makeTimedBook();\n\n}  // namespace book\n","storm2":"$1e"},"phases":["base","storm1","storm2"],"tests":{"base":[{"path":"ob_base.cpp","content":"$1f"}],"storm1":[{"path":"ob_storm1.cpp","content":"$20"}],"storm2":[{"path":"ob_storm2.cpp","content":"$21"}]},"reference":[{"path":"book_impl.h","content":"$22"},{"path":"half_book.h","content":"$23"},{"path":"matcher.h","content":"$24"},{"path":"order.h","content":"$25"},{"path":"registry.h","content":"#pragma once\n#include <unordered_map>\n#include <unordered_set>\n\n#include \"half_book.h\"\n\n// Every id ever accepted. An id is never reused, whatever became of its order.\nclass IdLedger {\n public:\n  bool seen(int id) const { return used_.count(id) != 0; }\n  void record(int id) { used_.insert(id); }\n\n private:\n  std::unordered_set<int> used_;\n};\n\n// Where each RESTING order sits, so a cancel or an amend goes straight to it.\nclass RestingIndex {\n public:\n  struct Handle {\n    book::Side side;\n    int price;\n    HalfBook::Position position;\n  };\n\n  void add(int id, const Handle& handle) { where_.emplace(id, handle); }\n  void forget(int id) { where_.erase(id); }\n  const Handle* find(int id) const {\n    const auto it = where_.find(id);\n    return it == where_.end() ? nullptr : &it->second;\n  }\n  int count() const { return static_cast<int>(where_.size()); }\n\n private:\n  std::unordered_map<int, Handle> where_;\n};\n"},{"path":"service.cpp","content":"#include \"book_impl.h\"\n\nstd::unique_ptr<book::Book> book::makeBook() { return std::make_unique<BookImpl>(); }\nstd::unique_ptr<book::TimedBook> book::makeTimedBook() { return std::make_unique<BookImpl>(); }\nstd::unique_ptr<book::AmendBook> book::makeAmendBook() { return std::make_unique<BookImpl>(); }\n"},{"path":"time_in_force.h","content":"$26"}],"driver":{"path":"driver.cpp","content":"#define BP_TEST_MAIN\n#include \"bp_test.h\"\n","readOnly":true}}}]

@@ -1,0 +1,1100 @@
+1:"$Sreact.fragment"
+2:"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js"
+3:I[39756,["$2"],"default"]
+4:I[37457,["$2"],"default"]
+5:"/blueprint-clash/_next/static/chunks/2n5qeheznvl4u.js"
+6:I[22016,["$2","$5"],""]
+7:I[64576,["$2"],"PwaRegister"]
+d:I[97367,["$2"],"OutletBoundary"]
+e:"$Sreact.suspense"
+10:"ViewportBoundary"
+11:I[97367,["$2"],"$10"]
+13:"MetadataBoundary"
+14:I[97367,["$2"],"$13"]
+16:I[68027,["$2"],"default",1]
+:HL["/blueprint-clash/_next/static/chunks/2lbfwxo4jtf0j.css","style"]
+:HL["/blueprint-clash/_next/static/media/07c7676b89ed2778-s.p.2bn3s6zvc0dyp.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/blueprint-clash/_next/static/media/486a103cae33528f-s.p.309ilb452anpd.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/blueprint-clash/_next/static/media/53897e768d329f66-s.p.3t6q91iet4nsy.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+9:X
+b:[["children",{"s":"__PAGE__","h":512,"d":{"r":["$","$1","c",{"children":["$Lc",[["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/2uk3wcjwqg0tl.js","async":true,"nonce":"$undefined"}],["$","script","script-1",{"src":"/blueprint-clash/_next/static/chunks/1zdu7yjl8efu4.js","async":true,"nonce":"$undefined"}]],["$","$Ld",null,{"children":["$","$e",null,{"name":"Next.MetadataOutlet","children":"$@f"}]}]]}],"p":false,"v":null}}]]
+a:[["children",{"s":{"n":"id","t":"d","k":"ticket-booking","s":[]},"h":66048,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],"p":false,"v":"$9"},"c":"$Qb"}]]
+8:[["children",{"s":"workshop","h":131584,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],"p":false,"v":"$9"},"c":"$Qa"}]]
+0:{"P":null,"c":["","workshop","ticket-booking",""],"q":"","i":false,"t":{"t":{"s":"","h":131600,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/2lbfwxo4jtf0j.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}],["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js","async":true,"nonce":"$undefined"}]],["$","html",null,{"lang":"en","className":"r7opxW_variable auY9QW_variable u-EJdW_variable h-full","children":["$","body",null,{"className":"min-h-full","children":[["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","main",null,{"className":"flex min-h-dvh flex-col items-center justify-center gap-4 px-4 text-center","children":[["$","div",null,{"className":"font-display text-5xl text-[var(--accent)]","children":"404"}],["$","p",null,{"className":"text-white/60","children":"This room is not on the blueprint yet."}],["$","$L6",null,{"href":"/","className":"text-sm text-white/80 underline","children":"Back to the title screen"}]]}],[]],"forbidden":"$undefined","unauthorized":"$undefined"}],["$","$L7",null,{}]]}]}]]}],"p":false,"v":null},"c":"$Q8"},"h":{"r":["$","$1","h",{"children":[null,["$","$L11",null,{"children":"$L12"}],["$","$L14",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$e",null,{"name":"Next.Metadata","children":"$L15"}]}],null]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"p":false,"v":null}},"m":"$undefined","G":["$16",[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/2lbfwxo4jtf0j.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]]],"S":true,"r":"$undefined","s":"$undefined","a":"$undefined","l":"$undefined","p":"$undefined","d":"$undefined","b":"WHHKcqqrgr3tfT2ZA5zb7"}
+9:C
+12:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1, viewport-fit=cover"}],["$","meta","2",{"name":"theme-color","content":"#0a1530"}]]
+17:I[27201,["$2"],"IconMark"]
+f:null
+15:[["$","title","0",{"children":"Movie ticket booking with seat holds: Blueprint Clash"}],["$","meta","1",{"name":"description","content":"A creature-tactics RPG that teaches low-level design in C++ and high-level system design, from fundamentals to big-tech interview level."}],["$","link","2",{"rel":"manifest","href":"/blueprint-clash/manifest.webmanifest","crossOrigin":"$undefined"}],["$","meta","3",{"name":"mobile-web-app-capable","content":"yes"}],["$","meta","4",{"name":"apple-mobile-web-app-title","content":"Blueprint Clash"}],["$","meta","5",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","link","6",{"rel":"icon","href":"/blueprint-clash/icon.png?icon.27re_xscs-jmw.png","sizes":"256x256","type":"image/png"}],["$","link","7",{"rel":"apple-touch-icon","href":"/blueprint-clash/apple-icon.png?apple-icon.2rac1w0yc3rju.png","sizes":"180x180","type":"image/png"}],["$","$L17","8",{}]]
+18:"/blueprint-clash/_next/static/chunks/2uk3wcjwqg0tl.js"
+19:"/blueprint-clash/_next/static/chunks/1zdu7yjl8efu4.js"
+1a:I[65612,["$2","$18","$19"],"WorkshopClient"]
+1b:T189d,# Editorial: Movie ticket booking with seat holds
+
+## Requirements
+Functional: shows with a hall of rows and numbered seats (`A1` to `Z50`). `hold` reserves every listed seat or none, for a limited time. `confirm` turns a live hold into a booking, `release` gives it up, and the free seats can be listed. Time arrives through an injected `Clock` in whole ticks. A hold placed at `s` with duration `h` is live while `now < s + h` and over from `s + h`. Checks run in a fixed order (`UnknownShow`, `InvalidRequest`, `UnknownSeat`, `SeatUnavailable`) and confirm fails in the order `UnknownHold`, `WrongUser`, `HoldExpired`. Hidden until asked: the boundary tick, whether anything has to clean up, what a late confirm does, the check order. Non-goals: payment, pricing, cancellations, thread safety (discussed), persistence.
+
+**Change Storm 1, best seats:** `holdBest(show, user, count)` picks adjacent free seats in one row by a rule: row closest to the middle, then run centred nearest the middle, then lower row, then lower seat. Revealable by asking whether customers will want "the best seats for four".
+
+**Change Storm 2, per-user limit:** a cap on the seats a user has in a show, counting booked seats and live holds, checked after seat names and before availability.
+
+## Reference design
+- `Layout` is the hall's shape and the strict parsing and naming of seats. It knows nothing about people.
+- `HoldWindow` owns the clock and the single definition of "live" (`now < expiresAt`). It also answers "when would a hold placed now expire".
+- `Inventory` keeps one slot per seat (the id of the last hold that covered it, or the booking) and the hold records. Seat state is **derived**: Booked if booked, Held if the remembered hold is unspent and live, otherwise Available. `confirm` and `release` share one `settle` function that checks existence, owner and expiry in that order, then changes seats.
+- `BookingImpl` is the facade: validate in the documented order, ask the policy, ask the inventory, place the hold.
+
+**Storm 1 in the reference:** one new class, `SeatSelector` (a Strategy), with `CentreFirstSelector`, and one new method on the facade that uses the same `grant` as `hold`. The inventory is untouched; the selector sees only the layout and a "is it free" predicate, so the rule can change without knowing about holds or time.
+
+**Storm 2 in the reference:** one new class, `UsagePolicy`, with `NoLimit` and `PerUserCap`, one new query on the inventory (`seatsInUse`, which uses the same liveness rule), and a factory. The facade asks the policy in the documented position. Storm 2 does edit the facade's `hold` method (one new check); the editorial says so rather than pretending it is a pure addition.
+
+## Alternatives
+- **A `std::set` of taken seats plus a map of hold-to-expiry**, with the free check inlined in each method, is what most first drafts are. It works until Storm 2: "does an expired hold count?" is then answered in three places.
+- **A sweeper thread or timer per hold** frees seats on time but drags in locks, a race with confirm, and sleeping tests. Deriving state from `(hold, now)` removes the race by construction.
+- **Eagerly freeing expired holds on every call ("reap, then act")** is fine and simple, and costs O(holds) per call unless an expiry heap is kept; the derived-state design costs nothing until a seat is touched.
+- **A State pattern per hold** (Active, Confirmed, Released, Expired classes) is the textbook shape. Here the states have no behaviour of their own beyond who may move where, so a `spent` flag plus the expiry is enough; with extension or payment states (see follow-ups) classes or a transition table start to pay.
+- **Seat objects with their own lock** are the natural concurrent design, and a request over several seats then needs ordered locking to avoid deadlock; per-show locking is simpler and is what the follow-ups ask for.
+- **Choosing best seats by scoring every seat** is tempting but groups need adjacency; scanning runs per row is O(rows x seats x count), which is nothing for a hall and is worth saying out loud.
+
+## Trade-offs
+Derived seat state costs one clock read per seat check and in return needs no cleanup to be correct. Remembering only the last hold id per seat is compact and correct because a seat can have at most one live hold; the price is that old hold records stay in memory (here forever), which a production system purges after a grace period. The all-or-nothing hold checks every seat first and then writes, which is two passes but cannot strand seats. The usage count scans the show's seats: O(seats), fine for a hall of at most 1300, and replaced by a per-user counter if profiling says so. A `SeatSelector` Strategy costs one virtual call per request and buys a rule that product can change quarterly.
+
+## What breaks at 10x
+At 10x the shows the per-show lock partitioning keeps working; at 10x the customers on one show a single lock becomes the hot spot, so you queue admission and keep the seat map slightly stale. The expired-hold records pile up and need a purge. `seatsInUse` scanning a hall per request becomes a counter per (show, user). The in-memory state becomes a replicated store with a conditional write per seat, correctness moves into the database, and the clock must be a single source. Payment confirmation arriving after expiry becomes a state of its own (extend while paying), and a refund path is no longer optional.
+
+## Level signals
+- **SDE2:** all-or-nothing hold, correct boundary tick, confirm refuses an expired or wrong-user hold, seats freed without a timer or at least by a clear mechanism, one place that decides what "free" means.
+- **Senior:** asks about the boundary, cleanup and late-confirm cases first; derives state from expiry so there is no sweeper race; checks in a documented order; the best-seat rule is a Strategy and the limit is a policy that reuses the same liveness rule; describes per-show locking and the check-then-place critical section.
+- **Staff:** puts correctness in a conditional write in a shared store, discusses clock authority, thundering herd on a premiere (waiting room, stale seat map, idempotency keys), payment arriving after expiry and the extend-while-paying state, and reasons about abuse (hoarding, id guessing) beyond the limit.
+1c:Tf5a,#pragma once
+// Public API for the Movie ticket booking problem. The hidden tests only use what is declared here.
+// You implement tix::makeBooking() (in any of your .cpp files); everything behind it is your design.
+#include <memory>
+#include <optional>
+#include <string>
+#include <vector>
+
+namespace tix {
+
+// A source of time in whole ticks (think seconds). It never goes backwards.
+// The system must read time only through this interface, never from the system clock.
+class Clock {
+ public:
+  virtual ~Clock() = default;
+  virtual long long now() const = 0;
+};
+
+using HoldId = long long;
+constexpr HoldId kNoHold = 0;  // hold ids that are issued are always positive and never reused
+
+enum class Status {
+  Ok,
+  UnknownShow,      // no such show
+  InvalidRequest,   // empty user, no seats, a seat listed twice, a count below one
+  UnknownSeat,      // a seat name that does not exist in this show's hall
+  SeatUnavailable,  // a seat is held by someone (unexpired) or already booked, or no suitable seats exist
+  UnknownHold,      // the hold id was never issued, or was already confirmed or released
+  WrongUser,        // the hold belongs to someone else
+  HoldExpired,      // the hold's time ran out before it was confirmed or released
+  OverLimit,        // only used by the per-user limit of the second change storm (api_storm2.h)
+};
+
+enum class SeatState { Available, Held, Booked };
+
+struct HoldResult {
+  Status status = Status::Ok;
+  HoldId id = kNoHold;             // kNoHold unless status is Ok
+  std::vector<std::string> seats;  // the seats now held, in the order requested; empty unless status is Ok
+};
+
+// Seats of a show are named by row letter and seat number: rows A, B, C... and seats 1, 2, 3... ("A1", "C12").
+// A malformed or out-of-range name (a1, A0, A01, A99 in a 10-seat row, Z1 in a 3-row hall) is UnknownSeat.
+class Booking {
+ public:
+  virtual ~Booking() = default;
+
+  // Adds a show whose hall has `rows` rows (1..26) of `seatsPerRow` seats (1..50), all available.
+  // Returns false, changing nothing, if the id is empty or taken, or a size is out of range.
+  virtual bool addShow(const std::string& show, int rows, int seatsPerRow) = 0;
+
+  // Puts a hold on every listed seat for the user, or on none of them. A hold lasts the number of ticks given to
+  // makeBooking: placed at tick s with a duration of h, it is live while now() < s + h and expired from s + h on.
+  // A seat is free when it is not booked and not covered by a live hold. Checks run in this order and the first
+  // failure is returned with nothing changed: UnknownShow, InvalidRequest, UnknownSeat, SeatUnavailable.
+  virtual HoldResult hold(const std::string& show, const std::string& user, const std::vector<std::string>& seats) = 0;
+
+  // Turns a live hold into bookings: the seats become Booked for good and the hold id is spent.
+  // Failures, checked in this order: UnknownHold (never issued, or already confirmed or released), WrongUser,
+  // HoldExpired. A failed call changes nothing; an expired hold stays expired, so asking again repeats HoldExpired.
+  virtual Status confirm(HoldId hold, const std::string& user) = 0;
+
+  // Gives a live hold up: its seats are free at once and the hold id is spent. Same failures and order as confirm.
+  virtual Status release(HoldId hold, const std::string& user) = 0;
+
+  // Empty when the show or the seat does not exist. A seat under an expired hold is Available.
+  virtual std::optional<SeatState> seatState(const std::string& show, const std::string& seat) const = 0;
+
+  // The free seats of the show in row order, then seat number order. Empty for an unknown show.
+  virtual std::vector<std::string> availableSeats(const std::string& show) const = 0;
+};
+
+// A hold lasts `holdTicks` ticks. Returns nullptr when the clock is null or holdTicks is zero or less.
+std::unique_ptr<Booking> makeBooking(std::shared_ptr<Clock> clock, long long holdTicks);
+
+}  // namespace tix
+1d:T4e0,#pragma once
+// Change Storm 1 adds "pick the best seats for me". Everything from api.h still holds.
+#include "api.h"
+
+namespace tix {
+
+class SmartBooking : public Booking {
+ public:
+  // Holds `count` seats side by side in one row, chosen by the house rule below, for the user. The held seats are
+  // returned left to right. Checks, in order: UnknownShow, InvalidRequest (empty user or count below one),
+  // SeatUnavailable when no row has `count` free seats in a run. Nothing changes on failure.
+  //
+  // House rule: among all runs of `count` adjacent free seats in one row, take the one that minimises, in this order:
+  //   1. the distance of its row from the middle of the hall, |2*row - (rows-1)|  (row 0 is A);
+  //   2. the distance of the run's centre from the middle of the row, |2*firstSeat + (count-1) - (seatsPerRow-1)|
+  //      (firstSeat counts from 0);
+  //   3. the row index, lower first;
+  //   4. the first seat index, lower first.
+  virtual HoldResult holdBest(const std::string& show, const std::string& user, int count) = 0;
+};
+
+// Returns nullptr when the clock is null or holdTicks is zero or less.
+std::unique_ptr<SmartBooking> makeSmartBooking(std::shared_ptr<Clock> clock, long long holdTicks);
+
+}  // namespace tix
+1e:T445,#pragma once
+// Change Storm 2 adds a per-user seat limit. Everything from api.h and api_storm1.h still holds.
+#include "api_storm1.h"
+
+namespace tix {
+
+// A user may never have more than `maxSeatsPerUser` seats in use in one show. A seat is in use for a user while it is
+// Booked by them or covered by one of their live holds. A hold that expired, or was released, no longer counts.
+// hold() and holdBest() return OverLimit, changing nothing, when seatsInUse + the seats requested would exceed the
+// limit. For hold() the order of checks becomes UnknownShow, InvalidRequest, UnknownSeat, OverLimit, SeatUnavailable;
+// for holdBest() it is UnknownShow, InvalidRequest, OverLimit, SeatUnavailable.
+class LimitedBooking : public SmartBooking {
+ public:
+  virtual int seatsInUse(const std::string& show, const std::string& user) const = 0;
+};
+
+// Returns nullptr when the clock is null, holdTicks is zero or less, or maxSeatsPerUser is below one.
+std::unique_ptr<LimitedBooking> makeLimitedBooking(std::shared_ptr<Clock> clock, long long holdTicks, int maxSeatsPerUser);
+
+}  // namespace tix
+1f:T2f41,#include <memory>
+#include <string>
+#include <vector>
+
+#include "api.h"
+#include "bp_test.h"
+
+using tix::SeatState;
+using tix::Status;
+using Seats = std::vector<std::string>;
+
+namespace {
+class FakeClock : public tix::Clock {
+ public:
+  long long now() const override { return now_; }
+  void advance(long long ticks) { now_ += ticks; }
+
+ private:
+  long long now_ = 1000;
+};
+
+// A 3 x 5 hall called "s1", holds last 100 ticks.
+struct Fixture {
+  std::shared_ptr<FakeClock> clock = std::make_shared<FakeClock>();
+  std::unique_ptr<tix::Booking> booking = tix::makeBooking(clock, 100);
+  Fixture() { booking->addShow("s1", 3, 5); }
+  SeatState state(const std::string& seat, const std::string& show = "s1") const {
+    const auto s = booking->seatState(show, seat);
+    return s.has_value() ? *s : static_cast<SeatState>(-1);
+  }
+};
+}  // namespace
+
+TEST(Setup, AFactoryRefusesANullClockAndANonPositiveHold) {
+  EXPECT_TRUE(tix::makeBooking(nullptr, 100) == nullptr);
+  EXPECT_TRUE(tix::makeBooking(std::make_shared<FakeClock>(), 0) == nullptr);
+  EXPECT_TRUE(tix::makeBooking(std::make_shared<FakeClock>(), -5) == nullptr);
+}
+
+TEST(Setup, ShowsMustBeNewAndHaveASaneSize) {
+  Fixture f;
+  EXPECT_FALSE(f.booking->addShow("s1", 2, 2));
+  EXPECT_FALSE(f.booking->addShow("", 2, 2));
+  EXPECT_FALSE(f.booking->addShow("x", 0, 5));
+  EXPECT_FALSE(f.booking->addShow("x", 27, 5));
+  EXPECT_FALSE(f.booking->addShow("x", 5, 0));
+  EXPECT_FALSE(f.booking->addShow("x", 5, 51));
+  EXPECT_TRUE(f.booking->addShow("big", 26, 50));
+  EXPECT_EQ(f.booking->availableSeats("big").size(), static_cast<std::size_t>(1300));
+}
+
+TEST(Setup, AFreshShowListsEverySeatInRowOrder) {
+  Fixture f;
+  const Seats all = f.booking->availableSeats("s1");
+  EXPECT_EQ(all.size(), static_cast<std::size_t>(15));
+  EXPECT_EQ(all.front(), "A1");
+  EXPECT_EQ(all[4], "A5");
+  EXPECT_EQ(all[5], "B1");
+  EXPECT_EQ(all.back(), "C5");
+  EXPECT_TRUE(f.booking->availableSeats("nope").empty());
+}
+
+TEST(Setup, SeatNamesAreStrict) {
+  Fixture f;
+  EXPECT_TRUE(f.booking->seatState("s1", "A1").has_value());
+  EXPECT_TRUE(f.booking->seatState("s1", "C5").has_value());
+  for (const char* bad : {"a1", "A0", "A01", "A6", "D1", "A", "", "1A", "A-1", "AB", "A1 "}) {
+    EXPECT_FALSE(f.booking->seatState("s1", bad).has_value());
+  }
+  EXPECT_FALSE(f.booking->seatState("nope", "A1").has_value());
+}
+
+TEST(Hold, HoldingFreeSeatsSucceedsAndMarksThemHeld) {
+  Fixture f;
+  const auto r = f.booking->hold("s1", "ann", {"B2", "B3"});
+  EXPECT_TRUE(r.status == Status::Ok);
+  EXPECT_GT(r.id, 0);
+  EXPECT_TRUE(r.seats == (Seats{"B2", "B3"}));
+  EXPECT_TRUE(f.state("B2") == SeatState::Held);
+  EXPECT_TRUE(f.state("B3") == SeatState::Held);
+  EXPECT_TRUE(f.state("B4") == SeatState::Available);
+  EXPECT_EQ(f.booking->availableSeats("s1").size(), static_cast<std::size_t>(13));
+}
+
+TEST(Hold, TheResultEchoesTheSeatsInTheOrderRequested) {
+  Fixture f;
+  const auto r = f.booking->hold("s1", "ann", {"C3", "A1", "B2"});
+  EXPECT_TRUE(r.seats == (Seats{"C3", "A1", "B2"}));
+}
+
+TEST(Hold, HoldIdsAreUniqueAndPositive) {
+  Fixture f;
+  const auto a = f.booking->hold("s1", "ann", {"A1"});
+  const auto b = f.booking->hold("s1", "bob", {"A2"});
+  EXPECT_GT(a.id, 0);
+  EXPECT_GT(b.id, 0);
+  EXPECT_NE(a.id, b.id);
+}
+
+TEST(Hold, ASeatHeldByOneUserCannotBeHeldByAnother) {
+  Fixture f;
+  f.booking->hold("s1", "ann", {"A1"});
+  const auto r = f.booking->hold("s1", "bob", {"A1"});
+  EXPECT_TRUE(r.status == Status::SeatUnavailable);
+  EXPECT_EQ(r.id, tix::kNoHold);
+  EXPECT_TRUE(r.seats.empty());
+}
+
+TEST(Hold, TheSameUserCannotHoldTheSameSeatTwiceEither) {
+  Fixture f;
+  f.booking->hold("s1", "ann", {"A1"});
+  EXPECT_TRUE(f.booking->hold("s1", "ann", {"A1"}).status == Status::SeatUnavailable);
+}
+
+TEST(Hold, AHoldIsAllOrNothing) {
+  Fixture f;
+  f.booking->hold("s1", "ann", {"A2"});
+  const auto r = f.booking->hold("s1", "bob", {"A1", "A2", "A3"});
+  EXPECT_TRUE(r.status == Status::SeatUnavailable);
+  EXPECT_TRUE(f.state("A1") == SeatState::Available);
+  EXPECT_TRUE(f.state("A3") == SeatState::Available);
+  EXPECT_TRUE(f.booking->hold("s1", "cat", {"A1", "A3"}).status == Status::Ok);
+}
+
+TEST(Hold, TheSameSeatInDifferentShowsIsIndependent) {
+  Fixture f;
+  f.booking->addShow("s2", 3, 5);
+  f.booking->hold("s1", "ann", {"A1"});
+  EXPECT_TRUE(f.booking->hold("s2", "bob", {"A1"}).status == Status::Ok);
+  EXPECT_TRUE(f.state("A1", "s2") == SeatState::Held);
+}
+
+TEST(Hold, InvalidRequestsAreRefusedWithNothingChanged) {
+  Fixture f;
+  EXPECT_TRUE(f.booking->hold("nope", "ann", {"A1"}).status == Status::UnknownShow);
+  EXPECT_TRUE(f.booking->hold("s1", "", {"A1"}).status == Status::InvalidRequest);
+  EXPECT_TRUE(f.booking->hold("s1", "ann", {}).status == Status::InvalidRequest);
+  EXPECT_TRUE(f.booking->hold("s1", "ann", {"A1", "A1"}).status == Status::InvalidRequest);
+  EXPECT_TRUE(f.booking->hold("s1", "ann", {"A1", "Z9"}).status == Status::UnknownSeat);
+  EXPECT_TRUE(f.booking->hold("s1", "ann", {"A1", "a2"}).status == Status::UnknownSeat);
+  EXPECT_EQ(f.booking->availableSeats("s1").size(), static_cast<std::size_t>(15));
+}
+
+TEST(Hold, ChecksRunInTheDocumentedOrder) {
+  Fixture f;
+  const auto held = f.booking->hold("s1", "ann", {"A1"});
+  f.booking->confirm(held.id, "ann");
+  // A1 is booked, Z9 does not exist: the unknown seat is reported first.
+  EXPECT_TRUE(f.booking->hold("s1", "bob", {"A1", "Z9"}).status == Status::UnknownSeat);
+  // A duplicate beats an unknown show only after the show exists; an unknown show comes first.
+  EXPECT_TRUE(f.booking->hold("nope", "", {}).status == Status::UnknownShow);
+}
+
+TEST(Expiry, AHoldIsLiveUntilItsLastTickAndGoneAtTheExpiryTick) {
+  Fixture f;
+  f.booking->hold("s1", "ann", {"A1"});  // placed at 1000, lasts to 1099
+  f.clock->advance(99);
+  EXPECT_TRUE(f.state("A1") == SeatState::Held);
+  EXPECT_TRUE(f.booking->hold("s1", "bob", {"A1"}).status == Status::SeatUnavailable);
+  f.clock->advance(1);  // tick 1100 = 1000 + 100
+  EXPECT_TRUE(f.state("A1") == SeatState::Available);
+  EXPECT_TRUE(f.booking->hold("s1", "bob", {"A1"}).status == Status::Ok);
+}
+
+TEST(Expiry, TheWindowCountsFromWhenTheHoldWasPlaced) {
+  Fixture f;
+  f.clock->advance(500);
+  f.booking->hold("s1", "ann", {"A1"});  // placed at 1500
+  f.clock->advance(99);
+  EXPECT_TRUE(f.state("A1") == SeatState::Held);
+  f.clock->advance(1);
+  EXPECT_TRUE(f.state("A1") == SeatState::Available);
+}
+
+TEST(Expiry, ExpiredSeatsAreListedAsAvailable) {
+  Fixture f;
+  f.booking->hold("s1", "ann", {"A1", "A2"});
+  f.clock->advance(100);
+  EXPECT_EQ(f.booking->availableSeats("s1").size(), static_cast<std::size_t>(15));
+}
+
+TEST(Expiry, HoldsExpireIndependently) {
+  Fixture f;
+  f.booking->hold("s1", "ann", {"A1"});  // 1000
+  f.clock->advance(60);
+  f.booking->hold("s1", "bob", {"A2"});  // 1060
+  f.clock->advance(40);                  // 1100: ann's is over, bob's has 60 left
+  EXPECT_TRUE(f.state("A1") == SeatState::Available);
+  EXPECT_TRUE(f.state("A2") == SeatState::Held);
+}
+
+TEST(Expiry, AnExpiredHoldCanBeTakenOverAndTheNewHolderKeepsItsFullWindow) {
+  Fixture f;
+  f.booking->hold("s1", "ann", {"A1"});
+  f.clock->advance(100);
+  const auto b = f.booking->hold("s1", "bob", {"A1"});  // placed at 1100, lasts to 1199
+  EXPECT_TRUE(b.status == Status::Ok);
+  f.clock->advance(50);
+  EXPECT_TRUE(f.state("A1") == SeatState::Held);
+  EXPECT_TRUE(f.booking->confirm(b.id, "bob") == Status::Ok);
+}
+
+TEST(Confirm, ConfirmingALiveHoldBooksTheSeatsForGood) {
+  Fixture f;
+  const auto r = f.booking->hold("s1", "ann", {"A1", "A2"});
+  EXPECT_TRUE(f.booking->confirm(r.id, "ann") == Status::Ok);
+  EXPECT_TRUE(f.state("A1") == SeatState::Booked);
+  EXPECT_TRUE(f.state("A2") == SeatState::Booked);
+  f.clock->advance(100000);
+  EXPECT_TRUE(f.state("A1") == SeatState::Booked);
+  EXPECT_TRUE(f.booking->hold("s1", "bob", {"A1"}).status == Status::SeatUnavailable);
+}
+
+TEST(Confirm, ConfirmingAtTheExpiryTickIsTooLate) {
+  Fixture f;
+  const auto r = f.booking->hold("s1", "ann", {"A1"});
+  f.clock->advance(99);
+  EXPECT_TRUE(f.booking->confirm(r.id, "ann") == Status::Ok);
+  const auto late = f.booking->hold("s1", "bob", {"B1"});
+  f.clock->advance(100);
+  EXPECT_TRUE(f.booking->confirm(late.id, "bob") == Status::HoldExpired);
+  EXPECT_TRUE(f.state("B1") == SeatState::Available);
+}
+
+TEST(Confirm, AnExpiredHoldStaysExpiredWhenAskedAgain) {
+  Fixture f;
+  const auto r = f.booking->hold("s1", "ann", {"A1"});
+  f.clock->advance(150);
+  EXPECT_TRUE(f.booking->confirm(r.id, "ann") == Status::HoldExpired);
+  EXPECT_TRUE(f.booking->confirm(r.id, "ann") == Status::HoldExpired);
+  EXPECT_TRUE(f.booking->release(r.id, "ann") == Status::HoldExpired);
+}
+
+TEST(Confirm, ALateConfirmCannotStealASeatSomeoneElseNowHolds) {
+  Fixture f;
+  const auto a = f.booking->hold("s1", "ann", {"A1"});
+  f.clock->advance(100);
+  const auto b = f.booking->hold("s1", "bob", {"A1"});
+  EXPECT_TRUE(f.booking->confirm(a.id, "ann") == Status::HoldExpired);
+  EXPECT_TRUE(f.state("A1") == SeatState::Held);
+  EXPECT_TRUE(f.booking->confirm(b.id, "bob") == Status::Ok);
+  EXPECT_TRUE(f.state("A1") == SeatState::Booked);
+}
+
+TEST(Confirm, ABookingIsSpentOnce) {
+  Fixture f;
+  const auto r = f.booking->hold("s1", "ann", {"A1"});
+  EXPECT_TRUE(f.booking->confirm(r.id, "ann") == Status::Ok);
+  EXPECT_TRUE(f.booking->confirm(r.id, "ann") == Status::UnknownHold);
+  EXPECT_TRUE(f.booking->release(r.id, "ann") == Status::UnknownHold);
+  EXPECT_TRUE(f.state("A1") == SeatState::Booked);
+}
+
+TEST(Confirm, OnlyTheHolderCanConfirmOrRelease) {
+  Fixture f;
+  const auto r = f.booking->hold("s1", "ann", {"A1"});
+  EXPECT_TRUE(f.booking->confirm(r.id, "bob") == Status::WrongUser);
+  EXPECT_TRUE(f.booking->release(r.id, "bob") == Status::WrongUser);
+  EXPECT_TRUE(f.state("A1") == SeatState::Held);
+  EXPECT_TRUE(f.booking->confirm(r.id, "ann") == Status::Ok);
+}
+
+TEST(Confirm, WrongUserIsReportedBeforeExpiry) {
+  Fixture f;
+  const auto r = f.booking->hold("s1", "ann", {"A1"});
+  f.clock->advance(500);
+  EXPECT_TRUE(f.booking->confirm(r.id, "bob") == Status::WrongUser);
+}
+
+TEST(Confirm, UnknownIdsAreRefused) {
+  Fixture f;
+  EXPECT_TRUE(f.booking->confirm(12345, "ann") == Status::UnknownHold);
+  EXPECT_TRUE(f.booking->confirm(tix::kNoHold, "ann") == Status::UnknownHold);
+  EXPECT_TRUE(f.booking->release(-4, "ann") == Status::UnknownHold);
+}
+
+TEST(Release, ReleasingFreesTheSeatsAtOnce) {
+  Fixture f;
+  const auto r = f.booking->hold("s1", "ann", {"A1", "A2"});
+  EXPECT_TRUE(f.booking->release(r.id, "ann") == Status::Ok);
+  EXPECT_TRUE(f.state("A1") == SeatState::Available);
+  EXPECT_TRUE(f.booking->hold("s1", "bob", {"A1", "A2"}).status == Status::Ok);
+}
+
+TEST(Release, AReleasedHoldCannotBeConfirmedEvenIfTheSeatsAreStillFree) {
+  Fixture f;
+  const auto r = f.booking->hold("s1", "ann", {"A1"});
+  f.booking->release(r.id, "ann");
+  EXPECT_TRUE(f.booking->confirm(r.id, "ann") == Status::UnknownHold);
+  EXPECT_TRUE(f.state("A1") == SeatState::Available);
+}
+
+TEST(Release, ReleasingOneHoldLeavesTheOthersAlone) {
+  Fixture f;
+  const auto a = f.booking->hold("s1", "ann", {"A1"});
+  const auto b = f.booking->hold("s1", "ann", {"A2"});
+  f.booking->release(a.id, "ann");
+  EXPECT_TRUE(f.state("A2") == SeatState::Held);
+  EXPECT_TRUE(f.booking->confirm(b.id, "ann") == Status::Ok);
+}
+
+TEST(Contention, TwoUsersRacingForTheSameSeatsExactlyOneWins) {
+  Fixture f;
+  int winners = 0;
+  for (const char* user : {"ann", "bob", "cat", "dan"}) {
+    if (f.booking->hold("s1", user, {"B2", "B3"}).status == Status::Ok) ++winners;
+  }
+  EXPECT_EQ(winners, 1);
+}
+
+TEST(Contention, ASeatIsSoldAtMostOnceEvenAcrossManyExpiriesAndRetries) {
+  Fixture f;
+  int confirmed = 0;
+  for (int round = 0; round < 6; ++round) {
+    for (const char* user : {"ann", "bob", "cat"}) {
+      const auto r = f.booking->hold("s1", user, {"C1"});
+      if (r.status != Status::Ok) continue;
+      f.clock->advance(round % 2 == 0 ? 100 : 10);  // even rounds: the hold lapses before the confirm
+      if (f.booking->confirm(r.id, user) == Status::Ok) ++confirmed;
+    }
+  }
+  EXPECT_EQ(confirmed, 1);
+  EXPECT_TRUE(f.state("C1") == SeatState::Booked);
+}
+20:T15fe,#include <memory>
+#include <string>
+#include <vector>
+
+#include "api_storm1.h"
+#include "bp_test.h"
+
+using tix::SeatState;
+using tix::Status;
+using Seats = std::vector<std::string>;
+
+namespace {
+class FakeClock : public tix::Clock {
+ public:
+  long long now() const override { return now_; }
+  void advance(long long ticks) { now_ += ticks; }
+
+ private:
+  long long now_ = 1000;
+};
+
+struct Fixture {
+  std::shared_ptr<FakeClock> clock = std::make_shared<FakeClock>();
+  std::unique_ptr<tix::SmartBooking> booking = tix::makeSmartBooking(clock, 100);
+  Fixture(int rows = 5, int seats = 9) { booking->addShow("s", rows, seats); }
+  SeatState state(const std::string& seat) const { return *booking->seatState("s", seat); }
+};
+}  // namespace
+
+TEST(Setup, ASmartBookingStillDoesEverythingABookingDoes) {
+  Fixture f;
+  EXPECT_TRUE(tix::makeSmartBooking(nullptr, 100) == nullptr);
+  EXPECT_TRUE(tix::makeSmartBooking(f.clock, 0) == nullptr);
+  const auto r = f.booking->hold("s", "ann", {"A1"});
+  EXPECT_TRUE(r.status == Status::Ok);
+  f.clock->advance(100);
+  EXPECT_TRUE(f.booking->confirm(r.id, "ann") == Status::HoldExpired);
+}
+
+TEST(Best, AnEmptyHallGivesTheMiddleOfTheMiddleRow) {
+  Fixture f;  // 5 rows x 9 seats: middle row C, middle seat 5
+  const auto r = f.booking->holdBest("s", "ann", 1);
+  EXPECT_TRUE(r.status == Status::Ok);
+  EXPECT_TRUE(r.seats == (Seats{"C5"}));
+  EXPECT_TRUE(f.state("C5") == SeatState::Held);
+}
+
+TEST(Best, AnOddGroupIsCentredOnTheMiddleSeat) {
+  Fixture f;
+  EXPECT_TRUE(f.booking->holdBest("s", "ann", 3).seats == (Seats{"C4", "C5", "C6"}));
+}
+
+TEST(Best, AnEvenGroupInAnOddRowTiesAndTheLeftmostWins) {
+  Fixture f;
+  // Nine seats, runs of four: C3..C6 and C4..C7 are each half a seat off the middle (C5), so the lower first seat wins.
+  EXPECT_TRUE(f.booking->holdBest("s", "ann", 4).seats == (Seats{"C3", "C4", "C5", "C6"}));
+}
+
+TEST(Best, AnEvenHallPrefersTheUpperOfTheTwoMiddleRows) {
+  Fixture f(4, 5);  // rows A..D: B and C are equally central, lower row index wins
+  const auto r = f.booking->holdBest("s", "ann", 1);
+  EXPECT_TRUE(r.seats == (Seats{"B3"}));
+}
+
+TEST(Best, TheRowComesBeforeTheSeatPosition) {
+  Fixture f;
+  // Occupy the dead centre of the middle row; a worse seat in the middle row still beats a perfect seat elsewhere.
+  f.booking->hold("s", "x", {"C5"});
+  const auto r = f.booking->holdBest("s", "ann", 1);
+  EXPECT_TRUE(r.seats == (Seats{"C4"}));
+}
+
+TEST(Best, FullMiddleRowMovesToTheNextClosestRowsInOrder) {
+  Fixture f;
+  f.booking->hold("s", "x", {"C1", "C2", "C3", "C4", "C5", "C6", "C7", "C8", "C9"});
+  EXPECT_TRUE(f.booking->holdBest("s", "ann", 1).seats == (Seats{"B5"}));  // B and D tie, lower row wins
+  EXPECT_TRUE(f.booking->holdBest("s", "bob", 1).seats == (Seats{"D5"}));  // rows B and D tie again: D5 is centred
+}
+
+TEST(Best, RunsNeverCrossAHeldSeat) {
+  Fixture f(1, 9);
+  f.booking->hold("s", "x", {"A5"});
+  const auto r = f.booking->holdBest("s", "ann", 4);
+  EXPECT_TRUE(r.status == Status::Ok);
+  // Runs of four: A1..A4 and A6..A9 are equally far from the middle seat, so the lower first seat wins.
+  EXPECT_TRUE(r.seats == (Seats{"A1", "A2", "A3", "A4"}));
+}
+
+TEST(Best, ARowThatCannotFitTheGroupIsSkippedEvenIfItIsMoreCentral) {
+  Fixture f;
+  f.booking->hold("s", "x", {"C3", "C7"});  // middle row: runs of at most 3 (C4..C6)
+  const auto r = f.booking->holdBest("s", "ann", 4);
+  EXPECT_TRUE(r.status == Status::Ok);
+  EXPECT_TRUE(r.seats == (Seats{"B3", "B4", "B5", "B6"}));
+}
+
+TEST(Best, ExpiredHoldsDoNotBlockTheBestSeats) {
+  Fixture f;
+  f.booking->hold("s", "x", {"C5"});
+  f.clock->advance(100);
+  EXPECT_TRUE(f.booking->holdBest("s", "ann", 1).seats == (Seats{"C5"}));
+}
+
+TEST(Best, ConfirmedSeatsAreNeverOffered) {
+  Fixture f;
+  const auto x = f.booking->hold("s", "x", {"C5"});
+  f.booking->confirm(x.id, "x");
+  EXPECT_TRUE(f.booking->holdBest("s", "ann", 1).seats == (Seats{"C4"}));
+}
+
+TEST(Best, ABestHoldBehavesLikeAnyOtherHold) {
+  Fixture f;
+  const auto r = f.booking->holdBest("s", "ann", 2);
+  EXPECT_TRUE(f.booking->confirm(r.id, "bob") == Status::WrongUser);
+  EXPECT_TRUE(f.booking->confirm(r.id, "ann") == Status::Ok);
+  for (const std::string& seat : r.seats) EXPECT_TRUE(f.state(seat) == SeatState::Booked);
+  const auto again = f.booking->holdBest("s", "bob", 2);
+  EXPECT_NE(again.id, r.id);
+}
+
+TEST(Best, NoRoomIsSeatUnavailableAndChangesNothing) {
+  Fixture f(1, 4);
+  f.booking->hold("s", "x", {"A2"});
+  const auto r = f.booking->holdBest("s", "ann", 3);
+  EXPECT_TRUE(r.status == Status::SeatUnavailable);
+  EXPECT_EQ(r.id, tix::kNoHold);
+  EXPECT_TRUE(r.seats.empty());
+  EXPECT_EQ(f.booking->availableSeats("s").size(), static_cast<std::size_t>(3));
+  EXPECT_TRUE(f.booking->holdBest("s", "ann", 5).status == Status::SeatUnavailable);
+}
+
+TEST(Best, InvalidRequestsAreRefused) {
+  Fixture f;
+  EXPECT_TRUE(f.booking->holdBest("nope", "ann", 1).status == Status::UnknownShow);
+  EXPECT_TRUE(f.booking->holdBest("s", "", 1).status == Status::InvalidRequest);
+  EXPECT_TRUE(f.booking->holdBest("s", "ann", 0).status == Status::InvalidRequest);
+  EXPECT_TRUE(f.booking->holdBest("s", "ann", -2).status == Status::InvalidRequest);
+}
+
+TEST(Best, FillingTheHallByPairsLeavesTheEndSeatsAloneAndNeverDoubleBooks) {
+  Fixture f(2, 4);
+  int placed = 0;
+  for (int i = 0; i < 10; ++i) {
+    if (f.booking->holdBest("s", "u" + std::to_string(i), 2).status == Status::Ok) ++placed;
+  }
+  // Each row takes one pair in the middle (A2 A3, B2 B3); the single seats left at the ends can never hold a pair.
+  EXPECT_EQ(placed, 2);
+  EXPECT_TRUE(f.booking->availableSeats("s") == (Seats{"A1", "A4", "B1", "B4"}));
+}
+21:T147c,#include <memory>
+#include <string>
+#include <vector>
+
+#include "api_storm2.h"
+#include "bp_test.h"
+
+using tix::SeatState;
+using tix::Status;
+using Seats = std::vector<std::string>;
+
+namespace {
+class FakeClock : public tix::Clock {
+ public:
+  long long now() const override { return now_; }
+  void advance(long long ticks) { now_ += ticks; }
+
+ private:
+  long long now_ = 1000;
+};
+
+// Holds last 100 ticks, each user may use 4 seats per show.
+struct Fixture {
+  std::shared_ptr<FakeClock> clock = std::make_shared<FakeClock>();
+  std::unique_ptr<tix::LimitedBooking> booking = tix::makeLimitedBooking(clock, 100, 4);
+  Fixture() {
+    booking->addShow("s1", 4, 10);
+    booking->addShow("s2", 4, 10);
+  }
+};
+}  // namespace
+
+TEST(Setup, TheFactoryRefusesBadArguments) {
+  const auto clock = std::make_shared<FakeClock>();
+  EXPECT_TRUE(tix::makeLimitedBooking(nullptr, 100, 4) == nullptr);
+  EXPECT_TRUE(tix::makeLimitedBooking(clock, 0, 4) == nullptr);
+  EXPECT_TRUE(tix::makeLimitedBooking(clock, 100, 0) == nullptr);
+  EXPECT_TRUE(tix::makeLimitedBooking(clock, 100, 1) != nullptr);
+}
+
+TEST(Limit, AUserMayHoldUpToTheLimitAndNoMore) {
+  Fixture f;
+  EXPECT_TRUE(f.booking->hold("s1", "ann", {"A1", "A2", "A3", "A4"}).status == Status::Ok);
+  EXPECT_EQ(f.booking->seatsInUse("s1", "ann"), 4);
+  const auto r = f.booking->hold("s1", "ann", {"B1"});
+  EXPECT_TRUE(r.status == Status::OverLimit);
+  EXPECT_EQ(r.id, tix::kNoHold);
+  EXPECT_TRUE(*f.booking->seatState("s1", "B1") == SeatState::Available);
+}
+
+TEST(Limit, TheLimitCoversSeveralHoldsAtOnce) {
+  Fixture f;
+  f.booking->hold("s1", "ann", {"A1", "A2"});
+  f.booking->hold("s1", "ann", {"A3"});
+  EXPECT_TRUE(f.booking->hold("s1", "ann", {"A4", "A5"}).status == Status::OverLimit);
+  EXPECT_TRUE(f.booking->hold("s1", "ann", {"A4"}).status == Status::Ok);
+}
+
+TEST(Limit, AGroupLargerThanTheLimitIsRefusedEvenInAnEmptyHall) {
+  Fixture f;
+  EXPECT_TRUE(f.booking->hold("s1", "ann", {"A1", "A2", "A3", "A4", "A5"}).status == Status::OverLimit);
+  EXPECT_TRUE(f.booking->holdBest("s1", "ann", 5).status == Status::OverLimit);
+  EXPECT_EQ(f.booking->availableSeats("s1").size(), static_cast<std::size_t>(40));
+}
+
+TEST(Limit, ConfirmedSeatsKeepCountingTowardsTheLimit) {
+  Fixture f;
+  const auto r = f.booking->hold("s1", "ann", {"A1", "A2", "A3"});
+  f.booking->confirm(r.id, "ann");
+  EXPECT_EQ(f.booking->seatsInUse("s1", "ann"), 3);
+  EXPECT_TRUE(f.booking->hold("s1", "ann", {"B1", "B2"}).status == Status::OverLimit);
+  EXPECT_TRUE(f.booking->hold("s1", "ann", {"B1"}).status == Status::Ok);
+  f.clock->advance(100000);
+  EXPECT_EQ(f.booking->seatsInUse("s1", "ann"), 3);
+}
+
+TEST(Limit, ExpiredHoldsStopCounting) {
+  Fixture f;
+  f.booking->hold("s1", "ann", {"A1", "A2", "A3", "A4"});
+  f.clock->advance(99);
+  EXPECT_EQ(f.booking->seatsInUse("s1", "ann"), 4);
+  EXPECT_TRUE(f.booking->hold("s1", "ann", {"B1"}).status == Status::OverLimit);
+  f.clock->advance(1);
+  EXPECT_EQ(f.booking->seatsInUse("s1", "ann"), 0);
+  EXPECT_TRUE(f.booking->hold("s1", "ann", {"B1", "B2", "B3", "B4"}).status == Status::Ok);
+}
+
+TEST(Limit, ReleasedHoldsStopCounting) {
+  Fixture f;
+  const auto r = f.booking->hold("s1", "ann", {"A1", "A2", "A3", "A4"});
+  f.booking->release(r.id, "ann");
+  EXPECT_EQ(f.booking->seatsInUse("s1", "ann"), 0);
+  EXPECT_TRUE(f.booking->hold("s1", "ann", {"C1", "C2", "C3", "C4"}).status == Status::Ok);
+}
+
+TEST(Limit, ARefusedRequestDoesNotCount) {
+  Fixture f;
+  f.booking->hold("s1", "bob", {"A1"});
+  EXPECT_TRUE(f.booking->hold("s1", "ann", {"A1", "A2"}).status == Status::SeatUnavailable);
+  EXPECT_EQ(f.booking->seatsInUse("s1", "ann"), 0);
+  EXPECT_TRUE(f.booking->hold("s1", "ann", {"A2", "A3", "A4", "A5"}).status == Status::Ok);
+}
+
+TEST(Limit, EachShowAndEachUserHasItsOwnAllowance) {
+  Fixture f;
+  f.booking->hold("s1", "ann", {"A1", "A2", "A3", "A4"});
+  EXPECT_TRUE(f.booking->hold("s2", "ann", {"A1", "A2", "A3", "A4"}).status == Status::Ok);
+  EXPECT_TRUE(f.booking->hold("s1", "bob", {"B1", "B2", "B3", "B4"}).status == Status::Ok);
+  EXPECT_EQ(f.booking->seatsInUse("s2", "bob"), 0);
+  EXPECT_EQ(f.booking->seatsInUse("nope", "ann"), 0);
+}
+
+TEST(Limit, TheBestSeatSearchObeysTheLimitToo) {
+  Fixture f;
+  f.booking->hold("s1", "ann", {"A1", "A2"});
+  EXPECT_TRUE(f.booking->holdBest("s1", "ann", 3).status == Status::OverLimit);
+  const auto r = f.booking->holdBest("s1", "ann", 2);
+  EXPECT_TRUE(r.status == Status::Ok);
+  EXPECT_EQ(f.booking->seatsInUse("s1", "ann"), 4);
+}
+
+TEST(Limit, TheLimitIsCheckedBeforeAvailabilityButAfterTheSeatNames) {
+  Fixture f;
+  f.booking->hold("s1", "bob", {"A1"});
+  EXPECT_TRUE(f.booking->hold("s1", "ann", {"A1", "A2", "A3", "A4", "A5"}).status == Status::OverLimit);
+  EXPECT_TRUE(f.booking->hold("s1", "ann", {"A1", "A2", "A3", "A4", "Z9"}).status == Status::UnknownSeat);
+  EXPECT_TRUE(f.booking->holdBest("s1", "ann", 0).status == Status::InvalidRequest);
+}
+
+TEST(Limit, OlderRulesStillHold) {
+  Fixture f;
+  const auto r = f.booking->hold("s1", "ann", {"A1"});
+  f.clock->advance(100);
+  EXPECT_TRUE(f.booking->confirm(r.id, "ann") == Status::HoldExpired);
+  EXPECT_TRUE(f.booking->hold("s1", "bob", {"A1"}).status == Status::Ok);
+  EXPECT_TRUE(f.booking->holdBest("s1", "cat", 1).status == Status::Ok);
+}
+22:T10a0,#pragma once
+#include <memory>
+#include <set>
+#include <string>
+#include <utility>
+#include <vector>
+
+#include "api_storm2.h"
+#include "inventory.h"
+#include "seat_selector.h"
+#include "usage_policy.h"
+
+// The public face. It validates a request, asks the policy and the inventory, and sequences the answer. It holds no
+// rule of its own about time, seat taste or limits.
+class BookingImpl : public tix::LimitedBooking {
+ public:
+  BookingImpl(std::shared_ptr<tix::Clock> clock, long long holdTicks, std::unique_ptr<UsagePolicy> usage)
+      : inventory_(HoldWindow(std::move(clock), holdTicks)), usage_(std::move(usage)) {}
+
+  bool addShow(const std::string& show, int rows, int seatsPerRow) override {
+    if (show.empty() || rows < 1 || rows > 26 || seatsPerRow < 1 || seatsPerRow > 50) return false;
+    return inventory_.addShow(show, Layout(rows, seatsPerRow));
+  }
+
+  tix::HoldResult hold(const std::string& show, const std::string& user, const std::vector<std::string>& names) override {
+    const Layout* layout = inventory_.layoutOf(show);
+    if (layout == nullptr) return refuse(tix::Status::UnknownShow);
+    if (user.empty() || names.empty()) return refuse(tix::Status::InvalidRequest);
+    std::vector<int> seats;
+    std::set<int> distinct;
+    for (const std::string& name : names) {
+      const auto index = layout->parse(name);
+      if (index.has_value() && !distinct.insert(*index).second) return refuse(tix::Status::InvalidRequest);
+      if (index.has_value()) seats.push_back(*index);
+    }
+    if (seats.size() != names.size()) return refuse(tix::Status::UnknownSeat);
+    if (!usage_->allows(inventory_.seatsInUse(show, user), static_cast<int>(seats.size()))) {
+      return refuse(tix::Status::OverLimit);
+    }
+    for (const int seat : seats) {
+      if (!inventory_.isFree(show, seat)) return refuse(tix::Status::SeatUnavailable);
+    }
+    return grant(show, user, seats, *layout);
+  }
+
+  tix::HoldResult holdBest(const std::string& show, const std::string& user, int count) override {
+    const Layout* layout = inventory_.layoutOf(show);
+    if (layout == nullptr) return refuse(tix::Status::UnknownShow);
+    if (user.empty() || count < 1) return refuse(tix::Status::InvalidRequest);
+    if (!usage_->allows(inventory_.seatsInUse(show, user), count)) return refuse(tix::Status::OverLimit);
+    const auto chosen = selector_.choose(*layout, [&](int seat) { return inventory_.isFree(show, seat); }, count);
+    if (!chosen.has_value()) return refuse(tix::Status::SeatUnavailable);
+    return grant(show, user, *chosen, *layout);
+  }
+
+  tix::Status confirm(tix::HoldId hold, const std::string& user) override { return inventory_.confirm(hold, user); }
+  tix::Status release(tix::HoldId hold, const std::string& user) override { return inventory_.release(hold, user); }
+
+  std::optional<tix::SeatState> seatState(const std::string& show, const std::string& seat) const override {
+    const Layout* layout = inventory_.layoutOf(show);
+    if (layout == nullptr) return std::nullopt;
+    const auto index = layout->parse(seat);
+    if (!index.has_value()) return std::nullopt;
+    return inventory_.stateOf(show, *index);
+  }
+
+  std::vector<std::string> availableSeats(const std::string& show) const override {
+    std::vector<std::string> free;
+    const Layout* layout = inventory_.layoutOf(show);
+    if (layout == nullptr) return free;
+    for (int seat = 0; seat < layout->size(); ++seat) {
+      if (inventory_.isFree(show, seat)) free.push_back(layout->nameOf(seat));
+    }
+    return free;
+  }
+
+  int seatsInUse(const std::string& show, const std::string& user) const override {
+    return inventory_.seatsInUse(show, user);
+  }
+
+ private:
+  static tix::HoldResult refuse(tix::Status status) { return tix::HoldResult{status, tix::kNoHold, {}}; }
+
+  tix::HoldResult grant(const std::string& show, const std::string& user, const std::vector<int>& seats,
+                        const Layout& layout) {
+    tix::HoldResult result;
+    result.status = tix::Status::Ok;
+    result.id = inventory_.place(show, user, seats);
+    for (const int seat : seats) result.seats.push_back(layout.nameOf(seat));
+    return result;
+  }
+
+  Inventory inventory_;
+  std::unique_ptr<UsagePolicy> usage_;
+  CentreFirstSelector selector_;
+};
+23:Teb8,#pragma once
+#include <map>
+#include <string>
+#include <utility>
+#include <vector>
+
+#include "api.h"
+#include "hold_window.h"
+#include "layout.h"
+
+// Who holds or owns each seat, and the holds themselves. Seat state is derived, never stored as "held": a slot
+// only remembers the id of the last hold that covered it, and the hold's expiry says whether that still counts.
+// Nothing needs a timer, and an expired hold frees its seats just by the clock moving on.
+class Inventory {
+ public:
+  explicit Inventory(HoldWindow window) : window_(std::move(window)) {}
+
+  bool addShow(const std::string& id, Layout layout) {
+    return shows_.emplace(id, Show{layout, std::vector<Slot>(static_cast<std::size_t>(layout.size()))}).second;
+  }
+
+  const Layout* layoutOf(const std::string& id) const {
+    const auto it = shows_.find(id);
+    return it == shows_.end() ? nullptr : &it->second.layout;
+  }
+
+  tix::SeatState stateOf(const std::string& show, int seat) const {
+    const Slot& slot = shows_.at(show).slots[static_cast<std::size_t>(seat)];
+    if (slot.booked) return tix::SeatState::Booked;
+    return isHeld(slot) ? tix::SeatState::Held : tix::SeatState::Available;
+  }
+
+  bool isFree(const std::string& show, int seat) const { return stateOf(show, seat) == tix::SeatState::Available; }
+
+  // The caller has checked that every seat exists and is free.
+  tix::HoldId place(const std::string& show, const std::string& user, const std::vector<int>& seats) {
+    const tix::HoldId id = nextId_++;
+    holds_[id] = Hold{show, user, seats, window_.expiryFromNow(), false};
+    Show& target = shows_.at(show);
+    for (const int seat : seats) target.slots[static_cast<std::size_t>(seat)].holdId = id;
+    return id;
+  }
+
+  tix::Status confirm(tix::HoldId id, const std::string& user) { return settle(id, user, true); }
+  tix::Status release(tix::HoldId id, const std::string& user) { return settle(id, user, false); }
+
+  int seatsInUse(const std::string& show, const std::string& user) const {
+    const auto it = shows_.find(show);
+    if (it == shows_.end()) return 0;
+    int used = 0;
+    for (const Slot& slot : it->second.slots) {
+      if (slot.booked && slot.bookedBy == user) ++used;
+      else if (!slot.booked && isHeld(slot) && holds_.at(slot.holdId).user == user) ++used;
+    }
+    return used;
+  }
+
+ private:
+  struct Slot {
+    tix::HoldId holdId = tix::kNoHold;
+    bool booked = false;
+    std::string bookedBy;
+  };
+  struct Show {
+    Layout layout;
+    std::vector<Slot> slots;
+  };
+  struct Hold {
+    std::string show;
+    std::string user;
+    std::vector<int> seats;
+    long long expiresAt = 0;
+    bool spent = false;  // confirmed or released
+  };
+
+  bool isHeld(const Slot& slot) const {
+    if (slot.holdId == tix::kNoHold) return false;
+    const Hold& hold = holds_.at(slot.holdId);
+    return !hold.spent && window_.isLive(hold.expiresAt);
+  }
+
+  // Confirm and release share every check; they differ only in what happens to the seats.
+  tix::Status settle(tix::HoldId id, const std::string& user, bool book) {
+    const auto it = holds_.find(id);
+    if (it == holds_.end() || it->second.spent) return tix::Status::UnknownHold;
+    Hold& hold = it->second;
+    if (hold.user != user) return tix::Status::WrongUser;
+    if (!window_.isLive(hold.expiresAt)) return tix::Status::HoldExpired;
+    Show& show = shows_.at(hold.show);
+    for (const int seat : hold.seats) {
+      Slot& slot = show.slots[static_cast<std::size_t>(seat)];
+      slot.holdId = tix::kNoHold;
+      if (book) {
+        slot.booked = true;
+        slot.bookedBy = user;
+      }
+    }
+    hold.spent = true;
+    return tix::Status::Ok;
+  }
+
+  HoldWindow window_;
+  std::map<std::string, Show> shows_;
+  std::map<tix::HoldId, Hold> holds_;
+  tix::HoldId nextId_ = 1;
+};
+24:T564,#pragma once
+#include <optional>
+#include <string>
+
+// The shape of one hall and the naming of its seats. It knows nothing about who holds what.
+// Seats are numbered row-major from 0; "A1" is index 0.
+class Layout {
+ public:
+  Layout(int rows, int seatsPerRow) : rows_(rows), seatsPerRow_(seatsPerRow) {}
+
+  int rows() const { return rows_; }
+  int seatsPerRow() const { return seatsPerRow_; }
+  int size() const { return rows_ * seatsPerRow_; }
+  int indexOf(int row, int seat) const { return row * seatsPerRow_ + seat; }
+
+  // Parses "C12" into an index. Anything malformed or out of range gives an empty optional.
+  std::optional<int> parse(const std::string& name) const {
+    if (name.size() < 2 || name.size() > 3) return std::nullopt;
+    const int row = name[0] - 'A';
+    if (row < 0 || row >= rows_) return std::nullopt;
+    if (name[1] == '0') return std::nullopt;
+    int number = 0;
+    for (std::size_t i = 1; i < name.size(); ++i) {
+      if (name[i] < '0' || name[i] > '9') return std::nullopt;
+      number = number * 10 + (name[i] - '0');
+    }
+    if (number < 1 || number > seatsPerRow_) return std::nullopt;
+    return indexOf(row, number - 1);
+  }
+
+  std::string nameOf(int index) const {
+    return std::string(1, static_cast<char>('A' + index / seatsPerRow_)) + std::to_string(index % seatsPerRow_ + 1);
+  }
+
+ private:
+  int rows_;
+  int seatsPerRow_;
+};
+25:T952,#pragma once
+#include <cstdlib>
+#include <functional>
+#include <optional>
+#include <vector>
+
+#include "layout.h"
+
+// Chooses seats for "pick the best for me". A Strategy: the rule is data about taste, and it will change.
+class SeatSelector {
+ public:
+  virtual ~SeatSelector() = default;
+  virtual std::optional<std::vector<int>> choose(const Layout& layout, const std::function<bool(int)>& isFree,
+                                                 int count) const = 0;
+};
+
+// Closest row to the middle of the hall, then the run centred nearest the middle of the row, then lowest row, then
+// lowest seat. Distances are doubled so that the half-seat cases need no floating point.
+class CentreFirstSelector : public SeatSelector {
+ public:
+  std::optional<std::vector<int>> choose(const Layout& layout, const std::function<bool(int)>& isFree,
+                                         int count) const override {
+    std::optional<Candidate> best;
+    for (int row = 0; row < layout.rows(); ++row) {
+      for (int first = 0; first + count <= layout.seatsPerRow(); ++first) {
+        if (!runIsFree(layout, isFree, row, first, count)) continue;
+        const Candidate candidate{std::abs(2 * row - (layout.rows() - 1)),
+                                  std::abs(2 * first + (count - 1) - (layout.seatsPerRow() - 1)), row, first};
+        if (!best.has_value() || better(candidate, *best)) best = candidate;
+      }
+    }
+    if (!best.has_value()) return std::nullopt;
+    std::vector<int> seats;
+    for (int i = 0; i < count; ++i) seats.push_back(layout.indexOf(best->row, best->first + i));
+    return seats;
+  }
+
+ private:
+  struct Candidate {
+    int rowDistance;
+    int centreDistance;
+    int row;
+    int first;
+  };
+
+  // The house rule as one lexicographic order: row distance, centre distance, row, first seat.
+  static bool better(const Candidate& a, const Candidate& b) {
+    if (a.rowDistance != b.rowDistance) return a.rowDistance < b.rowDistance;
+    if (a.centreDistance != b.centreDistance) return a.centreDistance < b.centreDistance;
+    if (a.row != b.row) return a.row < b.row;
+    return a.first < b.first;
+  }
+
+  static bool runIsFree(const Layout& layout, const std::function<bool(int)>& isFree, int row, int first, int count) {
+    for (int i = 0; i < count; ++i) {
+      if (!isFree(layout.indexOf(row, first + i))) return false;
+    }
+    return true;
+  }
+};
+c:["$","$L1a",null,{"bundle":{"id":"ticket-booking","title":"Movie ticket booking with seat holds","level":"Senior","parMinutes":60,"patterns":["Strategy","State"],"requirements":[{"id":"R-hold","text":"hold(show, user, seats) reserves every listed seat or none. Checks in order: UnknownShow, InvalidRequest (empty user, no seats, a seat twice), UnknownSeat (strict names: row letter then a number without leading zero, inside the hall), SeatUnavailable. A seat is free when it is not booked and not under a live hold. addShow refuses an existing id and out-of-range sizes. makeBooking returns nullptr for a null clock or a non-positive hold duration.","phase":"base","hidden":true},{"id":"R-expiry","text":"A hold placed at tick s with duration h is live while now() < s + h and expired from s + h on. An expired hold frees its seats everywhere (seatState, availableSeats, a new hold) without anyone sweeping it, and a new holder gets a full window of their own.","phase":"base","hidden":true},{"id":"R-confirm","text":"confirm and release take a hold id and the user. Failures in order: UnknownHold (never issued, or already confirmed or released), WrongUser, HoldExpired (an expired hold stays expired when asked again). A late confirm never touches seats someone else now holds. Confirm books the seats for good; release frees them at once; each spends the id.","phase":"base","hidden":true},{"id":"R-best","text":"Storm 1: holdBest(show, user, count) holds count adjacent free seats in one row, chosen by: row closest to the middle of the hall, then run centred nearest the middle of the row, then lower row, then lower first seat. SeatUnavailable when no row has such a run, InvalidRequest for an empty user or a count below one.","phase":"storm1","hidden":true},{"id":"R-limit","text":"Storm 2: makeLimitedBooking(clock, holdTicks, maxSeatsPerUser). Seats in use by a user in a show are the seats Booked by them plus the seats under their live holds. hold and holdBest return OverLimit, changing nothing, when in-use plus requested exceeds the limit; the check comes after the seat names and before availability. seatsInUse reports the count.","phase":"storm2","hidden":true}],"brief":"# Movie ticket booking\n\nYou are writing the booking core for a cinema chain's website. A customer picks seats for a show, has a few minutes to pay, and either completes the booking or loses the seats back to everyone else.\n\nWhat you know so far:\n\n- A show has a hall laid out as rows and numbered seats.\n- Two people must never end up with the same seat.\n- Choosing seats and paying are two steps, so a chosen seat must stay reserved for a while without being sold.\n- The system must not read the system clock itself: time arrives through a `Clock` the caller supplies, so a test (or a replay) controls it.\n\nYour task: design and implement it behind the `tix::Booking` interface in `api.h`. The hidden tests call only that interface. Ask the interviewer questions first: the brief is deliberately incomplete, and \"what exactly happens at the moment a hold runs out?\" is where most first drafts go wrong.\n","editorial":"$1b","clarify":[{"id":"q-seats","text":"How are seats identified, and can one request name several seats? What if one of them is taken?","answer":"A show has a hall of up to 26 rows (letters) of up to 50 seats (numbers): A1, C12. Names are strict: no lowercase, no leading zeros, nothing outside the hall (that is UnknownSeat). A request lists one or more seats, all in one show. It is all or nothing: if any listed seat is taken, nothing is held and the caller is told SeatUnavailable. Checks run in a fixed order: UnknownShow, InvalidRequest (empty user, no seats, a seat twice), UnknownSeat, SeatUnavailable.","reveals":["R-hold"],"quality":"essential"},{"id":"q-hold-time","text":"How long does a hold last and exactly when does it end? Who frees the seats when it does?","answer":"The duration is fixed when the system is created and time comes from an injected Clock, in whole ticks. A hold placed at tick s with duration h is live while now < s + h and over from s + h onwards. Nobody frees the seats: once the hold is over they simply count as available everywhere, and a new customer gets a full window of their own. The expiry must not need a timer.","reveals":["R-expiry"],"quality":"essential"},{"id":"q-confirm","text":"What does the customer do at the end? What if they pay late, pay twice, or someone else pays for their hold?","answer":"confirm(holdId, user) books the seats for good; release(holdId, user) gives them up. Failures are checked in order: UnknownHold (never issued or already used), WrongUser, HoldExpired. An expired hold stays expired when asked again. A late confirm must not take seats that someone else holds now. A booked seat is never freed (no cancellations here).","reveals":["R-confirm"],"quality":"essential"},{"id":"q-best","text":"Will customers ask for 'the best seats for four people' instead of naming seats?","answer":"Yes, that is the next feature: they will give a count and want seats side by side in one row, as central as possible. The product team will specify the exact preference order when it is time.","reveals":["R-best"],"quality":"essential"},{"id":"q-limit","text":"Is there any protection against one person grabbing all the good seats?","answer":"Yes, a per-user cap per show is coming. Think about what counts towards it. Details arrive with the change.","reveals":["R-limit"],"quality":"essential"},{"id":"q-ids","text":"What do hold ids look like? Can they repeat?","answer":"Positive numbers, unique, never reused. The tests only check that they are positive and different.","reveals":[],"quality":"useful"},{"id":"q-thread","text":"Many customers book at once. Does this need to be thread safe?","answer":"Not for the tests, which are single-threaded, but the whole point of a hold is contention. Say what you would do (one lock per show, with the check-and-place as one critical section) but do not build it.","reveals":[],"quality":"useful"},{"id":"q-memory","text":"Do expired holds need to be removed from memory?","answer":"Not for the tests. In production you would purge them after a grace period; say how, and what a customer then sees when confirming an old id.","reveals":[],"quality":"useful"},{"id":"q-cancel","text":"Can a booked ticket be cancelled and refunded?","answer":"Not in this problem. It is a natural extension, but it needs a payment story first.","reveals":[],"quality":"useful"},{"id":"q-pay","text":"Do I model payment, pricing or tickets with QR codes?","answer":"No. Payment happens elsewhere; this system only decides who may have which seat.","reveals":[],"quality":"noise"},{"id":"q-db","text":"Which database should I use for the seat inventory?","answer":"None here: it is an in-memory component and the tests build it from scratch. How you would persist it is a good discussion for the end.","reveals":[],"quality":"noise"},{"id":"q-wheel","text":"Do I need wheelchair spaces or couple seats?","answer":"No. Seats are all equal here; special seat types would be a later change.","reveals":[],"quality":"noise"}],"rubric":[{"id":"res-facade","text":"Exposes the public operations, validates a request in the documented order and sequences the collaborators","phase":"base","owners":["BookingImpl","BookingService","TicketBooking","BookingFacade","BookingSystem"]},{"id":"res-layout","text":"Knows the hall's shape and how seats are named; parses names strictly","phase":"base","owners":["Layout","Hall","SeatMap","SeatGrid","SeatNaming"]},{"id":"res-window","text":"Owns the clock and the one definition of 'a hold is live'; every free-seat, confirm and usage question asks it","phase":"base","owners":["HoldWindow","HoldPolicy","HoldClock","ExpiryRule","HoldTimer"]},{"id":"res-inventory","text":"Records which seats are booked or held and by whom, derives seat state, and settles confirm and release in one place","phase":"base","owners":["Inventory","SeatInventory","SeatLedger","HoldBook","ShowSeats"]},{"id":"res-select","text":"Chooses seats for a 'best seats' request by a replaceable rule","phase":"storm1","owners":["SeatSelector","SeatChooser","SeatPicker","SelectionStrategy","CentreFirstSelector"]},{"id":"res-limit","text":"Decides whether a user may take more seats, from what they already use","phase":"storm2","owners":["UsagePolicy","SeatLimit","UserLimit","LimitPolicy","QuotaPolicy"]}],"followups":[{"level":"SDE2","question":"Why can two customers never end up with the same seat in your design, and where exactly is that guaranteed?","answer":"A seat is sold only through confirm, and confirm succeeds only for a hold that is live and not yet spent; a hold can only be placed on seats that are free, meaning not booked and not under another live hold. Both checks and the state change happen in one place (the inventory), so there is one function to reason about and test. In a threaded service that function must run under one lock per show (or an atomic compare-and-set on the seat), otherwise two threads can both see 'free' and both place a hold."},{"level":"SDE2","question":"Why does a hold need an expiry at all, and why is it derived from the clock rather than freed by a timer?","answer":"Without an expiry an abandoned checkout blocks a seat forever, which is the worst failure for the business: empty seats that look sold. Deriving 'held' from (hold, now) means the state is always correct when asked, needs no thread, and is deterministic under a fake clock. A timer would add a thread, a race with confirm, and a test that sleeps. Timers are still useful for housekeeping (purging old hold records), where being late costs only memory."},{"level":"Senior","question":"Walk me through the race between a late confirm and a new hold on the same seat.","answer":"Customer A's hold expires at tick t. Customer B holds the same seat at t, and A pays at t+1. A's confirm finds A's hold (expired), reports HoldExpired and must not touch the seat, because the seat now carries B's hold id. In the reference the seat remembers only the last hold id and the expiry decides what that means; confirm checks expiry before changing any seat. The bad design that skips the check writes 'booked by A' over B's live hold, and B's later confirm either fails or double-books. The same shape appears in any lease or lock with a fencing token: stale owners must be refused at the point of use."},{"level":"Senior","question":"What do the three failure statuses of confirm tell the caller, and why that order?","answer":"UnknownHold means the id is not an active reservation (never issued, or already used): nothing to retry. WrongUser means the id exists but belongs to someone else: a bug or an attack, and it must not reveal whether the hold has expired. HoldExpired means a real owner was too late and should start again. Checking ownership before expiry keeps strangers from learning anything about other customers' holds; checking existence first keeps the error cheap. The order is part of the API contract, which is why the tests pin it."},{"level":"Senior","question":"How would you make this safe for thousands of concurrent customers?","answer":"Partition by show: each show has its own lock (or runs on a single-threaded executor keyed by show), because a request touches one show only. Inside it the check-then-place sequence is one critical section; reads of seat state can use a shared lock or copy-on-write snapshots. Keep hold records in a map guarded by the same lock, or shard it by hold id with the show id embedded in the id so a confirm finds its lock without a global table. Avoid holding the lock while calling payment. For a popular launch the show lock is the hot spot, which is where queueing (a virtual waiting room) beats contention."},{"level":"Senior","question":"The 'best seats' rule changes every quarter. How does your design absorb that, and what tests would you write?","answer":"The rule lives in a SeatSelector Strategy that sees the hall's shape and a predicate 'is this seat free', and returns seat indexes or nothing. Changing the taste (prefer aisle, avoid the front rows, keep a gap for accessibility) replaces one class and leaves holds, expiry and inventory alone. Test the rule as a pure function on small halls, including ties (even and odd groups, even and odd halls), fragmentation (runs that cannot fit), and held, booked and expired seats; then one integration test that a best-seat hold behaves like any other hold."},{"level":"Staff","question":"Design the production version: 50 million users, a popular premiere, a hold window of ten minutes. What changes?","answer":"In-memory state becomes a replicated store with a compare-and-set on the seat row (for example a conditional update keyed by show and seat, writing the hold id and expiry), so correctness lives in the database and the application servers are stateless. Hold expiry is stored as an absolute time and checked on read, with a sweeper purging old records; clocks must be one source (the database's) or the skew is a double-sale window. A premiere is a thundering herd on one show: put a queue in front, admit users at the rate the seat map can absorb, and show a seat map that is allowed to be slightly stale because the hold request is the real check. Idempotency keys on hold and confirm make retries safe; payment confirmation arrives asynchronously and can arrive after the hold expired, which needs an explicit refund or 'extend while paying' state."},{"level":"Staff","question":"Should a hold be allowed to extend while the customer is paying? How would you model it and what could go wrong?","answer":"Yes in practice, because payment providers can take minutes and an expiry in the middle of a card authorisation is the nastiest failure (money taken, seat gone). Model it as a state: Active, then Paying (the expiry is pushed once, to a bounded maximum), then Confirmed or Released. Entering Paying is itself a checked transition that fails if the hold already expired. Risks: unbounded extension lets a customer hoard seats, so cap extension and count it towards the per-user limit; a webhook that arrives after the extended expiry needs a refund path; and the state machine should be a table of allowed transitions so that illegal ones are impossible to write rather than checked in scattered ifs."}],"apiHeader":"$1c","phaseApis":{"storm1":"$1d","storm2":"$1e"},"phases":["base","storm1","storm2"],"tests":{"base":[{"path":"tix_base.cpp","content":"$1f"}],"storm1":[{"path":"tix_storm1.cpp","content":"$20"}],"storm2":[{"path":"tix_storm2.cpp","content":"$21"}]},"reference":[{"path":"booking_impl.h","content":"$22"},{"path":"hold_window.h","content":"#pragma once\n#include <memory>\n#include <utility>\n\n#include \"api.h\"\n\n// Owns the clock and the one definition of \"a hold is live\". Every question about whether a hold still counts,\n// whether a seat is free and whether a confirm is in time goes through isLive().\nclass HoldWindow {\n public:\n  HoldWindow(std::shared_ptr<tix::Clock> clock, long long ticks) : clock_(std::move(clock)), ticks_(ticks) {}\n\n  // The tick from which a hold placed now no longer counts.\n  long long expiryFromNow() const { return clock_->now() + ticks_; }\n\n  // Live while now < expiresAt; expired from the expiry tick itself.\n  bool isLive(long long expiresAt) const { return clock_->now() < expiresAt; }\n\n private:\n  std::shared_ptr<tix::Clock> clock_;\n  long long ticks_;\n};\n"},{"path":"inventory.h","content":"$23"},{"path":"layout.h","content":"$24"},{"path":"seat_selector.h","content":"$25"},{"path":"service.cpp","content":"#include \"booking_impl.h\"\n\nstd::unique_ptr<tix::Booking> tix::makeBooking(std::shared_ptr<Clock> clock, long long holdTicks) {\n  if (clock == nullptr || holdTicks <= 0) return nullptr;\n  return std::make_unique<BookingImpl>(std::move(clock), holdTicks, std::make_unique<NoLimit>());\n}\n\nstd::unique_ptr<tix::SmartBooking> tix::makeSmartBooking(std::shared_ptr<Clock> clock, long long holdTicks) {\n  if (clock == nullptr || holdTicks <= 0) return nullptr;\n  return std::make_unique<BookingImpl>(std::move(clock), holdTicks, std::make_unique<NoLimit>());\n}\n\nstd::unique_ptr<tix::LimitedBooking> tix::makeLimitedBooking(std::shared_ptr<Clock> clock, long long holdTicks,\n                                                             int maxSeatsPerUser) {\n  if (clock == nullptr || holdTicks <= 0 || maxSeatsPerUser < 1) return nullptr;\n  return std::make_unique<BookingImpl>(std::move(clock), holdTicks, std::make_unique<PerUserCap>(maxSeatsPerUser));\n}\n"},{"path":"usage_policy.h","content":"#pragma once\n\n// Decides whether a user may take more seats in a show. A Strategy so that \"no limit\" is not a special case in\n// the booking code.\nclass UsagePolicy {\n public:\n  virtual ~UsagePolicy() = default;\n  virtual bool allows(int seatsInUse, int seatsRequested) const = 0;\n};\n\nclass NoLimit : public UsagePolicy {\n public:\n  bool allows(int, int) const override { return true; }\n};\n\nclass PerUserCap : public UsagePolicy {\n public:\n  explicit PerUserCap(int maxSeats) : maxSeats_(maxSeats) {}\n  bool allows(int seatsInUse, int seatsRequested) const override { return seatsInUse + seatsRequested <= maxSeats_; }\n\n private:\n  int maxSeats_;\n};\n"}],"driver":{"path":"driver.cpp","content":"#define BP_TEST_MAIN\n#include \"bp_test.h\"\n","readOnly":true}}}]

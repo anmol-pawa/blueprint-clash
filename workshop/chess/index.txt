@@ -1,0 +1,1766 @@
+1:"$Sreact.fragment"
+2:"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js"
+3:I[39756,["$2"],"default"]
+4:I[37457,["$2"],"default"]
+5:"/blueprint-clash/_next/static/chunks/2n5qeheznvl4u.js"
+6:I[22016,["$2","$5"],""]
+7:I[64576,["$2"],"PwaRegister"]
+d:I[97367,["$2"],"OutletBoundary"]
+e:"$Sreact.suspense"
+10:"ViewportBoundary"
+11:I[97367,["$2"],"$10"]
+13:"MetadataBoundary"
+14:I[97367,["$2"],"$13"]
+16:I[68027,["$2"],"default",1]
+:HL["/blueprint-clash/_next/static/chunks/2lbfwxo4jtf0j.css","style"]
+:HL["/blueprint-clash/_next/static/media/07c7676b89ed2778-s.p.2bn3s6zvc0dyp.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/blueprint-clash/_next/static/media/486a103cae33528f-s.p.309ilb452anpd.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/blueprint-clash/_next/static/media/53897e768d329f66-s.p.3t6q91iet4nsy.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+9:X
+b:[["children",{"s":"__PAGE__","h":512,"d":{"r":["$","$1","c",{"children":["$Lc",[["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/2uk3wcjwqg0tl.js","async":true,"nonce":"$undefined"}],["$","script","script-1",{"src":"/blueprint-clash/_next/static/chunks/1zdu7yjl8efu4.js","async":true,"nonce":"$undefined"}]],["$","$Ld",null,{"children":["$","$e",null,{"name":"Next.MetadataOutlet","children":"$@f"}]}]]}],"p":false,"v":null}}]]
+a:[["children",{"s":{"n":"id","t":"d","k":"chess","s":[]},"h":66048,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],"p":false,"v":"$9"},"c":"$Qb"}]]
+8:[["children",{"s":"workshop","h":131584,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],"p":false,"v":"$9"},"c":"$Qa"}]]
+0:{"P":null,"c":["","workshop","chess",""],"q":"","i":false,"t":{"t":{"s":"","h":131600,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/2lbfwxo4jtf0j.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}],["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js","async":true,"nonce":"$undefined"}]],["$","html",null,{"lang":"en","className":"r7opxW_variable auY9QW_variable u-EJdW_variable h-full","children":["$","body",null,{"className":"min-h-full","children":[["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","main",null,{"className":"flex min-h-dvh flex-col items-center justify-center gap-4 px-4 text-center","children":[["$","div",null,{"className":"font-display text-5xl text-[var(--accent)]","children":"404"}],["$","p",null,{"className":"text-white/60","children":"This room is not on the blueprint yet."}],["$","$L6",null,{"href":"/","className":"text-sm text-white/80 underline","children":"Back to the title screen"}]]}],[]],"forbidden":"$undefined","unauthorized":"$undefined"}],["$","$L7",null,{}]]}]}]]}],"p":false,"v":null},"c":"$Q8"},"h":{"r":["$","$1","h",{"children":[null,["$","$L11",null,{"children":"$L12"}],["$","$L14",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$e",null,{"name":"Next.Metadata","children":"$L15"}]}],null]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"p":false,"v":null}},"m":"$undefined","G":["$16",[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/2lbfwxo4jtf0j.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]]],"S":true,"r":"$undefined","s":"$undefined","a":"$undefined","l":"$undefined","p":"$undefined","d":"$undefined","b":"WHHKcqqrgr3tfT2ZA5zb7"}
+9:C
+12:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1, viewport-fit=cover"}],["$","meta","2",{"name":"theme-color","content":"#0a1530"}]]
+17:I[27201,["$2"],"IconMark"]
+f:null
+15:[["$","title","0",{"children":"Chess: piece rules, check detection, castling, en passant and undo: Blueprint Clash"}],["$","meta","1",{"name":"description","content":"A creature-tactics RPG that teaches low-level design in C++ and high-level system design, from fundamentals to big-tech interview level."}],["$","link","2",{"rel":"manifest","href":"/blueprint-clash/manifest.webmanifest","crossOrigin":"$undefined"}],["$","meta","3",{"name":"mobile-web-app-capable","content":"yes"}],["$","meta","4",{"name":"apple-mobile-web-app-title","content":"Blueprint Clash"}],["$","meta","5",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","link","6",{"rel":"icon","href":"/blueprint-clash/icon.png?icon.27re_xscs-jmw.png","sizes":"256x256","type":"image/png"}],["$","link","7",{"rel":"apple-touch-icon","href":"/blueprint-clash/apple-icon.png?apple-icon.2rac1w0yc3rju.png","sizes":"180x180","type":"image/png"}],["$","$L17","8",{}]]
+18:"/blueprint-clash/_next/static/chunks/2uk3wcjwqg0tl.js"
+19:"/blueprint-clash/_next/static/chunks/1zdu7yjl8efu4.js"
+1a:I[65612,["$2","$18","$19"],"WorkshopClient"]
+1b:T5ce,# Chess: piece movement, check detection and checkmate
+
+You are building the rules engine of a chess game: no screen, no AI, just the part that says whether a move is allowed and what the position is afterwards. Two players share one `Game` object. A caller names two squares ("e2", "e4"); the engine moves the piece or says why not. It must also answer "where can this piece go?", "is the side to move in check?" and "is the game over?".
+
+What you know so far:
+
+- Six kinds of piece, each with its own way of moving: pawns, knights, bishops, rooks, queens and kings.
+- A piece may not land on a friend, sliders may not jump over pieces, and a pawn is special (it moves one way and captures another, and it becomes something else on the last rank).
+- A move that leaves your own king attacked is not allowed, whatever the piece.
+- The game ends when the side to move has no legal move.
+- White moves first, and the sides alternate.
+
+Your task: design and implement it behind the `chess::Game` interface in `api.h` (`makeGame()` and `makeGameFrom()` are yours to define). The hidden tests call only that interface. Ask the interviewer questions first: "what is a legal move, exactly?", "what does move() answer, and in which order does it check?", "what ends the game, and is a draw different from a loss?" and "which of the special rules are in?" are where first drafts go wrong. Expect a request for castling and en passant once the basics work, and then a request to take moves back.
+1c:T28d5,# Editorial: Chess with check detection, castling, en passant and undo
+
+## Requirements
+Functional: a `Game` for two players with `move(from, to, promoteTo)`, `pieceAt`, `turn`, `inCheck`, `outcome` and `legalMoves(square)`, a standard start (`makeGame`) and a position built from text (`makeGameFrom`). Then castling and en passant, and then `undo`.
+
+Hidden in the brief and revealed by good questions: the notation of squares and what is `InvalidSquare`; the movement of every piece, the pawn's push versus capture and its start rank per colour; that a promotion is chosen by the caller (default queen, `InvalidPromotion` for a pawn or king, ignored on other moves); that legality means "my king is not attacked after the move", which covers pins, check evasions, double check and a king stepping back along a rook's line; the check order of `move` (GameOver, InvalidSquare, Empty, NotYourTurn, IllegalMove, InvalidPromotion) and that a refused move changes nothing; that checkmate and stalemate differ (no legal move with and without check) and that `GameOver` is checked first; that `legalMoves` is sorted and lists a promotion square once; that the basic game has no castling and no en passant; and which positions `makeGameFrom` refuses.
+
+**Change Storm 1, castling and en passant:** the king and a never-moved rook may swap sides under conditions (empty between, not in check, not through or into an attacked square), the rights are lost on a king move, a rook move and a rook capture on its corner, and a position from text infers the rights from the home squares. A pawn that advanced two squares can be captured on the very next move by an adjacent enemy pawn as if it had advanced one, and that capture must also pass the king-safety test.
+
+**Change Storm 2, undo:** `undo()` takes back the last accepted move, restoring everything (turn, captured piece, promotion, rook, rights, en passant chance, outcome), works after checkmate, and has the starting position as its floor. `moveCount()` is the depth of the history.
+
+## Reference design
+`Square` and `Board` are small value types: the board is 64 cells, copying it is how a trial move is tried, and a `Position` adds the turn, the castling rights and the en passant square, so one `Position` is the entire state of a game. `PieceRules` is the Strategy for how one kind of piece behaves, with two questions: `attacks` (the squares it attacks, including the first piece on a line, whatever its colour) and `moves` (its own moves). `ReachRule` is the shared case where moves are the attacked squares minus those held by a friend; `StepRule` (knight, king) and `SlideRule` (bishop, rook, queen) are data-driven by their offsets, and `PawnRule` implements both questions on its own because a pawn pushes where it does not attack. A `RuleTable` finds the rule by kind, so there is no switch on the piece kind anywhere. `CheckDetector` answers "is this square attacked by that side?" by asking each enemy piece what it attacks, and "is this king in check?" with it.
+
+`MoveGenerator::legalFrom` takes the piece's moves plus any special moves, applies each to a copy with `MoveApplier` (the only place a move changes a position) and keeps those after which the mover's king is not attacked. `GameQueries` owns the state and every read-only question (`pieceAt`, `turn`, `inCheck`, `outcome`, `legalMoves`) and computes the outcome after each change; `GameImpl` holds the commands, `move` (validate in the documented order, look the move up among the legal moves of the piece, push the old position on the history, apply) and `undo`. `PositionParser` turns text rows into a position and refuses impossible ones.
+
+Storm 1 added no branch to the piece rules or to the legality test. `SpecialMove` is an extension interface with two methods, `generate` (extra moves for a piece) and `afterMove` (finish a move and update the state it keeps). `CastlingRule` adds the king's two-square move when the conditions hold, moves the rook, and updates the rights by one rule: a move that touches a king's or rook's home square (from it or onto it) removes the matching rights. `EnPassantRule` adds the diagonal capture when the position has an en passant square, removes the passed pawn, and clears and sets the en passant square after every move. A `RuleBook` is the piece table plus the list of specials: the basic game has an empty list, the full game has two. Storm 2 was `history_`, a stack of whole positions, which is why `undo` knows no rules.
+
+## Alternatives
+- **One class per piece with a virtual `moves`.** A `Piece` hierarchy (`Knight : Piece`) is what most interviews draw. It reads well and puts the rule next to the data, but the piece must then be cloneable (to copy a board for trial moves) or the board must hold pointers into shared objects. Here a piece is a value (colour and kind) and the behaviour is a stateless strategy found by kind: copying a position is trivial and a rule object is created once.
+- **Make and unmake in place instead of copying.** Faster and the standard in engines, and a source of bugs (every rule must undo itself, including en passant and castling rights). A copy is obviously correct, and the position is 70 bytes of cells.
+- **Derive attacks from moves.** Tempting for everyone except the pawn, whose pushes are not attacks and whose attacks are not moves, so two methods are cleaner than a flag.
+- **Pseudo-legal generation, then discover illegality when the king would be captured.** Engines do this and defer the king-safety test to the search; for a rules API the answer to "may I?" must be exact now, so the test is applied at generation time.
+- **A flag for "castled" or "has moved" on each piece.** Works for castling but puts game history on the piece and makes copies and undo carry flags around; rights as position state, updated by one rule, are easier to restore and to test.
+- **Commands with their own undo.** A `MoveCommand` that records what it changed (Command pattern). Memory-light and fast; every special rule must also implement the reversal. A snapshot per ply is simpler and cannot forget a field; the editorial recommends it until a profile says otherwise.
+- **Bitboards.** A different representation for speed (see 10x), not a different design.
+
+## Trade-offs
+- **Copy the position to test legality.** One test for every case and no special code for pins, checks or en passant, at the price of a copy per candidate move. Worth it far beyond the size of this problem; an engine would pay for a faster scheme.
+- **Rules as data (offset lists, a table by kind).** Adding or changing a piece is one entry; the cost is one virtual call per question and the discipline of keeping rules stateless.
+- **Castling rights in the position.** The rights are history, not geometry, so they live in state and are updated by one rule that watches four squares. The price is that a position from text needs a convention (rights inferred from the home squares), which is documented in the interface.
+- **Special moves as an extension interface.** Open to new rules (a variant could add one), at the price of every special being called after every move (a cheap call each) and a move type that says what it is.
+- **Snapshot history.** Undo cannot go wrong and knows no rules; memory is proportional to the number of plies. For a human game, trivial.
+- **Recomputing the outcome after each change.** It finds "any legal move" by generating moves until the first one, so each change costs about one legality pass; caching it in the state avoids asking twice.
+- **Strict interface.** Statuses with an order, refused calls changing nothing, a sorted list: callers and tests can rely on all of it.
+
+## What breaks at 10x
+- **Search**: a chess engine needs millions of positions per second. Bitboards, magic lookups for sliders, in-place make/unmake, pin and check masks instead of trying every move, and incremental hashing. The classes keep their jobs, the representation changes.
+- **Memory**: a long game stores one position per ply; a server hosting millions of games should store the move list and rebuild or snapshot every N plies.
+- **Many games**: one game per object, one lock per game, games sharded by id; the rules engine is pure, so it can run in the client for instant feedback and on the server as the truth.
+- **More rules**: draws by repetition (needs a position hash that includes rights and the en passant square), the fifty-move counter, insufficient material, and clocks. All are state next to the position and one more query on the game; none changes the piece rules.
+- **Variants**: Chess960 breaks the home-square assumptions for castling (rights and rook files become data), fairy pieces are new `PieceRules`, and a different board size breaks the `8` in `Square`. The first and the last are the ones that show where the hard-coded numbers are.
+- **Notation**: SAN, UCI and FEN are adapters on top of the interface; parsing "Nbd2" needs `legalMoves` to disambiguate, which is a good reason it is public.
+
+## Level signals
+- **SDE II:** the base problem correct: each piece moving as the rules say (including the pawn's different push, capture and start rank), legality as "the king is not attacked after the move", check, checkmate and stalemate, promotion, the documented check order, and `makeGameFrom` refusing impossible positions. Writes the piece behaviour as polymorphism or a table instead of a switch and names the boundary cases (blocked pawn, pinned piece, stalemate) before being asked.
+- **Senior:** all of the above plus attack detection that is separate from move generation, the legality test on a copy so that no special case exists for pins or evasions, castling and en passant as an extension that did not touch the piece rules, the castling rights as state with the capture-on-the-corner case, the en passant legality case (the exposed rank), and undo as a whole-state restore. Brings up perft as the way to test a generator.
+- **Staff:** treats the engine as a core with a clear representation boundary (bitboards, in-place make and unmake, pin masks) and the service around it: authoritative server-side validation, an append-only move log per game with snapshots, sharding by game id with one writer per game, clocks on the server, and the same rules code in the client. Discusses repetition and the fifty-move rule as position state with hashing, and variants (Chess960) as what breaks hard-coded assumptions.
+1d:T12a4,#pragma once
+// Public API for the Chess problem. The hidden tests only use what is declared here.
+// You implement chess::makeGame() and chess::makeGameFrom() (in any of your .cpp files); everything behind them is your design.
+#include <memory>
+#include <string>
+#include <vector>
+
+namespace chess {
+
+enum class Color { White, Black };
+enum class Kind { Pawn, Knight, Bishop, Rook, Queen, King };
+
+struct Piece {
+  Color color;
+  Kind kind;
+};
+
+enum class Status {
+  Ok,
+  InvalidSquare,     // a square is not written as a lower-case file a..h followed by a rank 1..8
+  Empty,             // there is no piece on the square (for move() and pieceAt())
+  NotYourTurn,       // the piece on the square belongs to the side that is not to move
+  IllegalMove,       // the piece cannot move there, or the move leaves the mover's own king attacked
+  InvalidPromotion,  // a pawn reaches the last rank and the requested piece is a pawn or a king
+  GameOver,          // the side to move is checkmated or stalemated
+  NothingToUndo,     // reserved for a later interface; nothing here returns it
+};
+
+enum class Outcome {
+  Ongoing,
+  Checkmate,  // the side to move is in check and has no legal move: the other side has won
+  Stalemate,  // the side to move is NOT in check and has no legal move: a draw
+};
+
+// A game of chess between two players who share one object. Squares are written "e4": a lower-case file and a rank.
+//
+// MOVEMENT. Every piece moves as in the standard game, with these simplifications for this exercise:
+//   Pawn    one square forward onto an empty square; two squares forward from its start rank (rank 2 for White,
+//           rank 7 for Black) when both squares in front of it are empty; one square diagonally forward onto a square
+//           that holds an enemy piece. White moves up the ranks, Black down. A pawn that reaches the last rank is
+//           promoted to the piece named by promoteTo (Queen, Rook, Bishop or Knight).
+//   Knight  the eight L-shaped jumps; it may jump over pieces.
+//   Bishop, Rook, Queen   any distance along its lines until the first piece: an enemy piece there may be captured,
+//           a friendly piece blocks and cannot be captured.
+//   King    one square in any direction.
+// No piece captures a piece of its own colour. This basic game has NO castling and NO en passant: a king that tries to
+// move two squares, or a pawn that tries to capture a square that is empty, is an IllegalMove.
+//
+// CHECK. A king is in check when an enemy piece attacks its square (a pawn attacks the two squares diagonally in front
+// of it, not the square it pushes to). A move is legal only if the mover's own king is not attacked afterwards: so a pinned
+// piece may move only along the line of the pin, a king may not step onto an attacked square, and while in check the
+// move must capture the checker, block it, or move the king.
+//
+// move(from, to, promoteTo) CHECK ORDER: GameOver, InvalidSquare (either square), Empty, NotYourTurn, IllegalMove,
+// InvalidPromotion. promoteTo is ignored unless the move is a promotion (a pawn reaching the last rank); for a promotion it
+// must be Queen, Rook, Bishop or Knight, or the call is InvalidPromotion. A refused call changes nothing.
+class Game {
+ public:
+  virtual ~Game() = default;
+
+  virtual Status move(const std::string& from, const std::string& to, Kind promoteTo = Kind::Queen) = 0;
+
+  // Ok and the piece, Empty for an empty square (out untouched), InvalidSquare for a bad name.
+  virtual Status pieceAt(const std::string& square, Piece& out) const = 0;
+
+  virtual Color turn() const = 0;      // the side to move
+  virtual bool inCheck() const = 0;    // is the side to move in check?
+  virtual Outcome outcome() const = 0;
+
+  // The squares the piece on `from` may legally move to, sorted by name ("a3" < "a4" < "b1"), each once (a promotion
+  // square appears once). Empty for an invalid square, an empty square or a piece of the side that is not to move.
+  virtual std::vector<std::string> legalMoves(const std::string& from) const = 0;
+};
+
+// The standard starting position, White to move.
+std::unique_ptr<Game> makeGame();
+
+// A game from a position. `rows` has 8 strings of 8 characters, rank 8 first, file a first: 'K','Q','R','B','N','P' are
+// White pieces, 'k','q','r','b','n','p' are Black pieces and '.' is an empty square. `toMove` is the side to move.
+// Returns nullptr for a position that cannot exist: wrong shape or characters, not exactly one king of each colour, a pawn
+// on rank 1 or 8, or the side that is NOT to move already in check. The outcome of a position that is already checkmate
+// or stalemate is reported at once.
+std::unique_ptr<Game> makeGameFrom(const std::vector<std::string>& rows, Color toMove);
+
+}  // namespace chess
+1e:T7bb,#pragma once
+// Change Storm 1: castling and en passant.
+#include "api.h"
+
+namespace chess {
+
+// makeFullGame() and makeFullGameFrom() have the same interface and the same rules as makeGame() and makeGameFrom(), plus two
+// special moves. Everything else (check order, legality, outcome) is unchanged, and legalMoves() lists the new moves.
+//
+// CASTLING. A king that has never moved, and a rook of its colour that has never moved and has not been captured, may
+// castle: the king moves two squares towards the rook (e1 to g1 or c1, e8 to g8 or c8) and the rook jumps to the square the
+// king crossed (f1 or d1, f8 or d8). It is a king move: move("e1", "g1"). Conditions: every square between the king and
+// the rook is empty (b1 must be empty for the long side); the king is not in check; the square the king crosses and the
+// square it lands on are not attacked. The rook's start square and the squares next to it may be attacked, and the
+// b-file square needs only to be empty. The right is lost for good when the king moves (also by castling), when a rook moves
+// from its corner, and when a rook is captured on its corner. In makeFullGameFrom() a king on its home square (e1 or e8) counts as
+// never moved, and a rook of its colour in a corner (a1, h1, a8, h8) counts as never moved.
+//
+// EN PASSANT. Right after a pawn advances two squares, an enemy pawn standing beside the square where it landed (on the
+// same rank, one file away) may capture it as if it had advanced only one square: the capturing pawn moves diagonally to the
+// square the other pawn crossed, and the passed pawn is removed. The chance exists for the very next move only. As for every
+// move, the capture is illegal if it leaves the mover's king attacked (including the case where it clears a rank
+// between the king and an enemy rook).
+std::unique_ptr<Game> makeFullGame();
+std::unique_ptr<Game> makeFullGameFrom(const std::vector<std::string>& rows, Color toMove);
+
+}  // namespace chess
+1f:T4a5,#pragma once
+// Change Storm 2: taking moves back.
+#include <cstddef>
+
+#include "api_storm1.h"
+
+namespace chess {
+
+// A full-rules game (castling and en passant) that can take its moves back.
+//
+// undo() takes back the last move that move() accepted: the board, the side to move, the captured piece, a promotion, a
+// castling's rook, the castling rights, the en passant chance and the outcome all return to exactly what they were before
+// that move, so the game continues as if it had not been played. Only moves made through move() on THIS object can be
+// taken back: the position a game was created from is the bottom of the history, and undo() there is NothingToUndo, as it is
+// after every move has been taken back. A refused move is not part of the history. undo() works after checkmate and stalemate
+// too (the game is Ongoing again). moveCount() is the number of moves undo() can still take back.
+class UndoGame : public Game {
+ public:
+  virtual Status undo() = 0;
+  virtual std::size_t moveCount() const = 0;
+};
+
+std::unique_ptr<UndoGame> makeUndoGame();
+std::unique_ptr<UndoGame> makeUndoGameFrom(const std::vector<std::string>& rows, Color toMove);
+
+}  // namespace chess
+20:T4253,#include <algorithm>
+#include <memory>
+#include <string>
+#include <vector>
+
+#include "api.h"
+#include "bp_test.h"
+
+namespace {
+using chess::Color;
+using chess::Kind;
+using chess::Outcome;
+using chess::Piece;
+using chess::Status;
+
+#define IS(call, expected) EXPECT_TRUE((call) == Status::expected)
+
+// "r3k2r/8/8/..." (a FEN placement) to the eight rows makeGameFrom() takes.
+std::vector<std::string> rowsOf(const std::string& placement) {
+  std::vector<std::string> rows(1);
+  for (char c : placement) {
+    if (c == '/') rows.emplace_back();
+    else if (c >= '1' && c <= '8') rows.back() += std::string(static_cast<std::size_t>(c - '0'), '.');
+    else rows.back() += c;
+  }
+  return rows;
+}
+
+std::unique_ptr<chess::Game> position(const std::string& placement, Color toMove = Color::White) {
+  return chess::makeGameFrom(rowsOf(placement), toMove);
+}
+
+std::string join(const std::vector<std::string>& names) {
+  std::string out;
+  for (const auto& n : names) out += (out.empty() ? "" : " ") + n;
+  return out;
+}
+
+std::string movesOf(const chess::Game& g, const std::string& from) { return join(g.legalMoves(from)); }
+
+// "e2e4" or "e7e8n": plays one move, the optional fifth letter names the promotion piece.
+Status play(chess::Game& g, const std::string& text) {
+  Kind promote = Kind::Queen;
+  if (text.size() == 5) promote = text[4] == 'n' ? Kind::Knight : text[4] == 'b' ? Kind::Bishop : text[4] == 'r' ? Kind::Rook : Kind::Queen;
+  return g.move(text.substr(0, 2), text.substr(2, 2), promote);
+}
+
+bool playAll(chess::Game& g, const std::string& line) {
+  std::size_t start = 0;
+  while (start < line.size()) {
+    std::size_t end = line.find(' ', start);
+    if (end == std::string::npos) end = line.size();
+    if (play(g, line.substr(start, end - start)) != Status::Ok) return false;
+    start = end + 1;
+  }
+  return true;
+}
+
+// The piece on a square as one letter (upper case White), '.' when empty.
+char letter(const chess::Game& g, const std::string& square) {
+  Piece p{Color::White, Kind::Pawn};
+  if (g.pieceAt(square, p) != Status::Ok) return '.';
+  static const std::string kinds = "PNBRQK";
+  const char c = kinds[static_cast<std::size_t>(p.kind)];
+  return p.color == Color::White ? c : static_cast<char>(c - 'A' + 'a');
+}
+
+std::string placementOf(const chess::Game& g) {
+  std::string out;
+  for (int rank = 8; rank >= 1; --rank) {
+    for (char file = 'a'; file <= 'h'; ++file) out += letter(g, std::string{file, static_cast<char>('0' + rank)});
+    if (rank > 1) out += '/';
+  }
+  return out;
+}
+
+// The number of moves of the side to move, a promotion counted as the four moves it is.
+long long countMoves(const chess::Game& g) {
+  long long total = 0;
+  for (char file = 'a'; file <= 'h'; ++file) {
+    for (char rank = '1'; rank <= '8'; ++rank) {
+      const std::string from{file, rank};
+      const char c = letter(g, from);
+      const bool pawn = c == 'P' || c == 'p';
+      for (const auto& to : g.legalMoves(from)) total += (pawn && (to[1] == '8' || to[1] == '1')) ? 4 : 1;
+    }
+  }
+  return total;
+}
+
+// Counts the positions `depth` moves ahead. The basic game has no hidden state, so a position is rebuilt from what
+// the board shows.
+long long perft(const chess::Game& g, int depth) {
+  if (depth == 1) return countMoves(g);
+  long long total = 0;
+  const std::string placement = placementOf(g);
+  for (char file = 'a'; file <= 'h'; ++file) {
+    for (char rank = '1'; rank <= '8'; ++rank) {
+      const std::string from{file, rank};
+      const char c = letter(g, from);
+      for (const auto& to : g.legalMoves(from)) {
+        const bool promotion = (c == 'P' || c == 'p') && (to[1] == '8' || to[1] == '1');
+        for (Kind k : {Kind::Queen, Kind::Rook, Kind::Bishop, Kind::Knight}) {
+          auto next = position(placement, g.turn());
+          if (!next || next->move(from, to, k) != Status::Ok) return -1000000;
+          total += perft(*next, depth - 1);
+          if (!promotion) break;
+        }
+      }
+    }
+  }
+  return total;
+}
+}  // namespace
+
+TEST(Setup, TheStartingPositionAndAnswersAboutSquares) {
+  auto g = chess::makeGame();
+  EXPECT_EQ(placementOf(*g), std::string("rnbqkbnr/pppppppp/......../......../......../......../PPPPPPPP/RNBQKBNR"));
+  EXPECT_TRUE(g->turn() == Color::White);
+  EXPECT_FALSE(g->inCheck());
+  EXPECT_TRUE(g->outcome() == Outcome::Ongoing);
+  Piece p{Color::Black, Kind::Pawn};
+  IS(g->pieceAt("d1", p), Ok);
+  EXPECT_TRUE(p.color == Color::White && p.kind == Kind::Queen);
+  IS(g->pieceAt("e4", p), Empty);
+  EXPECT_TRUE(p.color == Color::White && p.kind == Kind::Queen);  // untouched on a refusal
+  for (const char* bad : {"", "e", "e44", "i1", "a0", "a9", "E4", "4e", "e 4"}) IS(g->pieceAt(bad, p), InvalidSquare);
+}
+
+TEST(Setup, MakeGameFromRefusesPositionsThatCannotExist) {
+  EXPECT_TRUE(position("4k3/8/8/8/8/8/8/4K3") != nullptr);
+  EXPECT_TRUE(position("8/8/8/8/8/8/8/4K3") == nullptr);            // no black king
+  EXPECT_TRUE(position("4k3/8/8/8/8/8/8/8") == nullptr);            // no white king
+  EXPECT_TRUE(position("4k2k/8/8/8/8/8/8/4K3") == nullptr);         // two black kings
+  EXPECT_TRUE(position("4k3/8/8/8/8/8/8/3KK3") == nullptr);         // two white kings
+  EXPECT_TRUE(position("P3k3/8/8/8/8/8/8/4K3") == nullptr);         // a pawn on the last rank
+  EXPECT_TRUE(position("4k3/8/8/8/8/8/8/p3K3") == nullptr);         // a pawn on the first rank
+  EXPECT_TRUE(position("4k3/8/8/8/8/8/8/4K2x") == nullptr);         // an unknown piece
+  EXPECT_TRUE(position("4k3/8/8/8/8/8/8/4K") == nullptr);           // a short row
+  EXPECT_TRUE(position("4k3/8/8/8/8/8/4K3") == nullptr);            // seven rows
+  EXPECT_TRUE(position("4k3/8/8/8/4R3/8/8/4K3", Color::White) == nullptr);  // Black is in check and White is to move
+  EXPECT_TRUE(position("4k3/8/8/8/4R3/8/8/4K3", Color::Black) != nullptr);  // the same position with Black to move
+  EXPECT_TRUE(position("8/8/8/3kK3/8/8/8/8") == nullptr);           // adjacent kings attack each other
+}
+
+TEST(Pieces, TheKnightJumpsOverPiecesAndNeverCapturesItsOwn) {
+  auto g = position("4k3/8/8/8/3N4/2PP4/2PPP3/4K3");
+  EXPECT_EQ(movesOf(*g, "d4"), std::string("b3 b5 c6 e6 f3 f5"));
+  auto start = chess::makeGame();
+  EXPECT_EQ(movesOf(*start, "b1"), std::string("a3 c3"));
+  EXPECT_EQ(movesOf(*start, "g1"), std::string("f3 h3"));
+  auto corner = position("4k3/8/8/8/8/8/1p6/N3K3");
+  EXPECT_EQ(movesOf(*corner, "a1"), std::string("b3 c2"));
+}
+
+TEST(Pieces, BishopRookAndQueenSlideUntilBlockedAndCaptureTheFirstEnemy) {
+  auto g = position("4k3/8/2p5/8/4B3/8/2P5/R3K3");
+  EXPECT_EQ(movesOf(*g, "e4"), std::string("c6 d3 d5 f3 f5 g2 g6 h1 h7"));
+  EXPECT_EQ(movesOf(*g, "a1"), std::string("a2 a3 a4 a5 a6 a7 a8 b1 c1 d1"));
+  auto q = position("4k3/8/8/3q4/8/8/3P4/4K3", Color::Black);
+  EXPECT_EQ(movesOf(*q, "d5"), std::string("a2 a5 a8 b3 b5 b7 c4 c5 c6 d2 d3 d4 d6 d7 d8 e4 e5 e6 f3 f5 f7 g2 g5 g8 h1 h5"));
+  auto start = chess::makeGame();
+  EXPECT_EQ(movesOf(*start, "a1"), std::string(""));
+  EXPECT_EQ(movesOf(*start, "c1"), std::string(""));
+  EXPECT_EQ(movesOf(*start, "d1"), std::string(""));
+}
+
+TEST(Pieces, TheKingStepsOneSquareAndNotOntoASquareTheEnemyAttacks) {
+  auto g = position("4k3/8/8/8/8/8/8/4K3");
+  EXPECT_EQ(movesOf(*g, "e1"), std::string("d1 d2 e2 f1 f2"));
+  auto rook = position("7k/8/8/8/8/8/r7/4K3");
+  EXPECT_EQ(movesOf(*rook, "e1"), std::string("d1 f1"));
+  auto kings = position("8/8/8/8/8/4k3/8/4K3");
+  EXPECT_EQ(movesOf(*kings, "e1"), std::string("d1 f1"));  // the enemy king guards d2, e2 and f2
+}
+
+TEST(Pawns, PushOneOrTwoFromTheStartRankOnlyThroughEmptySquares) {
+  auto start = chess::makeGame();
+  EXPECT_EQ(movesOf(*start, "e2"), std::string("e3 e4"));
+  EXPECT_EQ(movesOf(*position("4k3/8/8/8/8/4p3/4P3/4K3"), "e2"), std::string(""));
+  EXPECT_EQ(movesOf(*position("4k3/8/8/8/4p3/8/4P3/4K3"), "e2"), std::string("e3"));
+  EXPECT_EQ(movesOf(*position("4k3/8/8/8/8/4P3/8/4K3"), "e3"), std::string("e4"));
+}
+
+TEST(Pawns, CaptureDiagonallyForwardOnlyNeverStraightAndNeverAFriend) {
+  EXPECT_EQ(movesOf(*position("4k3/8/8/3p1p2/4P3/8/8/4K3"), "e4"), std::string("d5 e5 f5"));
+  EXPECT_EQ(movesOf(*position("4k3/8/8/4p3/4P3/8/8/4K3"), "e4"), std::string(""));
+  EXPECT_EQ(movesOf(*position("4k3/8/8/3P4/4P3/8/8/4K3"), "e4"), std::string("e5"));
+  auto g = position("4k3/8/8/8/4P3/8/8/4K3");
+  IS(g->move("e4", "d5"), IllegalMove);  // a diagonal onto an empty square is not a capture
+}
+
+TEST(Pawns, BlackMovesDownTheBoard) {
+  auto g = chess::makeGame();
+  IS(g->move("e2", "e4"), Ok);
+  EXPECT_EQ(movesOf(*g, "e7"), std::string("e5 e6"));
+  EXPECT_EQ(movesOf(*position("4k3/8/8/8/3p4/2P1P3/8/4K3", Color::Black), "d4"), std::string("c3 d3 e3"));
+  auto back = position("4k3/4p3/8/8/8/8/8/4K3", Color::Black);
+  IS(back->move("e7", "e8"), IllegalMove);
+}
+
+TEST(Pawns, ReachingTheLastRankPromotesToTheChosenPieceOrAQueen) {
+  const std::string setup = "7k/4P3/8/8/8/8/8/K7";
+  auto plain = position(setup);
+  EXPECT_EQ(movesOf(*plain, "e7"), std::string("e8"));
+  IS(plain->move("e7", "e8"), Ok);
+  EXPECT_EQ(letter(*plain, "e8"), 'Q');
+  EXPECT_EQ(letter(*plain, "e7"), '.');
+  const std::vector<std::pair<Kind, char>> choices = {{Kind::Rook, 'R'}, {Kind::Bishop, 'B'}, {Kind::Knight, 'N'}, {Kind::Queen, 'Q'}};
+  for (const auto& choice : choices) {
+    auto g = position(setup);
+    IS(g->move("e7", "e8", choice.first), Ok);
+    EXPECT_EQ(letter(*g, "e8"), choice.second);
+  }
+  auto capture = position("3r3k/4P3/8/8/8/8/8/K7");
+  EXPECT_EQ(movesOf(*capture, "e7"), std::string("d8 e8"));
+  IS(capture->move("e7", "d8", Kind::Bishop), Ok);
+  EXPECT_EQ(placementOf(*capture), std::string("...B...k/......../......../......../......../......../......../K......."));
+  auto black = position("7k/8/8/8/8/8/3p4/K7", Color::Black);
+  IS(black->move("d2", "d1", Kind::Knight), Ok);
+  EXPECT_EQ(letter(*black, "d1"), 'n');
+}
+
+TEST(Pawns, ABadPromotionPieceIsRefusedOnlyWhenThereIsAPromotion) {
+  auto g = position("7k/4P3/8/8/8/8/8/K7");
+  const std::string before = placementOf(*g);
+  IS(g->move("e7", "e8", Kind::King), InvalidPromotion);
+  IS(g->move("e7", "e8", Kind::Pawn), InvalidPromotion);
+  IS(g->move("e7", "e6"), IllegalMove);  // a bad destination is refused as illegal, whatever the piece
+  EXPECT_EQ(placementOf(*g), before);
+  EXPECT_TRUE(g->turn() == Color::White);
+  auto start = chess::makeGame();
+  IS(start->move("e2", "e4", Kind::King), Ok);  // not a promotion: the piece is ignored
+  IS(start->move("e7", "e5", Kind::Pawn), Ok);
+}
+
+TEST(Moves, TheCheckOrderOfTheMoveCall) {
+  auto g = chess::makeGame();
+  IS(g->move("z1", "a1"), InvalidSquare);
+  IS(g->move("e5", "z9"), InvalidSquare);  // a bad square comes before an empty one
+  IS(g->move("e4", "e5"), Empty);
+  IS(g->move("e7", "e1"), NotYourTurn);    // not your turn comes before illegal
+  IS(g->move("e2", "e5"), IllegalMove);
+  IS(g->move("a1", "a2"), IllegalMove);    // the rook is blocked by its own pawn
+  IS(g->move("e2", "e4", Kind::Queen), Ok);
+  IS(g->move("e2", "e3"), Empty);
+  IS(g->move("d2", "d4"), NotYourTurn);
+}
+
+TEST(Moves, TurnsAlternateAndRefusedMovesChangeNothing) {
+  auto g = chess::makeGame();
+  EXPECT_TRUE(g->turn() == Color::White);
+  IS(g->move("g1", "f3"), Ok);
+  EXPECT_TRUE(g->turn() == Color::Black);
+  const std::string before = placementOf(*g);
+  IS(g->move("f3", "e5"), NotYourTurn);
+  IS(g->move("d7", "d3"), IllegalMove);
+  IS(g->move("q1", "q2"), InvalidSquare);
+  EXPECT_EQ(placementOf(*g), before);
+  EXPECT_TRUE(g->turn() == Color::Black);
+  IS(g->move("g8", "f6"), Ok);
+  EXPECT_TRUE(g->turn() == Color::White);
+  EXPECT_EQ(movesOf(*g, "a7"), std::string(""));  // the other side's piece has no moves to list
+  EXPECT_EQ(movesOf(*g, "e4"), std::string(""));  // an empty square has none
+  EXPECT_EQ(movesOf(*g, "z9"), std::string(""));
+}
+
+TEST(Moves, TheBasicGameHasNoCastlingAndNoEnPassant) {
+  auto g = position("r3k2r/8/8/8/8/8/8/R3K2R");
+  EXPECT_EQ(movesOf(*g, "e1"), std::string("d1 d2 e2 f1 f2"));
+  IS(g->move("e1", "g1"), IllegalMove);
+  IS(g->move("e1", "c1"), IllegalMove);
+  auto line = chess::makeGame();
+  EXPECT_TRUE(playAll(*line, "e2e4 a7a6 e4e5 d7d5"));
+  EXPECT_EQ(movesOf(*line, "e5"), std::string("e6"));
+  IS(line->move("e5", "d6"), IllegalMove);
+}
+
+TEST(Check, InCheckIsReportedForEachKindOfAttackerAndNotWhenBlocked) {
+  const std::vector<std::string> checks = {
+      "4k3/8/8/8/8/8/8/4R1K1",  // rook down the file
+      "4k3/8/8/8/B7/8/8/6K1",   // bishop along a diagonal
+      "4k3/8/5N2/8/8/8/8/6K1",  // knight
+      "4k3/3P4/8/8/8/8/8/6K1",  // pawn
+      "4k3/8/8/7Q/8/8/8/6K1",   // queen along a diagonal
+  };
+  for (const auto& placement : checks) {
+    auto g = position(placement, Color::Black);
+    ASSERT_TRUE(g != nullptr);
+    EXPECT_TRUE(g->inCheck());
+  }
+  EXPECT_FALSE(position("4k3/4p3/8/8/8/8/8/4R1K1", Color::Black)->inCheck());  // a pawn blocks the rook
+  auto white = position("4r1k1/8/8/8/8/8/8/4K3");
+  EXPECT_TRUE(white->inCheck());
+  EXPECT_TRUE(white->outcome() == Outcome::Ongoing);
+}
+
+TEST(Check, APawnAttacksDiagonallyNotTheSquareItPushesTo) {
+  auto g = position("4k3/4P3/8/8/8/8/8/6K1", Color::Black);
+  EXPECT_FALSE(g->inCheck());
+  EXPECT_EQ(movesOf(*g, "e8"), std::string("d7 e7 f7"));  // d8 and f8 are attacked by the pawn
+}
+
+TEST(Check, AMoveThatLeavesYourKingAttackedIsIllegal) {
+  auto pinnedBishop = position("k3r3/8/8/8/8/8/4B3/4K3");
+  EXPECT_EQ(movesOf(*pinnedBishop, "e2"), std::string(""));
+  IS(pinnedBishop->move("e2", "d3"), IllegalMove);
+  auto pinnedRook = position("k3r3/8/8/8/8/8/4R3/4K3");
+  EXPECT_EQ(movesOf(*pinnedRook, "e2"), std::string("e3 e4 e5 e6 e7 e8"));  // along the pin, capturing the pinner
+  auto pinnedKnight = position("k3r3/8/8/8/8/8/4N3/4K3");
+  EXPECT_EQ(movesOf(*pinnedKnight, "e2"), std::string(""));  // a pinned knight cannot move at all
+}
+
+TEST(Check, WhileInCheckTheMoveMustBlockCaptureOrRun) {
+  auto g = position("4r2k/8/8/8/8/8/3B4/R3K3");
+  EXPECT_TRUE(g->inCheck());
+  EXPECT_EQ(movesOf(*g, "e1"), std::string("d1 f1 f2"));
+  EXPECT_EQ(movesOf(*g, "d2"), std::string("e3"));
+  EXPECT_EQ(movesOf(*g, "a1"), std::string(""));
+  IS(g->move("a1", "a2"), IllegalMove);
+  IS(g->move("d2", "e3"), Ok);
+  EXPECT_FALSE(g->inCheck());
+}
+
+TEST(Check, InDoubleCheckOnlyTheKingCanMove) {
+  auto g = position("4r2k/8/8/8/Qb6/8/8/4K3");
+  EXPECT_TRUE(g->inCheck());
+  EXPECT_EQ(movesOf(*g, "a4"), std::string(""));  // the queen could take either checker, but not both
+  EXPECT_EQ(movesOf(*g, "e1"), std::string("d1 f1 f2"));
+}
+
+TEST(Check, AKingCannotRetreatAlongTheLineOfTheCheckingSlider) {
+  auto g = position("7k/8/8/8/8/8/8/r3K3");
+  EXPECT_TRUE(g->inCheck());
+  EXPECT_EQ(movesOf(*g, "e1"), std::string("d2 e2 f2"));  // f1 is still on the rook's line once the king has left e1
+}
+
+TEST(Outcome, FoolsMateIsCheckmateAndNothingMoreCanBePlayed) {
+  auto g = chess::makeGame();
+  EXPECT_TRUE(playAll(*g, "f2f3 e7e5 g2g4 d8h4"));
+  EXPECT_TRUE(g->inCheck());
+  EXPECT_TRUE(g->outcome() == Outcome::Checkmate);
+  EXPECT_EQ(movesOf(*g, "e1"), std::string(""));
+  EXPECT_EQ(movesOf(*g, "g1"), std::string(""));
+  IS(g->move("e2", "e3"), GameOver);
+  IS(g->move("z1", "z2"), GameOver);  // GameOver is checked first
+}
+
+TEST(Outcome, CheckIsNotMateWhenThereIsAnAnswer) {
+  auto g = chess::makeGame();
+  EXPECT_TRUE(playAll(*g, "e2e4 f7f6 d1h5"));
+  EXPECT_TRUE(g->inCheck());
+  EXPECT_TRUE(g->outcome() == Outcome::Ongoing);
+  EXPECT_EQ(movesOf(*g, "g7"), std::string("g6"));
+  EXPECT_EQ(movesOf(*g, "e8"), std::string(""));
+  IS(g->move("g7", "g6"), Ok);
+  EXPECT_FALSE(g->inCheck());
+}
+
+TEST(Outcome, StalemateIsADrawNotACheckmate) {
+  auto g = position("7k/5Q2/6K1/8/8/8/8/8", Color::Black);
+  EXPECT_FALSE(g->inCheck());
+  EXPECT_TRUE(g->outcome() == Outcome::Stalemate);
+  EXPECT_EQ(movesOf(*g, "h8"), std::string(""));
+  IS(g->move("h8", "g8"), GameOver);
+}
+
+TEST(Outcome, BackRankAndSmotheredMatesAreRecognised) {
+  auto back = position("6k1/5ppp/8/8/8/8/8/R3K3");
+  IS(back->move("a1", "a8"), Ok);
+  EXPECT_TRUE(back->outcome() == Outcome::Checkmate);
+  auto smothered = position("6rk/6pp/8/6N1/8/8/8/K7");
+  IS(smothered->move("g5", "f7"), Ok);
+  EXPECT_TRUE(smothered->inCheck());
+  EXPECT_TRUE(smothered->outcome() == Outcome::Checkmate);
+  auto over = position("R5k1/5ppp/8/8/8/8/8/4K3", Color::Black);
+  EXPECT_TRUE(over != nullptr);
+  EXPECT_TRUE(over->outcome() == Outcome::Checkmate);
+  IS(over->move("g8", "h8"), GameOver);
+}
+
+TEST(Perft, EveryLegalMoveIsFoundFromTheStartingPositionToDepthFour) {
+  auto g = chess::makeGame();
+  EXPECT_EQ(countMoves(*g), 20LL);
+  EXPECT_EQ(perft(*g, 2), 400LL);
+  EXPECT_EQ(perft(*g, 3), 8902LL);
+  EXPECT_EQ(perft(*g, 4), 197281LL);
+}
+
+TEST(Perft, PinsAndChecksInARookEndgameAndTheBasicRulesOnABusyMiddlegame) {
+  auto endgame = position("8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8");
+  EXPECT_EQ(perft(*endgame, 1), 14LL);
+  EXPECT_EQ(perft(*endgame, 2), 191LL);
+  // 48 moves with castling, 46 without it.
+  auto busy = position("r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R");
+  EXPECT_EQ(perft(*busy, 1), 46LL);
+}
+21:T309f,#include <algorithm>
+#include <memory>
+#include <string>
+#include <vector>
+
+#include "api_storm1.h"
+#include "bp_test.h"
+
+namespace {
+using chess::Color;
+using chess::Kind;
+using chess::Outcome;
+using chess::Piece;
+using chess::Status;
+
+#define IS(call, expected) EXPECT_TRUE((call) == Status::expected)
+
+// "r3k2r/8/8/..." (a FEN placement) to the eight rows makeGameFrom() takes.
+std::vector<std::string> rowsOf(const std::string& placement) {
+  std::vector<std::string> rows(1);
+  for (char c : placement) {
+    if (c == '/') rows.emplace_back();
+    else if (c >= '1' && c <= '8') rows.back() += std::string(static_cast<std::size_t>(c - '0'), '.');
+    else rows.back() += c;
+  }
+  return rows;
+}
+
+std::unique_ptr<chess::Game> position(const std::string& placement, Color toMove = Color::White) {
+  return chess::makeFullGameFrom(rowsOf(placement), toMove);
+}
+
+std::string join(const std::vector<std::string>& names) {
+  std::string out;
+  for (const auto& n : names) out += (out.empty() ? "" : " ") + n;
+  return out;
+}
+
+std::string movesOf(const chess::Game& g, const std::string& from) { return join(g.legalMoves(from)); }
+
+// "e2e4" or "e7e8n": plays one move, the optional fifth letter names the promotion piece.
+Status play(chess::Game& g, const std::string& text) {
+  Kind promote = Kind::Queen;
+  if (text.size() == 5) promote = text[4] == 'n' ? Kind::Knight : text[4] == 'b' ? Kind::Bishop : text[4] == 'r' ? Kind::Rook : Kind::Queen;
+  return g.move(text.substr(0, 2), text.substr(2, 2), promote);
+}
+
+bool playAll(chess::Game& g, const std::string& line) {
+  std::size_t start = 0;
+  while (start < line.size()) {
+    std::size_t end = line.find(' ', start);
+    if (end == std::string::npos) end = line.size();
+    if (play(g, line.substr(start, end - start)) != Status::Ok) return false;
+    start = end + 1;
+  }
+  return true;
+}
+
+// The piece on a square as one letter (upper case White), '.' when empty.
+char letter(const chess::Game& g, const std::string& square) {
+  Piece p{Color::White, Kind::Pawn};
+  if (g.pieceAt(square, p) != Status::Ok) return '.';
+  static const std::string kinds = "PNBRQK";
+  const char c = kinds[static_cast<std::size_t>(p.kind)];
+  return p.color == Color::White ? c : static_cast<char>(c - 'A' + 'a');
+}
+
+std::string placementOf(const chess::Game& g) {
+  std::string out;
+  for (int rank = 8; rank >= 1; --rank) {
+    for (char file = 'a'; file <= 'h'; ++file) out += letter(g, std::string{file, static_cast<char>('0' + rank)});
+    if (rank > 1) out += '/';
+  }
+  return out;
+}
+
+// The number of moves of the side to move, a promotion counted as the four moves it is.
+long long countMoves(const chess::Game& g) {
+  long long total = 0;
+  for (char file = 'a'; file <= 'h'; ++file) {
+    for (char rank = '1'; rank <= '8'; ++rank) {
+      const std::string from{file, rank};
+      const char c = letter(g, from);
+      const bool pawn = c == 'P' || c == 'p';
+      for (const auto& to : g.legalMoves(from)) total += (pawn && (to[1] == '8' || to[1] == '1')) ? 4 : 1;
+    }
+  }
+  return total;
+}
+
+
+struct Step {
+  std::string from;
+  std::string to;
+  Kind promote;
+};
+
+// A full game has hidden state (castling rights, the en passant chance), so a position is rebuilt by replaying its moves.
+std::unique_ptr<chess::Game> replay(const std::string& placement, Color toMove, const std::vector<Step>& path) {
+  auto g = position(placement, toMove);
+  for (const Step& s : path) {
+    if (!g || g->move(s.from, s.to, s.promote) != Status::Ok) return nullptr;
+  }
+  return g;
+}
+
+long long perft(const std::string& placement, Color toMove, std::vector<Step>& path, int depth) {
+  auto g = replay(placement, toMove, path);
+  if (!g) return -1000000;
+  if (depth == 1) return countMoves(*g);
+  long long total = 0;
+  for (char file = 'a'; file <= 'h'; ++file) {
+    for (char rank = '1'; rank <= '8'; ++rank) {
+      const std::string from{file, rank};
+      const char c = letter(*g, from);
+      for (const auto& to : g->legalMoves(from)) {
+        const bool promotion = (c == 'P' || c == 'p') && (to[1] == '8' || to[1] == '1');
+        for (Kind k : {Kind::Queen, Kind::Rook, Kind::Bishop, Kind::Knight}) {
+          path.push_back(Step{from, to, k});
+          total += perft(placement, toMove, path, depth - 1);
+          path.pop_back();
+          if (!promotion) break;
+        }
+      }
+    }
+  }
+  return total;
+}
+
+long long perft(const std::string& placement, int depth, Color toMove = Color::White) {
+  std::vector<Step> path;
+  return perft(placement, toMove, path, depth);
+}
+}  // namespace
+
+const char* const kBothSides = "r3k2r/8/8/8/8/8/8/R3K2R";
+const char* const kKiwipete = "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R";
+const char* const kPositionFour = "r3k2r/Pppp1ppp/1b3nbN/nP6/BBP1P3/q4N2/Pp1P2PP/R2Q1RK1";
+
+TEST(Castling, TheKingHopsTwoSquaresAndTheRookJumpsOverIt) {
+  auto g = position(kBothSides);
+  EXPECT_EQ(movesOf(*g, "e1"), std::string("c1 d1 d2 e2 f1 f2 g1"));
+  IS(g->move("e1", "g1"), Ok);
+  EXPECT_EQ(placementOf(*g), std::string("r...k..r/......../......../......../......../......../......../R....RK."));
+  EXPECT_EQ(movesOf(*g, "e8"), std::string("c8 d7 d8 e7"));
+  IS(g->move("e8", "c8"), Ok);
+  EXPECT_EQ(placementOf(*g), std::string("..kr...r/......../......../......../......../......../......../R....RK."));
+  auto longSide = position(kBothSides);
+  IS(longSide->move("e1", "c1"), Ok);
+  EXPECT_EQ(placementOf(*longSide), std::string("r...k..r/......../......../......../......../......../......../..KR...R"));
+  auto black = position("r3k2r/8/8/8/8/8/8/4K3", Color::Black);
+  IS(black->move("e8", "g8"), Ok);
+  EXPECT_EQ(placementOf(*black), std::string("r....rk./......../......../......../......../......../......../....K..."));
+}
+
+TEST(Castling, EverySquareBetweenTheKingAndTheRookMustBeEmpty) {
+  auto both = position("r3k2r/8/8/8/8/8/8/RN2K1NR");
+  EXPECT_EQ(movesOf(*both, "e1"), std::string("d1 d2 e2 f1 f2"));
+  auto enemyKnight = position("4k3/8/8/8/8/8/8/Rn2K2R");  // an enemy piece on b1 blocks too, though it attacks d2 and c3
+  EXPECT_EQ(movesOf(*enemyKnight, "e1"), std::string("d1 e2 f1 f2 g1"));
+}
+
+TEST(Castling, NeverOutOfCheck) {
+  auto g = position("6k1/8/8/8/8/8/4r3/R3K2R");
+  EXPECT_TRUE(g->inCheck());
+  EXPECT_EQ(movesOf(*g, "e1"), std::string("d1 e2 f1"));
+  IS(g->move("e1", "g1"), IllegalMove);
+}
+
+TEST(Castling, NeverThroughAnAttackedSquare) {
+  auto shortSide = position("2k2r2/8/8/8/8/8/8/R3K2R");  // f1 is attacked: the short castle crosses it
+  EXPECT_EQ(movesOf(*shortSide, "e1"), std::string("c1 d1 d2 e2"));
+  auto longSide = position("1k1r4/8/8/8/8/8/8/R3K2R");   // d1 is attacked: the long castle crosses it
+  EXPECT_EQ(movesOf(*longSide, "e1"), std::string("e2 f1 f2 g1"));
+}
+
+TEST(Castling, NeverIntoCheck) {
+  auto g = position("2k3r1/8/8/8/8/8/8/R3K2R");
+  EXPECT_EQ(movesOf(*g, "e1"), std::string("c1 d1 d2 e2 f1 f2"));
+  IS(g->move("e1", "g1"), IllegalMove);
+}
+
+TEST(Castling, TheRookAndTheSquareBesideItMayBeAttacked) {
+  auto b1 = position("1r1k4/8/8/8/8/8/8/R3K2R");  // b1 is attacked, and only has to be empty
+  EXPECT_EQ(movesOf(*b1, "e1"), std::string("c1 d1 d2 e2 f1 f2 g1"));
+  auto corner = position("r5k1/8/8/8/8/8/8/R3K2R");  // the rook on a1 is attacked
+  EXPECT_EQ(movesOf(*corner, "e1"), std::string("c1 d1 d2 e2 f1 f2 g1"));
+  IS(corner->move("e1", "c1"), Ok);
+  EXPECT_EQ(letter(*corner, "d1"), 'R');
+}
+
+TEST(Castling, TheRightIsLostWhenTheKingOrARookMovesEvenIfItComesBack) {
+  auto rook = position(kBothSides);
+  EXPECT_TRUE(playAll(*rook, "h1g1 a8b8 g1h1 b8a8"));
+  EXPECT_EQ(movesOf(*rook, "e1"), std::string("c1 d1 d2 e2 f1 f2"));  // the long side is still allowed
+  auto king = position(kBothSides);
+  EXPECT_TRUE(playAll(*king, "e1e2 a8b8 e2e1 b8a8"));
+  EXPECT_EQ(movesOf(*king, "e1"), std::string("d1 d2 e2 f1 f2"));
+  IS(king->move("e1", "g1"), IllegalMove);
+}
+
+TEST(Castling, TheRightIsLostWhenTheRookIsCapturedOnItsCorner) {
+  auto g = position("4k3/pb6/8/8/8/7R/P7/4K2R");
+  EXPECT_TRUE(playAll(*g, "a2a3 b7h1 h3h1 a7a6"));  // the white rook that stands on h1 now is not the one that never moved
+  EXPECT_EQ(letter(*g, "h1"), 'R');
+  EXPECT_EQ(movesOf(*g, "e1"), std::string("d1 d2 e2 f1 f2"));
+  IS(g->move("e1", "g1"), IllegalMove);
+}
+
+TEST(Castling, TheRightsAtSetupComeFromTheHomeSquares) {
+  auto one = position("4k3/8/8/8/8/8/8/R3K3");
+  EXPECT_EQ(movesOf(*one, "e1"), std::string("c1 d1 d2 e2 f1 f2"));
+  auto offHome = position("4k3/8/8/8/8/8/8/R2K3R");  // the king is on d1: it counts as having moved
+  EXPECT_EQ(movesOf(*offHome, "d1"), std::string("c1 c2 d2 e1 e2"));
+  auto enemyRook = position("3rk3/8/8/8/8/8/8/R3K3", Color::Black);
+  EXPECT_EQ(movesOf(*enemyRook, "e8"), std::string("d7 e7 f7 f8"));  // a rook of the other colour is not a castling partner
+}
+
+TEST(EnPassant, CaptureOnTheNextMoveRemovesThePassedPawn) {
+  auto g = chess::makeFullGame();
+  EXPECT_TRUE(playAll(*g, "e2e4 a7a6 e4e5 d7d5"));
+  EXPECT_EQ(movesOf(*g, "e5"), std::string("d6 e6"));
+  IS(g->move("e5", "d6"), Ok);
+  EXPECT_EQ(letter(*g, "d6"), 'P');
+  EXPECT_EQ(letter(*g, "d5"), '.');  // the pawn that was passed is gone, not the square the capturer landed on
+  EXPECT_EQ(letter(*g, "e5"), '.');
+  auto black = chess::makeFullGame();
+  EXPECT_TRUE(playAll(*black, "a2a3 e7e5 a3a4 e5e4 d2d4"));
+  EXPECT_EQ(movesOf(*black, "e4"), std::string("d3 e3"));
+  IS(black->move("e4", "d3"), Ok);
+  EXPECT_EQ(letter(*black, "d3"), 'p');
+  EXPECT_EQ(letter(*black, "d4"), '.');
+}
+
+TEST(EnPassant, OnlyOnTheVeryNextMove) {
+  auto g = chess::makeFullGame();
+  EXPECT_TRUE(playAll(*g, "e2e4 a7a6 e4e5 d7d5 h2h3 a6a5"));
+  EXPECT_EQ(movesOf(*g, "e5"), std::string("e6"));
+  IS(g->move("e5", "d6"), IllegalMove);
+}
+
+TEST(EnPassant, NeedsATwoSquareAdvanceNotTwoSingleSteps) {
+  auto g = chess::makeFullGame();
+  EXPECT_TRUE(playAll(*g, "e2e4 a7a6 e4e5 d7d6 a2a3 d6d5"));
+  EXPECT_EQ(movesOf(*g, "e5"), std::string("e6"));
+}
+
+TEST(EnPassant, OnlyAPawnBesideTheLandingSquareMayCapture) {
+  auto far = position("4k3/2p5/8/8/4P3/8/8/4K3", Color::Black);
+  IS(far->move("c7", "c5"), Ok);
+  EXPECT_EQ(movesOf(*far, "e4"), std::string("e5"));
+  auto behind = position("4k3/4p3/8/8/3P4/8/8/4K3", Color::Black);
+  IS(behind->move("e7", "e5"), Ok);
+  EXPECT_EQ(movesOf(*behind, "d4"), std::string("d5 e5"));  // e5 is an ordinary capture; e6 is not reachable from d4
+}
+
+TEST(EnPassant, OnlyAPawnMayCaptureEnPassant) {
+  auto g = position("7k/3p4/8/4R3/8/8/8/4K3", Color::Black);
+  IS(g->move("d7", "d5"), Ok);
+  EXPECT_EQ(movesOf(*g, "e5"), std::string("d5 e2 e3 e4 e6 e7 e8 f5 g5 h5"));  // a rook beside the pawn does not get d6
+  IS(g->move("e5", "d6"), IllegalMove);
+}
+
+TEST(EnPassant, TheCaptureMayNotExposeTheKingAlongTheRank) {
+  auto g = position("7k/2p5/8/KP5r/8/8/8/8", Color::Black);
+  IS(g->move("c7", "c5"), Ok);
+  EXPECT_EQ(movesOf(*g, "b5"), std::string("b6"));  // b5xc6 would clear the fifth rank between the king and the rook
+  IS(g->move("b5", "c6"), IllegalMove);
+}
+
+TEST(EnPassant, CanAnswerACheckByRemovingThePawnThatGivesIt) {
+  auto g = position("4k3/3p4/8/4P3/4K3/8/8/8", Color::Black);
+  IS(g->move("d7", "d5"), Ok);
+  EXPECT_TRUE(g->inCheck());
+  EXPECT_EQ(movesOf(*g, "e5"), std::string("d6"));  // the only pawn move that answers the check
+  IS(g->move("e5", "d6"), Ok);
+  EXPECT_FALSE(g->inCheck());
+}
+
+TEST(Rules, TheBasicRulesStillHoldInTheFullGame) {
+  auto start = chess::makeFullGame();
+  EXPECT_EQ(countMoves(*start), 20LL);
+  EXPECT_EQ(movesOf(*start, "e1"), std::string(""));
+  EXPECT_TRUE(playAll(*start, "f2f3 e7e5 g2g4 d8h4"));
+  EXPECT_TRUE(start->outcome() == Outcome::Checkmate);
+  IS(start->move("e2", "e3"), GameOver);
+  auto promo = position("7k/4P3/8/8/8/8/8/K7");
+  IS(promo->move("e7", "e8", Kind::King), InvalidPromotion);
+  IS(promo->move("e7", "e8", Kind::Rook), Ok);
+  EXPECT_EQ(letter(*promo, "e8"), 'R');
+}
+
+TEST(Perft, EveryRuleTogetherInAPositionBuiltToBreakMoveGenerators) {
+  EXPECT_EQ(perft(kKiwipete, 1), 48LL);
+  EXPECT_EQ(perft(kKiwipete, 2), 2039LL);
+  EXPECT_EQ(perft(kKiwipete, 3), 97862LL);
+}
+
+TEST(Perft, EnPassantPinsAndChecksInARookEndgame) {
+  EXPECT_EQ(perft("8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8", 3), 2812LL);  // two en passant captures at this depth
+  EXPECT_EQ(perft("8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8", 4), 43238LL);
+}
+
+TEST(Perft, PromotionsCapturesIntoPromotionsAndCastlingForOnlyOneSide) {
+  EXPECT_EQ(perft(kPositionFour, 1), 6LL);
+  EXPECT_EQ(perft(kPositionFour, 2), 264LL);
+  EXPECT_EQ(perft(kPositionFour, 3), 9467LL);
+}
+22:T2f5c,#include <algorithm>
+#include <cstdint>
+#include <memory>
+#include <string>
+#include <vector>
+
+#include "api_storm2.h"
+#include "bp_test.h"
+
+namespace {
+using chess::Color;
+using chess::Kind;
+using chess::Outcome;
+using chess::Piece;
+using chess::Status;
+
+#define IS(call, expected) EXPECT_TRUE((call) == Status::expected)
+
+// "r3k2r/8/8/..." (a FEN placement) to the eight rows makeGameFrom() takes.
+std::vector<std::string> rowsOf(const std::string& placement) {
+  std::vector<std::string> rows(1);
+  for (char c : placement) {
+    if (c == '/') rows.emplace_back();
+    else if (c >= '1' && c <= '8') rows.back() += std::string(static_cast<std::size_t>(c - '0'), '.');
+    else rows.back() += c;
+  }
+  return rows;
+}
+
+std::unique_ptr<chess::UndoGame> position(const std::string& placement, Color toMove = Color::White) {
+  return chess::makeUndoGameFrom(rowsOf(placement), toMove);
+}
+
+std::string join(const std::vector<std::string>& names) {
+  std::string out;
+  for (const auto& n : names) out += (out.empty() ? "" : " ") + n;
+  return out;
+}
+
+std::string movesOf(const chess::Game& g, const std::string& from) { return join(g.legalMoves(from)); }
+
+// "e2e4" or "e7e8n": plays one move, the optional fifth letter names the promotion piece.
+Status play(chess::Game& g, const std::string& text) {
+  Kind promote = Kind::Queen;
+  if (text.size() == 5) promote = text[4] == 'n' ? Kind::Knight : text[4] == 'b' ? Kind::Bishop : text[4] == 'r' ? Kind::Rook : Kind::Queen;
+  return g.move(text.substr(0, 2), text.substr(2, 2), promote);
+}
+
+bool playAll(chess::Game& g, const std::string& line) {
+  std::size_t start = 0;
+  while (start < line.size()) {
+    std::size_t end = line.find(' ', start);
+    if (end == std::string::npos) end = line.size();
+    if (play(g, line.substr(start, end - start)) != Status::Ok) return false;
+    start = end + 1;
+  }
+  return true;
+}
+
+// The piece on a square as one letter (upper case White), '.' when empty.
+char letter(const chess::Game& g, const std::string& square) {
+  Piece p{Color::White, Kind::Pawn};
+  if (g.pieceAt(square, p) != Status::Ok) return '.';
+  static const std::string kinds = "PNBRQK";
+  const char c = kinds[static_cast<std::size_t>(p.kind)];
+  return p.color == Color::White ? c : static_cast<char>(c - 'A' + 'a');
+}
+
+std::string placementOf(const chess::Game& g) {
+  std::string out;
+  for (int rank = 8; rank >= 1; --rank) {
+    for (char file = 'a'; file <= 'h'; ++file) out += letter(g, std::string{file, static_cast<char>('0' + rank)});
+    if (rank > 1) out += '/';
+  }
+  return out;
+}
+
+// The number of moves of the side to move, a promotion counted as the four moves it is.
+long long countMoves(const chess::Game& g) {
+  long long total = 0;
+  for (char file = 'a'; file <= 'h'; ++file) {
+    for (char rank = '1'; rank <= '8'; ++rank) {
+      const std::string from{file, rank};
+      const char c = letter(g, from);
+      const bool pawn = c == 'P' || c == 'p';
+      for (const auto& to : g.legalMoves(from)) total += (pawn && (to[1] == '8' || to[1] == '1')) ? 4 : 1;
+    }
+  }
+  return total;
+}
+
+
+// Everything an observer can see: if two games have the same signature they behave the same from here on.
+std::string signature(const chess::Game& g) {
+  std::string out = placementOf(g) + (g.turn() == Color::White ? " w " : " b ");
+  out += std::to_string(static_cast<int>(g.outcome())) + (g.inCheck() ? "+" : "-");
+  for (char file = 'a'; file <= 'h'; ++file) {
+    for (char rank = '1'; rank <= '8'; ++rank) {
+      const std::string from{file, rank};
+      const std::string moves = movesOf(g, from);
+      if (!moves.empty()) out += " " + from + ":" + moves;
+    }
+  }
+  return out;
+}
+
+long long perft(chess::UndoGame& g, int depth) {
+  if (depth == 1) return countMoves(g);
+  long long total = 0;
+  for (char file = 'a'; file <= 'h'; ++file) {
+    for (char rank = '1'; rank <= '8'; ++rank) {
+      const std::string from{file, rank};
+      const char c = letter(g, from);
+      for (const auto& to : g.legalMoves(from)) {
+        const bool promotion = (c == 'P' || c == 'p') && (to[1] == '8' || to[1] == '1');
+        for (Kind k : {Kind::Queen, Kind::Rook, Kind::Bishop, Kind::Knight}) {
+          if (g.move(from, to, k) != Status::Ok) return -1000000;
+          total += perft(g, depth - 1);
+          if (g.undo() != Status::Ok) return -1000000;
+          if (!promotion) break;
+        }
+      }
+    }
+  }
+  return total;
+}
+
+// Plays `plies` pseudo-random legal moves (a fixed seed gives a fixed game), then takes them all back one by one.
+bool walkAndUndo(const std::string& placement, Color toMove, std::uint64_t seed, int plies) {
+  auto g = position(placement, toMove);
+  if (!g) return false;
+  std::vector<std::string> seen{signature(*g)};
+  std::uint64_t state = seed;
+  for (int ply = 0; ply < plies && g->outcome() == Outcome::Ongoing; ++ply) {
+    std::vector<std::pair<std::string, std::string>> options;
+    for (char file = 'a'; file <= 'h'; ++file) {
+      for (char rank = '1'; rank <= '8'; ++rank) {
+        const std::string from{file, rank};
+        for (const auto& to : g->legalMoves(from)) options.emplace_back(from, to);
+      }
+    }
+    state = state * 6364136223846793005ULL + 1442695040888963407ULL;
+    const auto& pick = options[static_cast<std::size_t>(state >> 33) % options.size()];
+    const Kind promote = (state >> 20) % 3 == 0 ? Kind::Knight : Kind::Queen;
+    if (g->move(pick.first, pick.second, promote) != Status::Ok) return false;
+    seen.push_back(signature(*g));
+  }
+  if (g->moveCount() != seen.size() - 1) return false;
+  for (std::size_t back = seen.size() - 1; back > 0; --back) {
+    if (g->undo() != Status::Ok) return false;
+    if (signature(*g) != seen[back - 1]) return false;
+  }
+  return g->undo() == Status::NothingToUndo && g->moveCount() == 0;
+}
+}  // namespace
+
+const char* const kBothSides = "r3k2r/8/8/8/8/8/8/R3K2R";
+const char* const kKiwipete = "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R";
+const char* const kPositionFour = "r3k2r/Pppp1ppp/1b3nbN/nP6/BBP1P3/q4N2/Pp1P2PP/R2Q1RK1";
+const char* const kStart = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR";
+
+TEST(Undo, TakesBackAMoveAndGivesTheTurnBack) {
+  auto g = chess::makeUndoGame();
+  IS(g->undo(), NothingToUndo);
+  EXPECT_EQ(g->moveCount(), std::size_t{0});
+  const std::string start = signature(*g);
+  IS(g->move("e2", "e4"), Ok);
+  EXPECT_EQ(g->moveCount(), std::size_t{1});
+  EXPECT_TRUE(g->turn() == Color::Black);
+  IS(g->undo(), Ok);
+  EXPECT_EQ(signature(*g), start);
+  EXPECT_TRUE(g->turn() == Color::White);
+  EXPECT_EQ(g->moveCount(), std::size_t{0});
+  IS(g->undo(), NothingToUndo);
+  IS(g->move("e2", "e4"), Ok);  // and the same move can be played again
+}
+
+TEST(Undo, BringsBackACapturedPieceAndEveryoneElseStaysPut) {
+  auto g = chess::makeUndoGame();
+  EXPECT_TRUE(playAll(*g, "e2e4 d7d5"));
+  const std::string before = signature(*g);
+  IS(g->move("e4", "d5"), Ok);
+  EXPECT_EQ(letter(*g, "d5"), 'P');
+  IS(g->undo(), Ok);
+  EXPECT_EQ(letter(*g, "d5"), 'p');
+  EXPECT_EQ(letter(*g, "e4"), 'P');
+  EXPECT_EQ(signature(*g), before);
+  EXPECT_EQ(g->moveCount(), std::size_t{2});
+}
+
+TEST(Undo, ThePositionAGameStartedFromIsTheBottomOfTheHistory) {
+  auto g = position("4k3/8/8/8/8/8/4P3/4K3");
+  IS(g->undo(), NothingToUndo);
+  EXPECT_EQ(g->moveCount(), std::size_t{0});
+  IS(g->move("e2", "e4"), Ok);
+  IS(g->undo(), Ok);
+  IS(g->undo(), NothingToUndo);
+  EXPECT_EQ(placementOf(*g), std::string("....k.../......../......../......../......../......../....P.../....K..."));
+}
+
+TEST(Undo, RefusedMovesLeaveNoTraceInTheHistory) {
+  auto g = chess::makeUndoGame();
+  IS(g->move("e2", "e4"), Ok);
+  IS(g->move("e2", "e4"), Empty);
+  IS(g->move("e7", "e3"), IllegalMove);
+  IS(g->move("a1", "a2"), NotYourTurn);
+  EXPECT_EQ(g->moveCount(), std::size_t{1});
+  IS(g->undo(), Ok);  // takes back e2e4, not a refused call
+  EXPECT_EQ(placementOf(*g), std::string(kStart).empty() ? "" : placementOf(*chess::makeUndoGame()));
+  IS(g->undo(), NothingToUndo);
+}
+
+TEST(Undo, PromotionAndEnPassantAreTakenBack) {
+  auto promo = position("7k/4P3/8/8/8/8/8/K7");
+  const std::string before = signature(*promo);
+  IS(promo->move("e7", "e8", Kind::Knight), Ok);
+  EXPECT_EQ(letter(*promo, "e8"), 'N');
+  IS(promo->undo(), Ok);
+  EXPECT_EQ(letter(*promo, "e7"), 'P');
+  EXPECT_EQ(letter(*promo, "e8"), '.');
+  EXPECT_EQ(signature(*promo), before);
+  auto ep = chess::makeUndoGame();
+  EXPECT_TRUE(playAll(*ep, "e2e4 a7a6 e4e5 d7d5"));
+  const std::string chance = signature(*ep);
+  IS(ep->move("e5", "d6"), Ok);
+  EXPECT_EQ(letter(*ep, "d5"), '.');
+  IS(ep->undo(), Ok);
+  EXPECT_EQ(letter(*ep, "d5"), 'p');
+  EXPECT_EQ(letter(*ep, "d6"), '.');
+  EXPECT_EQ(letter(*ep, "e5"), 'P');
+  EXPECT_EQ(signature(*ep), chance);
+  EXPECT_EQ(movesOf(*ep, "e5"), std::string("d6 e6"));  // the chance is back as well
+}
+
+TEST(Undo, CastlingComesBackWithItsRookAndItsRight) {
+  auto g = position(kBothSides);
+  const std::string before = signature(*g);
+  IS(g->move("e1", "g1"), Ok);
+  IS(g->undo(), Ok);
+  EXPECT_EQ(signature(*g), before);
+  EXPECT_EQ(movesOf(*g, "e1"), std::string("c1 d1 d2 e2 f1 f2 g1"));
+  IS(g->move("e1", "c1"), Ok);
+  IS(g->undo(), Ok);
+  EXPECT_EQ(signature(*g), before);
+  // A rook move and a king move take the right away; taking them back gives it back.
+  EXPECT_TRUE(playAll(*g, "h1g1 a8b8"));
+  EXPECT_EQ(movesOf(*g, "e1"), std::string("c1 d1 d2 e2 f1 f2"));
+  IS(g->undo(), Ok);
+  IS(g->undo(), Ok);
+  EXPECT_EQ(signature(*g), before);
+  EXPECT_TRUE(playAll(*g, "e1e2 a8b8"));
+  IS(g->undo(), Ok);
+  IS(g->undo(), Ok);
+  EXPECT_EQ(movesOf(*g, "e1"), std::string("c1 d1 d2 e2 f1 f2 g1"));
+}
+
+TEST(Undo, ACapturedRookTakesItsCastlingRightWithItAndUndoReturnsIt) {
+  auto g = position("4k3/pb6/8/8/8/7R/P7/4K2R");
+  EXPECT_TRUE(playAll(*g, "a2a3 b7h1"));
+  EXPECT_EQ(movesOf(*g, "e1"), std::string("d1 d2 e2 f1 f2"));
+  IS(g->undo(), Ok);
+  EXPECT_EQ(letter(*g, "h1"), 'R');
+  IS(g->undo(), Ok);
+  EXPECT_EQ(movesOf(*g, "e1"), std::string("d1 d2 e2 f1 f2 g1"));
+}
+
+TEST(Undo, TheEnPassantChanceIsRestoredWhenTheMoveThatEndedItIsTakenBack) {
+  auto g = position("4k3/8/8/8/3p4/8/4P3/4K3");
+  IS(g->move("e2", "e4"), Ok);
+  EXPECT_EQ(movesOf(*g, "d4"), std::string("d3 e3"));
+  EXPECT_TRUE(playAll(*g, "e8d8 e1d1"));  // the chance is gone after one move each
+  EXPECT_EQ(movesOf(*g, "d4"), std::string("d3"));
+  IS(g->undo(), Ok);
+  IS(g->undo(), Ok);                      // back to the position right after the double advance
+  EXPECT_EQ(movesOf(*g, "d4"), std::string("d3 e3"));
+  IS(g->move("d4", "e3"), Ok);
+  EXPECT_EQ(letter(*g, "e4"), '.');
+  EXPECT_EQ(letter(*g, "e3"), 'p');
+}
+
+TEST(Undo, ACheckmateCanBeTakenBackAndTheGameGoesOn) {
+  auto g = chess::makeUndoGame();
+  EXPECT_TRUE(playAll(*g, "f2f3 e7e5 g2g4 d8h4"));
+  EXPECT_TRUE(g->outcome() == Outcome::Checkmate);
+  IS(g->undo(), Ok);
+  EXPECT_TRUE(g->outcome() == Outcome::Ongoing);
+  EXPECT_FALSE(g->inCheck());
+  EXPECT_TRUE(g->turn() == Color::Black);
+  IS(g->move("d8", "e7"), Ok);
+  auto draw = position("7k/5Q2/8/6K1/8/8/8/8");
+  IS(draw->move("g5", "g6"), Ok);
+  EXPECT_TRUE(draw->outcome() == Outcome::Stalemate);
+  IS(draw->move("h8", "g8"), GameOver);
+  IS(draw->undo(), Ok);
+  EXPECT_TRUE(draw->outcome() == Outcome::Ongoing);
+}
+
+TEST(Undo, LongRandomGamesCanBeTakenBackStepByStepThroughEveryPosition) {
+  for (std::uint64_t seed = 1; seed <= 4; ++seed) {
+    EXPECT_TRUE(walkAndUndo(kStart, Color::White, seed, 120));
+    EXPECT_TRUE(walkAndUndo(kKiwipete, Color::White, seed * 7, 120));
+    EXPECT_TRUE(walkAndUndo(kPositionFour, Color::White, seed * 13, 120));
+    EXPECT_TRUE(walkAndUndo(kBothSides, Color::Black, seed * 29, 120));
+  }
+}
+
+TEST(Perft, TheSameCountsAsEverWhenEveryMoveIsPlayedAndTakenBack) {
+  auto kiwi = position(kKiwipete);
+  EXPECT_EQ(perft(*kiwi, 3), 97862LL);
+  EXPECT_EQ(kiwi->moveCount(), std::size_t{0});
+  auto four = position(kPositionFour);
+  EXPECT_EQ(perft(*four, 3), 9467LL);
+  auto rook = position("8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8");
+  EXPECT_EQ(perft(*rook, 4), 43238LL);
+  auto five = position("rnbq1k1r/pp1Pbppp/2p5/8/2B5/8/PPP1NnPP/RNBQK2R");
+  EXPECT_EQ(perft(*five, 3), 62379LL);
+}
+23:T592,#pragma once
+#include <array>
+#include <vector>
+
+#include "api_storm2.h"
+#include "square.h"
+
+// Which piece stands where. A plain value: copying it is how a trial move is tried.
+class Board {
+ public:
+  bool occupied(Square square) const { return cells_[square.index()].present; }
+  chess::Piece at(Square square) const { return cells_[square.index()].piece; }
+  void place(Square square, chess::Piece piece) { cells_[square.index()] = Cell{true, piece}; }
+  void clear(Square square) { cells_[square.index()] = Cell{}; }
+
+  bool holds(Square square, chess::Color color, chess::Kind kind) const {
+    return occupied(square) && at(square).color == color && at(square).kind == kind;
+  }
+
+  std::vector<Square> squaresOf(chess::Color color) const {
+    std::vector<Square> found;
+    for (int rank = 0; rank < 8; ++rank) {
+      for (int file = 0; file < 8; ++file) {
+        const Square square(file, rank);
+        if (occupied(square) && at(square).color == color) found.push_back(square);
+      }
+    }
+    return found;
+  }
+
+  bool findKing(chess::Color color, Square& out) const {
+    for (const Square& square : squaresOf(color)) {
+      if (at(square).kind == chess::Kind::King) {
+        out = square;
+        return true;
+      }
+    }
+    return false;
+  }
+
+ private:
+  struct Cell {
+    bool present = false;
+    chess::Piece piece{chess::Color::White, chess::Kind::Pawn};
+  };
+
+  std::array<Cell, 64> cells_{};
+};
+24:T9da,#pragma once
+#include <memory>
+#include <string>
+#include <utility>
+#include <vector>
+
+#include "game_queries.h"
+#include "position_parser.h"
+
+// The commands. A move is looked up among the legal moves of the piece, so there is one definition of "legal"; the
+// history is a stack of whole positions (Memento), which is why undo needs to know nothing about the rules.
+class GameImpl : public GameQueries {
+ public:
+  using GameQueries::GameQueries;
+
+  static std::unique_ptr<GameImpl> create(Rules rules, const std::vector<std::string>& rows, chess::Color toMove) {
+    const RuleTable pieces;
+    const CheckDetector detector(pieces);
+    Position start;
+    if (!PositionParser(detector).parse(rows, toMove, start)) return nullptr;
+    return std::make_unique<GameImpl>(rules, start);
+  }
+
+  chess::Status move(const std::string& from, const std::string& to, chess::Kind promoteTo) override {
+    if (outcome_ != chess::Outcome::Ongoing) return chess::Status::GameOver;
+    const Square source = Square::parse(from);
+    const Square target = Square::parse(to);
+    if (!source.valid() || !target.valid()) return chess::Status::InvalidSquare;
+    if (!position_.board.occupied(source)) return chess::Status::Empty;
+    if (position_.board.at(source).color != position_.turn) return chess::Status::NotYourTurn;
+    std::vector<Move> options;
+    generator_.legalFrom(position_, source, options);
+    options.erase(std::remove_if(options.begin(), options.end(), [&](const Move& m) { return m.to != target; }), options.end());
+    if (options.empty()) return chess::Status::IllegalMove;
+    const Move* chosen = choose(options, promoteTo);
+    if (!chosen) return chess::Status::InvalidPromotion;
+    history_.push_back(position_);
+    applier_.apply(position_, *chosen);
+    refresh();
+    return chess::Status::Ok;
+  }
+
+  chess::Status undo() override {
+    if (history_.empty()) return chess::Status::NothingToUndo;
+    position_ = history_.back();
+    history_.pop_back();
+    refresh();
+    return chess::Status::Ok;
+  }
+
+  std::size_t moveCount() const override { return history_.size(); }
+
+ private:
+  // One option, or four when the move is a promotion (one per piece): the one asked for, or nothing.
+  static const Move* choose(const std::vector<Move>& options, chess::Kind promoteTo) {
+    if (!promotes(options.front())) return &options.front();
+    for (const Move& option : options) {
+      if (option.promoteTo == promoteTo) return &option;
+    }
+    return nullptr;
+  }
+
+  std::vector<Position> history_;
+};
+25:T791,#pragma once
+#include <algorithm>
+#include <string>
+#include <vector>
+
+#include "check_detector.h"
+#include "move_generator.h"
+
+// The state of one game and everything that can be asked about it without changing it.
+class GameQueries : public chess::UndoGame {
+ public:
+  GameQueries(Rules rules, Position start)
+      : rules_(rules), detector_(rules_.pieces()), applier_(rules_), generator_(rules_, detector_, applier_), position_(std::move(start)) {
+    refresh();
+  }
+
+  chess::Status pieceAt(const std::string& square, chess::Piece& out) const override {
+    const Square at = Square::parse(square);
+    if (!at.valid()) return chess::Status::InvalidSquare;
+    if (!position_.board.occupied(at)) return chess::Status::Empty;
+    out = position_.board.at(at);
+    return chess::Status::Ok;
+  }
+
+  chess::Color turn() const override { return position_.turn; }
+  bool inCheck() const override { return detector_.inCheck(position_.board, position_.turn); }
+  chess::Outcome outcome() const override { return outcome_; }
+
+  std::vector<std::string> legalMoves(const std::string& from) const override {
+    std::vector<Move> moves;
+    const Square at = Square::parse(from);
+    if (at.valid()) generator_.legalFrom(position_, at, moves);
+    std::vector<std::string> names;
+    for (const Move& move : moves) names.push_back(move.to.name());
+    std::sort(names.begin(), names.end());
+    names.erase(std::unique(names.begin(), names.end()), names.end());
+    return names;
+  }
+
+ protected:
+  // Works out whether the game is over; call after every change of the position.
+  void refresh() {
+    if (generator_.anyLegal(position_)) outcome_ = chess::Outcome::Ongoing;
+    else outcome_ = inCheck() ? chess::Outcome::Checkmate : chess::Outcome::Stalemate;
+  }
+
+  RuleBook rules_;
+  CheckDetector detector_;
+  MoveApplier applier_;
+  MoveGenerator generator_;
+  Position position_;
+  chess::Outcome outcome_ = chess::Outcome::Ongoing;
+};
+26:T55e,#pragma once
+#include "check_detector.h"
+#include "move_applier.h"
+
+// Finds the legal moves: the piece's own moves and the special moves, minus those that leave the mover's king attacked.
+class MoveGenerator {
+ public:
+  MoveGenerator(const RuleBook& rules, const CheckDetector& detector, const MoveApplier& applier)
+      : rules_(rules), detector_(detector), applier_(applier) {}
+
+  void legalFrom(const Position& position, Square from, std::vector<Move>& out) const {
+    if (!position.board.occupied(from) || position.board.at(from).color != position.turn) return;
+    std::vector<Move> candidates;
+    rules_.pieces().of(position.board.at(from).kind).moves(position.board, from, position.turn, candidates);
+    for (const auto& special : rules_.specials()) special->generate(position, from, candidates);
+    for (const Move& move : candidates) {
+      Position after = position;
+      applier_.apply(after, move);
+      if (!detector_.inCheck(after.board, position.turn)) out.push_back(move);
+    }
+  }
+
+  bool anyLegal(const Position& position) const {
+    std::vector<Move> found;
+    for (const Square& from : position.board.squaresOf(position.turn)) {
+      legalFrom(position, from, found);
+      if (!found.empty()) return true;
+    }
+    return false;
+  }
+
+ private:
+  const RuleBook& rules_;
+  const CheckDetector& detector_;
+  const MoveApplier& applier_;
+};
+27:T13c0,#pragma once
+#include <array>
+#include <memory>
+#include <utility>
+#include <vector>
+
+#include "board.h"
+#include "colors.h"
+#include "move.h"
+
+// How one kind of piece moves (Strategy). A rule is stateless: it looks at the board and the square it is asked about.
+class PieceRules {
+ public:
+  virtual ~PieceRules() = default;
+  // The squares this piece attacks: where it could capture. The first piece on a line counts, whichever colour it is.
+  virtual void attacks(const Board& board, Square from, chess::Color color, std::vector<Square>& out) const = 0;
+  // The moves the piece may make by its own movement rules alone (its king's safety is somebody else's question).
+  virtual void moves(const Board& board, Square from, chess::Color color, std::vector<Move>& out) const = 0;
+};
+
+// A piece that may move to every square it attacks except those held by a friend: knight, bishop, rook, queen, king.
+class ReachRule : public PieceRules {
+ public:
+  void moves(const Board& board, Square from, chess::Color color, std::vector<Move>& out) const override {
+    std::vector<Square> reach;
+    attacks(board, from, color, reach);
+    for (const Square& to : reach) {
+      if (!board.occupied(to) || board.at(to).color != color) out.push_back(Move{from, to});
+    }
+  }
+};
+
+using Steps = std::vector<std::pair<int, int>>;
+
+// Jumps by a fixed list of offsets: knight and king.
+class StepRule : public ReachRule {
+ public:
+  explicit StepRule(Steps steps) : steps_(std::move(steps)) {}
+
+  void attacks(const Board&, Square from, chess::Color, std::vector<Square>& out) const override {
+    for (const auto& step : steps_) {
+      const Square to = from.offset(step.first, step.second);
+      if (to.valid()) out.push_back(to);
+    }
+  }
+
+ private:
+  Steps steps_;
+};
+
+// Slides along its directions until the first piece: bishop, rook, queen.
+class SlideRule : public ReachRule {
+ public:
+  explicit SlideRule(Steps directions) : directions_(std::move(directions)) {}
+
+  void attacks(const Board& board, Square from, chess::Color, std::vector<Square>& out) const override {
+    for (const auto& direction : directions_) {
+      Square to = from.offset(direction.first, direction.second);
+      while (to.valid()) {
+        out.push_back(to);
+        if (board.occupied(to)) break;
+        to = to.offset(direction.first, direction.second);
+      }
+    }
+  }
+
+ private:
+  Steps directions_;
+};
+
+class PawnRule : public PieceRules {
+ public:
+  void attacks(const Board&, Square from, chess::Color color, std::vector<Square>& out) const override {
+    for (const int fileStep : {-1, 1}) {
+      const Square to = from.offset(fileStep, forwardStep(color));
+      if (to.valid()) out.push_back(to);
+    }
+  }
+
+  void moves(const Board& board, Square from, chess::Color color, std::vector<Move>& out) const override {
+    const Square one = from.offset(0, forwardStep(color));
+    if (one.valid() && !board.occupied(one)) {
+      add(from, one, color, MoveKind::Normal, out);
+      const Square two = from.offset(0, 2 * forwardStep(color));
+      if (from.rank() == pawnRank(color) && !board.occupied(two)) out.push_back(Move{from, two, chess::Kind::Pawn, MoveKind::DoublePush});
+    }
+    std::vector<Square> diagonals;
+    attacks(board, from, color, diagonals);
+    for (const Square& to : diagonals) {
+      if (board.occupied(to) && board.at(to).color != color) add(from, to, color, MoveKind::Normal, out);
+    }
+  }
+
+ private:
+  // A move onto the last rank is four moves: one per piece the pawn may become.
+  static void add(Square from, Square to, chess::Color color, MoveKind kind, std::vector<Move>& out) {
+    if (to.rank() != lastRank(color)) {
+      out.push_back(Move{from, to, chess::Kind::Pawn, kind});
+      return;
+    }
+    for (const chess::Kind becomes : {chess::Kind::Queen, chess::Kind::Rook, chess::Kind::Bishop, chess::Kind::Knight}) {
+      out.push_back(Move{from, to, becomes, kind});
+    }
+  }
+};
+
+// The rules of every kind of piece, found by kind: no switch, so a new piece is a new entry.
+class RuleTable {
+ public:
+  RuleTable() {
+    const Steps straight{{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+    const Steps diagonal{{1, 1}, {1, -1}, {-1, 1}, {-1, -1}};
+    Steps around = straight;
+    around.insert(around.end(), diagonal.begin(), diagonal.end());
+    const Steps jumps{{1, 2}, {2, 1}, {2, -1}, {1, -2}, {-1, -2}, {-2, -1}, {-2, 1}, {-1, 2}};
+    set(chess::Kind::Pawn, std::make_unique<PawnRule>());
+    set(chess::Kind::Knight, std::make_unique<StepRule>(jumps));
+    set(chess::Kind::Bishop, std::make_unique<SlideRule>(diagonal));
+    set(chess::Kind::Rook, std::make_unique<SlideRule>(straight));
+    set(chess::Kind::Queen, std::make_unique<SlideRule>(around));
+    set(chess::Kind::King, std::make_unique<StepRule>(around));
+  }
+
+  const PieceRules& of(chess::Kind kind) const { return *rules_[static_cast<std::size_t>(kind)]; }
+
+ private:
+  void set(chess::Kind kind, std::unique_ptr<PieceRules> rule) { rules_[static_cast<std::size_t>(kind)] = std::move(rule); }
+
+  std::array<std::unique_ptr<PieceRules>, 6> rules_;
+};
+28:Ta26,#pragma once
+#include <cctype>
+#include <string>
+#include <vector>
+
+#include "check_detector.h"
+#include "position.h"
+
+// Turns the eight text rows of makeGameFrom() into a Position, or refuses a position that cannot exist.
+class PositionParser {
+ public:
+  explicit PositionParser(const CheckDetector& detector) : detector_(detector) {}
+
+  static std::vector<std::string> startRows() {
+    return {"rnbqkbnr", "pppppppp", "........", "........", "........", "........", "PPPPPPPP", "RNBQKBNR"};
+  }
+
+  bool parse(const std::vector<std::string>& rows, chess::Color toMove, Position& out) const {
+    if (rows.size() != 8) return false;
+    Position position;
+    position.turn = toMove;
+    int kings[2] = {0, 0};
+    for (int row = 0; row < 8; ++row) {
+      if (rows[row].size() != 8) return false;
+      for (int file = 0; file < 8; ++file) {
+        if (rows[row][file] == '.') continue;
+        chess::Piece piece{chess::Color::White, chess::Kind::Pawn};
+        if (!decode(rows[row][file], piece)) return false;
+        const Square at(file, 7 - row);
+        if (piece.kind == chess::Kind::Pawn && (at.rank() == 0 || at.rank() == 7)) return false;
+        if (piece.kind == chess::Kind::King) ++kings[sideIndex(piece.color)];
+        position.board.place(at, piece);
+      }
+    }
+    if (kings[0] != 1 || kings[1] != 1) return false;
+    if (detector_.inCheck(position.board, opposite(toMove))) return false;
+    inferCastleRights(position);
+    out = position;
+    return true;
+  }
+
+ private:
+  static bool decode(char letter, chess::Piece& out) {
+    static const std::string kKinds = "pnbrqk";
+    const std::size_t found = kKinds.find(static_cast<char>(std::tolower(static_cast<unsigned char>(letter))));
+    if (found == std::string::npos) return false;
+    out = chess::Piece{std::isupper(static_cast<unsigned char>(letter)) ? chess::Color::White : chess::Color::Black, static_cast<chess::Kind>(found)};
+    return true;
+  }
+
+  // A king on its home square and a rook of its colour in a corner count as never moved.
+  static void inferCastleRights(Position& position) {
+    for (const chess::Color side : {chess::Color::White, chess::Color::Black}) {
+      const int rank = homeRank(side);
+      const bool kingHome = position.board.holds(Square(4, rank), side, chess::Kind::King);
+      position.rights.kingSide[sideIndex(side)] = kingHome && position.board.holds(Square(7, rank), side, chess::Kind::Rook);
+      position.rights.queenSide[sideIndex(side)] = kingHome && position.board.holds(Square(0, rank), side, chess::Kind::Rook);
+    }
+  }
+
+  const CheckDetector& detector_;
+};
+29:T1103,#pragma once
+#include <algorithm>
+#include <vector>
+
+#include "check_detector.h"
+#include "position.h"
+
+// A rule that is not a piece's own way of moving (Strategy): it may add moves and it may have to do more than move one piece.
+class SpecialMove {
+ public:
+  virtual ~SpecialMove() = default;
+  // Extra moves for the piece of the side to move standing on `from`.
+  virtual void generate(const Position& position, Square from, std::vector<Move>& out) const = 0;
+  // Called after the piece has been moved, captured and promoted: finish the move and update the state it keeps.
+  virtual void afterMove(Position& position, const Move& move) const = 0;
+};
+
+class CastlingRule : public SpecialMove {
+ public:
+  explicit CastlingRule(const RuleTable& pieces) : detector_(pieces) {}
+
+  void generate(const Position& position, Square from, std::vector<Move>& out) const override {
+    const chess::Color side = position.turn;
+    if (from != Square(kKingFile, homeRank(side))) return;
+    if (detector_.attacked(position.board, from, opposite(side))) return;
+    if (position.rights.kingSide[sideIndex(side)]) addIfClear(position, from, +1, kRookFileKingSide, out);
+    if (position.rights.queenSide[sideIndex(side)]) addIfClear(position, from, -1, kRookFileQueenSide, out);
+  }
+
+  void afterMove(Position& position, const Move& move) const override {
+    if (move.kind == MoveKind::Castle) moveRook(position, move);
+    for (const chess::Color side : {chess::Color::White, chess::Color::Black}) {
+      const int rank = homeRank(side);
+      if (touches(move, Square(kKingFile, rank))) {
+        position.rights.kingSide[sideIndex(side)] = false;
+        position.rights.queenSide[sideIndex(side)] = false;
+      }
+      if (touches(move, Square(kRookFileKingSide, rank))) position.rights.kingSide[sideIndex(side)] = false;
+      if (touches(move, Square(kRookFileQueenSide, rank))) position.rights.queenSide[sideIndex(side)] = false;
+    }
+  }
+
+ private:
+  static constexpr int kKingFile = 4;
+  static constexpr int kRookFileKingSide = 7;
+  static constexpr int kRookFileQueenSide = 0;
+
+  static bool touches(const Move& move, Square square) { return move.from == square || move.to == square; }
+
+  // Adds the castling towards `rookFile` when the squares between king and rook are empty and the king's way is not attacked.
+  // The landing square is checked like for any king move, by the legality filter.
+  void addIfClear(const Position& position, Square king, int direction, int rookFile, std::vector<Move>& out) const {
+    for (int file = kKingFile + direction; file != rookFile; file += direction) {
+      if (position.board.occupied(Square(file, king.rank()))) return;
+    }
+    if (detector_.attacked(position.board, king.offset(direction, 0), opposite(position.turn))) return;
+    out.push_back(Move{king, king.offset(2 * direction, 0), chess::Kind::Pawn, MoveKind::Castle});
+  }
+
+  static void moveRook(Position& position, const Move& move) {
+    const bool kingSide = move.to.file() > move.from.file();
+    const Square rookFrom(kingSide ? kRookFileKingSide : kRookFileQueenSide, move.from.rank());
+    const Square rookTo(kingSide ? kRookFileKingSide - 2 : kRookFileQueenSide + 3, move.from.rank());
+    position.board.place(rookTo, position.board.at(rookFrom));
+    position.board.clear(rookFrom);
+  }
+
+  CheckDetector detector_;
+};
+
+class EnPassantRule : public SpecialMove {
+ public:
+  explicit EnPassantRule(const RuleTable& pieces) : pawns_(pieces.of(chess::Kind::Pawn)) {}
+
+  void generate(const Position& position, Square from, std::vector<Move>& out) const override {
+    if (!position.enPassant.valid() || position.board.at(from).kind != chess::Kind::Pawn) return;
+    std::vector<Square> reach;
+    pawns_.attacks(position.board, from, position.turn, reach);
+    if (std::find(reach.begin(), reach.end(), position.enPassant) == reach.end()) return;
+    out.push_back(Move{from, position.enPassant, chess::Kind::Pawn, MoveKind::EnPassant});
+  }
+
+  void afterMove(Position& position, const Move& move) const override {
+    position.enPassant = Square();
+    if (move.kind == MoveKind::DoublePush) position.enPassant = Square(move.from.file(), (move.from.rank() + move.to.rank()) / 2);
+    if (move.kind == MoveKind::EnPassant) position.board.clear(Square(move.to.file(), move.from.rank()));
+  }
+
+ private:
+  const PieceRules& pawns_;
+};
+2a:T4b3,#pragma once
+#include <string>
+
+// A square of the board: file 0..7 is a..h, rank 0..7 is 1..8. A default Square is "nowhere".
+class Square {
+ public:
+  Square() = default;
+  Square(int file, int rank) : file_(file), rank_(rank) {}
+
+  int file() const { return file_; }
+  int rank() const { return rank_; }
+  bool valid() const { return file_ >= 0 && file_ < 8 && rank_ >= 0 && rank_ < 8; }
+  int index() const { return rank_ * 8 + file_; }
+  Square offset(int fileStep, int rankStep) const { return Square(file_ + fileStep, rank_ + rankStep); }
+  std::string name() const { return std::string{static_cast<char>('a' + file_), static_cast<char>('1' + rank_)}; }
+
+  bool operator==(const Square& other) const { return file_ == other.file_ && rank_ == other.rank_; }
+  bool operator!=(const Square& other) const { return !(*this == other); }
+
+  // "e4" gives a Square; anything else (wrong length, wrong characters, upper case) gives nowhere.
+  static Square parse(const std::string& text) {
+    if (text.size() != 2 || text[0] < 'a' || text[0] > 'h' || text[1] < '1' || text[1] > '8') return Square();
+    return Square(text[0] - 'a', text[1] - '1');
+  }
+
+ private:
+  int file_ = -1;
+  int rank_ = -1;
+};
+c:["$","$L1a",null,{"bundle":{"id":"chess","title":"Chess: piece rules, check detection, castling, en passant and undo","level":"Senior","parMinutes":90,"patterns":["Strategy","Composite","Memento","Template Method"],"requirements":[{"id":"R-squares","text":"Squares are a lower-case file a..h and a rank 1..8 (\"e4\"); anything else is InvalidSquare. makeGameFrom(rows, toMove) takes 8 rows of 8 characters (rank 8 first, KQRBNP White, kqrbnp Black, '.' empty) and returns nullptr unless there is exactly one king of each colour, no pawn on rank 1 or 8, and the side NOT to move is not in check. pieceAt answers Ok, Empty (out untouched) or InvalidSquare.","phase":"base","hidden":true},{"id":"R-moves","text":"Standard movement: the knight jumps; bishop, rook and queen slide until the first piece (an enemy there is captured, a friend blocks); the king steps one square; nothing captures its own side. A pawn pushes one square onto an empty square, two from its start rank (rank 2 White, rank 7 Black) when both squares ahead are empty, and captures one square diagonally forward onto an enemy piece only. White moves up, Black down.","phase":"base","hidden":true},{"id":"R-promotion","text":"A pawn reaching the last rank becomes the piece named by promoteTo (default Queen; Queen, Rook, Bishop or Knight), by push or by capture. promoteTo is ignored unless the move is a promotion; there a Pawn or King is InvalidPromotion and nothing changes.","phase":"base","hidden":true},{"id":"R-check","text":"A move is legal only if the mover's own king is not attacked after it (so pins, check evasions, double check and the king stepping back along a checking rook's line follow from one rule, tested on the position after the move). A pawn attacks the two diagonals in front of it, not the square it pushes to. inCheck() is about the side to move.","phase":"base","hidden":true},{"id":"R-order","text":"move(from, to, promoteTo) checks in this order: GameOver, InvalidSquare (either square), Empty, NotYourTurn, IllegalMove, InvalidPromotion. A refused call changes nothing; an accepted one flips the turn.","phase":"base","hidden":true},{"id":"R-outcome","text":"outcome() is Ongoing, Checkmate (no legal move and in check) or Stalemate (no legal move and not in check). After either, move() answers GameOver and legalMoves is empty everywhere. A position from makeGameFrom that is already over says so at once.","phase":"base","hidden":true},{"id":"R-legal","text":"legalMoves(square) lists the destination squares of the piece on it, sorted by name and each once (a promotion square once), and is empty for an invalid square, an empty square or a piece of the side not to move.","phase":"base","hidden":true},{"id":"R-basic","text":"The basic game (makeGame, makeGameFrom) has no castling and no en passant: a king moving two squares or a pawn capturing an empty square is an IllegalMove.","phase":"base","hidden":true},{"id":"R-castling","text":"In the full game (makeFullGame, makeFullGameFrom) the king castles with a never-moved, not-captured rook of its colour: the squares between are empty (b1 too), the king is not in check and neither crosses nor lands on an attacked square (the rook and b1 may be attacked); the king moves two squares and the rook jumps over it. The right is lost for good by a king move, a rook leaving its corner and a rook captured on its corner. A set-up position counts a king on e1/e8 and a rook of its colour in a corner as never moved.","phase":"storm1","hidden":true},{"id":"R-enpassant","text":"Right after a pawn advances two squares, an enemy pawn on the same rank beside its landing square may capture it diagonally onto the skipped square, removing the passed pawn; only on the very next move, only for a pawn, and only if the capture leaves the mover's king safe (including a rank opened by removing two pawns, and a check answered by removing the checking pawn).","phase":"storm1","hidden":true},{"id":"R-undo","text":"UndoGame::undo() takes back the last move accepted by move() on this object, restoring the board, the turn, the captured piece, a promotion, castling's rook, the castling rights, the en passant chance and the outcome (also after checkmate or stalemate). The starting position is the bottom: NothingToUndo. A refused move is not in the history; moveCount() is the number of moves undo() can take back.","phase":"storm2","hidden":true}],"brief":"$1b","editorial":"$1c","clarify":[{"id":"q-board","text":"How are squares named, how does a game start, and can I set up any position? What is a position that is not allowed?","answer":"Squares are a lower-case file a..h and a rank 1..8: \"e4\". Anything else (upper case, wrong length, off the board) is InvalidSquare. makeGame() is the standard start with White to move. makeGameFrom(rows, toMove) takes 8 rows of 8 characters, rank 8 first, with KQRBNP for White, kqrbnp for Black and '.' for empty. It returns nullptr for a malformed position, a side without exactly one king, a pawn on rank 1 or 8, or a position where the side NOT to move is already in check (the mover could simply take the king). pieceAt answers Ok, Empty or InvalidSquare.","reveals":["R-squares"],"quality":"essential"},{"id":"q-moves","text":"Do all pieces move as in the standard game? Anything I should simplify, and what about the pawn?","answer":"Standard movement: the knight jumps, bishop, rook and queen slide until the first piece (an enemy there is captured, a friend blocks), the king steps one square. No piece captures its own side. The pawn moves one square forward onto an empty square, two from its start rank (rank 2 for White, rank 7 for Black) if both squares are empty, and captures one square diagonally forward onto an enemy piece; White goes up the ranks, Black down. A diagonal step onto an empty square is not a move.","reveals":["R-moves"],"quality":"essential"},{"id":"q-promotion","text":"What happens when a pawn reaches the last rank, and who chooses the new piece?","answer":"It is promoted at once to the piece named by the caller (move takes a third argument, default Queen): Queen, Rook, Bishop or Knight. The argument is ignored on every move that is not a promotion; on a promotion a Pawn or a King is refused with InvalidPromotion and nothing changes. A promotion may also be a capture.","reveals":["R-promotion"],"quality":"essential"},{"id":"q-check","text":"What makes a move legal beyond the way the piece moves? How is check defined, and how do pins and checks restrict moves?","answer":"A move is legal only if, afterwards, the mover's own king is not attacked. That one rule covers a king stepping onto an attacked square, a pinned piece leaving its line (it may move along the line, including capturing the pinner), and the answer to a check (capture the checker, block it, or move the king; in double check only the king moves). A king is attacked when an enemy piece could capture on its square; pawns attack the two diagonals in front of them, not the square they push to. Test the position AFTER the move: a king that steps back along the line of a checking rook is still attacked.","reveals":["R-check"],"quality":"essential"},{"id":"q-order","text":"What does move() return and in which order does it check things? Whose turn is it, and what does a refused move change?","answer":"move(from, to, promoteTo) returns Status, checked in this order: GameOver, InvalidSquare (either square), Empty (nothing on from), NotYourTurn (the piece belongs to the side that is not to move), IllegalMove, InvalidPromotion. A refused call changes nothing, and a good move flips the turn. turn() is the side to move.","reveals":["R-order"],"quality":"essential"},{"id":"q-end","text":"When does the game end, and is a draw different from a loss? What can still be called afterwards?","answer":"outcome() is Ongoing, Checkmate or Stalemate. The side to move with no legal move is checkmated if it is in check (the other side has won) and stalemated if it is not (a draw). After either, move() answers GameOver (checked first) and legalMoves is empty for every square. A position built with makeGameFrom that is already over reports it immediately. inCheck() is about the side to move.","reveals":["R-outcome"],"quality":"essential"},{"id":"q-legal","text":"What does legalMoves(square) return, and how many entries for a promotion?","answer":"The destination squares the piece on that square may legally move to, sorted by name and each once, so a pawn that can promote on e8 lists e8 a single time. It is empty for an invalid square, an empty square, or a piece of the side that is not to move.","reveals":["R-legal"],"quality":"essential"},{"id":"q-basic","text":"Is castling in? En passant? Draw rules like repetition or the fifty-move rule?","answer":"Not in the basic game: a king that moves two squares, or a pawn that captures an empty square, is an IllegalMove. Expect castling and en passant as the next change request. Repetition, the fifty-move rule and insufficient material are out of scope.","reveals":["R-basic"],"quality":"useful"},{"id":"q-castle-later","text":"When castling comes, what are the exact conditions, and how does a position that is set up from text know who may castle?","answer":"A follow-up will ask for it: the king and that rook have never moved and the rook has not been captured, every square between them is empty, the king is not in check and does not cross or land on an attacked square (the rook and the b-file square may be attacked). The right is lost for good when the king moves, when a rook leaves its corner and when a rook is captured on its corner. In a position made from text, a king on its home square and a rook in its corner count as never moved. Say how your design would carry state that is not on the board.","reveals":["R-castling"],"quality":"useful"},{"id":"q-enpassant-later","text":"When en passant comes, what must the design remember, and for how long?","answer":"A follow-up will ask for it: right after a pawn advances two squares, an enemy pawn beside its landing square may capture it as if it had moved one, landing on the skipped square and removing the passed pawn. The chance lasts one move. The capture is illegal if it leaves your king attacked, which includes a rank where the capture removes two pawns at once. Say what your move type and state would need.","reveals":["R-enpassant"],"quality":"useful"},{"id":"q-undo-later","text":"Will the game need to take moves back? What would undo have to restore?","answer":"Yes, the last change request: undo() takes back the last move made through move() on this object, restoring the board, the turn, the captured piece, a promotion, castling's rook, the castling rights, the en passant chance and the outcome, and works after checkmate too. The position a game started from is the bottom of the history. Say what you would store per move: a copy of the state or the changes.","reveals":["R-undo"],"quality":"useful"},{"id":"q-perf","text":"How fast must it be? Do I need bitboards, move ordering or a transposition table?","answer":"No. A position is judged by looking at 64 squares and a few dozen pieces; the tests walk about a hundred thousand positions and clarity matters more than speed. Bitboards and incremental attack tables are the answer for an engine that searches millions per second, and a good thing to know and mention.","reveals":[],"quality":"useful"},{"id":"q-threads","text":"Will several threads call the game?","answer":"No. One caller at a time; no locking. A server that hosts many games would give each game its own object and guard it with one lock per game.","reveals":[],"quality":"useful"},{"id":"q-engine","text":"Should it also suggest the best move, or play against the user?","answer":"No: the engine only knows the rules. A computer player would be another class that asks legalMoves and move, which is a good reason to keep the rules behind a small interface.","reveals":[],"quality":"noise"},{"id":"q-notation","text":"Do I parse algebraic notation (Nf3, O-O, e8=Q) or FEN strings?","answer":"No. Callers name two squares; the position is given as rows of characters. A notation layer is an adapter on top of the interface and a good follow-up.","reveals":[],"quality":"noise"},{"id":"q-clock","text":"Is there a clock, a draw offer or resignation?","answer":"No. Clocks and resignation belong to a match around the game, not to the rules.","reveals":[],"quality":"noise"},{"id":"q-gui","text":"Should it draw the board or animate moves?","answer":"No rendering at all. The interface returns data; any screen is built on top of it.","reveals":[],"quality":"noise"}],"rubric":[{"id":"res-facade","text":"Exposes the public calls and sequences the collaborators: validate the arguments in the documented order, find the move among the piece's legal moves, apply it, refresh the outcome","phase":"base","owners":["GameImpl","GameQueries","ChessGame","Game","GameService","GameFacade","Chess"]},{"id":"res-board","text":"Holds the pieces on the squares as a plain value that can be copied for a trial move, with the square arithmetic (parse, name, offset, validity) in one small type","phase":"base","owners":["Board","Position","Square","Grid","BoardState","Squares"]},{"id":"res-pieces","text":"Knows how each kind of piece moves and attacks as its own class or table entry (Strategy or polymorphism), so adding or changing a piece touches no other piece","phase":"base","owners":["PieceRules","RuleTable","MovePattern","PieceBehavior","PieceMovement","Piece","MoveRule"]},{"id":"res-check","text":"Answers 'is this square attacked by that side?' and 'is this king in check?' on any board, in one place that reuses the piece rules","phase":"base","owners":["CheckDetector","AttackMap","AttackFinder","KingSafety","CheckChecker","Attacks"]},{"id":"res-legal","text":"Turns a piece's own moves into legal moves by trying each on a copy and rejecting those that leave the mover's king attacked","phase":"base","owners":["MoveGenerator","LegalMoves","MoveValidator","LegalityFilter","MoveFinder","Rules"]},{"id":"res-apply","text":"Is the single place where a move changes a position (move the piece, capture, promote, flip the turn), so the trial and the real move cannot differ","phase":"base","owners":["MoveApplier","MoveExecutor","Mover","MoveMaker","Position","BoardUpdater"]},{"id":"res-setup","text":"Turns the text rows into a position and refuses positions that cannot exist (kings, pawns on the back ranks, the side not to move in check)","phase":"base","owners":["PositionParser","PositionBuilder","BoardParser","PositionFactory","Setup","PositionLoader"]},{"id":"res-special","text":"Keeps the rules that are not a piece's own movement (castling, en passant) behind one extension interface that can add moves and finish them, so a new special rule is a new class and the move code does not change","phase":"storm1","owners":["SpecialMove","SpecialRule","MoveRule","Castling","CastlingRule","ExtraMoveRule","RuleExtension"]},{"id":"res-history","text":"Keeps the history of positions (or reversible moves) and restores the whole state, including the hidden parts, on undo, without knowing any rule","phase":"storm2","owners":["GameImpl","History","MoveHistory","UndoStack","Memento","HistoryStack","GameHistory"]}],"followups":[{"level":"SDE2","question":"Why does each kind of piece get its own rule object (or table entry) instead of one big function with an if for every piece?","answer":"Because the pieces vary independently and the rest of the engine must not care which one it is holding. With one rule per kind, check detection, move generation and legality all ask the same two questions (what do you attack, where can you move), and a new piece, or a changed rule, touches exactly one class. A single function with a branch per piece grows with every rule, and every edit risks the other pieces. The kind is a small enum used only to find the rule, so there is no switch over it anywhere else."},{"level":"SDE2","question":"How do you decide whether a move is legal, and why try the move on a copy of the position?","answer":"Generate the moves a piece can make by its own rules, then for each one apply it to a copy of the position and ask whether the mover's king is attacked in the copy; keep the moves for which it is not. That one test covers pins, moving into check, ignoring a check and the king stepping back along a rook's line, without any special code for each. The cost is a position copy per candidate move, which is cheap for a board of 64 small cells and keeps the code obviously correct; an engine would make and unmake moves in place instead."},{"level":"SDE2","question":"A pawn is the odd piece out. What makes it different, and where does that show up in your design?","answer":"It moves and attacks differently: it pushes onto empty squares but attacks the two diagonals in front of it, the push is two squares from its start rank, its direction depends on its colour, and on the last rank it turns into another piece (four moves for one destination). So the rule has two methods, attacks (used for check detection) and moves (used for generation), and a pawn rule implements both separately. Treating 'where it can move' as 'what it attacks' is the classic bug: a king would be 'in check' from the square in front of a pawn."},{"level":"SDE2","question":"What is the difference between checkmate and stalemate, and how does your code tell them apart?","answer":"Both mean the side to move has no legal move. If its king is attacked, it is checkmate and the other side wins; if not, it is stalemate and the game is drawn. The code computes 'has any legal move' once, and the answer to 'is the king attacked' decides between the two. The state is refreshed after every change of position (a move, an undo), so the outcome is never stale."},{"level":"Senior","question":"Why must the legality test look at the position after the move, and what bug does 'is the destination square attacked?' on the old board give you?","answer":"Because the move changes what blocks what. If a rook gives check along a rank and the king steps one square further along the same rank, the destination looks safe on the old board: the king's own body was standing between it and the rook. After the move the king has left, the line is open and the square is attacked. The same holds for a piece that captures a defender, and for en passant, where removing the passed pawn can open a rank. Applying the move to a copy and testing the king's square covers every case with no special code."},{"level":"Senior","question":"How did you make castling and en passant a small change? What state did they add that the board does not hold?","answer":"The state that is not on the board went into the position (castling rights per side and wing, the en passant square) and the rules went behind one interface: a special move can add moves for a piece and can finish a move (the rook's jump, the passed pawn's removal, updating its own state). The generator asks every special for extra moves and the applier calls every special after each move, so the piece rules and the legality test stay untouched. The first game in this problem had an empty list of specials; the full game adds two. The move carries a kind (normal, double push, castle, en passant) so the finishing step knows what to do."},{"level":"Senior","question":"Why can't the castling rights be derived from the board? And what do you assume when a position is set up from text?","answer":"Because 'the king is on e1' says nothing about whether it has ever moved: a king that went out and came back looks identical. The right is history, so it is state, updated by every move that touches the king's or a rook's home square (including a capture on a corner: touching the square is the rule, which covers moves from it and onto it). A position built from rows has no history, so the convention is: a king on its home square and a rook of its colour in a corner count as unmoved. The other convention, an extra argument that lists the rights, is the more honest interface and what FEN does."},{"level":"Senior","question":"What is the hardest en passant case, and how does your design handle it without a special case?","answer":"The capture removes two pawns from one rank at once (the capturer leaves its square and the passed pawn is taken from beside it), so it can expose a king standing on that rank to a rook or queen on the other side, a check that appears only after the capture and that no per-piece rule sees. Because legality is 'apply to a copy and test the king', the copy has both pawns removed and the test finds the attack. Writing the capture as a normal move with an extra effect, rather than a cheaper special path that skips the test, is what keeps this case correct for free."},{"level":"Senior","question":"Undo: do you store snapshots or reversible moves, and what are the trade-offs?","answer":"This design stores a copy of the whole position per move (a Memento): undo is one assignment, it cannot forget anything (rights, en passant, captured piece, promotion), and it knows no rules. The price is memory per ply (a few hundred bytes, which is nothing for a human game and too much for a search that makes millions of moves). The alternative is a Command per move that records exactly what it changed (captured piece, old rights, old en passant square) and reverses it: compact and fast, and every new rule must say how it undoes itself, which is where bugs hide. Start with snapshots; move to reversible moves when a profile asks for it."},{"level":"Staff","question":"How would you test a move generator, and what is perft?","answer":"Perft counts the leaf positions at a given depth from a known position; there are published counts for well-chosen positions (the starting position, positions built to contain castling, pins, en passant, promotions and check evasions). If the counts match at depth 3 to 5, every rule is almost certainly right, and if one differs, 'perft divide' (the count under each first move) bisects to the broken rule. The tests here use it, plus targeted cases per rule, plus a model-style random walk that plays and un-plays moves and compares full signatures. The lesson: for a rules engine with many interacting cases, an oracle with known answers beats any number of hand-written examples."},{"level":"Staff","question":"What would you change to make this a fast engine core that searches millions of positions per second?","answer":"Replace the cell array by bitboards (one 64-bit mask per piece kind and colour), generate moves with shifts and lookup tables (magic bitboards for sliders), make and unmake moves in place with a small undo record, test legality with pin and check masks instead of trying each move, and add incremental hashing for a transposition table. The structure of this design survives: the piece kinds, the rules as data, the move type with a kind, the position as state and the special rules as extensions; what changes is the representation behind them, which is exactly why the representation was hidden behind small classes."},{"level":"Staff","question":"You must host millions of games for a chess server. What is the state, and what is the architecture?","answer":"A game is a position plus its move list, a few hundred bytes, so the real problems are elsewhere: one authoritative service validates every move (clients are untrusted) and appends it to the game's log, an append-only log per game gives undo, takeback offers, resumption and an audit trail for free, and the position is rebuilt by replaying the log (with periodic snapshots). Games are sharded by game id; a game lives on one node at a time so moves are serialised without distributed locks, with the log replicated for failover. Players are connected through a gateway with WebSockets, clocks are kept by the server (the client's clock is a display), and the rules engine runs identically in the client for instant feedback and on the server for the truth."}],"apiHeader":"$1d","phaseApis":{"storm1":"$1e","storm2":"$1f"},"phases":["base","storm1","storm2"],"tests":{"base":[{"path":"chess_base.cpp","content":"$20"}],"storm1":[{"path":"chess_storm1.cpp","content":"$21"}],"storm2":[{"path":"chess_storm2.cpp","content":"$22"}]},"reference":[{"path":"board.h","content":"$23"},{"path":"check_detector.h","content":"#pragma once\n#include <algorithm>\n#include <vector>\n\n#include \"piece_rules.h\"\n\n// Answers \"is this square attacked?\" and \"is this king in check?\" by asking every enemy piece what it attacks.\nclass CheckDetector {\n public:\n  explicit CheckDetector(const RuleTable& pieces) : pieces_(pieces) {}\n\n  bool attacked(const Board& board, Square target, chess::Color by) const {\n    std::vector<Square> reach;\n    for (const Square& from : board.squaresOf(by)) {\n      reach.clear();\n      pieces_.of(board.at(from).kind).attacks(board, from, by, reach);\n      if (std::find(reach.begin(), reach.end(), target) != reach.end()) return true;\n    }\n    return false;\n  }\n\n  bool inCheck(const Board& board, chess::Color side) const {\n    Square king;\n    return board.findKing(side, king) && attacked(board, king, opposite(side));\n  }\n\n private:\n  const RuleTable& pieces_;\n};\n"},{"path":"colors.h","content":"#pragma once\n#include \"api_storm2.h\"\n\n// Everything that depends on which side a piece belongs to, in one place.\ninline chess::Color opposite(chess::Color color) { return color == chess::Color::White ? chess::Color::Black : chess::Color::White; }\ninline int forwardStep(chess::Color color) { return color == chess::Color::White ? 1 : -1; }\ninline int homeRank(chess::Color color) { return color == chess::Color::White ? 0 : 7; }\ninline int pawnRank(chess::Color color) { return color == chess::Color::White ? 1 : 6; }\ninline int lastRank(chess::Color color) { return color == chess::Color::White ? 7 : 0; }\ninline int sideIndex(chess::Color color) { return static_cast<int>(color); }\n"},{"path":"game_impl.h","content":"$24"},{"path":"game_queries.h","content":"$25"},{"path":"move.h","content":"#pragma once\n#include \"api_storm2.h\"\n#include \"square.h\"\n\nenum class MoveKind { Normal, DoublePush, Castle, EnPassant };\n\n// One move: where from, where to, and what a pawn becomes on the last rank. Kind::Pawn in promoteTo means \"no promotion\".\nstruct Move {\n  Square from;\n  Square to;\n  chess::Kind promoteTo = chess::Kind::Pawn;\n  MoveKind kind = MoveKind::Normal;\n};\n\ninline bool promotes(const Move& move) { return move.promoteTo != chess::Kind::Pawn; }\n"},{"path":"move_applier.h","content":"#pragma once\n#include \"rule_book.h\"\n\n// Makes a move on a position: the one place where a move changes anything.\nclass MoveApplier {\n public:\n  explicit MoveApplier(const RuleBook& rules) : rules_(rules) {}\n\n  void apply(Position& position, const Move& move) const {\n    const chess::Piece mover = position.board.at(move.from);\n    position.board.clear(move.from);\n    position.board.place(move.to, promotes(move) ? chess::Piece{mover.color, move.promoteTo} : mover);\n    for (const auto& special : rules_.specials()) special->afterMove(position, move);\n    position.turn = opposite(position.turn);\n  }\n\n private:\n  const RuleBook& rules_;\n};\n"},{"path":"move_generator.h","content":"$26"},{"path":"piece_rules.h","content":"$27"},{"path":"position.h","content":"#pragma once\n#include \"board.h\"\n\n// Who may still castle, per colour (indexed by sideIndex): the king has not moved and that rook has not moved or been captured.\nstruct CastleRights {\n  bool kingSide[2] = {false, false};\n  bool queenSide[2] = {false, false};\n};\n\n// Everything that decides what can happen next. A value: one history entry is one copy of it.\nstruct Position {\n  Board board;\n  chess::Color turn = chess::Color::White;\n  CastleRights rights;\n  Square enPassant;  // the square a pawn has just skipped with a two-square advance, or nowhere\n};\n"},{"path":"position_parser.h","content":"$28"},{"path":"rule_book.h","content":"#pragma once\n#include <memory>\n#include <vector>\n\n#include \"special_move.h\"\n\nenum class Rules { Basic, Full };\n\n// The rules of one game: how each piece moves, plus the special moves that this variant has.\nclass RuleBook {\n public:\n  explicit RuleBook(Rules rules) {\n    if (rules == Rules::Full) {\n      specials_.push_back(std::make_unique<CastlingRule>(pieces_));\n      specials_.push_back(std::make_unique<EnPassantRule>(pieces_));\n    }\n  }\n\n  const RuleTable& pieces() const { return pieces_; }\n  const std::vector<std::unique_ptr<SpecialMove>>& specials() const { return specials_; }\n\n private:\n  RuleTable pieces_;\n  std::vector<std::unique_ptr<SpecialMove>> specials_;\n};\n"},{"path":"service.cpp","content":"#include \"game_impl.h\"\n\nstd::unique_ptr<chess::Game> chess::makeGame() { return GameImpl::create(Rules::Basic, PositionParser::startRows(), chess::Color::White); }\n\nstd::unique_ptr<chess::Game> chess::makeGameFrom(const std::vector<std::string>& rows, chess::Color toMove) {\n  return GameImpl::create(Rules::Basic, rows, toMove);\n}\n\nstd::unique_ptr<chess::Game> chess::makeFullGame() { return GameImpl::create(Rules::Full, PositionParser::startRows(), chess::Color::White); }\n\nstd::unique_ptr<chess::Game> chess::makeFullGameFrom(const std::vector<std::string>& rows, chess::Color toMove) {\n  return GameImpl::create(Rules::Full, rows, toMove);\n}\n\nstd::unique_ptr<chess::UndoGame> chess::makeUndoGame() { return GameImpl::create(Rules::Full, PositionParser::startRows(), chess::Color::White); }\n\nstd::unique_ptr<chess::UndoGame> chess::makeUndoGameFrom(const std::vector<std::string>& rows, chess::Color toMove) {\n  return GameImpl::create(Rules::Full, rows, toMove);\n}\n"},{"path":"special_move.h","content":"$29"},{"path":"square.h","content":"$2a"}],"driver":{"path":"driver.cpp","content":"#define BP_TEST_MAIN\n#include \"bp_test.h\"\n","readOnly":true}}}]

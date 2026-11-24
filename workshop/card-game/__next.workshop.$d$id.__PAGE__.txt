@@ -1,0 +1,1434 @@
+1:"$Sreact.fragment"
+2:"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js"
+3:I[39756,["$2"],"default"]
+4:I[37457,["$2"],"default"]
+5:"/blueprint-clash/_next/static/chunks/2n5qeheznvl4u.js"
+6:I[22016,["$2","$5"],""]
+7:I[64576,["$2"],"PwaRegister"]
+10:"/blueprint-clash/_next/static/chunks/2uk3wcjwqg0tl.js"
+11:"/blueprint-clash/_next/static/chunks/1zdu7yjl8efu4.js"
+12:I[65612,["$2","$10","$11"],"WorkshopClient"]
+23:"ViewportBoundary"
+24:I[97367,["$2"],"$23"]
+25:"MetadataBoundary"
+26:I[97367,["$2"],"$25"]
+27:"$Sreact.suspense"
+28:I[27201,["$2"],"IconMark"]
+:HL["/blueprint-clash/_next/static/chunks/2lbfwxo4jtf0j.css","style"]
+9:X
+c:X
+c:C
+13:T68e,# Card game framework: one round of Twenty-One, then other games on the same table
+
+You are building the engine of a small card-game table: no screen, no network, only the rules. A `Game` object seats one to six players against a dealer, deals from a deck the caller has already put in order, lets each player decide in turn, lets the dealer play, and reports a result for every player. The first game is Twenty-One (Blackjack); the owner already says other games will follow, so the table, the deal and the turn loop must not belong to Blackjack.
+
+What you know so far:
+
+- A card has a rank (Ace to King) and a suit. A deck is an ordered list; the card at the front is the top.
+- Players sit in a fixed order, then the dealer. Cards go round the table one at a time.
+- Each player in turn may take a card (`hit`) or stop (`stand`). A hand worth more than 21 is a bust.
+- The dealer plays by a fixed rule after the last player, and then every player wins, loses or pushes against the dealer.
+- Everything is face up and the deck order is chosen by the caller, so every round can be replayed exactly.
+
+Your task: design and implement it behind the `cards::Game` interface in `api.h` (`makeBlackjack()` is yours to define). The hidden tests call only that interface. Ask the interviewer questions first: "what is a hand worth, exactly, and what does an Ace count as?", "what does each call answer, and in which order does it check?", "what does the dealer do, and when?" and "what decides a tie, a natural or a double bust?" are where first drafts go wrong. Expect a request for house rules once the basics work, and then a request for a second game that is not Blackjack at all.
+14:T2111,# Editorial: A card game framework with Template Method rounds, house rules and a second game
+
+## Requirements
+Functional: a `Game` for one to six players against a dealer, played from a stacked deck: `deal`, `hit`, `stand`, and the queries `phase`, `current`, `hand`, `total`, `result`, `dealerHand`, `dealerTotal`. Twenty-One first, then house rules (dealer hits soft 17, five-card Charlie), then a second game (Showdown) on the same interface.
+
+Hidden in the brief and revealed by good questions: who may sit and what a bad table is (`nullptr`, including a deck too small for the first deal); that the deck is the caller's, drawn from the front, and the deal goes round the table one card at a time ending with the dealer; the value of a hand (Ace 1 or 11 for the best total up to 21, faces 10, a bust shown as the hard sum); that a hand worth 21 has no decision, so a natural passes the turn at once; the check order of `hit` and `stand` (UnknownPlayer, WrongPhase, NotYourTurn, then DeckEmpty) and that a refused call changes nothing; the dealer's rule (draws below 17, stands on every 17, stands on an empty deck, plays only after the last player); the order in which a result is decided (player bust, dealer bust, naturals, dealer natural, totals); and that results exist only when the round is Finished.
+
+**Change Storm 1, house rules:** the dealer also draws on a soft 17, and a five-card Charlie ends the turn and beats everything but a dealer natural. Both must be switchable independently and with neither on the game must be exactly the basic one. **Change Storm 2, a different game:** Showdown deals three cards each, has no decisions, scores the sum of card points modulo ten and compares with the dealer. The real test is what has to change in code that already works.
+
+## Reference design
+The reference has four layers that change for different reasons.
+
+- **`Table`, `Seat`, `Hand`, `Shoe`, `Progress`:** plain state with no rules. A `Hand` is the cards in the order dealt, a `Shoe` hands out the caller's deck from the top, a `Seat` is a name, a hand and a result, `Table` is the seats, the dealer and the shoe, and `Progress` is the phase and whose turn it is. No game rule appears in any of them, so a second game reuses all of them.
+- **`Scorer` (Strategy):** what a hand is worth. `BlackjackScorer` returns the best total and whether an Ace is counted high (needed for the soft 17 rule); `ModTenScorer` sums points modulo ten. The skeleton never reads a rank.
+- **`TableGame` (the read side):** the queries, written once over `Table`, `Progress` and a `Scorer`, so every game answers `hand`, `total`, `result` and `current` the same way.
+- **`RoundGame` (Template Method):** `deal`, `hit` and `stand` are `final` and fix the order of a round. `deal` goes round the table, `hit` and `stand` check the call in the documented order, then both pass the turn on through one private `moveOn()` that skips seats without a decision and, when none is left, runs `finishRound()` (the dealer draws, the phase becomes Finished, every seat is settled). A game fills in four hooks: `openingCards`, `canAct`, `dealerDraws`, `settle`.
+- **`Blackjack` and `Showdown`:** each is the four hooks and a scorer. House rules are a small `HouseRules` value that two of Blackjack's hooks read (`canAct` for Charlie, `dealerDraws` for soft 17), so the two storm-1 rules are one condition each and no branch of the skeleton was edited. Showdown's `canAct` and `dealerDraws` return false, which is all it takes to have no decisions; the skeleton's loop simply finds nobody to ask.
+
+`validSetup` refuses a table before any object exists, so the constructors never see bad input. Settlement is a short chain of early returns in one function (`Blackjack::settle`), with the rules in the order the interface promises.
+
+## Alternatives
+- **One `Game` class with a `switch` on a game type:** the shortest first draft, and the one the storms punish: every new game or rule edits the same functions, and the skeleton's checks get copied into each branch.
+- **Template Method versus Strategy for the rules:** a `Rules` object passed to a single `Game` class gives the same flexibility with composition, no inheritance and a smaller blast radius when the hooks grow. Template Method is the better fit when the sequence is the shared part and the variants are small; Strategy is better when the variants are many and independent. A senior answer names both and says why.
+- **State pattern for the phases:** `Waiting`, `PlayerTurns` and `Finished` as State objects, each with its own `hit` and `stand`, removes the phase checks from the skeleton. It is worth it when the phases have many different behaviours (poker); for three phases and two calls a `Progress` value and a status check are simpler.
+- **Dealing with a `Deck` that shuffles itself:** hides a source of randomness in the game and makes every test either seeded or statistical. A stacked deck handed in is the Dependency Injection answer.
+- **Result as a value type with amounts:** carrying a payout (1:1, 3:2 for a natural) in the result is realistic, but it is a wallet's job; the interface keeps Win, Lose and Push.
+
+## Trade-offs
+- **Inheritance buys a fixed sequence at the price of fixed shape.** Showdown fits because it has the same shape with an empty decision step. Poker would not, and a design that says so is better than one that pretends the skeleton is universal.
+- **House rules as data versus subclasses.** Two flags, each read in one hook, are cheaper than two more classes; a third and fourth flag that interact would change the answer. The deciding factor is whether the flags are read in one place.
+- **`final` on the skeleton.** It protects the order of a round from a subclass, and costs the freedom to override it. Games that need a different order should not subclass this skeleton.
+- **Queries in a base class.** One read side for all games is less code and cannot drift, but it makes the interface wide (11 methods); splitting a read-only view from the commands is the next refactor if it grows.
+- **A bool for "can still decide".** It is enough for hit and stand; doubling, splitting and surrendering want a set of allowed actions instead.
+- **Status codes versus exceptions.** The judge builds without exceptions, and the callers here are expected to meet refusals in normal use, so statuses with a documented check order are the better contract.
+
+## What breaks at 10x
+- **More players and many tables:** a table is a few hundred bytes, so tens of thousands fit in one process. Share the card supply as an immutable vector with a cursor per table instead of copying a deck for each table, and give each table one lock (or one owner thread).
+- **Many decks (a shoe of eight packs):** the interface already allows repeats; a `Shoe` that draws by cursor is O(1) per card. A cut card (reshuffle at 75%) becomes a small policy of the shoe, not of the game.
+- **More decisions per hand (double, split, surrender, insurance):** `canAct` becomes `allowedActions`, a seat owns several hands and the turn becomes a (seat, hand) pair; only `Seat`, `Progress` and the skeleton's loop change, and each of them has one reason to.
+- **Many games from many teams:** freeze the interface and its check order, ship a conformance suite and a reference model in the style of the tests here, and keep the set of hooks open to growth.
+- **Replays and audits:** the deck plus the ordered list of calls reproduces a table exactly; log both and a production dispute becomes a unit test.
+
+## Level signals
+- **SDE II:** a working Blackjack with correct Ace handling, a bust, a dealer rule and results; classes for Card, Deck, Hand, Player and Game; clear status answers. Passes the base tests, with the round loop probably inside the game class.
+- **Senior:** the round skeleton separate from the rules (Template Method or Strategy, named and justified), scoring behind its own interface, state (table, progress) separate from rules, a stacked deck handed in, house rules without editing existing branches, and a second game that costs one class. Explains when inheritance is the wrong tool.
+- **Staff:** sees the shape limit of the skeleton before being asked, proposes allowed-action sets and per-seat multiple hands, keeps the interface's check order as a published contract with a conformance suite and a model for property tests, and talks about replay, sharding of tables and what to freeze for other teams.
+15:T12b2,#pragma once
+// Public API for the Card Game Framework problem. The hidden tests only use what is declared here.
+// You implement cards::makeBlackjack() (in any of your .cpp files); everything behind it is your design.
+#include <memory>
+#include <string>
+#include <vector>
+
+namespace cards {
+
+enum class Suit { Clubs, Diamonds, Hearts, Spades };
+
+// rank 1 is an Ace, 2..10 are the numbers, 11 is a Jack, 12 a Queen and 13 a King.
+struct Card {
+  int rank;
+  Suit suit;
+};
+inline bool operator==(const Card& a, const Card& b) { return a.rank == b.rank && a.suit == b.suit; }
+
+constexpr int kAce = 1;
+constexpr int kJack = 11;
+constexpr int kQueen = 12;
+constexpr int kKing = 13;
+
+// A deck is a list of cards; the card at the FRONT is the top and is drawn first. The caller decides the order (a stacked
+// deck keeps every game testable; shuffling is the caller's job), and a deck may hold repeats (a shoe of several packs).
+using Deck = std::vector<Card>;
+
+// 52 cards: Clubs, then Diamonds, then Hearts, then Spades, each Ace to King.
+inline Deck standardDeck() {
+  Deck deck;
+  for (int suit = 0; suit < 4; ++suit) {
+    for (int rank = kAce; rank <= kKing; ++rank) deck.push_back(Card{rank, static_cast<Suit>(suit)});
+  }
+  return deck;
+}
+
+enum class Status {
+  Ok,
+  UnknownPlayer,  // no seat has that name
+  WrongPhase,     // the call does not fit the state of the round (see Phase)
+  NotYourTurn,    // it is another player's turn
+  DeckEmpty,      // hit() with no card left to draw
+};
+
+enum class Phase {
+  Waiting,      // created, nothing dealt yet
+  PlayerTurns,  // dealt; the players decide one after another
+  Finished,     // the dealer has played and every result is known
+};
+
+enum class Result { Win, Lose, Push };  // for a player, against the dealer
+
+// One round of Twenty-One (Blackjack) for 1 to 6 players against the dealer, played from a stacked deck.
+//
+// SETUP. makeBlackjack(players, deck) returns nullptr unless there are 1 to 6 player names, each 1 to 16 characters and
+// all different, and the deck holds at least 2 * (players + 1) cards (enough for the first deal). Seats are in the order
+// of the names; the dealer is not a player and has no name. The game starts in Phase::Waiting.
+//
+// DEAL. deal() is allowed once, in Waiting (WrongPhase otherwise). Cards are dealt one at a time from the top of the deck,
+// going round the table in seat order and ending with the dealer, and then round again: every seat, then the dealer, gets
+// two cards. All cards are face up. Then the phase is PlayerTurns.
+//
+// VALUES. A number card is worth its rank, a Jack, Queen or King is worth 10, an Ace is worth 1 or 11, whichever gives
+// the higher total that is not above 21. total() is that best total; when every choice is above 21 it is the sum with
+// each Ace as 1 (a bust). A natural is a two-card hand worth 21.
+//
+// TURNS. The players act in seat order; current() is the name of the player to act, or "" outside PlayerTurns. A player
+// whose hand is worth 21 or more (a natural, or after a hit) has no decision: the turn passes at once. hit() draws the
+// top card into the hand; stand() ends the turn. When the last turn is over the dealer plays at once. CHECK ORDER for hit()
+// and stand(): UnknownPlayer, WrongPhase (not PlayerTurns), NotYourTurn, and for hit() also DeckEmpty (the turn stays).
+// A refused call changes nothing.
+//
+// DEALER. The dealer takes cards while the hand is worth less than 17 and stands on every 17 or more, soft or hard. If the
+// deck runs out the dealer stands. Then the phase is Finished.
+//
+// RESULT. result(player) is WrongPhase until Finished. Then, in this order: a bust loses (even if the dealer busts too); a
+// dealer bust wins; a natural against a natural is a Push, a natural against anything else wins, anything else against a
+// dealer natural loses; otherwise the higher total wins and equal totals push.
+class Game {
+ public:
+  virtual ~Game() = default;
+
+  virtual Status deal() = 0;
+  virtual Status hit(const std::string& player) = 0;
+  virtual Status stand(const std::string& player) = 0;
+
+  virtual Phase phase() const = 0;
+  virtual std::string current() const = 0;
+
+  // Queries. The out-parameter is touched only on Ok; UnknownPlayer for a name that is not seated. Before the deal a hand is
+  // empty and its total is 0.
+  virtual Status hand(const std::string& player, std::vector<Card>& out) const = 0;  // in the order dealt
+  virtual Status total(const std::string& player, int& out) const = 0;
+  virtual Status result(const std::string& player, Result& out) const = 0;
+
+  virtual std::vector<Card> dealerHand() const = 0;
+  virtual int dealerTotal() const = 0;
+};
+
+std::unique_ptr<Game> makeBlackjack(const std::vector<std::string>& players, const Deck& deck);
+
+}  // namespace cards
+16:T446,#pragma once
+// Change Storm 2: a second game on the same table.
+#include "api_storm1.h"
+
+namespace cards {
+
+// Showdown is played with the same Game interface and the same deal, but it has no decisions and a different score.
+//
+// SETUP. makeShowdown(players, deck) has the setup rules of makeBlackjack, except that the deck must hold 3 * (players + 1)
+// cards.
+//
+// DEAL. deal() gives every seat THREE cards, one at a time round the table in seat order and ending with the dealer, in
+// three rounds. The dealer takes no more cards and no player decides anything: right after deal() the phase is Finished,
+// current() is "", and hit() and stand() answer WrongPhase (after the UnknownPlayer check).
+//
+// VALUE. total() and dealerTotal() are the sum of the card points, modulo 10, where an Ace is 1, 2..9 are their rank and 10,
+// Jack, Queen and King are 0. The result of a player is Win for a higher value than the dealer, Lose for a lower one and
+// Push for the same.
+std::unique_ptr<Game> makeShowdown(const std::vector<std::string>& players, const Deck& deck);
+
+}  // namespace cards
+17:T3dd7,#include <algorithm>
+#include <cstdint>
+#include <initializer_list>
+#include <memory>
+#include <string>
+#include <vector>
+
+#include "api.h"
+#include "bp_test.h"
+
+namespace {
+using cards::Card;
+using cards::Deck;
+using cards::Phase;
+using cards::Result;
+using cards::Status;
+
+#define IS(call, expected) EXPECT_TRUE((call) == Status::expected)
+
+// A stacked deck from ranks (suits rotate; the rules never look at them).
+Deck stack(std::initializer_list<int> ranks) {
+  Deck deck;
+  int i = 0;
+  for (int rank : ranks) deck.push_back(Card{rank, static_cast<cards::Suit>(i++ % 4)});
+  return deck;
+}
+
+std::string show(const std::vector<Card>& cardsHeld) {
+  std::string out;
+  for (const auto& c : cardsHeld) out += (out.empty() ? "" : " ") + std::to_string(c.rank);
+  return out;
+}
+
+struct Table {
+  std::unique_ptr<cards::Game> game;
+  Table(const std::vector<std::string>& names, const Deck& deck) : game(cards::makeBlackjack(names, deck)) {}
+
+  std::string hand(const std::string& who) const {
+    std::vector<Card> h;
+    game->hand(who, h);
+    return show(h);
+  }
+  int total(const std::string& who) const {
+    int t = -1;
+    game->total(who, t);
+    return t;
+  }
+  std::string dealer() const { return show(game->dealerHand()); }
+  Result result(const std::string& who) const {
+    Result r = Result::Push;
+    game->result(who, r);
+    return r;
+  }
+};
+
+// Deck layouts for one player "A": A1, dealer1, A2, dealer2, then the rest.
+Deck solo(int a1, int d1, int a2, int d2, std::initializer_list<int> rest = {}) {
+  std::vector<int> ranks{a1, d1, a2, d2};
+  ranks.insert(ranks.end(), rest.begin(), rest.end());
+  Deck deck;
+  int i = 0;
+  for (int rank : ranks) deck.push_back(Card{rank, static_cast<cards::Suit>(i++ % 4)});
+  return deck;
+}
+}  // namespace
+
+TEST(Setup, RefusesBadPlayersAndDecksThatCannotBeDealt) {
+  const Deck big = cards::standardDeck();
+  EXPECT_TRUE(cards::makeBlackjack({}, big) == nullptr);
+  EXPECT_TRUE(cards::makeBlackjack({"a", "b", "c", "d", "e", "f", "g"}, big) == nullptr);
+  EXPECT_TRUE(cards::makeBlackjack({"a", "b", "c", "d", "e", "f"}, big) != nullptr);
+  EXPECT_TRUE(cards::makeBlackjack({"a", "a"}, big) == nullptr);
+  EXPECT_TRUE(cards::makeBlackjack({""}, big) == nullptr);
+  EXPECT_TRUE(cards::makeBlackjack({std::string(17, 'x')}, big) == nullptr);
+  EXPECT_TRUE(cards::makeBlackjack({std::string(16, 'x')}, big) != nullptr);
+  EXPECT_TRUE(cards::makeBlackjack({"a"}, stack({2, 3, 4})) == nullptr);
+  EXPECT_TRUE(cards::makeBlackjack({"a"}, stack({2, 3, 4, 5})) != nullptr);
+  EXPECT_TRUE(cards::makeBlackjack({"a", "b"}, stack({2, 3, 4, 5, 6})) == nullptr);
+  EXPECT_TRUE(cards::makeBlackjack({"a", "b"}, stack({2, 3, 4, 5, 6, 7})) != nullptr);
+  EXPECT_TRUE(cards::makeBlackjack({"a", "b", "c", "d", "e", "f"}, Deck(13, Card{2, cards::Suit::Clubs})) == nullptr);
+  EXPECT_TRUE(cards::makeBlackjack({"a", "b", "c", "d", "e", "f"}, Deck(14, Card{2, cards::Suit::Clubs})) != nullptr);
+}
+
+TEST(Setup, AFreshGameIsWaitingWithNothingDealt) {
+  Table t({"A", "B"}, cards::standardDeck());
+  EXPECT_TRUE(t.game->phase() == Phase::Waiting);
+  EXPECT_EQ(t.game->current(), std::string(""));
+  EXPECT_EQ(t.hand("A"), std::string(""));
+  EXPECT_EQ(t.total("A"), 0);
+  EXPECT_EQ(t.dealer(), std::string(""));
+  EXPECT_EQ(t.game->dealerTotal(), 0);
+  Result r = Result::Win;
+  IS(t.game->result("A", r), WrongPhase);
+  EXPECT_TRUE(r == Result::Win);
+  IS(t.game->hit("A"), WrongPhase);
+  IS(t.game->stand("A"), WrongPhase);
+  IS(t.game->hit("nobody"), UnknownPlayer);
+  IS(t.game->stand("nobody"), UnknownPlayer);
+  std::vector<Card> h;
+  int total = 99;
+  IS(t.game->hand("nobody", h), UnknownPlayer);
+  IS(t.game->total("nobody", total), UnknownPlayer);
+  IS(t.game->result("nobody", r), UnknownPlayer);
+  EXPECT_EQ(total, 99);
+}
+
+TEST(Deal, GoesRoundTheTableOneCardAtATimeAndEndsWithTheDealer) {
+  Table t({"A", "B"}, stack({2, 3, 4, 5, 6, 7, 8, 9}));
+  IS(t.game->deal(), Ok);
+  EXPECT_EQ(t.hand("A"), std::string("2 5"));
+  EXPECT_EQ(t.hand("B"), std::string("3 6"));
+  EXPECT_EQ(t.dealer(), std::string("4 7"));
+  EXPECT_TRUE(t.game->phase() == Phase::PlayerTurns);
+  EXPECT_EQ(t.game->current(), std::string("A"));
+  // The next card in the deck is what a hit draws.
+  IS(t.game->hit("A"), Ok);
+  EXPECT_EQ(t.hand("A"), std::string("2 5 8"));
+  IS(t.game->stand("A"), Ok);
+  IS(t.game->hit("B"), Ok);
+  EXPECT_EQ(t.hand("B"), std::string("3 6 9"));
+}
+
+TEST(Deal, HappensOnceAndARefusedDealChangesNothing) {
+  Table t({"A"}, solo(2, 3, 4, 5, {6, 7}));
+  IS(t.game->deal(), Ok);
+  IS(t.game->deal(), WrongPhase);
+  EXPECT_EQ(t.hand("A"), std::string("2 4"));
+  EXPECT_EQ(t.dealer(), std::string("3 5"));
+  IS(t.game->stand("A"), Ok);
+  EXPECT_TRUE(t.game->phase() == Phase::Finished);
+  IS(t.game->deal(), WrongPhase);
+}
+
+TEST(Value, AnAceIsElevenUntilThatWouldPassTwentyOne) {
+  Table t({"A"}, solo(1, 9, 6, 7, {10, 5, 2}));
+  IS(t.game->deal(), Ok);
+  EXPECT_EQ(t.total("A"), 17);  // soft 17
+  IS(t.game->hit("A"), Ok);
+  EXPECT_EQ(t.total("A"), 17);  // A + 6 + 10: the Ace drops to 1
+  IS(t.game->hit("A"), Ok);
+  EXPECT_EQ(t.total("A"), 22);  // a bust is the sum with every Ace as 1
+}
+
+TEST(Value, FacesAreTenAndTwoAcesMakeTwelve) {
+  {
+    Table t({"A"}, solo(11, 2, 12, 3, {5}));
+    IS(t.game->deal(), Ok);
+    EXPECT_EQ(t.total("A"), 20);
+  }
+  {
+    Table t({"A"}, solo(13, 2, 10, 3, {5}));
+    IS(t.game->deal(), Ok);
+    EXPECT_EQ(t.total("A"), 20);
+  }
+  {
+    Table t({"A"}, solo(1, 2, 1, 3, {5, 9, 9}));
+    IS(t.game->deal(), Ok);
+    EXPECT_EQ(t.total("A"), 12);
+    IS(t.game->hit("A"), Ok);
+    EXPECT_EQ(t.total("A"), 17);  // A, A, 5: one Ace is 11, the other is 1
+  }
+  {
+    Table t({"A"}, solo(1, 9, 1, 8, {1, 1, 9, 9}));
+    IS(t.game->deal(), Ok);
+    IS(t.game->hit("A"), Ok);
+    IS(t.game->hit("A"), Ok);
+    EXPECT_EQ(t.total("A"), 14);  // four Aces: 11 + 1 + 1 + 1
+  }
+}
+
+TEST(Turns, SeatsActInOrderAndRefusalsFollowTheDocumentedOrder) {
+  Table t({"A", "B"}, stack({2, 3, 4, 5, 6, 7, 8, 9}));
+  IS(t.game->hit("A"), WrongPhase);
+  IS(t.game->hit("zed"), UnknownPlayer);
+  IS(t.game->deal(), Ok);
+  IS(t.game->hit("zed"), UnknownPlayer);
+  IS(t.game->hit("B"), NotYourTurn);
+  IS(t.game->stand("B"), NotYourTurn);
+  EXPECT_EQ(t.hand("B"), std::string("3 6"));
+  EXPECT_EQ(t.game->current(), std::string("A"));
+  IS(t.game->stand("A"), Ok);
+  EXPECT_EQ(t.game->current(), std::string("B"));
+  IS(t.game->hit("A"), NotYourTurn);
+  IS(t.game->stand("B"), Ok);
+  EXPECT_EQ(t.game->current(), std::string(""));
+  EXPECT_TRUE(t.game->phase() == Phase::Finished);
+  IS(t.game->hit("A"), WrongPhase);
+  IS(t.game->stand("B"), WrongPhase);
+  IS(t.game->stand("zed"), UnknownPlayer);
+}
+
+TEST(Turns, ANaturalHasNoDecisionAndTwentyOneEndsATurnAtOnce) {
+  // A: A+K (natural), B: 5+6. Dealer 9+7. B hits a 10 for 21.
+  Table t({"A", "B"}, stack({1, 5, 9, 13, 6, 7, 10, 2, 3}));
+  IS(t.game->deal(), Ok);
+  EXPECT_EQ(t.hand("A"), std::string("1 13"));
+  EXPECT_EQ(t.game->current(), std::string("B"));
+  IS(t.game->hit("A"), NotYourTurn);
+  IS(t.game->hit("B"), Ok);
+  EXPECT_EQ(t.total("B"), 21);
+  EXPECT_EQ(t.game->current(), std::string(""));
+  EXPECT_TRUE(t.game->phase() == Phase::Finished);
+  EXPECT_EQ(t.dealer(), std::string("9 7 2"));  // 16 draws a 2 and stands on 18
+}
+
+TEST(Turns, HittingPastTwentyOneBustsAndPassesTheTurn) {
+  Table t({"A", "B"}, stack({10, 2, 9, 3, 6, 4, 7, 5, 8}));
+  IS(t.game->deal(), Ok);  // A holds 10 and 3, B 2 and 6, the dealer 9 and 4; the deck continues 7, 5, 8
+  EXPECT_EQ(t.hand("A"), std::string("10 3"));
+  IS(t.game->hit("A"), Ok);  // 7 -> 20
+  EXPECT_EQ(t.total("A"), 20);
+  IS(t.game->hit("A"), Ok);  // 5 -> 25 bust
+  EXPECT_EQ(t.total("A"), 25);
+  EXPECT_EQ(t.game->current(), std::string("B"));
+  IS(t.game->hit("A"), NotYourTurn);
+}
+
+TEST(Turns, AHitWithAnEmptyDeckIsRefusedAndTheTurnStays) {
+  Table t({"A"}, solo(5, 10, 6, 7));
+  IS(t.game->deal(), Ok);
+  IS(t.game->hit("A"), DeckEmpty);
+  EXPECT_EQ(t.hand("A"), std::string("5 6"));
+  EXPECT_EQ(t.game->current(), std::string("A"));
+  IS(t.game->stand("A"), Ok);
+  EXPECT_TRUE(t.game->phase() == Phase::Finished);
+}
+
+TEST(Dealer, DrawsBelowSeventeenAndStandsOnEverySeventeen) {
+  {  // hard 17
+    Table t({"A"}, solo(10, 10, 9, 7, {5}));
+    IS(t.game->deal(), Ok);
+    IS(t.game->stand("A"), Ok);
+    EXPECT_EQ(t.dealer(), std::string("10 7"));
+  }
+  {  // soft 17 stands in the basic game
+    Table t({"A"}, solo(10, 1, 9, 6, {5}));
+    IS(t.game->deal(), Ok);
+    IS(t.game->stand("A"), Ok);
+    EXPECT_EQ(t.dealer(), std::string("1 6"));
+    EXPECT_EQ(t.game->dealerTotal(), 17);
+  }
+  {  // 16 draws once
+    Table t({"A"}, solo(10, 10, 9, 6, {2, 5}));
+    IS(t.game->deal(), Ok);
+    IS(t.game->stand("A"), Ok);
+    EXPECT_EQ(t.dealer(), std::string("10 6 2"));
+    EXPECT_EQ(t.game->dealerTotal(), 18);
+  }
+}
+
+TEST(Dealer, KeepsDrawingAfterTheLastPlayerAndNotBefore) {
+  Table t({"A", "B"}, stack({10, 9, 2, 8, 3, 4, 4, 5, 6}));
+  IS(t.game->deal(), Ok);
+  EXPECT_EQ(t.dealer(), std::string("2 4"));  // the dealer does not move while players decide
+  IS(t.game->stand("A"), Ok);
+  EXPECT_EQ(t.dealer(), std::string("2 4"));
+  IS(t.game->stand("B"), Ok);
+  EXPECT_EQ(t.dealer(), std::string("2 4 4 5 6"));  // 6, 10, 15, 21: five cards, every draw below 17 until the last
+  EXPECT_EQ(t.game->dealerTotal(), 21);
+}
+
+TEST(Dealer, StandsWhenTheDeckRunsOut) {
+  Table t({"A"}, solo(10, 10, 9, 6));
+  IS(t.game->deal(), Ok);
+  IS(t.game->stand("A"), Ok);
+  EXPECT_TRUE(t.game->phase() == Phase::Finished);
+  EXPECT_EQ(t.game->dealerTotal(), 16);
+  EXPECT_TRUE(t.result("A") == Result::Win);  // 19 beats 16
+}
+
+TEST(Settle, ABustLosesEvenIfTheDealerBustsToo) {
+  Table t({"A"}, solo(10, 10, 6, 6, {10, 10}));
+  IS(t.game->deal(), Ok);
+  IS(t.game->hit("A"), Ok);  // 26
+  EXPECT_TRUE(t.game->phase() == Phase::Finished);
+  EXPECT_EQ(t.game->dealerTotal(), 26);
+  EXPECT_TRUE(t.result("A") == Result::Lose);
+}
+
+TEST(Settle, ADealerBustPaysEveryPlayerStillIn) {
+  Table t({"A", "B", "C"}, stack({10, 9, 2, 8, 10, 3, 9, 8, 10, 10}));
+  IS(t.game->deal(), Ok);
+  // A holds 20, B 12, C 11; the dealer holds 16 and draws a 10 for 26
+  IS(t.game->stand("A"), Ok);
+  IS(t.game->stand("B"), Ok);
+  IS(t.game->stand("C"), Ok);
+  EXPECT_TRUE(t.game->phase() == Phase::Finished);
+  EXPECT_TRUE(t.game->dealerTotal() > 21);
+  EXPECT_TRUE(t.result("A") == Result::Win);
+  EXPECT_TRUE(t.result("B") == Result::Win);
+  EXPECT_TRUE(t.result("C") == Result::Win);
+}
+
+TEST(Settle, HigherTotalWinsLowerLosesAndEqualPushes) {
+  Table t({"A", "B", "C"}, stack({10, 10, 10, 10, 10, 9, 8, 9, 9, 9}));
+  IS(t.game->deal(), Ok);
+  EXPECT_EQ(t.dealer(), std::string("10 9"));  // 19
+  IS(t.game->stand("A"), Ok);
+  IS(t.game->stand("B"), Ok);
+  IS(t.game->stand("C"), Ok);
+  EXPECT_EQ(t.total("A"), 20);
+  EXPECT_EQ(t.total("B"), 19);
+  EXPECT_EQ(t.total("C"), 18);
+  EXPECT_TRUE(t.result("A") == Result::Win);
+  EXPECT_TRUE(t.result("B") == Result::Push);
+  EXPECT_TRUE(t.result("C") == Result::Lose);
+}
+
+TEST(Settle, ANaturalBeatsEveryOtherTwentyOneAndTiesANatural) {
+  {  // player natural, dealer 21 with three cards
+    Table t({"A"}, solo(1, 5, 13, 6, {10}));
+    IS(t.game->deal(), Ok);
+    EXPECT_TRUE(t.game->phase() == Phase::Finished);
+    EXPECT_EQ(t.dealer(), std::string("5 6 10"));
+    EXPECT_TRUE(t.result("A") == Result::Win);
+  }
+  {  // player 21 in three cards, dealer natural
+    Table t({"A"}, solo(5, 1, 6, 12, {10}));
+    IS(t.game->deal(), Ok);
+    IS(t.game->hit("A"), Ok);
+    EXPECT_EQ(t.total("A"), 21);
+    EXPECT_TRUE(t.game->phase() == Phase::Finished);
+    EXPECT_TRUE(t.result("A") == Result::Lose);
+  }
+  {  // both natural
+    Table t({"A"}, solo(1, 1, 11, 13));
+    IS(t.game->deal(), Ok);
+    EXPECT_TRUE(t.result("A") == Result::Push);
+  }
+  {  // both 21 without a natural
+    Table t({"A"}, solo(5, 5, 6, 6, {10, 10}));
+    IS(t.game->deal(), Ok);
+    IS(t.game->hit("A"), Ok);
+    EXPECT_TRUE(t.result("A") == Result::Push);
+  }
+  {  // player 20 against a dealer natural
+    Table t({"A"}, solo(10, 1, 10, 13));
+    IS(t.game->deal(), Ok);
+    IS(t.game->stand("A"), Ok);
+    EXPECT_TRUE(t.result("A") == Result::Lose);
+  }
+}
+
+TEST(Settle, ResultsAppearOnlyWhenTheRoundIsFinished) {
+  Table t({"A", "B"}, stack({10, 9, 2, 8, 3, 4, 4, 5, 6, 7}));
+  IS(t.game->deal(), Ok);
+  Result r = Result::Win;
+  IS(t.game->result("A", r), WrongPhase);
+  IS(t.game->stand("A"), Ok);
+  IS(t.game->result("A", r), WrongPhase);
+  IS(t.game->stand("B"), Ok);
+  IS(t.game->result("A", r), Ok);
+  IS(t.game->result("B", r), Ok);
+  IS(t.game->result("nobody", r), UnknownPlayer);
+}
+
+// A model: plain, procedural Twenty-One written separately from any design, to be compared with games played at random.
+namespace model {
+int total(const std::vector<int>& ranks) {
+  int sum = 0;
+  bool ace = false;
+  for (int r : ranks) {
+    sum += r >= 11 ? 10 : r;
+    ace = ace || r == 1;
+  }
+  return (ace && sum + 10 <= 21) ? sum + 10 : sum;
+}
+Result settle(const std::vector<int>& p, const std::vector<int>& d) {
+  const int pt = total(p), dt = total(d);
+  const bool pn = p.size() == 2 && pt == 21, dn = d.size() == 2 && dt == 21;
+  if (pt > 21) return Result::Lose;
+  if (dt > 21) return Result::Win;
+  if (pn && dn) return Result::Push;
+  if (pn) return Result::Win;
+  if (dn) return Result::Lose;
+  return pt > dt ? Result::Win : (pt < dt ? Result::Lose : Result::Push);
+}
+}  // namespace model
+
+TEST(Model, RandomRoundsMatchAnIndependentImplementation) {
+  std::uint32_t seed = 20240611;
+  auto next = [&seed](int n) {
+    seed = seed * 1664525u + 1013904223u;
+    return static_cast<int>((seed >> 8) % static_cast<std::uint32_t>(n));
+  };
+  for (int game = 0; game < 400; ++game) {
+    const int players = 1 + next(6);
+    std::vector<std::string> names;
+    for (int i = 0; i < players; ++i) names.push_back("p" + std::to_string(i));
+    Deck deck;
+    std::vector<int> ranks;
+    const int size = 2 * (players + 1) + next(30);
+    for (int i = 0; i < size; ++i) {
+      ranks.push_back(1 + next(13));
+      deck.push_back(Card{ranks.back(), static_cast<cards::Suit>(next(4))});
+    }
+    auto g = cards::makeBlackjack(names, deck);
+    ASSERT_TRUE(g != nullptr);
+    ASSERT_TRUE(g->deal() == Status::Ok);
+    // model state
+    std::size_t top = 0;
+    std::vector<std::vector<int>> hands(players);
+    std::vector<int> dealer;
+    for (int round = 0; round < 2; ++round) {
+      for (int i = 0; i < players; ++i) hands[i].push_back(ranks[top++]);
+      dealer.push_back(ranks[top++]);
+    }
+    for (int i = 0; i < players; ++i) {
+      const int style = next(3);  // 0 stands at once, 1 hits below 15, 2 hits below 19
+      while (model::total(hands[i]) < 21) {
+        const int t = model::total(hands[i]);
+        const bool wantsHit = style == 1 ? t < 15 : (style == 2 ? t < 19 : false);
+        EXPECT_EQ(g->current(), names[i]);
+        if (!wantsHit) {
+          EXPECT_TRUE(g->stand(names[i]) == Status::Ok);
+          break;
+        }
+        if (top == ranks.size()) {
+          EXPECT_TRUE(g->hit(names[i]) == Status::DeckEmpty);
+          EXPECT_TRUE(g->stand(names[i]) == Status::Ok);
+          break;
+        }
+        EXPECT_TRUE(g->hit(names[i]) == Status::Ok);
+        hands[i].push_back(ranks[top++]);
+      }
+    }
+    EXPECT_TRUE(g->phase() == Phase::Finished);
+    while (model::total(dealer) < 17 && top < ranks.size()) dealer.push_back(ranks[top++]);
+    EXPECT_EQ(g->dealerTotal(), model::total(dealer));
+    EXPECT_EQ(show(g->dealerHand()), [&] { std::string s; for (int r : dealer) s += (s.empty() ? "" : " ") + std::to_string(r); return s; }());
+    for (int i = 0; i < players; ++i) {
+      int t = 0;
+      g->total(names[i], t);
+      EXPECT_EQ(t, model::total(hands[i]));
+      Result r = Result::Push;
+      EXPECT_TRUE(g->result(names[i], r) == Status::Ok);
+      EXPECT_TRUE(r == model::settle(hands[i], dealer));
+    }
+  }
+}
+18:T2a83,#include <cstdint>
+#include <initializer_list>
+#include <memory>
+#include <string>
+#include <vector>
+
+#include "api_storm1.h"
+#include "bp_test.h"
+
+namespace {
+using cards::Card;
+using cards::Deck;
+using cards::HouseRules;
+using cards::Phase;
+using cards::Result;
+using cards::Status;
+
+#define IS(call, expected) EXPECT_TRUE((call) == Status::expected)
+
+Deck stack(std::initializer_list<int> ranks) {
+  Deck deck;
+  int i = 0;
+  for (int rank : ranks) deck.push_back(Card{rank, static_cast<cards::Suit>(i++ % 4)});
+  return deck;
+}
+
+// One player "A": A1, dealer1, A2, dealer2, then the rest.
+Deck solo(int a1, int d1, int a2, int d2, std::initializer_list<int> rest = {}) {
+  std::vector<int> ranks{a1, d1, a2, d2};
+  ranks.insert(ranks.end(), rest.begin(), rest.end());
+  Deck deck;
+  int i = 0;
+  for (int rank : ranks) deck.push_back(Card{rank, static_cast<cards::Suit>(i++ % 4)});
+  return deck;
+}
+
+std::string show(const std::vector<Card>& held) {
+  std::string out;
+  for (const auto& c : held) out += (out.empty() ? "" : " ") + std::to_string(c.rank);
+  return out;
+}
+
+HouseRules soft17() {
+  HouseRules r;
+  r.dealerHitsSoft17 = true;
+  return r;
+}
+HouseRules charlie() {
+  HouseRules r;
+  r.fiveCardCharlie = true;
+  return r;
+}
+
+Result resultOf(const cards::Game& g, const std::string& who) {
+  Result r = Result::Push;
+  g.result(who, r);
+  return r;
+}
+}  // namespace
+
+TEST(HouseRules, NoRulesIsTheBasicGameAndBadSetupIsStillRefused) {
+  EXPECT_TRUE(cards::makeBlackjackWith({}, cards::standardDeck(), HouseRules{}) == nullptr);
+  EXPECT_TRUE(cards::makeBlackjackWith({"a", "a"}, cards::standardDeck(), soft17()) == nullptr);
+  EXPECT_TRUE(cards::makeBlackjackWith({"a"}, stack({1, 2, 3}), charlie()) == nullptr);
+  EXPECT_TRUE(cards::makeBlackjackWith({"a"}, stack({1, 2, 3, 4}), charlie()) != nullptr);
+  // A soft 17 stands when no rule says otherwise.
+  auto g = cards::makeBlackjackWith({"A"}, solo(10, 1, 9, 6, {5}), HouseRules{});
+  ASSERT_TRUE(g != nullptr);
+  IS(g->deal(), Ok);
+  IS(g->stand("A"), Ok);
+  EXPECT_EQ(show(g->dealerHand()), std::string("1 6"));
+}
+
+TEST(Soft17, TheDealerDrawsOnASoftSeventeenOnlyWhenTheHouseSaysSo) {
+  {  // A + 6 is a soft 17 and draws; the 4 makes a soft 21, which stands
+    auto g = cards::makeBlackjackWith({"A"}, solo(10, 1, 9, 6, {4, 5}), soft17());
+    IS(g->deal(), Ok);
+    IS(g->stand("A"), Ok);
+    EXPECT_EQ(show(g->dealerHand()), std::string("1 6 4"));
+    EXPECT_EQ(g->dealerTotal(), 21);
+  }
+  {  // hard 17 stands under the rule
+    auto g = cards::makeBlackjackWith({"A"}, solo(10, 10, 9, 7, {4}), soft17());
+    IS(g->deal(), Ok);
+    IS(g->stand("A"), Ok);
+    EXPECT_EQ(show(g->dealerHand()), std::string("10 7"));
+  }
+  {  // soft 18 stands under the rule
+    auto g = cards::makeBlackjackWith({"A"}, solo(10, 1, 9, 7, {4}), soft17());
+    IS(g->deal(), Ok);
+    IS(g->stand("A"), Ok);
+    EXPECT_EQ(show(g->dealerHand()), std::string("1 7"));
+    EXPECT_EQ(g->dealerTotal(), 18);
+  }
+  {  // a total of 17 that needs no Ace as 11 is hard even though the hand has an Ace
+    auto g = cards::makeBlackjackWith({"A"}, solo(10, 1, 9, 6, {10, 5}), soft17());
+    IS(g->deal(), Ok);
+    IS(g->stand("A"), Ok);
+    EXPECT_EQ(show(g->dealerHand()), std::string("1 6 10"));  // 1 + 6 + 10 = 17 hard: the dealer stops
+    EXPECT_EQ(g->dealerTotal(), 17);
+  }
+}
+
+TEST(Soft17, TheRuleIsAppliedToTheNewTotalAfterEveryCard) {
+  // The dealer holds A + 2 (soft 13), draws a 4 (soft 17) and, under the rule, draws again: a 5 makes a hard 12, then a 10 busts.
+  auto g = cards::makeBlackjackWith({"A"}, solo(10, 1, 9, 2, {4, 5, 10, 3}), soft17());
+  IS(g->deal(), Ok);
+  IS(g->stand("A"), Ok);
+  EXPECT_EQ(show(g->dealerHand()), std::string("1 2 4 5 10"));
+  EXPECT_EQ(g->dealerTotal(), 22);
+  EXPECT_TRUE(resultOf(*g, "A") == Result::Win);
+  // Without the rule the same cards stop at the soft 17.
+  auto basic = cards::makeBlackjackWith({"A"}, solo(10, 1, 9, 2, {4, 5, 10, 3}), HouseRules{});
+  IS(basic->deal(), Ok);
+  IS(basic->stand("A"), Ok);
+  EXPECT_EQ(show(basic->dealerHand()), std::string("1 2 4"));
+  EXPECT_TRUE(resultOf(*basic, "A") == Result::Win);  // 19 beats 17
+}
+
+TEST(Charlie, FiveCardsUnderTwentyOneEndTheTurnAndBeatTheDealer) {
+  // A: 2 + 3, hits 2, 2, 3 (total 12 with five cards) and the turn ends; the dealer holds 10 + 10 = 20.
+  auto g = cards::makeBlackjackWith({"A", "B"}, stack({2, 5, 10, 3, 6, 10, 2, 2, 3, 9}), charlie());
+  IS(g->deal(), Ok);
+  IS(g->hit("A"), Ok);
+  IS(g->hit("A"), Ok);
+  EXPECT_EQ(g->current(), std::string("A"));
+  IS(g->hit("A"), Ok);  // the fifth card
+  EXPECT_EQ(g->current(), std::string("B"));
+  int total = 0;
+  g->total("A", total);
+  EXPECT_EQ(total, 12);
+  IS(g->hit("A"), NotYourTurn);
+  IS(g->stand("B"), Ok);
+  EXPECT_TRUE(g->phase() == Phase::Finished);
+  EXPECT_EQ(g->dealerTotal(), 20);
+  EXPECT_TRUE(resultOf(*g, "A") == Result::Win);   // Charlie beats 20 although it is worth only 12
+  EXPECT_TRUE(resultOf(*g, "B") == Result::Lose);  // B holds 5 + 6 = 11 against 20
+}
+
+TEST(Charlie, ItBeatsADealerTwentyOneAndABustButNotADealerNatural) {
+  {  // dealer 21 in three cards
+    auto g = cards::makeBlackjackWith({"A"}, solo(2, 5, 3, 6, {2, 2, 3, 10}), charlie());
+    IS(g->deal(), Ok);
+    IS(g->hit("A"), Ok);
+    IS(g->hit("A"), Ok);
+    IS(g->hit("A"), Ok);
+    EXPECT_EQ(g->dealerTotal(), 21);
+    EXPECT_EQ(g->dealerHand().size(), std::size_t(3));
+    EXPECT_TRUE(resultOf(*g, "A") == Result::Win);
+  }
+  {  // dealer bust
+    auto g = cards::makeBlackjackWith({"A"}, solo(2, 10, 3, 6, {2, 2, 3, 10}), charlie());
+    IS(g->deal(), Ok);
+    IS(g->hit("A"), Ok);
+    IS(g->hit("A"), Ok);
+    IS(g->hit("A"), Ok);
+    EXPECT_EQ(g->dealerTotal(), 26);
+    EXPECT_TRUE(resultOf(*g, "A") == Result::Win);
+  }
+  {  // dealer natural
+    auto g = cards::makeBlackjackWith({"A"}, solo(2, 1, 3, 13, {2, 2, 3}), charlie());
+    IS(g->deal(), Ok);
+    IS(g->hit("A"), Ok);
+    IS(g->hit("A"), Ok);
+    IS(g->hit("A"), Ok);
+    EXPECT_TRUE(resultOf(*g, "A") == Result::Lose);
+  }
+}
+
+TEST(Charlie, ABustInFiveCardsStillLosesAndTheRuleOffMeansNothingSpecial) {
+  {
+    auto g = cards::makeBlackjackWith({"A"}, solo(5, 10, 5, 9, {3, 2, 10}), charlie());
+    IS(g->deal(), Ok);
+    IS(g->hit("A"), Ok);
+    IS(g->hit("A"), Ok);
+    IS(g->hit("A"), Ok);  // 5 5 3 2 10 = 25
+    EXPECT_TRUE(g->phase() == Phase::Finished);
+    EXPECT_TRUE(resultOf(*g, "A") == Result::Lose);
+  }
+  {  // Without the rule the player keeps deciding at five cards, and the same hand loses to 19.
+    auto g = cards::makeBlackjackWith({"A"}, solo(2, 10, 3, 9, {2, 2, 3, 4}), HouseRules{});
+    IS(g->deal(), Ok);
+    IS(g->hit("A"), Ok);
+    IS(g->hit("A"), Ok);
+    IS(g->hit("A"), Ok);
+    EXPECT_EQ(g->current(), std::string("A"));
+    IS(g->hit("A"), Ok);
+    IS(g->stand("A"), Ok);
+    EXPECT_TRUE(resultOf(*g, "A") == Result::Lose);  // 2 3 2 2 3 4 = 16 against 19
+  }
+}
+
+TEST(Charlie, TwentyOneInFiveCardsIsJustCharlieAndTheTwoRulesCombine) {
+  HouseRules both;
+  both.dealerHitsSoft17 = true;
+  both.fiveCardCharlie = true;
+  auto g = cards::makeBlackjackWith({"A"}, solo(1, 1, 2, 6, {3, 4, 1, 5}), both);
+  IS(g->deal(), Ok);
+  IS(g->hit("A"), Ok);
+  IS(g->hit("A"), Ok);
+  IS(g->hit("A"), Ok);  // A 2 3 4 A is a soft 21 in five cards: Charlie, and the turn ends
+  EXPECT_TRUE(g->phase() == Phase::Finished);
+  EXPECT_EQ(show(g->dealerHand()), std::string("1 6 5"));  // the soft 17 draws a 5 and becomes a hard 12; the deck is empty
+  EXPECT_TRUE(resultOf(*g, "A") == Result::Win);
+}
+
+// A model of the two rules, written separately, compared with random games.
+namespace model {
+struct Value {
+  int total;
+  bool soft;
+};
+Value value(const std::vector<int>& ranks) {
+  int sum = 0;
+  bool ace = false;
+  for (int r : ranks) {
+    sum += r >= 11 ? 10 : r;
+    ace = ace || r == 1;
+  }
+  if (ace && sum + 10 <= 21) return {sum + 10, true};
+  return {sum, false};
+}
+Result settle(const std::vector<int>& p, const std::vector<int>& d, bool charlieRule) {
+  const int pt = value(p).total, dt = value(d).total;
+  const bool dn = d.size() == 2 && dt == 21;
+  if (pt > 21) return Result::Lose;
+  if (charlieRule && p.size() >= 5) return dn ? Result::Lose : Result::Win;
+  const bool pn = p.size() == 2 && pt == 21;
+  if (dt > 21) return Result::Win;
+  if (pn && dn) return Result::Push;
+  if (pn) return Result::Win;
+  if (dn) return Result::Lose;
+  return pt > dt ? Result::Win : (pt < dt ? Result::Lose : Result::Push);
+}
+}  // namespace model
+
+TEST(HouseRules, RandomRoundsWithEveryRuleCombinationMatchAnIndependentModel) {
+  std::uint32_t seed = 987654321;
+  auto next = [&seed](int n) {
+    seed = seed * 1664525u + 1013904223u;
+    return static_cast<int>((seed >> 8) % static_cast<std::uint32_t>(n));
+  };
+  for (int game = 0; game < 500; ++game) {
+    HouseRules rules;
+    rules.dealerHitsSoft17 = next(2) == 1;
+    rules.fiveCardCharlie = next(2) == 1;
+    const int players = 1 + next(4);
+    std::vector<std::string> names;
+    for (int i = 0; i < players; ++i) names.push_back("p" + std::to_string(i));
+    Deck deck;
+    std::vector<int> ranks;
+    const int size = 2 * (players + 1) + 10 + next(40);
+    for (int i = 0; i < size; ++i) {
+      // Small cards make five-card hands and soft totals common.
+      ranks.push_back(next(3) == 0 ? 1 + next(13) : 1 + next(5));
+      deck.push_back(Card{ranks.back(), static_cast<cards::Suit>(next(4))});
+    }
+    auto g = cards::makeBlackjackWith(names, deck, rules);
+    ASSERT_TRUE(g != nullptr);
+    ASSERT_TRUE(g->deal() == Status::Ok);
+    std::size_t top = 0;
+    std::vector<std::vector<int>> hands(players);
+    std::vector<int> dealer;
+    for (int round = 0; round < 2; ++round) {
+      for (int i = 0; i < players; ++i) hands[i].push_back(ranks[top++]);
+      dealer.push_back(ranks[top++]);
+    }
+    for (int i = 0; i < players; ++i) {
+      const bool hitsAlot = next(2) == 1;
+      while (model::value(hands[i]).total < 21 && !(rules.fiveCardCharlie && hands[i].size() >= 5)) {
+        EXPECT_EQ(g->current(), names[i]);
+        const bool wantsHit = model::value(hands[i]).total < (hitsAlot ? 19 : 14);
+        if (!wantsHit || top == ranks.size()) {
+          EXPECT_TRUE(g->stand(names[i]) == Status::Ok);
+          break;
+        }
+        EXPECT_TRUE(g->hit(names[i]) == Status::Ok);
+        hands[i].push_back(ranks[top++]);
+      }
+    }
+    EXPECT_TRUE(g->phase() == Phase::Finished);
+    for (;;) {
+      const auto v = model::value(dealer);
+      const bool draws = v.total < 17 || (rules.dealerHitsSoft17 && v.total == 17 && v.soft);
+      if (!draws || top == ranks.size()) break;
+      dealer.push_back(ranks[top++]);
+    }
+    EXPECT_EQ(g->dealerTotal(), model::value(dealer).total);
+    EXPECT_EQ(g->dealerHand().size(), dealer.size());
+    for (int i = 0; i < players; ++i) {
+      EXPECT_TRUE(resultOf(*g, names[i]) == model::settle(hands[i], dealer, rules.fiveCardCharlie));
+    }
+  }
+}
+19:T1998,#include <cstdint>
+#include <initializer_list>
+#include <memory>
+#include <string>
+#include <vector>
+
+#include "api_storm2.h"
+#include "bp_test.h"
+
+namespace {
+using cards::Card;
+using cards::Deck;
+using cards::Phase;
+using cards::Result;
+using cards::Status;
+
+#define IS(call, expected) EXPECT_TRUE((call) == Status::expected)
+
+Deck stack(std::initializer_list<int> ranks) {
+  Deck deck;
+  int i = 0;
+  for (int rank : ranks) deck.push_back(Card{rank, static_cast<cards::Suit>(i++ % 4)});
+  return deck;
+}
+
+std::string show(const std::vector<Card>& held) {
+  std::string out;
+  for (const auto& c : held) out += (out.empty() ? "" : " ") + std::to_string(c.rank);
+  return out;
+}
+
+std::string handOf(const cards::Game& g, const std::string& who) {
+  std::vector<Card> h;
+  g.hand(who, h);
+  return show(h);
+}
+int totalOf(const cards::Game& g, const std::string& who) {
+  int t = -1;
+  g.total(who, t);
+  return t;
+}
+Result resultOf(const cards::Game& g, const std::string& who) {
+  Result r = Result::Push;
+  g.result(who, r);
+  return r;
+}
+}  // namespace
+
+TEST(Showdown, SetupNeedsThreeCardsForEverySeat) {
+  EXPECT_TRUE(cards::makeShowdown({}, cards::standardDeck()) == nullptr);
+  EXPECT_TRUE(cards::makeShowdown({"a", "a"}, cards::standardDeck()) == nullptr);
+  EXPECT_TRUE(cards::makeShowdown({"a", "b", "c", "d", "e", "f", "g"}, cards::standardDeck()) == nullptr);
+  EXPECT_TRUE(cards::makeShowdown({"a"}, stack({1, 2, 3, 4, 5})) == nullptr);
+  EXPECT_TRUE(cards::makeShowdown({"a"}, stack({1, 2, 3, 4, 5, 6})) != nullptr);
+  EXPECT_TRUE(cards::makeShowdown({"a", "b"}, stack({1, 2, 3, 4, 5, 6, 7, 8})) == nullptr);
+  EXPECT_TRUE(cards::makeShowdown({"a", "b"}, stack({1, 2, 3, 4, 5, 6, 7, 8, 9})) != nullptr);
+  // The blackjack table needs less, and is unchanged.
+  EXPECT_TRUE(cards::makeBlackjack({"a", "b"}, stack({1, 2, 3, 4, 5, 6})) != nullptr);
+}
+
+TEST(Showdown, TheDealGoesRoundThreeTimesAndTheRoundIsOverAtOnce) {
+  auto g = cards::makeShowdown({"A", "B"}, stack({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11}));
+  ASSERT_TRUE(g != nullptr);
+  EXPECT_TRUE(g->phase() == Phase::Waiting);
+  Result r = Result::Win;
+  IS(g->result("A", r), WrongPhase);
+  IS(g->deal(), Ok);
+  EXPECT_EQ(handOf(*g, "A"), std::string("1 4 7"));
+  EXPECT_EQ(handOf(*g, "B"), std::string("2 5 8"));
+  EXPECT_EQ(show(g->dealerHand()), std::string("3 6 9"));
+  EXPECT_TRUE(g->phase() == Phase::Finished);
+  EXPECT_EQ(g->current(), std::string(""));
+  IS(g->deal(), WrongPhase);
+  IS(g->result("A", r), Ok);
+  IS(g->result("B", r), Ok);
+  IS(g->result("nobody", r), UnknownPlayer);
+}
+
+TEST(Showdown, NobodyDecidesAnything) {
+  auto g = cards::makeShowdown({"A"}, stack({1, 2, 3, 4, 5, 6}));
+  IS(g->hit("A"), WrongPhase);
+  IS(g->stand("A"), WrongPhase);
+  IS(g->deal(), Ok);
+  IS(g->hit("A"), WrongPhase);
+  IS(g->stand("A"), WrongPhase);
+  IS(g->hit("nobody"), UnknownPlayer);
+  IS(g->stand("nobody"), UnknownPlayer);
+  EXPECT_EQ(g->dealerHand().size(), std::size_t(3));
+}
+
+TEST(Showdown, ACardIsWorthItsPointsAndTheHandIsTheSumModuloTen) {
+  // A holds 1 + 9 + 13 (K) = 10 -> 0; B holds 7 + 8 + 10 = 25 -> 5; C holds 11 + 12 + 5 = 5 -> 5; the dealer 2 + 3 + 4 = 9.
+  auto g = cards::makeShowdown({"A", "B", "C"}, stack({1, 7, 11, 2, 9, 8, 12, 3, 13, 10, 5, 4}));
+  IS(g->deal(), Ok);
+  EXPECT_EQ(totalOf(*g, "A"), 0);
+  EXPECT_EQ(totalOf(*g, "B"), 5);
+  EXPECT_EQ(totalOf(*g, "C"), 5);
+  EXPECT_EQ(g->dealerTotal(), 9);
+  EXPECT_EQ(totalOf(*g, "nobody"), -1);
+}
+
+TEST(Showdown, AnAceIsOneNotElevenAndTenIsZero) {
+  // Hands: A: 1 1 1 = 3. B: 10 10 10 = 0. C: 9 9 9 = 27 -> 7. Dealer: 1 + 10 + 11 = 1.
+  auto g = cards::makeShowdown({"A", "B", "C"}, stack({1, 10, 9, 1, 1, 10, 9, 10, 1, 10, 9, 11}));
+  IS(g->deal(), Ok);
+  EXPECT_EQ(totalOf(*g, "A"), 3);
+  EXPECT_EQ(totalOf(*g, "B"), 0);
+  EXPECT_EQ(totalOf(*g, "C"), 7);
+  EXPECT_EQ(g->dealerTotal(), 1);
+}
+
+TEST(Showdown, TheHigherValueWinsTheLowerLosesAndEqualValuesPush) {
+  // Dealer 5 + 5 + 5 = 15 -> 5.
+  auto g = cards::makeShowdown({"hi", "lo", "same"}, stack({9, 1, 2, 5, 9, 1, 2, 5, 9, 1, 1, 5}));
+  IS(g->deal(), Ok);
+  EXPECT_EQ(totalOf(*g, "hi"), 7);   // 9 + 9 + 9 = 27
+  EXPECT_EQ(totalOf(*g, "lo"), 3);   // 1 + 1 + 1
+  EXPECT_EQ(totalOf(*g, "same"), 5);  // 2 + 2 + 1
+  EXPECT_EQ(g->dealerTotal(), 5);
+  EXPECT_TRUE(resultOf(*g, "hi") == Result::Win);
+  EXPECT_TRUE(resultOf(*g, "lo") == Result::Lose);
+  EXPECT_TRUE(resultOf(*g, "same") == Result::Push);
+}
+
+TEST(Showdown, EqualValuesPushWhateverTheCards) {
+  auto g = cards::makeShowdown({"A"}, stack({4, 13, 3, 12, 3, 11}));  // 4 + 3 + 3 = 10 -> 0, dealer 0
+  IS(g->deal(), Ok);
+  EXPECT_EQ(totalOf(*g, "A"), 0);
+  EXPECT_EQ(g->dealerTotal(), 0);
+  EXPECT_TRUE(resultOf(*g, "A") == Result::Push);
+}
+
+TEST(Showdown, BlackjackStillPlaysTheSameAfterAddingAGame) {
+  auto g = cards::makeBlackjack({"A"}, stack({10, 10, 9, 7, 5}));
+  IS(g->deal(), Ok);
+  EXPECT_TRUE(g->phase() == Phase::PlayerTurns);
+  IS(g->stand("A"), Ok);
+  EXPECT_EQ(g->dealerTotal(), 17);
+  EXPECT_TRUE(resultOf(*g, "A") == Result::Win);
+}
+
+TEST(Showdown, RandomTablesMatchAnIndependentModel) {
+  std::uint32_t seed = 55512345;
+  auto next = [&seed](int n) {
+    seed = seed * 1664525u + 1013904223u;
+    return static_cast<int>((seed >> 8) % static_cast<std::uint32_t>(n));
+  };
+  for (int game = 0; game < 300; ++game) {
+    const int players = 1 + next(6);
+    std::vector<std::string> names;
+    for (int i = 0; i < players; ++i) names.push_back("p" + std::to_string(i));
+    std::vector<int> ranks;
+    Deck deck;
+    const int size = 3 * (players + 1) + next(10);
+    for (int i = 0; i < size; ++i) {
+      ranks.push_back(1 + next(13));
+      deck.push_back(Card{ranks.back(), static_cast<cards::Suit>(next(4))});
+    }
+    auto g = cards::makeShowdown(names, deck);
+    ASSERT_TRUE(g != nullptr);
+    ASSERT_TRUE(g->deal() == Status::Ok);
+    std::vector<int> sums(players + 1, 0);  // the last entry is the dealer
+    std::size_t top = 0;
+    for (int round = 0; round < 3; ++round) {
+      for (int seat = 0; seat <= players; ++seat) {
+        const int rank = ranks[top++];
+        sums[seat] += rank >= 10 ? 0 : rank;
+      }
+    }
+    EXPECT_EQ(g->dealerTotal(), sums[players] % 10);
+    for (int i = 0; i < players; ++i) {
+      EXPECT_EQ(totalOf(*g, names[i]), sums[i] % 10);
+      const int mine = sums[i] % 10, theirs = sums[players] % 10;
+      const Result expected = mine > theirs ? Result::Win : (mine < theirs ? Result::Lose : Result::Push);
+      EXPECT_TRUE(resultOf(*g, names[i]) == expected);
+    }
+    EXPECT_TRUE(g->phase() == Phase::Finished);
+  }
+}
+1a:T853,#pragma once
+#include <memory>
+#include <string>
+#include <utility>
+#include <vector>
+
+#include "round_game.h"
+
+constexpr std::size_t kBlackjackOpening = 2;
+constexpr std::size_t kCharlieCards = 5;
+constexpr int kDealerStandsOn = 17;
+
+// Twenty-One: two cards each, players decide, the dealer draws to 17. House rules are data, not subclasses.
+class Blackjack : public RoundGame {
+ public:
+  Blackjack(const std::vector<std::string>& names, cards::Deck deck, const cards::HouseRules& rules)
+      : RoundGame(names, std::move(deck), std::make_unique<BlackjackScorer>()), rules_(rules) {}
+
+ protected:
+  std::size_t openingCards() const override { return kBlackjackOpening; }
+
+  bool canAct(const Hand& hand) const override {
+    if (rules_.fiveCardCharlie && hand.size() >= kCharlieCards) return false;
+    return scoreOf(hand).total < kBlackjackTarget;
+  }
+
+  bool dealerDraws(const Hand& hand) const override {
+    const Score score = scoreOf(hand);
+    if (score.total < kDealerStandsOn) return true;
+    return rules_.dealerHitsSoft17 && score.total == kDealerStandsOn && score.soft;
+  }
+
+  cards::Result settle(const Hand& player, const Hand& dealer) const override {
+    const int mine = scoreOf(player).total;
+    const int theirs = scoreOf(dealer).total;
+    const bool dealerNatural = isNatural(dealer);
+    if (mine > kBlackjackTarget) return cards::Result::Lose;
+    if (isCharlie(player)) return dealerNatural ? cards::Result::Lose : cards::Result::Win;
+    if (theirs > kBlackjackTarget) return cards::Result::Win;
+    if (isNatural(player)) return dealerNatural ? cards::Result::Push : cards::Result::Win;
+    if (dealerNatural) return cards::Result::Lose;
+    if (mine == theirs) return cards::Result::Push;
+    return mine > theirs ? cards::Result::Win : cards::Result::Lose;
+  }
+
+ private:
+  bool isNatural(const Hand& hand) const {
+    return hand.size() == kBlackjackOpening && scoreOf(hand).total == kBlackjackTarget;
+  }
+  bool isCharlie(const Hand& hand) const {
+    return rules_.fiveCardCharlie && hand.size() >= kCharlieCards && scoreOf(hand).total <= kBlackjackTarget;
+  }
+
+  cards::HouseRules rules_;
+};
+1b:Tc69,#pragma once
+#include <cstddef>
+#include <string>
+
+#include "table_game.h"
+
+// The skeleton of a round (Template Method). deal(), hit() and stand() fix the order of the steps: deal round the table, let
+// each seat decide while it can, let the dealer play, settle every seat. A game is a subclass that fills in four hooks.
+class RoundGame : public TableGame {
+ public:
+  ~RoundGame() override = default;
+
+  cards::Status deal() final {
+    if (progress().phase() != cards::Phase::Waiting) return cards::Status::WrongPhase;
+    for (std::size_t round = 0; round < openingCards(); ++round) {
+      for (std::size_t i = 0; i < table().seatCount(); ++i) table().seat(i).hand().add(table().shoe().draw());
+      table().dealer().add(table().shoe().draw());
+    }
+    progress().beginTurns();
+    moveOn();
+    return cards::Status::Ok;
+  }
+
+  cards::Status hit(const std::string& player) final {
+    const cards::Status status = turnStatus(player);
+    if (status != cards::Status::Ok) return status;
+    if (table().shoe().empty()) return cards::Status::DeckEmpty;
+    Hand& hand = table().seat(progress().turn()).hand();
+    hand.add(table().shoe().draw());
+    if (!canAct(hand)) {
+      progress().nextTurn();
+      moveOn();
+    }
+    return cards::Status::Ok;
+  }
+
+  cards::Status stand(const std::string& player) final {
+    const cards::Status status = turnStatus(player);
+    if (status != cards::Status::Ok) return status;
+    progress().nextTurn();
+    moveOn();
+    return cards::Status::Ok;
+  }
+
+ protected:
+  RoundGame(const std::vector<std::string>& names, cards::Deck deck, std::unique_ptr<Scorer> scorer)
+      : TableGame(names, std::move(deck), std::move(scorer)) {}
+
+  // The hooks: what makes one game different from another.
+  virtual std::size_t openingCards() const = 0;                 // cards each seat and the dealer get in the deal
+  virtual bool canAct(const Hand& hand) const = 0;              // may this hand still take a decision?
+  virtual bool dealerDraws(const Hand& hand) const = 0;         // does the dealer take another card?
+  virtual cards::Result settle(const Hand& player, const Hand& dealer) const = 0;
+
+ private:
+  cards::Status turnStatus(const std::string& player) {
+    const int index = table().indexOf(player);
+    if (index < 0) return cards::Status::UnknownPlayer;
+    if (progress().phase() != cards::Phase::PlayerTurns) return cards::Status::WrongPhase;
+    if (static_cast<std::size_t>(index) != progress().turn()) return cards::Status::NotYourTurn;
+    return cards::Status::Ok;
+  }
+
+  // Skips the seats that have no decision; when none is left the round is over for the players.
+  void moveOn() {
+    while (progress().turn() < table().seatCount() && !canAct(table().seat(progress().turn()).hand())) progress().nextTurn();
+    if (progress().turn() == table().seatCount()) finishRound();
+  }
+
+  void finishRound() {
+    while (dealerDraws(table().dealer()) && !table().shoe().empty()) table().dealer().add(table().shoe().draw());
+    progress().finish();
+    for (std::size_t i = 0; i < table().seatCount(); ++i) {
+      Seat& seat = table().seat(i);
+      seat.settle(settle(seat.hand(), table().dealer()));
+    }
+  }
+};
+1c:T4f4,#pragma once
+#include "hand.h"
+
+constexpr int kBlackjackTarget = 21;
+constexpr int kAceBonus = 10;  // an Ace counts 1, or 11 when that does not pass the target
+constexpr int kFacePoints = 10;
+constexpr int kModTen = 10;
+
+struct Score {
+  int total;
+  bool soft;  // an Ace is counted as 11
+};
+
+// What a hand is worth (Strategy): every game scores its own way, and the round skeleton never looks at a card.
+class Scorer {
+ public:
+  virtual ~Scorer() = default;
+  virtual Score score(const Hand& hand) const = 0;
+};
+
+class BlackjackScorer : public Scorer {
+ public:
+  Score score(const Hand& hand) const override {
+    int sum = 0;
+    bool hasAce = false;
+    for (const auto& card : hand.cards()) {
+      sum += card.rank >= cards::kJack ? kFacePoints : card.rank;
+      hasAce = hasAce || card.rank == cards::kAce;
+    }
+    if (hasAce && sum + kAceBonus <= kBlackjackTarget) return Score{sum + kAceBonus, true};
+    return Score{sum, false};
+  }
+};
+
+// Ace 1, 2..9 their rank, ten and the faces 0, summed modulo ten.
+class ModTenScorer : public Scorer {
+ public:
+  Score score(const Hand& hand) const override {
+    int sum = 0;
+    for (const auto& card : hand.cards()) sum += card.rank >= kModTen ? 0 : card.rank;
+    return Score{sum % kModTen, false};
+  }
+};
+1d:T776,#pragma once
+#include <cstddef>
+#include <optional>
+#include <string>
+#include <utility>
+#include <vector>
+
+#include "hand.h"
+#include "shoe.h"
+
+// One player's place at the table.
+class Seat {
+ public:
+  explicit Seat(std::string name) : name_(std::move(name)) {}
+
+  const std::string& name() const { return name_; }
+  Hand& hand() { return hand_; }
+  const Hand& hand() const { return hand_; }
+  void settle(cards::Result result) { result_ = result; }
+  std::optional<cards::Result> result() const { return result_; }
+
+ private:
+  std::string name_;
+  Hand hand_;
+  std::optional<cards::Result> result_;
+};
+
+// Who sits where, the dealer's hand and the cards left. It knows nothing about any game's rules.
+class Table {
+ public:
+  Table(const std::vector<std::string>& names, cards::Deck deck) : shoe_(std::move(deck)) {
+    for (const auto& name : names) seats_.emplace_back(name);
+  }
+
+  std::size_t seatCount() const { return seats_.size(); }
+  Seat& seat(std::size_t index) { return seats_[index]; }
+  const Seat& seat(std::size_t index) const { return seats_[index]; }
+  // The seat with that name, or -1.
+  int indexOf(const std::string& name) const {
+    for (std::size_t i = 0; i < seats_.size(); ++i) {
+      if (seats_[i].name() == name) return static_cast<int>(i);
+    }
+    return -1;
+  }
+  Hand& dealer() { return dealer_; }
+  const Hand& dealer() const { return dealer_; }
+  Shoe& shoe() { return shoe_; }
+
+ private:
+  std::vector<Seat> seats_;
+  Hand dealer_;
+  Shoe shoe_;
+};
+
+// Where the round is: the phase and whose turn it is.
+class Progress {
+ public:
+  cards::Phase phase() const { return phase_; }
+  std::size_t turn() const { return turn_; }
+  void beginTurns() { phase_ = cards::Phase::PlayerTurns; turn_ = 0; }
+  void nextTurn() { ++turn_; }
+  void finish() { phase_ = cards::Phase::Finished; }
+
+ private:
+  cards::Phase phase_ = cards::Phase::Waiting;
+  std::size_t turn_ = 0;
+};
+1e:T82f,#pragma once
+#include <memory>
+#include <string>
+#include <utility>
+#include <vector>
+
+#include "scorer.h"
+#include "table.h"
+
+// The read side of every game: the same questions are answered the same way whichever rules are being played.
+class TableGame : public cards::Game {
+ public:
+  cards::Phase phase() const override { return progress_.phase(); }
+
+  std::string current() const override {
+    if (progress_.phase() != cards::Phase::PlayerTurns) return "";
+    return table_.seat(progress_.turn()).name();
+  }
+
+  cards::Status hand(const std::string& player, std::vector<cards::Card>& out) const override {
+    const int index = table_.indexOf(player);
+    if (index < 0) return cards::Status::UnknownPlayer;
+    out = table_.seat(static_cast<std::size_t>(index)).hand().cards();
+    return cards::Status::Ok;
+  }
+
+  cards::Status total(const std::string& player, int& out) const override {
+    const int index = table_.indexOf(player);
+    if (index < 0) return cards::Status::UnknownPlayer;
+    out = scoreOf(table_.seat(static_cast<std::size_t>(index)).hand()).total;
+    return cards::Status::Ok;
+  }
+
+  cards::Status result(const std::string& player, cards::Result& out) const override {
+    const int index = table_.indexOf(player);
+    if (index < 0) return cards::Status::UnknownPlayer;
+    const auto settled = table_.seat(static_cast<std::size_t>(index)).result();
+    if (!settled.has_value()) return cards::Status::WrongPhase;
+    out = *settled;
+    return cards::Status::Ok;
+  }
+
+  std::vector<cards::Card> dealerHand() const override { return table_.dealer().cards(); }
+  int dealerTotal() const override { return scoreOf(table_.dealer()).total; }
+
+ protected:
+  TableGame(const std::vector<std::string>& names, cards::Deck deck, std::unique_ptr<Scorer> scorer)
+      : table_(names, std::move(deck)), scorer_(std::move(scorer)) {}
+
+  Table& table() { return table_; }
+  Progress& progress() { return progress_; }
+  Score scoreOf(const Hand& hand) const { return scorer_->score(hand); }
+
+ private:
+  Table table_;
+  Progress progress_;
+  std::unique_ptr<Scorer> scorer_;
+};
+f:[["children",{"s":"__PAGE__","h":160,"d":{"r":["$","$1","c",{"children":[["$","$L12",null,{"bundle":{"id":"card-game","title":"Card game framework: a round skeleton, house rules and a second game","level":"Senior","parMinutes":90,"patterns":["Template Method","Strategy","State"],"requirements":[{"id":"R-setup","text":"Players: 1 to 6 names of 1 to 16 characters, all different; the deck must hold at least 2 * (players + 1) cards; anything else makes makeBlackjack return nullptr. Seats follow the order of the names and the game starts in Phase::Waiting.","phase":"base","hidden":true},{"id":"R-deal","text":"deal() is allowed once (WrongPhase otherwise). Cards come from the FRONT of the deck, one at a time round the table in seat order ending with the dealer, and then round again, so every seat and the dealer hold two cards, in the order dealt. The phase is then PlayerTurns.","phase":"base","hidden":true},{"id":"R-value","text":"A number card is worth its rank, Jack, Queen and King 10, an Ace 1 or 11 (the higher total that does not pass 21). total() is that best total, or the sum with every Ace as 1 when every choice passes 21. A natural is a two-card 21. An empty hand is worth 0.","phase":"base","hidden":true},{"id":"R-turns","text":"Players act in seat order and current() names the player to act (\"\" outside PlayerTurns). A hand worth 21 or more has no decision, so a natural, 21 and a bust pass the turn at once. hit() and stand() check UnknownPlayer, WrongPhase, NotYourTurn, and hit() then DeckEmpty (the turn stays). A refused call changes nothing.","phase":"base","hidden":true},{"id":"R-dealer","text":"After the last turn the dealer plays at once: it draws while its hand is worth less than 17 and stands on every 17 or more, soft or hard, and on an empty deck. Then the phase is Finished. The dealer does not draw while a player still has a decision.","phase":"base","hidden":true},{"id":"R-settle","text":"result() is WrongPhase until Finished. Then: a player bust loses (even when the dealer busts); a dealer bust wins; natural against natural pushes, a natural against anything else wins; anything else against a dealer natural loses; otherwise the higher total wins and equal totals push.","phase":"base","hidden":true},{"id":"R-phase","text":"Queries work at any time and answer UnknownPlayer for a name that is not seated (out-parameters untouched). After Finished, hit and stand answer WrongPhase and so does deal. One round per game object.","phase":"base","hidden":true},{"id":"R-soft17","text":"HouseRules::dealerHitsSoft17: the dealer also draws on a soft 17 (an Ace counted as 11) and the rule is applied to the new total after every card; every other 17 stands. With no rules makeBlackjackWith is exactly makeBlackjack.","phase":"storm1","hidden":true},{"id":"R-charlie","text":"HouseRules::fiveCardCharlie: a hand of five cards worth 21 or less ends its turn when the fifth card is dealt, whatever the total, and beats every dealer hand (a non-natural 21 and a bust included) except a dealer natural; a bust in five cards still loses. Without the rule a player keeps deciding at five cards.","phase":"storm1","hidden":true},{"id":"R-showdown","text":"makeShowdown on the same Game interface: setup needs 3 * (players + 1) cards; deal() gives every seat three cards round the table, ending with the dealer, and the phase is Finished at once (current() is \"\", hit and stand answer WrongPhase). A hand is the sum of points (Ace 1, 2..9, ten and faces 0) modulo 10; higher than the dealer wins, lower loses, equal pushes.","phase":"storm2","hidden":true}],"brief":"$13","editorial":"$14","clarify":[{"id":"q-setup","text":"Who can sit, what can they be called, and what does the table need before it exists? What does makeBlackjack return for a bad request?","answer":"One to six players, each a name of 1 to 16 characters, all different. The deck must hold at least 2 * (players + 1) cards, which is enough for the first deal. makeBlackjack returns nullptr for any other request. Seats are in the order of the names; the dealer has no name and is not a player. A fresh game is in Phase::Waiting.","reveals":["R-setup"],"quality":"essential"},{"id":"q-deal","text":"How is the deal done: in which order do cards go out, from which end of the deck, and what can be called twice?","answer":"Cards are dealt one at a time from the top (the FRONT of the deck vector), going round the table in seat order and ending with the dealer, and then round again: every seat and the dealer get two cards, all face up. deal() is allowed once, in Waiting; any other time it answers WrongPhase and changes nothing. After it the phase is PlayerTurns, unless nobody has a decision, in which case the dealer plays at once.","reveals":["R-deal"],"quality":"essential"},{"id":"q-value","text":"What is a hand worth? How do Aces, faces and a bust show up in total()?","answer":"Number cards are worth their rank, Jack, Queen and King are worth 10, and an Ace is worth 1 or 11, whichever gives the higher total that does not pass 21. total() is that best total; when every choice is above 21 it is the sum with each Ace as 1 (so a bust shows its real size). A natural is a two-card 21. Before the deal a hand is empty and its total is 0.","reveals":["R-value"],"quality":"essential"},{"id":"q-turns","text":"How do turns work: who acts when, what ends a turn, and what do hit() and stand() return in each state?","answer":"Players act in seat order; current() is the name of the player to act, or the empty string outside PlayerTurns. A player whose hand is worth 21 or more (a natural, or after a hit) has no decision and the turn passes at once. hit() draws the top card, stand() ends the turn. CHECK ORDER for both: UnknownPlayer, WrongPhase, NotYourTurn; hit() then answers DeckEmpty when no card is left (the turn stays with the player). A refused call changes nothing.","reveals":["R-turns"],"quality":"essential"},{"id":"q-dealer","text":"What does the dealer do, and when? What if the deck runs out?","answer":"After the last player's turn ends the dealer plays at once: draw while the hand is worth less than 17, stand on every 17 or more, soft or hard. If the deck runs out the dealer stands with what it holds. The phase is then Finished. The dealer never plays while a player still has a decision.","reveals":["R-dealer"],"quality":"essential"},{"id":"q-settle","text":"How is each result decided? What about busts on both sides, naturals and equal totals?","answer":"In this order: a player bust loses (even if the dealer busts too); a dealer bust wins; a natural against a natural is a Push; a natural against any other hand wins; any other hand against a dealer natural loses (so a three-card 21 loses to a natural); otherwise the higher total wins and equal totals push. result() answers WrongPhase until the phase is Finished.","reveals":["R-settle"],"quality":"essential"},{"id":"q-phase","text":"What can be asked at each stage, and what happens after the round is over?","answer":"Queries (hand, total, dealerHand, dealerTotal) work at any time; unknown names answer UnknownPlayer and leave the out-parameter alone. result() is WrongPhase until Finished. After Finished hit() and stand() answer WrongPhase (after the UnknownPlayer check) and deal() answers WrongPhase. There is one round per game object; a new round is a new object.","reveals":["R-phase"],"quality":"useful"},{"id":"q-house","text":"Will the house want to change the rules? Which ones, and are they per game or per table?","answer":"Yes, as the first change request, as an options struct given when the table is made: the dealer may also draw on a soft 17, and a five-card Charlie rule (five cards worth 21 or less end the turn and beat every dealer hand except a natural). With no options the game is exactly the basic one. Say how your design would switch a rule on without editing code that other rules depend on.","reveals":["R-soft17","R-charlie"],"quality":"useful"},{"id":"q-more-games","text":"Is Blackjack the only game? What will the second one need from the framework?","answer":"No: the second change request is a different game on the same Game interface, with its own deal size and scoring and no player decisions (a showdown of three cards each, scored by their points modulo ten, Ace 1 and tens and faces 0, highest wins). Say what your skeleton fixes (the order of a round) and what a game supplies (the deal size, who may decide, when the dealer draws, the score and the result).","reveals":["R-showdown"],"quality":"useful"},{"id":"q-shuffle","text":"Who shuffles? Do I need a Fisher-Yates and a random generator?","answer":"No. The caller hands in a deck in the order it wants, which keeps every game replayable and every test exact; a shuffle is a small function on the caller's side (and a good place to inject a random source). The deck may hold repeats, so a shoe of several packs works.","reveals":[],"quality":"noise"},{"id":"q-bets","text":"Do I handle bets, chips, doubling down, splitting or insurance?","answer":"No. Results are Win, Lose or Push; money belongs to a wallet built on top. Splits, doubles and insurance are extra decisions and a good follow-up on how the hooks would grow.","reveals":[],"quality":"noise"},{"id":"q-threads","text":"Will several threads call the same game?","answer":"No. One caller at a time, no locking. A server that hosts many tables gives each table its own object and one lock per table.","reveals":[],"quality":"useful"},{"id":"q-ui","text":"Does the game draw cards, animate the deal or play sounds?","answer":"No rendering at all. The interface returns data, and any screen is built on top of it, for example by polling the queries after each call.","reveals":[],"quality":"noise"},{"id":"q-hidden","text":"Is one of the dealer's cards hidden from the players?","answer":"No: everything is face up in this exercise, so dealerHand() shows every card. A hole card would add a visibility rule to the read side and is a fair follow-up.","reveals":[],"quality":"noise"}],"rubric":[{"id":"res-skeleton","text":"Owns the order of a round (deal round the table, let each seat decide while it can, let the dealer play, settle every seat) once, and leaves the parts that differ between games as hooks a subclass fills in (Template Method)","phase":"base","owners":["RoundGame","GameTemplate","CardGame","AbstractGame","BaseGame","Round","GameEngine"]},{"id":"res-scoring","text":"Knows what a hand is worth as its own replaceable piece, so the skeleton never looks at a rank (Ace as 1 or 11, faces as 10, a bust shown as the hard sum)","phase":"base","owners":["Scorer","BlackjackScorer","HandScorer","HandValue","ScoringRule","HandEvaluator","Evaluator"]},{"id":"res-rules","text":"Holds the rules of one game (cards in the deal, who may still decide, when the dealer draws, who wins) in one class that touches no table state directly","phase":"base","owners":["Blackjack","BlackjackRules","BlackjackGame","TwentyOne","BlackjackVariant"]},{"id":"res-table","text":"Keeps the seats, the dealer's hand and the cards left, with no knowledge of any game, so a new game reuses it unchanged","phase":"base","owners":["Table","Seat","Shoe","Hand","Deck","TableState"]},{"id":"res-progress","text":"Tracks the phase and whose turn it is in one place, so a refused call can be told apart from an accepted one without scattered flags","phase":"base","owners":["Progress","RoundState","TurnTracker","PhaseTracker","Turn","GameState"]},{"id":"res-queries","text":"Answers the read-only questions (hands, totals, results, the current player) the same way for every game, apart from the rules that change them","phase":"base","owners":["TableGame","GameView","GameQueries","TableView","Queries"]},{"id":"res-setup","text":"Decides whether a table can be seated at all (player count, names, deck size for the first deal) before any game object exists","phase":"base","owners":["TableValidator","Setup","TableValidator","SetupValidator","GameFactory","Validator"]},{"id":"res-house","text":"Carries optional rules (soft 17, five-card Charlie) as data that a hook reads, so switching a rule on edits no existing branch of the skeleton","phase":"storm1","owners":["HouseRules","Blackjack","RuleSet","Variant","BlackjackOptions","Rules"]},{"id":"res-newgame","text":"Adds a second game as a new subclass of the skeleton with its own scorer, and nothing in the skeleton, the table or Blackjack changes","phase":"storm2","owners":["Showdown","ModTenScorer","ShowdownGame","HighHand","Baccarat"]}],"followups":[{"level":"SDE2","question":"What is the Template Method here, and why is it better than putting the round loop in Blackjack?","answer":"The skeleton is the order of a round: deal round the table, let each seat decide while it can, let the dealer play, settle every seat. It is written once in the base class and marked final, so no game can reorder it. What differs between games (cards in the deal, whether a hand can still decide, when the dealer draws, who wins) are small virtual hooks. A second game then costs one subclass of four small methods, and the code that sequences turns and refuses bad calls is tested once. With the loop inside Blackjack the next game would copy it and the two copies would drift."},{"level":"SDE2","question":"Why does the caller pass a stacked deck instead of the game shuffling?","answer":"Because randomness is a dependency. A deck handed in is deterministic, so every test can name the exact cards and replay a round, and a bug report can include the deck. Shuffling is a small function (Fisher-Yates over an injected random source) that lives with the caller or a thin factory in front of the game. If the game shuffled by itself, tests would need a seed and a hidden contract about the algorithm, and a second game could not reuse a different shuffle."},{"level":"SDE2","question":"How do you value an Ace, and what do you show for a bust?","answer":"Sum the hand with every Ace as 1, then add 10 once if the hand has an Ace and the result is still 21 or less; only one Ace can ever count 11, because two would be at least 22. That gives the best total, and it is also the hard total when the hand cannot reach 21 with an Ace high. A bust is simply the sum with every Ace as 1, which is what the caller sees. Keeping this in a Scorer means the skeleton never inspects a rank, and a second game plugs in its own scoring."},{"level":"SDE2","question":"Why does a refused call answer a status instead of throwing, and why is the order of the checks documented?","answer":"Callers need to tell apart a name that does not exist, a call at the wrong time and a call out of turn, and they will test exactly that. The order matters when more than one thing is wrong (a stranger who calls hit before the deal): the interface promises one answer, so the check order is part of the contract. A refused call must also leave the game untouched, which is easy when every check happens before the first change."},{"level":"Senior","question":"Which parts of your design would change if the second game were Poker, with betting rounds and a different number of rounds?","answer":"The skeleton itself: a round of poker is several betting rounds with a deal between them, so 'deal once, then turns, then the dealer' is Blackjack-shaped. The honest answer is that the Template Method fixes a shape, and a game with a different shape needs a different skeleton, or the skeleton must be a loop over phases the game describes (a State or a list of Steps). Showdown fits because it has the same shape with an empty decision phase. A good design says so and keeps the table, the shoe, the hands and the scorers reusable, since they do not depend on the shape."},{"level":"Senior","question":"House rules as data versus a subclass per variant: when does each win?","answer":"A flag in an options struct is right while the variants differ in one or two small decisions inside the same hook, as here: whether the dealer draws on soft 17 and whether five cards end a turn. It adds no class and a rule can be tested alone. A subclass per variant wins when the variants differ in shape or in many hooks at once (Showdown), when the options would multiply (2^n combinations of flags interacting inside one function), or when a variant needs its own state. The smell to avoid is a flag that must be read in many places; one hook per decision keeps each flag in one spot."},{"level":"Senior","question":"Where can an inheritance-based framework hurt you, and what would you change?","answer":"Inheritance couples the games to the skeleton: a game can only vary what the base class decided to expose, and a new need (a hole card, a second dealer action, a betting step) means widening the hook set for every game. Deep hierarchies make the flow hard to follow, and protected state invites subclasses to reach into it. Mitigations: keep the hierarchy shallow (here table state, read side, skeleton and game are three small layers), make the skeleton methods final, keep state in a plain Table that hooks cannot reach, and prefer composition (a Scorer object, a rules struct) for the parts that vary independently of the round shape. If the hooks keep growing, switch to a Strategy object for the rules and keep the skeleton as a plain class."},{"level":"Senior","question":"How would you add a decision such as doubling down or splitting without breaking existing callers?","answer":"Add the call to the interface with a default status (WrongPhase for games that have no such decision) and let the hook that says who may decide become 'which actions are allowed for this hand', returning a set of actions instead of a bool. Doubling is a hit followed by an automatic stand, so it is one more step inside the skeleton's decision loop; splitting turns a seat into two hands, which means a seat owns a list of hands and 'the current turn' becomes a (seat, hand) pair. That change is real: it shows why the table, the progress tracker and the scorer are separate, because only the tracker and the seat's storage must change."},{"level":"Staff","question":"You must run ten thousand tables in one process. What do you do about the object model, memory and testing?","answer":"A table is a few hundred bytes (seats, a deck cursor, two small vectors), so ten thousand are cheap; the costs to watch are copies of the deck (share it as an immutable vector with a cursor per table, or hand each table a span into a pooled shoe) and a virtual call per hook, which is irrelevant at this scale. The tables do not share state, so they shard across threads with one lock or one owner thread per table; only the card supply and the results sink are shared. For testing, determinism is the big win: a recorded deck plus a recorded list of calls replays any table bit for bit, so a property test can compare every table against a model of the rules and a production incident can be replayed from its log."},{"level":"Staff","question":"How would you evolve this into a platform where other teams add games, and what would you freeze?","answer":"Freeze the contract: the Game interface and its check order, the status codes, the meaning of a deck and a result, and a conformance suite that every game must pass (setup refusals, one deal, turn order, refused calls change nothing, queries before and after). Provide the table, shoe, hand and phase tracker as a library, plus the skeleton for round-shaped games and a second skeleton for other shapes, so a team picks the closest one. Version the interface additively, publish the model-based test harness so that each game ships a model next to its code, and keep the rules of a game in one class that can be fuzzed against that model. What you must not freeze is the set of hooks: expect it to grow."}],"apiHeader":"$15","phaseApis":{"storm1":"#pragma once\n// Change Storm 1: house rules.\n#include \"api.h\"\n\nnamespace cards {\n\n// The house wants to switch two rules on and off without changing the rest of the game. makeBlackjackWith(players, deck,\n// HouseRules{}) is exactly makeBlackjack(players, deck).\nstruct HouseRules {\n  // The dealer also draws on a SOFT 17 (a total of 17 that counts an Ace as 11). Every other total of 17 or more still stands.\n  bool dealerHitsSoft17 = false;\n  // A player whose hand has five cards and is worth 21 or less (not a bust) is \"five-card Charlie\": the turn ends at once\n  // when the fifth card is dealt, whatever the total, and the hand beats every dealer hand, including a dealer's non-natural\n  // 21 and a dealer's bust, except a dealer natural, which still wins. Without the rule a player keeps deciding at five cards.\n  bool fiveCardCharlie = false;\n};\n\nstd::unique_ptr<Game> makeBlackjackWith(const std::vector<std::string>& players, const Deck& deck, const HouseRules& rules);\n\n}  // namespace cards\n","storm2":"$16"},"phases":["base","storm1","storm2"],"tests":{"base":[{"path":"cg_base.cpp","content":"$17"}],"storm1":[{"path":"cg_storm1.cpp","content":"$18"}],"storm2":[{"path":"cg_storm2.cpp","content":"$19"}]},"reference":[{"path":"blackjack.h","content":"$1a"},{"path":"hand.h","content":"#pragma once\n#include <cstddef>\n#include <vector>\n\n#include \"api_storm2.h\"\n\n// The cards one seat holds, in the order they were dealt.\nclass Hand {\n public:\n  void add(const cards::Card& card) { cards_.push_back(card); }\n  const std::vector<cards::Card>& cards() const { return cards_; }\n  std::size_t size() const { return cards_.size(); }\n\n private:\n  std::vector<cards::Card> cards_;\n};\n"},{"path":"round_game.h","content":"$1b"},{"path":"scorer.h","content":"$1c"},{"path":"service.cpp","content":"#include \"blackjack.h\"\n#include \"setup.h\"\n#include \"showdown.h\"\n\nstd::unique_ptr<cards::Game> cards::makeBlackjackWith(const std::vector<std::string>& players, const Deck& deck,\n                                                       const HouseRules& rules) {\n  if (!TableValidator::valid(players, deck, kBlackjackOpening)) return nullptr;\n  return std::make_unique<Blackjack>(players, deck, rules);\n}\n\nstd::unique_ptr<cards::Game> cards::makeBlackjack(const std::vector<std::string>& players, const Deck& deck) {\n  return makeBlackjackWith(players, deck, HouseRules{});\n}\n\nstd::unique_ptr<cards::Game> cards::makeShowdown(const std::vector<std::string>& players, const Deck& deck) {\n  if (!TableValidator::valid(players, deck, kShowdownOpening)) return nullptr;\n  return std::make_unique<Showdown>(players, deck);\n}\n"},{"path":"setup.h","content":"#pragma once\n#include <cstddef>\n#include <set>\n#include <string>\n#include <vector>\n\n#include \"api_storm2.h\"\n\nconstexpr std::size_t kMaxPlayers = 6;\nconstexpr std::size_t kMaxNameLength = 16;\n\n// Decides whether a table can be seated at all, before any game object exists.\nclass TableValidator {\n public:\n  // May these players sit, and is the deck big enough for the first deal of a game that deals `opening` cards each?\n  static bool valid(const std::vector<std::string>& players, const cards::Deck& deck, std::size_t opening) {\n    if (players.empty() || players.size() > kMaxPlayers) return false;\n    std::set<std::string> seen;\n    for (const auto& name : players) {\n      if (name.empty() || name.size() > kMaxNameLength) return false;\n      if (!seen.insert(name).second) return false;\n    }\n    return deck.size() >= opening * (players.size() + 1);\n  }\n};\n"},{"path":"shoe.h","content":"#pragma once\n#include <cstddef>\n#include <utility>\n\n#include \"api_storm2.h\"\n\n// The cards still to be drawn, top first. The caller chose the order; the shoe only hands the cards out.\nclass Shoe {\n public:\n  explicit Shoe(cards::Deck deck) : deck_(std::move(deck)) {}\n\n  bool empty() const { return next_ >= deck_.size(); }\n  // Precondition: !empty().\n  cards::Card draw() { return deck_[next_++]; }\n\n private:\n  cards::Deck deck_;\n  std::size_t next_ = 0;\n};\n"},{"path":"showdown.h","content":"#pragma once\n#include <memory>\n#include <string>\n#include <utility>\n#include <vector>\n\n#include \"round_game.h\"\n\nconstexpr std::size_t kShowdownOpening = 3;\n\n// Three cards each, nobody decides, the higher value (modulo ten) wins. Only the four hooks differ from Blackjack.\nclass Showdown : public RoundGame {\n public:\n  Showdown(const std::vector<std::string>& names, cards::Deck deck)\n      : RoundGame(names, std::move(deck), std::make_unique<ModTenScorer>()) {}\n\n protected:\n  std::size_t openingCards() const override { return kShowdownOpening; }\n  bool canAct(const Hand&) const override { return false; }\n  bool dealerDraws(const Hand&) const override { return false; }\n\n  cards::Result settle(const Hand& player, const Hand& dealer) const override {\n    const int mine = scoreOf(player).total;\n    const int theirs = scoreOf(dealer).total;\n    if (mine == theirs) return cards::Result::Push;\n    return mine > theirs ? cards::Result::Win : cards::Result::Lose;\n  }\n};\n"},{"path":"table.h","content":"$1d"},{"path":"table_game.h","content":"$1e"}],"driver":{"path":"driver.cpp","content":"#define BP_TEST_MAIN\n#include \"bp_test.h\"\n","readOnly":true}}}],["$L1f","$L20"],"$L21"]}],"p":"$@22","v":null,"s":"$9"}}]]
+d:[["children",{"s":{"n":"id","t":"d","k":"card-game","s":[]},"h":65632,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}]}]]}],"p":"$@e","v":"$c","s":"$9"},"c":"$Qf"}]]
+a:[["children",{"s":"workshop","h":131168,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}]}]]}],"p":"$@b","v":"$c","s":"$9"},"c":"$Qd"}]]
+0:{"t":{"t":{"s":"","h":131152,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/2lbfwxo4jtf0j.css","precedence":"next"}],["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js","async":true}]],["$","html",null,{"lang":"en","className":"r7opxW_variable auY9QW_variable u-EJdW_variable h-full","children":["$","body",null,{"className":"min-h-full","children":[["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}],"notFound":[["$","main",null,{"className":"flex min-h-dvh flex-col items-center justify-center gap-4 px-4 text-center","children":[["$","div",null,{"className":"font-display text-5xl text-[var(--accent)]","children":"404"}],["$","p",null,{"className":"text-white/60","children":"This room is not on the blueprint yet."}],["$","$L6",null,{"href":"/","className":"text-sm text-white/80 underline","children":"Back to the title screen"}]]}],[]]}],["$","$L7",null,{}]]}]}]]}],"p":"$@8","v":null,"s":"$9"},"c":"$Qa"},"h":{"r":["$","$1","h",{"children":[null,["$","$L24",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1, viewport-fit=cover"}],["$","meta","2",{"name":"theme-color","content":"#0a1530"}]]}],["$","$L26",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$27",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"Card game framework: a round skeleton, house rules and a second game: Blueprint Clash"}],["$","meta","1",{"name":"description","content":"A creature-tactics RPG that teaches low-level design in C++ and high-level system design, from fundamentals to big-tech interview level."}],["$","link","2",{"rel":"manifest","href":"/blueprint-clash/manifest.webmanifest"}],["$","meta","3",{"name":"mobile-web-app-capable","content":"yes"}],["$","meta","4",{"name":"apple-mobile-web-app-title","content":"Blueprint Clash"}],["$","meta","5",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","link","6",{"rel":"icon","href":"/blueprint-clash/icon.png?icon.27re_xscs-jmw.png","sizes":"256x256","type":"image/png"}],["$","link","7",{"rel":"apple-touch-icon","href":"/blueprint-clash/apple-icon.png?apple-icon.2rac1w0yc3rju.png","sizes":"180x180","type":"image/png"}],["$","$L28","8",{}]]}]}],null]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"p":"$@29","v":null,"s":"$9"}},"a":"$@2a","u":"$@2b","b":"WHHKcqqrgr3tfT2ZA5zb7"}
+2c:I[97367,["$2"],"OutletBoundary"]
+1f:["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/2uk3wcjwqg0tl.js","async":true}]
+20:["$","script","script-1",{"src":"/blueprint-clash/_next/static/chunks/1zdu7yjl8efu4.js","async":true}]
+21:["$","$L2c",null,{"children":["$","$27",null,{"name":"Next.MetadataOutlet","children":"$@2d"}]}]
+9:300
+2d:null
+2b:true
+9:C
+2a:0
+e:"$undefined"
+b:"$undefined"
+8:"$undefined"
+29:"$undefined"
+22:"$undefined"

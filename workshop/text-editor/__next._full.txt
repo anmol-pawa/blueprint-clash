@@ -1,0 +1,1422 @@
+1:"$Sreact.fragment"
+2:"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js"
+3:I[39756,["$2"],"default"]
+4:I[37457,["$2"],"default"]
+5:"/blueprint-clash/_next/static/chunks/2n5qeheznvl4u.js"
+6:I[22016,["$2","$5"],""]
+7:I[64576,["$2"],"PwaRegister"]
+d:I[97367,["$2"],"OutletBoundary"]
+e:"$Sreact.suspense"
+10:"ViewportBoundary"
+11:I[97367,["$2"],"$10"]
+13:"MetadataBoundary"
+14:I[97367,["$2"],"$13"]
+16:I[68027,["$2"],"default",1]
+:HL["/blueprint-clash/_next/static/chunks/2lbfwxo4jtf0j.css","style"]
+:HL["/blueprint-clash/_next/static/media/07c7676b89ed2778-s.p.2bn3s6zvc0dyp.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/blueprint-clash/_next/static/media/486a103cae33528f-s.p.309ilb452anpd.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/blueprint-clash/_next/static/media/53897e768d329f66-s.p.3t6q91iet4nsy.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+9:X
+b:[["children",{"s":"__PAGE__","h":512,"d":{"r":["$","$1","c",{"children":["$Lc",[["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/2uk3wcjwqg0tl.js","async":true,"nonce":"$undefined"}],["$","script","script-1",{"src":"/blueprint-clash/_next/static/chunks/1zdu7yjl8efu4.js","async":true,"nonce":"$undefined"}]],["$","$Ld",null,{"children":["$","$e",null,{"name":"Next.MetadataOutlet","children":"$@f"}]}]]}],"p":false,"v":null}}]]
+a:[["children",{"s":{"n":"id","t":"d","k":"text-editor","s":[]},"h":66048,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],"p":false,"v":"$9"},"c":"$Qb"}]]
+8:[["children",{"s":"workshop","h":131584,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],"p":false,"v":"$9"},"c":"$Qa"}]]
+0:{"P":null,"c":["","workshop","text-editor",""],"q":"","i":false,"t":{"t":{"s":"","h":131600,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/2lbfwxo4jtf0j.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}],["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js","async":true,"nonce":"$undefined"}]],["$","html",null,{"lang":"en","className":"r7opxW_variable auY9QW_variable u-EJdW_variable h-full","children":["$","body",null,{"className":"min-h-full","children":[["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","main",null,{"className":"flex min-h-dvh flex-col items-center justify-center gap-4 px-4 text-center","children":[["$","div",null,{"className":"font-display text-5xl text-[var(--accent)]","children":"404"}],["$","p",null,{"className":"text-white/60","children":"This room is not on the blueprint yet."}],["$","$L6",null,{"href":"/","className":"text-sm text-white/80 underline","children":"Back to the title screen"}]]}],[]],"forbidden":"$undefined","unauthorized":"$undefined"}],["$","$L7",null,{}]]}]}]]}],"p":false,"v":null},"c":"$Q8"},"h":{"r":["$","$1","h",{"children":[null,["$","$L11",null,{"children":"$L12"}],["$","$L14",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$e",null,{"name":"Next.Metadata","children":"$L15"}]}],null]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"p":false,"v":null}},"m":"$undefined","G":["$16",[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/2lbfwxo4jtf0j.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]]],"S":true,"r":"$undefined","s":"$undefined","a":"$undefined","l":"$undefined","p":"$undefined","d":"$undefined","b":"WHHKcqqrgr3tfT2ZA5zb7"}
+9:C
+12:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1, viewport-fit=cover"}],["$","meta","2",{"name":"theme-color","content":"#0a1530"}]]
+17:I[27201,["$2"],"IconMark"]
+f:null
+15:[["$","title","0",{"children":"Text editor with undo and redo: Blueprint Clash"}],["$","meta","1",{"name":"description","content":"A creature-tactics RPG that teaches low-level design in C++ and high-level system design, from fundamentals to big-tech interview level."}],["$","link","2",{"rel":"manifest","href":"/blueprint-clash/manifest.webmanifest","crossOrigin":"$undefined"}],["$","meta","3",{"name":"mobile-web-app-capable","content":"yes"}],["$","meta","4",{"name":"apple-mobile-web-app-title","content":"Blueprint Clash"}],["$","meta","5",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","link","6",{"rel":"icon","href":"/blueprint-clash/icon.png?icon.27re_xscs-jmw.png","sizes":"256x256","type":"image/png"}],["$","link","7",{"rel":"apple-touch-icon","href":"/blueprint-clash/apple-icon.png?apple-icon.2rac1w0yc3rju.png","sizes":"180x180","type":"image/png"}],["$","$L17","8",{}]]
+18:"/blueprint-clash/_next/static/chunks/2uk3wcjwqg0tl.js"
+19:"/blueprint-clash/_next/static/chunks/1zdu7yjl8efu4.js"
+1a:I[65612,["$2","$18","$19"],"WorkshopClient"]
+1b:T44f,# Text editor with undo and redo
+
+You are writing the core of a small text editor: a document, a cursor, and the keys that change them. Users type, delete, move around and press Ctrl+Z, and they are not forgiving: if undo puts the cursor somewhere strange or loses a character, they notice at once. Typing a long sentence and pressing undo should not feel like a bug either.
+
+What you know so far:
+
+- There is one document, and a cursor that sits between characters.
+- You can insert text at the cursor, delete before it (Backspace) and after it (Delete), and move the cursor.
+- Undo and redo work on what the user did, not on the whole document at once.
+
+Your task: design and implement it behind the `edit::Editor` interface in `api.h`. The hidden tests call only that interface. Ask the interviewer questions first: the brief is deliberately incomplete, and "what exactly does undo restore, and what does a new edit do to redo?" is where most first drafts go wrong. Expect grouped edits (one undo for a find-and-replace) and merged typing (one undo per word) to be asked for after you have finished.
+1c:T1bf9,# Editorial: Text editor with undo and redo
+
+## Requirements
+Functional: one document with a cursor; insert at the cursor, Backspace, Delete, move the cursor; undo and redo that restore the text and the cursor; a limit on how much history is kept; grouped edits; merged typing.
+
+Hidden in the brief and revealed by good questions: the cursor sits between characters and ends after inserted text; Backspace clamps at the start and leaves the cursor at the start of the deleted text, Delete clamps at the end and does not move the cursor; a call that changes nothing records nothing; undo restores the text and the exact cursor from before the step, redo the cursor from after it; any new edit discards redo, but moving the cursor does not; at most 100 steps are kept, counted as steps and not characters.
+
+**Change Storm 1, undo groups:** `beginGroup` and `endGroup`, nested, give one step for many edits. Undo and redo are refused while a group is open, the first edit inside discards redo, an empty group records nothing, and a group is one step for the limit.
+
+**Change Storm 2, typing runs:** `makeTypingEditor()` merges consecutive single-character inserts into one step until a space or newline has been added. Any other call ends the run, including calls that changed nothing; a paste is never part of a run; inside a group nothing merges.
+
+## Reference design
+- `EditorImpl` is the facade. It turns each call into a command, applies it to the buffer and hands it to the recorder. It decides which calls end a typing run and nothing else about history.
+- `TextBuffer` owns the text and the cursor and offers only primitive changes (`insertAt`, `eraseAt`, `setCursor`). It has no idea what undo is.
+- `Command` is the Command pattern: `apply` and `revert`, each leaving the cursor where that direction should. `InsertCommand` and `EraseCommand` hold exactly what they need to undo themselves (the position, the removed text, the cursor before and after).
+- `MacroCommand` is a Composite of commands: applied in order, reverted in reverse.
+- `History` owns the undo and redo stacks, the 100-step limit and the rule that a recorded edit discards redo. It never sees text.
+- `GroupRecorder` stands between the editor and the history: outside a group edits go straight through, inside one they are collected into a `MacroCommand` that becomes a step when the outermost group ends.
+- `MergePolicy` is a Strategy for "may this edit join the open step?": `NeverMerge` for the base editor and `TypingRuns` for storm 2. The command does the joining (`absorb`) and offers itself as typing only when it was made of single keystrokes.
+
+**Storm 1 in the reference:** `MacroCommand` and `GroupRecorder` are new, plus three methods on the facade. The history and the buffer are untouched, because a step could always have been any `Command`.
+
+**Storm 2 in the reference:** `TypingRuns` and `Command::absorb` are new. The history gained one flag (is the top step still open) that every other call clears; without it, undo and redo would merge the next keystroke into the step underneath.
+
+## Alternatives
+- **Snapshot (Memento) per step.** Store the whole text and cursor before each change. Easiest to get right and makes cursor restoration free. Costs the document per step: fine for a text field, 100 MB for a 1 MB file with a full history. The hidden random test uses exactly this design as its model.
+- **Command with an inverse, as here.** Costs one small object per step and an inverse per kind of edit. Undo cost follows the size of the edit, not the document. The standard answer for an editor.
+- **Diff-based history.** Store a patch of the text between states. Compact and generic but needs a diff, and it cannot say which edits were one keystroke; good for coarse autosave history, poor for word-level undo.
+- **A single stack with a pointer (undo and redo as moves of an index).** Elegant and equal in behaviour. Discarding redo becomes truncating the list at the pointer. A `std::vector` with an index works; the cap then needs a rotating start.
+- **A `switch` on an edit type inside the editor.** Every new edit (grouping, merging, replace-all) edits the switch. The Command object is what lets the two storms be additions.
+- **Command per keystroke with a time window for merging.** What many editors do ("merge if within 500 ms"). It needs a clock and makes behaviour untestable without one; the rule here is purely structural.
+- **Undo as one stack and redo recomputed.** Redo cannot be recomputed after undo without storing the step, so it is stored.
+
+## Trade-offs
+Recording the cursor in every command makes undo exact and puts a little knowledge in each command; keeping it only in the history would be tidier and wrong, because Backspace and Delete disagree about where the cursor ends.
+
+Merging typing makes undo feel like a person (word at a time) and costs a rule that must be written down precisely, because a user can see every detail of it: what ends a run, whether a failed move does, whether a paste can join. Time-based merging is easier to write and impossible to test deterministically.
+
+Dropping the oldest step at 100 bounds memory and loses the ability to undo that far back; the honest alternative is a byte budget per history, which handles a single huge step better than a step count.
+
+Positions here are bytes of a string; production editors use a rope or a piece table so that inserting in the middle of a 50 MB file is not a memmove, and positions are in characters or grapheme clusters.
+
+## What breaks at 10x
+A 10 MB document with an array-backed string makes every insert a memmove: use a gap buffer (insert near the cursor is O(1) amortised) or a piece table (edits append to a buffer and splice a list of pieces; undo is restoring piece lists). Commands then hold piece references instead of copied text. A paste of 5,000 lines is one step holding the pasted text: bound memory by bytes, not by steps. Typing speed is not the issue; a find-and-replace-all of 100,000 matches as one group is: collecting 100,000 small commands should become one command holding a compact edit list. With several users editing, a global stack is wrong: each author needs their own history whose inverses are transformed against concurrent operations, which is the operational-transformation or CRDT problem.
+
+## Level signals
+- **SDE2:** applies and reverts edits correctly, restores the cursor, clears redo on a new edit, clamps deletes, records nothing for no-ops, enforces the limit.
+- **Senior:** models a step as a Command (or justifies snapshots and says what they cost); keeps history ignorant of text and the buffer ignorant of history; adds groups as a Composite without touching the history; states the merge rule exactly (what ends a run) and puts it behind an interface; compares against a snapshot model in a test.
+- **Staff:** talks about gap buffers and piece tables, memory budgets per step, autosave and crash recovery from the history, and per-author undo with transformed inverses in a collaborative editor; says what they would measure (memory per step, undo latency on a large document) and what they would not build yet.
+1d:Ta8b,#pragma once
+// Public API for the Text editor problem. The hidden tests only use what is declared here.
+// You implement edit::makeEditor() (in any of your .cpp files); everything behind it is your design.
+#include <cstddef>
+#include <memory>
+#include <string>
+
+namespace edit {
+
+constexpr std::size_t kMaxUndoSteps = 100;  // the undo history keeps at most this many steps; the oldest is dropped
+
+// A one-document text editor with a cursor. The document starts empty with the cursor at 0. Positions count bytes
+// from the start of the text; the cursor sits between characters, so it is always in 0..text().size().
+class Editor {
+ public:
+  virtual ~Editor() = default;
+
+  // Inserts `text` at the cursor and leaves the cursor just after it. Returns false and records nothing for "".
+  virtual bool insert(const std::string& text) = 0;
+
+  // Deletes up to `count` characters before the cursor (the Backspace key) and returns how many were deleted:
+  // min(count, cursor). The cursor ends where the deleted text started. Returns 0 and records nothing when nothing
+  // was deleted.
+  virtual std::size_t backspace(std::size_t count) = 0;
+
+  // Deletes up to `count` characters after the cursor (the Delete key) and returns how many were deleted:
+  // min(count, size - cursor). The cursor does not move. Returns 0 and records nothing when nothing was deleted.
+  virtual std::size_t deleteAhead(std::size_t count) = 0;
+
+  // Moves the cursor. Returns false (and does not move it) when position > text().size(). Moving is not an edit: it
+  // is never undone and never clears the redo history.
+  virtual bool moveTo(std::size_t position) = 0;
+
+  // Takes back the most recent step that has not been taken back: the text and the cursor return to exactly what they
+  // were before that step. Returns false when there is nothing to undo.
+  virtual bool undo() = 0;
+
+  // Applies again the step most recently taken back: the text and cursor are what they were right after that step.
+  // Returns false when there is nothing to redo. Any new edit (an insert or delete that changed the text) discards
+  // everything that could have been redone.
+  virtual bool redo() = 0;
+
+  virtual std::string text() const = 0;
+  virtual std::size_t cursor() const = 0;
+  virtual std::size_t undoSteps() const = 0;  // how many undo() calls would succeed in a row
+  virtual std::size_t redoSteps() const = 0;  // how many redo() calls would succeed in a row
+};
+
+// Each insert, backspace or delete that changed the text is one undo step. Once more than kMaxUndoSteps steps have
+// been recorded the oldest ones are forgotten (they can no longer be undone).
+std::unique_ptr<Editor> makeEditor();
+
+}  // namespace edit
+1e:T56f,#pragma once
+// Change Storm 1 adds undo groups ("macros"). Everything from api.h still holds.
+#include "api.h"
+
+namespace edit {
+
+// An editor whose edits can be grouped so that one undo takes back all of them (a find-and-replace-all, a paste with
+// reformatting, a refactoring).
+class GroupingEditor : public Editor {
+ public:
+  // Starts a group. Groups nest: only the outermost group is a step; inner ones just join it. Always true.
+  virtual bool beginGroup() = 0;
+
+  // Ends the innermost open group. Returns false when no group is open. When the outermost group ends, the edits made
+  // since it began become ONE step (applied in order by redo, taken back in reverse order by undo). A group in which
+  // nothing changed the text records no step at all.
+  virtual bool endGroup() = 0;
+
+  // How many groups are open right now (0 when none).
+  virtual std::size_t openGroups() const = 0;
+};
+
+// While any group is open: undo() and redo() return false and change nothing, undoSteps() counts only finished steps,
+// and the first edit inside the group discards the redo history just like any other edit. Undoing a group puts the
+// cursor where it was before the group's first edit; redoing it puts the cursor where the group's last edit left it.
+// A finished group counts as one step against kMaxUndoSteps.
+std::unique_ptr<GroupingEditor> makeGroupingEditor();
+
+}  // namespace edit
+1f:T4c8,#pragma once
+// Change Storm 2 merges typing into word-sized undo steps. Everything from api.h and api_storm1.h still holds.
+#include "api_storm1.h"
+
+namespace edit {
+
+// Like makeGroupingEditor, but consecutive single-character inserts are typing and share one undo step:
+//  - A single-character insert joins the previous step when that step is a typing run (made of single-character
+//    inserts) that is still open. Otherwise it starts a new step, which is itself a typing run.
+//  - A run ends after a ' ' or '\n' has been added to it: the next character starts a new step.
+//  - Any call other than a single-character insert ends the open run, whether or not it changed anything: a delete,
+//    moveTo (even to where the cursor already is), undo, redo, beginGroup, an insert of more than one character, or
+//    insert(""). Queries (text, cursor, undoSteps, redoSteps, openGroups) do not.
+//  - A multi-character insert is never part of a run.
+//  - Inside an open group typing does not merge with anything: the group is the step.
+// So "hello world" typed one key at a time is two steps ("hello " and "world"), and one undo removes "world".
+std::unique_ptr<GroupingEditor> makeTypingEditor();
+
+}  // namespace edit
+20:T3009,#include <algorithm>
+#include <cstdint>
+#include <memory>
+#include <string>
+#include <vector>
+
+#include "api.h"
+#include "bp_test.h"
+
+namespace {
+using Sz = std::size_t;
+
+std::string str(const char* s) { return std::string(s); }
+
+struct Fixture {
+  std::unique_ptr<edit::Editor> ed = edit::makeEditor();
+  void type(const std::string& s) {
+    for (char c : s) ed->insert(std::string(1, c));
+  }
+};
+}  // namespace
+
+TEST(Edit, StartsEmptyWithTheCursorAtZero) {
+  Fixture f;
+  EXPECT_EQ(f.ed->text(), str(""));
+  EXPECT_EQ(f.ed->cursor(), static_cast<Sz>(0));
+  EXPECT_EQ(f.ed->undoSteps(), static_cast<Sz>(0));
+  EXPECT_EQ(f.ed->redoSteps(), static_cast<Sz>(0));
+  EXPECT_FALSE(f.ed->undo());
+  EXPECT_FALSE(f.ed->redo());
+}
+
+TEST(Edit, InsertGoesAtTheCursorAndMovesIt) {
+  Fixture f;
+  EXPECT_TRUE(f.ed->insert("hello"));
+  EXPECT_EQ(f.ed->text(), str("hello"));
+  EXPECT_EQ(f.ed->cursor(), static_cast<Sz>(5));
+  f.ed->moveTo(2);
+  EXPECT_TRUE(f.ed->insert("XY"));
+  EXPECT_EQ(f.ed->text(), str("heXYllo"));
+  EXPECT_EQ(f.ed->cursor(), static_cast<Sz>(4));
+}
+
+TEST(Edit, InsertingNothingIsRefusedAndRecordsNothing) {
+  Fixture f;
+  EXPECT_FALSE(f.ed->insert(""));
+  EXPECT_EQ(f.ed->undoSteps(), static_cast<Sz>(0));
+  f.ed->insert("a");
+  EXPECT_FALSE(f.ed->insert(""));
+  EXPECT_EQ(f.ed->undoSteps(), static_cast<Sz>(1));
+}
+
+TEST(Edit, BackspaceDeletesBeforeTheCursor) {
+  Fixture f;
+  f.ed->insert("abcdef");
+  f.ed->moveTo(4);
+  EXPECT_EQ(f.ed->backspace(2), static_cast<Sz>(2));
+  EXPECT_EQ(f.ed->text(), str("abef"));
+  EXPECT_EQ(f.ed->cursor(), static_cast<Sz>(2));
+}
+
+TEST(Edit, BackspaceIsClampedAtTheStart) {
+  Fixture f;
+  f.ed->insert("abc");
+  f.ed->moveTo(2);
+  EXPECT_EQ(f.ed->backspace(10), static_cast<Sz>(2));
+  EXPECT_EQ(f.ed->text(), str("c"));
+  EXPECT_EQ(f.ed->cursor(), static_cast<Sz>(0));
+  EXPECT_EQ(f.ed->backspace(1), static_cast<Sz>(0));
+}
+
+TEST(Edit, DeleteAheadDeletesAfterTheCursorAndKeepsIt) {
+  Fixture f;
+  f.ed->insert("abcdef");
+  f.ed->moveTo(1);
+  EXPECT_EQ(f.ed->deleteAhead(3), static_cast<Sz>(3));
+  EXPECT_EQ(f.ed->text(), str("aef"));
+  EXPECT_EQ(f.ed->cursor(), static_cast<Sz>(1));
+}
+
+TEST(Edit, DeleteAheadIsClampedAtTheEnd) {
+  Fixture f;
+  f.ed->insert("abc");
+  f.ed->moveTo(1);
+  EXPECT_EQ(f.ed->deleteAhead(99), static_cast<Sz>(2));
+  EXPECT_EQ(f.ed->text(), str("a"));
+  EXPECT_EQ(f.ed->deleteAhead(1), static_cast<Sz>(0));
+}
+
+TEST(Edit, DeletesThatRemoveNothingRecordNothing) {
+  Fixture f;
+  f.ed->insert("ab");
+  f.ed->moveTo(0);
+  EXPECT_EQ(f.ed->backspace(3), static_cast<Sz>(0));
+  f.ed->moveTo(2);
+  EXPECT_EQ(f.ed->deleteAhead(3), static_cast<Sz>(0));
+  EXPECT_EQ(f.ed->backspace(0), static_cast<Sz>(0));
+  EXPECT_EQ(f.ed->undoSteps(), static_cast<Sz>(1));
+}
+
+TEST(Edit, MoveToRejectsPositionsPastTheEnd) {
+  Fixture f;
+  f.ed->insert("abc");
+  EXPECT_TRUE(f.ed->moveTo(0));
+  EXPECT_TRUE(f.ed->moveTo(3));
+  EXPECT_FALSE(f.ed->moveTo(4));
+  EXPECT_EQ(f.ed->cursor(), static_cast<Sz>(3));
+}
+
+TEST(Undo, TakesBackAnInsertAndRestoresTheCursor) {
+  Fixture f;
+  f.ed->insert("abc");
+  f.ed->moveTo(1);
+  f.ed->insert("XY");
+  EXPECT_EQ(f.ed->text(), str("aXYbc"));
+  EXPECT_TRUE(f.ed->undo());
+  EXPECT_EQ(f.ed->text(), str("abc"));
+  EXPECT_EQ(f.ed->cursor(), static_cast<Sz>(1));
+}
+
+TEST(Undo, TakesBackABackspaceAndPutsTheCursorWhereItWas) {
+  Fixture f;
+  f.ed->insert("abcdef");
+  f.ed->moveTo(4);
+  f.ed->backspace(2);
+  EXPECT_TRUE(f.ed->undo());
+  EXPECT_EQ(f.ed->text(), str("abcdef"));
+  EXPECT_EQ(f.ed->cursor(), static_cast<Sz>(4));
+}
+
+TEST(Undo, TakesBackADeleteAndPutsTheCursorWhereItWas) {
+  Fixture f;
+  f.ed->insert("abcdef");
+  f.ed->moveTo(1);
+  f.ed->deleteAhead(3);
+  EXPECT_TRUE(f.ed->undo());
+  EXPECT_EQ(f.ed->text(), str("abcdef"));
+  EXPECT_EQ(f.ed->cursor(), static_cast<Sz>(1));
+}
+
+TEST(Undo, GoesBackOneStepAtATimeInReverseOrder) {
+  Fixture f;
+  f.ed->insert("one");
+  f.ed->insert(" two");
+  f.ed->insert(" three");
+  EXPECT_EQ(f.ed->undoSteps(), static_cast<Sz>(3));
+  f.ed->undo();
+  EXPECT_EQ(f.ed->text(), str("one two"));
+  f.ed->undo();
+  EXPECT_EQ(f.ed->text(), str("one"));
+  f.ed->undo();
+  EXPECT_EQ(f.ed->text(), str(""));
+  EXPECT_FALSE(f.ed->undo());
+  EXPECT_EQ(f.ed->redoSteps(), static_cast<Sz>(3));
+}
+
+TEST(Undo, MovingTheCursorIsNotAStepAndDoesNotChangeWhatUndoTakesBack) {
+  Fixture f;
+  f.ed->insert("abc");
+  f.ed->moveTo(0);
+  f.ed->moveTo(2);
+  EXPECT_EQ(f.ed->undoSteps(), static_cast<Sz>(1));
+  EXPECT_TRUE(f.ed->undo());
+  EXPECT_EQ(f.ed->text(), str(""));
+  EXPECT_EQ(f.ed->cursor(), static_cast<Sz>(0));
+}
+
+TEST(Redo, ReappliesTheStepAndPutsTheCursorAfterIt) {
+  Fixture f;
+  f.ed->insert("abc");
+  f.ed->moveTo(1);
+  f.ed->insert("XY");
+  f.ed->undo();
+  EXPECT_TRUE(f.ed->redo());
+  EXPECT_EQ(f.ed->text(), str("aXYbc"));
+  EXPECT_EQ(f.ed->cursor(), static_cast<Sz>(3));
+}
+
+TEST(Redo, ReappliesABackspaceWithTheCursorWhereItEnded) {
+  Fixture f;
+  f.ed->insert("abcdef");
+  f.ed->moveTo(4);
+  f.ed->backspace(2);
+  f.ed->undo();
+  EXPECT_TRUE(f.ed->redo());
+  EXPECT_EQ(f.ed->text(), str("abef"));
+  EXPECT_EQ(f.ed->cursor(), static_cast<Sz>(2));
+}
+
+TEST(Redo, ASecondUndoRedoRoundTripIsTheSameAsTheFirst) {
+  Fixture f;
+  f.ed->insert("abcdef");
+  f.ed->moveTo(1);
+  f.ed->deleteAhead(2);
+  for (int round = 0; round < 3; ++round) {
+    f.ed->undo();
+    EXPECT_EQ(f.ed->text(), str("abcdef"));
+    EXPECT_EQ(f.ed->cursor(), static_cast<Sz>(1));
+    f.ed->redo();
+    EXPECT_EQ(f.ed->text(), str("adef"));
+    EXPECT_EQ(f.ed->cursor(), static_cast<Sz>(1));
+  }
+}
+
+TEST(Redo, ANewEditDiscardsWhatCouldHaveBeenRedone) {
+  Fixture f;
+  f.ed->insert("abc");
+  f.ed->insert("def");
+  f.ed->undo();
+  EXPECT_EQ(f.ed->redoSteps(), static_cast<Sz>(1));
+  f.ed->insert("X");
+  EXPECT_EQ(f.ed->redoSteps(), static_cast<Sz>(0));
+  EXPECT_FALSE(f.ed->redo());
+  EXPECT_EQ(f.ed->text(), str("abcX"));
+}
+
+TEST(Redo, ADeleteAlsoDiscardsRedo) {
+  Fixture f;
+  f.ed->insert("abc");
+  f.ed->insert("def");
+  f.ed->undo();
+  EXPECT_EQ(f.ed->backspace(1), static_cast<Sz>(1));
+  EXPECT_EQ(f.ed->redoSteps(), static_cast<Sz>(0));
+}
+
+TEST(Redo, ACallThatChangedNothingKeepsRedo) {
+  Fixture f;
+  f.ed->insert("abc");
+  f.ed->insert("def");
+  f.ed->undo();
+  f.ed->insert("");
+  f.ed->moveTo(0);
+  f.ed->backspace(5);
+  f.ed->moveTo(99);
+  EXPECT_EQ(f.ed->redoSteps(), static_cast<Sz>(1));
+  EXPECT_TRUE(f.ed->redo());
+  EXPECT_EQ(f.ed->text(), str("abcdef"));
+}
+
+TEST(Redo, MovingTheCursorKeepsRedoAndRedoStillAppliesWhereItWasRecorded) {
+  Fixture f;
+  f.ed->insert("hello");
+  f.ed->insert(" world");
+  f.ed->undo();
+  f.ed->moveTo(0);
+  EXPECT_EQ(f.ed->redoSteps(), static_cast<Sz>(1));
+  EXPECT_TRUE(f.ed->redo());
+  EXPECT_EQ(f.ed->text(), str("hello world"));
+  EXPECT_EQ(f.ed->cursor(), static_cast<Sz>(11));
+}
+
+TEST(Undo, UndoStillWorksAfterMovingAwayFromTheEdit) {
+  Fixture f;
+  f.ed->insert("abc");
+  f.ed->insert("XYZ");
+  f.ed->moveTo(0);
+  EXPECT_TRUE(f.ed->undo());
+  EXPECT_EQ(f.ed->text(), str("abc"));
+  EXPECT_EQ(f.ed->cursor(), static_cast<Sz>(3));
+}
+
+TEST(Undo, StepCountsFollowUndoAndRedo) {
+  Fixture f;
+  f.ed->insert("a");
+  f.ed->insert("b");
+  f.ed->insert("c");
+  f.ed->undo();
+  f.ed->undo();
+  EXPECT_EQ(f.ed->undoSteps(), static_cast<Sz>(1));
+  EXPECT_EQ(f.ed->redoSteps(), static_cast<Sz>(2));
+  f.ed->redo();
+  EXPECT_EQ(f.ed->undoSteps(), static_cast<Sz>(2));
+  EXPECT_EQ(f.ed->redoSteps(), static_cast<Sz>(1));
+}
+
+TEST(Undo, EverySingleKeystrokeIsItsOwnStepInTheBaseEditor) {
+  Fixture f;
+  f.type("hello world");
+  EXPECT_EQ(f.ed->undoSteps(), static_cast<Sz>(11));
+  f.ed->undo();
+  EXPECT_EQ(f.ed->text(), str("hello worl"));
+}
+
+TEST(History, KeepsAtMostTheLastHundredSteps) {
+  Fixture f;
+  for (int i = 0; i < 130; ++i) f.ed->insert(std::string(1, static_cast<char>('a' + i % 26)));
+  EXPECT_EQ(f.ed->undoSteps(), edit::kMaxUndoSteps);
+  for (Sz i = 0; i < edit::kMaxUndoSteps; ++i) EXPECT_TRUE(f.ed->undo());
+  EXPECT_FALSE(f.ed->undo());
+  EXPECT_EQ(f.ed->text().size(), static_cast<Sz>(30));
+  EXPECT_EQ(f.ed->cursor(), static_cast<Sz>(30));
+}
+
+TEST(History, ExactlyAHundredStepsAreAllKept) {
+  Fixture f;
+  for (int i = 0; i < 100; ++i) f.ed->insert("x");
+  EXPECT_EQ(f.ed->undoSteps(), static_cast<Sz>(100));
+  for (int i = 0; i < 100; ++i) EXPECT_TRUE(f.ed->undo());
+  EXPECT_EQ(f.ed->text(), str(""));
+}
+
+TEST(History, TheLimitCountsStepsNotCharacters) {
+  Fixture f;
+  f.ed->insert(std::string(5000, 'a'));
+  for (int i = 0; i < 99; ++i) f.ed->insert("b");
+  EXPECT_EQ(f.ed->undoSteps(), static_cast<Sz>(100));
+  for (int i = 0; i < 100; ++i) f.ed->undo();
+  EXPECT_EQ(f.ed->text(), str(""));
+}
+
+TEST(History, RedoAfterTheLimitStillWorks) {
+  Fixture f;
+  for (int i = 0; i < 120; ++i) f.ed->insert("x");
+  for (int i = 0; i < 100; ++i) f.ed->undo();
+  EXPECT_EQ(f.ed->redoSteps(), static_cast<Sz>(100));
+  for (int i = 0; i < 100; ++i) EXPECT_TRUE(f.ed->redo());
+  EXPECT_EQ(f.ed->text().size(), static_cast<Sz>(120));
+}
+
+TEST(Editors, AreIndependent) {
+  auto a = edit::makeEditor();
+  auto b = edit::makeEditor();
+  a->insert("left");
+  b->insert("right");
+  a->undo();
+  EXPECT_EQ(a->text(), str(""));
+  EXPECT_EQ(b->text(), str("right"));
+}
+
+// A snapshot model: every step remembers the whole state before and after it. Simple and obviously right, so the
+// editor under test must agree with it after every operation.
+namespace {
+struct State {
+  std::string text;
+  Sz cursor = 0;
+};
+struct Step {
+  State before;
+  State after;
+};
+class Model {
+ public:
+  bool insert(const std::string& s) {
+    if (s.empty()) return false;
+    State before = now_;
+    now_.text.insert(now_.cursor, s);
+    now_.cursor += s.size();
+    record(before);
+    return true;
+  }
+  Sz backspace(Sz n) {
+    n = std::min(n, now_.cursor);
+    if (n == 0) return 0;
+    State before = now_;
+    now_.text.erase(now_.cursor - n, n);
+    now_.cursor -= n;
+    record(before);
+    return n;
+  }
+  Sz deleteAhead(Sz n) {
+    n = std::min(n, now_.text.size() - now_.cursor);
+    if (n == 0) return 0;
+    State before = now_;
+    now_.text.erase(now_.cursor, n);
+    record(before);
+    return n;
+  }
+  bool moveTo(Sz p) {
+    if (p > now_.text.size()) return false;
+    now_.cursor = p;
+    return true;
+  }
+  bool undo() {
+    if (undo_.empty()) return false;
+    now_ = undo_.back().before;
+    redo_.push_back(undo_.back());
+    undo_.pop_back();
+    return true;
+  }
+  bool redo() {
+    if (redo_.empty()) return false;
+    now_ = redo_.back().after;
+    undo_.push_back(redo_.back());
+    redo_.pop_back();
+    return true;
+  }
+  const State& now() const { return now_; }
+  Sz undoSteps() const { return undo_.size(); }
+  Sz redoSteps() const { return redo_.size(); }
+
+ private:
+  void record(const State& before) {
+    redo_.clear();
+    undo_.push_back(Step{before, now_});
+    if (undo_.size() > edit::kMaxUndoSteps) undo_.erase(undo_.begin());
+  }
+  State now_;
+  std::vector<Step> undo_;
+  std::vector<Step> redo_;
+};
+}  // namespace
+
+TEST(Edit, AgreesWithASnapshotModelOnRandomOperations) {
+  std::uint32_t seed = 12345;
+  auto next = [&seed](std::uint32_t bound) {
+    seed = seed * 1664525u + 1013904223u;
+    return (seed >> 8) % bound;
+  };
+  Fixture f;
+  Model model;
+  for (int i = 0; i < 6000; ++i) {
+    const std::uint32_t op = next(10);
+    if (op <= 2) {
+      std::string s(next(4), 'a');
+      for (char& c : s) c = static_cast<char>('a' + next(26));
+      EXPECT_EQ(f.ed->insert(s), model.insert(s));
+    } else if (op == 3) {
+      const Sz n = next(4);
+      EXPECT_EQ(f.ed->backspace(n), model.backspace(n));
+    } else if (op == 4) {
+      const Sz n = next(4);
+      EXPECT_EQ(f.ed->deleteAhead(n), model.deleteAhead(n));
+    } else if (op == 5 || op == 6) {
+      const Sz p = next(static_cast<std::uint32_t>(model.now().text.size() + 2));
+      EXPECT_EQ(f.ed->moveTo(p), model.moveTo(p));
+    } else if (op <= 8) {
+      EXPECT_EQ(f.ed->undo(), model.undo());
+    } else {
+      EXPECT_EQ(f.ed->redo(), model.redo());
+    }
+    if (f.ed->text() != model.now().text || f.ed->cursor() != model.now().cursor ||
+        f.ed->undoSteps() != model.undoSteps() || f.ed->redoSteps() != model.redoSteps()) {
+      EXPECT_EQ(f.ed->text(), model.now().text);
+      EXPECT_EQ(f.ed->cursor(), model.now().cursor);
+      EXPECT_EQ(f.ed->undoSteps(), model.undoSteps());
+      EXPECT_EQ(f.ed->redoSteps(), model.redoSteps());
+      return;
+    }
+  }
+}
+21:T173e,#include <memory>
+#include <string>
+
+#include "api_storm1.h"
+#include "bp_test.h"
+
+namespace {
+using Sz = std::size_t;
+std::string str(const char* s) { return std::string(s); }
+
+struct Fixture {
+  std::unique_ptr<edit::GroupingEditor> ed = edit::makeGroupingEditor();
+};
+}  // namespace
+
+TEST(Group, EditsInsideAGroupAreOneUndoStep) {
+  Fixture f;
+  f.ed->insert("abc");
+  EXPECT_TRUE(f.ed->beginGroup());
+  f.ed->insert("X");
+  f.ed->insert("Y");
+  f.ed->backspace(1);
+  f.ed->insert("Z");
+  EXPECT_TRUE(f.ed->endGroup());
+  EXPECT_EQ(f.ed->text(), str("abcXZ"));
+  EXPECT_EQ(f.ed->undoSteps(), static_cast<Sz>(2));
+  EXPECT_TRUE(f.ed->undo());
+  EXPECT_EQ(f.ed->text(), str("abc"));
+  EXPECT_EQ(f.ed->cursor(), static_cast<Sz>(3));
+}
+
+TEST(Group, RedoReappliesTheWholeGroupInOrder) {
+  Fixture f;
+  f.ed->insert("abc");
+  f.ed->beginGroup();
+  f.ed->moveTo(1);
+  f.ed->insert("X");
+  f.ed->deleteAhead(1);
+  f.ed->insert("Y");
+  f.ed->endGroup();
+  EXPECT_EQ(f.ed->text(), str("aXYc"));
+  f.ed->undo();
+  EXPECT_EQ(f.ed->text(), str("abc"));
+  EXPECT_TRUE(f.ed->redo());
+  EXPECT_EQ(f.ed->text(), str("aXYc"));
+  EXPECT_EQ(f.ed->cursor(), static_cast<Sz>(3));
+}
+
+TEST(Group, UndoPutsTheCursorWhereItWasBeforeTheGroupsFirstEdit) {
+  Fixture f;
+  f.ed->insert("0123456789");
+  f.ed->moveTo(7);
+  f.ed->beginGroup();
+  f.ed->moveTo(2);
+  f.ed->insert("AA");
+  f.ed->moveTo(9);
+  f.ed->deleteAhead(1);
+  f.ed->endGroup();
+  f.ed->undo();
+  EXPECT_EQ(f.ed->text(), str("0123456789"));
+  EXPECT_EQ(f.ed->cursor(), static_cast<Sz>(2));
+}
+
+TEST(Group, TheCursorMovesInsideAGroupAreNotPartOfTheStep) {
+  Fixture f;
+  f.ed->insert("abcdef");
+  f.ed->beginGroup();
+  f.ed->moveTo(3);
+  f.ed->insert("-");
+  f.ed->endGroup();
+  f.ed->moveTo(0);
+  f.ed->undo();
+  EXPECT_EQ(f.ed->text(), str("abcdef"));
+  EXPECT_EQ(f.ed->cursor(), static_cast<Sz>(3));
+}
+
+TEST(Group, NestedGroupsFormOneStepAtTheOutermostEnd) {
+  Fixture f;
+  f.ed->beginGroup();
+  f.ed->insert("a");
+  f.ed->beginGroup();
+  f.ed->insert("b");
+  EXPECT_EQ(f.ed->openGroups(), static_cast<Sz>(2));
+  EXPECT_TRUE(f.ed->endGroup());
+  EXPECT_EQ(f.ed->openGroups(), static_cast<Sz>(1));
+  EXPECT_EQ(f.ed->undoSteps(), static_cast<Sz>(0));
+  f.ed->insert("c");
+  EXPECT_TRUE(f.ed->endGroup());
+  EXPECT_EQ(f.ed->openGroups(), static_cast<Sz>(0));
+  EXPECT_EQ(f.ed->undoSteps(), static_cast<Sz>(1));
+  f.ed->undo();
+  EXPECT_EQ(f.ed->text(), str(""));
+}
+
+TEST(Group, EndingWithNoOpenGroupIsRefused) {
+  Fixture f;
+  EXPECT_FALSE(f.ed->endGroup());
+  f.ed->beginGroup();
+  EXPECT_TRUE(f.ed->endGroup());
+  EXPECT_FALSE(f.ed->endGroup());
+  EXPECT_EQ(f.ed->openGroups(), static_cast<Sz>(0));
+}
+
+TEST(Group, AnEmptyGroupRecordsNothing) {
+  Fixture f;
+  f.ed->insert("abc");
+  f.ed->undo();
+  f.ed->beginGroup();
+  f.ed->endGroup();
+  EXPECT_EQ(f.ed->undoSteps(), static_cast<Sz>(0));
+  EXPECT_EQ(f.ed->redoSteps(), static_cast<Sz>(1));
+}
+
+TEST(Group, AGroupOfOnlyNoOpsRecordsNothing) {
+  Fixture f;
+  f.ed->insert("abc");
+  f.ed->beginGroup();
+  f.ed->insert("");
+  f.ed->backspace(0);
+  f.ed->moveTo(0);
+  f.ed->backspace(3);
+  f.ed->endGroup();
+  EXPECT_EQ(f.ed->undoSteps(), static_cast<Sz>(1));
+}
+
+TEST(Group, UndoAndRedoAreRefusedWhileAGroupIsOpen) {
+  Fixture f;
+  f.ed->insert("abc");
+  f.ed->insert("def");
+  f.ed->undo();
+  f.ed->beginGroup();
+  f.ed->insert("X");
+  EXPECT_FALSE(f.ed->undo());
+  EXPECT_FALSE(f.ed->redo());
+  EXPECT_EQ(f.ed->text(), str("abcX"));
+  f.ed->endGroup();
+  EXPECT_TRUE(f.ed->undo());
+  EXPECT_EQ(f.ed->text(), str("abc"));
+}
+
+TEST(Group, UndoStepsCountOnlyFinishedSteps) {
+  Fixture f;
+  f.ed->insert("a");
+  f.ed->beginGroup();
+  f.ed->insert("b");
+  f.ed->insert("c");
+  EXPECT_EQ(f.ed->undoSteps(), static_cast<Sz>(1));
+  f.ed->endGroup();
+  EXPECT_EQ(f.ed->undoSteps(), static_cast<Sz>(2));
+}
+
+TEST(Group, TheFirstEditInsideAGroupDiscardsRedo) {
+  Fixture f;
+  f.ed->insert("abc");
+  f.ed->insert("def");
+  f.ed->undo();
+  EXPECT_EQ(f.ed->redoSteps(), static_cast<Sz>(1));
+  f.ed->beginGroup();
+  EXPECT_EQ(f.ed->redoSteps(), static_cast<Sz>(1));
+  f.ed->insert("X");
+  EXPECT_EQ(f.ed->redoSteps(), static_cast<Sz>(0));
+  f.ed->endGroup();
+  EXPECT_FALSE(f.ed->redo());
+}
+
+TEST(Group, AGroupWithNoEditKeepsRedo) {
+  Fixture f;
+  f.ed->insert("abc");
+  f.ed->undo();
+  f.ed->beginGroup();
+  f.ed->moveTo(0);
+  f.ed->endGroup();
+  EXPECT_EQ(f.ed->redoSteps(), static_cast<Sz>(1));
+}
+
+TEST(Group, AGroupCountsAsOneStepAgainstTheLimit) {
+  Fixture f;
+  f.ed->beginGroup();
+  for (int i = 0; i < 300; ++i) f.ed->insert("x");
+  f.ed->endGroup();
+  for (int i = 0; i < 99; ++i) f.ed->insert("y");
+  EXPECT_EQ(f.ed->undoSteps(), static_cast<Sz>(100));
+  for (int i = 0; i < 99; ++i) f.ed->undo();
+  EXPECT_EQ(f.ed->text().size(), static_cast<Sz>(300));
+  EXPECT_TRUE(f.ed->undo());
+  EXPECT_EQ(f.ed->text(), str(""));
+}
+
+TEST(Group, TheOldestStepIsDroppedWhenAGroupOverflowsTheLimit) {
+  Fixture f;
+  for (int i = 0; i < 100; ++i) f.ed->insert("a");
+  f.ed->beginGroup();
+  f.ed->insert("G");
+  f.ed->insert("H");
+  f.ed->endGroup();
+  EXPECT_EQ(f.ed->undoSteps(), static_cast<Sz>(100));
+  for (int i = 0; i < 100; ++i) f.ed->undo();
+  EXPECT_EQ(f.ed->text(), str("a"));
+}
+
+TEST(Group, AGroupedEditorStillBehavesLikeTheBaseEditorOutsideGroups) {
+  Fixture f;
+  f.ed->insert("hello");
+  f.ed->moveTo(2);
+  EXPECT_EQ(f.ed->deleteAhead(2), static_cast<Sz>(2));
+  EXPECT_TRUE(f.ed->undo());
+  EXPECT_EQ(f.ed->text(), str("hello"));
+  EXPECT_EQ(f.ed->cursor(), static_cast<Sz>(2));
+  EXPECT_EQ(f.ed->undoSteps(), static_cast<Sz>(1));
+  EXPECT_EQ(f.ed->openGroups(), static_cast<Sz>(0));
+}
+
+TEST(Group, TwoGroupsInARowAreTwoSteps) {
+  Fixture f;
+  f.ed->beginGroup();
+  f.ed->insert("a");
+  f.ed->insert("b");
+  f.ed->endGroup();
+  f.ed->beginGroup();
+  f.ed->insert("c");
+  f.ed->insert("d");
+  f.ed->endGroup();
+  EXPECT_EQ(f.ed->undoSteps(), static_cast<Sz>(2));
+  f.ed->undo();
+  EXPECT_EQ(f.ed->text(), str("ab"));
+  f.ed->undo();
+  EXPECT_EQ(f.ed->text(), str(""));
+}
+22:T1b74,#include <memory>
+#include <string>
+
+#include "api_storm2.h"
+#include "bp_test.h"
+
+namespace {
+using Sz = std::size_t;
+std::string str(const char* s) { return std::string(s); }
+
+struct Fixture {
+  std::unique_ptr<edit::GroupingEditor> ed = edit::makeTypingEditor();
+  void type(const std::string& s) {
+    for (char c : s) ed->insert(std::string(1, c));
+  }
+};
+}  // namespace
+
+TEST(Typing, ConsecutiveCharactersShareOneStep) {
+  Fixture f;
+  f.type("hello");
+  EXPECT_EQ(f.ed->text(), str("hello"));
+  EXPECT_EQ(f.ed->undoSteps(), static_cast<Sz>(1));
+  EXPECT_TRUE(f.ed->undo());
+  EXPECT_EQ(f.ed->text(), str(""));
+  EXPECT_EQ(f.ed->cursor(), static_cast<Sz>(0));
+}
+
+TEST(Typing, ASpaceEndsTheRunAndIsPartOfIt) {
+  Fixture f;
+  f.type("hello world");
+  EXPECT_EQ(f.ed->undoSteps(), static_cast<Sz>(2));
+  f.ed->undo();
+  EXPECT_EQ(f.ed->text(), str("hello "));
+  f.ed->undo();
+  EXPECT_EQ(f.ed->text(), str(""));
+}
+
+TEST(Typing, ANewlineEndsTheRunToo) {
+  Fixture f;
+  f.type("ab\ncd");
+  EXPECT_EQ(f.ed->undoSteps(), static_cast<Sz>(2));
+  f.ed->undo();
+  EXPECT_EQ(f.ed->text(), str("ab\n"));
+}
+
+TEST(Typing, SeveralSpacesInARowEachStartANewStepAfterTheFirst) {
+  Fixture f;
+  f.type("a  b");
+  EXPECT_EQ(f.ed->undoSteps(), static_cast<Sz>(3));
+  f.ed->undo();
+  EXPECT_EQ(f.ed->text(), str("a  "));
+  f.ed->undo();
+  EXPECT_EQ(f.ed->text(), str("a "));
+  f.ed->undo();
+  EXPECT_EQ(f.ed->text(), str(""));
+}
+
+TEST(Typing, RedoReappliesTheWholeRunAndPutsTheCursorAtItsEnd) {
+  Fixture f;
+  f.type("hello");
+  f.ed->undo();
+  EXPECT_TRUE(f.ed->redo());
+  EXPECT_EQ(f.ed->text(), str("hello"));
+  EXPECT_EQ(f.ed->cursor(), static_cast<Sz>(5));
+  EXPECT_EQ(f.ed->undoSteps(), static_cast<Sz>(1));
+}
+
+TEST(Typing, UndoPutsTheCursorWhereTheRunStarted) {
+  Fixture f;
+  f.ed->insert("abcdef");
+  f.ed->moveTo(3);
+  f.type("XYZ");
+  f.ed->undo();
+  EXPECT_EQ(f.ed->text(), str("abcdef"));
+  EXPECT_EQ(f.ed->cursor(), static_cast<Sz>(3));
+}
+
+TEST(Typing, MovingTheCursorEndsTheRunEvenToTheSamePlace) {
+  Fixture f;
+  f.type("ab");
+  f.ed->moveTo(2);
+  f.type("cd");
+  EXPECT_EQ(f.ed->undoSteps(), static_cast<Sz>(2));
+  f.ed->undo();
+  EXPECT_EQ(f.ed->text(), str("ab"));
+}
+
+TEST(Typing, AFailedMoveAlsoEndsTheRun) {
+  Fixture f;
+  f.type("ab");
+  EXPECT_FALSE(f.ed->moveTo(50));
+  f.type("cd");
+  EXPECT_EQ(f.ed->undoSteps(), static_cast<Sz>(2));
+}
+
+TEST(Typing, ADeleteEndsTheRunAndIsItsOwnStep) {
+  Fixture f;
+  f.type("abc");
+  f.ed->backspace(1);
+  f.type("de");
+  EXPECT_EQ(f.ed->text(), str("abde"));
+  EXPECT_EQ(f.ed->undoSteps(), static_cast<Sz>(3));
+  f.ed->undo();
+  EXPECT_EQ(f.ed->text(), str("ab"));
+  f.ed->undo();
+  EXPECT_EQ(f.ed->text(), str("abc"));
+}
+
+TEST(Typing, ADeleteThatRemovesNothingStillEndsTheRun) {
+  Fixture f;
+  f.type("ab");
+  EXPECT_EQ(f.ed->deleteAhead(1), static_cast<Sz>(0));
+  f.type("c");
+  EXPECT_EQ(f.ed->undoSteps(), static_cast<Sz>(2));
+}
+
+TEST(Typing, ABackspaceThatRemovesNothingStillEndsTheRun) {
+  Fixture f;
+  f.type("ab");
+  EXPECT_EQ(f.ed->backspace(0), static_cast<Sz>(0));
+  f.type("c");
+  EXPECT_EQ(f.ed->undoSteps(), static_cast<Sz>(2));
+}
+
+TEST(Typing, TypingAfterUndoingALaterStepDoesNotJoinTheRunUnderIt) {
+  Fixture f;
+  f.type("ab");
+  f.ed->insert("PASTE");
+  f.ed->undo();
+  f.type("c");
+  EXPECT_EQ(f.ed->text(), str("abc"));
+  EXPECT_EQ(f.ed->undoSteps(), static_cast<Sz>(2));
+  f.ed->undo();
+  EXPECT_EQ(f.ed->text(), str("ab"));
+}
+
+TEST(Typing, AnEmptyInsertEndsTheRun) {
+  Fixture f;
+  f.type("ab");
+  f.ed->insert("");
+  f.type("cd");
+  EXPECT_EQ(f.ed->undoSteps(), static_cast<Sz>(2));
+}
+
+TEST(Typing, APasteIsItsOwnStepAndIsNeverPartOfARun) {
+  Fixture f;
+  f.type("ab");
+  f.ed->insert("PASTE");
+  f.type("cd");
+  EXPECT_EQ(f.ed->text(), str("abPASTEcd"));
+  EXPECT_EQ(f.ed->undoSteps(), static_cast<Sz>(3));
+  f.ed->undo();
+  EXPECT_EQ(f.ed->text(), str("abPASTE"));
+  f.ed->undo();
+  EXPECT_EQ(f.ed->text(), str("ab"));
+}
+
+TEST(Typing, TypingRightAfterAPasteDoesNotJoinIt) {
+  Fixture f;
+  f.ed->insert("PASTE");
+  f.type("x");
+  EXPECT_EQ(f.ed->undoSteps(), static_cast<Sz>(2));
+}
+
+TEST(Typing, UndoAndRedoEndTheRun) {
+  Fixture f;
+  f.type("ab");
+  f.ed->undo();
+  f.type("cd");
+  EXPECT_EQ(f.ed->text(), str("cd"));
+  EXPECT_EQ(f.ed->undoSteps(), static_cast<Sz>(1));
+  f.ed->undo();
+  f.ed->redo();
+  f.type("e");
+  EXPECT_EQ(f.ed->undoSteps(), static_cast<Sz>(2));
+  EXPECT_EQ(f.ed->text(), str("cde"));
+}
+
+TEST(Typing, ARedoWithNothingToRedoStillEndsTheRun) {
+  Fixture f;
+  f.type("ab");
+  EXPECT_FALSE(f.ed->redo());
+  f.type("c");
+  EXPECT_EQ(f.ed->text(), str("abc"));
+  EXPECT_EQ(f.ed->undoSteps(), static_cast<Sz>(2));
+}
+
+TEST(Typing, TypingAfterAnUndoDoesNotJoinTheOlderRunBeforeIt) {
+  Fixture f;
+  f.type("ab ");
+  f.type("cd");
+  f.ed->undo();
+  EXPECT_EQ(f.ed->text(), str("ab "));
+  f.type("x");
+  EXPECT_EQ(f.ed->undoSteps(), static_cast<Sz>(2));
+  f.ed->undo();
+  EXPECT_EQ(f.ed->text(), str("ab "));
+}
+
+TEST(Typing, TypingDiscardsRedoLikeAnyEdit) {
+  Fixture f;
+  f.type("ab ");
+  f.type("cd");
+  f.ed->undo();
+  EXPECT_EQ(f.ed->redoSteps(), static_cast<Sz>(1));
+  f.type("x");
+  EXPECT_EQ(f.ed->redoSteps(), static_cast<Sz>(0));
+}
+
+TEST(Typing, ARunInsideAGroupDoesNotMergeWithAnythingOutside) {
+  Fixture f;
+  f.type("ab");
+  f.ed->beginGroup();
+  f.type("cd");
+  f.ed->endGroup();
+  f.type("ef");
+  EXPECT_EQ(f.ed->text(), str("abcdef"));
+  EXPECT_EQ(f.ed->undoSteps(), static_cast<Sz>(3));
+  f.ed->undo();
+  EXPECT_EQ(f.ed->text(), str("abcd"));
+  f.ed->undo();
+  EXPECT_EQ(f.ed->text(), str("ab"));
+}
+
+TEST(Typing, BeginningAGroupEndsTheRunEvenIfTheGroupIsEmpty) {
+  Fixture f;
+  f.type("ab");
+  f.ed->beginGroup();
+  f.ed->endGroup();
+  f.type("cd");
+  EXPECT_EQ(f.ed->undoSteps(), static_cast<Sz>(2));
+}
+
+TEST(Typing, TheStepLimitCountsRunsNotKeystrokes) {
+  Fixture f;
+  for (int i = 0; i < 150; ++i) {
+    f.type("word");
+    f.ed->moveTo(f.ed->text().size());
+  }
+  EXPECT_EQ(f.ed->undoSteps(), edit::kMaxUndoSteps);
+  for (Sz i = 0; i < edit::kMaxUndoSteps; ++i) EXPECT_TRUE(f.ed->undo());
+  EXPECT_FALSE(f.ed->undo());
+  EXPECT_EQ(f.ed->text().size(), static_cast<Sz>(200));
+}
+
+TEST(Typing, AMergedRunKeepsGrowingInsideTheLimit) {
+  Fixture f;
+  for (int i = 0; i < 99; ++i) {
+    f.ed->insert("--");
+  }
+  f.type(std::string(500, 'z'));
+  EXPECT_EQ(f.ed->undoSteps(), static_cast<Sz>(100));
+  f.ed->undo();
+  EXPECT_EQ(f.ed->text().size(), static_cast<Sz>(198));
+}
+
+TEST(Typing, TheBaseAndGroupingEditorsStillNeverMerge) {
+  auto base = edit::makeEditor();
+  auto grouping = edit::makeGroupingEditor();
+  for (char c : std::string("abc")) {
+    base->insert(std::string(1, c));
+    grouping->insert(std::string(1, c));
+  }
+  EXPECT_EQ(base->undoSteps(), static_cast<Sz>(3));
+  EXPECT_EQ(grouping->undoSteps(), static_cast<Sz>(3));
+}
+
+TEST(Typing, ATypingEditorStillHandlesTheBaseOperations) {
+  Fixture f;
+  f.ed->insert("hello");
+  f.ed->moveTo(1);
+  EXPECT_EQ(f.ed->deleteAhead(2), static_cast<Sz>(2));
+  EXPECT_TRUE(f.ed->undo());
+  EXPECT_EQ(f.ed->text(), str("hello"));
+  EXPECT_EQ(f.ed->cursor(), static_cast<Sz>(1));
+}
+23:Tc4f,#pragma once
+#include <cstddef>
+#include <memory>
+#include <string>
+#include <utility>
+#include <vector>
+
+#include "text_buffer.h"
+
+// Where a run of typed characters started and what it holds so far.
+struct TypedText {
+  std::size_t position;
+  std::string text;
+};
+
+// One undoable change. A Command knows how to apply itself and how to take itself back, including the cursor.
+class Command {
+ public:
+  virtual ~Command() = default;
+  virtual void apply(TextBuffer& buffer) const = 0;
+  virtual void revert(TextBuffer& buffer) const = 0;
+
+  // Typing support: a command that is a run of single-character inserts shows what it holds, and can take the next
+  // keystroke into itself. The defaults say "not typing".
+  virtual const TypedText* typedText() const { return nullptr; }
+  virtual bool absorb(const Command& /*next*/) { return false; }
+};
+
+class InsertCommand : public Command {
+ public:
+  InsertCommand(std::size_t position, std::string added)
+      : typed_{position, std::move(added)}, isRun_(typed_.text.size() == 1) {}
+
+  void apply(TextBuffer& buffer) const override {
+    buffer.insertAt(typed_.position, typed_.text);
+    buffer.setCursor(typed_.position + typed_.text.size());
+  }
+  void revert(TextBuffer& buffer) const override {
+    buffer.eraseAt(typed_.position, typed_.text.size());
+    buffer.setCursor(typed_.position);
+  }
+
+  const TypedText* typedText() const override { return isRun_ ? &typed_ : nullptr; }
+  bool absorb(const Command& next) override {
+    const TypedText* more = next.typedText();
+    if (!isRun_ || more == nullptr || more->position != typed_.position + typed_.text.size()) return false;
+    typed_.text += more->text;
+    return true;
+  }
+
+ private:
+  TypedText typed_;
+  bool isRun_;
+};
+
+// Removes text. `cursorBefore` and `cursorAfter` say where the cursor was and where it ends up, because Backspace and
+// Delete leave it in different places and undo must put it back exactly.
+class EraseCommand : public Command {
+ public:
+  EraseCommand(std::size_t position, std::string removed, std::size_t cursorBefore, std::size_t cursorAfter)
+      : position_(position), removed_(std::move(removed)), cursorBefore_(cursorBefore), cursorAfter_(cursorAfter) {}
+
+  void apply(TextBuffer& buffer) const override {
+    buffer.eraseAt(position_, removed_.size());
+    buffer.setCursor(cursorAfter_);
+  }
+  void revert(TextBuffer& buffer) const override {
+    buffer.insertAt(position_, removed_);
+    buffer.setCursor(cursorBefore_);
+  }
+
+ private:
+  std::size_t position_;
+  std::string removed_;
+  std::size_t cursorBefore_;
+  std::size_t cursorAfter_;
+};
+
+// A Composite: several commands that undo and redo as one.
+class MacroCommand : public Command {
+ public:
+  void add(std::unique_ptr<Command> part) { parts_.push_back(std::move(part)); }
+  bool empty() const { return parts_.empty(); }
+
+  void apply(TextBuffer& buffer) const override {
+    for (const auto& part : parts_) part->apply(buffer);
+  }
+  void revert(TextBuffer& buffer) const override {
+    for (auto it = parts_.rbegin(); it != parts_.rend(); ++it) (*it)->revert(buffer);
+  }
+
+ private:
+  std::vector<std::unique_ptr<Command>> parts_;
+};
+24:Ta85,#pragma once
+#include <algorithm>
+#include <memory>
+#include <string>
+#include <utility>
+
+#include "api_storm2.h"
+#include "group_recorder.h"
+#include "history.h"
+#include "text_buffer.h"
+
+// What an editor is made of, and the read-only questions about it.
+class EditorState : public edit::GroupingEditor {
+ public:
+  explicit EditorState(std::unique_ptr<MergePolicy> policy)
+      : history_(edit::kMaxUndoSteps, std::move(policy)), groups_(history_) {}
+
+  std::size_t openGroups() const override { return groups_.depth(); }
+  std::string text() const override { return buffer_.text(); }
+  std::size_t cursor() const override { return buffer_.cursor(); }
+  std::size_t undoSteps() const override { return history_.undoSteps(); }
+  std::size_t redoSteps() const override { return history_.redoSteps(); }
+
+ protected:
+  TextBuffer buffer_;
+  History history_;
+  GroupRecorder groups_;
+};
+
+// The facade: turns each key press into a command, applies it and hands it to the recorder.
+class EditorImpl : public EditorState {
+ public:
+  using EditorState::EditorState;
+
+  bool insert(const std::string& added) override {
+    if (added.size() != 1) history_.seal();
+    if (added.empty()) return false;
+    perform(std::make_unique<InsertCommand>(buffer_.cursor(), added));
+    return true;
+  }
+
+  std::size_t backspace(std::size_t count) override {
+    history_.seal();
+    const std::size_t cursor = buffer_.cursor();
+    const std::size_t length = std::min(count, cursor);
+    if (length == 0) return 0;
+    const std::size_t start = cursor - length;
+    perform(std::make_unique<EraseCommand>(start, buffer_.text().substr(start, length), cursor, start));
+    return length;
+  }
+
+  std::size_t deleteAhead(std::size_t count) override {
+    history_.seal();
+    const std::size_t cursor = buffer_.cursor();
+    const std::size_t length = std::min(count, buffer_.size() - cursor);
+    if (length == 0) return 0;
+    perform(std::make_unique<EraseCommand>(cursor, buffer_.text().substr(cursor, length), cursor, cursor));
+    return length;
+  }
+
+  bool moveTo(std::size_t position) override {
+    history_.seal();
+    if (position > buffer_.size()) return false;
+    buffer_.setCursor(position);
+    return true;
+  }
+
+  bool undo() override {
+    history_.seal();
+    return groups_.depth() == 0 && history_.undo(buffer_);
+  }
+
+  bool redo() override {
+    history_.seal();
+    return groups_.depth() == 0 && history_.redo(buffer_);
+  }
+
+  bool beginGroup() override {
+    groups_.begin();
+    return true;
+  }
+
+  bool endGroup() override { return groups_.end(); }
+
+ private:
+  void perform(std::unique_ptr<Command> change) {
+    change->apply(buffer_);
+    groups_.submit(std::move(change));
+  }
+};
+25:T439,#pragma once
+#include <cstddef>
+#include <memory>
+#include <utility>
+
+#include "command.h"
+#include "history.h"
+
+// Sits between the editor and the history. Outside a group an edit goes straight to the history; inside one it is
+// collected into a MacroCommand that becomes a single step when the outermost group ends.
+class GroupRecorder {
+ public:
+  explicit GroupRecorder(History& history) : history_(history) {}
+
+  void begin() {
+    history_.seal();
+    ++depth_;
+  }
+
+  bool end() {
+    if (depth_ == 0) return false;
+    --depth_;
+    if (depth_ == 0 && pending_ != nullptr) history_.record(std::move(pending_));
+    return true;
+  }
+
+  std::size_t depth() const { return depth_; }
+
+  void submit(std::unique_ptr<Command> done) {
+    if (depth_ == 0) {
+      history_.record(std::move(done));
+      return;
+    }
+    if (pending_ == nullptr) {
+      pending_ = std::make_unique<MacroCommand>();
+      history_.discardRedo();
+    }
+    pending_->add(std::move(done));
+  }
+
+ private:
+  History& history_;
+  std::size_t depth_ = 0;
+  std::unique_ptr<MacroCommand> pending_;
+};
+26:T67f,#pragma once
+#include <cstddef>
+#include <deque>
+#include <memory>
+#include <utility>
+#include <vector>
+
+#include "command.h"
+#include "merge_policy.h"
+
+// The undo and redo stacks. It owns the commands and the step limit and knows nothing about text.
+class History {
+ public:
+  History(std::size_t maxSteps, std::unique_ptr<MergePolicy> policy) : maxSteps_(maxSteps), policy_(std::move(policy)) {}
+
+  // Records a change that has already been applied. A new edit discards what could have been redone.
+  void record(std::unique_ptr<Command> done) {
+    redo_.clear();
+    if (open_ && !undo_.empty() && policy_->joins(*undo_.back(), *done) && undo_.back()->absorb(*done)) return;
+    undo_.push_back(std::move(done));
+    if (undo_.size() > maxSteps_) undo_.pop_front();
+    open_ = true;
+  }
+
+  void discardRedo() { redo_.clear(); }
+
+  // Ends the open run: the next edit starts a new step even if the policy would have joined it.
+  void seal() { open_ = false; }
+
+  bool undo(TextBuffer& buffer) {
+    if (undo_.empty()) return false;
+    undo_.back()->revert(buffer);
+    redo_.push_back(std::move(undo_.back()));
+    undo_.pop_back();
+    return true;
+  }
+
+  bool redo(TextBuffer& buffer) {
+    if (redo_.empty()) return false;
+    redo_.back()->apply(buffer);
+    undo_.push_back(std::move(redo_.back()));
+    redo_.pop_back();
+    return true;
+  }
+
+  std::size_t undoSteps() const { return undo_.size(); }
+  std::size_t redoSteps() const { return redo_.size(); }
+
+ private:
+  std::size_t maxSteps_;
+  std::unique_ptr<MergePolicy> policy_;
+  std::deque<std::unique_ptr<Command>> undo_;
+  std::vector<std::unique_ptr<Command>> redo_;
+  bool open_ = false;
+};
+c:["$","$L1a",null,{"bundle":{"id":"text-editor","title":"Text editor with undo and redo","level":"Senior","parMinutes":60,"patterns":["Command","Composite","Strategy"],"requirements":[{"id":"R-edit","text":"One document, starting empty with the cursor at 0; the cursor sits between characters (0..size). insert(text) puts text at the cursor and leaves the cursor after it; insert(\"\") returns false. backspace(n) removes min(n, cursor) characters before the cursor and returns that count; the cursor ends where the removed text started. deleteAhead(n) removes min(n, size - cursor) characters after the cursor and returns the count; the cursor stays. A call that removes nothing returns 0 and is not a step. moveTo(p) returns false and does nothing for p > size.","phase":"base","hidden":true},{"id":"R-undo","text":"Each insert, backspace or deleteAhead that changed the text is one step. undo() restores the text and the cursor to exactly what they were before the most recent un-undone step (an insert: cursor back at the insert position; a backspace or delete: the cursor where it was before the key). redo() restores the text and the cursor to exactly what they were right after the step. Both return false when there is nothing to do. Moving the cursor is not a step and never changes what undo takes back. A step keeps its own recorded position, whatever the cursor has done since.","phase":"base","hidden":true},{"id":"R-redo","text":"Any call that changed the text discards the redo history. A call that changed nothing (insert(\"\"), a delete of zero characters, a refused or successful moveTo) does not, and neither does moving the cursor: redo still applies where the step was recorded. undoSteps() and redoSteps() report how many undo() and redo() calls would succeed in a row.","phase":"base","hidden":true},{"id":"R-limit","text":"At most kMaxUndoSteps (100) steps are kept; the 101st step drops the oldest one, so only the last 100 can be undone. The limit counts steps, not characters. Redo after reaching the limit still works.","phase":"base","hidden":true},{"id":"R-group","text":"Storm 1: makeGroupingEditor adds beginGroup (always true), endGroup (false when none is open) and openGroups. Groups nest; the edits made between the outermost begin and its matching end are ONE step (redone in order, undone in reverse; undo puts the cursor where it was before the group's first edit, redo where the last edit left it). An empty group, or one whose calls changed nothing, records no step and keeps redo. While a group is open undo() and redo() return false and change nothing, undoSteps() counts only finished steps, and the first edit inside discards redo. A finished group counts as one step against the limit.","phase":"storm1","hidden":true},{"id":"R-typing","text":"Storm 2: makeTypingEditor merges consecutive single-character inserts into one step. A keystroke joins the previous step only when that step is a still-open run of single keystrokes; a run ends once a space or newline has been added to it (the space or newline is the run's last character). Any call other than a single-character insert ends the open run, whether or not it changed anything (delete, moveTo even to the same place or refused, undo, redo, beginGroup, insert(\"\"), a longer insert). A multi-character insert is never part of a run. Inside an open group nothing merges. A merged run is one step for undo, redo and the limit, and undo puts the cursor where the run started.","phase":"storm2","hidden":true}],"brief":"$1b","editorial":"$1c","clarify":[{"id":"q-model","text":"What is the document, and what does the cursor mean? What operations do I support?","answer":"One document, a string; the cursor sits between characters, so it is always in 0..size. Operations: insert at the cursor (the cursor ends after the new text), Backspace (delete before the cursor, up to a count, clamped), Delete (delete after the cursor, clamped, the cursor does not move) and moveTo (refused past the end). Each delete returns how many characters it removed.","reveals":["R-edit"],"quality":"essential"},{"id":"q-undo","text":"What exactly does undo restore? Only the text, or the cursor as well?","answer":"Both. After undo the text and the cursor are exactly what they were before the step; after redo they are what they were right after it. Backspace and Delete leave the cursor in different places, so undo has to remember where it was, not guess.","reveals":["R-undo"],"quality":"essential"},{"id":"q-redo","text":"When is the redo history thrown away?","answer":"Any new edit that changed the text discards it. A call that changed nothing (an empty insert, a delete of zero characters, a refused move) does not, and neither does moving the cursor: redo still applies where the step was recorded.","reveals":["R-redo"],"quality":"essential"},{"id":"q-noop","text":"What if an edit changes nothing, say a Backspace at the start of the text?","answer":"It returns 0 (or false) and records no step: pressing undo must not appear to do nothing. Only calls that changed the text are steps.","reveals":["R-edit","R-redo"],"quality":"essential"},{"id":"q-move","text":"Is moving the cursor part of the history?","answer":"No. It is never undone and never counts as a step. (Some editors keep a separate navigation history; that is another feature.)","reveals":["R-undo"],"quality":"useful"},{"id":"q-limit","text":"Does the history grow forever?","answer":"No: at most 100 steps are kept and the oldest is forgotten first. The limit counts steps, not characters, so one step that inserted a 5,000 character paste costs one slot. Say what you would do about memory if a single step is huge.","reveals":["R-limit"],"quality":"essential"},{"id":"q-group","text":"Will several edits ever need to be undone as one thing?","answer":"Yes, soon: a find-and-replace-all or a refactoring is dozens of edits that the user sees as one action. A later change will add beginGroup and endGroup with nesting. Think about whether a step can contain steps.","reveals":["R-group"],"quality":"essential"},{"id":"q-typing","text":"Should typing 'hello world' take eleven undos?","answer":"Not in the finished product: a later change merges consecutive keystrokes so that one undo removes a word. Say which part of your design decides whether a new edit joins the previous step, and where the 'is the run still open' flag lives.","reveals":["R-typing"],"quality":"essential"},{"id":"q-memento","text":"Do you want me to snapshot the document for each step, or record the change?","answer":"Your call; say why. Snapshots are the easiest to get right and cost the whole document per step. Recording the change costs one small object per step but needs an inverse for every kind of edit. The tests check behaviour only.","reveals":[],"quality":"useful"},{"id":"q-thread","text":"Is the editor used from several threads?","answer":"No: one UI thread. Say how you would change it for collaborative editing (operational transforms or CRDTs), where a local undo must not remove a collaborator's text.","reveals":[],"quality":"useful"},{"id":"q-unicode","text":"Do I handle UTF-8, lines, selections and formatting?","answer":"No. Positions are bytes of a plain string; there are no lines, selections or styles. A rope or piece table is the answer for big documents, and is a different problem.","reveals":[],"quality":"noise"},{"id":"q-ui","text":"Do I draw the text, handle key bindings or save files?","answer":"No. This component is the model behind the keys: what the text is and what undo does.","reveals":[],"quality":"noise"}],"rubric":[{"id":"res-facade","text":"Exposes the public operations, turns each key press into a recorded change and sequences the collaborators","phase":"base","owners":["EditorImpl","EditorState","TextEditor","EditorFacade","Editor","EditorService"]},{"id":"res-buffer","text":"Owns the text and the cursor and offers only primitive changes, knowing nothing about history","phase":"base","owners":["TextBuffer","Document","Buffer","TextDocument","TextModel"]},{"id":"res-command","text":"Represents one change as an object that can apply itself and take itself back, including where the cursor goes each way","phase":"base","owners":["Command","EditCommand","Edit","UndoableCommand","Action"]},{"id":"res-history","text":"Keeps the undo and redo stacks, enforces the step limit and clears redo on a new edit, knowing nothing about text","phase":"base","owners":["History","UndoStack","UndoManager","CommandHistory","HistoryStack"]},{"id":"res-group","text":"Collects the edits made between begin and end into one composite step, with nesting","phase":"storm1","owners":["MacroCommand","GroupRecorder","CompositeCommand","CommandGroup","Macro"]},{"id":"res-merge","text":"Decides when a new edit joins the previous step, behind an interface so the base editor never merges","phase":"storm2","owners":["MergePolicy","Coalescer","MergeStrategy","TypingPolicy","Merger"]}],"followups":[{"level":"SDE2","question":"Why does undo need to remember the cursor? Could it put the cursor at the end of the restored text?","answer":"A user presses undo to get back to where they were. After a Backspace the cursor was at the end of the deleted text, after a Delete at the start, after an insert at its start. A single rule for all three is wrong for at least two. The command stores the cursor before and after, so each kind of edit answers for itself and the history never needs to know which kind it holds."},{"level":"SDE2","question":"Why is a Backspace at position 0 not an undo step?","answer":"Because nothing changed. If it were recorded, one undo would appear to do nothing, and the redo history would have been thrown away for no reason. The rule 'a step is a change to the text' is simple and is the one users expect."},{"level":"SDE2","question":"What happens to the redo stack when the user undoes three steps, moves the cursor, then types?","answer":"Moving changes nothing, so redo is still available until the typing. The typing is a new edit: the three undone steps would apply to a text that no longer matches them, so they are discarded. That is why redo is a stack that is cleared on a new edit and not a list that can be revisited."},{"level":"Senior","question":"Command with an inverse or Memento with a snapshot? Which did you choose and what does it cost?","answer":"Commands: each step is a few dozen bytes plus the text it removed, and undo is local, so cost follows the size of the edit and not the size of the document. Snapshots copy the document per step: trivial to get right and fine for a small field, but at 100 steps of a 1 MB file it is 100 MB. The price of commands is that every kind of edit needs a correct inverse; a model-based test that compares against a snapshot implementation, as the hidden tests do, is how you keep that honest. Real editors that need both keep commands and take occasional snapshots."},{"level":"Senior","question":"Where did the undo group go in your design, and what did you have to change for it?","answer":"A group is a Composite: a command that holds commands, applies them in order and reverts them in reverse. A recorder sits in front of the history and collects while a group is open, so the history and the buffer do not change at all. The things that did change are the rules around it: undo is refused while a group is open, the first edit in a group discards redo, and an empty group records nothing. If your history had a hard-wired list of edit types this was where it hurt."},{"level":"Senior","question":"Typing merges into word-sized steps. Who decides, and what stops 'ab' + paste + 'cd' from merging?","answer":"A MergePolicy decides whether a new edit may join the open step, and the command does the joining (it knows how to extend itself). A command only offers itself as 'typing' when it was made of single keystrokes, so a paste is never part of a run in either direction. The run is 'open' only until anything else happens: a flag in the history that every other call clears, which is why moveTo(sameplace), an empty insert and a no-op delete all end a run too. Putting that flag next to the stacks, in one place, is what keeps undo and redo from merging with the step below them."},{"level":"Senior","question":"Undo of a merged typing run: where does the cursor go?","answer":"To where the run started, because the run's position is the first character's position and undo erases from there. Redo puts it at the end. A run that is only length-extended keeps the start, so merging cannot change where undo lands. This is the sort of detail that a snapshot-based design gets for free and a command-based one must test."},{"level":"Staff","question":"Design undo for a collaborative editor like a shared document.","answer":"Undo becomes 'undo my own last change' and must not remove other people's text, so a global stack of snapshots is wrong. Model the document as operations that can be transformed against concurrent ones (operational transformation) or as a CRDT sequence with stable identifiers per character. A local undo is then the inverse of my operation, transformed against everything that happened since, so it still removes exactly my characters; and it is itself a new operation that is sent to the others, not a rewind. Keep per-user history stacks, define what grouping means across users (usually per user, time-boxed), and test with a randomised multi-client simulation that checks all replicas converge and that undoing everything leaves other authors' text intact."}],"apiHeader":"$1d","phaseApis":{"storm1":"$1e","storm2":"$1f"},"phases":["base","storm1","storm2"],"tests":{"base":[{"path":"edit_base.cpp","content":"$20"}],"storm1":[{"path":"edit_storm1.cpp","content":"$21"}],"storm2":[{"path":"edit_storm2.cpp","content":"$22"}]},"reference":[{"path":"command.h","content":"$23"},{"path":"editor_impl.h","content":"$24"},{"path":"group_recorder.h","content":"$25"},{"path":"history.h","content":"$26"},{"path":"merge_policy.h","content":"#pragma once\n#include \"command.h\"\n\n// Decides whether a new edit may join the step before it. A Strategy: the history asks and never looks at characters.\nclass MergePolicy {\n public:\n  virtual ~MergePolicy() = default;\n  virtual bool joins(const Command& open, const Command& next) const = 0;\n};\n\nclass NeverMerge : public MergePolicy {\n public:\n  bool joins(const Command& /*open*/, const Command& /*next*/) const override { return false; }\n};\n\n// Typing runs: single keystrokes join an open run until a space or a newline ends it (word-sized undo steps).\nclass TypingRuns : public MergePolicy {\n public:\n  bool joins(const Command& open, const Command& next) const override {\n    const TypedText* run = open.typedText();\n    if (run == nullptr || next.typedText() == nullptr) return false;\n    const char last = run->text.back();\n    return last != ' ' && last != '\\n';\n  }\n};\n"},{"path":"service.cpp","content":"#include \"editor_impl.h\"\n\nstd::unique_ptr<edit::Editor> edit::makeEditor() { return std::make_unique<EditorImpl>(std::make_unique<NeverMerge>()); }\n\nstd::unique_ptr<edit::GroupingEditor> edit::makeGroupingEditor() {\n  return std::make_unique<EditorImpl>(std::make_unique<NeverMerge>());\n}\n\nstd::unique_ptr<edit::GroupingEditor> edit::makeTypingEditor() {\n  return std::make_unique<EditorImpl>(std::make_unique<TypingRuns>());\n}\n"},{"path":"text_buffer.h","content":"#pragma once\n#include <cstddef>\n#include <string>\n\n// The document: the text and the cursor. It offers primitive changes only and knows nothing about undo.\nclass TextBuffer {\n public:\n  const std::string& text() const { return text_; }\n  std::size_t cursor() const { return cursor_; }\n  std::size_t size() const { return text_.size(); }\n\n  void insertAt(std::size_t position, const std::string& added) { text_.insert(position, added); }\n  void eraseAt(std::size_t position, std::size_t length) { text_.erase(position, length); }\n  void setCursor(std::size_t position) { cursor_ = position; }\n\n private:\n  std::string text_;\n  std::size_t cursor_ = 0;\n};\n"}],"driver":{"path":"driver.cpp","content":"#define BP_TEST_MAIN\n#include \"bp_test.h\"\n","readOnly":true}}}]

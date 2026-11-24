@@ -1,0 +1,1120 @@
+1:"$Sreact.fragment"
+2:"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js"
+3:I[39756,["$2"],"default"]
+4:I[37457,["$2"],"default"]
+5:"/blueprint-clash/_next/static/chunks/2n5qeheznvl4u.js"
+6:I[22016,["$2","$5"],""]
+7:I[64576,["$2"],"PwaRegister"]
+10:"/blueprint-clash/_next/static/chunks/2uk3wcjwqg0tl.js"
+11:"/blueprint-clash/_next/static/chunks/1zdu7yjl8efu4.js"
+12:I[65612,["$2","$10","$11"],"WorkshopClient"]
+22:"ViewportBoundary"
+23:I[97367,["$2"],"$22"]
+24:"MetadataBoundary"
+25:I[97367,["$2"],"$24"]
+26:"$Sreact.suspense"
+27:I[27201,["$2"],"IconMark"]
+:HL["/blueprint-clash/_next/static/chunks/2lbfwxo4jtf0j.css","style"]
+9:X
+c:X
+c:C
+13:T1b67,# Editorial: Hotel booking
+
+## Requirements
+Functional: room types with a number of identical rooms and a nightly rate. A guest books a type for a stay from a check-in day to a check-out day; the system reserves one room for every night or nothing, and returns an id and the total. A booking can be cancelled until the stay starts. Time arrives through an injected `Clock` as a whole day number. A stay is the half-open range of nights `[checkIn, checkOut)`, one to thirty nights. Checks run in a fixed order (`UnknownType`, `InvalidRequest`, `InPast`, `SoldOut`) and cancel fails in the order `UnknownReservation`, `WrongGuest`, `StayStarted`. Hidden until asked: whether the check-out day is a night, what "sold out" means for a stay that is only partly full, what cancelling gives back, and what a failed request changes (nothing). Non-goals: payment, taxes, room numbers, overbooking, thread safety (discussed), persistence.
+
+**Change Storm 1, seasonal prices:** `addSeason(type, from, to, rate)` prices a range of nights for one type; where seasons overlap the last one added wins; `quote` returns what a stay would cost; a reservation already made keeps its total. Revealable by asking whether prices stay the same all year.
+
+**Change Storm 2, refunds:** `makeRefundingHotel(clock, tiers)` with "at least N days before check-in, P percent back". The largest matching threshold applies, tiers come in any order, the refund is a percentage of the total charged at booking, rounded down.
+
+## Reference design
+- `StayRange` is the stay as a half-open range of nights: validity (one to thirty nights), the first night, the end, and how far away the start is. It knows nothing about rooms or money.
+- `RoomCalendar` is one room type's capacity and a sparse count of rooms taken per night. Availability is the minimum over the nights; `take` and `give` add and remove exactly one room per night.
+- `ReservationBook` issues ids and keeps, for each reservation, the guest, type, stay and the total it was given. Cancelling removes the record, so a cancelled id looks never issued.
+- `Pricing` is the one place that knows what a night costs: a `BaseRates` rule and a `SeasonRates` rule asked in priority order. `book` and `quote` both call `total`.
+- `RefundPolicy` is a Strategy: `NoRefund` and `TieredRefund`.
+- `HotelImpl` is the facade: it validates in the documented order and sequences calendar, pricing, book and policy. It holds no rule of its own about nights, prices or refunds.
+
+**Storm 1 in the reference:** `SeasonRates` is a new rule class and `Pricing` gets one more rule in its priority list; the facade gains `addSeason` and `quote`, each a few lines. No existing class changes its behaviour. The editorial would be lying if it said the facade was untouched, since it gains two methods.
+
+**Storm 2 in the reference:** `TieredRefund` is one new class; `HotelImpl::cancel` becomes a call to `cancelWithRefund` and drops the money. The reservation already stores the total, which is the one design choice made earlier that Storm 2 depends on.
+
+## Alternatives
+- **A boolean per room per night** (`bool booked[room][night]`) looks natural and forces you to pick a room, scan for a free one on every night and keep the choice consistent across nights. Rooms of a type are interchangeable, so a count per night is both simpler and correct; per-room tracking is justified only when rooms differ (upgrades, accessibility) and then availability becomes a matching problem.
+- **A list of reservations scanned on every request** is the first thing most candidates write: count overlapping reservations for each night. It is correct if the overlap test is, and costs O(reservations) per request. A calendar of counts is O(nights) and has no overlap predicate to get wrong.
+- **A dense array of days** is fine for a fixed horizon and wastes memory for a sparse one; the sparse map keeps cost proportional to bookings and needs no year limit.
+- **Re-pricing from the rate card at cancellation time** is the tempting shortcut that avoids storing a total. It makes refunds depend on today's prices, which is a bug the moment a season is added.
+- **A State pattern per reservation** (Booked, Cancelled, CheckedIn) is the textbook shape. The only states here are "exists" and "spent", plus a date rule, so a record that is removed is enough; check-in and check-out events would justify real states and are listed in the follow-ups.
+- **Overbooking, waiting lists and room upgrades** each change an assumption (capacity, a queue, interchangeability). Saying which class would change for each is stronger than building any of them.
+
+## Trade-offs
+Counting rooms per night, instead of assigning rooms, makes bookings O(nights) and keeps the model honest about what the guest was promised; it costs the ability to say which room, which needs a second phase at check-in. Storing the total on the reservation costs a few bytes and buys exact refunds and an audit trail. Keeping the id record only for live reservations makes memory proportional to live bookings; the cost is that "never issued" and "cancelled" are indistinguishable, which the API accepts and a real product would not (a tombstone keeps the difference). Newest-first seasons search is O(seasons) per night: fine for dozens of seasons, replaced by an interval map if profiling asks.
+
+## What breaks at 10x
+At 10x the hotels, nothing changes: each hotel is its own calendar, so you shard by hotel. At 10x the traffic on one hotel, the per-type lock becomes the hot spot and search traffic (availability) must be separated from booking traffic: serve searches from a stale cache and re-check at booking. The pricing scan per night grows with the number of seasons and needs an interval structure. In memory is no longer enough: the calendar becomes rows keyed by (hotel, type, night) with a conditional update that refuses to exceed capacity, which moves correctness into the database, and booking needs an idempotency key so a retry cannot book twice. Payment confirmation arriving late wants a short hold between choosing and paying, which is the ticket-booking design.
+
+## Level signals
+- **SDE2:** the half-open range stated and used consistently, availability as the minimum over nights, a failed booking that changes nothing, cancel that frees only its own room and spends the id, checks in a clear order.
+- **Senior:** asks about the check-out day, partial overlaps and what a failed request changes before coding; keeps range, calendar, reservations, pricing and refund as separate small classes; stores the total at booking and explains why; the refund and the seasons are policies added without editing the core; describes the per-type critical section and why check-then-write races.
+- **Staff:** moves correctness into a conditional write in a shared store and separates search from booking, discusses overbooking and room assignment as changes of assumption, idempotency and holds for the payment gap, and the failure modes of caching availability.
+14:Td34,#pragma once
+// Public API for the Hotel booking problem. The hidden tests only use what is declared here.
+// You implement hotel::makeHotel() (in any of your .cpp files); everything behind it is your design.
+#include <memory>
+#include <optional>
+#include <string>
+
+namespace hotel {
+
+// A source of the current day, as a whole number. The system must read the date only through this interface.
+class Clock {
+ public:
+  virtual ~Clock() = default;
+  virtual long long today() const = 0;
+};
+
+using ReservationId = long long;
+constexpr ReservationId kNoReservation = 0;  // ids that are issued are always positive and never reused
+using Money = long long;                      // whole cents
+
+constexpr int kMaxRooms = 1000;          // rooms of one type
+constexpr Money kMaxNightlyRate = 1000000;  // cents per night
+constexpr int kMaxNights = 30;           // longest single stay
+
+enum class Status {
+  Ok,
+  UnknownType,         // no such room type
+  InvalidRequest,      // empty guest, a stay of no nights or fewer, or more than kMaxNights nights
+  InPast,              // the stay would start before today
+  SoldOut,             // on at least one night of the stay every room of the type is taken
+  UnknownReservation,  // never issued, or already cancelled
+  WrongGuest,          // the reservation belongs to someone else
+  StayStarted,         // today is the check-in day or later
+};
+
+struct BookResult {
+  Status status = Status::Ok;
+  ReservationId id = kNoReservation;  // kNoReservation unless status is Ok
+  Money total = 0;                    // what the guest pays for the whole stay; 0 unless status is Ok
+};
+
+// Days are whole numbers. A stay from checkIn to checkOut occupies the NIGHTS checkIn, checkIn+1, ..., checkOut-1:
+// the check-out day itself is not a night, so one guest may leave on the day another arrives.
+class Hotel {
+ public:
+  virtual ~Hotel() = default;
+
+  // Adds a room type with `rooms` identical rooms (1..kMaxRooms) at `nightlyRate` (1..kMaxNightlyRate). Returns false,
+  // changing nothing, when the name is empty or taken or a number is out of range.
+  virtual bool addRoomType(const std::string& type, int rooms, Money nightlyRate) = 0;
+
+  // Reserves one room of the type for every night of the stay, or nothing. A guest is not given a particular room.
+  // Checks run in this order, and the first failure is returned with nothing changed: UnknownType, InvalidRequest,
+  // InPast (checkIn < today; checking in today is fine), SoldOut. The total is the nightly rates added up.
+  virtual BookResult book(const std::string& guest, const std::string& type, long long checkIn, long long checkOut) = 0;
+
+  // Gives the rooms of a reservation back for every night of it and spends the id. Failures, in this order:
+  // UnknownReservation, WrongGuest, StayStarted (today >= checkIn). A failed call changes nothing.
+  virtual Status cancel(ReservationId id, const std::string& guest) = 0;
+
+  // The number of rooms of the type that are free on EVERY night of the stay, so the number of such stays that
+  // could still be booked at once. 0 for an unknown type or a stay that is not valid. It ignores today.
+  virtual int available(const std::string& type, long long checkIn, long long checkOut) const = 0;
+};
+
+// Returns nullptr when the clock is null.
+std::unique_ptr<Hotel> makeHotel(std::shared_ptr<Clock> clock);
+
+}  // namespace hotel
+15:T4e1,#pragma once
+// Change Storm 1 adds seasonal prices. Everything from api.h still holds.
+#include "api.h"
+
+namespace hotel {
+
+class SeasonalHotel : public Hotel {
+ public:
+  // From now on the nights fromDay, fromDay+1, ..., toDay-1 of the room type cost `nightlyRate` instead of the
+  // normal rate. Where seasons overlap, the one added LAST wins on the nights they share. Returns false, changing
+  // nothing, for an unknown type, toDay <= fromDay, or a rate outside 1..kMaxNightlyRate. A season may be any length
+  // and cover any days. A reservation already made keeps the total it was given; only later bookings and quotes
+  // see the new season.
+  virtual bool addSeason(const std::string& type, long long fromDay, long long toDay, Money nightlyRate) = 0;
+
+  // What booking this stay would cost right now, whether or not it is available and whether or not it is in the
+  // past. Empty for an unknown type or a stay that is not valid (as in api.h). book() charges exactly this.
+  virtual std::optional<Money> quote(const std::string& type, long long checkIn, long long checkOut) const = 0;
+};
+
+// Returns nullptr when the clock is null.
+std::unique_ptr<SeasonalHotel> makeSeasonalHotel(std::shared_ptr<Clock> clock);
+
+}  // namespace hotel
+16:T5be,#pragma once
+// Change Storm 2 adds cancellation refunds. Everything from api.h and api_storm1.h still holds.
+#include <vector>
+
+#include "api_storm1.h"
+
+namespace hotel {
+
+// "If the guest cancels at least `daysBefore` days before check-in, they get `percent` percent of the total back."
+struct RefundTier {
+  int daysBefore;
+  int percent;
+};
+
+struct CancelResult {
+  Status status = Status::Ok;
+  Money refund = 0;  // 0 unless status is Ok
+};
+
+// The days before check-in are checkIn - today(), measured when the guest cancels. The tier that applies is the one
+// with the LARGEST daysBefore that is still <= that number; the tiers may be given in any order. When no tier
+// applies the refund is 0. The refund is a percentage of the total the reservation was given when it was booked
+// (not of today's prices), rounded down to whole cents. cancel() of api.h behaves exactly like cancelWithRefund()
+// and drops the refund. A stay that has started cannot be cancelled, whatever the tiers say.
+class RefundingHotel : public SeasonalHotel {
+ public:
+  virtual CancelResult cancelWithRefund(ReservationId id, const std::string& guest) = 0;
+};
+
+// Returns nullptr when the clock is null, a percent is outside 0..100, a daysBefore is negative, or two tiers share
+// a daysBefore. An empty tier list is fine: nothing is ever refunded.
+std::unique_ptr<RefundingHotel> makeRefundingHotel(std::shared_ptr<Clock> clock, std::vector<RefundTier> tiers);
+
+}  // namespace hotel
+17:T2f8c,#include <algorithm>
+#include <iterator>
+#include <map>
+#include <memory>
+#include <string>
+
+#include "api.h"
+#include "bp_test.h"
+
+using hotel::Status;
+
+namespace {
+class FakeClock : public hotel::Clock {
+ public:
+  long long today() const override { return today_; }
+  void set(long long day) { today_ = day; }
+
+ private:
+  long long today_ = 10;
+};
+
+// Today is day 10. "double": 2 rooms at 10000 a night. "suite": 1 room at 30000 a night.
+struct Fixture {
+  std::shared_ptr<FakeClock> clock = std::make_shared<FakeClock>();
+  std::unique_ptr<hotel::Hotel> hotel = hotel::makeHotel(clock);
+  Fixture() {
+    hotel->addRoomType("double", 2, 10000);
+    hotel->addRoomType("suite", 1, 30000);
+  }
+  hotel::BookResult book(const std::string& guest, const std::string& type, long long in, long long out) {
+    return hotel->book(guest, type, in, out);
+  }
+};
+}  // namespace
+
+TEST(Setup, AFactoryRefusesANullClock) {
+  EXPECT_TRUE(hotel::makeHotel(nullptr) == nullptr);
+  EXPECT_TRUE(hotel::makeHotel(std::make_shared<FakeClock>()) != nullptr);
+}
+
+TEST(Setup, RoomTypesMustBeNewAndHaveSaneNumbers) {
+  Fixture f;
+  EXPECT_FALSE(f.hotel->addRoomType("double", 5, 5000));
+  EXPECT_FALSE(f.hotel->addRoomType("", 5, 5000));
+  EXPECT_FALSE(f.hotel->addRoomType("x", 0, 5000));
+  EXPECT_FALSE(f.hotel->addRoomType("x", 1001, 5000));
+  EXPECT_FALSE(f.hotel->addRoomType("x", 5, 0));
+  EXPECT_FALSE(f.hotel->addRoomType("x", 5, 1000001));
+  EXPECT_TRUE(f.hotel->addRoomType("big", 1000, 1000000));
+  EXPECT_EQ(f.hotel->available("big", 20, 21), 1000);
+}
+
+TEST(Setup, ARefusedRoomTypeDoesNotDisturbTheExistingOne) {
+  Fixture f;
+  EXPECT_TRUE(f.book("ann", "suite", 20, 22).status == Status::Ok);
+  EXPECT_FALSE(f.hotel->addRoomType("suite", 9, 1));
+  EXPECT_EQ(f.hotel->available("suite", 20, 22), 0);
+  EXPECT_TRUE(f.book("bob", "suite", 20, 21).status == Status::SoldOut);
+  EXPECT_EQ(f.book("bob", "suite", 22, 23).total, 30000);
+}
+
+TEST(Book, ABookingReturnsAPositiveIdAndTheTotal) {
+  Fixture f;
+  const hotel::BookResult r = f.book("ann", "double", 20, 23);
+  EXPECT_TRUE(r.status == Status::Ok);
+  EXPECT_TRUE(r.id > 0);
+  EXPECT_EQ(r.total, 30000);
+  EXPECT_EQ(f.book("bob", "suite", 20, 22).total, 60000);
+}
+
+TEST(Book, IdsAreDistinct) {
+  Fixture f;
+  const hotel::BookResult a = f.book("ann", "double", 20, 21);
+  const hotel::BookResult b = f.book("bob", "double", 20, 21);
+  EXPECT_TRUE(a.id > 0);
+  EXPECT_TRUE(b.id > 0);
+  EXPECT_TRUE(a.id != b.id);
+}
+
+TEST(Book, ARefusalCarriesNoIdAndNoTotal) {
+  Fixture f;
+  const hotel::BookResult r = f.book("ann", "nope", 20, 21);
+  EXPECT_TRUE(r.status == Status::UnknownType);
+  EXPECT_EQ(r.id, hotel::kNoReservation);
+  EXPECT_EQ(r.total, 0);
+}
+
+TEST(Book, UnknownTypeIsCheckedFirst) {
+  Fixture f;
+  EXPECT_TRUE(f.book("", "nope", 5, 5).status == Status::UnknownType);
+  EXPECT_TRUE(f.book("ann", "nope", 5, 6).status == Status::UnknownType);
+}
+
+TEST(Book, InvalidRequestsAreRefused) {
+  Fixture f;
+  EXPECT_TRUE(f.book("", "double", 20, 21).status == Status::InvalidRequest);
+  EXPECT_TRUE(f.book("ann", "double", 20, 20).status == Status::InvalidRequest);
+  EXPECT_TRUE(f.book("ann", "double", 21, 20).status == Status::InvalidRequest);
+  EXPECT_EQ(f.hotel->available("double", 20, 21), 2);
+}
+
+TEST(Book, AStayIsAtMostThirtyNights) {
+  Fixture f;
+  EXPECT_TRUE(f.book("ann", "double", 20, 51).status == Status::InvalidRequest);
+  EXPECT_TRUE(f.book("ann", "double", 20, 50).status == Status::Ok);
+}
+
+TEST(Book, InvalidIsCheckedBeforeInThePast) {
+  Fixture f;
+  EXPECT_TRUE(f.book("", "double", 2, 3).status == Status::InvalidRequest);
+  EXPECT_TRUE(f.book("ann", "double", 4, 4).status == Status::InvalidRequest);
+}
+
+TEST(Book, CheckingInTodayIsAllowedButYesterdayIsNot) {
+  Fixture f;
+  EXPECT_TRUE(f.book("ann", "double", 10, 11).status == Status::Ok);
+  EXPECT_TRUE(f.book("bob", "double", 9, 12).status == Status::InPast);
+  EXPECT_EQ(f.hotel->available("double", 9, 12), 1);
+}
+
+TEST(Book, InThePastIsCheckedBeforeSoldOut) {
+  Fixture f;
+  EXPECT_TRUE(f.book("ann", "suite", 10, 12).status == Status::Ok);
+  EXPECT_TRUE(f.book("bob", "suite", 9, 11).status == Status::InPast);
+}
+
+TEST(Book, TheClockDecidesWhatIsInThePast) {
+  Fixture f;
+  EXPECT_TRUE(f.book("ann", "double", 14, 15).status == Status::Ok);
+  f.clock->set(15);
+  EXPECT_TRUE(f.book("bob", "double", 14, 16).status == Status::InPast);
+  EXPECT_TRUE(f.book("bob", "double", 15, 16).status == Status::Ok);
+}
+
+TEST(Book, TypesAreIndependent) {
+  Fixture f;
+  EXPECT_TRUE(f.book("ann", "suite", 20, 22).status == Status::Ok);
+  EXPECT_EQ(f.hotel->available("double", 20, 22), 2);
+  EXPECT_TRUE(f.book("bob", "double", 20, 22).status == Status::Ok);
+}
+
+TEST(Overlap, TheLastRoomOfATypeCannotBeBookedTwice) {
+  Fixture f;
+  EXPECT_TRUE(f.book("ann", "suite", 20, 23).status == Status::Ok);
+  EXPECT_TRUE(f.book("bob", "suite", 20, 23).status == Status::SoldOut);
+  EXPECT_TRUE(f.book("bob", "suite", 22, 25).status == Status::SoldOut);
+  EXPECT_TRUE(f.book("bob", "suite", 18, 21).status == Status::SoldOut);
+}
+
+TEST(Overlap, AGuestMayLeaveOnTheDayAnotherArrives) {
+  Fixture f;
+  EXPECT_TRUE(f.book("ann", "suite", 20, 23).status == Status::Ok);
+  EXPECT_TRUE(f.book("bob", "suite", 23, 25).status == Status::Ok);
+  EXPECT_TRUE(f.book("cat", "suite", 18, 20).status == Status::Ok);
+  EXPECT_EQ(f.hotel->available("suite", 18, 25), 0);
+  EXPECT_EQ(f.hotel->available("suite", 25, 26), 1);
+}
+
+TEST(Overlap, AStayThatSurroundsOrFitsInsideAnotherOverlaps) {
+  Fixture f;
+  EXPECT_TRUE(f.book("ann", "suite", 20, 30).status == Status::Ok);
+  EXPECT_TRUE(f.book("bob", "suite", 24, 25).status == Status::SoldOut);
+  EXPECT_TRUE(f.book("cat", "suite", 15, 40).status == Status::SoldOut);
+  EXPECT_TRUE(f.book("cat", "suite", 19, 31).status == Status::SoldOut);
+  Fixture g;
+  EXPECT_TRUE(g.book("ann", "suite", 24, 25).status == Status::Ok);
+  EXPECT_TRUE(g.book("bob", "suite", 20, 30).status == Status::SoldOut);
+}
+
+TEST(Overlap, TheTightestNightDecidesAvailability) {
+  Fixture f;
+  EXPECT_TRUE(f.book("ann", "double", 20, 22).status == Status::Ok);
+  EXPECT_TRUE(f.book("bob", "double", 21, 23).status == Status::Ok);
+  // night 21 has both rooms taken; 20 and 22 have one free each
+  EXPECT_EQ(f.hotel->available("double", 20, 23), 0);
+  EXPECT_EQ(f.hotel->available("double", 20, 21), 1);
+  EXPECT_EQ(f.hotel->available("double", 22, 23), 1);
+  EXPECT_EQ(f.hotel->available("double", 21, 22), 0);
+  EXPECT_TRUE(f.book("cat", "double", 20, 23).status == Status::SoldOut);
+}
+
+TEST(Book, ASoldOutRequestChangesNothing) {
+  Fixture f;
+  EXPECT_TRUE(f.book("ann", "suite", 22, 24).status == Status::Ok);
+  EXPECT_TRUE(f.book("bob", "suite", 20, 23).status == Status::SoldOut);
+  EXPECT_EQ(f.hotel->available("suite", 20, 22), 1);
+  EXPECT_TRUE(f.book("cat", "suite", 20, 22).status == Status::Ok);
+}
+
+TEST(Available, CountsDropWithEveryBookingAndIgnoreOtherNights) {
+  Fixture f;
+  EXPECT_EQ(f.hotel->available("double", 20, 23), 2);
+  f.book("ann", "double", 20, 21);
+  EXPECT_EQ(f.hotel->available("double", 20, 23), 1);
+  EXPECT_EQ(f.hotel->available("double", 21, 23), 2);
+  f.book("bob", "double", 22, 23);
+  EXPECT_EQ(f.hotel->available("double", 20, 23), 1);
+  f.book("cat", "double", 20, 21);
+  EXPECT_EQ(f.hotel->available("double", 20, 23), 0);
+  EXPECT_EQ(f.hotel->available("double", 21, 22), 2);
+}
+
+TEST(Available, UnknownTypesAndBadRangesHaveNoRooms) {
+  Fixture f;
+  EXPECT_EQ(f.hotel->available("nope", 20, 21), 0);
+  EXPECT_EQ(f.hotel->available("double", 20, 20), 0);
+  EXPECT_EQ(f.hotel->available("double", 21, 20), 0);
+  EXPECT_EQ(f.hotel->available("double", 20, 51), 0);
+}
+
+TEST(Available, IgnoresToday) {
+  Fixture f;
+  EXPECT_EQ(f.hotel->available("double", 1, 3), 2);
+}
+
+TEST(Cancel, FreesEveryNightOfTheStay) {
+  Fixture f;
+  const hotel::BookResult r = f.book("ann", "suite", 20, 25);
+  EXPECT_TRUE(f.hotel->cancel(r.id, "ann") == Status::Ok);
+  EXPECT_EQ(f.hotel->available("suite", 20, 25), 1);
+  EXPECT_TRUE(f.book("bob", "suite", 20, 25).status == Status::Ok);
+}
+
+TEST(Cancel, CancellingFreesOnlyItsOwnRoom) {
+  Fixture f;
+  const hotel::BookResult a = f.book("ann", "double", 20, 22);
+  f.book("bob", "double", 20, 22);
+  EXPECT_TRUE(f.hotel->cancel(a.id, "ann") == Status::Ok);
+  EXPECT_EQ(f.hotel->available("double", 20, 22), 1);
+  EXPECT_TRUE(f.book("cat", "double", 20, 22).status == Status::Ok);
+  EXPECT_TRUE(f.book("dan", "double", 20, 22).status == Status::SoldOut);
+}
+
+TEST(Cancel, OnlyTheGuestCanCancel) {
+  Fixture f;
+  const hotel::BookResult r = f.book("ann", "suite", 20, 22);
+  EXPECT_TRUE(f.hotel->cancel(r.id, "bob") == Status::WrongGuest);
+  EXPECT_TRUE(f.hotel->cancel(r.id, "") == Status::WrongGuest);
+  EXPECT_EQ(f.hotel->available("suite", 20, 22), 0);
+  EXPECT_TRUE(f.hotel->cancel(r.id, "ann") == Status::Ok);
+}
+
+TEST(Cancel, UnknownIdsAreReported) {
+  Fixture f;
+  EXPECT_TRUE(f.hotel->cancel(12345, "ann") == Status::UnknownReservation);
+  EXPECT_TRUE(f.hotel->cancel(hotel::kNoReservation, "ann") == Status::UnknownReservation);
+  EXPECT_TRUE(f.hotel->cancel(-3, "ann") == Status::UnknownReservation);
+}
+
+TEST(Cancel, AStayThatHasStartedCannotBeCancelled) {
+  Fixture f;
+  const hotel::BookResult r = f.book("ann", "suite", 14, 16);
+  f.clock->set(13);
+  EXPECT_TRUE(f.hotel->cancel(r.id, "ann") == Status::Ok);
+  const hotel::BookResult s = f.book("ann", "suite", 14, 16);
+  f.clock->set(14);
+  EXPECT_TRUE(f.hotel->cancel(s.id, "ann") == Status::StayStarted);
+  f.clock->set(15);
+  EXPECT_TRUE(f.hotel->cancel(s.id, "ann") == Status::StayStarted);
+  EXPECT_EQ(f.hotel->available("suite", 14, 16), 0);
+}
+
+TEST(Cancel, FailuresAreReportedInTheDocumentedOrder) {
+  Fixture f;
+  const hotel::BookResult r = f.book("ann", "suite", 12, 14);
+  f.clock->set(13);
+  EXPECT_TRUE(f.hotel->cancel(r.id, "bob") == Status::WrongGuest);
+  EXPECT_TRUE(f.hotel->cancel(r.id, "ann") == Status::StayStarted);
+  EXPECT_TRUE(f.hotel->cancel(999, "bob") == Status::UnknownReservation);
+}
+
+TEST(Cancel, ACancelledReservationIsSpent) {
+  Fixture f;
+  const hotel::BookResult r = f.book("ann", "double", 20, 22);
+  EXPECT_TRUE(f.hotel->cancel(r.id, "ann") == Status::Ok);
+  EXPECT_TRUE(f.hotel->cancel(r.id, "ann") == Status::UnknownReservation);
+  EXPECT_EQ(f.hotel->available("double", 20, 22), 2);
+}
+
+TEST(Cancel, IdsAreNeverReused) {
+  Fixture f;
+  const hotel::BookResult a = f.book("ann", "double", 20, 22);
+  f.hotel->cancel(a.id, "ann");
+  const hotel::BookResult b = f.book("bob", "double", 20, 22);
+  EXPECT_TRUE(b.id > 0);
+  EXPECT_TRUE(b.id != a.id);
+  EXPECT_TRUE(f.hotel->cancel(a.id, "bob") == Status::UnknownReservation);
+}
+
+TEST(Contention, ManyStaysAgreeWithASimpleNightByNightModel) {
+  auto h = hotel::makeHotel(std::make_shared<FakeClock>());
+  h->addRoomType("r", 3, 1000);
+  std::map<long long, int> model;  // night -> rooms taken
+  struct Live {
+    hotel::ReservationId id;
+    long long in;
+    long long out;
+  };
+  std::map<int, Live> live;
+  unsigned seed = 12345;
+  auto next = [&seed](unsigned bound) {
+    seed = seed * 1103515245u + 12345u;
+    return (seed >> 16) % bound;
+  };
+  int nextKey = 0;
+  for (int step = 0; step < 400; ++step) {
+    if (next(4) != 0 || live.empty()) {
+      const long long in = 11 + static_cast<long long>(next(12));
+      const long long out = in + 1 + static_cast<long long>(next(5));
+      int tightest = 3;
+      for (long long n = in; n < out; ++n) tightest = std::min(tightest, 3 - model[n]);
+      EXPECT_EQ(h->available("r", in, out), tightest);
+      const hotel::BookResult r = h->book("g", "r", in, out);
+      if (tightest > 0) {
+        EXPECT_TRUE(r.status == Status::Ok);
+        for (long long n = in; n < out; ++n) ++model[n];
+        live[nextKey++] = Live{r.id, in, out};
+      } else {
+        EXPECT_TRUE(r.status == Status::SoldOut);
+      }
+    } else {
+      auto it = live.begin();
+      std::advance(it, static_cast<long>(next(static_cast<unsigned>(live.size()))));
+      EXPECT_TRUE(h->cancel(it->second.id, "g") == Status::Ok);
+      for (long long n = it->second.in; n < it->second.out; ++n) --model[n];
+      live.erase(it);
+    }
+  }
+  for (long long n = 11; n < 30; ++n) EXPECT_EQ(h->available("r", n, n + 1), 3 - model[n]);
+}
+18:T1654,#include <memory>
+#include <string>
+
+#include "api_storm1.h"
+#include "bp_test.h"
+
+using hotel::Status;
+
+namespace {
+class FakeClock : public hotel::Clock {
+ public:
+  long long today() const override { return today_; }
+  void set(long long day) { today_ = day; }
+
+ private:
+  long long today_ = 10;
+};
+
+// Today is day 10. "double": 2 rooms at 10000. "suite": 1 room at 30000.
+struct Fixture {
+  std::shared_ptr<FakeClock> clock = std::make_shared<FakeClock>();
+  std::unique_ptr<hotel::SeasonalHotel> hotel = hotel::makeSeasonalHotel(clock);
+  Fixture() {
+    hotel->addRoomType("double", 2, 10000);
+    hotel->addRoomType("suite", 1, 30000);
+  }
+};
+}  // namespace
+
+TEST(Setup, TheFactoryRefusesANullClock) {
+  EXPECT_TRUE(hotel::makeSeasonalHotel(nullptr) == nullptr);
+}
+
+TEST(Base, EarlierBehaviourStillHolds) {
+  Fixture f;
+  const hotel::BookResult r = f.hotel->book("ann", "suite", 20, 22);
+  EXPECT_TRUE(r.status == Status::Ok);
+  EXPECT_EQ(r.total, 60000);
+  EXPECT_TRUE(f.hotel->book("bob", "suite", 21, 23).status == Status::SoldOut);
+  EXPECT_TRUE(f.hotel->book("bob", "suite", 22, 23).status == Status::Ok);
+  EXPECT_TRUE(f.hotel->cancel(r.id, "bob") == Status::WrongGuest);
+  EXPECT_TRUE(f.hotel->cancel(r.id, "ann") == Status::Ok);
+  EXPECT_EQ(f.hotel->available("suite", 20, 22), 1);
+}
+
+TEST(Season, NightsInsideASeasonUseItsRateAndOthersKeepTheNormalRate) {
+  Fixture f;
+  EXPECT_TRUE(f.hotel->addSeason("double", 12, 14, 15000));
+  // nights 11, 12, 13, 14 -> 10000 + 15000 + 15000 + 10000
+  const hotel::BookResult r = f.hotel->book("ann", "double", 11, 15);
+  EXPECT_TRUE(r.status == Status::Ok);
+  EXPECT_EQ(r.total, 50000);
+}
+
+TEST(Season, ItStartsOnItsFirstDayAndEndsTheDayBeforeItsEndDate) {
+  Fixture f;
+  f.hotel->addSeason("double", 12, 14, 15000);
+  EXPECT_EQ(*f.hotel->quote("double", 11, 12), 10000);
+  EXPECT_EQ(*f.hotel->quote("double", 12, 13), 15000);
+  EXPECT_EQ(*f.hotel->quote("double", 13, 14), 15000);
+  EXPECT_EQ(*f.hotel->quote("double", 14, 15), 10000);
+}
+
+TEST(Season, ALaterSeasonWinsWhereTheyOverlap) {
+  Fixture f;
+  f.hotel->addSeason("double", 10, 20, 12000);
+  f.hotel->addSeason("double", 14, 16, 20000);
+  // nights 13, 14, 15, 16 -> 12000 + 20000 + 20000 + 12000
+  EXPECT_EQ(*f.hotel->quote("double", 13, 17), 64000);
+}
+
+TEST(Season, TheLaterOneWinsEvenWhenItIsBroaderOrCheaper) {
+  Fixture f;
+  f.hotel->addSeason("double", 14, 16, 20000);
+  f.hotel->addSeason("double", 10, 20, 12000);
+  EXPECT_EQ(*f.hotel->quote("double", 13, 17), 48000);
+  Fixture g;
+  g.hotel->addSeason("double", 10, 20, 22000);
+  g.hotel->addSeason("double", 14, 16, 5000);
+  EXPECT_EQ(*g.hotel->quote("double", 13, 17), 22000 + 5000 + 5000 + 22000);
+}
+
+TEST(Season, ASeasonOnlyPricesItsOwnRoomType) {
+  Fixture f;
+  f.hotel->addSeason("double", 10, 40, 99000);
+  EXPECT_EQ(*f.hotel->quote("suite", 20, 22), 60000);
+  EXPECT_EQ(*f.hotel->quote("double", 20, 22), 198000);
+}
+
+TEST(Season, ASeasonMayBeCheaperThanTheNormalRate) {
+  Fixture f;
+  f.hotel->addSeason("suite", 20, 25, 1000);
+  EXPECT_EQ(*f.hotel->quote("suite", 19, 26), 30000 + 5 * 1000 + 30000);
+}
+
+TEST(Season, ASeasonCanBeLongerThanAStayAndCoverFarAwayDays) {
+  Fixture f;
+  EXPECT_TRUE(f.hotel->addSeason("double", 0, 100000, 11000));
+  EXPECT_EQ(*f.hotel->quote("double", 50000, 50003), 33000);
+  EXPECT_TRUE(f.hotel->addSeason("double", -100, 5, 9000));
+  EXPECT_EQ(*f.hotel->quote("double", 3, 7), 9000 + 9000 + 11000 + 11000);
+}
+
+TEST(Season, BadSeasonsAreRefusedAndChangeNothing) {
+  Fixture f;
+  EXPECT_FALSE(f.hotel->addSeason("nope", 12, 14, 15000));
+  EXPECT_FALSE(f.hotel->addSeason("double", 14, 14, 15000));
+  EXPECT_FALSE(f.hotel->addSeason("double", 15, 14, 15000));
+  EXPECT_FALSE(f.hotel->addSeason("double", 12, 14, 0));
+  EXPECT_FALSE(f.hotel->addSeason("double", 12, 14, 1000001));
+  EXPECT_TRUE(f.hotel->addSeason("double", 12, 14, 1000000));
+  EXPECT_TRUE(f.hotel->addSeason("double", 12, 14, 1));
+  EXPECT_EQ(*f.hotel->quote("double", 12, 14), 2);
+}
+
+TEST(Season, BookingChargesWhatTheQuoteSays) {
+  Fixture f;
+  f.hotel->addSeason("suite", 21, 23, 50000);
+  const long long quoted = *f.hotel->quote("suite", 20, 24);
+  const hotel::BookResult r = f.hotel->book("ann", "suite", 20, 24);
+  EXPECT_EQ(r.total, quoted);
+  EXPECT_EQ(r.total, 30000 + 50000 + 50000 + 30000);
+}
+
+TEST(Season, ASeasonAddedLaterDoesNotChangeAnEarlierBookingsPrice) {
+  Fixture f;
+  const hotel::BookResult before = f.hotel->book("ann", "double", 20, 22);
+  f.hotel->addSeason("double", 20, 22, 25000);
+  const hotel::BookResult after = f.hotel->book("bob", "double", 20, 22);
+  EXPECT_EQ(before.total, 20000);
+  EXPECT_EQ(after.total, 50000);
+}
+
+TEST(Quote, IsEmptyForUnknownTypesAndInvalidStays) {
+  Fixture f;
+  EXPECT_FALSE(f.hotel->quote("nope", 20, 21).has_value());
+  EXPECT_FALSE(f.hotel->quote("double", 20, 20).has_value());
+  EXPECT_FALSE(f.hotel->quote("double", 21, 20).has_value());
+  EXPECT_FALSE(f.hotel->quote("double", 20, 51).has_value());
+  EXPECT_TRUE(f.hotel->quote("double", 20, 50).has_value());
+}
+
+TEST(Quote, IgnoresAvailabilityAndToday) {
+  Fixture f;
+  f.hotel->book("ann", "suite", 20, 22);
+  EXPECT_EQ(*f.hotel->quote("suite", 20, 22), 60000);
+  EXPECT_EQ(*f.hotel->quote("suite", 1, 3), 60000);
+}
+
+TEST(Quote, ChangesNothing) {
+  Fixture f;
+  f.hotel->quote("suite", 20, 22);
+  EXPECT_EQ(f.hotel->available("suite", 20, 22), 1);
+  EXPECT_TRUE(f.hotel->book("ann", "suite", 20, 22).status == Status::Ok);
+}
+
+TEST(Season, SeasonsDoNotTouchAvailability) {
+  Fixture f;
+  f.hotel->addSeason("suite", 20, 22, 99000);
+  EXPECT_EQ(f.hotel->available("suite", 20, 22), 1);
+  EXPECT_TRUE(f.hotel->book("ann", "suite", 20, 22).status == Status::Ok);
+  EXPECT_EQ(f.hotel->available("suite", 20, 22), 0);
+}
+19:T1d4f,#include <memory>
+#include <string>
+#include <vector>
+
+#include "api_storm2.h"
+#include "bp_test.h"
+
+using hotel::Status;
+
+namespace {
+class FakeClock : public hotel::Clock {
+ public:
+  long long today() const override { return today_; }
+  void set(long long day) { today_ = day; }
+
+ private:
+  long long today_ = 10;
+};
+
+// Today is day 10. Tiers: 7+ days before check-in -> 100 percent, 2+ days -> 50 percent. Given smallest first.
+struct Fixture {
+  std::shared_ptr<FakeClock> clock = std::make_shared<FakeClock>();
+  std::unique_ptr<hotel::RefundingHotel> hotel = hotel::makeRefundingHotel(clock, {{2, 50}, {7, 100}});
+  Fixture() {
+    hotel->addRoomType("double", 2, 10000);
+    hotel->addRoomType("suite", 1, 30000);
+  }
+  // Books `nights` nights of "double" starting `daysAhead` days from today.
+  hotel::BookResult bookAhead(const std::string& guest, long long daysAhead, long long nights = 2) {
+    return hotel->book(guest, "double", 10 + daysAhead, 10 + daysAhead + nights);
+  }
+};
+}  // namespace
+
+TEST(Setup, TheFactoryRefusesBadArguments) {
+  const auto clock = std::make_shared<FakeClock>();
+  EXPECT_TRUE(hotel::makeRefundingHotel(nullptr, {{7, 100}}) == nullptr);
+  EXPECT_TRUE(hotel::makeRefundingHotel(clock, {{7, 101}}) == nullptr);
+  EXPECT_TRUE(hotel::makeRefundingHotel(clock, {{7, -1}}) == nullptr);
+  EXPECT_TRUE(hotel::makeRefundingHotel(clock, {{-1, 50}}) == nullptr);
+  EXPECT_TRUE(hotel::makeRefundingHotel(clock, {{7, 100}, {7, 50}}) == nullptr);
+  EXPECT_TRUE(hotel::makeRefundingHotel(clock, {{7, 100}, {2, 50}, {7, 20}}) == nullptr);
+  EXPECT_TRUE(hotel::makeRefundingHotel(clock, {{0, 0}, {7, 100}}) != nullptr);
+  EXPECT_TRUE(hotel::makeRefundingHotel(clock, {}) != nullptr);
+}
+
+TEST(Refund, NoTiersMeansNothingIsEverRefunded) {
+  const auto clock = std::make_shared<FakeClock>();
+  auto h = hotel::makeRefundingHotel(clock, {});
+  h->addRoomType("double", 2, 10000);
+  const hotel::BookResult r = h->book("ann", "double", 30, 32);
+  const hotel::CancelResult c = h->cancelWithRefund(r.id, "ann");
+  EXPECT_TRUE(c.status == Status::Ok);
+  EXPECT_EQ(c.refund, 0);
+  EXPECT_EQ(h->available("double", 30, 32), 2);
+}
+
+TEST(Base, EarlierBehaviourStillHolds) {
+  Fixture f;
+  EXPECT_EQ(f.bookAhead("ann", 20).total, 20000);
+  EXPECT_TRUE(f.hotel->book("bob", "suite", 20, 22).status == Status::Ok);
+  EXPECT_TRUE(f.hotel->book("cat", "suite", 21, 23).status == Status::SoldOut);
+  EXPECT_TRUE(f.hotel->book("cat", "suite", 5, 7).status == Status::InPast);
+  EXPECT_TRUE(f.hotel->addSeason("suite", 30, 32, 10000));
+  EXPECT_EQ(*f.hotel->quote("suite", 30, 32), 20000);
+}
+
+TEST(Refund, TheTierWithTheLargestMatchingDaysBeforeApplies) {
+  Fixture f;
+  const hotel::CancelResult far = f.hotel->cancelWithRefund(f.bookAhead("ann", 20).id, "ann");
+  EXPECT_TRUE(far.status == Status::Ok);
+  EXPECT_EQ(far.refund, 20000);
+  const hotel::CancelResult middle = f.hotel->cancelWithRefund(f.bookAhead("ann", 4).id, "ann");
+  EXPECT_EQ(middle.refund, 10000);
+  const hotel::CancelResult near = f.hotel->cancelWithRefund(f.bookAhead("ann", 1).id, "ann");
+  EXPECT_TRUE(near.status == Status::Ok);
+  EXPECT_EQ(near.refund, 0);
+}
+
+TEST(Refund, ATierStartsExactlyItsDaysBefore) {
+  Fixture f;
+  EXPECT_EQ(f.hotel->cancelWithRefund(f.bookAhead("a", 7).id, "a").refund, 20000);
+  EXPECT_EQ(f.hotel->cancelWithRefund(f.bookAhead("a", 6).id, "a").refund, 10000);
+  EXPECT_EQ(f.hotel->cancelWithRefund(f.bookAhead("a", 2).id, "a").refund, 10000);
+  EXPECT_EQ(f.hotel->cancelWithRefund(f.bookAhead("a", 1).id, "a").refund, 0);
+}
+
+TEST(Refund, TierOrderInTheInputDoesNotMatter) {
+  const auto clock = std::make_shared<FakeClock>();
+  auto sorted = hotel::makeRefundingHotel(clock, {{7, 100}, {2, 50}, {0, 10}});
+  auto shuffled = hotel::makeRefundingHotel(clock, {{2, 50}, {0, 10}, {7, 100}});
+  sorted->addRoomType("double", 2, 10000);
+  shuffled->addRoomType("double", 2, 10000);
+  for (const long long ahead : {1, 2, 5, 7, 12}) {
+    const hotel::BookResult a = sorted->book("ann", "double", 10 + ahead, 12 + ahead);
+    const hotel::BookResult b = shuffled->book("ann", "double", 10 + ahead, 12 + ahead);
+    EXPECT_EQ(sorted->cancelWithRefund(a.id, "ann").refund, shuffled->cancelWithRefund(b.id, "ann").refund);
+  }
+  const hotel::BookResult c = shuffled->book("ann", "double", 11, 13);
+  EXPECT_EQ(shuffled->cancelWithRefund(c.id, "ann").refund, 2000);
+}
+
+TEST(Refund, DaysAreCountedFromTheMomentOfCancelling) {
+  Fixture f;
+  const hotel::BookResult r = f.bookAhead("ann", 20);  // check-in on day 30
+  f.clock->set(24);                                     // 6 days to go
+  const hotel::CancelResult c = f.hotel->cancelWithRefund(r.id, "ann");
+  EXPECT_EQ(c.refund, 10000);
+}
+
+TEST(Refund, IsAPercentageOfWhatWasChargedNotOfTodaysPrices) {
+  Fixture f;
+  const hotel::BookResult r = f.bookAhead("ann", 20);  // charged 20000
+  EXPECT_EQ(r.total, 20000);
+  f.hotel->addSeason("double", 25, 60, 90000);
+  EXPECT_EQ(f.hotel->cancelWithRefund(r.id, "ann").refund, 20000);
+}
+
+TEST(Refund, SeasonalTotalsAreRefundedAsCharged) {
+  Fixture f;
+  f.hotel->addSeason("double", 30, 31, 25000);
+  const hotel::BookResult r = f.hotel->book("ann", "double", 30, 32);  // 25000 + 10000
+  EXPECT_EQ(r.total, 35000);
+  f.clock->set(25);  // 5 days before -> 50 percent
+  EXPECT_EQ(f.hotel->cancelWithRefund(r.id, "ann").refund, 17500);
+}
+
+TEST(Refund, RoundsDownToWholeCents) {
+  const auto clock = std::make_shared<FakeClock>();
+  auto h = hotel::makeRefundingHotel(clock, {{0, 33}});
+  h->addRoomType("tiny", 1, 999);
+  const hotel::BookResult r = h->book("ann", "tiny", 20, 21);
+  EXPECT_EQ(r.total, 999);
+  EXPECT_EQ(h->cancelWithRefund(r.id, "ann").refund, 329);
+}
+
+TEST(Refund, FailuresRefundNothingAndChangeNothing) {
+  Fixture f;
+  const hotel::BookResult r = f.bookAhead("ann", 20);
+  EXPECT_TRUE(f.hotel->cancelWithRefund(r.id, "bob").status == Status::WrongGuest);
+  EXPECT_EQ(f.hotel->cancelWithRefund(r.id, "bob").refund, 0);
+  EXPECT_TRUE(f.hotel->cancelWithRefund(777, "ann").status == Status::UnknownReservation);
+  EXPECT_EQ(f.hotel->available("double", 30, 32), 1);
+  f.clock->set(30);
+  const hotel::CancelResult started = f.hotel->cancelWithRefund(r.id, "ann");
+  EXPECT_TRUE(started.status == Status::StayStarted);
+  EXPECT_EQ(started.refund, 0);
+  EXPECT_EQ(f.hotel->available("double", 30, 32), 1);
+}
+
+TEST(Refund, ACancelledReservationCannotBeRefundedTwice) {
+  Fixture f;
+  const hotel::BookResult r = f.bookAhead("ann", 20);
+  EXPECT_EQ(f.hotel->cancelWithRefund(r.id, "ann").refund, 20000);
+  const hotel::CancelResult again = f.hotel->cancelWithRefund(r.id, "ann");
+  EXPECT_TRUE(again.status == Status::UnknownReservation);
+  EXPECT_EQ(again.refund, 0);
+}
+
+TEST(Refund, PlainCancelBehavesLikeCancelWithRefundWithoutTheMoney) {
+  Fixture f;
+  const hotel::BookResult r = f.bookAhead("ann", 20);
+  EXPECT_TRUE(f.hotel->cancel(r.id, "bob") == Status::WrongGuest);
+  EXPECT_TRUE(f.hotel->cancel(r.id, "ann") == Status::Ok);
+  EXPECT_EQ(f.hotel->available("double", 30, 32), 2);
+  EXPECT_TRUE(f.hotel->cancelWithRefund(r.id, "ann").status == Status::UnknownReservation);
+}
+
+TEST(Refund, ACancellationFreesTheRoomsEvenWhenNothingIsRefunded) {
+  Fixture f;
+  const hotel::BookResult a = f.hotel->book("ann", "suite", 11, 13);
+  EXPECT_TRUE(f.hotel->book("bob", "suite", 11, 13).status == Status::SoldOut);
+  const hotel::CancelResult c = f.hotel->cancelWithRefund(a.id, "ann");
+  EXPECT_EQ(c.refund, 0);
+  EXPECT_TRUE(f.hotel->book("bob", "suite", 11, 13).status == Status::Ok);
+}
+1a:Tf69,#pragma once
+#include <map>
+#include <memory>
+#include <string>
+#include <utility>
+
+#include "api_storm2.h"
+#include "pricing.h"
+#include "refund_policy.h"
+#include "reservation_book.h"
+#include "room_calendar.h"
+
+// The public face. It validates a request in the documented order and sequences the collaborators. It holds no
+// rule of its own about nights, prices or refunds.
+class HotelImpl : public hotel::RefundingHotel {
+ public:
+  HotelImpl(std::shared_ptr<hotel::Clock> clock, std::unique_ptr<RefundPolicy> refunds)
+      : clock_(std::move(clock)), refunds_(std::move(refunds)) {}
+
+  bool addRoomType(const std::string& type, int rooms, hotel::Money rate) override {
+    if (type.empty() || rooms < 1 || rooms > hotel::kMaxRooms) return false;
+    if (rate < 1 || rate > hotel::kMaxNightlyRate) return false;
+    if (!calendars_.emplace(type, RoomCalendar(rooms)).second) return false;
+    pricing_.setBase(type, rate);
+    return true;
+  }
+
+  hotel::BookResult book(const std::string& guest, const std::string& type, long long checkIn,
+                         long long checkOut) override {
+    const auto calendar = calendars_.find(type);
+    if (calendar == calendars_.end()) return refuse(hotel::Status::UnknownType);
+    const StayRange stay(checkIn, checkOut);
+    if (guest.empty() || !stay.isValid()) return refuse(hotel::Status::InvalidRequest);
+    if (stay.startsBefore(clock_->today())) return refuse(hotel::Status::InPast);
+    if (calendar->second.freeFor(stay) < 1) return refuse(hotel::Status::SoldOut);
+    calendar->second.take(stay);
+    const hotel::Money total = pricing_.total(type, stay);
+    const hotel::ReservationId id = reservations_.add(Reservation{guest, type, stay, total});
+    return hotel::BookResult{hotel::Status::Ok, id, total};
+  }
+
+  hotel::Status cancel(hotel::ReservationId id, const std::string& guest) override {
+    return cancelWithRefund(id, guest).status;
+  }
+
+  hotel::CancelResult cancelWithRefund(hotel::ReservationId id, const std::string& guest) override {
+    const Reservation* reservation = reservations_.find(id);
+    if (reservation == nullptr) return hotel::CancelResult{hotel::Status::UnknownReservation, 0};
+    if (reservation->guest != guest) return hotel::CancelResult{hotel::Status::WrongGuest, 0};
+    const long long today = clock_->today();
+    if (reservation->stay.hasStartedBy(today)) return hotel::CancelResult{hotel::Status::StayStarted, 0};
+    const hotel::Money refund = refunds_->refund(reservation->total, reservation->stay.daysUntilStart(today));
+    calendars_.at(reservation->type).give(reservation->stay);
+    reservations_.remove(id);
+    return hotel::CancelResult{hotel::Status::Ok, refund};
+  }
+
+  int available(const std::string& type, long long checkIn, long long checkOut) const override {
+    const auto calendar = calendars_.find(type);
+    const StayRange stay(checkIn, checkOut);
+    if (calendar == calendars_.end() || !stay.isValid()) return 0;
+    return calendar->second.freeFor(stay);
+  }
+
+  bool addSeason(const std::string& type, long long fromDay, long long toDay, hotel::Money rate) override {
+    if (calendars_.find(type) == calendars_.end() || toDay <= fromDay) return false;
+    if (rate < 1 || rate > hotel::kMaxNightlyRate) return false;
+    pricing_.addSeason(type, fromDay, toDay, rate);
+    return true;
+  }
+
+  std::optional<hotel::Money> quote(const std::string& type, long long checkIn, long long checkOut) const override {
+    const StayRange stay(checkIn, checkOut);
+    if (calendars_.find(type) == calendars_.end() || !stay.isValid()) return std::nullopt;
+    return pricing_.total(type, stay);
+  }
+
+ private:
+  static hotel::BookResult refuse(hotel::Status status) { return hotel::BookResult{status, hotel::kNoReservation, 0}; }
+
+  std::shared_ptr<hotel::Clock> clock_;
+  std::unique_ptr<RefundPolicy> refunds_;
+  std::map<std::string, RoomCalendar> calendars_;
+  Pricing pricing_;
+  ReservationBook reservations_;
+};
+1b:T9ab,#pragma once
+#include <map>
+#include <optional>
+#include <string>
+#include <vector>
+
+#include "stay_range.h"
+
+// One source of nightly prices. Rules are asked in priority order; the first one with an answer decides.
+class RateRule {
+ public:
+  virtual ~RateRule() = default;
+  virtual std::optional<hotel::Money> rateFor(const std::string& type, long long night) const = 0;
+};
+
+// The normal rate of each room type, set when the type is added.
+class BaseRates : public RateRule {
+ public:
+  void set(const std::string& type, hotel::Money rate) { rates_[type] = rate; }
+  std::optional<hotel::Money> rateFor(const std::string& type, long long) const override {
+    const auto it = rates_.find(type);
+    if (it == rates_.end()) return std::nullopt;
+    return it->second;
+  }
+
+ private:
+  std::map<std::string, hotel::Money> rates_;
+};
+
+// Seasonal overrides. The season added last wins where seasons overlap, so the list is searched newest first.
+class SeasonRates : public RateRule {
+ public:
+  void add(const std::string& type, long long fromDay, long long toDay, hotel::Money rate) {
+    seasons_.push_back(Season{type, fromDay, toDay, rate});
+  }
+
+  std::optional<hotel::Money> rateFor(const std::string& type, long long night) const override {
+    for (auto it = seasons_.rbegin(); it != seasons_.rend(); ++it) {
+      if (it->type == type && night >= it->from && night < it->to) return it->rate;
+    }
+    return std::nullopt;
+  }
+
+ private:
+  struct Season {
+    std::string type;
+    long long from;
+    long long to;
+    hotel::Money rate;
+  };
+  std::vector<Season> seasons_;
+};
+
+// The price of a stay: the nights' rates added up. Booking and quoting both call total(), so they cannot disagree.
+class Pricing {
+ public:
+  void setBase(const std::string& type, hotel::Money rate) { base_.set(type, rate); }
+  void addSeason(const std::string& type, long long from, long long to, hotel::Money rate) {
+    seasons_.add(type, from, to, rate);
+  }
+
+  hotel::Money total(const std::string& type, const StayRange& stay) const {
+    hotel::Money sum = 0;
+    for (long long night = stay.firstNight(); night < stay.endDay(); ++night) sum += nightly(type, night);
+    return sum;
+  }
+
+ private:
+  hotel::Money nightly(const std::string& type, long long night) const {
+    const std::optional<hotel::Money> seasonal = seasons_.rateFor(type, night);
+    return seasonal.has_value() ? *seasonal : *base_.rateFor(type, night);
+  }
+
+  BaseRates base_;
+  SeasonRates seasons_;
+};
+1c:T6b4,#pragma once
+#include <algorithm>
+#include <vector>
+
+#include "api_storm2.h"
+
+// Decides how much of a total is paid back when a stay is cancelled `daysBefore` days ahead. A Strategy so that
+// "no refunds" is not a special case in the cancellation code.
+class RefundPolicy {
+ public:
+  virtual ~RefundPolicy() = default;
+  virtual hotel::Money refund(hotel::Money total, long long daysBefore) const = 0;
+};
+
+class NoRefund : public RefundPolicy {
+ public:
+  hotel::Money refund(hotel::Money, long long) const override { return 0; }
+};
+
+// The tier with the largest daysBefore that is still <= the days remaining applies, whatever order they came in.
+class TieredRefund : public RefundPolicy {
+ public:
+  explicit TieredRefund(std::vector<hotel::RefundTier> tiers) : tiers_(std::move(tiers)) {
+    std::sort(tiers_.begin(), tiers_.end(),
+              [](const hotel::RefundTier& a, const hotel::RefundTier& b) { return a.daysBefore > b.daysBefore; });
+  }
+
+  hotel::Money refund(hotel::Money total, long long daysBefore) const override {
+    for (const hotel::RefundTier& tier : tiers_) {
+      if (tier.daysBefore <= daysBefore) return total * tier.percent / 100;
+    }
+    return 0;
+  }
+
+  // True when the tiers are usable: sane numbers, no two with the same daysBefore.
+  static bool areValid(const std::vector<hotel::RefundTier>& tiers) {
+    for (std::size_t i = 0; i < tiers.size(); ++i) {
+      if (tiers[i].percent < 0 || tiers[i].percent > 100 || tiers[i].daysBefore < 0) return false;
+      for (std::size_t j = i + 1; j < tiers.size(); ++j) {
+        if (tiers[i].daysBefore == tiers[j].daysBefore) return false;
+      }
+    }
+    return true;
+  }
+
+ private:
+  std::vector<hotel::RefundTier> tiers_;
+};
+1d:T4a8,#pragma once
+#include <algorithm>
+#include <map>
+
+#include "stay_range.h"
+
+// How many rooms of ONE type are taken on each night. Sparse: a night nobody booked has no entry. A stay is
+// available only as far as its tightest night, so availability is the minimum over the nights.
+class RoomCalendar {
+ public:
+  explicit RoomCalendar(int rooms) : rooms_(rooms) {}
+
+  int freeFor(const StayRange& stay) const {
+    int free = rooms_;
+    for (long long night = stay.firstNight(); night < stay.endDay(); ++night) free = std::min(free, rooms_ - takenOn(night));
+    return free;
+  }
+
+  // The caller has checked freeFor(stay) >= 1.
+  void take(const StayRange& stay) {
+    for (long long night = stay.firstNight(); night < stay.endDay(); ++night) ++taken_[night];
+  }
+
+  // Gives back exactly one room per night: other guests' rooms on the same nights stay taken.
+  void give(const StayRange& stay) {
+    for (long long night = stay.firstNight(); night < stay.endDay(); ++night) --taken_[night];
+  }
+
+ private:
+  int takenOn(long long night) const {
+    const auto it = taken_.find(night);
+    return it == taken_.end() ? 0 : it->second;
+  }
+
+  int rooms_;
+  std::map<long long, int> taken_;
+};
+f:[["children",{"s":"__PAGE__","h":160,"d":{"r":["$","$1","c",{"children":[["$","$L12",null,{"bundle":{"id":"hotel-booking","title":"Hotel booking","level":"Senior","parMinutes":60,"patterns":["Strategy","Value Object"],"requirements":[{"id":"R-nights","text":"A stay from checkIn to checkOut occupies the nights checkIn..checkOut-1: the check-out day is not a night, so back-to-back stays share a day but not a night. A stay of no nights or fewer, or more than 30 nights, is InvalidRequest.","phase":"base","hidden":true},{"id":"R-book","text":"book(guest, type, checkIn, checkOut) reserves one room of the type for every night or nothing. Checks in order: UnknownType, InvalidRequest (empty guest, bad stay), InPast (checkIn < today; today is allowed), SoldOut (some night has every room taken). Total is the nightly rates added up. addRoomType refuses an existing name and out-of-range numbers. makeHotel returns nullptr for a null clock.","phase":"base","hidden":true},{"id":"R-avail","text":"available(type, in, out) is the number of rooms free on every night of the stay (the minimum over the nights); 0 for an unknown type or an invalid stay; it ignores today.","phase":"base","hidden":true},{"id":"R-cancel","text":"cancel(id, guest) gives back one room per night of that reservation only and spends the id. Failures in order: UnknownReservation (never issued, or already cancelled), WrongGuest, StayStarted (today >= checkIn). A failed call changes nothing. Ids are positive and never reused.","phase":"base","hidden":true},{"id":"R-season","text":"Storm 1: addSeason(type, from, to, rate) prices nights from..to-1 of one room type at the rate; where seasons overlap the one added last wins. Bad arguments are refused. quote(type, in, out) is the price book() would charge, available or not, past or not; empty for an unknown type or invalid stay. A reservation keeps the total it was given.","phase":"storm1","hidden":true},{"id":"R-refund","text":"Storm 2: makeRefundingHotel(clock, tiers). On cancellation the days before check-in are checkIn - today; the tier with the largest daysBefore that is <= that applies, in any input order; the refund is that percent of the total charged at booking, rounded down; no matching tier means 0. Invalid tiers (percent outside 0..100, negative days, duplicate days) make the factory return nullptr. cancel() behaves like cancelWithRefund() without the money.","phase":"storm2","hidden":true}],"brief":"# Hotel booking\n\nYou are writing the reservation core for a small hotel chain's website. A guest picks a room type and the dates of their stay, and the hotel must never promise a room it does not have.\n\nWhat you know so far:\n\n- A hotel has several room types, each with a number of identical rooms and a price per night.\n- A guest books a type, not a particular room, for a stay from a check-in day to a check-out day.\n- Guests change their minds, so a booking can be cancelled.\n- The system must not read the date itself: today arrives through a `Clock` the caller supplies, so a test (or a replay) controls it.\n\nYour task: design and implement it behind the `hotel::Hotel` interface in `api.h`. The hidden tests call only that interface. Ask the interviewer questions first: the brief is deliberately incomplete, and \"does the check-out day count as a night?\" is where most first drafts go wrong.\n","editorial":"$13","clarify":[{"id":"q-nights","text":"What exactly does a stay occupy? If one guest leaves on the 12th and another arrives on the 12th, is that a clash? How long can a stay be?","answer":"A stay is a list of nights: from the check-in day up to, but not including, the check-out day. The check-out day is not a night, so back-to-back stays never clash. A stay must be at least one night and at most 30. Days are whole numbers.","reveals":["R-nights"],"quality":"essential"},{"id":"q-book","text":"What does booking return, and in which order are the problems reported when a request is wrong in several ways?","answer":"One room of the type is reserved for every night of the stay, or nothing at all. The result carries an id and the total price. Checks run in a fixed order: UnknownType, InvalidRequest (empty guest, a bad stay), InPast (the check-in day is before today; checking in today is fine), SoldOut. The tests run on a fake clock, so today is whatever the Clock says.","reveals":["R-book"],"quality":"essential"},{"id":"q-sold","text":"When is a stay sold out? If the first night is free but the third is full?","answer":"A stay can be booked only if every one of its nights has a free room, so the tightest night decides. A request that fails must not change anything. available() reports how many rooms are free on every night of a stay, the minimum over the nights; for an unknown type or an invalid stay it is 0, and it does not care about today.","reveals":["R-avail"],"quality":"essential"},{"id":"q-cancel","text":"What does cancelling do, who may do it and until when?","answer":"Cancelling gives back one room for each night of that booking and nothing else, and the id is spent: a second cancel says UnknownReservation, as does an id that was never issued. Failures are checked in order: UnknownReservation, WrongGuest, StayStarted (today is the check-in day or later). A failed call changes nothing. Ids are positive and never reused.","reveals":["R-cancel"],"quality":"essential"},{"id":"q-price","text":"Will prices stay the same all year? Weekends, holidays, high season?","answer":"Not for long: the revenue team wants seasonal prices per room type, set by date range, and a way to ask what a stay would cost before booking it. The exact rules arrive with the change. Think about what happens to bookings that already exist.","reveals":["R-season"],"quality":"essential"},{"id":"q-refund","text":"What do guests get back when they cancel?","answer":"Today nothing is modelled. A refund schedule by how far ahead the guest cancels is the next feature. Think about what the refund is a percentage of.","reveals":["R-refund"],"quality":"essential"},{"id":"q-room","text":"Does the guest get a particular room, like room 204? Can I move them if a room is needed?","answer":"No. Rooms of a type are identical and the guest is promised a type for the nights, not a number. Room numbers and upgrades would be a later change and need their own conversation.","reveals":[],"quality":"useful"},{"id":"q-thread","text":"Many guests book at once. Does this need to be thread safe?","answer":"Not for the tests, which are single-threaded. Say what you would do: one lock per room type, with the availability check and the take of every night as one critical section, and why checking then writing without it sells a room twice.","reveals":[],"quality":"useful"},{"id":"q-over","text":"Hotels overbook on purpose. Should the system allow it?","answer":"Not here. Overbooking is a business policy with a cost model (walk-outs, compensation) and would be its own change. Say how you would add it: a per-type allowance in the availability rule, in one place.","reveals":[],"quality":"useful"},{"id":"q-memory","text":"Does old data need cleaning up, like nights long past or cancelled bookings?","answer":"Not for the tests. A real system archives past nights and reservations. Say how, and what the guest sees when asking about an archived id.","reveals":[],"quality":"useful"},{"id":"q-pay","text":"Do I model payment, taxes, deposits or guest accounts?","answer":"No. Payment happens elsewhere; this system only decides who may have a room on which nights and what the room costs.","reveals":[],"quality":"noise"},{"id":"q-db","text":"Which database should I use for the reservations?","answer":"None here: it is an in-memory component and the tests build it from scratch. How you would persist it is a good discussion for the end.","reveals":[],"quality":"noise"},{"id":"q-ui","text":"Do I need a calendar view or an email confirmation?","answer":"No. The core only answers booking questions; presentation and notifications are other components.","reveals":[],"quality":"noise"}],"rubric":[{"id":"res-facade","text":"Exposes the public operations, validates a request in the documented order and sequences the collaborators","phase":"base","owners":["HotelImpl","HotelService","HotelBooking","HotelFacade","BookingSystem"]},{"id":"res-range","text":"Owns the meaning of a stay: the half-open range of nights, its length limit and how far away it starts","phase":"base","owners":["StayRange","DateRange","NightRange","Stay","StayDates"]},{"id":"res-calendar","text":"Counts the rooms taken on each night of one room type and answers availability as the tightest night","phase":"base","owners":["RoomCalendar","Inventory","NightlyInventory","AvailabilityCalendar","RoomStock"]},{"id":"res-reservations","text":"Records who holds which reservation with the total it was given, issues ids and spends them on cancel","phase":"base","owners":["ReservationBook","ReservationStore","Reservations","BookingLedger","ReservationRegistry"]},{"id":"res-pricing","text":"Prices a stay night by night; the one place that knows normal rates and seasons","phase":"storm1","owners":["Pricing","RateCard","PriceCalculator","Pricer","RatePolicy"]},{"id":"res-refund","text":"Decides how much of a total is paid back for a cancellation this many days ahead","phase":"storm2","owners":["RefundPolicy","CancellationPolicy","RefundStrategy","TieredRefund","RefundSchedule"]}],"followups":[{"level":"SDE2","question":"Why is the check-out day not a night, and where does your design make that true?","answer":"A guest who leaves on the 12th has slept the nights of the 10th and 11th; the room is empty on the night of the 12th, so another guest may arrive that day. Representing a stay as the half-open range [checkIn, checkOut) makes back-to-back stays share a boundary but no night. In the reference one class, StayRange, owns the range, and every loop over nights (taking rooms, giving them back, pricing, availability) asks it for the first night and the end, so there is one place for the off-by-one to be right or wrong."},{"level":"SDE2","question":"A stay of three nights is free on the first and last night but full in the middle. What does availability say and how do you compute it?","answer":"Zero: a stay is bookable only if every night has a room, so availability is the minimum over its nights of (rooms - taken). Checking only the first night, or the total count of bookings overlapping the range, gives wrong answers in both directions. The cost is O(nights), at most 30."},{"level":"Senior","question":"Booking checks the nights and then takes them. What goes wrong if two requests run at the same time, and what would you do?","answer":"Both can see the last room free on a shared night and both take it, so the room is sold twice. The check and the take of all nights must be one critical section per room type: a mutex per type, held for the O(nights) work and not across any I/O. Different types never contend. Taking nights one at a time without a lock, or locking per night, adds a second hazard: another request can interleave and a failure half-way leaves earlier nights taken. At scale the same shape becomes a conditional write on (type, night) rows in a database with a counter and a check that it stays within capacity, done in one transaction."},{"level":"Senior","question":"Cancelling resets nothing: it gives back one room per night. Why does that matter, and how would a design get it wrong?","answer":"Rooms of a type are interchangeable, so the calendar stores a count per night, not an owner. Cancelling must decrement by exactly one. A design that stores 'booked: true' per night, or zeroes the count, frees other guests' rooms on shared nights and overbooks. The reservation record is what remembers which nights to give back, which is why it keeps the stay, and why the id must be spent on cancel (a second cancel would otherwise decrement again and push the count below zero)."},{"level":"Senior","question":"A season is added after a guest has booked. What price does that guest pay, and where is that decided?","answer":"The one they were quoted: the total is stored with the reservation when it is made. Re-pricing existing bookings when a rate card changes is almost never what a business wants and it breaks refunds, which are a percentage of what was paid. The reference keeps the rate rules in Pricing (base rate per type plus a newest-first list of seasons) and the total in the reservation, and both book() and quote() call the same total() so a quote can never disagree with the charge."},{"level":"Senior","question":"Refund tiers arrive in any order, and two tiers might share a threshold. How do you handle both?","answer":"Sort once at construction by threshold, descending, then the first tier whose threshold is at most the days remaining is the right one. Equal thresholds make the answer depend on sort stability, so the factory rejects them rather than guess; invalid percentages and negative thresholds are rejected the same way. A policy that depends on the caller's ordering is a bug waiting for the second caller."},{"level":"Staff","question":"The hotel now wants overbooking, a waiting list and room upgrades. What in your design bends and what breaks?","answer":"Overbooking changes one number in the availability rule (capacity plus allowance per type), so it belongs in the calendar behind a policy and nothing else moves. A waiting list is an ordered queue per (type, range) that is offered a room when a cancel frees one; it needs an event from cancel and a fairness rule, and it creates a time-limited hold, which is the ticket-booking problem again. Upgrades break the 'identical rooms' assumption: the model moves from counts per type to a graph of which types can substitute for which, and availability becomes a matching question rather than a minimum. Say which assumption you would revisit first and why."},{"level":"Staff","question":"Design this for 5,000 hotels and a marketing campaign that sends 50x normal traffic to one hotel for one weekend.","answer":"Partition by hotel (and type), so the hot hotel is one hot shard and the rest are unaffected. Within it, correctness lives in a single conditional write per (type, night) counter or a per-type lock; reads (availability search) are served from a slightly stale cache or read replica and re-checked at booking, because showing 'one room left' is a hint, not a promise. Protect the hot key with a queue or waiting room in front, idempotency keys on book() so a retry does not double-book, and a short hold with expiry between choosing and paying (as in the ticket problem). Reconcile with the property system, which remains the system of record."}],"apiHeader":"$14","phaseApis":{"storm1":"$15","storm2":"$16"},"phases":["base","storm1","storm2"],"tests":{"base":[{"path":"hotel_base.cpp","content":"$17"}],"storm1":[{"path":"hotel_storm1.cpp","content":"$18"}],"storm2":[{"path":"hotel_storm2.cpp","content":"$19"}]},"reference":[{"path":"hotel_impl.h","content":"$1a"},{"path":"pricing.h","content":"$1b"},{"path":"refund_policy.h","content":"$1c"},{"path":"reservation_book.h","content":"#pragma once\n#include <map>\n#include <string>\n#include <utility>\n\n#include \"stay_range.h\"\n\n// A reservation as it was made. The total is fixed at booking time and never recomputed.\nstruct Reservation {\n  std::string guest;\n  std::string type;\n  StayRange stay;\n  hotel::Money total;\n};\n\n// Who holds which reservation. Ids are positive, increasing and never reused; cancelling removes the record, so\n// \"cancelled\" and \"never issued\" look the same, as the API says.\nclass ReservationBook {\n public:\n  hotel::ReservationId add(Reservation reservation) {\n    const hotel::ReservationId id = nextId_++;\n    records_.emplace(id, std::move(reservation));\n    return id;\n  }\n\n  const Reservation* find(hotel::ReservationId id) const {\n    const auto it = records_.find(id);\n    return it == records_.end() ? nullptr : &it->second;\n  }\n\n  void remove(hotel::ReservationId id) { records_.erase(id); }\n\n private:\n  hotel::ReservationId nextId_ = 1;\n  std::map<hotel::ReservationId, Reservation> records_;\n};\n"},{"path":"room_calendar.h","content":"$1d"},{"path":"service.cpp","content":"#include \"hotel_impl.h\"\n\nstd::unique_ptr<hotel::Hotel> hotel::makeHotel(std::shared_ptr<Clock> clock) {\n  if (clock == nullptr) return nullptr;\n  return std::make_unique<HotelImpl>(std::move(clock), std::make_unique<NoRefund>());\n}\n\nstd::unique_ptr<hotel::SeasonalHotel> hotel::makeSeasonalHotel(std::shared_ptr<Clock> clock) {\n  if (clock == nullptr) return nullptr;\n  return std::make_unique<HotelImpl>(std::move(clock), std::make_unique<NoRefund>());\n}\n\nstd::unique_ptr<hotel::RefundingHotel> hotel::makeRefundingHotel(std::shared_ptr<Clock> clock,\n                                                                 std::vector<RefundTier> tiers) {\n  if (clock == nullptr || !TieredRefund::areValid(tiers)) return nullptr;\n  return std::make_unique<HotelImpl>(std::move(clock), std::make_unique<TieredRefund>(std::move(tiers)));\n}\n"},{"path":"stay_range.h","content":"#pragma once\n#include \"api.h\"\n\n// A stay as a half-open range of nights: checkIn is the first night, checkOut is the day the guest leaves and is\n// NOT a night. Every question about nights, length and \"how far away\" is answered here and nowhere else.\nclass StayRange {\n public:\n  StayRange(long long checkIn, long long checkOut) : in_(checkIn), out_(checkOut) {}\n\n  bool isValid() const { return out_ > in_ && out_ - in_ <= hotel::kMaxNights; }\n  long long firstNight() const { return in_; }\n  long long endDay() const { return out_; }  // one past the last night\n  bool startsBefore(long long day) const { return in_ < day; }\n  bool hasStartedBy(long long today) const { return in_ <= today; }\n  long long daysUntilStart(long long today) const { return in_ - today; }\n\n private:\n  long long in_;\n  long long out_;\n};\n"}],"driver":{"path":"driver.cpp","content":"#define BP_TEST_MAIN\n#include \"bp_test.h\"\n","readOnly":true}}}],["$L1e","$L1f"],"$L20"]}],"p":"$@21","v":null,"s":"$9"}}]]
+d:[["children",{"s":{"n":"id","t":"d","k":"hotel-booking","s":[]},"h":65632,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}]}]]}],"p":"$@e","v":"$c","s":"$9"},"c":"$Qf"}]]
+a:[["children",{"s":"workshop","h":131168,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}]}]]}],"p":"$@b","v":"$c","s":"$9"},"c":"$Qd"}]]
+0:{"t":{"t":{"s":"","h":131152,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/2lbfwxo4jtf0j.css","precedence":"next"}],["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js","async":true}]],["$","html",null,{"lang":"en","className":"r7opxW_variable auY9QW_variable u-EJdW_variable h-full","children":["$","body",null,{"className":"min-h-full","children":[["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}],"notFound":[["$","main",null,{"className":"flex min-h-dvh flex-col items-center justify-center gap-4 px-4 text-center","children":[["$","div",null,{"className":"font-display text-5xl text-[var(--accent)]","children":"404"}],["$","p",null,{"className":"text-white/60","children":"This room is not on the blueprint yet."}],["$","$L6",null,{"href":"/","className":"text-sm text-white/80 underline","children":"Back to the title screen"}]]}],[]]}],["$","$L7",null,{}]]}]}]]}],"p":"$@8","v":null,"s":"$9"},"c":"$Qa"},"h":{"r":["$","$1","h",{"children":[null,["$","$L23",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1, viewport-fit=cover"}],["$","meta","2",{"name":"theme-color","content":"#0a1530"}]]}],["$","$L25",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$26",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"Hotel booking: Blueprint Clash"}],["$","meta","1",{"name":"description","content":"A creature-tactics RPG that teaches low-level design in C++ and high-level system design, from fundamentals to big-tech interview level."}],["$","link","2",{"rel":"manifest","href":"/blueprint-clash/manifest.webmanifest"}],["$","meta","3",{"name":"mobile-web-app-capable","content":"yes"}],["$","meta","4",{"name":"apple-mobile-web-app-title","content":"Blueprint Clash"}],["$","meta","5",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","link","6",{"rel":"icon","href":"/blueprint-clash/icon.png?icon.27re_xscs-jmw.png","sizes":"256x256","type":"image/png"}],["$","link","7",{"rel":"apple-touch-icon","href":"/blueprint-clash/apple-icon.png?apple-icon.2rac1w0yc3rju.png","sizes":"180x180","type":"image/png"}],["$","$L27","8",{}]]}]}],null]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"p":"$@28","v":null,"s":"$9"}},"a":"$@29","u":"$@2a","b":"WHHKcqqrgr3tfT2ZA5zb7"}
+2b:I[97367,["$2"],"OutletBoundary"]
+1e:["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/2uk3wcjwqg0tl.js","async":true}]
+1f:["$","script","script-1",{"src":"/blueprint-clash/_next/static/chunks/1zdu7yjl8efu4.js","async":true}]
+20:["$","$L2b",null,{"children":["$","$26",null,{"name":"Next.MetadataOutlet","children":"$@2c"}]}]
+9:300
+2c:null
+2a:true
+9:C
+29:0
+e:"$undefined"
+b:"$undefined"
+8:"$undefined"
+28:"$undefined"
+21:"$undefined"

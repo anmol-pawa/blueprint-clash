@@ -1,0 +1,1140 @@
+1:"$Sreact.fragment"
+2:"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js"
+3:I[39756,["$2"],"default"]
+4:I[37457,["$2"],"default"]
+5:"/blueprint-clash/_next/static/chunks/2n5qeheznvl4u.js"
+6:I[22016,["$2","$5"],""]
+7:I[64576,["$2"],"PwaRegister"]
+10:"/blueprint-clash/_next/static/chunks/2uk3wcjwqg0tl.js"
+11:"/blueprint-clash/_next/static/chunks/1zdu7yjl8efu4.js"
+12:I[65612,["$2","$10","$11"],"WorkshopClient"]
+22:"ViewportBoundary"
+23:I[97367,["$2"],"$22"]
+24:"MetadataBoundary"
+25:I[97367,["$2"],"$24"]
+26:"$Sreact.suspense"
+27:I[27201,["$2"],"IconMark"]
+:HL["/blueprint-clash/_next/static/chunks/2lbfwxo4jtf0j.css","style"]
+9:X
+c:X
+c:C
+13:T1b2b,# Editorial: Ride sharing
+
+## Requirements
+Functional: drivers with a position who can go online and offline; riders who request a trip from one point to another on a grid; a **nearest-driver match** within 10 blocks, ties to the lowest name; a price returned up front (310 plus 125 per block, in cents) and fixed from then on; and a **trip state machine**: Matched, Arrived, InProgress, Completed, or Cancelled. The driver reports arrived, start and complete; the rider can cancel until the ride starts (free while Matched, a flat 200 once the driver has Arrived). Every call checks UnknownTrip, then WrongParty, then InvalidState. Finished trips stay inspectable. Hidden until asked: the distance metric and the pickup limit, the tie-break, what the match does to the driver, where the driver is after a trip, what cancelling costs and when. Non-goals: payment, ratings, ETAs and traffic, persistence, thread safety (discussed).
+
+**Change Storm 1, surge pricing:** `makeSurgeRides()`. A multiplier of 100, 150 or 200 percent from the share of online drivers who are busy at the moment of the request, read before the new driver is taken, rounded down once, and fixed on the trip. Revealable by asking whether prices will change when the city is busy.
+
+**Change Storm 2, declines:** `makeDecliningRides()` adds `decline(trip, driver)`. The decliner is freed, never offered this trip again, and the trip is re-matched by the same rule at the same fare; if nobody is left the trip is cancelled. Revealable by asking whether drivers can turn a trip down.
+
+## Reference design
+- `grid.h` owns the meaning of space: distance in blocks and whether a point is on the map.
+- `DriverRoster` is the drivers: position, online, busy; it also answers the two market counts and who is idle. It knows nothing about trips or prices.
+- `Matcher` is a Strategy (`NearestMatcher`): it ranks the candidates the roster hands it and applies the pickup limit. It never sees trips.
+- `FarePolicy` is a Strategy (`FlatFare`, `SurgeFare`) that prices a trip from its length and a small `Demand` value, so it is a pure function and needs no roster to be tested.
+- `TripLifecycle` is the state machine as one table of legal moves, and `TripLedger` keeps every trip for good and issues ids.
+- `RidesImpl` is the facade: it validates in the documented order and sequences the others. It holds no rule of its own about distance, price or legal moves.
+
+The central decision is that **each thing that changes for a business reason has its own home**: who is chosen (`Matcher`), what a trip costs (`FarePolicy`), which moves are legal (`TripLifecycle`). The two storms then land in exactly one place each.
+
+**Storm 1 in the reference:** `SurgeFare` is a new class and `makeSurgeRides` plugs it in. The only existing line that matters is the order in `requestRide`: the market is read before `setBusy`, and the fare is stored on the trip. **Storm 2 in the reference:** `decline` is one new method; the decliners are remembered on the `Trip`, and the re-match is the same call to the same `Matcher` with those drivers filtered out of the candidates. The honest cost is that the matcher was handed a list of candidates (not the roster) so that filtering stays outside it; a design whose matcher reached into the roster would need a new parameter.
+
+## Alternatives
+- **A `switch` or `if` chain on the trip state in each operation.** Quicker for the base game, and every new operation then has its own idea of what is legal. A table of moves in one place costs a dozen lines and makes `cancel_in_progress`-style bugs a one-row diff.
+- **A State class per stage** (`MatchedState`, `ArrivedState`, ...). The textbook shape, and worth it when each stage has behaviour of its own (a timer, a message, a different fee). Here the stages differ only in which moves are allowed and in one fee, so the table is smaller and as clear; this editorial would choose State objects the day an `Arrived` trip needs a no-show timer.
+- **Matching inside the facade** as a loop with a distance comparison. It works for the base game and then has to be copied into the decline path; two copies of a tie-break drift apart.
+- **A global 'unavailable' flag on the driver** for decliners. It blocks them for every rider and needs a timer to clear. The fact is per trip, so it lives on the trip.
+- **Computing the price at completion** from the market then. It makes the price the rider sees a guess; a quoted price has to be stored.
+- **Scanning every driver** is right for the tests and wrong for a city: see 10x.
+
+## Trade-offs
+A small interface for the matcher costs one class and a `Candidate` struct and makes the rule replaceable, testable alone, and shared by the request and re-match paths. Handing the fare policy a `Demand` value rather than the roster costs a few lines in the facade and keeps pricing independent of how drivers are stored. A table-driven lifecycle trades the flexibility of arbitrary per-state code for a rule you can read in ten lines; the price is that behaviour that really differs per stage (the late fee) is still an `if` in the facade, and that is stated, not hidden. Keeping finished trips forever makes state machine bugs observable and costs memory that a real system would archive.
+
+## What breaks at 10x
+At 10x the drivers the scan in `idle()` and `riderIsTravelling` (O(drivers), O(trips)) are the first to go: index idle drivers by a geo cell, search the rider's cell and the neighbouring ring, widen if needed, and keep an index of open trips per rider. At 10x the request rate the 'read candidates, then mark busy' sequence is a race, so make it a conditional write per driver ('busy if still free') and retry with the next candidate, with a lock or a single-writer partition per zone. Positions arrive continuously: treat them as a stream into an in-memory index, not a database write each. A hot area (an airport at closing time) needs finer cells or its own shard. Quotes need idempotency keys so a retried request does not take two drivers.
+
+## Level signals
+- **SDE2:** the state machine written down and used consistently, a failed call that changes nothing, a driver freed on every path that ends a trip, the nearest driver chosen with a documented tie-break, the checks in the documented order.
+- **Senior:** asks about distance, the pickup limit, tie-breaks and cancellation before coding; puts matching and pricing behind interfaces before being told they will change; stores the quoted fare; reads the market before the match changes it; explains why the decliner is remembered by the trip; names the zone lock.
+- **Staff:** designs the geo index and the stale-read-then-conditional-write matching loop, splits pricing from matching from the trip service for stated reasons, makes every transition an idempotent versioned write, discusses surge as a feedback loop (it changes supply and demand, so it needs smoothing and caps), and separates 'quote' from 'book'.
+14:T1379,#pragma once
+// Public API for the Ride sharing problem. The hidden tests only use what is declared here.
+// You implement ride::makeRides() (in any of your .cpp files); everything behind it is your design.
+#include <memory>
+#include <string>
+
+namespace ride {
+
+using TripId = long long;
+constexpr TripId kNoTrip = 0;  // ids that are issued are always positive and never reused
+using Money = long long;       // whole cents
+
+// The city is a grid of whole-number points. Distance is the number of blocks driven: |dx| + |dy|.
+struct Point {
+  int x = 0;
+  int y = 0;
+};
+
+constexpr int kMaxCoordinate = 1000;       // every coordinate must be in -1000..1000
+constexpr int kMaxPickupDistance = 10;     // a driver farther than this from the pickup is never matched
+constexpr Money kBaseFare = 310;           // every trip
+constexpr Money kFarePerBlock = 125;       // per block between pickup and drop-off
+constexpr Money kLateCancelFee = 200;      // rider cancels after the driver has arrived
+
+enum class Status {
+  Ok,
+  InvalidRequest,    // empty name, a point out of range, or pickup equal to drop-off
+  UnknownDriver,
+  UnknownTrip,
+  WrongParty,        // the rider or driver is not the one on this trip
+  InvalidState,      // the trip (or rider) is not in a state where this is allowed
+  DriverBusy,        // the driver is on a trip
+  NoDriverAvailable, // nobody online, free and within kMaxPickupDistance
+};
+
+enum class TripState { Matched, Arrived, InProgress, Completed, Cancelled };
+
+struct RequestResult {
+  Status status = Status::Ok;
+  TripId trip = kNoTrip;  // kNoTrip unless status is Ok
+  std::string driver;     // empty unless status is Ok
+  Money fare = 0;         // 0 unless status is Ok; what the trip will cost, fixed now
+};
+
+struct CancelResult {
+  Status status = Status::Ok;
+  Money fee = 0;  // 0 unless the rider cancelled after the driver had arrived
+};
+
+struct CompleteResult {
+  Status status = Status::Ok;
+  Money fare = 0;  // 0 unless status is Ok
+};
+
+struct TripInfo {
+  Status status = Status::Ok;  // UnknownTrip when no such trip was ever issued
+  TripState state = TripState::Matched;
+  std::string rider;
+  std::string driver;
+  Money fare = 0;
+};
+
+struct DriverInfo {
+  Status status = Status::Ok;  // UnknownDriver when never registered
+  bool online = false;
+  bool onTrip = false;  // matched, arrived or in progress
+  Point at;
+};
+
+class Rides {
+ public:
+  virtual ~Rides() = default;
+
+  // Registers a driver at a point. The driver starts offline. Returns false, changing nothing, for an empty name, a
+  // name already registered or a point out of range.
+  virtual bool registerDriver(const std::string& driver, Point at) = 0;
+
+  // Online and offline are idempotent. Failures: UnknownDriver; for goOffline also DriverBusy while on a trip.
+  virtual Status goOnline(const std::string& driver) = 0;
+  virtual Status goOffline(const std::string& driver) = 0;
+
+  // Moves the driver, at any time (also while on a trip). Failures in order: UnknownDriver, InvalidRequest (range).
+  virtual Status moveDriver(const std::string& driver, Point to) = 0;
+
+  // Matches the rider with the NEAREST driver who is online, not on a trip and within kMaxPickupDistance of the
+  // pickup; a tie goes to the lowest driver name. The driver is on the trip from now on. The fare is
+  // kBaseFare + kFarePerBlock * distance(pickup, dropoff) and is fixed now. Checks in order: InvalidRequest,
+  // InvalidState (the rider already has a trip that is Matched, Arrived or InProgress), NoDriverAvailable.
+  // A failed call changes nothing.
+  virtual RequestResult requestRide(const std::string& rider, Point pickup, Point dropoff) = 0;
+
+  // Trip lifecycle: Matched -> Arrived -> InProgress -> Completed, or Cancelled. Every call checks, in this order:
+  // UnknownTrip, WrongParty (the caller is not the trip's driver / rider), InvalidState. A failed call changes
+  // nothing.
+  //
+  // arrived:  the driver is at the pickup. Matched -> Arrived.
+  // start:    the rider is in the car. Arrived -> InProgress.
+  // complete: the driver drops the rider off. InProgress -> Completed; the driver is free again, at the drop-off
+  //           point, and the fare is returned.
+  // cancel:   the RIDER cancels, only from Matched (free) or Arrived (kLateCancelFee). The driver is free again,
+  //           where they were. A trip that is InProgress, Completed or Cancelled is InvalidState.
+  virtual Status arrived(TripId trip, const std::string& driver) = 0;
+  virtual Status start(TripId trip, const std::string& driver) = 0;
+  virtual CompleteResult complete(TripId trip, const std::string& driver) = 0;
+  virtual CancelResult cancel(TripId trip, const std::string& rider) = 0;
+
+  // Trips are never forgotten, so finished trips can be inspected.
+  virtual TripInfo trip(TripId trip) const = 0;
+  virtual DriverInfo driver(const std::string& driver) const = 0;
+};
+
+// Always returns a working system.
+std::unique_ptr<Rides> makeRides();
+
+}  // namespace ride
+15:T4b5,#pragma once
+// Change Storm 2 lets a driver decline a trip. Everything from api.h and api_storm1.h still holds.
+#include "api_storm1.h"
+
+namespace ride {
+
+struct DeclineResult {
+  Status status = Status::Ok;  // Ok: re-matched. NoDriverAvailable: the trip is now Cancelled.
+  std::string driver;          // the new driver; empty unless status is Ok
+};
+
+class DecliningRides : public Rides {
+ public:
+  // The driver of a Matched trip turns it down. Checks in order: UnknownTrip, WrongParty, InvalidState (only a
+  // Matched trip can be declined). The decliner is free again, online, where they were, and is never offered THIS
+  // trip again. The trip is matched again at once, by the same rule as requestRide from the same pickup, among
+  // the drivers who have not declined it: the new driver is returned and the trip stays Matched with the fare it
+  // already had. If nobody qualifies the trip becomes Cancelled (no fee, the rider may request again) and the
+  // status is NoDriverAvailable.
+  virtual DeclineResult decline(TripId trip, const std::string& driver) = 0;
+};
+
+// Surge pricing as in Storm 1, plus decline().
+std::unique_ptr<DecliningRides> makeDecliningRides();
+
+}  // namespace ride
+16:T369c,#include <memory>
+#include <string>
+
+#include "api.h"
+#include "bp_test.h"
+
+using ride::Point;
+using ride::Status;
+using ride::TripState;
+
+namespace {
+Point at(int x, int y) { return Point{x, y}; }
+
+// Drivers ana (0,0), ben (3,0) and cy (0,4), all online. They are registered in an order that is neither alphabetical
+// nor by distance, so "first registered" is never the right answer by accident. The usual trip is from (1,0) to (1,6):
+// six blocks, so the fare is 310 + 125 * 6 = 1060.
+struct Fixture {
+  std::unique_ptr<ride::Rides> rides = ride::makeRides();
+  Fixture() {
+    rides->registerDriver("ben", at(3, 0));
+    rides->registerDriver("cy", at(0, 4));
+    rides->registerDriver("ana", at(0, 0));
+    for (const char* name : {"ana", "ben", "cy"}) rides->goOnline(name);
+  }
+  ride::RequestResult ask(const std::string& rider, Point pickup = at(1, 0), Point dropoff = at(1, 6)) {
+    return rides->requestRide(rider, pickup, dropoff);
+  }
+  // Takes a rider all the way to the end of a trip with the matched driver.
+  ride::CompleteResult drive(const std::string& rider, Point pickup, Point dropoff) {
+    const auto r = ask(rider, pickup, dropoff);
+    rides->arrived(r.trip, r.driver);
+    rides->start(r.trip, r.driver);
+    return rides->complete(r.trip, r.driver);
+  }
+};
+}  // namespace
+
+TEST(Setup, AFactoryAlwaysReturnsASystem) { EXPECT_TRUE(ride::makeRides() != nullptr); }
+
+TEST(Setup, DriversNeedANewNameAndAPointOnTheMap) {
+  auto rides = ride::makeRides();
+  EXPECT_TRUE(rides->registerDriver("ana", at(0, 0)));
+  EXPECT_FALSE(rides->registerDriver("ana", at(5, 5)));
+  EXPECT_FALSE(rides->registerDriver("", at(0, 0)));
+  EXPECT_FALSE(rides->registerDriver("far", at(1001, 0)));
+  EXPECT_FALSE(rides->registerDriver("far", at(0, -1001)));
+  EXPECT_EQ(rides->driver("ana").at.x, 0);  // the refused duplicate moved nobody
+  EXPECT_TRUE(rides->driver("far").status == Status::UnknownDriver);
+}
+
+TEST(Setup, TheEdgeOfTheMapIsOnTheMap) {
+  auto rides = ride::makeRides();
+  EXPECT_TRUE(rides->registerDriver("corner", at(1000, -1000)));
+  EXPECT_TRUE(rides->moveDriver("corner", at(-1000, 1000)) == Status::Ok);
+  EXPECT_TRUE(rides->moveDriver("corner", at(1001, 0)) == Status::InvalidRequest);
+  EXPECT_EQ(rides->driver("corner").at.x, -1000);  // a refused move changes nothing
+  EXPECT_EQ(rides->driver("corner").at.y, 1000);
+}
+
+TEST(Setup, ANewDriverIsOfflineAndUnknownDriversAreReported) {
+  Fixture f;
+  EXPECT_TRUE(f.rides->registerDriver("dan", at(2, 2)));
+  const auto info = f.rides->driver("dan");
+  EXPECT_TRUE(info.status == Status::Ok);
+  EXPECT_FALSE(info.online);
+  EXPECT_FALSE(info.onTrip);
+  EXPECT_TRUE(f.rides->goOnline("nobody") == Status::UnknownDriver);
+  EXPECT_TRUE(f.rides->goOffline("nobody") == Status::UnknownDriver);
+  EXPECT_TRUE(f.rides->moveDriver("nobody", at(0, 0)) == Status::UnknownDriver);
+  EXPECT_TRUE(f.rides->goOnline("dan") == Status::Ok);
+  EXPECT_TRUE(f.rides->goOnline("dan") == Status::Ok);  // idempotent
+  EXPECT_TRUE(f.rides->driver("dan").online);
+  EXPECT_TRUE(f.rides->goOffline("dan") == Status::Ok);
+  EXPECT_TRUE(f.rides->goOffline("dan") == Status::Ok);
+  EXPECT_FALSE(f.rides->driver("dan").online);
+}
+
+TEST(Match, TheNearestFreeDriverIsChosenAndTheFareIsReturned) {
+  Fixture f;
+  const auto r = f.ask("ann");
+  EXPECT_TRUE(r.status == Status::Ok);
+  EXPECT_TRUE(r.trip > 0);
+  EXPECT_EQ(r.driver, std::string("ana"));  // 1 block; ben is 2, cy is 5
+  EXPECT_EQ(r.fare, 1060);
+  EXPECT_TRUE(f.rides->driver("ana").onTrip);
+  EXPECT_FALSE(f.rides->driver("ben").onTrip);
+  const auto info = f.rides->trip(r.trip);
+  EXPECT_TRUE(info.status == Status::Ok);
+  EXPECT_TRUE(info.state == TripState::Matched);
+  EXPECT_EQ(info.rider, std::string("ann"));
+  EXPECT_EQ(info.driver, std::string("ana"));
+  EXPECT_EQ(info.fare, 1060);
+}
+
+TEST(Match, TheNearestDriverNotTheFarthestOrTheFirstRegistered) {
+  Fixture f;
+  EXPECT_EQ(f.ask("ann", at(3, 1)).driver, std::string("ben"));   // ben 1, ana 4, cy 6
+  EXPECT_EQ(f.ask("bob", at(0, 6)).driver, std::string("cy"));    // cy 2, ana 6, ben 9
+}
+
+TEST(Match, EqualDistancesGoToTheLowestName) {
+  Fixture f;
+  // (0,2) is two blocks from ana (0,0) and two from cy (0,4); ben is five away.
+  EXPECT_EQ(f.ask("ann", at(0, 2), at(0, 3)).driver, std::string("ana"));
+  EXPECT_EQ(f.ask("bob", at(0, 2), at(0, 3)).driver, std::string("cy"));  // ana is on a trip now
+}
+
+TEST(Match, MovingADriverChangesWhoIsNearest) {
+  Fixture f;
+  EXPECT_TRUE(f.rides->moveDriver("cy", at(1, 1)) == Status::Ok);
+  EXPECT_EQ(f.ask("ann").driver, std::string("ana"));  // ana 1, cy 1: the tie goes to the lower name
+  Fixture g;
+  EXPECT_TRUE(g.rides->moveDriver("cy", at(1, 0)) == Status::Ok);
+  EXPECT_EQ(g.ask("ann").driver, std::string("cy"));
+}
+
+TEST(Match, NobodyBeyondTheLimitIsMatched) {
+  Fixture f;
+  // (0,-20) is 20 blocks from ana, 23 from ben and 24 from cy.
+  const auto r = f.ask("ann", at(0, -20), at(0, -21));
+  EXPECT_TRUE(r.status == Status::NoDriverAvailable);
+  EXPECT_EQ(r.trip, 0);
+  EXPECT_EQ(r.driver, std::string(""));
+  EXPECT_EQ(r.fare, 0);
+  EXPECT_FALSE(f.rides->driver("ana").onTrip);
+}
+
+TEST(Match, ADriverExactlyAtTheLimitIsStillMatched) {
+  Fixture f;
+  f.rides->goOffline("ben");
+  f.rides->goOffline("cy");
+  f.rides->moveDriver("ana", at(10, 0));
+  EXPECT_TRUE(f.ask("ann", at(0, 0), at(0, 3)).status == Status::Ok);  // ten blocks
+  Fixture g;
+  g.rides->goOffline("ben");
+  g.rides->goOffline("cy");
+  g.rides->moveDriver("ana", at(11, 0));
+  EXPECT_TRUE(g.ask("ann", at(0, 0), at(0, 3)).status == Status::NoDriverAvailable);  // eleven
+}
+
+TEST(Match, OfflineDriversAreNeverMatched) {
+  Fixture f;
+  f.rides->goOffline("ana");
+  f.rides->goOffline("ben");
+  EXPECT_EQ(f.ask("ann").driver, std::string("cy"));
+  Fixture g;
+  for (const char* name : {"ana", "ben", "cy"}) g.rides->goOffline(name);
+  EXPECT_TRUE(g.ask("ann").status == Status::NoDriverAvailable);
+}
+
+TEST(Match, ADriverOnATripIsNotMatchedAgain) {
+  Fixture f;
+  EXPECT_EQ(f.ask("r1").driver, std::string("ana"));
+  EXPECT_EQ(f.ask("r2").driver, std::string("ben"));
+  EXPECT_EQ(f.ask("r3").driver, std::string("cy"));
+  EXPECT_TRUE(f.ask("r4").status == Status::NoDriverAvailable);
+}
+
+TEST(Match, ARiderWithAnOpenTripCannotRequestAnother) {
+  Fixture f;
+  const auto first = f.ask("ann");
+  EXPECT_TRUE(f.ask("ann").status == Status::InvalidState);
+  EXPECT_FALSE(f.rides->driver("ben").onTrip);  // the refused request took nobody
+  f.rides->arrived(first.trip, first.driver);
+  f.rides->start(first.trip, first.driver);
+  EXPECT_TRUE(f.ask("ann").status == Status::InvalidState);  // still travelling
+  f.rides->complete(first.trip, first.driver);
+  EXPECT_TRUE(f.ask("ann").status == Status::Ok);  // the trip is over
+}
+
+TEST(Match, RequestsAreCheckedInTheDocumentedOrder) {
+  Fixture f;
+  EXPECT_TRUE(f.ask("", at(1, 0), at(1, 6)).status == Status::InvalidRequest);
+  EXPECT_TRUE(f.ask("ann", at(1001, 0), at(1, 6)).status == Status::InvalidRequest);
+  EXPECT_TRUE(f.ask("ann", at(1, 0), at(1, -1001)).status == Status::InvalidRequest);
+  EXPECT_TRUE(f.ask("ann", at(2, 2), at(2, 2)).status == Status::InvalidRequest);
+  // Invalid beats "no driver" and beats "you already have a trip".
+  for (const char* name : {"ana", "ben", "cy"}) f.rides->goOffline(name);
+  EXPECT_TRUE(f.ask("ann", at(2, 2), at(2, 2)).status == Status::InvalidRequest);
+  EXPECT_TRUE(f.ask("ann").status == Status::NoDriverAvailable);
+  for (const char* name : {"ana", "ben", "cy"}) f.rides->goOnline(name);
+  EXPECT_TRUE(f.ask("ann").status == Status::Ok);
+  EXPECT_TRUE(f.ask("ann", at(2, 2), at(2, 2)).status == Status::InvalidRequest);
+  EXPECT_TRUE(f.ask("ann").status == Status::InvalidState);
+}
+
+TEST(Fare, TheFareIsTheBaseFarePlusTheBlocksDriven) {
+  Fixture f;
+  EXPECT_EQ(f.ask("ann", at(1, 0), at(1, 6)).fare, 1060);   // 310 + 6 * 125
+  EXPECT_EQ(f.ask("bob", at(3, 1), at(6, -3)).fare, 1185);  // 310 + 7 * 125
+  EXPECT_EQ(f.ask("cat", at(0, 6), at(0, 7)).fare, 435);    // 310 + 1 * 125
+}
+
+TEST(Fare, TheOriginalGameNeverSurges) {
+  Fixture f;
+  f.ask("r1", at(3, 0), at(3, 6));
+  f.ask("r2", at(0, 4), at(0, 10));
+  EXPECT_EQ(f.ask("r3", at(0, 0), at(0, 6)).fare, 1060);  // two of three drivers are busy
+}
+
+TEST(Lifecycle, ATripWalksThroughItsStates) {
+  Fixture f;
+  const auto r = f.ask("ann");
+  EXPECT_TRUE(f.rides->arrived(r.trip, "ana") == Status::Ok);
+  EXPECT_TRUE(f.rides->trip(r.trip).state == TripState::Arrived);
+  EXPECT_TRUE(f.rides->start(r.trip, "ana") == Status::Ok);
+  EXPECT_TRUE(f.rides->trip(r.trip).state == TripState::InProgress);
+  const auto done = f.rides->complete(r.trip, "ana");
+  EXPECT_TRUE(done.status == Status::Ok);
+  EXPECT_EQ(done.fare, 1060);
+  EXPECT_TRUE(f.rides->trip(r.trip).state == TripState::Completed);
+  EXPECT_TRUE(f.rides->trip(999).status == Status::UnknownTrip);
+}
+
+TEST(Lifecycle, EachStepNeedsTheStepBefore) {
+  Fixture f;
+  const auto r = f.ask("ann");
+  EXPECT_TRUE(f.rides->start(r.trip, "ana") == Status::InvalidState);  // not arrived yet
+  EXPECT_TRUE(f.rides->complete(r.trip, "ana").status == Status::InvalidState);
+  EXPECT_TRUE(f.rides->trip(r.trip).state == TripState::Matched);
+  EXPECT_TRUE(f.rides->arrived(r.trip, "ana") == Status::Ok);
+  EXPECT_TRUE(f.rides->arrived(r.trip, "ana") == Status::InvalidState);  // twice
+  EXPECT_TRUE(f.rides->complete(r.trip, "ana").status == Status::InvalidState);  // not started yet
+  EXPECT_TRUE(f.rides->start(r.trip, "ana") == Status::Ok);
+  EXPECT_TRUE(f.rides->start(r.trip, "ana") == Status::InvalidState);
+  EXPECT_TRUE(f.rides->complete(r.trip, "ana").status == Status::Ok);
+  EXPECT_TRUE(f.rides->complete(r.trip, "ana").status == Status::InvalidState);  // a second time
+  EXPECT_TRUE(f.rides->arrived(r.trip, "ana") == Status::InvalidState);
+}
+
+TEST(Lifecycle, OnlyTheTripsOwnDriverMovesIt) {
+  Fixture f;
+  const auto r = f.ask("ann");
+  EXPECT_TRUE(f.rides->arrived(r.trip, "ben") == Status::WrongParty);
+  EXPECT_TRUE(f.rides->start(r.trip, "ben") == Status::WrongParty);  // wrong party beats wrong state
+  EXPECT_TRUE(f.rides->complete(r.trip, "ben").status == Status::WrongParty);
+  EXPECT_TRUE(f.rides->trip(r.trip).state == TripState::Matched);
+  EXPECT_TRUE(f.rides->arrived(999, "ben") == Status::UnknownTrip);  // unknown beats everything
+  EXPECT_TRUE(f.rides->complete(999, "ana").status == Status::UnknownTrip);
+}
+
+TEST(Complete, TheDriverIsFreeAtTheDropoffAfterTheTrip) {
+  Fixture f;
+  f.drive("ann", at(1, 0), at(1, 6));
+  const auto info = f.rides->driver("ana");
+  EXPECT_FALSE(info.onTrip);
+  EXPECT_TRUE(info.online);
+  EXPECT_EQ(info.at.x, 1);
+  EXPECT_EQ(info.at.y, 6);
+}
+
+TEST(Complete, ADriverWhoFinishedIsMatchedFromTheNewPlace) {
+  Fixture f;
+  f.drive("ann", at(1, 0), at(1, 6));
+  // Ana is now at (1,6). From (1,7) she is one block away; cy at (0,4) is four, ben at (3,0) nine.
+  EXPECT_EQ(f.ask("bob", at(1, 7), at(1, 9)).driver, std::string("ana"));
+}
+
+TEST(Cancel, CancellingBeforeTheDriverArrivesIsFree) {
+  Fixture f;
+  const auto r = f.ask("ann");
+  const auto c = f.rides->cancel(r.trip, "ann");
+  EXPECT_TRUE(c.status == Status::Ok);
+  EXPECT_EQ(c.fee, 0);
+  EXPECT_TRUE(f.rides->trip(r.trip).state == TripState::Cancelled);
+}
+
+TEST(Cancel, CancellingAfterTheDriverArrivedCostsTheLateFee) {
+  Fixture f;
+  const auto r = f.ask("ann");
+  f.rides->arrived(r.trip, "ana");
+  const auto c = f.rides->cancel(r.trip, "ann");
+  EXPECT_TRUE(c.status == Status::Ok);
+  EXPECT_EQ(c.fee, 200);
+  EXPECT_TRUE(f.rides->trip(r.trip).state == TripState::Cancelled);
+}
+
+TEST(Cancel, CancellingFreesTheDriverWhereTheyWere) {
+  Fixture f;
+  const auto r = f.ask("ann");
+  f.rides->moveDriver("ana", at(2, 1));  // driving towards the rider
+  f.rides->cancel(r.trip, "ann");
+  const auto info = f.rides->driver("ana");
+  EXPECT_FALSE(info.onTrip);
+  EXPECT_TRUE(info.online);
+  EXPECT_EQ(info.at.x, 2);
+  EXPECT_EQ(info.at.y, 1);
+  EXPECT_EQ(f.ask("bob").driver, std::string("ana"));  // and she can be matched again: two blocks, tied with ben
+  EXPECT_TRUE(f.ask("ann").status == Status::Ok);      // the rider can ask again too
+}
+
+TEST(Cancel, ATripInProgressCannotBeCancelled) {
+  Fixture f;
+  const auto r = f.ask("ann");
+  f.rides->arrived(r.trip, "ana");
+  f.rides->start(r.trip, "ana");
+  const auto c = f.rides->cancel(r.trip, "ann");
+  EXPECT_TRUE(c.status == Status::InvalidState);
+  EXPECT_EQ(c.fee, 0);
+  EXPECT_TRUE(f.rides->trip(r.trip).state == TripState::InProgress);
+  EXPECT_TRUE(f.rides->driver("ana").onTrip);
+}
+
+TEST(Cancel, FinishedTripsCannotBeCancelledAgain) {
+  Fixture f;
+  const auto a = f.ask("ann");
+  f.rides->cancel(a.trip, "ann");
+  EXPECT_TRUE(f.rides->cancel(a.trip, "ann").status == Status::InvalidState);
+  f.drive("bob", at(1, 0), at(1, 6));
+  const auto b = f.ask("cat", at(1, 6), at(1, 8));
+  EXPECT_TRUE(f.rides->cancel(b.trip, "cat").status == Status::Ok);
+}
+
+TEST(Cancel, OnlyTheRiderCanCancelAndChecksRunInOrder) {
+  Fixture f;
+  const auto r = f.ask("ann");
+  EXPECT_TRUE(f.rides->cancel(r.trip, "mallory").status == Status::WrongParty);
+  EXPECT_TRUE(f.rides->cancel(r.trip, "ana").status == Status::WrongParty);  // the driver is not the rider
+  EXPECT_TRUE(f.rides->cancel(999, "ann").status == Status::UnknownTrip);
+  EXPECT_TRUE(f.rides->trip(r.trip).state == TripState::Matched);
+  EXPECT_TRUE(f.rides->driver("ana").onTrip);
+  f.rides->arrived(r.trip, "ana");
+  f.rides->start(r.trip, "ana");
+  f.rides->complete(r.trip, "ana");
+  EXPECT_TRUE(f.rides->cancel(r.trip, "mallory").status == Status::WrongParty);  // party beats state
+}
+
+TEST(Driver, AnOnlineDriverOnATripCannotGoOffline) {
+  Fixture f;
+  const auto r = f.ask("ann");
+  EXPECT_TRUE(f.rides->goOffline("ana") == Status::DriverBusy);
+  EXPECT_TRUE(f.rides->driver("ana").online);
+  EXPECT_TRUE(f.rides->moveDriver("ana", at(2, 1)) == Status::Ok);  // moving is allowed on a trip
+  f.rides->arrived(r.trip, "ana");
+  f.rides->start(r.trip, "ana");
+  f.rides->complete(r.trip, "ana");
+  EXPECT_TRUE(f.rides->goOffline("ana") == Status::Ok);
+}
+17:Tcb9,#include <memory>
+#include <string>
+
+#include "api_storm1.h"
+#include "bp_test.h"
+
+using ride::Point;
+using ride::Status;
+
+namespace {
+Point spot(int x, int y) { return Point{x, y}; }
+
+// `count` drivers d1..dN at the origin, all online. Every ordinary trip is (0,0) to (0,2): two blocks, so the
+// standard fare is 310 + 2 * 125 = 560.
+struct SurgeFixture {
+  std::unique_ptr<ride::Rides> rides = ride::makeSurgeRides();
+  explicit SurgeFixture(int count) {
+    for (int i = 1; i <= count; ++i) {
+      const std::string name = "d" + std::to_string(i);
+      rides->registerDriver(name, spot(0, 0));
+      rides->goOnline(name);
+    }
+  }
+  ride::RequestResult ask(const std::string& rider, Point dropoff = spot(0, 2)) {
+    return rides->requestRide(rider, spot(0, 0), dropoff);
+  }
+};
+}  // namespace
+
+TEST(Surge, AFactoryReturnsASystem) { EXPECT_TRUE(ride::makeSurgeRides() != nullptr); }
+
+TEST(Surge, TheMultiplierStepsUpWithUtilisation) {
+  SurgeFixture f(5);
+  EXPECT_EQ(f.ask("r1").fare, 560);   // 0 of 5 busy: 0%
+  EXPECT_EQ(f.ask("r2").fare, 560);   // 1 of 5: 20%
+  EXPECT_EQ(f.ask("r3").fare, 560);   // 2 of 5: 40%
+  EXPECT_EQ(f.ask("r4").fare, 840);   // 3 of 5: 60% -> x1.5
+  EXPECT_EQ(f.ask("r5").fare, 1120);  // 4 of 5: 80% -> x2
+}
+
+TEST(Surge, ExactlyHalfBusyAlreadyCostsMore) {
+  SurgeFixture f(4);
+  f.ask("r1");
+  f.ask("r2");
+  EXPECT_EQ(f.ask("r3").fare, 840);  // 2 of 4 busy is exactly 50%
+}
+
+TEST(Surge, ExactlyEightyPercentIsTheTopStep) {
+  SurgeFixture f(5);
+  f.ask("r1");
+  f.ask("r2");
+  f.ask("r3");
+  EXPECT_EQ(f.ask("r4").fare, 840);   // 60%
+  EXPECT_EQ(f.ask("r5").fare, 1120);  // 80%
+}
+
+TEST(Surge, TheMarketIsReadBeforeTheNewDriverIsTaken) {
+  SurgeFixture f(2);
+  EXPECT_EQ(f.ask("r1").fare, 560);   // nobody was busy when this request arrived
+  EXPECT_EQ(f.ask("r2").fare, 840);   // one of two was
+}
+
+TEST(Surge, OfflineDriversDoNotCountAsCapacity) {
+  SurgeFixture f(4);
+  f.rides->goOffline("d3");
+  f.rides->goOffline("d4");
+  f.ask("r1");
+  EXPECT_EQ(f.ask("r2").fare, 840);  // one of two ONLINE drivers is busy
+}
+
+TEST(Surge, TheFareIsRoundedDownOnce) {
+  SurgeFixture f(2);
+  f.ask("r1");
+  // One block costs 435 at the standard rate; x1.5 is 652.5, rounded down once to 652.
+  EXPECT_EQ(f.ask("r2", spot(0, 1)).fare, 652);
+}
+
+TEST(Surge, TheQuotedFareIsTheFareChargedAtTheEnd) {
+  SurgeFixture f(2);
+  f.ask("r1");
+  const auto surged = f.ask("r2");
+  EXPECT_EQ(surged.fare, 840);
+  f.rides->arrived(surged.trip, surged.driver);
+  f.rides->start(surged.trip, surged.driver);
+  EXPECT_EQ(f.rides->trip(surged.trip).fare, 840);
+  const auto done = f.rides->complete(surged.trip, surged.driver);
+  EXPECT_EQ(done.fare, 840);
+}
+
+TEST(Surge, TheFareIsFixedWhenRequestedWhateverHappensNext) {
+  SurgeFixture f(2);
+  const auto calm = f.ask("r1");
+  EXPECT_EQ(calm.fare, 560);
+  f.ask("r2");  // the city fills up after r1 asked
+  f.rides->arrived(calm.trip, calm.driver);
+  f.rides->start(calm.trip, calm.driver);
+  EXPECT_EQ(f.rides->complete(calm.trip, calm.driver).fare, 560);
+}
+
+TEST(Surge, TheLateCancelFeeIsNotMultiplied) {
+  SurgeFixture f(2);
+  f.ask("r1");
+  const auto surged = f.ask("r2");
+  f.rides->arrived(surged.trip, surged.driver);
+  EXPECT_EQ(f.rides->cancel(surged.trip, "r2").fee, 200);
+}
+18:T140a,#include <memory>
+#include <string>
+
+#include "api_storm2.h"
+#include "bp_test.h"
+
+using ride::Point;
+using ride::Status;
+using ride::TripState;
+
+namespace {
+Point place(int x, int y) { return Point{x, y}; }
+
+// Drivers ana (0,0), ben (3,0), cy (0,4) and dee (5,0), all online. The usual rider asks from (1,0): ana is 1 block
+// away, ben 2, dee 4 and cy 5. The trip goes to (1,6), so the standard fare is 1060.
+struct DeclineFixture {
+  std::unique_ptr<ride::DecliningRides> rides = ride::makeDecliningRides();
+  DeclineFixture() {
+    rides->registerDriver("dee", place(5, 0));
+    rides->registerDriver("ben", place(3, 0));
+    rides->registerDriver("cy", place(0, 4));
+    rides->registerDriver("ana", place(0, 0));
+    for (const char* name : {"ana", "ben", "cy", "dee"}) rides->goOnline(name);
+  }
+  ride::RequestResult ask(const std::string& rider, Point pickup = place(1, 0)) {
+    return rides->requestRide(rider, pickup, place(1, 6));
+  }
+};
+}  // namespace
+
+TEST(Decline, AFactoryReturnsASystem) { EXPECT_TRUE(ride::makeDecliningRides() != nullptr); }
+
+TEST(Decline, ADeclinedTripGoesToTheNextBestDriverWithTheSameFare) {
+  DeclineFixture f;
+  const auto r = f.ask("ann");
+  EXPECT_EQ(r.driver, std::string("ana"));
+  const auto d = f.rides->decline(r.trip, "ana");
+  EXPECT_TRUE(d.status == Status::Ok);
+  EXPECT_EQ(d.driver, std::string("ben"));
+  const auto info = f.rides->trip(r.trip);
+  EXPECT_TRUE(info.state == TripState::Matched);
+  EXPECT_EQ(info.driver, std::string("ben"));
+  EXPECT_EQ(info.fare, 1060);
+  EXPECT_TRUE(f.rides->driver("ben").onTrip);
+  EXPECT_TRUE(f.rides->arrived(r.trip, "ben") == Status::Ok);  // the new driver owns the trip now
+}
+
+TEST(Decline, TheDeclinerIsNotOfferedTheSameTripAgain) {
+  DeclineFixture f;
+  const auto r = f.ask("ann");
+  EXPECT_EQ(f.rides->decline(r.trip, "ana").driver, std::string("ben"));
+  // Ana is free and nearest, but she already said no to this trip.
+  EXPECT_EQ(f.rides->decline(r.trip, "ben").driver, std::string("dee"));
+  EXPECT_EQ(f.rides->decline(r.trip, "dee").driver, std::string("cy"));
+}
+
+TEST(Decline, DecliningFreesTheDeclinerForOtherTrips) {
+  DeclineFixture f;
+  const auto r = f.ask("ann");
+  f.rides->decline(r.trip, "ana");
+  const auto info = f.rides->driver("ana");
+  EXPECT_FALSE(info.onTrip);
+  EXPECT_TRUE(info.online);
+  EXPECT_EQ(info.at.x, 0);
+  EXPECT_EQ(f.ask("bob", place(0, 0)).driver, std::string("ana"));
+}
+
+TEST(Decline, WhenNobodyIsLeftTheTripIsCancelled) {
+  DeclineFixture f;
+  const auto r = f.ask("ann");
+  f.rides->decline(r.trip, "ana");
+  f.rides->decline(r.trip, "ben");
+  f.rides->decline(r.trip, "dee");
+  const auto last = f.rides->decline(r.trip, "cy");
+  EXPECT_TRUE(last.status == Status::NoDriverAvailable);
+  EXPECT_EQ(last.driver, std::string(""));
+  EXPECT_TRUE(f.rides->trip(r.trip).state == TripState::Cancelled);
+  EXPECT_FALSE(f.rides->driver("cy").onTrip);
+  EXPECT_TRUE(f.rides->decline(r.trip, "cy").status == Status::InvalidState);  // it is over
+  EXPECT_TRUE(f.ask("ann").status == Status::Ok);  // the rider may ask again, with a fresh trip
+}
+
+TEST(Decline, DriversBeyondTheLimitAreNotRematched) {
+  DeclineFixture f;
+  const auto r = f.ask("ann");
+  f.rides->moveDriver("ben", place(40, 40));
+  f.rides->moveDriver("dee", place(40, 40));
+  f.rides->moveDriver("cy", place(40, 40));
+  EXPECT_TRUE(f.rides->decline(r.trip, "ana").status == Status::NoDriverAvailable);
+  EXPECT_TRUE(f.rides->trip(r.trip).state == TripState::Cancelled);
+}
+
+TEST(Decline, OnlyAMatchedTripCanBeDeclined) {
+  DeclineFixture f;
+  const auto r = f.ask("ann");
+  f.rides->arrived(r.trip, "ana");
+  EXPECT_TRUE(f.rides->decline(r.trip, "ana").status == Status::InvalidState);
+  f.rides->start(r.trip, "ana");
+  EXPECT_TRUE(f.rides->decline(r.trip, "ana").status == Status::InvalidState);
+  EXPECT_EQ(f.rides->trip(r.trip).driver, std::string("ana"));
+  EXPECT_TRUE(f.rides->driver("ana").onTrip);
+}
+
+TEST(Decline, OnlyTheTripsDriverCanDeclineAndChecksRunInOrder) {
+  DeclineFixture f;
+  const auto r = f.ask("ann");
+  EXPECT_TRUE(f.rides->decline(r.trip, "ben").status == Status::WrongParty);
+  EXPECT_TRUE(f.rides->decline(999, "ben").status == Status::UnknownTrip);
+  EXPECT_EQ(f.rides->trip(r.trip).driver, std::string("ana"));
+  EXPECT_FALSE(f.rides->driver("ben").onTrip);
+  f.rides->arrived(r.trip, "ana");
+  EXPECT_TRUE(f.rides->decline(r.trip, "ben").status == Status::WrongParty);  // party beats state
+}
+
+TEST(Decline, TheFareIsNotRecalculatedByADecline) {
+  DeclineFixture f;
+  f.ask("x", place(0, 4));  // cy is busy: 1 of 4, so the next trip is quoted at the standard fare
+  const auto r = f.ask("ann");
+  EXPECT_EQ(r.fare, 1060);
+  const auto d = f.rides->decline(r.trip, "ana");
+  EXPECT_EQ(d.driver, std::string("ben"));
+  EXPECT_EQ(f.rides->trip(r.trip).fare, 1060);
+  f.rides->arrived(r.trip, "ben");
+  f.rides->start(r.trip, "ben");
+  EXPECT_EQ(f.rides->complete(r.trip, "ben").fare, 1060);
+}
+
+TEST(Decline, SurgePricingStillApplies) {
+  DeclineFixture f;
+  f.ask("x", place(0, 4));
+  f.ask("y", place(3, 0));
+  const auto r = f.ask("ann");  // two of four busy: 50%, x1.5
+  EXPECT_EQ(r.fare, 1590);
+}
+19:T5a7,#pragma once
+#include "grid.h"
+
+// What the market looks like at the moment a trip is requested.
+struct Demand {
+  int online;
+  int busy;
+};
+
+// What a trip costs. A Strategy: the pricing rule is the part the business keeps changing.
+class FarePolicy {
+ public:
+  virtual ~FarePolicy() = default;
+  virtual ride::Money quote(int blocks, const Demand& demand) const = 0;
+};
+
+class FlatFare : public FarePolicy {
+ public:
+  ride::Money quote(int blocks, const Demand& /*demand*/) const override { return standard(blocks); }
+
+  static ride::Money standard(int blocks) { return ride::kBaseFare + ride::kFarePerBlock * blocks; }
+};
+
+// The standard fare times a multiplier that grows with the share of online drivers who are busy.
+class SurgeFare : public FarePolicy {
+ public:
+  ride::Money quote(int blocks, const Demand& demand) const override {
+    return FlatFare::standard(blocks) * multiplierPercent(demand) / kPercent;
+  }
+
+  static int multiplierPercent(const Demand& demand) {
+    const int utilisation = demand.online > 0 ? demand.busy * kPercent / demand.online : 0;
+    if (utilisation >= kHighLoad) return kHighMultiplier;
+    if (utilisation >= kMediumLoad) return kMediumMultiplier;
+    return kPercent;
+  }
+
+ private:
+  static constexpr int kPercent = 100;
+  static constexpr int kMediumLoad = 50;
+  static constexpr int kHighLoad = 80;
+  static constexpr int kMediumMultiplier = 150;
+  static constexpr int kHighMultiplier = 200;
+};
+1a:T6b7,#pragma once
+#include <optional>
+#include <set>
+#include <string>
+#include <vector>
+
+#include "roster.h"
+
+// How a driver is chosen for a pickup. The roster decides who is free; the matcher only ranks them.
+class Matcher {
+ public:
+  virtual ~Matcher() = default;
+  virtual std::optional<std::string> pick(const std::vector<Candidate>& candidates, ride::Point pickup) const = 0;
+};
+
+// The nearest driver within the pickup limit; equal distances go to the lowest name.
+class NearestMatcher : public Matcher {
+ public:
+  std::optional<std::string> pick(const std::vector<Candidate>& candidates, ride::Point pickup) const override {
+    const Candidate* best = nullptr;
+    int bestBlocks = 0;
+    for (const Candidate& candidate : candidates) {
+      const int blocks = Grid::blocksBetween(candidate.at, pickup);
+      if (blocks > ride::kMaxPickupDistance) continue;
+      if (best == nullptr || blocks < bestBlocks || (blocks == bestBlocks && candidate.name < best->name)) {
+        best = &candidate;
+        bestBlocks = blocks;
+      }
+    }
+    if (best == nullptr) return std::nullopt;
+    return best->name;
+  }
+};
+
+// The best free driver for a pickup, leaving out the ones who turned this trip down. The roster says who is free and
+// the matcher ranks them; neither knows about the other.
+inline std::optional<std::string> pickFree(const Matcher& matcher, const DriverRoster& roster, ride::Point pickup,
+                                           const std::set<std::string>& declinedBy) {
+  std::vector<Candidate> candidates;
+  for (const Candidate& candidate : roster.idle()) {
+    if (declinedBy.count(candidate.name) == 0) candidates.push_back(candidate);
+  }
+  return matcher.pick(candidates, pickup);
+}
+1b:T1507,#pragma once
+#include <memory>
+#include <optional>
+#include <string>
+#include <utility>
+
+#include "fare_policy.h"
+#include "matcher.h"
+#include "roster.h"
+#include "trip_ledger.h"
+
+// The public face. It validates in the documented order and sequences the roster, the matcher, the fare policy and
+// the ledger. Which driver is chosen, what a trip costs and which moves are legal are decided by those classes.
+class RidesImpl : public ride::DecliningRides {
+ public:
+  RidesImpl(std::unique_ptr<Matcher> matcher, std::unique_ptr<FarePolicy> fares)
+      : matcher_(std::move(matcher)), fares_(std::move(fares)) {}
+
+  bool registerDriver(const std::string& driver, ride::Point at) override { return roster_.add(driver, at); }
+
+  ride::Status goOnline(const std::string& driver) override {
+    if (!roster_.knows(driver)) return ride::Status::UnknownDriver;
+    roster_.setOnline(driver, true);
+    return ride::Status::Ok;
+  }
+
+  ride::Status goOffline(const std::string& driver) override {
+    if (!roster_.knows(driver)) return ride::Status::UnknownDriver;
+    if (roster_.isBusy(driver)) return ride::Status::DriverBusy;
+    roster_.setOnline(driver, false);
+    return ride::Status::Ok;
+  }
+
+  ride::Status moveDriver(const std::string& driver, ride::Point to) override {
+    if (!roster_.knows(driver)) return ride::Status::UnknownDriver;
+    if (!Grid::onTheMap(to)) return ride::Status::InvalidRequest;
+    roster_.moveTo(driver, to);
+    return ride::Status::Ok;
+  }
+
+  ride::RequestResult requestRide(const std::string& rider, ride::Point pickup, ride::Point dropoff) override {
+    if (rider.empty() || !Grid::onTheMap(pickup) || !Grid::onTheMap(dropoff) || Grid::samePlace(pickup, dropoff)) {
+      return ride::RequestResult{ride::Status::InvalidRequest};
+    }
+    if (ledger_.riderIsTravelling(rider)) return ride::RequestResult{ride::Status::InvalidState};
+    const std::optional<std::string> driver = pickFree(*matcher_, roster_, pickup, {});
+    if (!driver) return ride::RequestResult{ride::Status::NoDriverAvailable};
+    // The market is read before this trip takes a driver out of it.
+    const ride::Money fare = fares_->quote(Grid::blocksBetween(pickup, dropoff), Demand{roster_.onlineCount(), roster_.busyCount()});
+    roster_.setBusy(*driver, true);
+    const ride::TripId id = ledger_.open(Trip{rider, *driver, pickup, dropoff, fare, ride::TripState::Matched, {}});
+    return ride::RequestResult{ride::Status::Ok, id, *driver, fare};
+  }
+
+  ride::Status arrived(ride::TripId id, const std::string& driver) override {
+    return ledger_.advance(id, driver, ride::TripState::Arrived);
+  }
+
+  ride::Status start(ride::TripId id, const std::string& driver) override {
+    return ledger_.advance(id, driver, ride::TripState::InProgress);
+  }
+
+  ride::CompleteResult complete(ride::TripId id, const std::string& driver) override {
+    const ride::Status status = ledger_.advance(id, driver, ride::TripState::Completed);
+    if (status != ride::Status::Ok) return ride::CompleteResult{status};
+    const Trip& trip = *ledger_.find(id);
+    roster_.setBusy(driver, false);
+    roster_.moveTo(driver, trip.dropoff);
+    return ride::CompleteResult{ride::Status::Ok, trip.fare};
+  }
+
+  ride::CancelResult cancel(ride::TripId id, const std::string& rider) override {
+    Trip* trip = ledger_.find(id);
+    if (trip == nullptr) return ride::CancelResult{ride::Status::UnknownTrip};
+    if (trip->rider != rider) return ride::CancelResult{ride::Status::WrongParty};
+    if (!TripLifecycle::allows(trip->state, ride::TripState::Cancelled)) return ride::CancelResult{ride::Status::InvalidState};
+    const ride::Money fee = trip->state == ride::TripState::Arrived ? ride::kLateCancelFee : 0;
+    trip->state = ride::TripState::Cancelled;
+    roster_.setBusy(trip->driver, false);
+    return ride::CancelResult{ride::Status::Ok, fee};
+  }
+
+  ride::DeclineResult decline(ride::TripId id, const std::string& driver) override {
+    Trip* trip = ledger_.find(id);
+    if (trip == nullptr) return ride::DeclineResult{ride::Status::UnknownTrip};
+    if (trip->driver != driver) return ride::DeclineResult{ride::Status::WrongParty};
+    if (!TripLifecycle::canBeDeclined(trip->state)) return ride::DeclineResult{ride::Status::InvalidState};
+    trip->declinedBy.insert(driver);
+    roster_.setBusy(driver, false);
+    const std::optional<std::string> next = pickFree(*matcher_, roster_, trip->pickup, trip->declinedBy);
+    if (!next) {
+      trip->state = ride::TripState::Cancelled;
+      return ride::DeclineResult{ride::Status::NoDriverAvailable};
+    }
+    trip->driver = *next;
+    roster_.setBusy(*next, true);
+    return ride::DeclineResult{ride::Status::Ok, *next};
+  }
+
+  ride::TripInfo trip(ride::TripId id) const override {
+    const Trip* found = ledger_.find(id);
+    if (found == nullptr) return ride::TripInfo{ride::Status::UnknownTrip};
+    return ride::TripInfo{ride::Status::Ok, found->state, found->rider, found->driver, found->fare};
+  }
+
+  ride::DriverInfo driver(const std::string& driver) const override {
+    if (!roster_.knows(driver)) return ride::DriverInfo{ride::Status::UnknownDriver};
+    return ride::DriverInfo{ride::Status::Ok, roster_.isOnline(driver), roster_.isBusy(driver), roster_.position(driver)};
+  }
+
+ private:
+  std::unique_ptr<Matcher> matcher_;
+  std::unique_ptr<FarePolicy> fares_;
+  DriverRoster roster_;
+  TripLedger ledger_;
+};
+1c:T759,#pragma once
+#include <map>
+#include <string>
+#include <vector>
+
+#include "grid.h"
+
+// A driver the matcher may choose from: free, online, and where they are.
+struct Candidate {
+  std::string name;
+  ride::Point at;
+};
+
+// Who the drivers are and what each is doing right now. It knows nothing about trips, prices or how a driver is
+// chosen. Busy implies online: a driver on a trip cannot go offline.
+class DriverRoster {
+ public:
+  bool add(const std::string& name, ride::Point at) {
+    if (name.empty() || !Grid::onTheMap(at)) return false;
+    return drivers_.emplace(name, Driver{at, false, false}).second;
+  }
+
+  bool knows(const std::string& name) const { return drivers_.count(name) > 0; }
+  bool isOnline(const std::string& name) const { return drivers_.at(name).online; }
+  bool isBusy(const std::string& name) const { return drivers_.at(name).busy; }
+  ride::Point position(const std::string& name) const { return drivers_.at(name).at; }
+
+  void setOnline(const std::string& name, bool online) { drivers_.at(name).online = online; }
+  void setBusy(const std::string& name, bool busy) { drivers_.at(name).busy = busy; }
+  void moveTo(const std::string& name, ride::Point at) { drivers_.at(name).at = at; }
+
+  int onlineCount() const {
+    int count = 0;
+    for (const auto& [name, driver] : drivers_) count += driver.online ? 1 : 0;
+    return count;
+  }
+
+  int busyCount() const {
+    int count = 0;
+    for (const auto& [name, driver] : drivers_) count += driver.busy ? 1 : 0;
+    return count;
+  }
+
+  std::vector<Candidate> idle() const {
+    std::vector<Candidate> free;
+    for (const auto& [name, driver] : drivers_) {
+      if (driver.online && !driver.busy) free.push_back(Candidate{name, driver.at});
+    }
+    return free;
+  }
+
+ private:
+  struct Driver {
+    ride::Point at;
+    bool online;
+    bool busy;
+  };
+  std::map<std::string, Driver> drivers_;
+};
+1d:Ta48,#pragma once
+#include <map>
+#include <set>
+#include <string>
+#include <utility>
+
+#include "grid.h"
+
+// One trip, as a record. It has no behaviour: the rules about moving between states are in TripLifecycle.
+struct Trip {
+  std::string rider;
+  std::string driver;
+  ride::Point pickup;
+  ride::Point dropoff;
+  ride::Money fare;
+  ride::TripState state;
+  std::set<std::string> declinedBy;
+};
+
+// The state machine, written once as a table of legal moves.
+class TripLifecycle {
+ public:
+  static bool allows(ride::TripState from, ride::TripState to) {
+    using ride::TripState;
+    static const std::set<std::pair<TripState, TripState>> moves = {
+        {TripState::Matched, TripState::Arrived},    {TripState::Matched, TripState::Cancelled},
+        {TripState::Arrived, TripState::InProgress}, {TripState::Arrived, TripState::Cancelled},
+        {TripState::InProgress, TripState::Completed},
+    };
+    return moves.count({from, to}) > 0;
+  }
+
+  // A trip that has not ended: its driver is busy and its rider may not ask for another.
+  static bool isOpen(ride::TripState state) {
+    return state == ride::TripState::Matched || state == ride::TripState::Arrived ||
+           state == ride::TripState::InProgress;
+  }
+
+  static bool canBeDeclined(ride::TripState state) { return state == ride::TripState::Matched; }
+};
+
+// Issues ids and keeps every trip for good, so a finished trip can still be told apart from one that never existed.
+class TripLedger {
+ public:
+  ride::TripId open(Trip trip) {
+    const ride::TripId id = nextId_++;
+    trips_.emplace(id, std::move(trip));
+    return id;
+  }
+
+  Trip* find(ride::TripId id) {
+    const auto found = trips_.find(id);
+    return found == trips_.end() ? nullptr : &found->second;
+  }
+
+  const Trip* find(ride::TripId id) const {
+    const auto found = trips_.find(id);
+    return found == trips_.end() ? nullptr : &found->second;
+  }
+
+  // One step of the lifecycle, asked for by the trip's own driver.
+  ride::Status advance(ride::TripId id, const std::string& driver, ride::TripState to) {
+    Trip* trip = find(id);
+    if (trip == nullptr) return ride::Status::UnknownTrip;
+    if (trip->driver != driver) return ride::Status::WrongParty;
+    if (!TripLifecycle::allows(trip->state, to)) return ride::Status::InvalidState;
+    trip->state = to;
+    return ride::Status::Ok;
+  }
+
+  bool riderIsTravelling(const std::string& rider) const {
+    for (const auto& [id, trip] : trips_) {
+      if (trip.rider == rider && TripLifecycle::isOpen(trip.state)) return true;
+    }
+    return false;
+  }
+
+ private:
+  ride::TripId nextId_ = 1;
+  std::map<ride::TripId, Trip> trips_;
+};
+f:[["children",{"s":"__PAGE__","h":160,"d":{"r":["$","$1","c",{"children":[["$","$L12",null,{"bundle":{"id":"ride-sharing","title":"Ride sharing","level":"Senior","parMinutes":75,"patterns":["Strategy","State"],"requirements":[{"id":"R-map","text":"The map is a grid with coordinates in -1000..1000 and distance is blocks, |dx| + |dy|. registerDriver refuses an empty name, an existing name and a point off the map; moveDriver refuses a point off the map (InvalidRequest) and changes nothing. A new driver is offline. goOnline and goOffline are idempotent. makeRides always returns a system.","phase":"base","hidden":true},{"id":"R-match","text":"requestRide matches the NEAREST driver who is online, not on a trip and within kMaxPickupDistance (10 blocks, inclusive) of the pickup; equal distances go to the lowest name. The driver is on the trip from then on. With nobody eligible the result is NoDriverAvailable and nothing changes. Checks in order: InvalidRequest (empty rider, a point off the map, pickup equal to drop-off), InvalidState (the rider already has a Matched, Arrived or InProgress trip), NoDriverAvailable.","phase":"base","hidden":true},{"id":"R-fare","text":"The fare is kBaseFare (310) plus kFarePerBlock (125) per block between pickup and drop-off, returned at request time and fixed from then on. The original factory never surges.","phase":"base","hidden":true},{"id":"R-states","text":"A trip moves Matched -> Arrived -> InProgress -> Completed, driven by its own driver through arrived(), start() and complete(); every call checks UnknownTrip, then WrongParty, then InvalidState, and a failed call changes nothing. Trips are kept for good, so finished trips can be inspected.","phase":"base","hidden":true},{"id":"R-cancel","text":"Only the trip's rider can cancel, only from Matched (no fee) or Arrived (kLateCancelFee, 200). Failures in order: UnknownTrip, WrongParty, InvalidState (InProgress, Completed and Cancelled trips). The driver is free again, where they were.","phase":"base","hidden":true},{"id":"R-driver","text":"A driver on a trip cannot go offline (DriverBusy) but can move. Completing a trip frees the driver, online, at the drop-off point. A rider can have only one open trip at a time.","phase":"base","hidden":true},{"id":"R-surge","text":"Storm 1: makeSurgeRides(). At request time, before the new driver is taken, utilisation = busy * 100 / online with integer division, over online drivers (busy ones included). The multiplier is 100 percent below 50, 150 from 50 to 79 and 200 from 80. fare = standard fare * multiplier / 100, rounded down once, fixed at request time. The late cancel fee is not multiplied.","phase":"storm1","hidden":true},{"id":"R-decline","text":"Storm 2: makeDecliningRides() adds decline(trip, driver) to the surge system. Checks: UnknownTrip, WrongParty, InvalidState (only a Matched trip). The decliner is free again and is never offered this trip again; the trip is re-matched with the same rule among the other drivers and keeps its fare. If nobody qualifies the trip is Cancelled (no fee) and the status is NoDriverAvailable.","phase":"storm2","hidden":true}],"brief":"# Ride sharing\n\nYou are writing the dispatch core for a ride-hailing startup in one city. Riders ask for a trip, the system finds a driver, and the trip moves through a handful of stages until the rider is dropped off or the trip is called off.\n\nWhat you know so far:\n\n- The city is a grid. Drivers have a position, can go online or offline, and can only take one trip at a time.\n- A rider asks for a trip from one point to another. The system picks a driver for them and tells them the price up front.\n- A trip has stages (the driver is on the way, the driver has arrived, the rider is in the car, the trip is over), and what each side may do depends on the stage.\n- Riders change their minds, and drivers sometimes have to stop.\n\nYour task: design and implement it behind the `ride::Rides` interface in `api.h`. The hidden tests call only that interface. Ask the interviewer first: the brief is deliberately incomplete, and \"which driver, and how far is too far?\" is where most first drafts go wrong.\n","editorial":"$13","clarify":[{"id":"q-map","text":"What is the map, how is distance measured, and how far may a driver be and still be sent?","answer":"A grid of whole-number points with coordinates from -1000 to 1000. Distance is the number of blocks driven, |dx| + |dy|. A driver farther than 10 blocks from the pickup is never sent. Registering a driver or asking for a trip outside the map is refused.","reveals":["R-map"],"quality":"essential"},{"id":"q-match","text":"Which driver gets the trip, and who counts as available?","answer":"The nearest driver who is online, not on a trip, and within the limit. Equal distances go to the lowest driver name, so the answer is deterministic. A driver is on the trip from the moment they are matched. If nobody qualifies the request fails and nothing changes. Think about where the choice rule lives: it is the part product will want to change.","reveals":["R-match"],"quality":"essential"},{"id":"q-fare","text":"How is the price worked out, and when is it fixed?","answer":"A base of 310 plus 125 per block between pickup and drop-off, in cents. It is returned when the trip is requested and it is what the rider pays at the end; nothing that happens later changes it.","reveals":["R-fare"],"quality":"essential"},{"id":"q-states","text":"What stages does a trip have, and who moves it between them?","answer":"Matched, Arrived, InProgress, Completed, or Cancelled. The driver reports arrived, start and complete, in that order, and only the trip's own driver may. Any other call at the wrong stage fails with InvalidState and changes nothing. Every call checks UnknownTrip, then WrongParty, then InvalidState. Finished trips stay inspectable forever.","reveals":["R-states"],"quality":"essential"},{"id":"q-cancel","text":"Can the rider cancel? What does it cost, and what happens to the driver?","answer":"Only the rider, only while the trip is Matched (free) or Arrived (a flat fee of 200 because the driver is waiting). Once the rider is in the car it cannot be cancelled. The driver is free again, where they were.","reveals":["R-cancel"],"quality":"essential"},{"id":"q-driver","text":"What can a driver do outside a trip, and what happens to them after one?","answer":"Go online or offline (idempotent; a driver on a trip cannot go offline) and move at any time, also while driving to a pickup. Completing a trip frees the driver at the drop-off point, still online. A rider may have only one open trip at a time.","reveals":["R-driver"],"quality":"essential"},{"id":"q-surge","text":"Will prices change when the city is busy?","answer":"Yes, soon: a multiplier based on how many online drivers are busy at the moment a trip is requested. The exact steps arrive with the change. Think about which class knows how a trip is priced, and whether the price can be asked for without knowing about drivers.","reveals":["R-surge"],"quality":"essential"},{"id":"q-decline","text":"Do drivers accept trips, or can they turn one down?","answer":"Today a match is final. Product wants drivers to be able to decline a trip they were matched with, which then goes to somebody else. Think about what has to be remembered per trip, and whether the matching rule can be reused unchanged.","reveals":["R-decline"],"quality":"essential"},{"id":"q-eta","text":"Should matching use traffic, an ETA or a driver rating instead of plain distance?","answer":"Not now. Say how the choice would plug in: the rule that ranks free drivers is the part that changes, and it should be replaceable without touching the trip logic.","reveals":[],"quality":"useful"},{"id":"q-thread","text":"Thousands of requests per second. Does it need to be thread safe?","answer":"Not for the tests, which are single-threaded. Say what you would do: matching reads many drivers and then marks one busy, so two requests can pick the same driver unless that step is one critical section per zone.","reveals":[],"quality":"useful"},{"id":"q-scale","text":"How would the nearest driver be found with a million drivers?","answer":"Here the roster is scanned, which is fine for the tests. At scale you would index drivers by a geo cell (a grid or a hash of the area), search the rider's cell and its neighbours, and widen the ring if needed. Say what you would index and what would go stale.","reveals":[],"quality":"useful"},{"id":"q-pay","text":"Do I model payment, tips, ratings or receipts?","answer":"No. Payment and reputation are other systems; this one decides who drives whom and what it costs.","reveals":[],"quality":"noise"},{"id":"q-db","text":"Which database should I use?","answer":"None here: it is an in-memory component and the tests build it from scratch. How you would persist it is a good discussion for the end.","reveals":[],"quality":"noise"},{"id":"q-app","text":"Do I need a map screen or push notifications?","answer":"No. The core answers dispatch questions; presentation and notifications are other components.","reveals":[],"quality":"noise"}],"rubric":[{"id":"res-facade","text":"Exposes the public operations, validates a request in the documented order and sequences the collaborators","phase":"base","owners":["RidesImpl","RideService","RideSystem","Dispatcher","RideFacade"]},{"id":"res-grid","text":"Owns the meaning of space: the map's limits and the distance in blocks","phase":"base","owners":["Grid","CityMap","Geometry","Distance","Coordinates"]},{"id":"res-roster","text":"Knows the drivers: who exists, who is online, who is on a trip and where each is","phase":"base","owners":["DriverRoster","Roster","DriverPool","Drivers","DriverRegistry"]},{"id":"res-matcher","text":"Decides which of the free drivers gets a trip, behind an interface the rest of the code does not look inside","phase":"base","owners":["Matcher","DriverMatcher","MatchingStrategy","DriverSelector","MatchPolicy"]},{"id":"res-lifecycle","text":"Owns the trip state machine: which moves between stages are legal, written once","phase":"base","owners":["TripLifecycle","TripState","TripStateMachine","StateMachine","Transitions"]},{"id":"res-ledger","text":"Records every trip for good, issues ids and finds a trip or a rider's open trip","phase":"base","owners":["TripLedger","TripStore","Trips","TripRepository","TripBook"]},{"id":"res-fare","text":"Decides what a trip costs, given the distance and, in Storm 1, the state of the market","phase":"storm1","owners":["FarePolicy","PricingPolicy","Pricing","FareStrategy","FareCalculator"]},{"id":"res-decline","text":"Remembers who has declined a trip so that the matcher is never offered them for it, and does the re-matching","phase":"storm2","owners":["Trip","RidesImpl","TripLedger","Dispatcher","RideService"]}],"followups":[{"level":"SDE2","question":"Draw the trip's state machine. Which transitions exist, and where in your code is that written down?","answer":"Matched to Arrived or Cancelled, Arrived to InProgress or Cancelled, InProgress to Completed; Completed and Cancelled are final. In the reference it is one table in `TripLifecycle::allows`, and every operation asks it, so adding a transition (or a state) is one edit and a test. The weak shape is an `if` chain in each operation: every operation then has its own idea of what is legal, and the ideas drift. A State class per stage is the textbook alternative; it is worth it when a stage has its own behaviour, not when stages only differ in which moves are allowed."},{"level":"SDE2","question":"Why does the reference check the caller (WrongParty) before the state (InvalidState)?","answer":"Because telling a stranger what state somebody else's trip is in leaks information, and because it makes the order of failures a documented contract rather than an accident: the same bad call always gets the same answer. The tests pin the order (unknown trip, wrong party, invalid state), and the mutation where the party check is skipped is the one that lets any driver finish any trip."},{"level":"Senior","question":"The matcher picks the nearest driver today. Product wants it to prefer higher-rated drivers within 3 blocks. What changes?","answer":"One class: a new `Matcher` implementation. The roster already answers who is free, the lifecycle and fare policy never see the matcher, and the facade only asks `pick(candidates, pickup)`. The only honest change is that `Candidate` must carry the rating, which is a small widening of one struct. What goes wrong in a weaker design is a distance comparison written inside `requestRide`, which is then copied into the re-match path that Storm 2 adds."},{"level":"Senior","question":"Surge pricing reads 'how busy is the city'. Where should that number come from and when is it read?","answer":"From the roster (online and busy counts), handed to the fare policy as a small `Demand` value, so the policy is a pure function of distance and demand and can be tested without a roster. It is read BEFORE the new driver is marked busy: the price of this trip must describe the market the rider walked into, not the market they just changed. The fare is then stored on the trip, so a later change in demand cannot reprice a trip already quoted. A price that moves after the quote is a customer-support ticket."},{"level":"Senior","question":"A driver declines. Why remember the decliner per trip instead of putting them on a temporary 'unavailable' list?","answer":"The decliner is free and should be matched to other riders at once; only THIS trip must never be offered to them again. The fact belongs to the trip (`declinedBy`), and re-matching asks the matcher with the decliners filtered out, so the matcher stays unchanged. A global flag on the driver would wrongly block them for everyone, and would have to be cleared by something, which is a timer and a bug. The fare is also kept: the decline is the driver's choice and must not change what the rider was promised."},{"level":"Senior","question":"Many requests arrive at once. What breaks and what would you lock?","answer":"Matching is read-then-write: two requests can see the same free driver and both take them. The scan of free drivers and the mark-busy must be one critical section, and one lock for the whole city is the bottleneck, so partition by zone (a cell id) and lock the zone: a request near a boundary may need two zones locked in a fixed order. The ledger needs its own id counter. The trip operations (arrived, start, complete) are per-trip and only need that trip's lock."},{"level":"Staff","question":"Design the nearest-driver search for ten million drivers whose positions change every few seconds.","answer":"Index drivers by a hierarchical geo cell (a grid, geohash or a hexagonal index) held in memory, partitioned by city or region; positions arrive as a stream and are applied as updates to the cell index, not as database writes. A request searches the rider's cell and expands in rings until it has enough candidates, then ranks them by real ETA (a routing service) rather than straight-line distance. The index is allowed to be a few seconds stale: matching re-checks in the driver's authoritative state with a conditional write ('mark busy if still free'), and a failed write tries the next candidate. Hot spots (stadiums, airports) need smaller cells or their own shard."},{"level":"Staff","question":"Matching, pricing and the trip lifecycle: which would you split into separate services first, and what stays together?","answer":"Pricing first: it is a pure function of distance, demand and rules, it changes weekly for business reasons, and it can be called by a quote screen without creating a trip. Location and matching come next, because they have a different scale and failure profile (high write volume, tolerates staleness). The trip lifecycle stays one strongly consistent service per trip: the state machine and the 'one trip per driver' invariant need single-writer semantics, so partition by trip id and make every transition an idempotent, versioned write. The cost of the split is that a request spans three calls, so the booking needs a saga with a compensating 'release driver'."}],"apiHeader":"$14","phaseApis":{"storm1":"#pragma once\n// Change Storm 1 adds surge pricing. Everything from api.h still holds.\n#include \"api.h\"\n\nnamespace ride {\n\n// Busy cities cost more. At the moment of requestRide(), BEFORE the new driver is taken, let\n//   online = drivers who are online (free or on a trip), busy = drivers on a trip,\n//   utilisation = busy * 100 / online   (integer division; there is always at least one online driver when a\n//                                         match exists)\n// The fare multiplier in percent is 100 when utilisation < 50, 150 when it is 50..79 and 200 when it is 80 or more.\n//   fare = (kBaseFare + kFarePerBlock * distance) * multiplier / 100   (integer maths, rounded down once)\n// The fare is fixed at request time and never changes afterwards. The late cancel fee is not multiplied.\nstd::unique_ptr<Rides> makeSurgeRides();\n\n}  // namespace ride\n","storm2":"$15"},"phases":["base","storm1","storm2"],"tests":{"base":[{"path":"ride_base.cpp","content":"$16"}],"storm1":[{"path":"ride_storm1.cpp","content":"$17"}],"storm2":[{"path":"ride_storm2.cpp","content":"$18"}]},"reference":[{"path":"fare_policy.h","content":"$19"},{"path":"grid.h","content":"#pragma once\n#include <cstdlib>\n\n#include \"api_storm2.h\"\n\n// The map is a grid; driving distance is counted in blocks. Both questions about space live here and nowhere else.\nclass Grid {\n public:\n  static int blocksBetween(ride::Point from, ride::Point to) {\n    return std::abs(from.x - to.x) + std::abs(from.y - to.y);\n  }\n\n  static bool onTheMap(ride::Point point) {\n    return std::abs(point.x) <= ride::kMaxCoordinate && std::abs(point.y) <= ride::kMaxCoordinate;\n  }\n\n  static bool samePlace(ride::Point first, ride::Point second) { return first.x == second.x && first.y == second.y; }\n};\n"},{"path":"matcher.h","content":"$1a"},{"path":"ride_impl.h","content":"$1b"},{"path":"roster.h","content":"$1c"},{"path":"service.cpp","content":"#include \"ride_impl.h\"\n\nstd::unique_ptr<ride::Rides> ride::makeRides() {\n  return std::make_unique<RidesImpl>(std::make_unique<NearestMatcher>(), std::make_unique<FlatFare>());\n}\n\nstd::unique_ptr<ride::Rides> ride::makeSurgeRides() {\n  return std::make_unique<RidesImpl>(std::make_unique<NearestMatcher>(), std::make_unique<SurgeFare>());\n}\n\nstd::unique_ptr<ride::DecliningRides> ride::makeDecliningRides() {\n  return std::make_unique<RidesImpl>(std::make_unique<NearestMatcher>(), std::make_unique<SurgeFare>());\n}\n"},{"path":"trip_ledger.h","content":"$1d"}],"driver":{"path":"driver.cpp","content":"#define BP_TEST_MAIN\n#include \"bp_test.h\"\n","readOnly":true}}}],["$L1e","$L1f"],"$L20"]}],"p":"$@21","v":null,"s":"$9"}}]]
+d:[["children",{"s":{"n":"id","t":"d","k":"ride-sharing","s":[]},"h":65632,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}]}]]}],"p":"$@e","v":"$c","s":"$9"},"c":"$Qf"}]]
+a:[["children",{"s":"workshop","h":131168,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}]}]]}],"p":"$@b","v":"$c","s":"$9"},"c":"$Qd"}]]
+0:{"t":{"t":{"s":"","h":131152,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/2lbfwxo4jtf0j.css","precedence":"next"}],["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js","async":true}]],["$","html",null,{"lang":"en","className":"r7opxW_variable auY9QW_variable u-EJdW_variable h-full","children":["$","body",null,{"className":"min-h-full","children":[["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}],"notFound":[["$","main",null,{"className":"flex min-h-dvh flex-col items-center justify-center gap-4 px-4 text-center","children":[["$","div",null,{"className":"font-display text-5xl text-[var(--accent)]","children":"404"}],["$","p",null,{"className":"text-white/60","children":"This room is not on the blueprint yet."}],["$","$L6",null,{"href":"/","className":"text-sm text-white/80 underline","children":"Back to the title screen"}]]}],[]]}],["$","$L7",null,{}]]}]}]]}],"p":"$@8","v":null,"s":"$9"},"c":"$Qa"},"h":{"r":["$","$1","h",{"children":[null,["$","$L23",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1, viewport-fit=cover"}],["$","meta","2",{"name":"theme-color","content":"#0a1530"}]]}],["$","$L25",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$26",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"Ride sharing: Blueprint Clash"}],["$","meta","1",{"name":"description","content":"A creature-tactics RPG that teaches low-level design in C++ and high-level system design, from fundamentals to big-tech interview level."}],["$","link","2",{"rel":"manifest","href":"/blueprint-clash/manifest.webmanifest"}],["$","meta","3",{"name":"mobile-web-app-capable","content":"yes"}],["$","meta","4",{"name":"apple-mobile-web-app-title","content":"Blueprint Clash"}],["$","meta","5",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","link","6",{"rel":"icon","href":"/blueprint-clash/icon.png?icon.27re_xscs-jmw.png","sizes":"256x256","type":"image/png"}],["$","link","7",{"rel":"apple-touch-icon","href":"/blueprint-clash/apple-icon.png?apple-icon.2rac1w0yc3rju.png","sizes":"180x180","type":"image/png"}],["$","$L27","8",{}]]}]}],null]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"p":"$@28","v":null,"s":"$9"}},"a":"$@29","u":"$@2a","b":"WHHKcqqrgr3tfT2ZA5zb7"}
+2b:I[97367,["$2"],"OutletBoundary"]
+1e:["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/2uk3wcjwqg0tl.js","async":true}]
+1f:["$","script","script-1",{"src":"/blueprint-clash/_next/static/chunks/1zdu7yjl8efu4.js","async":true}]
+20:["$","$L2b",null,{"children":["$","$26",null,{"name":"Next.MetadataOutlet","children":"$@2c"}]}]
+9:300
+2c:null
+2a:true
+9:C
+29:0
+e:"$undefined"
+b:"$undefined"
+8:"$undefined"
+28:"$undefined"
+21:"$undefined"

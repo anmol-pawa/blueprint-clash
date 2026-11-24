@@ -1,0 +1,1854 @@
+1:"$Sreact.fragment"
+2:"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js"
+3:I[39756,["$2"],"default"]
+4:I[37457,["$2"],"default"]
+5:"/blueprint-clash/_next/static/chunks/2n5qeheznvl4u.js"
+6:I[22016,["$2","$5"],""]
+7:I[64576,["$2"],"PwaRegister"]
+10:"/blueprint-clash/_next/static/chunks/2uk3wcjwqg0tl.js"
+11:"/blueprint-clash/_next/static/chunks/1zdu7yjl8efu4.js"
+12:I[65612,["$2","$10","$11"],"WorkshopClient"]
+24:"ViewportBoundary"
+25:I[97367,["$2"],"$24"]
+26:"MetadataBoundary"
+27:I[97367,["$2"],"$26"]
+28:"$Sreact.suspense"
+29:I[27201,["$2"],"IconMark"]
+:HL["/blueprint-clash/_next/static/chunks/2lbfwxo4jtf0j.css","style"]
+9:X
+c:X
+c:C
+13:T682,# Stock brokerage: accounts, trades, lots and profit
+
+You are building the core of a small retail brokerage: no screen, no network, no exchange. Customers have **accounts** that hold cash. The market publishes a **quote** (a price per share) for each symbol. A customer **buys** and **sells** shares at the current quote, and the brokerage must always be able to say what the account holds, what it cost, how much profit has been locked in, and what the whole account is worth today.
+
+What you know so far:
+
+- Money is whole cents, and one order can be a million shares at a million cents each. Think about which type holds that.
+- A buy takes cash and gives shares. A sell takes shares and gives cash. Neither can leave an account with negative cash or negative shares.
+- The same symbol bought on different days at different prices is not one lump: when some of it is sold, the profit depends on WHICH shares were sold.
+- Every call answers a status, and a call that is refused must not change anything.
+- Everything is single-threaded and deterministic, so every test can replay an exact sequence.
+
+Your task: design and implement it behind the `broker::Brokerage` interface in `api.h` (`makeBrokerage()` is yours to define). The hidden tests call only that interface. Ask the interviewer questions first: "which shares does a sale use up?", "what is profit, exactly, and when is it realized?", "in which order does each call check its arguments?", "what happens to a symbol that was never quoted?" and "what is a legal amount?" are where first drafts go wrong. Expect a change request for commissions once the basics work, and then one for splits and dividends.
+14:T1def,# Editorial: A brokerage with FIFO lots, commissions and corporate actions
+
+## Requirements
+Functional: accounts that hold cash (`openAccount`, `deposit`, `withdraw`), a market that publishes quotes (`setQuote`), market orders at the current quote (`buy`, `sell`) and two read calls (`statement`, `holding`). Then commissions (change storm 1) and splits and dividends (change storm 2).
+
+Hidden in the brief and revealed by good questions: the legal ranges and the fixed check order (InvalidInput, then UnknownAccount, then the state), that a refused call changes nothing; that money is whole cents in 64 bits (one order can be 10^12 cents); that a never-quoted symbol is `NoQuote`; that a sale that cannot be filled in full is refused rather than shrunk; that sales use the OLDEST lot first and a part-used lot keeps the matching part of its cost; that realized profit moves only on a sale; and that portfolio value uses today's quote while cost basis is history.
+
+**Change Storm 1, commissions:** `fee = max(minimum, flat + ceil(value x bps / 10000))` on every trade. The fee is part of what a buy cost and is taken out of what a sale pays, which makes a lot's cost something that is no longer a whole number per share, so the rule for the cost of part of a lot has to be written down (round down, the last shares take the rest). **Change Storm 2, corporate actions:** a split multiplies every lot's shares without touching cost or order, a dividend pays per share held now and never touches cost or profit.
+
+## Reference design
+Nine small classes, each with one reason to change.
+- `Lot` is one purchase still held: shares and the cost of those shares. `take(count)` gives up shares and cost together, with the floor-then-remainder rule, so the cents always add up.
+- `Position` is the lots of one symbol in purchase order. `sellFifo` is the only place that decides which shares go first.
+- `Purse`, `Totals`, `Holdings` and `Account` split one customer's state into cash, running totals and positions, so no class is a bag of loose numbers.
+- `Accounts` finds and opens accounts and owns the shared check order (bad id, then unknown id). `Rules` holds every legal range once.
+- `QuoteBoard` knows the latest price of each symbol and nothing about accounts. `Commission` is the fee rule and nothing else.
+- `TradeDesk` is the one place that moves cash, lots and totals together. Every check happens before the first write, so a refusal cannot leave a half-done trade. `Valuation` answers what an account is worth and is separate from how trades happen.
+- `CorporateActions` is the only class that walks every holder.
+- `BrokerageImpl` is a thin facade: validate, look the account up, delegate. It has exactly the interface's twelve methods and no rule of its own.
+
+Why this shape passes the storms: the fee storm adds `Commission` and two calls in `TradeDesk` (and one total) and changes no existing class's meaning; the corporate-action storm adds `CorporateActions` and one `Position::split`. Nothing in `buy` or `sell` learns that splits exist.
+
+## Alternatives
+- **Average cost instead of lots:** one running (shares, cost) pair per symbol. Smaller and faster, and what many fund platforms report. The profit of a sale then no longer depends on which shares were sold, so it cannot answer tax-lot questions. A different `Position`, same interface.
+- **LIFO, highest-cost-first or specific-lot selection:** the same lots with a different pick. Worth a `LotSelection` Strategy only when a second rule is really needed; one `if` today is cheaper to read than a hierarchy nobody uses.
+- **Event-sourced accounts:** store only a journal of deposits, trades and actions, and derive cash and lots by replaying it. Great for audit and for recovery, more work to query; the natural production design (see the follow-ups), too heavy for the first 90 minutes.
+- **Floating-point money:** simple and wrong. Use integers of the smallest unit, or a decimal type with a stated rounding rule.
+- **Fees inside the quote (a spread) instead of an explicit commission:** how many retail platforms earn money. It removes the fee line but hides the cost from the ledger, so it was not asked for here.
+
+## Trade-offs
+- **Deque of lots per symbol vs an aggregate:** a deque costs memory per purchase and O(lots) to sum a position; the aggregate is O(1) but loses information. The reference sums on demand because positions have few lots; cache the totals in `Position` when that shows up in a profile.
+- **Walking all accounts for a split or dividend vs a holders index:** the walk is trivially correct and costs O(accounts); the index is O(holders) and one more structure that must agree with the positions. Start with the walk, and keep it in one class so the swap is local.
+- **Rounding the cost of a part-used lot down, remainder to the last shares:** loses nothing and never goes negative; the price is that the cost of one share in a lot can differ by a cent between sales. The alternative (exact fractions) is correct but heavy. The contested choice is _where_ the rounding error goes; the deciding factor is that the books must balance to the cent.
+- **Refuse vs clamp:** a sale of more shares than held is refused, because a silent smaller trade is a different trade. The cost is one more round trip for a caller who really did want 'everything'; give that caller a `holding()` read first.
+- **Validate in the facade, check state in the desk:** keeps `Rules` and the check order testable in one place; the cost is that the desk assumes valid arguments, so it is internal.
+
+## What breaks at 10x
+- **Many more accounts and symbols:** an `std::map` per account and a walk for every action is fine until a split must touch millions of accounts. Add the holders index, and run the action as a batch of independent, idempotent per-account jobs.
+- **Many threads:** the design is single-threaded on purpose. Per-account serialisation is easy; the cross-account operations (actions, transfers) need a cut-off or a fixed lock order. Shard by account id so a trade is a single-partition transaction.
+- **Many more quotes per second:** `setQuote` is a hash write, but every `portfolioValue` walks the positions. Cache a valuation per account and invalidate it on trade and on a quote change for a held symbol, or compute valuations lazily at the edge.
+- **Long-lived accounts:** the number of lots grows. Compact lots only through the same rules (a sold-out lot disappears already); never merge lots that cost different amounts, it changes future profit.
+- **Failure between writes:** in memory a trade cannot half-happen; across a database it can. Journal the trade as one record, derive the rest, and make retries idempotent.
+
+## Level signals
+- **SDE II:** gets the cash and the lots right, uses 64-bit cents, makes a refused call change nothing, and passes FIFO profit including a partly consumed lot. May need a hint for the check order and for the rounding rule once fees arrive.
+- **Senior:** separates lots, positions, the trade desk, quotes and valuation without being asked; keeps every check before the first write; handles the fee storm by adding a fee rule rather than editing the trade code in several places; writes the rounding rule down and shows the books add up. Names the corporate-action walk as a cost.
+- **Staff:** frames cash and lots as derived from an append-only journal, brings idempotency keys, reconciliation against a custodian and invariants that run in production, and discusses ex-dividend cut-offs and per-account sharding as the real concurrency problems. Explains why FIFO versus average cost is a product and tax decision, not a technical one.
+15:Tf84,#pragma once
+// Public API for the Stock Brokerage problem. The hidden tests only use what is declared here.
+// You implement broker::makeBrokerage() (in any of your .cpp files); everything behind it is your design.
+#include <memory>
+#include <string>
+
+namespace broker {
+
+enum class Status {
+  Ok,
+  InvalidInput,        // an id, symbol, amount, quote or share count outside the documented range
+  DuplicateAccount,    // the account id is already open
+  UnknownAccount,      // no such account
+  NoQuote,             // the symbol has never been quoted, so there is no price to trade at
+  InsufficientFunds,   // the cash is not enough
+  InsufficientShares,  // the account holds fewer shares than it wants to sell
+};
+
+constexpr int kMaxQuote = 1000000;               // cents per share, 1..kMaxQuote
+constexpr int kMaxShares = 1000000;              // per order, 1..kMaxShares
+constexpr long long kMaxCash = 1000000000000LL;  // cents per deposit or withdrawal, 1..kMaxCash
+
+// A retail brokerage: accounts that hold cash and shares, traded at the market quote. All money is whole CENTS in
+// `long long` (a single order can be 10^6 shares x 10^6 cents). Single-threaded and deterministic.
+//
+// ACCOUNTS. openAccount(id): id 1 or more (InvalidInput), then DuplicateAccount; a new account has no cash and no shares.
+// deposit/withdraw(id, cents): InvalidInput (id < 1 or cents outside 1..kMaxCash), then UnknownAccount; withdraw also answers
+// InsufficientFunds when the cash is less than the amount (exactly the amount is fine). A refused call changes nothing.
+//
+// QUOTES. setQuote(symbol, cents) records the market price of a symbol: InvalidInput when the symbol is empty or the price
+// is outside 1..kMaxQuote. Quotes are only ever replaced, never removed.
+//
+// TRADES, always a market order at the CURRENT quote. buy(id, symbol, shares) checks InvalidInput (id < 1, empty symbol, shares
+// outside 1..kMaxShares), UnknownAccount, NoQuote, InsufficientFunds, in that order. It takes shares x quote from the cash
+// and adds a LOT (shares, what they cost). sell(id, symbol, shares) checks InvalidInput, UnknownAccount, then
+// InsufficientShares (an account that never held the symbol has 0 shares), and pays shares x quote into the cash. A sale
+// uses up lots FIRST-IN FIRST-OUT: the oldest lot is consumed first, and a lot that is only partly consumed keeps the rest of
+// its shares and the matching part of its cost. realizedPnl is the running total of (proceeds - cost of the shares sold).
+// A refused call changes nothing.
+//
+// QUERIES (never change anything; the out-parameter is touched only on Ok). statement(id) answers InvalidInput (id < 1) then
+// UnknownAccount; holding(id, symbol) answers InvalidInput (id < 1 or an empty symbol) then UnknownAccount.
+// One account at a glance. portfolioValue = cash + every held symbol's shares x its CURRENT quote. positionCount = how many
+// symbols the account holds shares of (a symbol sold down to zero is not counted).
+struct Statement {
+  long long cash = 0;
+  long long realizedPnl = 0;
+  long long portfolioValue = 0;
+  int positionCount = 0;
+};
+
+// What an account holds of one symbol: the shares (0 when none) and the cost of exactly those shares still held (0 when none).
+struct Holding {
+  long long shares = 0;
+  long long costBasis = 0;
+};
+
+class Brokerage {
+ public:
+  virtual ~Brokerage() = default;
+
+  virtual Status openAccount(int id) = 0;
+  virtual Status deposit(int id, long long cents) = 0;
+  virtual Status withdraw(int id, long long cents) = 0;
+  virtual Status setQuote(const std::string& symbol, int cents) = 0;
+  virtual Status buy(int id, const std::string& symbol, int shares) = 0;
+  virtual Status sell(int id, const std::string& symbol, int shares) = 0;
+
+  virtual Status statement(int id, Statement& out) const = 0;
+  virtual Status holding(int id, const std::string& symbol, Holding& out) const = 0;
+};
+
+std::unique_ptr<Brokerage> makeBrokerage();
+
+}  // namespace broker
+16:T5d9,#pragma once
+// Change Storm 1: commissions.
+#include "api.h"
+
+namespace broker {
+
+// What one trade costs in commission, in cents, from the trade's VALUE (shares x quote):
+//   fee = max(minimum, flat + ceil(value x basisPoints / 10000)).     (ceil: a part of a cent is a whole cent)
+// The all-zero schedule is "no commission", which is exactly makeBrokerage().
+struct FeeSchedule {
+  long long flat = 0;
+  int basisPoints = 0;  // 1 basis point = 0.01 percent
+  long long minimum = 0;
+};
+
+class FeeBrokerage : public Brokerage {
+ public:
+  // The commission is charged on every buy and every sell, the same schedule for both.
+  //  - buy: the cash must cover value + fee (else InsufficientFunds). The fee becomes part of the new lot's COST.
+  //  - sell: the fee is taken out of the proceeds, so the cash gets value - fee. A sale whose fee is more than its value is
+  //    refused with InsufficientFunds (checked after InsufficientShares). Realized P&L is (value - fee) minus the cost of the
+  //    consumed shares, where a PARTLY consumed lot gives up cost x consumed / lotShares, rounded down, and the lot that is
+  //    used up completely gives up whatever cost it has left (so no cent is lost or invented).
+  // feesPaid() is the account's total commission so far (InvalidInput, then UnknownAccount; touched only on Ok).
+  virtual Status feesPaid(int id, long long& out) const = 0;
+};
+
+std::unique_ptr<FeeBrokerage> makeFeeBrokerage(const FeeSchedule& schedule);
+
+}  // namespace broker
+17:T558,#pragma once
+// Change Storm 2: corporate actions.
+#include "api_storm1.h"
+
+namespace broker {
+
+class CorporateBrokerage : public FeeBrokerage {
+ public:
+  // A forward split. Every account's lots of `symbol` get `factor` times as many shares, the same total cost and the same
+  // order (so FIFO is unchanged); the quote becomes `newQuote` (the market publishes it). Realized P&L and cash are not
+  // touched. Checks: InvalidInput (empty symbol, factor outside 2..100, newQuote outside 1..kMaxQuote), then NoQuote when the
+  // symbol was never quoted. A refused call changes nothing.
+  virtual Status split(const std::string& symbol, int factor, int newQuote) = 0;
+
+  // A cash dividend of `centsPerShare` (1..kMaxQuote) on every share of `symbol`: each account holding it gets
+  // shares x centsPerShare in cash. Cost basis, lots and realized P&L are NOT touched; the money is counted separately in
+  // dividendsReceived(). Checks: InvalidInput (empty symbol or amount out of range), then NoQuote.
+  virtual Status dividend(const std::string& symbol, int centsPerShare) = 0;
+
+  // The account's total dividends so far (InvalidInput, then UnknownAccount; touched only on Ok).
+  virtual Status dividendsReceived(int id, long long& out) const = 0;
+};
+
+std::unique_ptr<CorporateBrokerage> makeCorporateBrokerage(const FeeSchedule& schedule);
+
+}  // namespace broker
+18:T3cee,#include <algorithm>
+#include <cstdint>
+#include <map>
+#include <memory>
+#include <string>
+#include <vector>
+
+#include "api.h"
+#include "bp_test.h"
+
+namespace {
+using broker::Holding;
+using broker::Statement;
+using broker::Status;
+
+#define IS(call, expected) EXPECT_TRUE((call) == Status::expected)
+
+long long cashOf(const broker::Brokerage& b, int id) {
+  Statement s;
+  return b.statement(id, s) == Status::Ok ? s.cash : -999999;
+}
+long long realizedOf(const broker::Brokerage& b, int id) {
+  Statement s;
+  return b.statement(id, s) == Status::Ok ? s.realizedPnl : -999999;
+}
+long long valueOf(const broker::Brokerage& b, int id) {
+  Statement s;
+  return b.statement(id, s) == Status::Ok ? s.portfolioValue : -999999;
+}
+int positionsOf(const broker::Brokerage& b, int id) {
+  Statement s;
+  return b.statement(id, s) == Status::Ok ? s.positionCount : -1;
+}
+long long sharesOf(const broker::Brokerage& b, int id, const std::string& sym) {
+  Holding h;
+  return b.holding(id, sym, h) == Status::Ok ? h.shares : -1;
+}
+long long costOf(const broker::Brokerage& b, int id, const std::string& sym) {
+  Holding h;
+  return b.holding(id, sym, h) == Status::Ok ? h.costBasis : -1;
+}
+
+struct MLot {
+  long long shares;
+  long long cost;
+};
+struct MAccount {
+  long long cash = 0, realized = 0, fees = 0, dividends = 0;
+  std::map<std::string, std::vector<MLot>> pos;
+};
+
+class Model {
+ public:
+  
+  std::map<int, MAccount> accounts;
+  std::map<std::string, int> quotes;
+
+  long long feeOf(long long value) const {
+    return 0 * value;
+  }
+  Status open(int id) {
+    if (id < 1) return Status::InvalidInput;
+    return accounts.emplace(id, MAccount()).second ? Status::Ok : Status::DuplicateAccount;
+  }
+  Status deposit(int id, long long c) {
+    if (id < 1 || c < 1 || c > broker::kMaxCash) return Status::InvalidInput;
+    if (!accounts.count(id)) return Status::UnknownAccount;
+    accounts[id].cash += c;
+    return Status::Ok;
+  }
+  Status withdraw(int id, long long c) {
+    if (id < 1 || c < 1 || c > broker::kMaxCash) return Status::InvalidInput;
+    if (!accounts.count(id)) return Status::UnknownAccount;
+    if (accounts[id].cash < c) return Status::InsufficientFunds;
+    accounts[id].cash -= c;
+    return Status::Ok;
+  }
+  Status quote(const std::string& s, int c) {
+    if (s.empty() || c < 1 || c > broker::kMaxQuote) return Status::InvalidInput;
+    quotes[s] = c;
+    return Status::Ok;
+  }
+  Status buy(int id, const std::string& s, int n) {
+    if (id < 1 || s.empty() || n < 1 || n > broker::kMaxShares) return Status::InvalidInput;
+    if (!accounts.count(id)) return Status::UnknownAccount;
+    if (!quotes.count(s)) return Status::NoQuote;
+    MAccount& a = accounts[id];
+    const long long value = static_cast<long long>(n) * quotes[s];
+    const long long fee = feeOf(value);
+    if (a.cash < value + fee) return Status::InsufficientFunds;
+    a.cash -= value + fee;
+    a.fees += fee;
+    a.pos[s].push_back({n, value + fee});
+    return Status::Ok;
+  }
+  Status sell(int id, const std::string& s, int n) {
+    if (id < 1 || s.empty() || n < 1 || n > broker::kMaxShares) return Status::InvalidInput;
+    if (!accounts.count(id)) return Status::UnknownAccount;
+    MAccount& a = accounts[id];
+    long long held = 0;
+    for (const MLot& l : a.pos[s]) held += l.shares;
+    if (held < n) return Status::InsufficientShares;
+    const long long value = static_cast<long long>(n) * quotes[s];
+    const long long fee = feeOf(value);
+    if (fee > value) return Status::InsufficientFunds;
+    long long need = n, cost = 0;
+    std::vector<MLot>& lots = a.pos[s];
+    while (need > 0) {
+      MLot& l = lots.front();
+      const long long used = std::min(need, l.shares);
+      const long long given = used == l.shares ? l.cost : l.cost * used / l.shares;
+      l.shares -= used;
+      l.cost -= given;
+      cost += given;
+      need -= used;
+      if (l.shares == 0) lots.erase(lots.begin());
+    }
+    a.cash += value - fee;
+    a.fees += fee;
+    a.realized += value - fee - cost;
+    return Status::Ok;
+  }
+
+  long long sharesOf(int id, const std::string& s) {
+    long long t = 0;
+    for (const MLot& l : accounts[id].pos[s]) t += l.shares;
+    return t;
+  }
+  long long costOf(int id, const std::string& s) {
+    long long t = 0;
+    for (const MLot& l : accounts[id].pos[s]) t += l.cost;
+    return t;
+  }
+  long long valueOf(int id) {
+    long long t = accounts[id].cash;
+    for (const auto& e : accounts[id].pos) t += sharesOf(id, e.first) * (quotes.count(e.first) ? quotes[e.first] : 0);
+    return t;
+  }
+  int positionsOf(int id) {
+    int n = 0;
+    for (const auto& e : accounts[id].pos) n += sharesOf(id, e.first) > 0 ? 1 : 0;
+    return n;
+  }
+};
+
+const char* const kSymbols[] = {"AAA", "BBB", "CCC"};
+
+std::uint64_t next(std::uint64_t& s) {
+  s = s * 6364136223846793005ULL + 1442695040888963407ULL;
+  return s >> 33;
+}
+
+bool agree(const broker::Brokerage& b, Model& m, int id) {
+  Statement st;
+  if (b.statement(id, st) != Status::Ok) return false;
+  if (st.cash != m.accounts[id].cash || st.realizedPnl != m.accounts[id].realized) return false;
+  if (st.portfolioValue != m.valueOf(id) || st.positionCount != m.positionsOf(id)) return false;
+  for (const char* sym : kSymbols) {
+    Holding h;
+    if (b.holding(id, sym, h) != Status::Ok) return false;
+    if (h.shares != m.sharesOf(id, sym) || h.costBasis != m.costOf(id, sym)) return false;
+  }
+  return true;
+}
+
+
+void runRandom(broker::Brokerage& bk, Model& m, std::uint64_t seed, int steps) {
+  std::uint64_t rng = seed;
+  for (int id = 1; id <= 3; ++id) {
+    EXPECT_TRUE(bk.openAccount(id) == Status::Ok);
+    EXPECT_TRUE(m.open(id) == Status::Ok);
+  }
+  for (int i = 0; i < steps; ++i) {
+    const int id = 1 + static_cast<int>(next(rng) % 3);
+    const std::string sym = kSymbols[next(rng) % 3];
+    const int roll = static_cast<int>(next(rng) % 100);
+    Status got = Status::Ok, want = Status::Ok;
+    if (roll < 10) {
+      const int q = 1 + static_cast<int>(next(rng) % 400);
+      got = bk.setQuote(sym, q);
+      want = m.quote(sym, q);
+    } else if (roll < 25) {
+      const long long c = 1 + static_cast<long long>(next(rng) % 50000);
+      got = bk.deposit(id, c);
+      want = m.deposit(id, c);
+    } else if (roll < 30) {
+      const long long c = 1 + static_cast<long long>(next(rng) % 20000);
+      got = bk.withdraw(id, c);
+      want = m.withdraw(id, c);
+    } else if (roll < 62) {
+      const int n = 1 + static_cast<int>(next(rng) % 40);
+      got = bk.buy(id, sym, n);
+      want = m.buy(id, sym, n);
+    } else if (roll < 100) {
+      const int n = 1 + static_cast<int>(next(rng) % 40);
+      got = bk.sell(id, sym, n);
+      want = m.sell(id, sym, n);
+    }
+    if (got != want) FAIL("a call answered differently from the model");
+    for (int a = 1; a <= 3; ++a) {
+      if (!agree(bk, m, a)) FAIL("an account differs from the model");
+    }
+  }
+}
+
+
+// An account with `cash` already deposited and the symbol quoted.
+void fund(broker::Brokerage& b, int id, long long cash) {
+  EXPECT_TRUE(b.openAccount(id) == Status::Ok);
+  EXPECT_TRUE(b.deposit(id, cash) == Status::Ok);
+}
+
+}  // namespace
+
+TEST(Accounts, OpeningAccountsAndTheRangesAndTheCheckOrder) {
+  auto b = broker::makeBrokerage();
+  IS(b->openAccount(0), InvalidInput);
+  IS(b->openAccount(-3), InvalidInput);
+  IS(b->openAccount(1), Ok);
+  IS(b->openAccount(1), DuplicateAccount);
+  IS(b->deposit(0, 100), InvalidInput);
+  IS(b->deposit(1, 0), InvalidInput);
+  IS(b->deposit(1, -5), InvalidInput);
+  IS(b->deposit(1, broker::kMaxCash + 1), InvalidInput);
+  IS(b->deposit(9, 0), InvalidInput);  // the amount is checked before the account is looked up
+  IS(b->deposit(9, 5), UnknownAccount);
+  EXPECT_EQ(cashOf(*b, 1), 0);
+  IS(b->deposit(1, broker::kMaxCash), Ok);
+  EXPECT_EQ(cashOf(*b, 1), broker::kMaxCash);
+  IS(b->openAccount(1), DuplicateAccount);  // a second open must not wipe the account
+  EXPECT_EQ(cashOf(*b, 1), broker::kMaxCash);
+  Statement s;
+  s.cash = 77;
+  IS(b->statement(0, s), InvalidInput);
+  IS(b->statement(9, s), UnknownAccount);
+  EXPECT_EQ(s.cash, 77);  // the out-parameter is touched only on Ok
+  EXPECT_EQ(realizedOf(*b, 1), 0);
+  EXPECT_EQ(positionsOf(*b, 1), 0);
+}
+
+TEST(Accounts, WithdrawingExactlyTheCashIsFineAndMoreIsRefused) {
+  auto b = broker::makeBrokerage();
+  fund(*b, 1, 500);
+  IS(b->withdraw(1, 501), InsufficientFunds);
+  EXPECT_EQ(cashOf(*b, 1), 500);
+  IS(b->withdraw(1, 0), InvalidInput);
+  IS(b->withdraw(0, 1), InvalidInput);
+  IS(b->withdraw(7, 0), InvalidInput);
+  IS(b->withdraw(7, 1), UnknownAccount);
+  IS(b->withdraw(1, 500), Ok);
+  EXPECT_EQ(cashOf(*b, 1), 0);
+  IS(b->withdraw(1, 1), InsufficientFunds);
+}
+
+TEST(Accounts, QuotesAreValidatedAndReplacedNeverRemoved) {
+  auto b = broker::makeBrokerage();
+  fund(*b, 1, 100000);
+  IS(b->setQuote("", 100), InvalidInput);
+  IS(b->setQuote("A", 0), InvalidInput);
+  IS(b->setQuote("A", broker::kMaxQuote + 1), InvalidInput);
+  IS(b->buy(1, "A", 1), NoQuote);  // the refused quotes did not create one
+  IS(b->setQuote("A", broker::kMaxQuote), Ok);
+  IS(b->setQuote("A", 100), Ok);
+  IS(b->buy(1, "A", 3), Ok);
+  EXPECT_EQ(cashOf(*b, 1), 99700);
+}
+
+TEST(Trading, ABuyMovesCashIntoAHoldingAtTheCurrentQuote) {
+  auto b = broker::makeBrokerage();
+  fund(*b, 1, 100000);
+  IS(b->setQuote("ACME", 2500), Ok);
+  IS(b->buy(1, "ACME", 10), Ok);
+  EXPECT_EQ(cashOf(*b, 1), 75000);
+  EXPECT_EQ(sharesOf(*b, 1, "ACME"), 10);
+  EXPECT_EQ(costOf(*b, 1, "ACME"), 25000);
+  EXPECT_EQ(valueOf(*b, 1), 100000);
+  EXPECT_EQ(positionsOf(*b, 1), 1);
+  EXPECT_EQ(realizedOf(*b, 1), 0);
+  EXPECT_EQ(sharesOf(*b, 1, "OTHER"), 0);
+  EXPECT_EQ(costOf(*b, 1, "OTHER"), 0);
+}
+
+TEST(Trading, BuyChecksFollowTheDocumentedOrderAndARefusalChangesNothing) {
+  auto b = broker::makeBrokerage();
+  fund(*b, 1, 1000);
+  IS(b->setQuote("A", 100), Ok);
+  IS(b->buy(0, "A", 1), InvalidInput);
+  IS(b->buy(1, "", 1), InvalidInput);
+  IS(b->buy(1, "A", 0), InvalidInput);
+  IS(b->buy(1, "A", broker::kMaxShares + 1), InvalidInput);
+  IS(b->buy(9, "", 1), InvalidInput);        // a bad symbol is reported before an unknown account
+  IS(b->buy(9, "A", 1), UnknownAccount);
+  IS(b->buy(9, "NOPE", 1), UnknownAccount);  // an unknown account before a missing quote
+  IS(b->buy(1, "NOPE", 5000), NoQuote);      // a missing quote before the money is looked at
+  IS(b->buy(1, "A", 11), InsufficientFunds);
+  EXPECT_EQ(cashOf(*b, 1), 1000);
+  EXPECT_EQ(sharesOf(*b, 1, "A"), 0);
+  EXPECT_EQ(positionsOf(*b, 1), 0);
+  IS(b->buy(1, "A", 10), Ok);  // exactly what the cash covers
+  EXPECT_EQ(cashOf(*b, 1), 0);
+}
+
+TEST(Trading, ASaleIsPaidAtTheCurrentQuoteAndRealizesTheDifference) {
+  auto b = broker::makeBrokerage();
+  fund(*b, 1, 100000);
+  IS(b->setQuote("A", 100), Ok);
+  IS(b->buy(1, "A", 10), Ok);
+  IS(b->setQuote("A", 130), Ok);
+  IS(b->sell(1, "A", 4), Ok);
+  EXPECT_EQ(cashOf(*b, 1), 99520);
+  EXPECT_EQ(realizedOf(*b, 1), 120);
+  EXPECT_EQ(sharesOf(*b, 1, "A"), 6);
+  EXPECT_EQ(costOf(*b, 1, "A"), 600);
+  EXPECT_EQ(valueOf(*b, 1), 99520 + 6 * 130);
+}
+
+TEST(Trading, SellChecksFollowTheDocumentedOrderAndARefusalChangesNothing) {
+  auto b = broker::makeBrokerage();
+  fund(*b, 1, 100000);
+  IS(b->setQuote("A", 100), Ok);
+  IS(b->setQuote("B", 50), Ok);
+  IS(b->buy(1, "A", 10), Ok);
+  IS(b->sell(0, "A", 1), InvalidInput);
+  IS(b->sell(1, "", 1), InvalidInput);
+  IS(b->sell(1, "A", 0), InvalidInput);
+  IS(b->sell(1, "A", broker::kMaxShares + 1), InvalidInput);
+  IS(b->sell(9, "A", 1), UnknownAccount);
+  IS(b->sell(1, "A", 11), InsufficientShares);
+  IS(b->sell(1, "B", 1), InsufficientShares);      // never held
+  IS(b->sell(1, "NOPE", 1), InsufficientShares);   // never even quoted
+  EXPECT_EQ(cashOf(*b, 1), 99000);
+  EXPECT_EQ(sharesOf(*b, 1, "A"), 10);
+  EXPECT_EQ(realizedOf(*b, 1), 0);
+  IS(b->sell(1, "A", 10), Ok);  // exactly what is held
+  EXPECT_EQ(sharesOf(*b, 1, "A"), 0);
+}
+
+TEST(Lots, SalesUseUpTheOldestLotFirst) {
+  auto b = broker::makeBrokerage();
+  fund(*b, 1, 100000);
+  IS(b->setQuote("A", 100), Ok);
+  IS(b->buy(1, "A", 10), Ok);
+  IS(b->setQuote("A", 200), Ok);
+  IS(b->buy(1, "A", 10), Ok);
+  IS(b->setQuote("A", 300), Ok);
+  EXPECT_EQ(costOf(*b, 1, "A"), 3000);
+  IS(b->sell(1, "A", 15), Ok);  // all of the 100 lot and half of the 200 lot
+  EXPECT_EQ(cashOf(*b, 1), 97000 + 4500);
+  EXPECT_EQ(realizedOf(*b, 1), 4500 - (10 * 100 + 5 * 200));
+  EXPECT_EQ(sharesOf(*b, 1, "A"), 5);
+  EXPECT_EQ(costOf(*b, 1, "A"), 1000);
+  IS(b->sell(1, "A", 5), Ok);
+  EXPECT_EQ(realizedOf(*b, 1), 3000);
+  EXPECT_EQ(costOf(*b, 1, "A"), 0);
+  EXPECT_EQ(positionsOf(*b, 1), 0);
+}
+
+TEST(Lots, ASoldOutSymbolIsNotCountedAndCanBeBoughtAgain) {
+  auto b = broker::makeBrokerage();
+  fund(*b, 1, 100000);
+  IS(b->setQuote("A", 100), Ok);
+  IS(b->setQuote("B", 10), Ok);
+  IS(b->buy(1, "A", 5), Ok);
+  IS(b->buy(1, "B", 5), Ok);
+  EXPECT_EQ(positionsOf(*b, 1), 2);
+  IS(b->sell(1, "A", 5), Ok);
+  EXPECT_EQ(positionsOf(*b, 1), 1);
+  IS(b->setQuote("A", 120), Ok);
+  IS(b->buy(1, "A", 2), Ok);
+  EXPECT_EQ(positionsOf(*b, 1), 2);
+  EXPECT_EQ(sharesOf(*b, 1, "A"), 2);
+  EXPECT_EQ(costOf(*b, 1, "A"), 240);  // the old lot is gone, only the new purchase counts
+}
+
+TEST(Lots, LossesAreNegativeAndTheTotalAddsUp) {
+  auto b = broker::makeBrokerage();
+  fund(*b, 1, 100000);
+  IS(b->setQuote("B", 500), Ok);
+  IS(b->buy(1, "B", 4), Ok);
+  IS(b->setQuote("B", 300), Ok);
+  IS(b->sell(1, "B", 4), Ok);
+  EXPECT_EQ(realizedOf(*b, 1), -800);
+  IS(b->buy(1, "B", 2), Ok);
+  IS(b->setQuote("B", 400), Ok);
+  IS(b->sell(1, "B", 1), Ok);
+  EXPECT_EQ(realizedOf(*b, 1), -700);
+  EXPECT_EQ(costOf(*b, 1, "B"), 300);
+}
+
+TEST(Valuation, ValueIsCashPlusSharesAtTodaysQuoteAndAccountsAreSeparate) {
+  auto b = broker::makeBrokerage();
+  fund(*b, 1, 10000);
+  fund(*b, 2, 10000);
+  IS(b->setQuote("A", 100), Ok);
+  IS(b->buy(1, "A", 10), Ok);
+  IS(b->buy(2, "A", 20), Ok);
+  IS(b->setQuote("A", 150), Ok);
+  EXPECT_EQ(valueOf(*b, 1), 9000 + 1500);
+  EXPECT_EQ(valueOf(*b, 2), 8000 + 3000);
+  EXPECT_EQ(costOf(*b, 1, "A"), 1000);  // a new quote does not change what the shares cost
+  EXPECT_EQ(costOf(*b, 2, "A"), 2000);
+  IS(b->sell(1, "A", 10), Ok);
+  EXPECT_EQ(sharesOf(*b, 2, "A"), 20);
+  EXPECT_EQ(cashOf(*b, 2), 8000);
+  EXPECT_EQ(realizedOf(*b, 2), 0);
+  EXPECT_EQ(valueOf(*b, 1), 10500);
+}
+
+TEST(Valuation, LargeOrdersDoNotOverflow) {
+  auto b = broker::makeBrokerage();
+  fund(*b, 1, broker::kMaxCash);
+  IS(b->deposit(1, broker::kMaxCash), Ok);
+  IS(b->setQuote("BIG", broker::kMaxQuote), Ok);
+  IS(b->buy(1, "BIG", broker::kMaxShares), Ok);  // 10^6 x 10^6 cents does not fit in an int
+  EXPECT_EQ(cashOf(*b, 1), 2 * broker::kMaxCash - 1000000000000LL);
+  EXPECT_EQ(costOf(*b, 1, "BIG"), 1000000000000LL);
+  EXPECT_EQ(valueOf(*b, 1), 2 * broker::kMaxCash);
+  IS(b->setQuote("BIG", broker::kMaxQuote - 1), Ok);
+  IS(b->sell(1, "BIG", broker::kMaxShares), Ok);
+  EXPECT_EQ(realizedOf(*b, 1), -1000000);
+  EXPECT_EQ(cashOf(*b, 1), 2 * broker::kMaxCash - 1000000);
+}
+
+TEST(Valuation, HoldingAndStatementQueriesAreCheckedAndLeaveTheOutParameterAlone) {
+  auto b = broker::makeBrokerage();
+  fund(*b, 1, 100);
+  Holding h;
+  h.shares = 5;
+  h.costBasis = 6;
+  IS(b->holding(0, "A", h), InvalidInput);
+  IS(b->holding(1, "", h), InvalidInput);
+  IS(b->holding(9, "A", h), UnknownAccount);
+  EXPECT_EQ(h.shares, 5);
+  EXPECT_EQ(h.costBasis, 6);
+  IS(b->holding(1, "ZZZ", h), Ok);
+  EXPECT_EQ(h.shares, 0);
+  EXPECT_EQ(h.costBasis, 0);
+}
+
+TEST(Model, RandomActivityMatchesAnIndependentImplementation) {
+  for (std::uint64_t seed = 1; seed <= 6; ++seed) {
+    auto b = broker::makeBrokerage();
+    Model m;
+    runRandom(*b, m, seed * 7919, 1500);
+  }
+}
+19:T3161,#include <algorithm>
+#include <cstdint>
+#include <map>
+#include <memory>
+#include <string>
+#include <vector>
+
+#include "api_storm1.h"
+#include "bp_test.h"
+
+namespace {
+using broker::Holding;
+using broker::Statement;
+using broker::Status;
+
+#define IS(call, expected) EXPECT_TRUE((call) == Status::expected)
+
+long long cashOf(const broker::Brokerage& b, int id) {
+  Statement s;
+  return b.statement(id, s) == Status::Ok ? s.cash : -999999;
+}
+long long realizedOf(const broker::Brokerage& b, int id) {
+  Statement s;
+  return b.statement(id, s) == Status::Ok ? s.realizedPnl : -999999;
+}
+long long valueOf(const broker::Brokerage& b, int id) {
+  Statement s;
+  return b.statement(id, s) == Status::Ok ? s.portfolioValue : -999999;
+}
+int positionsOf(const broker::Brokerage& b, int id) {
+  Statement s;
+  return b.statement(id, s) == Status::Ok ? s.positionCount : -1;
+}
+long long sharesOf(const broker::Brokerage& b, int id, const std::string& sym) {
+  Holding h;
+  return b.holding(id, sym, h) == Status::Ok ? h.shares : -1;
+}
+long long costOf(const broker::Brokerage& b, int id, const std::string& sym) {
+  Holding h;
+  return b.holding(id, sym, h) == Status::Ok ? h.costBasis : -1;
+}
+
+struct MLot {
+  long long shares;
+  long long cost;
+};
+struct MAccount {
+  long long cash = 0, realized = 0, fees = 0, dividends = 0;
+  std::map<std::string, std::vector<MLot>> pos;
+};
+
+class Model {
+ public:
+  explicit Model(const broker::FeeSchedule& f) : schedule(f) {}
+  broker::FeeSchedule schedule;
+  std::map<int, MAccount> accounts;
+  std::map<std::string, int> quotes;
+
+  long long feeOf(long long value) const {
+    const long long pct = (value * schedule.basisPoints + 9999) / 10000;
+    const long long fee = schedule.flat + pct;
+    return fee < schedule.minimum ? schedule.minimum : fee;
+  }
+  Status open(int id) {
+    if (id < 1) return Status::InvalidInput;
+    return accounts.emplace(id, MAccount()).second ? Status::Ok : Status::DuplicateAccount;
+  }
+  Status deposit(int id, long long c) {
+    if (id < 1 || c < 1 || c > broker::kMaxCash) return Status::InvalidInput;
+    if (!accounts.count(id)) return Status::UnknownAccount;
+    accounts[id].cash += c;
+    return Status::Ok;
+  }
+  Status withdraw(int id, long long c) {
+    if (id < 1 || c < 1 || c > broker::kMaxCash) return Status::InvalidInput;
+    if (!accounts.count(id)) return Status::UnknownAccount;
+    if (accounts[id].cash < c) return Status::InsufficientFunds;
+    accounts[id].cash -= c;
+    return Status::Ok;
+  }
+  Status quote(const std::string& s, int c) {
+    if (s.empty() || c < 1 || c > broker::kMaxQuote) return Status::InvalidInput;
+    quotes[s] = c;
+    return Status::Ok;
+  }
+  Status buy(int id, const std::string& s, int n) {
+    if (id < 1 || s.empty() || n < 1 || n > broker::kMaxShares) return Status::InvalidInput;
+    if (!accounts.count(id)) return Status::UnknownAccount;
+    if (!quotes.count(s)) return Status::NoQuote;
+    MAccount& a = accounts[id];
+    const long long value = static_cast<long long>(n) * quotes[s];
+    const long long fee = feeOf(value);
+    if (a.cash < value + fee) return Status::InsufficientFunds;
+    a.cash -= value + fee;
+    a.fees += fee;
+    a.pos[s].push_back({n, value + fee});
+    return Status::Ok;
+  }
+  Status sell(int id, const std::string& s, int n) {
+    if (id < 1 || s.empty() || n < 1 || n > broker::kMaxShares) return Status::InvalidInput;
+    if (!accounts.count(id)) return Status::UnknownAccount;
+    MAccount& a = accounts[id];
+    long long held = 0;
+    for (const MLot& l : a.pos[s]) held += l.shares;
+    if (held < n) return Status::InsufficientShares;
+    const long long value = static_cast<long long>(n) * quotes[s];
+    const long long fee = feeOf(value);
+    if (fee > value) return Status::InsufficientFunds;
+    long long need = n, cost = 0;
+    std::vector<MLot>& lots = a.pos[s];
+    while (need > 0) {
+      MLot& l = lots.front();
+      const long long used = std::min(need, l.shares);
+      const long long given = used == l.shares ? l.cost : l.cost * used / l.shares;
+      l.shares -= used;
+      l.cost -= given;
+      cost += given;
+      need -= used;
+      if (l.shares == 0) lots.erase(lots.begin());
+    }
+    a.cash += value - fee;
+    a.fees += fee;
+    a.realized += value - fee - cost;
+    return Status::Ok;
+  }
+
+  long long sharesOf(int id, const std::string& s) {
+    long long t = 0;
+    for (const MLot& l : accounts[id].pos[s]) t += l.shares;
+    return t;
+  }
+  long long costOf(int id, const std::string& s) {
+    long long t = 0;
+    for (const MLot& l : accounts[id].pos[s]) t += l.cost;
+    return t;
+  }
+  long long valueOf(int id) {
+    long long t = accounts[id].cash;
+    for (const auto& e : accounts[id].pos) t += sharesOf(id, e.first) * (quotes.count(e.first) ? quotes[e.first] : 0);
+    return t;
+  }
+  int positionsOf(int id) {
+    int n = 0;
+    for (const auto& e : accounts[id].pos) n += sharesOf(id, e.first) > 0 ? 1 : 0;
+    return n;
+  }
+};
+
+const char* const kSymbols[] = {"AAA", "BBB", "CCC"};
+
+std::uint64_t next(std::uint64_t& s) {
+  s = s * 6364136223846793005ULL + 1442695040888963407ULL;
+  return s >> 33;
+}
+
+bool agree(const broker::Brokerage& b, Model& m, int id) {
+  Statement st;
+  if (b.statement(id, st) != Status::Ok) return false;
+  if (st.cash != m.accounts[id].cash || st.realizedPnl != m.accounts[id].realized) return false;
+  if (st.portfolioValue != m.valueOf(id) || st.positionCount != m.positionsOf(id)) return false;
+  for (const char* sym : kSymbols) {
+    Holding h;
+    if (b.holding(id, sym, h) != Status::Ok) return false;
+    if (h.shares != m.sharesOf(id, sym) || h.costBasis != m.costOf(id, sym)) return false;
+  }
+  return true;
+}
+
+
+void runRandom(broker::FeeBrokerage& bk, Model& m, std::uint64_t seed, int steps) {
+  std::uint64_t rng = seed;
+  for (int id = 1; id <= 3; ++id) {
+    EXPECT_TRUE(bk.openAccount(id) == Status::Ok);
+    EXPECT_TRUE(m.open(id) == Status::Ok);
+  }
+  for (int i = 0; i < steps; ++i) {
+    const int id = 1 + static_cast<int>(next(rng) % 3);
+    const std::string sym = kSymbols[next(rng) % 3];
+    const int roll = static_cast<int>(next(rng) % 100);
+    Status got = Status::Ok, want = Status::Ok;
+    if (roll < 10) {
+      const int q = 1 + static_cast<int>(next(rng) % 400);
+      got = bk.setQuote(sym, q);
+      want = m.quote(sym, q);
+    } else if (roll < 25) {
+      const long long c = 1 + static_cast<long long>(next(rng) % 50000);
+      got = bk.deposit(id, c);
+      want = m.deposit(id, c);
+    } else if (roll < 30) {
+      const long long c = 1 + static_cast<long long>(next(rng) % 20000);
+      got = bk.withdraw(id, c);
+      want = m.withdraw(id, c);
+    } else if (roll < 62) {
+      const int n = 1 + static_cast<int>(next(rng) % 40);
+      got = bk.buy(id, sym, n);
+      want = m.buy(id, sym, n);
+    } else if (roll < 100) {
+      const int n = 1 + static_cast<int>(next(rng) % 40);
+      got = bk.sell(id, sym, n);
+      want = m.sell(id, sym, n);
+    }
+    if (got != want) FAIL("a call answered differently from the model");
+    for (int a = 1; a <= 3; ++a) {
+      if (!agree(bk, m, a)) FAIL("an account differs from the model");
+      long long fp = 0;
+      if (bk.feesPaid(a, fp) != Status::Ok || fp != m.accounts[a].fees) FAIL("fees differ from the model");
+    }
+  }
+}
+
+
+using broker::FeeSchedule;
+
+std::unique_ptr<broker::FeeBrokerage> feeDesk(long long flat, int bps, long long minimum) {
+  FeeSchedule f;
+  f.flat = flat;
+  f.basisPoints = bps;
+  f.minimum = minimum;
+  return broker::makeFeeBrokerage(f);
+}
+void fundFee(broker::Brokerage& b, int id, long long cash) {
+  EXPECT_TRUE(b.openAccount(id) == Status::Ok);
+  EXPECT_TRUE(b.deposit(id, cash) == Status::Ok);
+}
+long long feesOf(const broker::FeeBrokerage& b, int id) {
+  long long out = -1;
+  return b.feesPaid(id, out) == Status::Ok ? out : -999999;
+}
+
+}  // namespace
+
+TEST(Fees, ANoCommissionScheduleBehavesLikeTheBaseBrokerage) {
+  auto b = feeDesk(0, 0, 0);
+  fundFee(*b, 1, 10000);
+  IS(b->setQuote("A", 100), Ok);
+  IS(b->buy(1, "A", 10), Ok);
+  IS(b->setQuote("A", 120), Ok);
+  IS(b->sell(1, "A", 10), Ok);
+  EXPECT_EQ(cashOf(*b, 1), 10200);
+  EXPECT_EQ(realizedOf(*b, 1), 200);
+  EXPECT_EQ(feesOf(*b, 1), 0);
+}
+
+TEST(Fees, AFlatFeeIsPaidOnABuyAndBecomesPartOfTheCost) {
+  auto b = feeDesk(100, 0, 0);
+  fundFee(*b, 1, 5100);
+  fundFee(*b, 2, 5099);
+  IS(b->setQuote("X", 1000), Ok);
+  IS(b->buy(2, "X", 5), InsufficientFunds);  // 5000 + 100 does not fit in 5099
+  EXPECT_EQ(cashOf(*b, 2), 5099);
+  EXPECT_EQ(feesOf(*b, 2), 0);
+  EXPECT_EQ(sharesOf(*b, 2, "X"), 0);
+  IS(b->buy(1, "X", 5), Ok);
+  EXPECT_EQ(cashOf(*b, 1), 0);
+  EXPECT_EQ(costOf(*b, 1, "X"), 5100);
+  EXPECT_EQ(feesOf(*b, 1), 100);
+  EXPECT_EQ(valueOf(*b, 1), 5000);  // the fee is gone, the shares are worth their quote
+}
+
+TEST(Fees, PercentFeesRoundUpToAWholeCentAndTheMinimumApplies) {
+  auto b = feeDesk(0, 25, 50);
+  fundFee(*b, 1, 1000000);
+  IS(b->setQuote("Q", 1), Ok);
+  IS(b->buy(1, "Q", 10000), Ok);  // 0.25% of 10000 is 25, below the minimum of 50
+  EXPECT_EQ(feesOf(*b, 1), 50);
+  IS(b->buy(1, "Q", 100000), Ok);  // exactly 250
+  EXPECT_EQ(feesOf(*b, 1), 300);
+  IS(b->buy(1, "Q", 100001), Ok);  // 250.0025 rounds UP to 251
+  EXPECT_EQ(feesOf(*b, 1), 551);
+  EXPECT_EQ(costOf(*b, 1, "Q"), 210001 + 551);
+  auto c = feeDesk(30, 100, 0);
+  fundFee(*c, 1, 100000);
+  IS(c->setQuote("Z", 1999), Ok);
+  IS(c->buy(1, "Z", 1), Ok);  // 1% of 1999 is 19.99, rounds up to 20, plus the flat 30
+  EXPECT_EQ(feesOf(*c, 1), 50);
+  EXPECT_EQ(cashOf(*c, 1), 100000 - 1999 - 50);
+}
+
+TEST(Fees, ASaleKeepsTheFeeOutOfTheProceedsAndTheProfit) {
+  auto b = feeDesk(0, 100, 0);
+  fundFee(*b, 1, 100000);
+  IS(b->setQuote("A", 1000), Ok);
+  IS(b->buy(1, "A", 10), Ok);  // 10000 + 100
+  EXPECT_EQ(cashOf(*b, 1), 89900);
+  EXPECT_EQ(costOf(*b, 1, "A"), 10100);
+  IS(b->setQuote("A", 1200), Ok);
+  IS(b->sell(1, "A", 10), Ok);  // 12000 - 120
+  EXPECT_EQ(cashOf(*b, 1), 89900 + 11880);
+  EXPECT_EQ(realizedOf(*b, 1), 11880 - 10100);
+  EXPECT_EQ(feesOf(*b, 1), 220);
+}
+
+TEST(Fees, APartlyUsedLotGivesUpCostInProportionAndNoCentIsLost) {
+  auto b = feeDesk(1, 0, 0);
+  fundFee(*b, 1, 10000);
+  IS(b->setQuote("A", 100), Ok);
+  IS(b->buy(1, "A", 3), Ok);  // 3 shares for 300 + 1
+  EXPECT_EQ(costOf(*b, 1, "A"), 301);
+  IS(b->sell(1, "A", 1), Ok);  // 301 x 1 / 3 = 100 (rounded down)
+  EXPECT_EQ(costOf(*b, 1, "A"), 201);
+  EXPECT_EQ(realizedOf(*b, 1), 99 - 100);
+  IS(b->sell(1, "A", 1), Ok);  // 201 x 1 / 2 = 100
+  EXPECT_EQ(costOf(*b, 1, "A"), 101);
+  IS(b->sell(1, "A", 1), Ok);  // the last share takes everything that is left
+  EXPECT_EQ(costOf(*b, 1, "A"), 0);
+  EXPECT_EQ(realizedOf(*b, 1), 3 * 99 - 301);
+  EXPECT_EQ(cashOf(*b, 1), 10000 - 301 + 3 * 99);
+  EXPECT_EQ(feesOf(*b, 1), 4);
+}
+
+TEST(Fees, ASaleReachingIntoASecondLotTakesTheWholeOldLotFirst) {
+  auto b = feeDesk(1, 0, 0);
+  fundFee(*b, 1, 10000);
+  IS(b->setQuote("A", 100), Ok);
+  IS(b->buy(1, "A", 3), Ok);  // lot of 3 for 301
+  IS(b->buy(1, "A", 2), Ok);  // lot of 2 for 201
+  IS(b->sell(1, "A", 4), Ok);  // all of the first lot (301) and one of the second (201 x 1 / 2 = 100)
+  EXPECT_EQ(realizedOf(*b, 1), 399 - 401);
+  EXPECT_EQ(sharesOf(*b, 1, "A"), 1);
+  EXPECT_EQ(costOf(*b, 1, "A"), 101);
+}
+
+TEST(Fees, ASaleWhoseFeeIsMoreThanItsValueIsRefusedAndOneEqualToItIsNot) {
+  auto b = feeDesk(500, 0, 0);
+  fundFee(*b, 1, 10000);
+  IS(b->setQuote("A", 100), Ok);
+  IS(b->buy(1, "A", 10), Ok);  // value 1000, fee 500, cost 1500
+  EXPECT_EQ(cashOf(*b, 1), 8500);
+  IS(b->sell(1, "A", 100), InsufficientShares);  // the shares are checked first
+  IS(b->sell(1, "A", 4), InsufficientFunds);     // value 400 cannot pay a fee of 500
+  EXPECT_EQ(sharesOf(*b, 1, "A"), 10);
+  EXPECT_EQ(cashOf(*b, 1), 8500);
+  EXPECT_EQ(feesOf(*b, 1), 500);
+  EXPECT_EQ(realizedOf(*b, 1), 0);
+  IS(b->sell(1, "A", 5), Ok);  // value 500, fee 500: nothing is paid out
+  EXPECT_EQ(cashOf(*b, 1), 8500);
+  EXPECT_EQ(realizedOf(*b, 1), -750);
+  EXPECT_EQ(costOf(*b, 1, "A"), 750);
+  EXPECT_EQ(feesOf(*b, 1), 1000);
+}
+
+TEST(Fees, FeesPaidIsCheckedAndLeavesTheOutParameterAlone) {
+  auto b = feeDesk(1, 0, 0);
+  fundFee(*b, 1, 100);
+  long long out = 42;
+  IS(b->feesPaid(0, out), InvalidInput);
+  IS(b->feesPaid(9, out), UnknownAccount);
+  EXPECT_EQ(out, 42);
+  IS(b->feesPaid(1, out), Ok);
+  EXPECT_EQ(out, 0);
+}
+
+TEST(Model, RandomActivityWithCommissionsMatchesAnIndependentImplementation) {
+  const FeeSchedule schedules[] = {{0, 0, 0}, {7, 0, 0}, {0, 150, 3}, {2, 40, 9}, {0, 9999, 1}};
+  std::uint64_t seed = 11;
+  for (const FeeSchedule& f : schedules) {
+    auto b = broker::makeFeeBrokerage(f);
+    Model m(f);
+    runRandom(*b, m, seed++ * 104729, 1500);
+  }
+}
+1a:T38e5,#include <algorithm>
+#include <cstdint>
+#include <map>
+#include <memory>
+#include <string>
+#include <vector>
+
+#include "api_storm2.h"
+#include "bp_test.h"
+
+namespace {
+using broker::Holding;
+using broker::Statement;
+using broker::Status;
+
+#define IS(call, expected) EXPECT_TRUE((call) == Status::expected)
+
+long long cashOf(const broker::Brokerage& b, int id) {
+  Statement s;
+  return b.statement(id, s) == Status::Ok ? s.cash : -999999;
+}
+long long realizedOf(const broker::Brokerage& b, int id) {
+  Statement s;
+  return b.statement(id, s) == Status::Ok ? s.realizedPnl : -999999;
+}
+long long valueOf(const broker::Brokerage& b, int id) {
+  Statement s;
+  return b.statement(id, s) == Status::Ok ? s.portfolioValue : -999999;
+}
+int positionsOf(const broker::Brokerage& b, int id) {
+  Statement s;
+  return b.statement(id, s) == Status::Ok ? s.positionCount : -1;
+}
+long long sharesOf(const broker::Brokerage& b, int id, const std::string& sym) {
+  Holding h;
+  return b.holding(id, sym, h) == Status::Ok ? h.shares : -1;
+}
+long long costOf(const broker::Brokerage& b, int id, const std::string& sym) {
+  Holding h;
+  return b.holding(id, sym, h) == Status::Ok ? h.costBasis : -1;
+}
+
+struct MLot {
+  long long shares;
+  long long cost;
+};
+struct MAccount {
+  long long cash = 0, realized = 0, fees = 0, dividends = 0;
+  std::map<std::string, std::vector<MLot>> pos;
+};
+
+class Model {
+ public:
+  explicit Model(const broker::FeeSchedule& f) : schedule(f) {}
+  broker::FeeSchedule schedule;
+  std::map<int, MAccount> accounts;
+  std::map<std::string, int> quotes;
+
+  long long feeOf(long long value) const {
+    const long long pct = (value * schedule.basisPoints + 9999) / 10000;
+    const long long fee = schedule.flat + pct;
+    return fee < schedule.minimum ? schedule.minimum : fee;
+  }
+  Status open(int id) {
+    if (id < 1) return Status::InvalidInput;
+    return accounts.emplace(id, MAccount()).second ? Status::Ok : Status::DuplicateAccount;
+  }
+  Status deposit(int id, long long c) {
+    if (id < 1 || c < 1 || c > broker::kMaxCash) return Status::InvalidInput;
+    if (!accounts.count(id)) return Status::UnknownAccount;
+    accounts[id].cash += c;
+    return Status::Ok;
+  }
+  Status withdraw(int id, long long c) {
+    if (id < 1 || c < 1 || c > broker::kMaxCash) return Status::InvalidInput;
+    if (!accounts.count(id)) return Status::UnknownAccount;
+    if (accounts[id].cash < c) return Status::InsufficientFunds;
+    accounts[id].cash -= c;
+    return Status::Ok;
+  }
+  Status quote(const std::string& s, int c) {
+    if (s.empty() || c < 1 || c > broker::kMaxQuote) return Status::InvalidInput;
+    quotes[s] = c;
+    return Status::Ok;
+  }
+  Status buy(int id, const std::string& s, int n) {
+    if (id < 1 || s.empty() || n < 1 || n > broker::kMaxShares) return Status::InvalidInput;
+    if (!accounts.count(id)) return Status::UnknownAccount;
+    if (!quotes.count(s)) return Status::NoQuote;
+    MAccount& a = accounts[id];
+    const long long value = static_cast<long long>(n) * quotes[s];
+    const long long fee = feeOf(value);
+    if (a.cash < value + fee) return Status::InsufficientFunds;
+    a.cash -= value + fee;
+    a.fees += fee;
+    a.pos[s].push_back({n, value + fee});
+    return Status::Ok;
+  }
+  Status sell(int id, const std::string& s, int n) {
+    if (id < 1 || s.empty() || n < 1 || n > broker::kMaxShares) return Status::InvalidInput;
+    if (!accounts.count(id)) return Status::UnknownAccount;
+    MAccount& a = accounts[id];
+    long long held = 0;
+    for (const MLot& l : a.pos[s]) held += l.shares;
+    if (held < n) return Status::InsufficientShares;
+    const long long value = static_cast<long long>(n) * quotes[s];
+    const long long fee = feeOf(value);
+    if (fee > value) return Status::InsufficientFunds;
+    long long need = n, cost = 0;
+    std::vector<MLot>& lots = a.pos[s];
+    while (need > 0) {
+      MLot& l = lots.front();
+      const long long used = std::min(need, l.shares);
+      const long long given = used == l.shares ? l.cost : l.cost * used / l.shares;
+      l.shares -= used;
+      l.cost -= given;
+      cost += given;
+      need -= used;
+      if (l.shares == 0) lots.erase(lots.begin());
+    }
+    a.cash += value - fee;
+    a.fees += fee;
+    a.realized += value - fee - cost;
+    return Status::Ok;
+  }
+  Status split(const std::string& s, int factor, int q) {
+    if (s.empty() || factor < 2 || factor > 100 || q < 1 || q > broker::kMaxQuote) return Status::InvalidInput;
+    if (!quotes.count(s)) return Status::NoQuote;
+    for (auto& e : accounts) {
+      for (MLot& l : e.second.pos[s]) l.shares *= factor;
+    }
+    quotes[s] = q;
+    return Status::Ok;
+  }
+  Status dividend(const std::string& s, int c) {
+    if (s.empty() || c < 1 || c > broker::kMaxQuote) return Status::InvalidInput;
+    if (!quotes.count(s)) return Status::NoQuote;
+    for (auto& e : accounts) {
+      const long long paid = sharesOf(e.first, s) * c;
+      e.second.cash += paid;
+      e.second.dividends += paid;
+    }
+    return Status::Ok;
+  }
+
+  long long sharesOf(int id, const std::string& s) {
+    long long t = 0;
+    for (const MLot& l : accounts[id].pos[s]) t += l.shares;
+    return t;
+  }
+  long long costOf(int id, const std::string& s) {
+    long long t = 0;
+    for (const MLot& l : accounts[id].pos[s]) t += l.cost;
+    return t;
+  }
+  long long valueOf(int id) {
+    long long t = accounts[id].cash;
+    for (const auto& e : accounts[id].pos) t += sharesOf(id, e.first) * (quotes.count(e.first) ? quotes[e.first] : 0);
+    return t;
+  }
+  int positionsOf(int id) {
+    int n = 0;
+    for (const auto& e : accounts[id].pos) n += sharesOf(id, e.first) > 0 ? 1 : 0;
+    return n;
+  }
+};
+
+const char* const kSymbols[] = {"AAA", "BBB", "CCC"};
+
+std::uint64_t next(std::uint64_t& s) {
+  s = s * 6364136223846793005ULL + 1442695040888963407ULL;
+  return s >> 33;
+}
+
+bool agree(const broker::Brokerage& b, Model& m, int id) {
+  Statement st;
+  if (b.statement(id, st) != Status::Ok) return false;
+  if (st.cash != m.accounts[id].cash || st.realizedPnl != m.accounts[id].realized) return false;
+  if (st.portfolioValue != m.valueOf(id) || st.positionCount != m.positionsOf(id)) return false;
+  for (const char* sym : kSymbols) {
+    Holding h;
+    if (b.holding(id, sym, h) != Status::Ok) return false;
+    if (h.shares != m.sharesOf(id, sym) || h.costBasis != m.costOf(id, sym)) return false;
+  }
+  return true;
+}
+
+
+void runRandom(broker::CorporateBrokerage& bk, Model& m, std::uint64_t seed, int steps) {
+  std::uint64_t rng = seed;
+  for (int id = 1; id <= 3; ++id) {
+    EXPECT_TRUE(bk.openAccount(id) == Status::Ok);
+    EXPECT_TRUE(m.open(id) == Status::Ok);
+  }
+  for (int i = 0; i < steps; ++i) {
+    const int id = 1 + static_cast<int>(next(rng) % 3);
+    const std::string sym = kSymbols[next(rng) % 3];
+    const int roll = static_cast<int>(next(rng) % 100);
+    Status got = Status::Ok, want = Status::Ok;
+    if (roll < 10) {
+      const int q = 1 + static_cast<int>(next(rng) % 400);
+      got = bk.setQuote(sym, q);
+      want = m.quote(sym, q);
+    } else if (roll < 25) {
+      const long long c = 1 + static_cast<long long>(next(rng) % 50000);
+      got = bk.deposit(id, c);
+      want = m.deposit(id, c);
+    } else if (roll < 30) {
+      const long long c = 1 + static_cast<long long>(next(rng) % 20000);
+      got = bk.withdraw(id, c);
+      want = m.withdraw(id, c);
+    } else if (roll < 62) {
+      const int n = 1 + static_cast<int>(next(rng) % 40);
+      got = bk.buy(id, sym, n);
+      want = m.buy(id, sym, n);
+    } else if (roll < 94) {
+      const int n = 1 + static_cast<int>(next(rng) % 40);
+      got = bk.sell(id, sym, n);
+      want = m.sell(id, sym, n);
+    } else if (roll < 97) {
+      const int f = 2 + static_cast<int>(next(rng) % 3);
+      const int q = 1 + static_cast<int>(next(rng) % 400);
+      got = bk.split(sym, f, q);
+      want = m.split(sym, f, q);
+    } else {
+      const int cents = 1 + static_cast<int>(next(rng) % 20);
+      got = bk.dividend(sym, cents);
+      want = m.dividend(sym, cents);
+    }
+    if (got != want) FAIL("a call answered differently from the model");
+    for (int a = 1; a <= 3; ++a) {
+      if (!agree(bk, m, a)) FAIL("an account differs from the model");
+      long long d = 0, fp = 0;
+      if (bk.dividendsReceived(a, d) != Status::Ok || d != m.accounts[a].dividends) FAIL("dividends differ from the model");
+      if (bk.feesPaid(a, fp) != Status::Ok || fp != m.accounts[a].fees) FAIL("fees differ from the model");
+    }
+  }
+}
+
+
+using broker::FeeSchedule;
+
+std::unique_ptr<broker::CorporateBrokerage> desk(long long flat = 0) {
+  FeeSchedule f;
+  f.flat = flat;
+  return broker::makeCorporateBrokerage(f);
+}
+void fundAll(broker::Brokerage& b, int id, long long cash) {
+  EXPECT_TRUE(b.openAccount(id) == Status::Ok);
+  EXPECT_TRUE(b.deposit(id, cash) == Status::Ok);
+}
+long long dividendsOf(const broker::CorporateBrokerage& b, int id) {
+  long long out = -1;
+  return b.dividendsReceived(id, out) == Status::Ok ? out : -999999;
+}
+
+}  // namespace
+
+TEST(Actions, ASplitMultipliesEveryLotKeepsTheCostAndTheFifoOrder) {
+  auto b = desk();
+  fundAll(*b, 1, 100000);
+  IS(b->setQuote("A", 100), Ok);
+  IS(b->buy(1, "A", 10), Ok);  // lot 1: 10 shares for 1000
+  IS(b->setQuote("A", 200), Ok);
+  IS(b->buy(1, "A", 10), Ok);  // lot 2: 10 shares for 2000
+  IS(b->setQuote("A", 300), Ok);
+  IS(b->split("A", 2, 150), Ok);
+  EXPECT_EQ(sharesOf(*b, 1, "A"), 40);
+  EXPECT_EQ(costOf(*b, 1, "A"), 3000);
+  EXPECT_EQ(cashOf(*b, 1), 97000);
+  EXPECT_EQ(realizedOf(*b, 1), 0);
+  EXPECT_EQ(valueOf(*b, 1), 97000 + 40 * 150);
+  IS(b->sell(1, "A", 10), Ok);  // half of lot 1: it holds 20 shares for 1000
+  EXPECT_EQ(realizedOf(*b, 1), 1500 - 500);
+  IS(b->sell(1, "A", 15), Ok);  // the other 10 of lot 1 (500) and 5 of lot 2's 20 shares (500)
+  EXPECT_EQ(realizedOf(*b, 1), 1000 + (2250 - 1000));
+  EXPECT_EQ(sharesOf(*b, 1, "A"), 15);
+  EXPECT_EQ(costOf(*b, 1, "A"), 1500);
+}
+
+TEST(Actions, ASplitTouchesEveryHolderOfThatSymbolAndNothingElse) {
+  auto b = desk();
+  fundAll(*b, 1, 10000);
+  fundAll(*b, 2, 10000);
+  fundAll(*b, 3, 10000);
+  IS(b->setQuote("A", 100), Ok);
+  IS(b->setQuote("B", 50), Ok);
+  IS(b->buy(1, "A", 10), Ok);
+  IS(b->buy(2, "A", 5), Ok);
+  IS(b->buy(2, "B", 7), Ok);
+  IS(b->split("A", 3, 40), Ok);
+  EXPECT_EQ(sharesOf(*b, 1, "A"), 30);
+  EXPECT_EQ(sharesOf(*b, 2, "A"), 15);
+  EXPECT_EQ(sharesOf(*b, 2, "B"), 7);
+  EXPECT_EQ(sharesOf(*b, 3, "A"), 0);
+  EXPECT_EQ(costOf(*b, 1, "A"), 1000);
+  EXPECT_EQ(valueOf(*b, 1), 9000 + 30 * 40);
+  EXPECT_EQ(valueOf(*b, 2), 10000 - 500 - 350 + 15 * 40 + 7 * 50);
+  EXPECT_EQ(positionsOf(*b, 2), 2);
+  IS(b->buy(3, "A", 25), Ok);  // the new quote is what a later buy pays
+  EXPECT_EQ(cashOf(*b, 3), 9000);
+}
+
+TEST(Actions, SplitChecksFollowTheDocumentedOrderAndARefusalChangesNothing) {
+  auto b = desk();
+  fundAll(*b, 1, 10000);
+  IS(b->setQuote("A", 100), Ok);
+  IS(b->buy(1, "A", 10), Ok);
+  IS(b->split("", 2, 10), InvalidInput);
+  IS(b->split("A", 1, 10), InvalidInput);
+  IS(b->split("A", 101, 10), InvalidInput);
+  IS(b->split("A", 2, 0), InvalidInput);
+  IS(b->split("A", 2, broker::kMaxQuote + 1), InvalidInput);
+  IS(b->split("NOPE", 1, 10), InvalidInput);  // the arguments are checked before the quote is looked up
+  IS(b->split("NOPE", 2, 10), NoQuote);
+  EXPECT_EQ(sharesOf(*b, 1, "A"), 10);
+  EXPECT_EQ(valueOf(*b, 1), 9000 + 1000);  // the quote is still 100
+  IS(b->split("A", 100, 1), Ok);
+  EXPECT_EQ(sharesOf(*b, 1, "A"), 1000);
+  IS(b->split("A", 2, 1), Ok);
+  EXPECT_EQ(sharesOf(*b, 1, "A"), 2000);
+}
+
+TEST(Actions, ADividendPaysEveryHolderPerShareAndTouchesNeitherCostNorProfit) {
+  auto b = desk();
+  fundAll(*b, 1, 100000);
+  fundAll(*b, 2, 100000);
+  fundAll(*b, 3, 100000);
+  IS(b->setQuote("A", 100), Ok);
+  IS(b->buy(1, "A", 10), Ok);
+  IS(b->buy(2, "A", 25), Ok);
+  IS(b->dividend("A", 30), Ok);
+  EXPECT_EQ(cashOf(*b, 1), 100000 - 1000 + 300);
+  EXPECT_EQ(cashOf(*b, 2), 100000 - 2500 + 750);
+  EXPECT_EQ(cashOf(*b, 3), 100000);
+  EXPECT_EQ(dividendsOf(*b, 1), 300);
+  EXPECT_EQ(dividendsOf(*b, 2), 750);
+  EXPECT_EQ(dividendsOf(*b, 3), 0);
+  EXPECT_EQ(costOf(*b, 1, "A"), 1000);
+  EXPECT_EQ(realizedOf(*b, 1), 0);
+  EXPECT_EQ(valueOf(*b, 1), 100000 - 1000 + 300 + 1000);
+}
+
+TEST(Actions, DividendChecksAndTheTotalQueryAreValidatedAndRefusalsChangeNothing) {
+  auto b = desk();
+  fundAll(*b, 1, 10000);
+  IS(b->setQuote("A", 100), Ok);
+  IS(b->buy(1, "A", 10), Ok);
+  IS(b->dividend("", 30), InvalidInput);
+  IS(b->dividend("A", 0), InvalidInput);
+  IS(b->dividend("A", broker::kMaxQuote + 1), InvalidInput);
+  IS(b->dividend("NOPE", 0), InvalidInput);
+  IS(b->dividend("NOPE", 30), NoQuote);
+  EXPECT_EQ(cashOf(*b, 1), 9000);
+  EXPECT_EQ(dividendsOf(*b, 1), 0);
+  long long out = 5;
+  IS(b->dividendsReceived(0, out), InvalidInput);
+  IS(b->dividendsReceived(9, out), UnknownAccount);
+  EXPECT_EQ(out, 5);
+}
+
+TEST(Actions, ADividendCountsOnlyTheSharesHeldNowAndTotalsAccumulate) {
+  auto b = desk();
+  fundAll(*b, 1, 100000);
+  fundAll(*b, 2, 100000);
+  IS(b->setQuote("A", 100), Ok);
+  IS(b->buy(1, "A", 10), Ok);
+  IS(b->sell(1, "A", 4), Ok);
+  IS(b->buy(2, "A", 5), Ok);
+  IS(b->sell(2, "A", 5), Ok);  // sold out before the dividend
+  IS(b->dividend("A", 10), Ok);
+  EXPECT_EQ(dividendsOf(*b, 1), 60);
+  EXPECT_EQ(dividendsOf(*b, 2), 0);
+  IS(b->dividend("A", 5), Ok);
+  EXPECT_EQ(dividendsOf(*b, 1), 90);
+  EXPECT_EQ(cashOf(*b, 1), 100000 - 1000 + 400 + 90);
+  IS(b->split("A", 2, 50), Ok);
+  IS(b->dividend("A", 1), Ok);  // 12 shares now
+  EXPECT_EQ(dividendsOf(*b, 1), 102);
+}
+
+TEST(Actions, ACostSplitAcrossMoreSharesIsGivenUpInProportionToTheNewCount) {
+  auto b = desk(1);
+  fundAll(*b, 1, 10000);
+  IS(b->setQuote("A", 100), Ok);
+  IS(b->buy(1, "A", 3), Ok);  // 3 shares for 301
+  IS(b->split("A", 2, 50), Ok);
+  EXPECT_EQ(sharesOf(*b, 1, "A"), 6);
+  EXPECT_EQ(costOf(*b, 1, "A"), 301);
+  IS(b->sell(1, "A", 2), Ok);  // value 100, fee 1; cost 301 x 2 / 6 = 100
+  EXPECT_EQ(realizedOf(*b, 1), 99 - 100);
+  EXPECT_EQ(costOf(*b, 1, "A"), 201);
+  IS(b->sell(1, "A", 4), Ok);  // value 200, fee 1; the rest of the lot, 201
+  EXPECT_EQ(realizedOf(*b, 1), -1 + (199 - 201));
+  EXPECT_EQ(positionsOf(*b, 1), 0);
+}
+
+TEST(Model, RandomActivityWithSplitsAndDividendsMatchesAnIndependentImplementation) {
+  const FeeSchedule schedules[] = {{0, 0, 0}, {3, 0, 0}, {0, 200, 2}};
+  std::uint64_t seed = 21;
+  for (const FeeSchedule& f : schedules) {
+    for (int round = 0; round < 3; ++round) {
+      auto b = broker::makeCorporateBrokerage(f);
+      Model m(f);
+      runRandom(*b, m, seed++ * 15485863, 1200);
+    }
+  }
+}
+1b:Tb66,#pragma once
+#include <map>
+#include <string>
+
+#include "lot.h"
+
+// The cash an account holds. It never goes below zero because every debit is checked by the caller first.
+class Purse {
+ public:
+  long long balance() const { return balance_; }
+  void credit(long long cents) { balance_ += cents; }
+  void debit(long long cents) { balance_ -= cents; }
+
+ private:
+  long long balance_ = 0;
+};
+
+// The running totals that are reported but never spent from.
+class Totals {
+ public:
+  long long realized() const { return realized_; }
+  long long fees() const { return fees_; }
+  long long dividends() const { return dividends_; }
+  void addRealized(long long cents) { realized_ += cents; }
+  void addFee(long long cents) { fees_ += cents; }
+  void addDividend(long long cents) { dividends_ += cents; }
+
+ private:
+  long long realized_ = 0;
+  long long fees_ = 0;
+  long long dividends_ = 0;
+};
+
+// The positions of one account, one per symbol that still has shares.
+class Holdings {
+ public:
+  Position& open(const std::string& symbol) { return positions_[symbol]; }
+
+  Position* find(const std::string& symbol) {
+    const auto it = positions_.find(symbol);
+    return it == positions_.end() ? nullptr : &it->second;
+  }
+
+  const Position* find(const std::string& symbol) const {
+    const auto it = positions_.find(symbol);
+    return it == positions_.end() ? nullptr : &it->second;
+  }
+
+  void closeIfEmpty(const std::string& symbol) {
+    const auto it = positions_.find(symbol);
+    if (it != positions_.end() && it->second.empty()) positions_.erase(it);
+  }
+
+  const std::map<std::string, Position>& all() const { return positions_; }
+
+ private:
+  std::map<std::string, Position> positions_;
+};
+
+class Account {
+ public:
+  Purse& purse() { return purse_; }
+  const Purse& purse() const { return purse_; }
+  Holdings& holdings() { return holdings_; }
+  const Holdings& holdings() const { return holdings_; }
+  Totals& totals() { return totals_; }
+  const Totals& totals() const { return totals_; }
+
+ private:
+  Purse purse_;
+  Holdings holdings_;
+  Totals totals_;
+};
+
+class Accounts {
+ public:
+  bool open(int id) { return accounts_.emplace(id, Account()).second; }
+
+  Account* find(int id) {
+    const auto it = accounts_.find(id);
+    return it == accounts_.end() ? nullptr : &it->second;
+  }
+
+  const Account* find(int id) const {
+    const auto it = accounts_.find(id);
+    return it == accounts_.end() ? nullptr : &it->second;
+  }
+
+  // The shared check order of every account call: a bad id first, then an id nobody opened.
+  broker::Status lookup(int id, const Account*& account) const {
+    if (id < 1) return broker::Status::InvalidInput;
+    account = find(id);
+    return account == nullptr ? broker::Status::UnknownAccount : broker::Status::Ok;
+  }
+
+  template <typename Fn>
+  void forEach(Fn fn) {
+    for (auto& entry : accounts_) fn(entry.second);
+  }
+
+ private:
+  std::map<int, Account> accounts_;
+};
+1c:T1286,#pragma once
+#include "trade_desk.h"
+
+// The facade the interface sees: validate, look the account up, hand the work to the collaborator that owns it.
+class BrokerageImpl : public broker::CorporateBrokerage {
+ public:
+  explicit BrokerageImpl(const broker::FeeSchedule& schedule)
+      : commission_(schedule), desk_(quotes_, commission_), actions_(accounts_) {}
+
+  broker::Status openAccount(int id) override {
+    if (!Rules::accountId(id)) return broker::Status::InvalidInput;
+    return accounts_.open(id) ? broker::Status::Ok : broker::Status::DuplicateAccount;
+  }
+
+  broker::Status deposit(int id, long long cents) override {
+    if (!Rules::accountId(id) || !Rules::cash(cents)) return broker::Status::InvalidInput;
+    Account* account = accounts_.find(id);
+    if (account == nullptr) return broker::Status::UnknownAccount;
+    account->purse().credit(cents);
+    return broker::Status::Ok;
+  }
+
+  broker::Status withdraw(int id, long long cents) override {
+    if (!Rules::accountId(id) || !Rules::cash(cents)) return broker::Status::InvalidInput;
+    Account* account = accounts_.find(id);
+    if (account == nullptr) return broker::Status::UnknownAccount;
+    if (account->purse().balance() < cents) return broker::Status::InsufficientFunds;
+    account->purse().debit(cents);
+    return broker::Status::Ok;
+  }
+
+  broker::Status setQuote(const std::string& symbol, int cents) override {
+    if (!Rules::symbol(symbol) || !Rules::quote(cents)) return broker::Status::InvalidInput;
+    quotes_.set(symbol, cents);
+    return broker::Status::Ok;
+  }
+
+  broker::Status buy(int id, const std::string& symbol, int shares) override {
+    if (!Rules::accountId(id) || !Rules::symbol(symbol) || !Rules::shares(shares)) return broker::Status::InvalidInput;
+    Account* account = accounts_.find(id);
+    return account == nullptr ? broker::Status::UnknownAccount : desk_.buy(*account, symbol, shares);
+  }
+
+  broker::Status sell(int id, const std::string& symbol, int shares) override {
+    if (!Rules::accountId(id) || !Rules::symbol(symbol) || !Rules::shares(shares)) return broker::Status::InvalidInput;
+    Account* account = accounts_.find(id);
+    return account == nullptr ? broker::Status::UnknownAccount : desk_.sell(*account, symbol, shares);
+  }
+
+  broker::Status statement(int id, broker::Statement& out) const override {
+    const Account* account = nullptr;
+    const broker::Status status = accounts_.lookup(id, account);
+    if (status != broker::Status::Ok) return status;
+    out.cash = account->purse().balance();
+    out.realizedPnl = account->totals().realized();
+    out.portfolioValue = Valuation::of(*account, quotes_);
+    out.positionCount = static_cast<int>(account->holdings().all().size());
+    return broker::Status::Ok;
+  }
+
+  broker::Status holding(int id, const std::string& symbol, broker::Holding& out) const override {
+    const Account* account = nullptr;
+    if (!Rules::symbol(symbol)) return broker::Status::InvalidInput;
+    const broker::Status status = accounts_.lookup(id, account);
+    if (status != broker::Status::Ok) return status;
+    const Position* position = account->holdings().find(symbol);
+    out.shares = position == nullptr ? 0 : position->shares();
+    out.costBasis = position == nullptr ? 0 : position->cost();
+    return broker::Status::Ok;
+  }
+
+  broker::Status feesPaid(int id, long long& out) const override {
+    const Account* account = nullptr;
+    const broker::Status status = accounts_.lookup(id, account);
+    if (status == broker::Status::Ok) out = account->totals().fees();
+    return status;
+  }
+
+  broker::Status split(const std::string& symbol, int factor, int newQuote) override {
+    int old = 0;
+    if (!Rules::symbol(symbol) || !Rules::splitFactor(factor) || !Rules::quote(newQuote)) return broker::Status::InvalidInput;
+    if (!quotes_.find(symbol, old)) return broker::Status::NoQuote;
+    actions_.split(symbol, factor);
+    quotes_.set(symbol, newQuote);
+    return broker::Status::Ok;
+  }
+
+  broker::Status dividend(const std::string& symbol, int centsPerShare) override {
+    int old = 0;
+    if (!Rules::symbol(symbol) || !Rules::quote(centsPerShare)) return broker::Status::InvalidInput;
+    if (!quotes_.find(symbol, old)) return broker::Status::NoQuote;
+    actions_.dividend(symbol, centsPerShare);
+    return broker::Status::Ok;
+  }
+
+  broker::Status dividendsReceived(int id, long long& out) const override {
+    const Account* account = nullptr;
+    const broker::Status status = accounts_.lookup(id, account);
+    if (status == broker::Status::Ok) out = account->totals().dividends();
+    return status;
+  }
+
+ private:
+  Accounts accounts_;
+  QuoteBoard quotes_;
+  Commission commission_;
+  TradeDesk desk_;
+  CorporateActions actions_;
+};
+1d:T777,#pragma once
+#include <deque>
+
+#include "api.h"
+
+// One purchase still (partly) held: how many shares remain and what those shares cost, commission included.
+class Lot {
+ public:
+  Lot(long long shares, long long cost) : shares_(shares), cost_(cost) {}
+
+  long long shares() const { return shares_; }
+  long long cost() const { return cost_; }
+
+  // Gives up `count` shares (at most shares()) and returns the cost that went with them. A part of a lot takes its share of
+  // the cost rounded down; the last shares take whatever is left, so the cents always add up.
+  long long take(long long count) {
+    const long long given = count == shares_ ? cost_ : cost_ * count / shares_;
+    shares_ -= count;
+    cost_ -= given;
+    return given;
+  }
+
+  void multiplyShares(int factor) { shares_ *= factor; }
+
+ private:
+  long long shares_;
+  long long cost_;
+};
+
+// Everything one account holds of one symbol, as lots in the order they were bought.
+class Position {
+ public:
+  void add(const Lot& lot) { lots_.push_back(lot); }
+
+  long long shares() const {
+    long long total = 0;
+    for (const Lot& lot : lots_) total += lot.shares();
+    return total;
+  }
+
+  long long cost() const {
+    long long total = 0;
+    for (const Lot& lot : lots_) total += lot.cost();
+    return total;
+  }
+
+  // First in, first out. The caller has checked that `count` shares are held. Returns the cost of the shares sold.
+  long long sellFifo(long long count) {
+    long long cost = 0;
+    while (count > 0) {
+      Lot& oldest = lots_.front();
+      const long long used = oldest.shares() < count ? oldest.shares() : count;
+      cost += oldest.take(used);
+      count -= used;
+      if (oldest.shares() == 0) lots_.pop_front();
+    }
+    return cost;
+  }
+
+  void split(int factor) {
+    for (Lot& lot : lots_) lot.multiplyShares(factor);
+  }
+
+  bool empty() const { return lots_.empty(); }
+
+ private:
+  std::deque<Lot> lots_;
+};
+1e:T683,#pragma once
+#include <string>
+#include <unordered_map>
+
+#include "api_storm2.h"
+
+// The latest price of every symbol that was ever quoted.
+class QuoteBoard {
+ public:
+  void set(const std::string& symbol, int cents) { quotes_[symbol] = cents; }
+
+  bool find(const std::string& symbol, int& cents) const {
+    const auto it = quotes_.find(symbol);
+    if (it == quotes_.end()) return false;
+    cents = it->second;
+    return true;
+  }
+
+ private:
+  std::unordered_map<std::string, int> quotes_;
+};
+
+// What a trade costs in commission. The all-zero schedule charges nothing.
+class Commission {
+ public:
+  explicit Commission(const broker::FeeSchedule& schedule) : schedule_(schedule) {}
+
+  long long on(long long value) const {
+    const long long percent = (value * schedule_.basisPoints + kBasisPointsPerWhole - 1) / kBasisPointsPerWhole;
+    const long long fee = schedule_.flat + percent;
+    return fee < schedule_.minimum ? schedule_.minimum : fee;
+  }
+
+ private:
+  static constexpr long long kBasisPointsPerWhole = 10000;
+  broker::FeeSchedule schedule_;
+};
+
+// The legal ranges, in one place.
+struct Rules {
+  static bool accountId(int id) { return id >= 1; }
+  static bool symbol(const std::string& s) { return !s.empty(); }
+  static bool cash(long long cents) { return cents >= 1 && cents <= broker::kMaxCash; }
+  static bool quote(int cents) { return cents >= 1 && cents <= broker::kMaxQuote; }
+  static bool shares(int count) { return count >= 1 && count <= broker::kMaxShares; }
+  static bool splitFactor(int factor) { return factor >= kMinSplit && factor <= kMaxSplit; }
+
+  static constexpr int kMinSplit = 2;
+  static constexpr int kMaxSplit = 100;
+};
+1f:Tb30,#pragma once
+#include "account.h"
+#include "market.h"
+
+// Market orders at the current quote: the one place that moves cash, lots and totals together.
+class TradeDesk {
+ public:
+  TradeDesk(const QuoteBoard& quotes, const Commission& commission) : quotes_(quotes), commission_(commission) {}
+
+  broker::Status buy(Account& account, const std::string& symbol, long long shares) const {
+    int quote = 0;
+    if (!quotes_.find(symbol, quote)) return broker::Status::NoQuote;
+    const long long value = shares * quote;
+    const long long fee = commission_.on(value);
+    if (account.purse().balance() < value + fee) return broker::Status::InsufficientFunds;
+    account.purse().debit(value + fee);
+    account.totals().addFee(fee);
+    account.holdings().open(symbol).add(Lot(shares, value + fee));
+    return broker::Status::Ok;
+  }
+
+  broker::Status sell(Account& account, const std::string& symbol, long long shares) const {
+    Position* position = account.holdings().find(symbol);
+    int quote = 0;
+    if (position == nullptr || position->shares() < shares || !quotes_.find(symbol, quote)) {
+      return broker::Status::InsufficientShares;
+    }
+    const long long value = shares * quote;
+    const long long fee = commission_.on(value);
+    if (fee > value) return broker::Status::InsufficientFunds;
+    const long long cost = position->sellFifo(shares);
+    account.holdings().closeIfEmpty(symbol);
+    account.purse().credit(value - fee);
+    account.totals().addFee(fee);
+    account.totals().addRealized(value - fee - cost);
+    return broker::Status::Ok;
+  }
+
+ private:
+  const QuoteBoard& quotes_;
+  const Commission& commission_;
+};
+
+// What an account is worth at today's quotes.
+struct Valuation {
+  static long long of(const Account& account, const QuoteBoard& quotes) {
+    long long total = account.purse().balance();
+    for (const auto& entry : account.holdings().all()) {
+      int quote = 0;
+      if (quotes.find(entry.first, quote)) total += entry.second.shares() * quote;
+    }
+    return total;
+  }
+};
+
+// Splits and dividends touch every holder of a symbol and nothing else in the design.
+class CorporateActions {
+ public:
+  explicit CorporateActions(Accounts& accounts) : accounts_(accounts) {}
+
+  void split(const std::string& symbol, int factor) {
+    accounts_.forEach([&](Account& account) {
+      Position* position = account.holdings().find(symbol);
+      if (position != nullptr) position->split(factor);
+    });
+  }
+
+  void dividend(const std::string& symbol, int centsPerShare) {
+    accounts_.forEach([&](Account& account) {
+      const Position* position = account.holdings().find(symbol);
+      if (position == nullptr) return;
+      const long long paid = position->shares() * centsPerShare;
+      account.purse().credit(paid);
+      account.totals().addDividend(paid);
+    });
+  }
+
+ private:
+  Accounts& accounts_;
+};
+f:[["children",{"s":"__PAGE__","h":160,"d":{"r":["$","$1","c",{"children":[["$","$L12",null,{"bundle":{"id":"brokerage","title":"Stock brokerage: FIFO lots, commissions and corporate actions","level":"Senior","parMinutes":90,"patterns":["Strategy","Facade","Value Object"],"requirements":[{"id":"R-accounts","text":"Accounts: openAccount(id) needs id 1 or more (InvalidInput), then DuplicateAccount; a duplicate open changes nothing. deposit/withdraw take cents 1..kMaxCash inclusive. Every call checks InvalidInput, then UnknownAccount, then the state (withdraw: InsufficientFunds only when cash < amount; exactly the cash is fine). A refused call changes nothing.","phase":"base","hidden":true},{"id":"R-quotes","text":"setQuote(symbol, cents): non-empty symbol and 1..kMaxQuote else InvalidInput. A quote replaces the old one and is never removed. A buy of a symbol that was never quoted is NoQuote.","phase":"base","hidden":true},{"id":"R-buy","text":"buy checks InvalidInput (id < 1, empty symbol, shares outside 1..kMaxShares), UnknownAccount, NoQuote, InsufficientFunds, in that order. On Ok it takes shares x current quote from the cash and adds a lot (shares, cost). A refusal changes nothing.","phase":"base","hidden":true},{"id":"R-sell","text":"sell checks InvalidInput, UnknownAccount, then InsufficientShares (fewer shares held than asked, or never held). It never sells less than asked. On Ok the cash gets shares x current quote, and a symbol sold down to zero is no longer a position. A refusal changes nothing.","phase":"base","hidden":true},{"id":"R-fifo","text":"Sales use lots first in, first out. A lot that is only partly used keeps the rest of its shares and the matching part of its cost. realizedPnl is the running total of (proceeds - cost of the shares sold); a quote change alone never moves it.","phase":"base","hidden":true},{"id":"R-money","text":"Money and share counts are whole cents / shares in 64-bit integers: a single order can be 10^12 cents and the products must not overflow.","phase":"base","hidden":true},{"id":"R-queries","text":"statement(id) = cash, realizedPnl, portfolioValue (cash + shares x CURRENT quote of every held symbol) and positionCount; holding(id, symbol) = shares and the cost of the shares still held (both 0 when none). Errors are InvalidInput then UnknownAccount; the out-parameter is touched only on Ok.","phase":"base","hidden":true},{"id":"R-fee-buy","text":"FeeSchedule: fee = max(minimum, flat + ceil(value x basisPoints / 10000)) on every trade. A buy needs cash >= value + fee (else InsufficientFunds) and the fee becomes part of the new lot's cost. feesPaid is the running total of all fees.","phase":"storm1","hidden":true},{"id":"R-fee-sell","text":"A sale pays value - fee into the cash and realizes (value - fee) - cost taken. A sale whose fee is more than its value is refused with InsufficientFunds, checked after InsufficientShares; fee equal to value is fine.","phase":"storm1","hidden":true},{"id":"R-fee-round","text":"A PARTLY consumed lot gives up cost x consumed / lotShares rounded down; a lot used up completely gives up all the cost it has left, so no cent is lost or invented.","phase":"storm1","hidden":true},{"id":"R-split","text":"split(symbol, factor 2..100, newQuote 1..kMaxQuote): every lot of the symbol in every account gets factor times the shares with the same cost and the same order; the quote becomes newQuote; cash and realized profit are untouched. InvalidInput, then NoQuote for a never-quoted symbol; a refusal changes nothing.","phase":"storm2","hidden":true},{"id":"R-dividend","text":"dividend(symbol, centsPerShare 1..kMaxQuote): each account holding the symbol gets shares x cents into the cash, counted in dividendsReceived. Cost basis, lots and realized profit are not touched. InvalidInput, then NoQuote.","phase":"storm2","hidden":true}],"brief":"$13","editorial":"$14","clarify":[{"id":"q-accounts","text":"How are accounts opened, what are the legal amounts, and in which order does each call check its arguments?","answer":"openAccount(id) with an id of 1 or more (InvalidInput), then DuplicateAccount; a new account has no cash and no shares. deposit and withdraw take whole cents from 1 to kMaxCash, both ends inclusive. Every call checks InvalidInput first, then UnknownAccount, then the state (withdraw: InsufficientFunds when the cash is less than the amount; exactly the amount is fine). A refused call changes nothing at all.","reveals":["R-accounts"],"quality":"essential"},{"id":"q-quotes","text":"Where do prices come from, and what if a symbol has no price yet?","answer":"The market pushes them in with setQuote(symbol, cents): the symbol must be non-empty and the price 1 to kMaxQuote. A quote replaces the old one and is never removed. A buy of a symbol that was never quoted is refused with NoQuote; the trades themselves are market orders at the CURRENT quote, there are no limit orders.","reveals":["R-quotes"],"quality":"essential"},{"id":"q-buy","text":"What does a buy check, in what order, and what exactly changes when it succeeds?","answer":"InvalidInput (id below 1, empty symbol, shares outside 1..kMaxShares), UnknownAccount, NoQuote, InsufficientFunds. On success it takes shares x quote from the cash and adds a LOT: the number of shares and what they cost. Exactly the cash the account has is enough. Nothing else is touched.","reveals":["R-buy"],"quality":"essential"},{"id":"q-sell","text":"What does a sell check and what does it pay?","answer":"InvalidInput, UnknownAccount, then InsufficientShares: an account that holds fewer shares than it wants to sell, or never held the symbol at all, is refused and nothing changes. It never sells 'what it can'. A sale pays shares x the CURRENT quote into the cash, and a symbol sold down to zero is no longer a position.","reveals":["R-sell"],"quality":"essential"},{"id":"q-lots","text":"When I sell part of what I hold, which shares are sold, and what is profit?","answer":"First in, first out: the oldest lot is used up first; a lot that is only partly used keeps its remaining shares and the matching part of its cost. Realized P&L is the running total of (proceeds - cost of the shares that were sold). It is realized only when shares are sold: a price move alone changes the portfolio value but never the realized profit.","reveals":["R-fifo"],"quality":"essential"},{"id":"q-numbers","text":"What type holds money and share counts, and how big can they get?","answer":"Whole cents in a 64-bit integer. One order is up to kMaxShares (10^6) shares at up to kMaxQuote (10^6) cents, so a single trade is up to 10^12 cents and a deposit up to kMaxCash (also 10^12). A 32-bit int overflows on the first big order, and no floating point anywhere: it would drift by cents.","reveals":["R-money"],"quality":"essential"},{"id":"q-queries","text":"What can I ask an account, and what is the portfolio value?","answer":"statement(id) gives the cash, the realized profit, the portfolio value and the number of positions; holding(id, symbol) gives the shares (0 when none) and the cost of exactly the shares still held. Portfolio value is cash plus every held symbol's shares x its CURRENT quote. The out-parameter is touched only on Ok; the errors are InvalidInput then UnknownAccount.","reveals":["R-queries"],"quality":"useful"},{"id":"q-fees","text":"Does the brokerage charge commission, and how is it worked out?","answer":"Yes, as the first change request, from a schedule: fee = max(minimum, flat + ceil(value x basisPoints / 10000)) on every trade, buys and sells. On a buy the cash must cover value + fee and the fee becomes part of the lot's cost. On a sale the cash gets value - fee, and a sale whose fee exceeds its value is refused with InsufficientFunds. Realized profit is (value - fee) minus the cost taken.","reveals":["R-fee-buy","R-fee-sell"],"quality":"useful"},{"id":"q-rounding","text":"With fees, a lot's cost is no longer a whole number of cents per share. How is the cost of part of a lot worked out?","answer":"A PARTLY consumed lot gives up cost x consumed / lotShares, rounded down; the lot that is used up completely gives up whatever cost it has left. So no cent is lost or invented: the costs of all the sales and what is still held always add up to what was paid.","reveals":["R-fee-round"],"quality":"useful"},{"id":"q-actions","text":"Do shares ever change by themselves, like stock splits or dividends?","answer":"Yes, as the second change request. A forward split (factor 2 to 100) multiplies every lot's shares of one symbol in every account, keeps the cost and the order, and installs the new quote. A cash dividend pays every holder shares x cents per share into the cash, leaves the cost and the realized profit alone, and is counted separately.","reveals":["R-split","R-dividend"],"quality":"useful"},{"id":"q-orders","text":"Do I need limit orders, stop orders, short selling, margin or options?","answer":"No. Only market orders at the current quote, long positions only, paid in cash. Limit orders would be a fair follow-up (they are an order book problem in this workshop) and margin is a risk-engine topic.","reveals":[],"quality":"noise"},{"id":"q-tax","text":"Should I track tax: wash sales, long-term versus short-term gains?","answer":"No. FIFO lots are what a tax report would be built from, but nothing here is time-aware and the brokerage keeps no dates.","reveals":[],"quality":"noise"},{"id":"q-threads","text":"Will many customers trade at the same time from several threads?","answer":"Not in this exercise: single-threaded and deterministic. How you would make it safe (one lock per account, a lock order for anything touching two accounts) is a good follow-up.","reveals":[],"quality":"noise"},{"id":"q-feed","text":"Does the brokerage need a live market-data feed or to persist anything?","answer":"No. setQuote is the whole feed and everything lives in memory. A journal of the calls would be enough to rebuild an account and is a good follow-up.","reveals":[],"quality":"noise"}],"rubric":[{"id":"res-lot","text":"Is one purchase still held: the shares that remain and the cost of exactly those shares, giving both up together when part of it is sold","phase":"base","owners":["Lot","TaxLot","PurchaseLot","Tranche","CostLot"]},{"id":"res-position","text":"Keeps the lots of one symbol in purchase order and sells from the oldest first (FIFO), reporting the cost of what was sold","phase":"base","owners":["Position","Holding","SymbolPosition","LotQueue","LotBook","Lots"]},{"id":"res-desk","text":"Is the one place that moves cash, lots and totals together for a buy or a sale, after the checks, so a refused order changes nothing","phase":"base","owners":["TradeDesk","Trader","OrderDesk","Exchange","TradeExecutor","Broker","Executor"]},{"id":"res-quotes","text":"Knows the latest price of each symbol and whether one exists, and knows nothing about accounts","phase":"base","owners":["QuoteBoard","Quotes","PriceBoard","MarketData","PriceBook","QuoteBook","Prices"]},{"id":"res-account","text":"Owns one customer's state (cash, positions, totals) behind small collaborators instead of loose numbers in the facade","phase":"base","owners":["Account","CustomerAccount","BrokerageAccount"]},{"id":"res-accounts","text":"Finds and opens accounts by id in one place, with the shared check order of a bad id before an unknown one","phase":"base","owners":["Accounts","AccountBook","AccountRegistry","AccountStore","AccountTable","Customers"]},{"id":"res-rules","text":"Holds the legal ranges of every id, amount, quote and share count in one place","phase":"base","owners":["Rules","Limits","Validator","Validation","InputRules","Ranges"]},{"id":"res-valuation","text":"Answers what an account is worth today from its cash, its positions and the current quotes, separately from how trades are done","phase":"base","owners":["Valuation","Valuer","PortfolioValue","Portfolio","Pricing","Valuator"]},{"id":"res-facade","text":"Is a thin facade that validates, finds the account and delegates, owning no business rule itself","phase":"base","owners":["BrokerageImpl","BrokerageFacade","Brokerage","BrokerageService","BrokerageDesk","SimpleBrokerage"]},{"id":"res-commission","text":"Owns the commission rule (flat plus percent rounded up, with a minimum) in one place that a trade asks, so a new schedule does not touch the trade code","phase":"storm1","owners":["Commission","FeeSchedule","FeePolicy","Fees","CommissionPolicy","FeeCalculator","Pricing"]},{"id":"res-actions","text":"Applies splits and dividends to every holder of a symbol from one class, without changing how a buy, a sale or a lot works","phase":"storm2","owners":["CorporateActions","Actions","CorporateActionProcessor","ActionProcessor","Corporate","Events"]}],"followups":[{"level":"SDE2","question":"Why is money a `long long` of cents, and where does an `int` break first?","answer":"Cents are exact: 0.1 + 0.2 style drift cannot happen with integers, and every figure the brokerage reports can be compared with `==`. The type matters because the biggest legal order is 10^6 shares at 10^6 cents, which is 10^12 cents and needs 40 bits. The first place an `int` breaks is the multiplication `shares * quote`, not the balance, and C++ does that multiplication in the operands' type before it is widened, so the value must be converted BEFORE the product (`static_cast<long long>(shares) * quote`, or take shares as a 64-bit value from the start). Signed overflow is also undefined behaviour, not just a wrong number."},{"level":"SDE2","question":"Why does the sale answer InsufficientShares instead of selling what the account has?","answer":"Because the caller asked for a precise trade and a partial one is a different trade at a different size. Returning Ok for less than was asked hides the difference unless the caller reads the quantity back, and a retrying client would sell twice. Refusing and changing nothing keeps the contract simple: Ok means exactly what you asked. If partial fills were wanted they would be an explicit order type with their own result."},{"level":"SDE2","question":"What is a lot, and why are lots stored instead of one total per symbol?","answer":"A lot is one purchase that is still (partly) held: its remaining shares and what those shares cost. A single total of shares and a single total of cost loses which shares are which, and which shares are sold changes the profit. With lots a sale can take the oldest first and report exactly the cost of what left. With one pair of totals you can only compute an average cost, which is a different, equally legitimate rule (and the one many brokers use for funds)."},{"level":"Senior","question":"FIFO, LIFO and average cost all appear in real brokerages. How does the design let you switch?","answer":"The rule lives in `Position`: which lot a sale takes from, and what cost it reports. A `LotSelection` Strategy (oldest first, newest first, highest cost first) can sit behind `sellFifo`, chosen per account because tax rules are an account property in practice. Average cost is a different representation, one running (shares, cost) pair, so it is a different `Position` implementation behind the same small interface rather than another selection order. The `TradeDesk` and the facade do not change in either case, which is what the Change Storm on fees also shows: the trade code asks the cost model and the fee model, and neither of them is spread through it."},{"level":"Senior","question":"Walk through why a refused order must change nothing, and how the reference guarantees it.","answer":"A client that gets InsufficientFunds will retry, show a message or move on; if the call had already taken the cash, the account is now wrong and nothing in the system knows. The reference makes the guarantee structural: the facade validates, the desk does every CHECK (quote, funds, shares, fee against value) before the first line that writes, and the writes after that cannot fail. The bad design that debits first and then checks looks equivalent in a happy-path test and is wrong exactly when it matters. In a system with failures between the writes (a database), the same discipline becomes a transaction, with the checks inside it."},{"level":"Senior","question":"Rounding: a lot of 3 shares cost 301 cents and you sell one share. What is its cost, and why that rule?","answer":"301 x 1 / 3 = 100.33, and the rule rounds down to 100, leaving 201 cents on 2 shares. The next sale gives up 201 x 1 / 2 = 100 and leaves 101 on the last share, which takes ALL of what is left. Two properties matter: the costs given up and the cost still held always add up to what was paid (no cent is lost), and no lot ever goes negative (rounding up could take more than a lot has). The alternative of keeping a rational cost per share (301/3) is exact but needs fractions; integer cents with 'the last share takes the remainder' is the usual way to keep ledgers balanced, the same trick as splitting a bill."},{"level":"Senior","question":"The corporate action touches every account. What is the cost, and how would you make it cheap at scale?","answer":"In the reference a split or a dividend walks every account and looks the symbol up in each, which is O(accounts x log symbols) per action. With millions of accounts and thousands of symbols that is slow for a rare event but fine for a nightly batch. The fix is a holders index (symbol to the set of accounts that hold it), kept up to date when a position opens or closes, so an action visits only holders. That adds a second place that must agree with the positions, so it is only worth it when profiling says so. The reference keeps `CorporateActions` as the only class that knows about 'every holder', so adding the index later changes one class."},{"level":"Staff","question":"How would you make it safe for many threads or processes, and where does the real difficulty sit?","answer":"Per-account state is the easy part: one lock (or one strand/actor) per account serializes that account's buys, sells, deposits and queries. The hard parts are what crosses accounts. A dividend or split touches many accounts and must not interleave with a trade in a way that pays a dividend on shares sold a moment earlier; the usual answers are a cut-off (ex-dividend date: who held it at a recorded moment) or a global epoch lock taken only for actions. The quote read inside a trade must be the same value used for the cash and the lot, so it is read once. And any operation that moves money between accounts (a transfer) needs a fixed lock order (by account id) to avoid deadlock. In a real system accounts are partitioned (shard by account id) so a trade is a single-partition transaction and corporate actions become a fan-out of idempotent per-account jobs."},{"level":"Staff","question":"Design the persistence and audit story for this brokerage.","answer":"Treat cash, lots and totals as DERIVED from an append-only journal of facts: deposit, withdraw, trade (account, symbol, shares, price, fee), split, dividend. Each entry has a sequence number and an idempotency key so a retried request does not trade twice. Current state is a snapshot plus a replay of the tail; because the rules are deterministic (FIFO, floor division, the same fee schedule), replaying the journal always reproduces the same lots and the same realized profit, which is also how you would verify a bug fix and answer a regulator. Money tables use integer cents and constraints (cash >= 0, shares >= 0) as a last line of defence beneath the code's own checks. Corporate actions are journalled per account as well, with the action id, so a replay or a re-run of the batch is a no-op."},{"level":"Staff","question":"How do reconciliation and correctness at scale change what you build?","answer":"Money systems are checked from outside, not trusted from inside. A nightly reconciliation compares the brokerage's records with the custodian's: shares per symbol per account must match exactly, and the cash must match the bank. Differences become tickets, not silent fixes. Inside, an invariant monitor re-adds the books (the cost of all lots plus the cost taken by sales equals the total paid; the cash equals deposits minus withdrawals minus buys plus sales plus dividends minus fees) on a sample of accounts continuously, and the model-based random test in this workshop is the offline version of the same idea: an independent, obviously correct implementation run against the same inputs."}],"apiHeader":"$15","phaseApis":{"storm1":"$16","storm2":"$17"},"phases":["base","storm1","storm2"],"tests":{"base":[{"path":"bk_base.cpp","content":"$18"}],"storm1":[{"path":"bk_storm1.cpp","content":"$19"}],"storm2":[{"path":"bk_storm2.cpp","content":"$1a"}]},"reference":[{"path":"account.h","content":"$1b"},{"path":"brokerage_impl.h","content":"$1c"},{"path":"lot.h","content":"$1d"},{"path":"market.h","content":"$1e"},{"path":"service.cpp","content":"#include \"brokerage_impl.h\"\n\nstd::unique_ptr<broker::Brokerage> broker::makeBrokerage() { return std::make_unique<BrokerageImpl>(FeeSchedule()); }\nstd::unique_ptr<broker::FeeBrokerage> broker::makeFeeBrokerage(const FeeSchedule& schedule) {\n  return std::make_unique<BrokerageImpl>(schedule);\n}\nstd::unique_ptr<broker::CorporateBrokerage> broker::makeCorporateBrokerage(const FeeSchedule& schedule) {\n  return std::make_unique<BrokerageImpl>(schedule);\n}\n"},{"path":"trade_desk.h","content":"$1f"}],"driver":{"path":"driver.cpp","content":"#define BP_TEST_MAIN\n#include \"bp_test.h\"\n","readOnly":true}}}],["$L20","$L21"],"$L22"]}],"p":"$@23","v":null,"s":"$9"}}]]
+d:[["children",{"s":{"n":"id","t":"d","k":"brokerage","s":[]},"h":65632,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}]}]]}],"p":"$@e","v":"$c","s":"$9"},"c":"$Qf"}]]
+a:[["children",{"s":"workshop","h":131168,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}]}]]}],"p":"$@b","v":"$c","s":"$9"},"c":"$Qd"}]]
+0:{"t":{"t":{"s":"","h":131152,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/blueprint-clash/_next/static/chunks/2lbfwxo4jtf0j.css","precedence":"next"}],["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/1kncy_xossezt.js","async":true}]],["$","html",null,{"lang":"en","className":"r7opxW_variable auY9QW_variable u-EJdW_variable h-full","children":["$","body",null,{"className":"min-h-full","children":[["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}],"notFound":[["$","main",null,{"className":"flex min-h-dvh flex-col items-center justify-center gap-4 px-4 text-center","children":[["$","div",null,{"className":"font-display text-5xl text-[var(--accent)]","children":"404"}],["$","p",null,{"className":"text-white/60","children":"This room is not on the blueprint yet."}],["$","$L6",null,{"href":"/","className":"text-sm text-white/80 underline","children":"Back to the title screen"}]]}],[]]}],["$","$L7",null,{}]]}]}]]}],"p":"$@8","v":null,"s":"$9"},"c":"$Qa"},"h":{"r":["$","$1","h",{"children":[null,["$","$L25",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1, viewport-fit=cover"}],["$","meta","2",{"name":"theme-color","content":"#0a1530"}]]}],["$","$L27",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$28",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"Stock brokerage: FIFO lots, commissions and corporate actions: Blueprint Clash"}],["$","meta","1",{"name":"description","content":"A creature-tactics RPG that teaches low-level design in C++ and high-level system design, from fundamentals to big-tech interview level."}],["$","link","2",{"rel":"manifest","href":"/blueprint-clash/manifest.webmanifest"}],["$","meta","3",{"name":"mobile-web-app-capable","content":"yes"}],["$","meta","4",{"name":"apple-mobile-web-app-title","content":"Blueprint Clash"}],["$","meta","5",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","link","6",{"rel":"icon","href":"/blueprint-clash/icon.png?icon.27re_xscs-jmw.png","sizes":"256x256","type":"image/png"}],["$","link","7",{"rel":"apple-touch-icon","href":"/blueprint-clash/apple-icon.png?apple-icon.2rac1w0yc3rju.png","sizes":"180x180","type":"image/png"}],["$","$L29","8",{}]]}]}],null]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"p":"$@2a","v":null,"s":"$9"}},"a":"$@2b","u":"$@2c","b":"WHHKcqqrgr3tfT2ZA5zb7"}
+2d:I[97367,["$2"],"OutletBoundary"]
+20:["$","script","script-0",{"src":"/blueprint-clash/_next/static/chunks/2uk3wcjwqg0tl.js","async":true}]
+21:["$","script","script-1",{"src":"/blueprint-clash/_next/static/chunks/1zdu7yjl8efu4.js","async":true}]
+22:["$","$L2d",null,{"children":["$","$28",null,{"name":"Next.MetadataOutlet","children":"$@2e"}]}]
+9:300
+2e:null
+2c:true
+9:C
+2b:0
+e:"$undefined"
+b:"$undefined"
+8:"$undefined"
+2a:"$undefined"
+23:"$undefined"
